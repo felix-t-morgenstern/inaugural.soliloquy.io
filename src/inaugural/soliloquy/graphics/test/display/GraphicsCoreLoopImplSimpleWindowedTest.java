@@ -1,25 +1,33 @@
 package inaugural.soliloquy.graphics.test.display;
 
-import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
 import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
 import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
+import inaugural.soliloquy.graphics.test.fakes.FakeWindowManager;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.rendering.FrameTimer;
 import soliloquy.specs.graphics.rendering.StackRenderer;
+import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-class GraphicsCoreLoopImplSimpleTest {
+class GraphicsCoreLoopImplSimpleWindowedTest {
+    static FakeWindowManager WindowManager;
+
     public static void main(String[] args) {
-        FrameTimer frameTimer = new FakeFrameTimer();
+        FakeFrameTimer frameTimer = new FakeFrameTimer();
         StackRenderer stackRenderer = new FakeStackRenderer();
+        WindowManager = new FakeWindowManager();
 
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl(WindowResolution.RES_800x600,
-                "New window", new FakeGLFWMouseButtonCallback(), frameTimer, stackRenderer);
+        frameTimer.ShouldExecuteNextFrame = true;
 
-        graphicsCoreLoop.startup(GraphicsCoreLoopImplSimpleTest::closeWindowAfterSomeTime);
+        WindowManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED);
+        WindowManager.setDimensions(800, 600);
+
+        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
+                new FakeGLFWMouseButtonCallback(), frameTimer, WindowManager, stackRenderer);
+
+        graphicsCoreLoop.startup(GraphicsCoreLoopImplSimpleWindowedTest::closeWindowAfterSomeTime);
     }
 
     private static void closeWindowAfterSomeTime(long window) {

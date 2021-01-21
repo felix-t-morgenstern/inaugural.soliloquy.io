@@ -5,6 +5,8 @@ import soliloquy.specs.graphics.rendering.FrameTimer;
 public class FakeFrameTimer implements FrameTimer {
     private int _pollingInterval;
 
+    public boolean ShouldExecuteNextFrame;
+
     @Override
     public int getPollingInterval() {
         return _pollingInterval;
@@ -22,7 +24,7 @@ public class FakeFrameTimer implements FrameTimer {
 
     @Override
     public boolean shouldExecuteNextFrame() {
-        return false;
+        return ShouldExecuteNextFrame;
     }
 
     @Override

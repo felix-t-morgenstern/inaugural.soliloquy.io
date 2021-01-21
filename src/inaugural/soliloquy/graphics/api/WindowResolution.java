@@ -1,6 +1,11 @@
 package inaugural.soliloquy.graphics.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum WindowResolution {
+    RES_INVALID(-1, -1),
+
     RES_WINDOWED_FULLSCREEN(0, 0),
 
     // TODO: Consider minimum resolution to support
@@ -22,12 +27,38 @@ public enum WindowResolution {
     RES_3840x1620(3840, 1620),
     RES_3840x2160(3840, 2160);
 
+    private static final Map<Integer, Map<Integer, WindowResolution>> BY_WIDTH_AND_HEIGHT =
+            new HashMap<>();
+
+    static {
+        for (WindowResolution w : values()) {
+            if (!BY_WIDTH_AND_HEIGHT.containsKey(w.WIDTH)) {
+                BY_WIDTH_AND_HEIGHT.put(w.WIDTH, new HashMap<>());
+            }
+            BY_WIDTH_AND_HEIGHT.get(w.WIDTH).put(w.HEIGHT, w);
+        }
+    }
+
     public final int WIDTH;
     public final int HEIGHT;
 
     WindowResolution(int width, int height) {
         WIDTH = width;
         HEIGHT = height;
+    }
+
+    public static WindowResolution getFromWidthAndHeight(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return WindowResolution.RES_INVALID;
+        }
+
+        if (BY_WIDTH_AND_HEIGHT.containsKey(width)) {
+            if (BY_WIDTH_AND_HEIGHT.containsKey(height)) {
+                return BY_WIDTH_AND_HEIGHT.get(width).get(height);
+            }
+        }
+
+        return WindowResolution.RES_INVALID;
     }
 
     @Override
