@@ -8,8 +8,8 @@ public class FakeWindowManager implements WindowManager {
     int _width;
     int _height;
 
-    int _xPos;
-    int _yPos;
+    public Runnable UpdateWindowSizeAndLocationAction;
+    public int NumberOfTimesUpdateWindowSizeAndLocationActionCalled;
 
     @Override
     public WindowDisplayMode getWindowDisplayMode() {
@@ -28,29 +28,11 @@ public class FakeWindowManager implements WindowManager {
     }
 
     @Override
-    public int windowWidth() throws UnsupportedOperationException {
-        return _width;
-    }
-
-    @Override
-    public int windowHeight() throws UnsupportedOperationException {
-        return _height;
-    }
-
-    @Override
-    public void setLocation(int i, int i1) throws IllegalArgumentException, UnsupportedOperationException {
-        _xPos = i;
-        _yPos = i1;
-    }
-
-    @Override
-    public int windowXPos() throws UnsupportedOperationException {
-        return _xPos;
-    }
-
-    @Override
-    public int windowYPos() throws UnsupportedOperationException {
-        return _yPos;
+    public void updateWindowSizeAndLocation() {
+        NumberOfTimesUpdateWindowSizeAndLocationActionCalled++;
+        if (UpdateWindowSizeAndLocationAction != null) {
+            UpdateWindowSizeAndLocationAction.run();
+        }
     }
 
     @Override

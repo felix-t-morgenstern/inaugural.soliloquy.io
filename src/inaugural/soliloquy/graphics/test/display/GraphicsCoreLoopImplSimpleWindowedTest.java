@@ -7,9 +7,9 @@ import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
 import inaugural.soliloquy.graphics.test.fakes.FakeWindowManager;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.StackRenderer;
-import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSize;
 
 class GraphicsCoreLoopImplSimpleWindowedTest {
     static FakeWindowManager WindowManager;
@@ -21,16 +21,18 @@ class GraphicsCoreLoopImplSimpleWindowedTest {
 
         frameTimer.ShouldExecuteNextFrame = true;
 
-        WindowManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED);
-        WindowManager.setDimensions(800, 600);
-
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
                 new FakeGLFWMouseButtonCallback(), frameTimer, WindowManager, stackRenderer);
 
-        graphicsCoreLoop.startup(GraphicsCoreLoopImplSimpleWindowedTest::closeWindowAfterSomeTime);
+        graphicsCoreLoop.startup(
+                GraphicsCoreLoopImplSimpleWindowedTest::resizeThenCloseAfterSomeTime);
     }
 
-    private static void closeWindowAfterSomeTime(long window) {
+    private static void resizeThenCloseAfterSomeTime(long window) {
+        WindowManager.UpdateWindowSizeAndLocationAction = () -> {
+            glfwSetWindowSize(window, 800, 600);
+        };
+
         final int msBeforeClose = 2000;
 
         try {
