@@ -4,20 +4,21 @@ import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
 import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
 import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
-import inaugural.soliloquy.graphics.test.fakes.FakeWindowManager;
+import inaugural.soliloquy.graphics.test.fakes.FakeWindowResolutionManager;
+import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 
 class GraphicsCoreLoopImplTests {
     private String _titlebar;
     private GLFWMouseButtonCallback _mouseButtonCallback;
     private FakeFrameTimer _frameTimer;
-    private FakeWindowManager _windowManager;
+    private FakeWindowResolutionManager _windowManager;
     private FakeStackRenderer _stackRenderer;
 
     private GraphicsCoreLoop _graphicsCoreLoop;
@@ -27,8 +28,15 @@ class GraphicsCoreLoopImplTests {
         _titlebar = "My title bar";
         _mouseButtonCallback = new FakeGLFWMouseButtonCallback();
         _frameTimer = new FakeFrameTimer();
-        _windowManager = new FakeWindowManager();
+        _windowManager = new FakeWindowResolutionManager();
         _stackRenderer = new FakeStackRenderer();
+
+        _windowManager.UpdateWindowSizeAndLocationAction = () -> {
+            long windowId = glfwCreateWindow(800, 600, "My titlebar", 0, 0);
+            glfwMakeContextCurrent(windowId);
+            return windowId;
+        };
+        _windowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
 
         _frameTimer.setPollingInterval(20);
 
@@ -88,17 +96,24 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testStartupWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _graphicsCoreLoop.startup(null));
+    void testGetInterfaceName() {
+        assertEquals(GraphicsCoreLoop.class.getCanonicalName(),
+                _graphicsCoreLoop.getInterfaceName());
+    }
+
+    @Test
+    void testGetTitlebar() {
+        assertEquals(_titlebar, _graphicsCoreLoop.getTitlebar());
     }
 
     @Test
     void testWhenFrameTimerDoesNotPermitNewFrames() {
         _frameTimer.ShouldExecuteNextFrame = false;
 
-        _graphicsCoreLoop.startup(GraphicsCoreLoopImplTests::closeAfterSomeTime);
+        _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
 
-        assertEquals(0, _windowManager.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
+        // Should be 1, since it is called to create the initial window
+        assertEquals(1, _windowManager.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
         assertEquals(0, _stackRenderer.NumberOfTimesRenderCalled);
     }
 
@@ -106,7 +121,7 @@ class GraphicsCoreLoopImplTests {
     void testWhenFrameTimerPermitsNewFrames() {
         _frameTimer.ShouldExecuteNextFrame = true;
 
-        _graphicsCoreLoop.startup(GraphicsCoreLoopImplTests::closeAfterSomeTime);
+        _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
 
         // NB: This test is *somewhat* indeterminate, since the polling interval used from
         //     FrameTimer does *not* guarantee polling at *precisely* that rate; instead, it only
@@ -121,15 +136,14 @@ class GraphicsCoreLoopImplTests {
         assertTrue(_stackRenderer.NumberOfTimesRenderCalled > 1);
     }
 
-    private static void closeAfterSomeTime(long window) {
-        final int msBeforeClose = 50;
+    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+        CheckedExceptionWrapper.Sleep(100);
 
-        try {
-            Thread.sleep(msBeforeClose);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        while (graphicsCoreLoop.windowId() <= 0)
+//        {
+//            CheckedExceptionWrapper.Sleep(100);
+//        }
 
-        glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 }

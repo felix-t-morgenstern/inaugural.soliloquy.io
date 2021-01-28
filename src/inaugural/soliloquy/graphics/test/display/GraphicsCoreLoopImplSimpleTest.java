@@ -4,43 +4,41 @@ import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
 import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
 import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
-import inaugural.soliloquy.graphics.test.fakes.FakeWindowManager;
+import inaugural.soliloquy.graphics.test.fakes.FakeWindowResolutionManager;
+import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.StackRenderer;
 
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowSize;
+import static org.lwjgl.glfw.GLFW.*;
 
-class GraphicsCoreLoopImplSimpleWindowedTest {
-    static FakeWindowManager WindowManager;
+class GraphicsCoreLoopImplSimpleTest {
+    static FakeWindowResolutionManager WindowManager;
 
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         StackRenderer stackRenderer = new FakeStackRenderer();
-        WindowManager = new FakeWindowManager();
+        WindowManager = new FakeWindowResolutionManager();
 
         frameTimer.ShouldExecuteNextFrame = true;
+        frameTimer.setPollingInterval(10);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
                 new FakeGLFWMouseButtonCallback(), frameTimer, WindowManager, stackRenderer);
 
-        graphicsCoreLoop.startup(
-                GraphicsCoreLoopImplSimpleWindowedTest::resizeThenCloseAfterSomeTime);
-    }
-
-    private static void resizeThenCloseAfterSomeTime(long window) {
+        WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {
-            glfwSetWindowSize(window, 800, 600);
+            long windowId = glfwCreateWindow(800, 600, "My titlebar", 0, 0);
+            glfwShowWindow(windowId);
+            glfwMakeContextCurrent(windowId);
+            return windowId;
         };
 
-        final int msBeforeClose = 2000;
+        graphicsCoreLoop.startup(() -> resizeThenCloseAfterSomeTime(graphicsCoreLoop));
+    }
 
-        try {
-            Thread.sleep(msBeforeClose);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private static void resizeThenCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+        CheckedExceptionWrapper.Sleep(2000);
 
-        glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 }

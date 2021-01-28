@@ -53,7 +53,7 @@ public enum WindowResolution {
         }
 
         if (BY_WIDTH_AND_HEIGHT.containsKey(width)) {
-            if (BY_WIDTH_AND_HEIGHT.containsKey(height)) {
+            if (BY_WIDTH_AND_HEIGHT.get(width).containsKey(height)) {
                 return BY_WIDTH_AND_HEIGHT.get(width).get(height);
             }
         }
