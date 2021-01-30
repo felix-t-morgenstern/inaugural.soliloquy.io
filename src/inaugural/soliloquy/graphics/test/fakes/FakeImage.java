@@ -4,8 +4,9 @@ import soliloquy.specs.graphics.assets.Image;
 
 public class FakeImage implements Image {
     private String _relativeLocation;
-    private int _width;
-    private int _height;
+
+    public int _width;
+    public int _height;
 
     public FakeImage(String relativeLocation, int width, int height) {
         _relativeLocation = relativeLocation;

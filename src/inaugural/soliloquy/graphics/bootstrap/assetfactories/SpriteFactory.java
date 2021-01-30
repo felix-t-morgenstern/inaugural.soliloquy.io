@@ -6,6 +6,8 @@ import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
+import static inaugural.soliloquy.tools.Check.*;
+
 public class SpriteFactory implements AssetFactory<SpriteDefinition, Sprite> {
     @Override
     public Sprite create(SpriteDefinition spriteDefinition) throws IllegalArgumentException {
@@ -16,13 +18,13 @@ public class SpriteFactory implements AssetFactory<SpriteDefinition, Sprite> {
         Check.ifNullOrEmpty(spriteDefinition.image().relativeLocation(),
                 "spriteDefinition.image().relativeLocation()");
 
-        throwOnZeroOrLess(spriteDefinition.image().width(), "spriteDefinition.image().width()");
-        throwOnZeroOrLess(spriteDefinition.image().height(), "spriteDefinition.image().height()");
+        throwOnLteZero(spriteDefinition.image().width(), "spriteDefinition.image().width()");
+        throwOnLteZero(spriteDefinition.image().height(), "spriteDefinition.image().height()");
 
-        throwOnNegative(spriteDefinition.leftX(), "spriteDefinition.leftX()");
-        throwOnNegative(spriteDefinition.topY(), "spriteDefinition.topY()");
-        throwOnNegative(spriteDefinition.rightX(), "spriteDefinition.rightX()");
-        throwOnNegative(spriteDefinition.bottomY(), "spriteDefinition.bottomY()");
+        Check.ifNonNegative(spriteDefinition.leftX(), "spriteDefinition.leftX()");
+        Check.ifNonNegative(spriteDefinition.topY(), "spriteDefinition.topY()");
+        Check.ifNonNegative(spriteDefinition.rightX(), "spriteDefinition.rightX()");
+        Check.ifNonNegative(spriteDefinition.bottomY(), "spriteDefinition.bottomY()");
 
         throwOnSecondLte(spriteDefinition.leftX(), spriteDefinition.rightX(),
                 "spriteDefinition.leftX()", "spriteDefinition.rightX()");
@@ -76,38 +78,6 @@ public class SpriteFactory implements AssetFactory<SpriteDefinition, Sprite> {
                 return Sprite.class.getCanonicalName();
             }
         };
-    }
-
-    private void throwOnNegative(int value, String parameterName) {
-        if (value < 0) {
-            throw new IllegalArgumentException("SpriteFactory.create: " + parameterName +
-                    " (" + value + ") cannot be negative");
-        }
-    }
-
-    private void throwOnZeroOrLess(int value, String parameterName) {
-        if (value <= 0) {
-            throw new IllegalArgumentException("SpriteFactory.create: " + parameterName +
-                    " (" + value + ") cannot be 0 or less");
-        }
-    }
-
-    private void throwOnSecondLte(int first, int second,
-                                  String firstParamName, String secondParamName) {
-        if (second <= first) {
-            throw new IllegalArgumentException("SpriteFactory.create: " + secondParamName +
-                    " (" + second + ") cannot be less than or equal to " + firstParamName + " (" +
-                    first + ")");
-        }
-    }
-
-    private void throwOnSecondGt(int first, int second,
-                                  String firstParamName, String secondParamName) {
-        if (second > first) {
-            throw new IllegalArgumentException("SpriteFactory.create: " + secondParamName +
-                    " (" + second + ") cannot be greater than " + firstParamName + " (" + first +
-                    ")");
-        }
     }
 
     @Override
