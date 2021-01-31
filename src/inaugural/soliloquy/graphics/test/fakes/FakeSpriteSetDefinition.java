@@ -24,4 +24,9 @@ public class FakeSpriteSetDefinition implements SpriteSetDefinition {
     public String assetId() {
         return _assetId;
     }
+
+    @Override
+    public String getInterfaceName() {
+        return null;
+    }
 }
