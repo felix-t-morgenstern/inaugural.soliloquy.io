@@ -12,10 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static inaugural.soliloquy.tools.Check.*;
 import static inaugural.soliloquy.tools.Tools.emptyIfNull;
 
-public class SpriteSetFactory implements AssetFactory<SpriteSetDefinition, SpriteSet> {
+public class SpriteSetFactory extends AssetFactoryAbstract<SpriteSetDefinition, SpriteSet> {
     @Override
     public SpriteSet create(SpriteSetDefinition spriteSetDefinition)
             throws IllegalArgumentException {
@@ -55,45 +54,8 @@ public class SpriteSetFactory implements AssetFactory<SpriteSetDefinition, Sprit
                 String type = emptyIfNull(spriteSetSnippetDefinition.type());
                 String direction = emptyIfNull(spriteSetSnippetDefinition.direction());
 
-                throwOnLteZero(spriteSetSnippetDefinition.image().width(),
-                        "spriteSetSnippetDefinition.image().width()");
-                throwOnLteZero(spriteSetSnippetDefinition.image().height(),
-                        "spriteSetSnippetDefinition.image().height()");
-
-                Check.ifNonNegative(spriteSetSnippetDefinition.leftX(),
-                        "spriteDefinition.leftX()");
-                Check.ifNonNegative(spriteSetSnippetDefinition.topY(),
-                        "spriteDefinition.topY()");
-                Check.ifNonNegative(spriteSetSnippetDefinition.rightX(),
-                        "spriteDefinition.rightX()");
-                Check.ifNonNegative(spriteSetSnippetDefinition.bottomY(),
-                        "spriteDefinition.bottomY()");
-
-                throwOnSecondLte(spriteSetSnippetDefinition.leftX(),
-                        spriteSetSnippetDefinition.rightX(),
-                        "spriteSetSnippetDefinition.leftX()",
-                        "spriteSetSnippetDefinition.rightX()");
-                throwOnSecondLte(spriteSetSnippetDefinition.topY(),
-                        spriteSetSnippetDefinition.bottomY(),
-                        "spriteSetSnippetDefinition.topY()",
-                        "spriteSetSnippetDefinition.bottomY()");
-
-                throwOnSecondGt(spriteSetSnippetDefinition.image().width(),
-                        spriteSetSnippetDefinition.leftX(),
-                        "spriteSetSnippetDefinition.image().width()",
-                        "spriteSetSnippetDefinition.leftX()");
-                throwOnSecondGt(spriteSetSnippetDefinition.image().height(),
-                        spriteSetSnippetDefinition.topY(),
-                        "spriteSetSnippetDefinition.image().height()",
-                        "spriteSetSnippetDefinition.topY()");
-                throwOnSecondGt(spriteSetSnippetDefinition.image().width(),
-                        spriteSetSnippetDefinition.rightX(),
-                        "spriteSetSnippetDefinition.image().width()",
-                        "spriteSetSnippetDefinition.rightX()");
-                throwOnSecondGt(spriteSetSnippetDefinition.image().height(),
-                        spriteSetSnippetDefinition.bottomY(),
-                        "spriteSetSnippetDefinition.image().height()",
-                        "spriteSetSnippetDefinition.bottomY()");
+                throwOnInvalidSnippetDefinition(spriteSetSnippetDefinition,
+                        "spriteSetSnippetDefinition");
 
                 if (!SNIPPETS_BY_TYPE_AND_DIRECTION.containsKey(type)) {
                     SNIPPETS_BY_TYPE_AND_DIRECTION.put(type, new HashMap<>());

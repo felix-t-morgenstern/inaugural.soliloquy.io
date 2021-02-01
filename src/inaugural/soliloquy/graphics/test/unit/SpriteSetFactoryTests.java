@@ -7,7 +7,6 @@ import inaugural.soliloquy.graphics.test.fakes.FakeSpriteSetSnippetDefinition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.AssetSnippet;
-import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.assets.SpriteSet;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteSetDefinition;
@@ -95,7 +94,9 @@ class SpriteSetFactoryTests {
         SpriteSet createdSpriteSet = _spriteSetFactory.create(spriteSetDefinition);
 
         assertNotNull(createdSpriteSet);
+
         assertEquals(_assetId, createdSpriteSet.id());
+
         assertEquals(SpriteSet.class.getCanonicalName(), createdSpriteSet.getInterfaceName());
 
         AssetSnippet snippet1 = createdSpriteSet
@@ -129,6 +130,7 @@ class SpriteSetFactoryTests {
         assertEquals(AssetSnippet.class.getCanonicalName(), snippet3.getInterfaceName());
     }
 
+    // TODO: Consider breaking out into separate test cases
     @Test
     void testCreateWithInvalidParams() {
         @SuppressWarnings({"unchecked", "rawtypes"})
@@ -153,6 +155,28 @@ class SpriteSetFactoryTests {
         assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, "")
         ));
+
+
+
+        _spriteSetSnippetDefinition1._image = null;
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+                new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
+        ));
+        _spriteSetSnippetDefinition1._image = _image1;
+
+
+
+        _image1._relativeLocation = null;
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+                new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
+        ));
+        _image1._relativeLocation = _image1RelativeLocation;
+
+        _image1._relativeLocation = "";
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+                new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
+        ));
+        _image1._relativeLocation = _image1RelativeLocation;
 
 
 

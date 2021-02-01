@@ -56,6 +56,7 @@ class SpriteFactoryTests {
         assertEquals(_bottomY, createdSprite.bottomY());
     }
 
+    // TODO: Consider breaking out into separate test cases
     @Test
     void testCreateWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.create(null));

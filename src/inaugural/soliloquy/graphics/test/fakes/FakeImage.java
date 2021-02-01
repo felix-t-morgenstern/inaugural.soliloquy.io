@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.fakes;
 import soliloquy.specs.graphics.assets.Image;
 
 public class FakeImage implements Image {
-    private String _relativeLocation;
+    public String _relativeLocation;
 
     public int _width;
     public int _height;
