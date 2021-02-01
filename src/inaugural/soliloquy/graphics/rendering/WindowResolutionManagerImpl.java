@@ -6,6 +6,9 @@ import org.lwjgl.glfw.GLFWVidMode;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 // TODO: Clean up all the mess in this code
@@ -126,73 +129,63 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
             _mostRecentlyRenderedWindowDisplayMode = _windowDisplayMode;
         }
 
-        // TODO: Is this call redundant?
-        glfwShowWindow(windowId);
-
         return windowId;
     }
 
     private long renderWindowed(long windowId, String titlebar) {
         // TODO: Consider enforcing window to be within boundaries of monitor resolution
-        if (_mostRecentlyRenderedWindowDisplayMode == WindowDisplayMode.WINDOWED) {
-            glfwSetWindowSize(windowId, _windowResolution.WIDTH, _windowResolution.HEIGHT);
-            return windowId;
-        }
+        return renderWindowForMode(windowId, WindowDisplayMode.WINDOWED,
+                currentWindowId -> glfwSetWindowSize(currentWindowId, _windowResolution.WIDTH,
+                        _windowResolution.HEIGHT),
+                monitor -> glfwVidMode -> {
 
-        long oldWindowId = windowId;
-        long monitor = glfwGetPrimaryMonitor();
-        GLFWVidMode glfwVidMode = glfwGetVideoMode(monitor);
-        assert glfwVidMode != null;
+                    glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 
-        glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+                    long newWindowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(),
+                            titlebar, 0, 0);
+                    glfwSetWindowMonitor(newWindowId, 0,
+                            (glfwVidMode.width() - _windowResolution.WIDTH) / 2,
+                            (glfwVidMode.height() - _windowResolution.HEIGHT) / 2,
+                            _windowResolution.WIDTH,
+                            _windowResolution.HEIGHT,
+                            GLFW_DONT_CARE);
 
-        windowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(), titlebar,
-                0, 0);
-        glfwSetWindowMonitor(windowId, 0,
-                (glfwVidMode.width() - _windowResolution.WIDTH) / 2,
-                (glfwVidMode.height() - _windowResolution.HEIGHT) / 2,
-                _windowResolution.WIDTH,
-                _windowResolution.HEIGHT,
-                GLFW_DONT_CARE);
-
-        if (_mostRecentlyRenderedWindowDisplayMode != WindowDisplayMode.UNKNOWN) {
-            glfwDestroyWindow(oldWindowId);
-        }
-
-        glfwMakeContextCurrent(windowId);
-        glfwShowWindow(windowId);
-
-        return windowId;
+                    return newWindowId;
+                });
     }
 
-    // TODO: This is looking a lot like renderWindowed; consider merging?
     private long renderFullscreen(long windowId, String titlebar) {
-        if (_mostRecentlyRenderedWindowDisplayMode == WindowDisplayMode.FULLSCREEN) {
-            glfwSetWindowSize(windowId, _windowResolution.WIDTH, _windowResolution.HEIGHT);
-            return windowId;
-        }
-
-        long oldWindowId = windowId;
-        long monitor = glfwGetPrimaryMonitor();
-        GLFWVidMode glfwVidMode = glfwGetVideoMode(monitor);
-        assert glfwVidMode != null;
-
-        windowId = glfwCreateWindow(_windowResolution.WIDTH, _windowResolution.HEIGHT, titlebar,
-                monitor, 0);
-
-        if (_mostRecentlyRenderedWindowDisplayMode != WindowDisplayMode.UNKNOWN) {
-            glfwDestroyWindow(oldWindowId);
-        }
-
-        glfwMakeContextCurrent(windowId);
-        glfwShowWindow(windowId);
-
-        return windowId;
+        return renderWindowForMode(windowId, WindowDisplayMode.FULLSCREEN,
+                currentWindowId -> glfwSetWindowSize(currentWindowId, _windowResolution.WIDTH,
+                        _windowResolution.HEIGHT),
+                monitor -> glfwVidMode -> glfwCreateWindow(_windowResolution.WIDTH,
+                        _windowResolution.HEIGHT, titlebar, monitor, 0));
     }
 
-    // TODO: This is looking a lot like renderWindowed; consider merging?
     private long renderWindowedFullscreen(long windowId, String titlebar) {
-        if (_mostRecentlyRenderedWindowDisplayMode == WindowDisplayMode.WINDOWED_FULLSCREEN) {
+        return renderWindowForMode(windowId, WindowDisplayMode.WINDOWED_FULLSCREEN,
+                currentWindowId -> {}, monitor -> glfwVidMode -> {
+
+                    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+                    long newWindowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(), titlebar,
+                            0, 0);
+                    glfwSetWindowMonitor(newWindowId, 0,
+                            0,
+                            0,
+                            glfwVidMode.width(),
+                            glfwVidMode.height(),
+                            GLFW_DONT_CARE);
+                    return newWindowId;
+                });
+    }
+
+    private long renderWindowForMode(long windowId,
+                                     WindowDisplayMode windowDisplayMode,
+                                     Consumer<Long> noDisplayModeChangeAction,
+                                     Function<Long, Function<GLFWVidMode, Long>> createNewWindow) {
+        if (_mostRecentlyRenderedWindowDisplayMode == windowDisplayMode) {
+            noDisplayModeChangeAction.accept(windowId);
             return windowId;
         }
 
@@ -201,16 +194,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         GLFWVidMode glfwVidMode = glfwGetVideoMode(monitor);
         assert glfwVidMode != null;
 
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-
-        windowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(), titlebar,
-                0, 0);
-        glfwSetWindowMonitor(windowId, 0,
-                0,
-                0,
-                glfwVidMode.width(),
-                glfwVidMode.height(),
-                GLFW_DONT_CARE);
+        windowId = createNewWindow.apply(monitor).apply(glfwVidMode);
 
         if (_mostRecentlyRenderedWindowDisplayMode != WindowDisplayMode.UNKNOWN) {
             glfwDestroyWindow(oldWindowId);
