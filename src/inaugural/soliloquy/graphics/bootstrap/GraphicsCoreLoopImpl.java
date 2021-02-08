@@ -3,13 +3,13 @@ package inaugural.soliloquy.graphics.bootstrap;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.FrameTimer;
 import soliloquy.specs.graphics.rendering.StackRenderer;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
@@ -41,9 +41,21 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         _window = _windowManager.updateWindowSizeAndLocation(_window, _titlebar);
 
-        createCapabilities();
+        // TODO: Ensure via tests that 0 values throw exceptions, both at initial creation, and on updates
+        if (_window == 0) {
+            throw new IllegalStateException("Failed to create window");
+        }
 
-        glClearColor(0, 0, 0, 1);
+        GL.createCapabilities();
+
+        glClearColor(0, 0, 0, 0);
+
+        glEnable(GL_LINE_STIPPLE);
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDepthMask(false);
 
         glfwSetMouseButtonCallback(_window, _mouseButtonCallback);
 
@@ -51,21 +63,21 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         while(!glfwWindowShouldClose(_window)) {
             if (_frameTimer.shouldExecuteNextFrame()) {
+                glfwPollEvents();
+
                 _window = _windowManager.updateWindowSizeAndLocation(_window, _titlebar);
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 _stackRenderer.render();
 
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-                glfwSwapBuffers(_window); // swap the color buffers
-
-                // Poll for window events. The key callback above will only be
-                // invoked during this call.
-                glfwPollEvents();
+                glfwSwapBuffers(_window);
             }
 
             CheckedExceptionWrapper.Sleep(_frameTimer.getPollingInterval());
         }
+
+        glfwTerminate();
     }
 
     @Override

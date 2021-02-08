@@ -1,10 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.common.valueobjects.ReadableCoordinate;
-import soliloquy.specs.graphics.colorshifting.ColorShiftType;
 import soliloquy.specs.graphics.renderables.Renderable;
-
-import java.util.List;
 
 public class FakeRenderable implements Renderable {
     public int _z;
@@ -14,48 +10,28 @@ public class FakeRenderable implements Renderable {
     }
 
     @Override
-    public boolean capturesMouseEvents() {
-        return false;
+    public float xLoc() {
+        return 0;
     }
 
     @Override
-    public void click() throws UnsupportedOperationException {
-
+    public float yLoc() {
+        return 0;
     }
 
     @Override
-    public void mouseOver() throws UnsupportedOperationException {
-
+    public float width() {
+        return 0;
     }
 
     @Override
-    public void mouseLeave() throws UnsupportedOperationException {
-
-    }
-
-    @Override
-    public ReadableCoordinate screenLocation() {
-        return null;
+    public float height() {
+        return 0;
     }
 
     @Override
     public int z() {
         return _z;
-    }
-
-    @Override
-    public ReadableCoordinate dimensions() {
-        return null;
-    }
-
-    @Override
-    public List<ColorShiftType> colorShifts() {
-        return null;
-    }
-
-    @Override
-    public List<Renderable> innerRenderables() {
-        return null;
     }
 
     @Override

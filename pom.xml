@@ -37,12 +37,12 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.25</version>
+            <version>0.0.30</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.tools</artifactId>
-            <version>0.0.8</version>
+            <version>0.0.15</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>

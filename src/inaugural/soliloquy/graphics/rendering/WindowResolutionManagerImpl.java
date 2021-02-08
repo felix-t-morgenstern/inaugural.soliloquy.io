@@ -108,7 +108,6 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
         if (_windowResolution != _mostRecentlyRenderedWindowResolution ||
                 _windowDisplayMode != _mostRecentlyRenderedWindowDisplayMode) {
-            // Do the actual action here
             switch(_windowDisplayMode) {
                 case WINDOWED:
                     windowId = renderWindowed(windowId, titlebar);
@@ -141,14 +140,11 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
                     glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 
-                    long newWindowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(),
-                            titlebar, 0, 0);
-                    glfwSetWindowMonitor(newWindowId, 0,
+                    long newWindowId = glfwCreateWindow(_windowResolution.WIDTH,
+                            _windowResolution.HEIGHT, titlebar, 0, 0);
+                    glfwSetWindowPos(newWindowId,
                             (glfwVidMode.width() - _windowResolution.WIDTH) / 2,
-                            (glfwVidMode.height() - _windowResolution.HEIGHT) / 2,
-                            _windowResolution.WIDTH,
-                            _windowResolution.HEIGHT,
-                            GLFW_DONT_CARE);
+                            (glfwVidMode.height() - _windowResolution.HEIGHT) / 2);
 
                     return newWindowId;
                 });
