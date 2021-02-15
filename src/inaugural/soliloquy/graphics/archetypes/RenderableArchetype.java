@@ -1,7 +1,9 @@
 package inaugural.soliloquy.graphics.archetypes;
 
+import soliloquy.specs.common.shared.Cloneable;
 import soliloquy.specs.graphics.renderables.Renderable;
 
+@SuppressWarnings("rawtypes")
 public class RenderableArchetype implements Renderable {
     @Override
     public float xLoc() {
@@ -32,5 +34,11 @@ public class RenderableArchetype implements Renderable {
     @Override
     public String getInterfaceName() {
         return Renderable.class.getCanonicalName();
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Cloneable makeClone() {
+        return null;
     }
 }

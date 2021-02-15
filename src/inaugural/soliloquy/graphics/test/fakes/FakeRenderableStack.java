@@ -1,26 +1,26 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import inaugural.soliloquy.common.test.fakes.FakeCollection;
+import inaugural.soliloquy.common.test.fakes.FakeList;
 import inaugural.soliloquy.common.test.fakes.FakeMap;
-import soliloquy.specs.common.infrastructure.Collection;
+import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
-import soliloquy.specs.common.infrastructure.ReadableCollection;
-import soliloquy.specs.common.infrastructure.ReadableMap;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 public class FakeRenderableStack implements RenderableStack {
-    public Map<Integer, Collection<Renderable>> RENDERABLES = new FakeMap<>();
+    @SuppressWarnings("rawtypes")
+    public Map<Integer, List<Renderable>> RENDERABLES = new FakeMap<>();
 
     @Override
     public void clear() {
         RENDERABLES.clear();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         if (!RENDERABLES.containsKey(renderable.z())) {
-            Collection<Renderable> renderablesAtZ = new FakeCollection<>();
+            List<Renderable> renderablesAtZ = new FakeList<>();
             renderablesAtZ.add(renderable);
             RENDERABLES.put(renderable.z(), renderablesAtZ);
             return;
@@ -29,11 +29,12 @@ public class FakeRenderableStack implements RenderableStack {
         RENDERABLES.get(renderable.z()).add(renderable);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public ReadableMap<Integer, ReadableCollection<Renderable>> snapshot() {
-        Map<Integer, ReadableCollection<Renderable>> snapshot = new FakeMap<>();
+    public Map<Integer, List<Renderable>> snapshot() {
+        Map<Integer, List<Renderable>> snapshot = new FakeMap<>();
 
-        RENDERABLES.forEach(kv -> snapshot.put(kv.getItem1(), kv.getItem2()));
+        RENDERABLES.forEach(snapshot::put);
 
         return snapshot;
     }

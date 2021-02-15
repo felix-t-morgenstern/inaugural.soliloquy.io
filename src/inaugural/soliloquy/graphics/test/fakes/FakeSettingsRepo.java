@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.common.infrastructure.Collection;
+import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.infrastructure.Setting;
 import soliloquy.specs.common.infrastructure.SettingsRepo;
@@ -24,22 +24,24 @@ public class FakeSettingsRepo implements SettingsRepo {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <V> void setSetting(String s, V v) throws IllegalArgumentException {
-        SETTINGS.put(s, new FakeSetting(s, v));
+        SETTINGS.put(s, new FakeSetting<>(s, v));
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public Collection<EntityGroupItem<Setting>> getAllGrouped() {
+    public List<EntityGroupItem<Setting>> getAllGrouped() {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public Collection<Setting> getAllUngrouped() {
+    public List<Setting> getAllUngrouped() {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public EntityGroupItem<Setting> getItemByOrder(int i) throws IllegalArgumentException {
         return null;

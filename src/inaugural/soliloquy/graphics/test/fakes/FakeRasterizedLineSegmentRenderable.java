@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.renderables.Renderable;
 
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
     public float Thickness;
@@ -97,6 +98,11 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public Renderable<RasterizedLineSegmentRenderable> makeClone() {
         return null;
     }
 }

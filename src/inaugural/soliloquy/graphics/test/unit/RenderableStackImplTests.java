@@ -1,16 +1,15 @@
 package inaugural.soliloquy.graphics.test.unit;
 
-import inaugural.soliloquy.common.test.fakes.FakeCollectionFactory;
+import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.factories.CollectionFactory;
+import soliloquy.specs.common.factories.ListFactory;
 import soliloquy.specs.common.factories.MapFactory;
-import soliloquy.specs.common.infrastructure.Collection;
-import soliloquy.specs.common.infrastructure.ReadableCollection;
-import soliloquy.specs.common.infrastructure.ReadableMap;
+import soliloquy.specs.common.infrastructure.List;
+import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
@@ -22,15 +21,15 @@ class RenderableStackImplTests {
     @BeforeEach
     void setUp() {
         MapFactory mapFactory = new FakeMapFactory();
-        CollectionFactory collectionFactory = new FakeCollectionFactory();
+        ListFactory listFactory = new FakeListFactory();
 
-        _renderableStack = new RenderableStackImpl(mapFactory, collectionFactory);
+        _renderableStack = new RenderableStackImpl(mapFactory, listFactory);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(null, new FakeCollectionFactory()));
+                () -> new RenderableStackImpl(null, new FakeListFactory()));
         assertThrows(IllegalArgumentException.class,
                 () -> new RenderableStackImpl(new FakeMapFactory(), null));
     }
@@ -41,6 +40,7 @@ class RenderableStackImplTests {
                 _renderableStack.getInterfaceName());
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     void testAddAndSnapshot() {
         Renderable renderable1 = new FakeRenderable(1);
@@ -51,18 +51,17 @@ class RenderableStackImplTests {
         _renderableStack.add(renderable2);
         _renderableStack.add(renderable3);
 
-        ReadableMap<Integer, ReadableCollection<Renderable>> snapshot =
-                _renderableStack.snapshot();
+        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
 
         assertNotNull(snapshot);
 
         assertNotNull(snapshot.getFirstArchetype());
         assertNotNull(snapshot.getSecondArchetype());
-        assertEquals(Collection.class.getCanonicalName() + "<" +
+        assertEquals(List.class.getCanonicalName() + "<" +
                 Renderable.class.getCanonicalName() + ">",
                 snapshot.getSecondArchetype().getInterfaceName());
 
-        ReadableCollection<Renderable> zIndex1 = snapshot.get(1);
+        List<Renderable> zIndex1 = snapshot.get(1);
         assertNotNull(zIndex1.getArchetype());
         assertEquals(Renderable.class.getCanonicalName(),
                 zIndex1.getArchetype().getInterfaceName());
@@ -70,7 +69,7 @@ class RenderableStackImplTests {
         assertTrue(zIndex1.contains(renderable1));
         assertTrue(zIndex1.contains(renderable3));
 
-        ReadableCollection<Renderable> zIndex2 = snapshot.get(2);
+        List<Renderable> zIndex2 = snapshot.get(2);
         assertNotNull(zIndex2.getArchetype());
         assertEquals(Renderable.class.getCanonicalName(),
                 zIndex2.getArchetype().getInterfaceName());
@@ -78,6 +77,7 @@ class RenderableStackImplTests {
         assertTrue(zIndex2.contains(renderable2));
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     void testClear() {
         Renderable renderable = new FakeRenderable(0);
@@ -86,8 +86,7 @@ class RenderableStackImplTests {
 
         _renderableStack.clear();
 
-        ReadableMap<Integer, ReadableCollection<Renderable>> snapshot =
-                _renderableStack.snapshot();
+        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
 
         assertEquals(0, snapshot.size());
     }

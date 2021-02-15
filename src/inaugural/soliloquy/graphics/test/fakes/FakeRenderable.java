@@ -1,7 +1,9 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
+import soliloquy.specs.common.shared.Cloneable;
 import soliloquy.specs.graphics.renderables.Renderable;
 
+@SuppressWarnings("rawtypes")
 public class FakeRenderable implements Renderable {
     public int _z;
 
@@ -36,6 +38,12 @@ public class FakeRenderable implements Renderable {
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Cloneable makeClone() {
         return null;
     }
 }
