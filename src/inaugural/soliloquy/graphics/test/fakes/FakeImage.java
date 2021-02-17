@@ -8,6 +8,10 @@ public class FakeImage implements Image {
     public int _width;
     public int _height;
 
+    public FakeImage(String relativeLocation) {
+        _relativeLocation = relativeLocation;
+    }
+
     public FakeImage(String relativeLocation, int width, int height) {
         _relativeLocation = relativeLocation;
         _width = width;
