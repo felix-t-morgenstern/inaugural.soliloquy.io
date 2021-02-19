@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.unit;
+package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;

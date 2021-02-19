@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.unit;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.SpriteSetFactory;
 import inaugural.soliloquy.graphics.test.fakes.FakeImage;

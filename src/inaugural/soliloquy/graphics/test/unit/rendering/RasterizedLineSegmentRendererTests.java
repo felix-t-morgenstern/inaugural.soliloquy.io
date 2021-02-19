@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.unit;
+package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.fakes.FakeRasterizedLineSegmentRenderable;
