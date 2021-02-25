@@ -19,6 +19,11 @@ public class FakeImage implements Image {
     }
 
     @Override
+    public int textureId() {
+        return 0;
+    }
+
+    @Override
     public String relativeLocation() {
         return _relativeLocation;
     }
