@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
 import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
+import inaugural.soliloquy.graphics.test.fakes.FakeShaderFactory;
 import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -25,7 +26,8 @@ class WindowManagerImplWindowedTest {
 
         StackRenderer stackRenderer = new FakeStackRenderer();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer);
+                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
+                new FakeShaderFactory(), "");
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
     }

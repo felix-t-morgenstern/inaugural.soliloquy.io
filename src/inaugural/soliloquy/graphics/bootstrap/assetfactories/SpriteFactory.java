@@ -8,7 +8,7 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefin
 
 public class SpriteFactory extends AssetFactoryAbstract<SpriteDefinition, Sprite> {
     @Override
-    public Sprite create(SpriteDefinition spriteDefinition) throws IllegalArgumentException {
+    public Sprite make(SpriteDefinition spriteDefinition) throws IllegalArgumentException {
         Check.ifNull(spriteDefinition, "spriteDefinition");
 
         throwOnInvalidSnippetDefinition(spriteDefinition, "spriteDefinition");

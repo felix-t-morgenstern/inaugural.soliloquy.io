@@ -96,7 +96,7 @@ class AnimationFactoryTests {
         animationFrameSnippets.put(_snippet2Ms, _animationFrameSnippetDefinition2);
         animationFrameSnippets.put(_snippet3Ms, _animationFrameSnippetDefinition3);
 
-        Animation createdAnimation = _animationFactory.create(
+        Animation createdAnimation = _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId,
                         animationFrameSnippets));
 
@@ -132,30 +132,30 @@ class AnimationFactoryTests {
         animationFrameSnippets.put(_snippet2Ms, _animationFrameSnippetDefinition2);
         animationFrameSnippets.put(_snippet3Ms, _animationFrameSnippetDefinition3);
 
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(null));
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(null));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(0, _assetId,
+                () -> _animationFactory.make(new FakeAnimationDefinition(0, _assetId,
                         animationFrameSnippets)));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         null, animationFrameSnippets)));
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         "", animationFrameSnippets)));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         _assetId, null)));
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         _assetId, new HashMap<>())));
 
 
@@ -163,7 +163,7 @@ class AnimationFactoryTests {
         animationFrameSnippets.remove(_snippet1Ms);
         animationFrameSnippets.put(-1, _animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         _assetId, animationFrameSnippets)));
         animationFrameSnippets.remove(-1);
         animationFrameSnippets.put(_snippet1Ms, _animationFrameSnippetDefinition1);
@@ -171,7 +171,7 @@ class AnimationFactoryTests {
         animationFrameSnippets.remove(_snippet1Ms);
         animationFrameSnippets.put(_animationDurationMs, _animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         _assetId, animationFrameSnippets)));
         animationFrameSnippets.remove(_animationDurationMs);
         animationFrameSnippets.put(_snippet1Ms, _animationFrameSnippetDefinition1);
@@ -179,7 +179,7 @@ class AnimationFactoryTests {
         animationFrameSnippets.remove(_snippet1Ms);
         animationFrameSnippets.put(1, _animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> _animationFactory.create(new FakeAnimationDefinition(_animationDurationMs,
+                () -> _animationFactory.make(new FakeAnimationDefinition(_animationDurationMs,
                         _assetId, animationFrameSnippets)));
         animationFrameSnippets.remove(1);
         animationFrameSnippets.put(_snippet1Ms, _animationFrameSnippetDefinition1);
@@ -187,7 +187,7 @@ class AnimationFactoryTests {
 
 
         _animationFrameSnippetDefinition1._image = null;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._image = _image1;
@@ -195,13 +195,13 @@ class AnimationFactoryTests {
 
 
         _image1._relativeLocation = null;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _image1._relativeLocation = _image1RelativeLocation;
 
         _image1._relativeLocation = "";
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _image1._relativeLocation = _image1RelativeLocation;
@@ -209,13 +209,13 @@ class AnimationFactoryTests {
 
 
         _image1._width = 0;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _image1._width = _image1Width;
 
         _image1._height = 0;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _image1._height = _image1Height;
@@ -223,25 +223,25 @@ class AnimationFactoryTests {
 
 
         _animationFrameSnippetDefinition1._leftX = -1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._leftX = _snippet1LeftX;
 
         _animationFrameSnippetDefinition1._topY = -1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._topY = _snippet1TopY;
 
         _animationFrameSnippetDefinition1._rightX = -1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._rightX = _snippet1RightX;
 
         _animationFrameSnippetDefinition1._bottomY = -1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._bottomY = _snippet1BottomY;
@@ -249,13 +249,13 @@ class AnimationFactoryTests {
 
 
         _animationFrameSnippetDefinition1._rightX = _snippet1LeftX;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._rightX = _snippet1RightX;
 
         _animationFrameSnippetDefinition1._bottomY = _snippet1TopY;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._bottomY = _snippet1BottomY;
@@ -263,25 +263,25 @@ class AnimationFactoryTests {
 
 
         _animationFrameSnippetDefinition1._leftX = _image1Width + 1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._leftX = _snippet1LeftX;
 
         _animationFrameSnippetDefinition1._topY = _image1Height + 1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._topY = _snippet1TopY;
 
         _animationFrameSnippetDefinition1._rightX = _image1Width + 1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._rightX = _snippet1RightX;
 
         _animationFrameSnippetDefinition1._bottomY = _image1Height + 1;
-        assertThrows(IllegalArgumentException.class, () -> _animationFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _assetId, animationFrameSnippets)
         ));
         _animationFrameSnippetDefinition1._bottomY = _snippet1BottomY;

@@ -2,27 +2,13 @@ package inaugural.soliloquy.graphics.archetypes;
 
 import soliloquy.specs.common.shared.Cloneable;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.FloatBox;
 
 @SuppressWarnings("rawtypes")
 public class RenderableArchetype implements Renderable {
     @Override
-    public float xLoc() {
-        return 0;
-    }
-
-    @Override
-    public float yLoc() {
-        return 0;
-    }
-
-    @Override
-    public float width() {
-        return 0;
-    }
-
-    @Override
-    public float height() {
-        return 0;
+    public FloatBox renderingArea() {
+        return null;
     }
 
     @Override

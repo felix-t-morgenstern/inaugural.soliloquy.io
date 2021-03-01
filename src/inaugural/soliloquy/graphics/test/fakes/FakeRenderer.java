@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.rendering.RendererType;
+import soliloquy.specs.graphics.rendering.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakeRenderer implements RendererType<Renderable> {
+public class FakeRenderer implements Renderer<Renderable> {
     public List<Renderable> RENDERED = new ArrayList<>();
 
     @Override

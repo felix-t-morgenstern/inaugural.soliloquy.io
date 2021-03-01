@@ -8,8 +8,6 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteSetDefinition;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteSetSnippetDefinition;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class AnimationPreloaderWorker {
     @SuppressWarnings("ConstantConditions")
     public void load(Collection<AnimationDTO> animationDTOs) {
         Check.ifNull(animationDTOs, "animationDTOs");
-        animationDTOs.forEach(dto -> REGISTRY.add(FACTORY.create(makeDefinition(dto))));
+        animationDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
 
     private AnimationDefinition makeDefinition(AnimationDTO animationDTO) {

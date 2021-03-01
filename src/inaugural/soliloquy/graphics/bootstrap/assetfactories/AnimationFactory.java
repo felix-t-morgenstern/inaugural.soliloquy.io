@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, Animation> {
     @Override
-    public Animation create(AnimationDefinition animationDefinition) throws IllegalArgumentException {
+    public Animation make(AnimationDefinition animationDefinition) throws IllegalArgumentException {
         Check.ifNull(animationDefinition, "animationDefinition");
         return new AnimationImpl(animationDefinition.assetId(), animationDefinition.msDuration(),
                 animationDefinition.frameSnippetDefinitions());

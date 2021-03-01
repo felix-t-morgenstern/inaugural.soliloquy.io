@@ -29,7 +29,7 @@ public class SpriteSetPreloaderWorker {
     @SuppressWarnings("ConstantConditions")
     public void load(Collection<SpriteSetDTO> spriteSetDTOs) {
         Check.ifNull(spriteSetDTOs, "spriteSetDTOs");
-        spriteSetDTOs.forEach(dto -> REGISTRY.add(FACTORY.create(makeDefinition(dto))));
+        spriteSetDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
 
     private SpriteSetDefinition makeDefinition(SpriteSetDTO spriteSetDTO) {

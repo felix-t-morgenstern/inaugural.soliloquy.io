@@ -26,7 +26,7 @@ public class SpritePreloaderWorker {
     @SuppressWarnings("ConstantConditions")
     public void load(Collection<SpriteDTO> spriteDTOs) {
         Check.ifNull(spriteDTOs, "spriteDTOs");
-        spriteDTOs.forEach(dto -> REGISTRY.add(FACTORY.create(
+        spriteDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(
                 new SpriteDefinition() {
                     @Override
                     public Image image() {

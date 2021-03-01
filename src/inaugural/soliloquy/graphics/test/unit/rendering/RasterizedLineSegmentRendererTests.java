@@ -1,11 +1,12 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
+import inaugural.soliloquy.graphics.test.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.fakes.FakeRasterizedLineSegmentRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.rendering.RendererType;
+import soliloquy.specs.graphics.rendering.Renderer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,7 +21,7 @@ class RasterizedLineSegmentRendererTests {
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(RendererType.class.getCanonicalName() + "<" +
+        assertEquals(Renderer.class.getCanonicalName() + "<" +
                         RasterizedLineSegmentRenderable.class.getCanonicalName() + ">",
                 _lineSegmentRenderer.getInterfaceName());
     }
@@ -32,115 +33,65 @@ class RasterizedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(0f, (short)0xAAAA,
                         1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0x0000,
                         1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0x0000,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
                         0, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
                         257, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0001f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         -0.0001f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, 1.0001f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, -0.0001f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, 1.0f, 1.0001f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, 1.0f, -0.0001f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, 1.0f, 1.0f, 1.0001f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA, 1,
                         1.0f, 1.0f, 1.0f, -0.0001f,
-                        0.5f, 0.5f, 0.5f, 0.5f, 1)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        -1.0001f, 0.5f, 0.5f, 0.5f, 1)
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        1.0001f, 0.5f, 0.5f, 0.5f, 1)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, -1.0001f, 0.5f, 0.5f, 1)
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 1.0001f, 0.5f, 0.5f, 1)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5001f, 0.5f, 1)
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, -1.5001f, 0.5f, 1)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, 0.5001f, 1)
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
-                new FakeRasterizedLineSegmentRenderable(1.0f, (short)0xAAAA,
-                        1, 1.0f, 1.0f, 1.0f, 1.0f,
-                        0.5f, 0.5f, 0.5f, -1.5001f, 1)
+                        new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f), 1)
         ));
     }
 }

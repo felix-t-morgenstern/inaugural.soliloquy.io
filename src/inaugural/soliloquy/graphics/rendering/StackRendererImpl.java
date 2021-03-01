@@ -5,7 +5,7 @@ import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
-import soliloquy.specs.graphics.rendering.RendererType;
+import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.StackRenderer;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.Collections;
 public class StackRendererImpl implements StackRenderer {
     private final RenderableStack RENDERABLE_STACK;
     @SuppressWarnings("rawtypes")
-    private final RendererType<Renderable> RENDERER;
+    private final Renderer<Renderable> RENDERER;
 
     @SuppressWarnings("rawtypes")
-    public StackRendererImpl(RenderableStack renderableStack, RendererType<Renderable> renderer) {
+    public StackRendererImpl(RenderableStack renderableStack, Renderer<Renderable> renderer) {
         RENDERABLE_STACK = Check.ifNull(renderableStack, "renderableStack");
         RENDERER = Check.ifNull(renderer, "renderer");
     }

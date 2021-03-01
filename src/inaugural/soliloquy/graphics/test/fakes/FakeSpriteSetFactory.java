@@ -14,7 +14,7 @@ public class FakeSpriteSetFactory implements AssetFactory<SpriteSetDefinition, S
     public final List<SpriteSet> OUTPUTS = new ArrayList<>();
 
     @Override
-    public SpriteSet create(SpriteSetDefinition spriteSetDefinition) throws IllegalArgumentException {
+    public SpriteSet make(SpriteSetDefinition spriteSetDefinition) throws IllegalArgumentException {
         INPUTS.put(spriteSetDefinition.assetId(), spriteSetDefinition);
         SpriteSet createdSpriteSet = new FakeSpriteSet(spriteSetDefinition.assetId());
         OUTPUTS.add(createdSpriteSet);

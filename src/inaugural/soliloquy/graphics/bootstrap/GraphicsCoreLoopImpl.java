@@ -6,18 +6,22 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.FrameTimer;
+import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.StackRenderer;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
-    private final String _titlebar;
-    private final GLFWMouseButtonCallback _mouseButtonCallback;
-    private final FrameTimer _frameTimer;
-    private final WindowResolutionManager _windowManager;
-    private final StackRenderer _stackRenderer;
+    private final String TITLEBAR;
+    private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK;
+    private final FrameTimer FRAME_TIMER;
+    private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
+    private final StackRenderer STACK_RENDERER;
+    private final ShaderFactory SHADER_FACTORY;
+    private final String SHADER_FILENAME_PREFIX;
 
     private long _window;
 
@@ -25,12 +29,17 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                 GLFWMouseButtonCallback mouseButtonCallback,
                                 FrameTimer frameTimer,
                                 WindowResolutionManager windowResolutionManager,
-                                StackRenderer stackRenderer) {
-        _titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
-        _mouseButtonCallback = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
-        _frameTimer = Check.ifNull(frameTimer, "frameTimer");
-        _windowManager = Check.ifNull(windowResolutionManager, "windowResolutionManager");
-        _stackRenderer = Check.ifNull(stackRenderer, "stackRenderer");
+                                StackRenderer stackRenderer,
+                                ShaderFactory shaderFactory,
+                                String shaderFilenamePrefix) {
+        TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
+        MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
+        FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
+        WINDOW_RESOLUTION_MANAGER = Check.ifNull(windowResolutionManager,
+                "windowResolutionManager");
+        STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
+        SHADER_FACTORY = Check.ifNull(shaderFactory, "shaderFactory");
+        SHADER_FILENAME_PREFIX = Check.ifNullOrEmpty(shaderFilenamePrefix, "shaderFilenamePrefix");
     }
 
     @Override
@@ -39,7 +48,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
             throw new RuntimeException("GLFW failed to initialize");
         }
 
-        _window = _windowManager.updateWindowSizeAndLocation(_window, _titlebar);
+        _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
 
         // TODO: Ensure via tests that 0 values throw exceptions, both at initial creation, and on updates
         if (_window == 0) {
@@ -57,24 +66,27 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glDepthMask(false);
 
-        glfwSetMouseButtonCallback(_window, _mouseButtonCallback);
+        glfwSetMouseButtonCallback(_window, MOUSE_BUTTON_CALLBACK);
+
+        Shader shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
+        shader.bind();
 
         new Thread(gameThread).start();
 
         while(!glfwWindowShouldClose(_window)) {
-            if (_frameTimer.shouldExecuteNextFrame()) {
+            if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
 
-                _window = _windowManager.updateWindowSizeAndLocation(_window, _titlebar);
+                _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                _stackRenderer.render();
+                STACK_RENDERER.render();
 
                 glfwSwapBuffers(_window);
             }
 
-            CheckedExceptionWrapper.Sleep(_frameTimer.getPollingInterval());
+            CheckedExceptionWrapper.Sleep(FRAME_TIMER.getPollingInterval());
         }
 
         glfwTerminate();
@@ -87,7 +99,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
     @Override
     public String getTitlebar() {
-        return _titlebar;
+        return TITLEBAR;
     }
 
     @Override

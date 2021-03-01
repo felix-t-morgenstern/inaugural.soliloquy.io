@@ -4,14 +4,11 @@ import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
-import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
-import inaugural.soliloquy.graphics.test.fakes.FakeRasterizedLineSegmentRenderable;
-import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
+import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.rendering.RendererType;
+import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 
 import java.util.Random;
@@ -29,19 +26,15 @@ class RasterizedLineSegmentRendererTest {
 
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
 
-        RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable =
-                new FakeRasterizedLineSegmentRenderable(6f, (short) 0xAAAA, 2,
-                        1f, 0.1f, 0f, 0.5f,
-                        -0.5f, 0.75f, 1f, -.25f, 1);
-
-        RendererType<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =
+        Renderer<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =
                 new RasterizedLineSegmentRenderer();
 
         stackRenderer.RenderAction =
                 () -> rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable());
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer);
+                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
+                new FakeShaderFactory(), "");
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
     }
@@ -53,13 +46,12 @@ class RasterizedLineSegmentRendererTest {
     }
 
     private static RasterizedLineSegmentRenderable randomRasterizedLineSegmentRenderable() {
-        Random random = new Random();
         return new FakeRasterizedLineSegmentRenderable(6f, (short) 0xAAAA,
                 1 + new Random().nextInt(8),
                 new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1f,
-                0f, 0f,
-                (2 * new Random().nextFloat()) - 1f,
-                (2 * new Random().nextFloat()) - 1f,
+                new FakeFloatBox(0f, 0f,
+                        (2 * new Random().nextFloat()) - 1f,
+                        (2 * new Random().nextFloat()) - 1f),
                 1);
     }
 }

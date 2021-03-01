@@ -2,11 +2,11 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.rendering.RendererType;
+import soliloquy.specs.graphics.rendering.Renderer;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class RasterizedLineSegmentRenderer implements RendererType<RasterizedLineSegmentRenderable> {
+public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSegmentRenderable> {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable)
@@ -41,47 +41,6 @@ public class RasterizedLineSegmentRenderer implements RendererType<RasterizedLin
         Check.throwOnGtValue(rasterizedLineSegmentRenderable.alpha(), 1f,
                 "rasterizedLineSegmentRenderable.alpha()");
 
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.xLoc(), -1f,
-                "rasterizedLineSegmentRenderable.xLoc()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.xLoc(), 1f,
-                "rasterizedLineSegmentRenderable.xLoc()");
-
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.yLoc(), -1f,
-                "rasterizedLineSegmentRenderable.yLoc()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.yLoc(), 1f,
-                "rasterizedLineSegmentRenderable.yLoc()");
-
-        if (rasterizedLineSegmentRenderable.xLoc() + rasterizedLineSegmentRenderable.width()
-                > 1f) {
-            throw new IllegalArgumentException("RasterizedLineSegmentRenderer.render: xLoc (" +
-                    rasterizedLineSegmentRenderable.xLoc() + ") plus width (" +
-                    rasterizedLineSegmentRenderable.width() + ") exceed maximum boundary of " +
-                    "window (1.0)");
-        }
-        if (rasterizedLineSegmentRenderable.xLoc() + rasterizedLineSegmentRenderable.width()
-                < -1f) {
-            throw new IllegalArgumentException("RasterizedLineSegmentRenderer.render: xLoc (" +
-                    rasterizedLineSegmentRenderable.xLoc() + ") plus width (" +
-                    rasterizedLineSegmentRenderable.width() + ") exceed minimum boundary of " +
-                    "window (-1.0)");
-        }
-
-        if (rasterizedLineSegmentRenderable.yLoc() + rasterizedLineSegmentRenderable.height()
-                > 1f) {
-            throw new IllegalArgumentException("RasterizedLineSegmentRenderer.render: yLoc (" +
-                    rasterizedLineSegmentRenderable.yLoc() + ") plus height (" +
-                    rasterizedLineSegmentRenderable.height() + ") exceed maximum boundary of " +
-                    "window (1.0)");
-        }
-
-        if (rasterizedLineSegmentRenderable.yLoc() + rasterizedLineSegmentRenderable.height()
-                < -1f) {
-            throw new IllegalArgumentException("RasterizedLineSegmentRenderer.render: yLoc (" +
-                    rasterizedLineSegmentRenderable.yLoc() + ") plus height (" +
-                    rasterizedLineSegmentRenderable.height() + ") exceed minimum boundary of " +
-                    "window (-1.0)");
-        }
-
         glLineWidth(rasterizedLineSegmentRenderable.thickness());
 
         glLineStipple(rasterizedLineSegmentRenderable.stippleFactor(),
@@ -94,17 +53,18 @@ public class RasterizedLineSegmentRenderer implements RendererType<RasterizedLin
 
         glBegin(GL_LINES);
 
-        glVertex2f(rasterizedLineSegmentRenderable.xLoc(), rasterizedLineSegmentRenderable.yLoc());
+        glVertex2f(rasterizedLineSegmentRenderable.renderingArea().leftX(),
+                rasterizedLineSegmentRenderable.renderingArea().topY());
 
-        glVertex2f(rasterizedLineSegmentRenderable.xLoc() + rasterizedLineSegmentRenderable.width(),
-                rasterizedLineSegmentRenderable.yLoc() + rasterizedLineSegmentRenderable.height());
+        glVertex2f(rasterizedLineSegmentRenderable.renderingArea().rightX(),
+                rasterizedLineSegmentRenderable.renderingArea().bottomY());
 
         glEnd();
     }
 
     @Override
     public String getInterfaceName() {
-        return RendererType.class.getCanonicalName() + "<" +
+        return Renderer.class.getCanonicalName() + "<" +
                 RasterizedLineSegmentRenderable.class.getCanonicalName() + ">";
     }
 }

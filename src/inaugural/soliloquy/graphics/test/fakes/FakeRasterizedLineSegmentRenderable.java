@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.fakes;
 
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
     public float Thickness;
@@ -11,17 +12,13 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public float Green;
     public float Blue;
     public float Alpha;
-    public float XLoc;
-    public float YLoc;
-    public float Width;
-    public float Height;
+    public FloatBox RenderingArea;
     public int Z;
 
     public FakeRasterizedLineSegmentRenderable(float thickness, short stipplePattern,
                                                int stippleFactor,
                                                float red, float green, float blue, float alpha,
-                                               float xLoc,
-                                               float yLoc, float width, float height, int z) {
+                                               FloatBox renderingArea, int z) {
         Thickness = thickness;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
@@ -29,10 +26,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
         Green = green;
         Blue = blue;
         Alpha = alpha;
-        XLoc = xLoc;
-        YLoc = yLoc;
-        Width = width;
-        Height = height;
+        RenderingArea = renderingArea;
         Z = z;
     }
 
@@ -72,23 +66,8 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public float xLoc() {
-        return XLoc;
-    }
-
-    @Override
-    public float yLoc() {
-        return YLoc;
-    }
-
-    @Override
-    public float width() {
-        return Width;
-    }
-
-    @Override
-    public float height() {
-        return Height;
+    public FloatBox renderingArea() {
+        return RenderingArea;
     }
 
     @Override

@@ -2,38 +2,25 @@ package inaugural.soliloquy.graphics.test.fakes;
 
 import soliloquy.specs.common.shared.Cloneable;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.FloatBox;
 
 @SuppressWarnings("rawtypes")
 public class FakeRenderable implements Renderable {
-    public int _z;
+    public int Z;
+    public FloatBox RenderingArea;
 
     public FakeRenderable(int z) {
-        _z = z;
+        Z = z;
     }
 
     @Override
-    public float xLoc() {
-        return 0;
-    }
-
-    @Override
-    public float yLoc() {
-        return 0;
-    }
-
-    @Override
-    public float width() {
-        return 0;
-    }
-
-    @Override
-    public float height() {
-        return 0;
+    public FloatBox renderingArea() {
+        return RenderingArea;
     }
 
     @Override
     public int z() {
-        return _z;
+        return Z;
     }
 
     @Override

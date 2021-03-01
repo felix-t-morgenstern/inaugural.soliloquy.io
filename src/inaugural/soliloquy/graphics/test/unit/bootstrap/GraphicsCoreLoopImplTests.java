@@ -1,10 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
-import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
-import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
-import inaugural.soliloquy.graphics.test.fakes.FakeWindowResolutionManager;
+import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,37 +12,37 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 class GraphicsCoreLoopImplTests {
-    private String _titlebar;
-    private GLFWMouseButtonCallback _mouseButtonCallback;
-    private FakeFrameTimer _frameTimer;
-    private FakeWindowResolutionManager _windowManager;
-    private FakeStackRenderer _stackRenderer;
+    private final String TITLEBAR = "My title bar";
+    private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK =
+            new FakeGLFWMouseButtonCallback();
+    private final FakeFrameTimer FRAME_TIMER = new FakeFrameTimer();
+    private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
+            new FakeWindowResolutionManager();
+    private final FakeStackRenderer STACK_RENDERER = new FakeStackRenderer();
+    private final FakeShaderFactory SHADER_FACTORY = new FakeShaderFactory();
+    private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
 
     private GraphicsCoreLoop _graphicsCoreLoop;
 
     @BeforeEach
     void setUp() {
-        _titlebar = "My title bar";
-        _mouseButtonCallback = new FakeGLFWMouseButtonCallback();
-        _frameTimer = new FakeFrameTimer();
-        _windowManager = new FakeWindowResolutionManager();
-        _stackRenderer = new FakeStackRenderer();
-
-        _windowManager.UpdateWindowSizeAndLocationAction = () -> {
+        WINDOW_RESOLUTION_MANAGER.UpdateWindowSizeAndLocationAction = () -> {
             long windowId = glfwCreateWindow(800, 600, "My titlebar", 0, 0);
             glfwMakeContextCurrent(windowId);
             return windowId;
         };
-        _windowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
+        WINDOW_RESOLUTION_MANAGER.CallUpdateWindowSizeAndLocationOnlyOnce = true;
 
-        _frameTimer.setPollingInterval(20);
+        FRAME_TIMER.setPollingInterval(20);
 
         _graphicsCoreLoop = new GraphicsCoreLoopImpl(
-                _titlebar,
-                _mouseButtonCallback,
-                _frameTimer,
-                _windowManager,
-                _stackRenderer
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         );
     }
 
@@ -53,45 +50,84 @@ class GraphicsCoreLoopImplTests {
     void testInvalidConstructorParams() {
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 null,
-                _mouseButtonCallback,
-                _frameTimer,
-                _windowManager,
-                _stackRenderer
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 "",
-                _mouseButtonCallback,
-                _frameTimer,
-                _windowManager,
-                _stackRenderer
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                _titlebar,
+                TITLEBAR,
                 null,
-                _frameTimer,
-                _windowManager,
-                _stackRenderer
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                _titlebar,
-                _mouseButtonCallback,
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
                 null,
-                _windowManager,
-                _stackRenderer
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                _titlebar,
-                _mouseButtonCallback,
-                _frameTimer,
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
                 null,
-                _stackRenderer
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                _titlebar,
-                _mouseButtonCallback,
-                _frameTimer,
-                _windowManager,
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                null,
+                SHADER_FACTORY,
+                SHADER_FILE_PREFIX
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                null,
+                SHADER_FILE_PREFIX
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
                 null
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                ""
         ));
     }
 
@@ -103,23 +139,23 @@ class GraphicsCoreLoopImplTests {
 
     @Test
     void testGetTitlebar() {
-        assertEquals(_titlebar, _graphicsCoreLoop.getTitlebar());
+        assertEquals(TITLEBAR, _graphicsCoreLoop.getTitlebar());
     }
 
     @Test
     void testWhenFrameTimerDoesNotPermitNewFrames() {
-        _frameTimer.ShouldExecuteNextFrame = false;
+        FRAME_TIMER.ShouldExecuteNextFrame = false;
 
         _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
 
         // Should be 1, since it is called to create the initial window
-        assertEquals(1, _windowManager.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
-        assertEquals(0, _stackRenderer.NumberOfTimesRenderCalled);
+        assertEquals(1, WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
+        assertEquals(0, STACK_RENDERER.NumberOfTimesRenderCalled);
     }
 
     @Test
     void testWhenFrameTimerPermitsNewFrames() {
-        _frameTimer.ShouldExecuteNextFrame = true;
+        FRAME_TIMER.ShouldExecuteNextFrame = true;
 
         _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
 
@@ -132,8 +168,8 @@ class GraphicsCoreLoopImplTests {
         //     polling interval as an actual interval, rather than merely a delay; however, since
         //     the interval should be very small in practice (e.g. 2-5ms), this slight
         //     indeterminacy should not radically affect performance.
-        assertTrue(_windowManager.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
-        assertTrue(_stackRenderer.NumberOfTimesRenderCalled > 1);
+        assertTrue(WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
+        assertTrue(STACK_RENDERER.NumberOfTimesRenderCalled > 1);
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

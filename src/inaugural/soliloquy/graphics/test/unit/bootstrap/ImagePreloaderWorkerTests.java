@@ -15,7 +15,7 @@ class ImagePreloaderWorkerTests {
     private final String SIMPLE_GRADIENT_RELATIVE_LOCATION = "./res/images/ui/gradient.png";
 
     @BeforeAll
-    static void setUp() {
+    static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -26,7 +26,7 @@ class ImagePreloaderWorkerTests {
     }
 
     @AfterAll
-    static void tearDown() {
+    static void tearDownFixture() {
         glfwTerminate();
     }
 

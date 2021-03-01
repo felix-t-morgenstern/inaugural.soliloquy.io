@@ -91,7 +91,7 @@ class SpriteSetFactoryTests {
                     add(_spriteSetSnippetDefinition3);
                 }}, _assetId);
 
-        SpriteSet createdSpriteSet = _spriteSetFactory.create(spriteSetDefinition);
+        SpriteSet createdSpriteSet = _spriteSetFactory.make(spriteSetDefinition);
 
         assertNotNull(createdSpriteSet);
 
@@ -140,26 +140,26 @@ class SpriteSetFactoryTests {
             add(_spriteSetSnippetDefinition3);
         }};
 
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(null));
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(null));
 
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(null, _assetId)
         ));
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(new ArrayList<>(), _assetId)
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, null)
         ));
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, "")
         ));
 
 
 
         _spriteSetSnippetDefinition1._image = null;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._image = _image1;
@@ -167,13 +167,13 @@ class SpriteSetFactoryTests {
 
 
         _image1._relativeLocation = null;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _image1._relativeLocation = _image1RelativeLocation;
 
         _image1._relativeLocation = "";
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _image1._relativeLocation = _image1RelativeLocation;
@@ -181,13 +181,13 @@ class SpriteSetFactoryTests {
 
 
         _image1._width = 0;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _image1._width = _image1Width;
 
         _image1._height = 0;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _image1._height = _image1Height;
@@ -196,7 +196,7 @@ class SpriteSetFactoryTests {
 
         _spriteSetSnippetDefinition1._type = null;
         _spriteSetSnippetDefinition1._direction = _snippet2Direction;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._type = _snippet1Type;
@@ -205,25 +205,25 @@ class SpriteSetFactoryTests {
 
 
         _spriteSetSnippetDefinition1._leftX = -1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._leftX = _snippet1LeftX;
 
         _spriteSetSnippetDefinition1._topY = -1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._topY = _snippet1TopY;
 
         _spriteSetSnippetDefinition1._rightX = -1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._rightX = _snippet1RightX;
 
         _spriteSetSnippetDefinition1._bottomY = -1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._bottomY = _snippet1BottomY;
@@ -231,13 +231,13 @@ class SpriteSetFactoryTests {
 
 
         _spriteSetSnippetDefinition1._rightX = _snippet1LeftX;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._rightX = _snippet1RightX;
 
         _spriteSetSnippetDefinition1._bottomY = _snippet1TopY;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._bottomY = _snippet1BottomY;
@@ -245,25 +245,25 @@ class SpriteSetFactoryTests {
 
 
         _spriteSetSnippetDefinition1._leftX = _image1Width + 1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._leftX = _snippet1LeftX;
 
         _spriteSetSnippetDefinition1._topY = _image1Height + 1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._topY = _snippet1TopY;
 
         _spriteSetSnippetDefinition1._rightX = _image1Width + 1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._rightX = _snippet1RightX;
 
         _spriteSetSnippetDefinition1._bottomY = _image1Height + 1;
-        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.create(
+        assertThrows(IllegalArgumentException.class, () -> _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId)
         ));
         _spriteSetSnippetDefinition1._bottomY = _snippet1BottomY;
@@ -278,7 +278,7 @@ class SpriteSetFactoryTests {
             add(_spriteSetSnippetDefinition3);
         }};
 
-        SpriteSet spriteSet = _spriteSetFactory.create(
+        SpriteSet spriteSet = _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId));
 
         AssetSnippet snippet1 =
@@ -326,7 +326,7 @@ class SpriteSetFactoryTests {
             add(_spriteSetSnippetDefinition3);
         }};
 
-        SpriteSet spriteSet = _spriteSetFactory.create(
+        SpriteSet spriteSet = _spriteSetFactory.make(
                 new FakeSpriteSetDefinition(spriteSetSnippetDefinitions, _assetId));
 
         assertEquals(_assetId, spriteSet.id());

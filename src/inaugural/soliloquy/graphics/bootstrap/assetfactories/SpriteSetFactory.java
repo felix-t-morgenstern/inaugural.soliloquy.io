@@ -16,7 +16,7 @@ import static inaugural.soliloquy.tools.Tools.emptyIfNull;
 
 public class SpriteSetFactory extends AssetFactoryAbstract<SpriteSetDefinition, SpriteSet> {
     @Override
-    public SpriteSet create(SpriteSetDefinition spriteSetDefinition)
+    public SpriteSet make(SpriteSetDefinition spriteSetDefinition)
             throws IllegalArgumentException {
         Check.ifNull(spriteSetDefinition, "spriteSetDefinition");
 
