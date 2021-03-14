@@ -27,6 +27,18 @@ class RasterizedLineSegmentRendererTests {
     }
 
     @Test
+    void testSetMesh() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> _lineSegmentRenderer.setMesh(null));
+    }
+
+    @Test
+    void testSetShader() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> _lineSegmentRenderer.setShader(null));
+    }
+
+    @Test
     void testRenderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(null));
 

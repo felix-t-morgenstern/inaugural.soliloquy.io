@@ -6,16 +6,19 @@ in vec2 textureCoords;
 out vec4 color;
 out vec2 uvCoords;
 
-uniform float zIndex;
 uniform vec4 matColor;
 uniform vec4 offset;
-uniform vec2 pixelScale;
-uniform vec2 screenPosition;
+uniform vec2 dimensionsInWindow;
+uniform vec2 windowPosition;
 
 void main()
 {
     color = matColor;
-    gl_Position = vec4((position * pixelScale) + screenPosition, 0, 1);
-    gl_Position.z = zIndex;
+    gl_Position = vec4((position * (dimensionsInWindow * 2)) +
+        vec2(
+            (windowPosition.x * 2.0) - 1.0,
+            (((-windowPosition.y + (1.0 - dimensionsInWindow.y)) * 2.0) - 1.0)
+        ),
+        0, 1);
     uvCoords = (textureCoords * offset.zw) + offset.xy;
 }

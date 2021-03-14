@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
+import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class FakeFloatBox implements FloatBox {
@@ -42,12 +43,16 @@ public class FakeFloatBox implements FloatBox {
 
     @Override
     public float height() {
-        return TopY - BottomY;
+        return BottomY - TopY;
     }
 
     @Override
     public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
-        return null;
+        return new FakeFloatBox(
+                Math.max(LeftX, floatBox.leftX()),
+                Math.max(TopY, floatBox.topY()),
+                Math.min(RightX, floatBox.rightX()),
+                Math.min(BottomY, floatBox.bottomY()));
     }
 
     @Override

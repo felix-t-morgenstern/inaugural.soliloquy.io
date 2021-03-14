@@ -5,11 +5,12 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.rendering.FrameTimer;
-import soliloquy.specs.graphics.rendering.Shader;
-import soliloquy.specs.graphics.rendering.StackRenderer;
-import soliloquy.specs.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
+import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
+
+import java.util.Collection;
+import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -21,7 +22,15 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
     private final StackRenderer STACK_RENDERER;
     private final ShaderFactory SHADER_FACTORY;
+    @SuppressWarnings("rawtypes")
+    private final Collection<Renderer> RENDERERS_WITH_SHADER;
     private final String SHADER_FILENAME_PREFIX;
+    private final Function<float[], Function<float[],Mesh>> MESH_FACTORY;
+    @SuppressWarnings("rawtypes")
+    private final Collection<Renderer> RENDERERS_WITH_MESH;
+    private final float[] MESH_VERTICES;
+    private final float[] MESH_UV_COORDINATES;
+    private final GraphicsPreloader GRAPHICS_PRELOADER;
 
     private long _window;
 
@@ -31,7 +40,15 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                 WindowResolutionManager windowResolutionManager,
                                 StackRenderer stackRenderer,
                                 ShaderFactory shaderFactory,
-                                String shaderFilenamePrefix) {
+                                @SuppressWarnings("rawtypes") Collection<Renderer>
+                                        renderersWithShader,
+                                String shaderFilenamePrefix,
+                                Function<float[], Function<float[],Mesh>> meshFactory,
+                                @SuppressWarnings("rawtypes") Collection<Renderer>
+                                        renderersWithMesh,
+                                float[] meshVertices,
+                                float[] meshUvCoordinates,
+                                GraphicsPreloader graphicsPreloader) {
         TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
         MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
@@ -39,7 +56,13 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 "windowResolutionManager");
         STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
         SHADER_FACTORY = Check.ifNull(shaderFactory, "shaderFactory");
+        RENDERERS_WITH_SHADER = Check.ifNull(renderersWithShader, "renderersWithShader");
         SHADER_FILENAME_PREFIX = Check.ifNullOrEmpty(shaderFilenamePrefix, "shaderFilenamePrefix");
+        MESH_FACTORY = Check.ifNull(meshFactory, "meshFactory");
+        RENDERERS_WITH_MESH = Check.ifNull(renderersWithMesh, "renderersWithMesh");
+        MESH_VERTICES = Check.ifNull(meshVertices, "meshVertices");
+        MESH_UV_COORDINATES = Check.ifNull(meshUvCoordinates, "meshUvCoordinates");
+        GRAPHICS_PRELOADER = Check.ifNull(graphicsPreloader, "graphicsPreloader");
     }
 
     @Override
@@ -48,12 +71,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
             throw new RuntimeException("GLFW failed to initialize");
         }
 
-        _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
-
-        // TODO: Ensure via tests that 0 values throw exceptions, both at initial creation, and on updates
-        if (_window == 0) {
-            throw new IllegalStateException("Failed to create window");
-        }
+        updateWindow();
 
         GL.createCapabilities();
 
@@ -71,13 +89,24 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         Shader shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
         shader.bind();
 
+        RENDERERS_WITH_SHADER.forEach(renderer -> renderer.setShader(shader));
+
+        Mesh mesh = MESH_FACTORY.apply(MESH_VERTICES).apply(MESH_UV_COORDINATES);
+
+        RENDERERS_WITH_MESH.forEach(renderer -> renderer.setMesh(mesh));
+
+        mesh.bind();
+
+        // TODO: Consider test for whether GraphicsPreloader.load was called _before_ the first invocation of FrameTimer.shouldExecuteNextFrame
+        GRAPHICS_PRELOADER.load();
+
         new Thread(gameThread).start();
 
         while(!glfwWindowShouldClose(_window)) {
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
 
-                _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
+                updateWindow();
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -90,6 +119,14 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         }
 
         glfwTerminate();
+    }
+
+    private void updateWindow() {
+        _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
+        // TODO: Ensure via tests that 0 values throw exceptions, both at initial creation, and on updates
+        if (_window == 0) {
+            throw new IllegalStateException("Failed to create window");
+        }
     }
 
     @Override

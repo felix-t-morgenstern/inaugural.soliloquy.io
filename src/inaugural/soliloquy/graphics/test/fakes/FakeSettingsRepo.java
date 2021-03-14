@@ -59,7 +59,7 @@ public class FakeSettingsRepo implements SettingsRepo {
 
     @Override
     public boolean removeItem(String s) throws IllegalArgumentException {
-        return false;
+        return SETTINGS.remove(s) != null;
     }
 
     @Override

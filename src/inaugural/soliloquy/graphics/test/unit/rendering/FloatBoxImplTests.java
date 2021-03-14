@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FloatBoxImplTests {
-    private final float LEFT_X = -0.11f;
+    private final float LEFT_X = 0.11f;
     private final float TOP_Y = 0.22f;
     private final float RIGHT_X = 0.33f;
-    private final float BOTTOM_Y = -0.44f;
+    private final float BOTTOM_Y = 0.44f;
 
     private FloatBox _floatBox;
 
@@ -32,15 +32,15 @@ class FloatBoxImplTests {
     @Test
     void testWidthAndHeight() {
         assertEquals(RIGHT_X - LEFT_X, _floatBox.width());
-        assertEquals(TOP_Y - BOTTOM_Y, _floatBox.height());
+        assertEquals(BOTTOM_Y - TOP_Y, _floatBox.height());
     }
 
     @Test
     void testIntersection() {
-        float newLeftX = -0.01f;
-        float newTopY = 0.01f;
-        float newRightX = 0.01f;
-        float newBottomY = -0.01f;
+        float newLeftX = LEFT_X + 0.01f;
+        float newTopY = TOP_Y + 0.01f;
+        float newRightX = RIGHT_X - 0.01f;
+        float newBottomY = BOTTOM_Y - 0.01f;
 
         FloatBox intersectand1 = new FloatBoxImpl(newLeftX, TOP_Y, RIGHT_X, BOTTOM_Y);
 

@@ -50,11 +50,11 @@ class StackRendererImplTests {
 
         _stackRenderer.render();
 
-        assertEquals(3, _renderer.RENDERED.size());
-        assertTrue(_renderer.RENDERED.get(0) == renderable2 ||
-                _renderer.RENDERED.get(0) == renderable3);
-        assertTrue(_renderer.RENDERED.get(1) == renderable2 ||
-                _renderer.RENDERED.get(1) == renderable3);
-        assertSame(renderable1, _renderer.RENDERED.get(2));
+        assertEquals(3, _renderer.Rendered.size());
+        assertTrue(_renderer.Rendered.get(0) == renderable2 ||
+                _renderer.Rendered.get(0) == renderable3);
+        assertTrue(_renderer.Rendered.get(1) == renderable2 ||
+                _renderer.Rendered.get(1) == renderable3);
+        assertSame(renderable1, _renderer.Rendered.get(2));
     }
 }

@@ -43,7 +43,7 @@ public class FloatBoxImpl implements FloatBox {
 
     @Override
     public float height() {
-        return TOP_Y - BOTTOM_Y;
+        return BOTTOM_Y - TOP_Y;
     }
 
     @Override
@@ -51,9 +51,9 @@ public class FloatBoxImpl implements FloatBox {
         Check.ifNull(floatBox, "floatBox");
         return new FloatBoxImpl(
                 Math.max(LEFT_X, floatBox.leftX()),
-                Math.min(TOP_Y, floatBox.topY()),
+                Math.max(TOP_Y, floatBox.topY()),
                 Math.min(RIGHT_X, floatBox.rightX()),
-                Math.max(BOTTOM_Y, floatBox.bottomY()));
+                Math.min(BOTTOM_Y, floatBox.bottomY()));
     }
 
     @Override

@@ -2,11 +2,25 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.Shader;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSegmentRenderable> {
+    @Override
+    public void setMesh(Mesh mesh) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("RasterizedLineSegmentRenderer.setMesh: " +
+                "this Renderer does not require a Mesh");
+    }
+
+    @Override
+    public void setShader(Shader shader) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("RasterizedLineSegmentRenderer.setShader: " +
+                "this Renderer does not require a Shader");
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void render(RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable)

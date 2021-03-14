@@ -11,7 +11,8 @@ import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class FakeRenderableImage implements Image {
-    public String _relativeLocation;
+    public String RelativeLocation;
+    public long WindowId;
 
     public int _width;
     public int _height;
@@ -22,7 +23,11 @@ public class FakeRenderableImage implements Image {
     private final static int BORDER = 0;
 
     public FakeRenderableImage(String relativeLocation) {
-        _relativeLocation = relativeLocation;
+        RelativeLocation = relativeLocation;
+    }
+
+    public void load() {
+        _textureId = loadTexture();
     }
 
     private int loadTexture() {
@@ -30,7 +35,7 @@ public class FakeRenderableImage implements Image {
         IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
 
-        ByteBuffer imageData = stbi_load(_relativeLocation, widthBuffer, heightBuffer,
+        ByteBuffer imageData = stbi_load(RelativeLocation, widthBuffer, heightBuffer,
                 channelsBuffer, DESIRED_CHANNELS);
         assert imageData != null;
 
@@ -59,7 +64,7 @@ public class FakeRenderableImage implements Image {
 
     @Override
     public String relativeLocation() {
-        return _relativeLocation;
+        return RelativeLocation;
     }
 
     @Override

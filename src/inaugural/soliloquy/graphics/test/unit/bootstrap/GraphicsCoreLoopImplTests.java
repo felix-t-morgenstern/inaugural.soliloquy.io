@@ -7,6 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.Renderer;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -21,6 +27,24 @@ class GraphicsCoreLoopImplTests {
     private final FakeStackRenderer STACK_RENDERER = new FakeStackRenderer();
     private final FakeShaderFactory SHADER_FACTORY = new FakeShaderFactory();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
+    private final FakeRenderer RENDERER = new FakeRenderer();
+    @SuppressWarnings("rawtypes")
+    private final Collection<Renderer> RENDERERS_WITH_SHADER = new ArrayList<Renderer>() {{
+        add(RENDERER);
+    }};
+    private final FakeMesh MESH = new FakeMesh();
+    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY = f1 -> f2 -> {
+        MESH.Vertices = f1;
+        MESH.UvCoordinates = f2;
+        return MESH;
+    };
+    @SuppressWarnings("rawtypes")
+    private final Collection<Renderer> RENDERERS_WITH_MESH = new ArrayList<Renderer>() {{
+        add(RENDERER);
+    }};
+    private final float[] MESH_VERTICES = new float[] {0.123f};
+    private final float[] MESH_UV_COORDINATES = new float[] {0.456f};
+    private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
 
     private GraphicsCoreLoop _graphicsCoreLoop;
 
@@ -42,7 +66,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         );
     }
 
@@ -55,7 +85,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 "",
@@ -64,7 +100,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -73,7 +115,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -82,7 +130,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -91,7 +145,13 @@ class GraphicsCoreLoopImplTests {
                 null,
                 STACK_RENDERER,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -100,7 +160,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 null,
                 SHADER_FACTORY,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -109,7 +175,13 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 null,
-                SHADER_FILE_PREFIX
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -118,16 +190,118 @@ class GraphicsCoreLoopImplTests {
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
+                null,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                null,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                "",
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                null,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                null,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                null,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                null,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
                 null
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
-                FRAME_TIMER,
-                WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
-                SHADER_FACTORY,
-                ""
         ));
     }
 
@@ -170,6 +344,17 @@ class GraphicsCoreLoopImplTests {
         //     indeterminacy should not radically affect performance.
         assertTrue(WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
         assertTrue(STACK_RENDERER.NumberOfTimesRenderCalled > 1);
+    }
+
+    @Test
+    void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalled() {
+        FRAME_TIMER.ShouldExecuteNextFrame = false;
+
+        _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
+
+        assertSame(MESH, RENDERER.Mesh);
+        assertSame(SHADER_FACTORY.MostRecentlyCreated, RENDERER.Shader);
+        assertTrue(GRAPHICS_PRELOADER.LoadCalled);
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

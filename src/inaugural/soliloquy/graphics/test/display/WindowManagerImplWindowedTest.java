@@ -3,18 +3,23 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeFrameTimer;
-import inaugural.soliloquy.graphics.test.fakes.FakeGLFWMouseButtonCallback;
-import inaugural.soliloquy.graphics.test.fakes.FakeShaderFactory;
-import inaugural.soliloquy.graphics.test.fakes.FakeStackRenderer;
+import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.StackRenderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 class WindowManagerImplWindowedTest {
+    private final static float[] MESH_DATA =
+            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager =
@@ -23,11 +28,15 @@ class WindowManagerImplWindowedTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();
+        Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
-                new FakeShaderFactory(), "");
+                new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
+                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
     }
