@@ -1,17 +1,17 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.graphics.assets.AssetSnippet;
-import soliloquy.specs.graphics.assets.SpriteSet;
+import soliloquy.specs.graphics.assets.ImageAsset;
+import soliloquy.specs.graphics.assets.ImageAssetSet;
 
-public class FakeSpriteSet implements SpriteSet {
+public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
 
-    public FakeSpriteSet(String id) {
+    public FakeImageAssetSet(String id) {
         Id = id;
     }
 
     @Override
-    public AssetSnippet getImageAndBoundariesForTypeAndDirection(String s, String s1) throws IllegalArgumentException {
+    public ImageAsset getImageAssetForTypeAndDirection(String s, String s1) throws IllegalArgumentException {
         return null;
     }
 

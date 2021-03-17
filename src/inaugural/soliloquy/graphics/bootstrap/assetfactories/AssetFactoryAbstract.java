@@ -1,14 +1,14 @@
 package inaugural.soliloquy.graphics.bootstrap.assetfactories;
 
+import soliloquy.specs.graphics.assets.Asset;
 import soliloquy.specs.graphics.assets.AssetSnippet;
-import soliloquy.specs.graphics.assets.AssetType;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AssetDefinition;
 
 import static inaugural.soliloquy.tools.Check.*;
 
-abstract class AssetFactoryAbstract<TAssetDefinition extends AssetDefinition<TAssetType>,
-        TAssetType extends AssetType> implements AssetFactory<TAssetDefinition, TAssetType> {
+abstract class AssetFactoryAbstract<TAssetDefinition extends AssetDefinition<TAsset>,
+        TAsset extends Asset> implements AssetFactory<TAssetDefinition, TAsset> {
     void throwOnInvalidSnippetDefinition(AssetSnippet snippet, String paramName) {
         ifNull(snippet.image(), paramName + ".image()");
 
