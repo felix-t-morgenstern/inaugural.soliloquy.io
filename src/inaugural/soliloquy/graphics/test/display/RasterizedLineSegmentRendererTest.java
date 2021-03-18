@@ -19,6 +19,19 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
+ *    Window"
+ * 2. During the 2000ms, random rasterized line segments will radiate from the center of the
+ *    screen in random directions. These segments will have an evenly-spaced dash pattern, though
+ *    the density of these dashes will be randomized. The colors of the segments will also be
+ *    randomized. (The timing of the rendering of these segments is not regulated in any way; it is
+ *    expected that new, randomized segments will be generated very rapidly.)
+ * 3. The window will then close
+ *
+ */
 class RasterizedLineSegmentRendererTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -33,7 +46,7 @@ class RasterizedLineSegmentRendererTest {
 
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
         Collection<Renderer> renderersWithShader = new ArrayList<>();
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         Renderer<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =

@@ -14,6 +14,14 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
+ *    Window"
+ * 2. The window will then close
+ *
+ */
 class GraphicsCoreLoopImplSimpleTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -25,7 +33,7 @@ class GraphicsCoreLoopImplSimpleTest {
         StackRenderer stackRenderer = new FakeStackRenderer();
         Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         frameTimer.ShouldExecuteNextFrame = true;

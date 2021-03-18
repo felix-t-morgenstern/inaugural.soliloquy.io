@@ -14,6 +14,14 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window in fullscreen mode, changing the resolution of the monitor to
+ *    3840x2160, for 3000ms.
+ * 2. The window will then close
+ *
+ */
 class WindowManagerImplFullscreenTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -26,7 +34,7 @@ class WindowManagerImplFullscreenTest {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
         frameTimer.setPollingInterval(20);
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();

@@ -17,6 +17,15 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window in windowed mode, with a resolution of 800x600 pixels, for
+ *    3000ms. This window will appear in the center of the screen, and will have a titlebar reading
+ *    "My title bar".
+ * 2. The window will then close
+ *
+ */
 class WindowManagerImplWindowedTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -28,7 +37,7 @@ class WindowManagerImplWindowedTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();

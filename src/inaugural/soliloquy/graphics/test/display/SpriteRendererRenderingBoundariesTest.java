@@ -19,6 +19,25 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 1000ms
+ *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
+ *    centered in the window, taking up half of the width and three-fourths of the height of the
+ *    window.
+ * 2. The image displayed will be clipped so that only the portions of the image within the
+ *    left-most and top-most 62.5% of the window are displayed. This will last for 1000ms.
+ * 3. The image displayed will be clipped so that only the portions of the image within the
+ *    right-most and top-most 62.5% of the window are displayed. This will last for 1000ms.
+ * 4. The image displayed will be clipped so that only the portions of the image within the
+ *    right-most and bottom-most 62.5% of the window are displayed. This will last for 1000ms.
+ * 5. The image displayed will be clipped so that only the portions of the image within the
+ *    left-most and bottom-most 62.5% of the window are displayed. This will last for 1000ms.
+ * 6. The entirety of the image will be displayed again for 1000ms.
+ * 7. The window will then close.
+ *
+ */
 public class SpriteRendererRenderingBoundariesTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -48,7 +67,7 @@ public class SpriteRendererRenderingBoundariesTest {
                 new FakeSprite(renderableImage, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new FakeFloatBox(0.25f, 0.125f, 0.75f,
-                        0.825f));
+                        0.875f));
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES);
