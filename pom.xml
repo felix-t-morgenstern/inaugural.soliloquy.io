@@ -42,12 +42,12 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.common</artifactId>
-            <version>0.0.9</version>
+            <version>0.0.10</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.tools</artifactId>
-            <version>0.0.24</version>
+            <version>0.0.29</version>
         </dependency>
     </dependencies>
 
