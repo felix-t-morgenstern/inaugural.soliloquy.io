@@ -56,7 +56,7 @@ class RasterizedLineSegmentRendererTest {
                 () -> rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable());
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
                 MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
@@ -64,7 +64,7 @@ class RasterizedLineSegmentRendererTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(2000);
+        CheckedExceptionWrapper.sleep(2000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

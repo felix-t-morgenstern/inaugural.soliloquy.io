@@ -22,6 +22,7 @@ class GraphicsCoreLoopImplTests {
     private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK =
             new FakeGLFWMouseButtonCallback();
     private final FakeFrameTimer FRAME_TIMER = new FakeFrameTimer();
+    private final int FRAME_TIMER_POLLING_INTERVAL = 20;
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
     private final FakeStackRenderer STACK_RENDERER = new FakeStackRenderer();
@@ -57,12 +58,11 @@ class GraphicsCoreLoopImplTests {
         };
         WINDOW_RESOLUTION_MANAGER.CallUpdateWindowSizeAndLocationOnlyOnce = true;
 
-        FRAME_TIMER.setPollingInterval(20);
-
         _graphicsCoreLoop = new GraphicsCoreLoopImpl(
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -82,6 +82,7 @@ class GraphicsCoreLoopImplTests {
                 null,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -97,6 +98,7 @@ class GraphicsCoreLoopImplTests {
                 "",
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -112,6 +114,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 null,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -127,6 +130,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 null,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -142,6 +146,39 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                -1,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                1000,
+                WINDOW_RESOLUTION_MANAGER,
+                STACK_RENDERER,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 null,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -157,6 +194,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 null,
                 SHADER_FACTORY,
@@ -172,6 +210,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 null,
@@ -187,6 +226,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -202,6 +242,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -217,6 +258,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -232,6 +274,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -247,6 +290,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -262,6 +306,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -277,6 +322,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -292,6 +338,7 @@ class GraphicsCoreLoopImplTests {
                 TITLEBAR,
                 MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
                 STACK_RENDERER,
                 SHADER_FACTORY,
@@ -358,7 +405,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(100);
+        CheckedExceptionWrapper.sleep(100);
 
 //        while (graphicsCoreLoop.windowId() <= 0)
 //        {

@@ -3,22 +3,25 @@ package inaugural.soliloquy.graphics.test.fakes;
 import soliloquy.specs.graphics.rendering.FrameTimer;
 
 public class FakeFrameTimer implements FrameTimer {
-    private int _pollingInterval;
-
     public boolean ShouldExecuteNextFrame;
 
     @Override
-    public int getPollingInterval() {
-        return _pollingInterval;
+    public void setTargetFps(float i) throws IllegalArgumentException {
+
     }
 
     @Override
-    public void setPollingInterval(int i) throws IllegalArgumentException {
-        _pollingInterval = i;
+    public void start() throws UnsupportedOperationException {
+
     }
 
     @Override
-    public void setTargetFps(int i) throws IllegalArgumentException {
+    public void stop() throws UnsupportedOperationException {
+
+    }
+
+    @Override
+    public void registerFrameExecution() throws UnsupportedOperationException {
 
     }
 

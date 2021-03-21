@@ -83,7 +83,7 @@ public class SpriteRendererRenderingBoundariesTest {
         stackRenderer.RenderAction = () -> spriteRenderer.render(SpriteRenderable);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
                 new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
@@ -97,27 +97,27 @@ public class SpriteRendererRenderingBoundariesTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.625f, 0.625f);
 
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.0f, 1.0f, 0.625f);
 
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.375f, 1.0f, 1.0f);
 
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.375f, 0.625f, 1.0f);
 
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        CheckedExceptionWrapper.Sleep(1000);
+        CheckedExceptionWrapper.sleep(1000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

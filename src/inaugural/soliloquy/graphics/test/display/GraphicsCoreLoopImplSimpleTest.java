@@ -31,16 +31,14 @@ class GraphicsCoreLoopImplSimpleTest {
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         StackRenderer stackRenderer = new FakeStackRenderer();
-        Collection<Renderer> renderersWithShader = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        frameTimer.ShouldExecuteNextFrame = true;
-        frameTimer.setPollingInterval(10);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
-                new FakeGLFWMouseButtonCallback(), frameTimer, WindowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, WindowManager, stackRenderer,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
                 MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
@@ -56,7 +54,7 @@ class GraphicsCoreLoopImplSimpleTest {
     }
 
     private static void resizeThenCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(2000);
+        CheckedExceptionWrapper.sleep(2000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

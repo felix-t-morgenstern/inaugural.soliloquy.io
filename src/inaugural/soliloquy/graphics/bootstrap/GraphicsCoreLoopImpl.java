@@ -16,9 +16,12 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
+    private final static int MS_PER_SECOND = 1000;
+
     private final String TITLEBAR;
     private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK;
     private final FrameTimer FRAME_TIMER;
+    private final int FRAME_TIMER_POLLING_INTERVAL;
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
     private final StackRenderer STACK_RENDERER;
     private final ShaderFactory SHADER_FACTORY;
@@ -37,6 +40,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     public GraphicsCoreLoopImpl(String titlebar,
                                 GLFWMouseButtonCallback mouseButtonCallback,
                                 FrameTimer frameTimer,
+                                int frameTimerPollingInterval,
                                 WindowResolutionManager windowResolutionManager,
                                 StackRenderer stackRenderer,
                                 ShaderFactory shaderFactory,
@@ -52,6 +56,11 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
         MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
+        FRAME_TIMER_POLLING_INTERVAL = Check.throwOnLtValue(
+                Check.throwOnGteValue(frameTimerPollingInterval, MS_PER_SECOND,
+                        "frameTimerPollingInterval"),
+                0, "frameTimerPollingInterval"
+        );
         WINDOW_RESOLUTION_MANAGER = Check.ifNull(windowResolutionManager,
                 "windowResolutionManager");
         STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
@@ -115,7 +124,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 glfwSwapBuffers(_window);
             }
 
-            CheckedExceptionWrapper.Sleep(FRAME_TIMER.getPollingInterval());
+            CheckedExceptionWrapper.sleep(FRAME_TIMER_POLLING_INTERVAL);
         }
 
         glfwTerminate();

@@ -75,7 +75,7 @@ class SpriteRendererSimpleTest {
         stackRenderer.RenderAction = () -> spriteRenderer.render(SpriteRenderable);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
                 new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
@@ -89,7 +89,7 @@ class SpriteRendererSimpleTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(3000);
+        CheckedExceptionWrapper.sleep(3000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

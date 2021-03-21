@@ -1,11 +1,11 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.test.fakes;
 
 import soliloquy.specs.graphics.rendering.GlobalClock;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class GlobalClockImpl implements GlobalClock {
+public class FakeGlobalClock implements GlobalClock {
     @SuppressWarnings("FieldCanBeLocal")
     private final String TIME_ZONE = "GMT";
 
@@ -16,6 +16,6 @@ public class GlobalClockImpl implements GlobalClock {
 
     @Override
     public String getInterfaceName() {
-        return GlobalClock.class.getCanonicalName();
+        return null;
     }
 }

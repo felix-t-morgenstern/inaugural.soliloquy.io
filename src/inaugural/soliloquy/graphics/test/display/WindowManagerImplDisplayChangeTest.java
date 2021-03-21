@@ -47,14 +47,13 @@ class WindowManagerImplDisplayChangeTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        frameTimer.setPollingInterval(20);
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowResolutionManager,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
                 stackRenderer, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
@@ -68,68 +67,68 @@ class WindowManagerImplDisplayChangeTest {
 
         System.out.println("Starting at windowed fullscreen...");
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to windowed, small res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED);
         windowResolutionManager.setDimensions(800, 600);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to fullscreen, med res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.FULLSCREEN);
         windowResolutionManager.setDimensions(1920, 1080);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to fullscreen, large res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.FULLSCREEN);
         windowResolutionManager.setDimensions(3840, 2160);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to windowed, small res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED);
         windowResolutionManager.setDimensions(800, 600);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to fullscreen, large res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.FULLSCREEN);
         windowResolutionManager.setDimensions(3840, 2160);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to windowed fullscreen...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED_FULLSCREEN);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to fullscreen, large res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.FULLSCREEN);
         windowResolutionManager.setDimensions(3840, 2160);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to windowed, small res...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED);
         windowResolutionManager.setDimensions(800, 600);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         System.out.println("Setting to windowed fullscreen...");
 
         windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED_FULLSCREEN);
 
-        CheckedExceptionWrapper.Sleep(ms);
+        CheckedExceptionWrapper.sleep(ms);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

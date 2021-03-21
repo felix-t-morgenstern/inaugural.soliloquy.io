@@ -34,14 +34,13 @@ class WindowManagerImplWindowedFullscreenTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        frameTimer.setPollingInterval(20);
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();
-        Collection<Renderer> renderersWithShader = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, windowResolutionManager,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
                 stackRenderer, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
@@ -49,7 +48,7 @@ class WindowManagerImplWindowedFullscreenTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.Sleep(3000);
+        CheckedExceptionWrapper.sleep(3000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
