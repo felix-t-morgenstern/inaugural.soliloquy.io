@@ -6,7 +6,7 @@ public class FakeFrameTimer implements FrameTimer {
     public boolean ShouldExecuteNextFrame;
 
     @Override
-    public void setTargetFps(float i) throws IllegalArgumentException {
+    public void setTargetFps(Float i) throws IllegalArgumentException {
 
     }
 

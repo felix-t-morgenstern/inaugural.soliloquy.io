@@ -58,7 +58,7 @@ class FrameTimerImplTests {
 
     @Test
     void testSetTargetFpsWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _frameTimer.setTargetFps(0));
+        assertThrows(IllegalArgumentException.class, () -> _frameTimer.setTargetFps(0f));
     }
 
     @Test
@@ -147,6 +147,24 @@ class FrameTimerImplTests {
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
         assertEquals(targetFps, (float)FRAME_RATE_REPORTER.ActualFps.get(0));
+    }
+
+    @Test
+    void testNullTargetFps() {
+        int numberOfFramesToExecute = 1234;
+        _frameTimer.setTargetFps(null);
+        new Thread(_frameTimer::start).start();
+        CheckedExceptionWrapper.sleep(50);
+        for (int i = 0; i < numberOfFramesToExecute; i++) {
+            if (_frameTimer.shouldExecuteNextFrame()) {
+                _frameTimer.registerFrameExecution();
+            }
+        }
+        CheckedExceptionWrapper.sleep(950);
+        _frameTimer.stop();
+
+        assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
+        assertEquals(numberOfFramesToExecute, (float)FRAME_RATE_REPORTER.ActualFps.get(0));
     }
 
     @Test

@@ -17,7 +17,7 @@ public class FrameTimerImpl implements FrameTimer {
 
     private boolean _started;
     private boolean _stopped;
-    private float _targetFps;
+    private Float _targetFps;
 
     private Long _currentPeriodStartTimestamp;
     private Long _currentPeriodEndTimestamp;
@@ -29,8 +29,13 @@ public class FrameTimerImpl implements FrameTimer {
     }
 
     @Override
-    public void setTargetFps(float targetFps) throws IllegalArgumentException {
-        _targetFps = Check.throwOnLteZero(targetFps, "targetFps");
+    public void setTargetFps(Float targetFps) throws IllegalArgumentException {
+        if (targetFps == null) {
+            _targetFps = null;
+        }
+        else {
+            _targetFps = Check.throwOnLteZero(targetFps, "targetFps");
+        }
     }
 
     @Override
@@ -38,7 +43,7 @@ public class FrameTimerImpl implements FrameTimer {
         if (_started) {
             throw new UnsupportedOperationException("FrameTimerImpl: cannot be started twice");
         }
-        new Thread(this::startNewFrameTimingLoopIteration).start();
+        new Thread(this::startNewPeriodLoopIteration).start();
         _started = true;
 
         while (!_stopped) {
@@ -66,7 +71,7 @@ public class FrameTimerImpl implements FrameTimer {
         }
     }
 
-    private void startNewFrameTimingLoopIteration() {
+    private void startNewPeriodLoopIteration() {
         if (_stopped) {
             return;
         }
@@ -88,15 +93,19 @@ public class FrameTimerImpl implements FrameTimer {
 
         CheckedExceptionWrapper.sleep(_currentPeriodEndTimestamp - currentTimestamp);
 
-        startNewFrameTimingLoopIteration();
+        startNewPeriodLoopIteration();
     }
 
-    private void reportFrameInformation(long gmtTimestamp, float targetFps, float actualFps) {
+    private void reportFrameInformation(long gmtTimestamp, Float targetFps, float actualFps) {
         FRAME_RATE_REPORTER.reportFrameRate(new Date(gmtTimestamp), targetFps, actualFps);
     }
 
     @Override
     public boolean shouldExecuteNextFrame() throws UnsupportedOperationException {
+        if (_targetFps == null) {
+            return true;
+        }
+
         long msThroughCurrentPeriod;
         int framesExecutedInCurrentPeriod;
         float targetFps;

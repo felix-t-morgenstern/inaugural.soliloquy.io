@@ -11,7 +11,7 @@ public class FakeFrameRateReporter implements FrameRateReporter {
     public ArrayList<Float> ActualFps = new ArrayList<>();
 
     @Override
-    public void reportFrameRate(Date date, float targetFps, float actualFps)
+    public void reportFrameRate(Date date, Float targetFps, float actualFps)
             throws IllegalArgumentException {
         Dates.add(date);
         TargetFps.add(targetFps);
