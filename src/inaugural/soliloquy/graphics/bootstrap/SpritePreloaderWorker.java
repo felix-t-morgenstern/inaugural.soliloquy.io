@@ -24,7 +24,7 @@ public class SpritePreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void load(Collection<SpriteDTO> spriteDTOs) {
+    public void run(Collection<SpriteDTO> spriteDTOs) {
         Check.ifNull(spriteDTOs, "spriteDTOs");
         spriteDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(
                 new SpriteDefinition() {
@@ -54,7 +54,7 @@ public class SpritePreloaderWorker {
                     }
 
                     @Override
-                    public String assetId() {
+                    public String id() {
                         return dto.id;
                     }
 

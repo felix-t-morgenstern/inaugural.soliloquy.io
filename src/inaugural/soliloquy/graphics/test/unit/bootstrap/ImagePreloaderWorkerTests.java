@@ -33,13 +33,13 @@ class ImagePreloaderWorkerTests {
     }
 
     @Test
-    void testLoad() {
+    void testRun() {
         ArrayList<Image> images = new ArrayList<>();
 
         ImagePreloaderWorker worker = new ImagePreloaderWorker(IMAGE_FACTORY, RELATIVE_LOCATION,
                 true, images::add);
 
-        worker.load();
+        worker.run();
 
         assertEquals(IMAGE_FACTORY.RelativeLocations.get(0), RELATIVE_LOCATION);
         assertTrue(IMAGE_FACTORY.SupportsEventCapturingValues.get(0));

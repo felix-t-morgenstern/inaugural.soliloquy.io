@@ -40,7 +40,7 @@ class ImageAssetSetPreloaderWorkerTests {
     }
 
     @Test
-    void testLoad() {
+    void testRun() {
         String type1 = "type1";
         String type2 = "type2";
         String direction1 = "direction1";
@@ -82,7 +82,7 @@ class ImageAssetSetPreloaderWorkerTests {
             add(imageAssetSet2DTO);
         }};
 
-        _imageAssetSetPreloaderWorker.load(imageAssetSetDTOs);
+        _imageAssetSetPreloaderWorker.run(imageAssetSetDTOs);
 
         assertEquals(imageAssetSetDTOs.size(), IMAGE_ASSET_SET_REGISTRY.size());
         imageAssetSetDTOs.forEach(dto -> {
@@ -102,7 +102,7 @@ class ImageAssetSetPreloaderWorkerTests {
             });
 
             ImageAssetSet imageAssetSet =
-                    IMAGE_ASSET_SET_REGISTRY.get(createdDefinition.assetId());
+                    IMAGE_ASSET_SET_REGISTRY.get(createdDefinition.id());
             assertTrue(FACTORY.OUTPUTS.contains(imageAssetSet));
         });
     }
@@ -121,8 +121,9 @@ class ImageAssetSetPreloaderWorkerTests {
     // NB: This test case does not contain any more in-depth tests of the DTO fields, since the
     //     preloader's only job is to pass the DTO on to the factory
     @Test
-    void testLoadWithInvalidParams() {
+    void testRunWithInvalidParams() {
+        // TODO: Expand invalid param criteria
         assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetPreloaderWorker.load(null));
+                () -> _imageAssetSetPreloaderWorker.run(null));
     }
 }

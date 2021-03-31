@@ -21,7 +21,7 @@ class SpriteFactoryTests {
     private int _topY = 34;
     private int _rightX = 56;
     private int _bottomY = 78;
-    private String _assetId = "assetId";
+    private String _id = "spriteId";
 
     private AssetFactory<SpriteDefinition, Sprite> _spriteFactory;
 
@@ -41,13 +41,13 @@ class SpriteFactoryTests {
     @Test
     void testCreate() {
         SpriteDefinition spriteDefinition = new FakeSpriteDefinition(_image, _leftX, _topY, _rightX,
-                _bottomY, _assetId);
+                _bottomY, _id);
 
         Sprite createdSprite = _spriteFactory.make(spriteDefinition);
 
         assertNotNull(createdSprite);
         assertEquals(Sprite.class.getCanonicalName(), createdSprite.getInterfaceName());
-        assertEquals(_assetId, createdSprite.id());
+        assertEquals(_id, createdSprite.id());
         assertSame(_image, createdSprite.image());
         assertEquals(_relativeLocation, createdSprite.image().relativeLocation());
         assertEquals(_leftX, createdSprite.leftX());
@@ -62,61 +62,61 @@ class SpriteFactoryTests {
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(null));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(null, _leftX, _topY, _rightX, _bottomY, _assetId)
+                new FakeSpriteDefinition(null, _leftX, _topY, _rightX, _bottomY, _id)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(new FakeImage(null, _imageWidth, _imageHeight), _leftX,
-                        _topY, _rightX, _bottomY, _assetId)
+                        _topY, _rightX, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(new FakeImage("", _imageWidth, _imageHeight), _leftX,
-                        _topY, _rightX, _bottomY, _assetId)
+                        _topY, _rightX, _bottomY, _id)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(new FakeImage(_relativeLocation, 0, _imageHeight), _leftX,
-                        _topY, _rightX, _bottomY, _assetId)
+                        _topY, _rightX, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(new FakeImage(_relativeLocation, _imageWidth, 0), _leftX,
-                        _topY, _rightX, _bottomY, _assetId)
+                        _topY, _rightX, _bottomY, _id)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, -1, _topY, _rightX, _bottomY, _assetId)
+                new FakeSpriteDefinition(_image, -1, _topY, _rightX, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _leftX, -1, _rightX, _bottomY, _assetId)
+                new FakeSpriteDefinition(_image, _leftX, -1, _rightX, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _leftX, _topY, -1, _bottomY, _assetId)
+                new FakeSpriteDefinition(_image, _leftX, _topY, -1, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _leftX, _topY, _rightX, -1, _assetId)
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _leftX, _topY, _leftX, _bottomY, _assetId)
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _leftX, _topY, _rightX, _topY, _assetId)
+                new FakeSpriteDefinition(_image, _leftX, _topY, _rightX, -1, _id)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new FakeSpriteDefinition(_image, _imageWidth + 1, _topY, _rightX, _bottomY, _assetId)
+                new FakeSpriteDefinition(_image, _leftX, _topY, _leftX, _bottomY, _id)
+        ));
+        assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
+                new FakeSpriteDefinition(_image, _leftX, _topY, _rightX, _topY, _id)
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
+                new FakeSpriteDefinition(_image, _imageWidth + 1, _topY, _rightX, _bottomY, _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(_image, _leftX, _imageHeight + 1, _rightX, _bottomY,
-                        _assetId)
+                        _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(_image, _leftX, _topY, _imageWidth + 1, _bottomY,
-                        _assetId)
+                        _id)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
                 new FakeSpriteDefinition(_image, _leftX, _topY, _rightX, _imageHeight + 1,
-                        _assetId)
+                        _id)
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(

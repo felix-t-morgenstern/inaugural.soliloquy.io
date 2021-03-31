@@ -97,15 +97,15 @@ class ImageAssetSetFactoryTests {
     void testCreateWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(null));
 
-        IMAGE_ASSET_SET_DEFINITION.AssetId = null;
+        IMAGE_ASSET_SET_DEFINITION.Id = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
 
-        IMAGE_ASSET_SET_DEFINITION.AssetId = "";
+        IMAGE_ASSET_SET_DEFINITION.Id = "";
         assertThrows(IllegalArgumentException.class,
                 () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
 
-        IMAGE_ASSET_SET_DEFINITION.AssetId = IMAGE_ASSET_SET_ID;
+        IMAGE_ASSET_SET_DEFINITION.Id = IMAGE_ASSET_SET_ID;
 
         IMAGE_ASSET_SET_DEFINITION.ImageAssetSetAssetDefinitions = null;
         assertThrows(IllegalArgumentException.class,

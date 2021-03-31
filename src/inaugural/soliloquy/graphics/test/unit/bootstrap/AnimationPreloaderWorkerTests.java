@@ -43,7 +43,7 @@ class AnimationPreloaderWorkerTests {
     }
 
     @Test
-    void testLoad() {
+    void testRun() {
         String relativeLocation1 = "relativeLocation1";
         String relativeLocation2 = "relativeLocation2";
 
@@ -83,7 +83,7 @@ class AnimationPreloaderWorkerTests {
             add(animation1DTO); add(animation2DTO);
         }};
 
-        _animationPreloaderWorker.load(animationDTOs);
+        _animationPreloaderWorker.run(animationDTOs);
 
         assertEquals(animationDTOs.size(), REGISTRY.size());
         animationDTOs.forEach(dto -> {
@@ -105,13 +105,13 @@ class AnimationPreloaderWorkerTests {
                 assertEquals(snippetDTO.offsetY, snippetDefinition.offsetY());
             });
 
-            Animation animation = REGISTRY.get(createdDefinition.assetId());
+            Animation animation = REGISTRY.get(createdDefinition.id());
             assertTrue(FACTORY.OUTPUTS.contains(animation));
         });
     }
 
     @Test
-    void testLoadWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _animationPreloaderWorker.load(null));
+    void testRunWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _animationPreloaderWorker.run(null));
     }
 }

@@ -42,7 +42,7 @@ class SpritePreloaderWorkerTests {
     }
 
     @Test
-    void testLoad() {
+    void testRun() {
         String relativeLocation1 = "relativeLocation1";
         String relativeLocation2 = "relativeLocation2";
         String relativeLocation3 = "relativeLocation3";
@@ -59,7 +59,7 @@ class SpritePreloaderWorkerTests {
                 spriteDTO1, spriteDTO2, spriteDTO3
         ));
 
-        _spritePreloaderWorker.load(spriteDTOs);
+        _spritePreloaderWorker.run(spriteDTOs);
 
         assertEquals(spriteDTOs.size(), REGISTRY.size());
         spriteDTOs.forEach(dto -> {
@@ -75,13 +75,14 @@ class SpritePreloaderWorkerTests {
             assertEquals(SpriteDefinition.class.getCanonicalName(),
                     createdDefinition.getInterfaceName());
 
-            Sprite sprite = REGISTRY.get(createdDefinition.assetId());
+            Sprite sprite = REGISTRY.get(createdDefinition.id());
             assertTrue(FACTORY.OUTPUTS.contains(sprite));
         });
     }
 
     @Test
-    void testLoadWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _spritePreloaderWorker.load(null));
+    void testRunWithInvalidParams() {
+        // TODO: Expand invalid param criteria
+        assertThrows(IllegalArgumentException.class, () -> _spritePreloaderWorker.run(null));
     }
 }

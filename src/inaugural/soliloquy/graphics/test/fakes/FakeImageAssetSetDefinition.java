@@ -7,12 +7,12 @@ import java.util.List;
 
 public class FakeImageAssetSetDefinition implements ImageAssetSetDefinition {
     public List<ImageAssetSetAssetDefinition> ImageAssetSetAssetDefinitions;
-    public String AssetId;
+    public String Id;
 
     public FakeImageAssetSetDefinition(List<ImageAssetSetAssetDefinition> imageAssetSetAssetDefinitions,
-                                       String assetId) {
+                                       String id) {
         ImageAssetSetAssetDefinitions = imageAssetSetAssetDefinitions;
-        AssetId = assetId;
+        Id = id;
     }
 
     @Override
@@ -21,8 +21,8 @@ public class FakeImageAssetSetDefinition implements ImageAssetSetDefinition {
     }
 
     @Override
-    public String assetId() {
-        return AssetId;
+    public String id() {
+        return Id;
     }
 
     @Override

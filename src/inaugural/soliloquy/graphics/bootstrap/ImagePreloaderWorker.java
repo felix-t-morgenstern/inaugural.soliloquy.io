@@ -6,7 +6,7 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
 
 import java.util.function.Consumer;
 
-public class ImagePreloaderWorker {
+public class ImagePreloaderWorker implements Runnable {
     private final ImageFactory IMAGE_FACTORY;
     private final String RELATIVE_LOCATION;
     private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
@@ -22,7 +22,8 @@ public class ImagePreloaderWorker {
         ADD_LOADED_IMAGE = Check.ifNull(addLoadedImage, "addLoadedImage");
     }
 
-    public void load() {
+    @Override
+    public void run() {
         ADD_LOADED_IMAGE.accept(
                 IMAGE_FACTORY.make(RELATIVE_LOCATION, SUPPORTS_MOUSE_EVENT_CAPTURING));
     }

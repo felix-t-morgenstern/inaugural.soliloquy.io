@@ -25,7 +25,7 @@ public class ImageAssetSetPreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void load(Collection<ImageAssetSetDTO> imageAssetSetDTOs) {
+    public void run(Collection<ImageAssetSetDTO> imageAssetSetDTOs) {
         Check.ifNull(imageAssetSetDTOs, "imageAssetSetDTOs");
         imageAssetSetDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
@@ -68,7 +68,7 @@ public class ImageAssetSetPreloaderWorker {
             }
 
             @Override
-            public String assetId() {
+            public String id() {
                 return imageAssetSetDTO.id;
             }
 

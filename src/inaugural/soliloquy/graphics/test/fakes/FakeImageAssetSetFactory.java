@@ -17,9 +17,9 @@ public class FakeImageAssetSetFactory
     @Override
     public ImageAssetSet make(ImageAssetSetDefinition imageAssetSetDefinition)
             throws IllegalArgumentException {
-        INPUTS.put(imageAssetSetDefinition.assetId(), imageAssetSetDefinition);
+        INPUTS.put(imageAssetSetDefinition.id(), imageAssetSetDefinition);
         ImageAssetSet createdImageAssetSet =
-                new FakeImageAssetSet(imageAssetSetDefinition.assetId());
+                new FakeImageAssetSet(imageAssetSetDefinition.id());
         OUTPUTS.add(createdImageAssetSet);
         return createdImageAssetSet;
     }

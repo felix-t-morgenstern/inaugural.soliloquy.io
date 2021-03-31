@@ -12,7 +12,7 @@ public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, 
     @Override
     public Animation make(AnimationDefinition animationDefinition) throws IllegalArgumentException {
         Check.ifNull(animationDefinition, "animationDefinition");
-        return new AnimationImpl(animationDefinition.assetId(), animationDefinition.msDuration(),
+        return new AnimationImpl(animationDefinition.id(), animationDefinition.msDuration(),
                 animationDefinition.frameSnippetDefinitions());
     }
 

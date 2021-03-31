@@ -4,12 +4,12 @@ import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 public class FakeSpriteDefinition extends FakeAssetSnippet implements SpriteDefinition {
-    public String _assetId;
+    public String _id;
 
     public FakeSpriteDefinition(Image image, int leftX, int topY, int rightX, int bottomY,
-                                String assetId) {
+                                String id) {
         super(image, leftX, topY, rightX, bottomY);
-        _assetId = assetId;
+        _id = id;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class FakeSpriteDefinition extends FakeAssetSnippet implements SpriteDefi
     }
 
     @Override
-    public String assetId() {
-        return _assetId;
+    public String id() {
+        return _id;
     }
 }

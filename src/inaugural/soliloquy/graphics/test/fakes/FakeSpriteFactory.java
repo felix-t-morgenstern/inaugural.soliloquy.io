@@ -15,8 +15,8 @@ public class FakeSpriteFactory implements AssetFactory<SpriteDefinition, Sprite>
 
     @Override
     public Sprite make(SpriteDefinition spriteDefinition) throws IllegalArgumentException {
-        INPUTS.put(spriteDefinition.assetId(), spriteDefinition);
-        Sprite createdSprite = new FakeSprite(spriteDefinition.assetId());
+        INPUTS.put(spriteDefinition.id(), spriteDefinition);
+        Sprite createdSprite = new FakeSprite(spriteDefinition.id());
         OUTPUTS.add(createdSprite);
         return createdSprite;
     }

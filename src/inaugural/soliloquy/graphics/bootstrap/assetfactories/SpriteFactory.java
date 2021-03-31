@@ -13,12 +13,12 @@ public class SpriteFactory extends AssetFactoryAbstract<SpriteDefinition, Sprite
 
         throwOnInvalidSnippetDefinition(spriteDefinition, "spriteDefinition");
 
-        Check.ifNullOrEmpty(spriteDefinition.assetId(), "spriteDefinition.assetId()");
+        Check.ifNullOrEmpty(spriteDefinition.id(), "spriteDefinition.id()");
 
         return new Sprite() {
             @Override
             public String id() throws IllegalStateException {
-                return spriteDefinition.assetId();
+                return spriteDefinition.id();
             }
 
             @Override

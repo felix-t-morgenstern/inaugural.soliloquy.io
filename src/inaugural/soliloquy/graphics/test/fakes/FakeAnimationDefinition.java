@@ -7,13 +7,13 @@ import java.util.Map;
 
 public class FakeAnimationDefinition implements AnimationDefinition {
     public int _msDuration;
-    public String _assetId;
+    public String _id;
     public Map<Integer, AnimationFrameSnippet> _frameSnippetDefinitions;
 
-    public FakeAnimationDefinition(int msDuration, String assetId,
+    public FakeAnimationDefinition(int msDuration, String id,
                                    Map<Integer, AnimationFrameSnippet> frameSnippetDefinitions) {
         _msDuration = msDuration;
-        _assetId = assetId;
+        _id = id;
         _frameSnippetDefinitions = frameSnippetDefinitions;
     }
 
@@ -28,8 +28,8 @@ public class FakeAnimationDefinition implements AnimationDefinition {
     }
 
     @Override
-    public String assetId() {
-        return _assetId;
+    public String id() {
+        return _id;
     }
 
     @Override

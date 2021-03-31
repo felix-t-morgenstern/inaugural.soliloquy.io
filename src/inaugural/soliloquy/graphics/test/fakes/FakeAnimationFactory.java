@@ -15,8 +15,8 @@ public class FakeAnimationFactory implements AssetFactory<AnimationDefinition, A
 
     @Override
     public Animation make(AnimationDefinition animationDefinition) throws IllegalArgumentException {
-        INPUTS.put(animationDefinition.assetId(), animationDefinition);
-        Animation createdAnimation = new FakeAnimation(animationDefinition.assetId());
+        INPUTS.put(animationDefinition.id(), animationDefinition);
+        Animation createdAnimation = new FakeAnimation(animationDefinition.id());
         OUTPUTS.add(createdAnimation);
         return createdAnimation;
     }

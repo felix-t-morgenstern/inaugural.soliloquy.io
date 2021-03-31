@@ -37,8 +37,7 @@ public class ImageAssetSetFactory
                     "imageAssetSetDefinition.assetDefinitions() cannot be empty");
         }
 
-        Check.ifNullOrEmpty(imageAssetSetDefinition.assetId(),
-                "imageAssetSetDefinition.assetId()");
+        Check.ifNullOrEmpty(imageAssetSetDefinition.id(), "imageAssetSetDefinition.id()");
 
         Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection = new HashMap<>();
 
@@ -88,7 +87,7 @@ public class ImageAssetSetFactory
             assetsByDirection.put(direction, imageAsset);
         });
 
-        return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.assetId());
+        return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id());
     }
 
     private static String nullIfEmpty(String string) {

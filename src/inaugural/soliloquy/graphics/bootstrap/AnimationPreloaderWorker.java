@@ -27,7 +27,7 @@ public class AnimationPreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void load(Collection<AnimationDTO> animationDTOs) {
+    public void run(Collection<AnimationDTO> animationDTOs) {
         Check.ifNull(animationDTOs, "animationDTOs");
         animationDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
@@ -90,7 +90,7 @@ public class AnimationPreloaderWorker {
             }
 
             @Override
-            public String assetId() {
+            public String id() {
                 return animationDTO.id;
             }
 
