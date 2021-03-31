@@ -140,7 +140,6 @@ public class FontImpl implements Font {
 
             float glyphWidth = fontMetrics.charWidth(glyph);
 
-            // TODO: Consider customizing the padding as a constructor parameter
             float glyphWidthWithPadding = glyphWidth + additionalGlyphPadding;
 
             if (tempX + glyphWidthWithPadding > imageWidth) {

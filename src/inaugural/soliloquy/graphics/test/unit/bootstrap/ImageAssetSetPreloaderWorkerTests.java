@@ -122,7 +122,6 @@ class ImageAssetSetPreloaderWorkerTests {
     //     preloader's only job is to pass the DTO on to the factory
     @Test
     void testRunWithInvalidParams() {
-        // TODO: Expand invalid param criteria
         assertThrows(IllegalArgumentException.class,
                 () -> _imageAssetSetPreloaderWorker.run(null));
     }

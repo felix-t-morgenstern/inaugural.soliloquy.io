@@ -82,7 +82,6 @@ class SpritePreloaderWorkerTests {
 
     @Test
     void testRunWithInvalidParams() {
-        // TODO: Expand invalid param criteria
         assertThrows(IllegalArgumentException.class, () -> _spritePreloaderWorker.run(null));
     }
 }
