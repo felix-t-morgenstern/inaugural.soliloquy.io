@@ -3,18 +3,22 @@ package inaugural.soliloquy.graphics.rendering;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.*;
+import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class SpriteRenderer implements Renderer<SpriteRenderable> {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final FloatBoxFactory FLOAT_BOX_FACTORY;
 
     private Shader _shader;
     private Mesh _mesh;
 
-    public SpriteRenderer(RenderingBoundaries renderingBoundaries) {
+    public SpriteRenderer(RenderingBoundaries renderingBoundaries,
+                          FloatBoxFactory floatBoxFactory) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
     }
 
     @Override
@@ -116,7 +120,7 @@ public class SpriteRenderer implements Renderer<SpriteRenderable> {
         }
 
         // TODO: Have a snippet provide this on demand; DEFINITELY decouple FloatBoxImpl
-        FloatBox snippetBox = new FloatBoxImpl(
+        FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
                 snippetLeftXWithinBounds,
                 snippetTopYWithinBounds,
                 snippetRightXWithinBounds,

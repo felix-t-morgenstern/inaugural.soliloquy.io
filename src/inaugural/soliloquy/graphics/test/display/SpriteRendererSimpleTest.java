@@ -35,6 +35,7 @@ class SpriteRendererSimpleTest {
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
+    private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./res/images/items/RPG_Weapons.png";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
@@ -62,7 +63,8 @@ class SpriteRendererSimpleTest {
                         0.875f));
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES);
+        Renderer<SpriteRenderable> spriteRenderer =
+                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);

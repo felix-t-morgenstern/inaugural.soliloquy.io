@@ -17,17 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SpriteRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
+    private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
 
     private Renderer<SpriteRenderable> _spriteRenderer;
 
     @BeforeEach
     void setUp() {
-        _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES);
+        _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new SpriteRenderer(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SpriteRenderer(null, FLOAT_BOX_FACTORY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SpriteRenderer(RENDERING_BOUNDARIES, null));
     }
 
     @Test

@@ -45,6 +45,7 @@ public class SpriteRendererRenderingBoundariesTest {
             new FakeRenderingBoundaries();
     private final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./res/images/items/RPG_Weapons.png";
+    private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeSpriteRenderable SpriteRenderable;
@@ -70,7 +71,8 @@ public class SpriteRendererRenderingBoundariesTest {
                         0.875f));
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES);
+        Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
+                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);
