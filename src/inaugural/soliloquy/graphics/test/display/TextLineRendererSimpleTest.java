@@ -3,12 +3,13 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
-import inaugural.soliloquy.graphics.rendering.SpriteRenderer;
+import inaugural.soliloquy.graphics.rendering.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
@@ -22,33 +23,26 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 1000ms
- *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
- *    centered in the window, taking up half of the width and three-fourths of the height of the
- *    window.
- * 2. The image displayed will be clipped so that only the portions of the image within the
- *    left-most and top-most 62.5% of the window are displayed. This will last for 1000ms.
- * 3. The image displayed will be clipped so that only the portions of the image within the
- *    right-most and top-most 62.5% of the window are displayed. This will last for 1000ms.
- * 4. The image displayed will be clipped so that only the portions of the image within the
- *    right-most and bottom-most 62.5% of the window are displayed. This will last for 1000ms.
- * 5. The image displayed will be clipped so that only the portions of the image within the
- *    left-most and bottom-most 62.5% of the window are displayed. This will last for 1000ms.
- * 6. The entirety of the image will be displayed again for 1000ms.
- * 7. The window will then close.
+ * 1. This test will display a string of text, "Text Line", white, aligned left, at the left edge
+ *    of the window, for 4000ms.
+ * 2. The window will then close.
  *
  */
-public class SpriteRendererRenderingBoundariesTest {
+class TextLineRendererSimpleTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
-    private final static String RPG_WEAPONS_RELATIVE_LOCATION =
-            "./res/images/items/RPG_Weapons.png";
+    private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
+    private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
+    private final static float ADDITIONAL_GLYPH_PADDING = 0.005f;
+    private final static int IMAGE_WIDTH = 2048;
+    private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final static String LINE_TEXT = "Text Line";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
-    private static FakeSpriteRenderable SpriteRenderable;
+    private static FakeTextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager =
@@ -62,27 +56,26 @@ public class SpriteRendererRenderingBoundariesTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeImageLoadable renderableImage =
-                new FakeImageLoadable(RPG_WEAPONS_RELATIVE_LOCATION);
-        FakeSprite sprite =
-                new FakeSprite(renderableImage, 266, 271, 313, 343);
-        SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
-                new FakeFloatBox(0.25f, 0.125f, 0.75f,
-                        0.875f));
+        FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
+                ADDITIONAL_GLYPH_PADDING, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
+
+        TextLineRenderable = new FakeTextLineRenderable(font, 0.25f, LINE_TEXT, null, null, null);
+
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
-                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        Renderer<TextLineRenderable> textLineRenderer =
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
-                    add(spriteRenderer);
+                    add(textLineRenderer);
                 }};
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader =
                 new ArrayList<Renderer>() {{
-                    add(spriteRenderer);
+                    add(textLineRenderer);
                 }};
 
-        stackRenderer.RenderAction = () -> spriteRenderer.render(SpriteRenderable);
+        stackRenderer.RenderAction = () -> textLineRenderer.render(TextLineRenderable);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
@@ -90,7 +83,7 @@ public class SpriteRendererRenderingBoundariesTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            renderableImage.load();
+            font.load();
             frameTimer.ShouldExecuteNextFrame = true;
         };
 
@@ -98,27 +91,7 @@ public class SpriteRendererRenderingBoundariesTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(1000);
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.625f, 0.625f);
-
-        CheckedExceptionWrapper.sleep(1000);
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.0f, 1.0f, 0.625f);
-
-        CheckedExceptionWrapper.sleep(1000);
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.375f, 1.0f, 1.0f);
-
-        CheckedExceptionWrapper.sleep(1000);
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.375f, 0.625f, 1.0f);
-
-        CheckedExceptionWrapper.sleep(1000);
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
-
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(3000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

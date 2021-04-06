@@ -54,8 +54,8 @@ class SpriteRendererSimpleTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeRenderableImage renderableImage =
-                new FakeRenderableImage(RPG_WEAPONS_RELATIVE_LOCATION);
+        FakeImageLoadable renderableImage =
+                new FakeImageLoadable(RPG_WEAPONS_RELATIVE_LOCATION);
         FakeSprite sprite =
                 new FakeSprite(renderableImage, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
@@ -82,7 +82,6 @@ class SpriteRendererSimpleTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            renderableImage.WindowId = graphicsCoreLoop.windowId();
             renderableImage.load();
             frameTimer.ShouldExecuteNextFrame = true;
         };

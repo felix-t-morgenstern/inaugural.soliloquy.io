@@ -10,9 +10,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
-public class FakeRenderableImage implements Image {
+public class FakeImageLoadable implements Image {
     public String RelativeLocation;
-    public long WindowId;
 
     public int _width;
     public int _height;
@@ -22,7 +21,7 @@ public class FakeRenderableImage implements Image {
     private final static int LEVEL_OF_DETAIL = 0;
     private final static int BORDER = 0;
 
-    public FakeRenderableImage(String relativeLocation) {
+    public FakeImageLoadable(String relativeLocation) {
         RelativeLocation = relativeLocation;
     }
 

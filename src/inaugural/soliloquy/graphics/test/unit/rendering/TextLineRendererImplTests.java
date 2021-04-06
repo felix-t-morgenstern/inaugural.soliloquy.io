@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
-import inaugural.soliloquy.graphics.rendering.TextLineRenderer;
+import inaugural.soliloquy.graphics.rendering.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFloatBoxFactory;
 import inaugural.soliloquy.graphics.test.fakes.FakeFont;
 import inaugural.soliloquy.graphics.test.fakes.FakeRenderingBoundaries;
@@ -9,31 +9,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.TextLineRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-class TextLineRendererTests {
+class TextLineRendererImplTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
 
-    private Renderer<TextLineRenderable> _textLineRenderer;
+    private TextLineRenderer _textLineRenderer;
 
     @BeforeEach
     void setUp() {
-        _textLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        _textLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(null, FLOAT_BOX_FACTORY));
+                () -> new TextLineRendererImpl(null, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(RENDERING_BOUNDARIES, null));
+                () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, null));
     }
 
     @Test
@@ -97,6 +97,7 @@ class TextLineRendererTests {
         italicIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable));
+        //noinspection RedundantCast
         italicIndices.remove((Object)(null));
 
         italicIndices.add(-1);
@@ -112,6 +113,7 @@ class TextLineRendererTests {
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable));
+        //noinspection SuspiciousMethodCalls
         boldIndices.remove((Object)(null));
 
         boldIndices.add(-1);
@@ -123,6 +125,92 @@ class TextLineRendererTests {
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable));
         boldIndices.remove((Object)(textLine.length()));
+    }
+
+    @Test
+    void testTextLineLengthWithInvalidParams() {
+        FakeFont font = new FakeFont();
+        float lineHeight = 0.25f;
+        String textLine = "Text line";
+        HashMap<Integer, Color> colorIndices = new HashMap<>();
+        colorIndices.put(4, Color.RED);
+        ArrayList<Integer> italicIndices = new ArrayList<>();
+        italicIndices.add(2);
+        italicIndices.add(6);
+        ArrayList<Integer> boldIndices = new ArrayList<>();
+        boldIndices.add(3);
+        boldIndices.add(5);
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
+                textLine, colorIndices, italicIndices, boldIndices);
+
+
+
+        textLineRenderable.Font = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.Font = font;
+
+        textLineRenderable.LineHeight = 0f;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.LineHeight = 0.25f;
+
+        colorIndices.put(null, Color.BLUE);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        colorIndices.remove(null);
+
+        colorIndices.put(6, null);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        colorIndices.remove(6);
+
+        colorIndices.put(-1, Color.BLUE);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        colorIndices.remove(-1);
+
+        colorIndices.put(textLine.length(), null);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        colorIndices.remove(textLine.length());
+
+        italicIndices.add(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        //noinspection RedundantCast
+        italicIndices.remove((Object)(null));
+
+        italicIndices.add(-1);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        italicIndices.remove((Object)(-1));
+
+        italicIndices.add(textLine.length());
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        italicIndices.remove((Object)(textLine.length()));
+
+        boldIndices.add(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        //noinspection SuspiciousMethodCalls
+        boldIndices.remove((Object)(null));
+
+        boldIndices.add(-1);
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        boldIndices.remove((Object)(-1));
+
+        boldIndices.add(textLine.length());
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        boldIndices.remove((Object)(textLine.length()));
+    }
+
+    @Test
+    void testTextLineLength() {
+        fail("Implement this test!");
     }
 
     @Test
