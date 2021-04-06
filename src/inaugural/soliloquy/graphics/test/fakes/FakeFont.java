@@ -20,12 +20,22 @@ public class FakeFont implements Font {
     }
 
     @Override
+    public FloatBox getUvCoordinatesForGlyphBoldItalic(char c) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
     public int textureIdItalic() {
         return 0;
     }
 
     @Override
     public int textureIdBold() {
+        return 0;
+    }
+
+    @Override
+    public int textureIdBoldItalic() {
         return 0;
     }
 

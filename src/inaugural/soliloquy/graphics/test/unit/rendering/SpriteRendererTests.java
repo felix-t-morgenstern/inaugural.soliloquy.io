@@ -40,6 +40,11 @@ class SpriteRendererTests {
     }
 
     @Test
+    void testSetShaderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.setShader(null));
+    }
+
+    @Test
     void testRenderWithInvalidParams() {
         Sprite sprite = new FakeSprite();
         List<ColorShift> colorShifts = new ArrayList<>();

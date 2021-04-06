@@ -19,6 +19,31 @@ public class FakeFrameRateReporter implements FrameRateReporter {
     }
 
     @Override
+    public Float currentActualFps() {
+        return null;
+    }
+
+    @Override
+    public void activateAggregateOutput(String s) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void deactivateAggregateOutput(String s) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void reportPause(long l) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void reportUnpause(long l) throws IllegalArgumentException {
+
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }

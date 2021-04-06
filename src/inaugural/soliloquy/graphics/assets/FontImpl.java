@@ -29,9 +29,11 @@ public class FontImpl implements Font {
     private final int TEXTURE_ID;
     private final int TEXTURE_ID_ITALIC;
     private final int TEXTURE_ID_BOLD;
+    private final int TEXTURE_ID_BOLD_ITALIC;
     private final Map<Character, FloatBox> GLYPHS;
     private final Map<Character, FloatBox> GLYPHS_ITALIC;
     private final Map<Character, FloatBox> GLYPHS_BOLD;
+    private final Map<Character, FloatBox> GLYPHS_BOLD_ITALIC;
 
     public FontImpl(String id, String relativeLocation, float maxLosslessFontSize,
                     float additionalGlyphPadding,
@@ -49,10 +51,13 @@ public class FontImpl implements Font {
         GLYPHS = new HashMap<>();
         GLYPHS_ITALIC = new HashMap<>();
         GLYPHS_BOLD = new HashMap<>();
+        GLYPHS_BOLD_ITALIC = new HashMap<>();
 
         java.awt.Font fontFromFile = loadFontFromFile(relativeLocation, maxLosslessFontSize);
         java.awt.Font fontFromFileItalic = fontFromFile.deriveFont(java.awt.Font.ITALIC);
         java.awt.Font fontFromFileBold = fontFromFile.deriveFont(java.awt.Font.BOLD);
+        java.awt.Font fontFromFileBoldItalic = fontFromFile.deriveFont(
+                java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
         TEXTURE_ID = generateFontAsset(fontFromFile, imageWidth, imageHeight,
                 additionalGlyphPadding, GLYPHS, floatBoxFactory);
@@ -60,6 +65,8 @@ public class FontImpl implements Font {
                 additionalGlyphPadding, GLYPHS_ITALIC, floatBoxFactory);
         TEXTURE_ID_BOLD = generateFontAsset(fontFromFileBold, imageWidth, imageHeight,
                 additionalGlyphPadding, GLYPHS_BOLD, floatBoxFactory);
+        TEXTURE_ID_BOLD_ITALIC = generateFontAsset(fontFromFileBoldItalic, imageWidth, imageHeight,
+                additionalGlyphPadding, GLYPHS_BOLD_ITALIC, floatBoxFactory);
     }
 
     private static java.awt.Font loadFontFromFile(String relativeLocation,
@@ -215,6 +222,15 @@ public class FontImpl implements Font {
     }
 
     @Override
+    public FloatBox getUvCoordinatesForGlyphBoldItalic(char glyph)
+            throws IllegalArgumentException {
+        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
+        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
+        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
+        return GLYPHS_BOLD_ITALIC.get(glyph);
+    }
+
+    @Override
     public int textureIdItalic() {
         return TEXTURE_ID_ITALIC;
     }
@@ -222,6 +238,11 @@ public class FontImpl implements Font {
     @Override
     public int textureIdBold() {
         return TEXTURE_ID_BOLD;
+    }
+
+    @Override
+    public int textureIdBoldItalic() {
+        return TEXTURE_ID_BOLD_ITALIC;
     }
 
     @Override

@@ -104,6 +104,14 @@ class FontImplTests {
     }
 
     @Test
+    void testTextureIdBoldItalic() {
+        assertNotEquals(0, _font.textureIdBoldItalic());
+        assertNotEquals(_font.textureId(), _font.textureIdBoldItalic());
+        assertNotEquals(_font.textureIdItalic(), _font.textureIdBoldItalic());
+        assertNotEquals(_font.textureIdBold(), _font.textureIdBoldItalic());
+    }
+
+    @Test
     void testGetUvCoordinatesForGlyph() {
         FloatBox spaceUvCoordinates = _font.getUvCoordinatesForGlyph(' ');
         FloatBox bangUvCoordinates = _font.getUvCoordinatesForGlyph('!');
@@ -182,6 +190,8 @@ class FontImplTests {
 
         FloatBox lastUvCoordinates =
                 _font.getUvCoordinatesForGlyph((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
+        FloatBox lastUvCoordinatesItalic =
+                _font.getUvCoordinatesForGlyphItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
         FloatBox lastUvCoordinatesBold =
                 _font.getUvCoordinatesForGlyphBold((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
 
@@ -213,6 +223,62 @@ class FontImplTests {
 
         assertNotEquals(lastUvCoordinates.rightX(), lastUvCoordinatesBold.rightX());
         assertNotEquals(lastUvCoordinates.bottomY(), lastUvCoordinatesBold.bottomY());
+        // NB: These tests are commented out, because I couldn't find any fonts whose italic widths
+        // were different from their bold widths; look to display tests to verify this
+        // functionality
+//        assertNotEquals(lastUvCoordinatesItalic.rightX(), lastUvCoordinatesBold.rightX());
+//        assertNotEquals(lastUvCoordinatesItalic.bottomY(), lastUvCoordinatesBold.bottomY());
+    }
+
+    @Test
+    void testGetUvCoordinatesForGlyphBoldItalic() {
+        FloatBox spaceUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic(' ');
+        FloatBox bangUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic('!');
+
+        FloatBox lastUvCoordinates =
+                _font.getUvCoordinatesForGlyph((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
+        FloatBox lastUvCoordinatesItalic =
+                _font.getUvCoordinatesForGlyphItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
+        FloatBox lastUvCoordinatesBold =
+                _font.getUvCoordinatesForGlyphBold((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
+        FloatBox lastUvCoordinatesBoldItalic =
+                _font.getUvCoordinatesForGlyphBoldItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
+
+        FloatBox firstCharacterOnSecondLine = null;
+        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
+            if (i == ASCII_CHAR_DELETE) {
+                continue;
+            }
+            FloatBox glyphUvCoordinates = _font.getUvCoordinatesForGlyphBoldItalic((char)i);
+            if (glyphUvCoordinates.topY() > 0f) {
+                firstCharacterOnSecondLine = glyphUvCoordinates;
+                break;
+            }
+        }
+
+        assertNotNull(spaceUvCoordinatesBoldItalic);
+        assertNotNull(bangUvCoordinatesBoldItalic);
+        assertNotNull(firstCharacterOnSecondLine);
+
+        assertEquals(0f, spaceUvCoordinatesBoldItalic.leftX());
+        assertEquals(0f, spaceUvCoordinatesBoldItalic.topY());
+
+        assertEquals(spaceUvCoordinatesBoldItalic.rightX(), bangUvCoordinatesBoldItalic.leftX());
+        assertEquals(0f, bangUvCoordinatesBoldItalic.topY());
+
+        assertEquals(0f, firstCharacterOnSecondLine.leftX());
+        assertEquals(spaceUvCoordinatesBoldItalic.bottomY(), firstCharacterOnSecondLine.topY());
+        assertEquals(spaceUvCoordinatesBoldItalic.bottomY() * 2, firstCharacterOnSecondLine.bottomY());
+
+        assertNotEquals(lastUvCoordinates.rightX(), lastUvCoordinatesBoldItalic.rightX());
+        assertNotEquals(lastUvCoordinates.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
+        // NB: These tests are commented out, because I couldn't find any fonts whose italic widths
+        // or bold widths were different from their bold-italic widths; look to display tests to
+        // verify this functionality
+//        assertNotEquals(lastUvCoordinatesItalic.rightX(), lastUvCoordinatesBoldItalic.rightX());
+//        assertNotEquals(lastUvCoordinatesItalic.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
+//        assertNotEquals(lastUvCoordinatesBold.rightX(), lastUvCoordinatesBoldItalic.rightX());
+//        assertNotEquals(lastUvCoordinatesBold.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
     }
 
     @Test
@@ -237,6 +303,16 @@ class FontImplTests {
 
     @Test
     void testGetUvCoordinatesForGlyphBoldWithInvalidParameters() {
+        assertThrows(IllegalArgumentException.class,
+                () -> _font.getUvCoordinatesForGlyphBold((char)(ASCII_CHAR_SPACE - 1)));
+        assertThrows(IllegalArgumentException.class,
+                () -> _font.getUvCoordinatesForGlyphBold((char)ASCII_CHAR_DELETE));
+        assertThrows(IllegalArgumentException.class,
+                () -> _font.getUvCoordinatesForGlyphBold((char)NUMBER_EXTENDED_ASCII_CHARS));
+    }
+
+    @Test
+    void testGetUvCoordinatesForGlyphBoldItalicWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
                 () -> _font.getUvCoordinatesForGlyphBold((char)(ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
