@@ -138,13 +138,9 @@ public class FontImpl implements Font {
                                        FloatBoxFactory floatBoxFactory) {
         int tempX = 0;
         int tempY = 0;
-        float glyphHeight = (float)(fontMetrics.getMaxAscent() + fontMetrics.getMaxDescent());
-        float ascent = fontMetrics.getAscent();
-        float descent = fontMetrics.getMaxDescent();
-        float maxAscent = fontMetrics.getMaxAscent();
-        float maxDescent = fontMetrics.getMaxDescent();
         float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
-        float height = fontMetrics.getHeight();
+        float glyphHeight = fontMetrics.getHeight() - leading;
+        float descent = fontMetrics.getMaxDescent();
 
         for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
             if (i == ASCII_CHAR_DELETE) {
@@ -168,8 +164,9 @@ public class FontImpl implements Font {
             float bottomY = topY + (glyphHeight / imageHeight);
             glyphs.put(glyph, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
+            float glyphDrawTopY = (glyphHeight * (tempY + 1)) - descent;
             graphics2d.drawString(String.valueOf(glyph), tempX,
-                    (glyphHeight * (tempY + 1)) - leading);
+                    glyphDrawTopY);
 
             tempX += glyphWidthWithPadding;
         }
