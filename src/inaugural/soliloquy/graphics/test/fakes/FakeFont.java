@@ -3,25 +3,32 @@ package inaugural.soliloquy.graphics.test.fakes;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.util.HashMap;
+
 public class FakeFont implements Font {
+    public HashMap<Character,FloatBox> Glyphs = new HashMap<>();
+    public HashMap<Character,FloatBox> GlyphsItalic = new HashMap<>();
+    public HashMap<Character,FloatBox> GlyphsBold = new HashMap<>();
+    public HashMap<Character,FloatBox> GlyphsBoldItalic = new HashMap<>();
+
     @Override
     public FloatBox getUvCoordinatesForGlyph(char c) throws IllegalArgumentException {
-        return null;
+        return Glyphs.get(c);
     }
 
     @Override
     public FloatBox getUvCoordinatesForGlyphItalic(char c) throws IllegalArgumentException {
-        return null;
+        return GlyphsItalic.get(c);
     }
 
     @Override
     public FloatBox getUvCoordinatesForGlyphBold(char c) throws IllegalArgumentException {
-        return null;
+        return GlyphsBold.get(c);
     }
 
     @Override
     public FloatBox getUvCoordinatesForGlyphBoldItalic(char c) throws IllegalArgumentException {
-        return null;
+        return GlyphsBoldItalic.get(c);
     }
 
     @Override
