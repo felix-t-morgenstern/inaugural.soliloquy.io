@@ -36,13 +36,15 @@ public class FontImpl implements Font {
     private final Map<Character, FloatBox> GLYPHS_BOLD_ITALIC;
 
     public FontImpl(String id, String relativeLocation, float maxLosslessFontSize,
-                    float additionalGlyphPadding,
+                    float additionalGlyphPadding, float leadingAdjustment,
                     int imageWidth, int imageHeight,
                     FloatBoxFactory floatBoxFactory) {
         Check.ifNullOrEmpty(id, "id");
         Check.ifNullOrEmpty(relativeLocation, "relativeLocation");
         Check.throwOnLteZero(maxLosslessFontSize, "maxLosslessFontSize");
         Check.throwOnLtValue(additionalGlyphPadding, 0f, "additionalGlyphPadding");
+        Check.throwOnLtValue(leadingAdjustment, 0f, "leadingAdjustment");
+        Check.throwOnGteValue(leadingAdjustment, 1f, "leadingAdjustment");
         Check.throwOnLteZero(imageWidth, "imageWidth");
         Check.throwOnLteZero(imageHeight, "imageHeight");
         Check.ifNull(floatBoxFactory, "floatBoxFactory");
@@ -60,13 +62,13 @@ public class FontImpl implements Font {
                 java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
         TEXTURE_ID = generateFontAsset(fontFromFile, imageWidth, imageHeight,
-                additionalGlyphPadding, GLYPHS, floatBoxFactory);
+                additionalGlyphPadding, leadingAdjustment, GLYPHS, floatBoxFactory);
         TEXTURE_ID_ITALIC = generateFontAsset(fontFromFileItalic, imageWidth, imageHeight,
-                additionalGlyphPadding, GLYPHS_ITALIC, floatBoxFactory);
+                additionalGlyphPadding, leadingAdjustment, GLYPHS_ITALIC, floatBoxFactory);
         TEXTURE_ID_BOLD = generateFontAsset(fontFromFileBold, imageWidth, imageHeight,
-                additionalGlyphPadding, GLYPHS_BOLD, floatBoxFactory);
+                additionalGlyphPadding, leadingAdjustment, GLYPHS_BOLD, floatBoxFactory);
         TEXTURE_ID_BOLD_ITALIC = generateFontAsset(fontFromFileBoldItalic, imageWidth, imageHeight,
-                additionalGlyphPadding, GLYPHS_BOLD_ITALIC, floatBoxFactory);
+                additionalGlyphPadding, leadingAdjustment, GLYPHS_BOLD_ITALIC, floatBoxFactory);
     }
 
     private static java.awt.Font loadFontFromFile(String relativeLocation,
@@ -80,7 +82,7 @@ public class FontImpl implements Font {
     }
 
     private static int generateFontAsset(java.awt.Font font, int imageWidth, int imageHeight,
-                                         float additionalGlyphPadding,
+                                         float additionalGlyphPadding, float leadingAdjustment,
                                          Map<Character, FloatBox> glyphs,
                                          FloatBoxFactory floatBoxFactory) {
         GraphicsConfiguration graphicsConfiguration =
@@ -100,7 +102,7 @@ public class FontImpl implements Font {
         int textureId = glGenTextures();
 
         ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics, imageWidth,
-                imageHeight, additionalGlyphPadding, glyphs, floatBoxFactory);
+                imageHeight, additionalGlyphPadding, leadingAdjustment, glyphs, floatBoxFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -115,7 +117,7 @@ public class FontImpl implements Font {
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
                                             FontMetrics fontMetrics,
                                             int imageWidth, int imageHeight,
-                                            float additionalGlyphPadding,
+                                            float additionalGlyphPadding, float leadingAdjustment,
                                             Map<Character, FloatBox> glyphs,
                                             FloatBoxFactory floatBoxFactory) {
         Graphics2D graphics2d = (Graphics2D)bufferedImage.getGraphics();
@@ -124,19 +126,25 @@ public class FontImpl implements Font {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight, additionalGlyphPadding,
-                glyphs, floatBoxFactory);
+                leadingAdjustment, glyphs, floatBoxFactory);
 
         return createBuffer(bufferedImage, imageWidth, imageHeight);
     }
 
     private static void drawCharacters(Graphics2D graphics2d, FontMetrics fontMetrics,
                                        int imageWidth, int imageHeight,
-                                       float additionalGlyphPadding,
+                                       float additionalGlyphPadding, float leadingAdjustment,
                                        Map<Character, FloatBox> glyphs,
                                        FloatBoxFactory floatBoxFactory) {
         int tempX = 0;
         int tempY = 0;
         float glyphHeight = (float)(fontMetrics.getMaxAscent() + fontMetrics.getMaxDescent());
+        float ascent = fontMetrics.getAscent();
+        float descent = fontMetrics.getMaxDescent();
+        float maxAscent = fontMetrics.getMaxAscent();
+        float maxDescent = fontMetrics.getMaxDescent();
+        float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
+        float height = fontMetrics.getHeight();
 
         for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
             if (i == ASCII_CHAR_DELETE) {
@@ -147,7 +155,7 @@ public class FontImpl implements Font {
 
             float glyphWidth = fontMetrics.charWidth(glyph);
 
-            float glyphWidthWithPadding = glyphWidth + additionalGlyphPadding;
+            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphPadding);
 
             if (tempX + glyphWidthWithPadding > imageWidth) {
                 tempX = 0;
@@ -155,13 +163,13 @@ public class FontImpl implements Font {
             }
 
             float leftX = tempX / (float) imageWidth;
-            float topY = glyphHeight * tempY;
-            float rightX = (glyphWidth / (float) imageWidth) - leftX;
-            float bottomY = topY + glyphHeight;
+            float topY = (glyphHeight * tempY) / imageHeight;
+            float rightX = (glyphWidth / (float) imageWidth) + leftX;
+            float bottomY = topY + (glyphHeight / imageHeight);
             glyphs.put(glyph, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
             graphics2d.drawString(String.valueOf(glyph), tempX,
-                    fontMetrics.getMaxAscent() + (glyphHeight * tempY));
+                    (glyphHeight * (tempY + 1)) - leading);
 
             tempX += glyphWidthWithPadding;
         }

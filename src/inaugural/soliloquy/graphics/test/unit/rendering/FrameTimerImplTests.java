@@ -160,7 +160,7 @@ class FrameTimerImplTests {
                 _frameTimer.registerFrameExecution();
             }
         }
-        CheckedExceptionWrapper.sleep(950);
+        CheckedExceptionWrapper.sleep(1050);
         _frameTimer.stop();
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());

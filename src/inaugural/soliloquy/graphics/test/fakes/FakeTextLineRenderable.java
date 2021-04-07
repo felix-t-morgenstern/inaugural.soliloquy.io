@@ -16,6 +16,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public Map<Integer, Color> ColorIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
+    public FloatBox RenderingArea;
 
     public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
                                   Map<Integer, Color> colorIndices, List<Integer> italicIndices,
@@ -26,6 +27,13 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         ColorIndices = colorIndices;
         ItalicIndices = italicIndices;
         BoldIndices = boldIndices;
+    }
+
+    public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
+                                  Map<Integer, Color> colorIndices, List<Integer> italicIndices,
+                                  List<Integer> boldIndices, FloatBox renderingArea) {
+        this(font, lineHeight, lineText, colorIndices, italicIndices, boldIndices);
+        RenderingArea = renderingArea;
     }
 
     @Override
@@ -60,7 +68,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
 
     @Override
     public FloatBox renderingArea() {
-        return null;
+        return RenderingArea;
     }
 
     @Override

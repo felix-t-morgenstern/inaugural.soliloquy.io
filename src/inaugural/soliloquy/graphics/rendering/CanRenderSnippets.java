@@ -14,7 +14,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         extends HasOneGenericParam<TRenderable>
         implements Renderer<TRenderable> {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
-    private final FloatBoxFactory FLOAT_BOX_FACTORY;
+
+    protected final FloatBoxFactory FLOAT_BOX_FACTORY;
 
     private Shader _shader;
     private Mesh _mesh;

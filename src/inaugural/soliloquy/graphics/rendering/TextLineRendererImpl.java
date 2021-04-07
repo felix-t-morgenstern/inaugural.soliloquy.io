@@ -11,6 +11,8 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.awt.*;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         implements TextLineRenderer {
@@ -26,6 +28,30 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         validateTextLineRenderable(textLineRenderable, "render");
 
         System.out.println("Rendering text line...");
+
+        iterateOverTextLine(textLineRenderable,
+                textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> {
+                    System.out.println("Rendering glyph...");
+
+                    float leftX = textLineRenderable.renderingArea().leftX() +
+                            textLineLengthThusFar;
+                    FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                            leftX,
+                            textLineRenderable.renderingArea().topY(),
+                            leftX + glyphLength,
+                            textLineRenderable.renderingArea().topY() +
+                                    textLineRenderable.lineHeight()
+                    );
+
+//                    renderingArea = FLOAT_BOX_FACTORY.make(0, 0, 1, 1);
+
+                    super.render(renderingArea,
+//                            0, 0, 1, 1,
+                            glyphBox.leftX(), glyphBox.topY(),
+                            glyphBox.rightX(), glyphBox.bottomY(),
+                            textureId,
+                            1.0f, 1.0f, 1.0f, 1.0f);
+        });
     }
 
     @Override
@@ -33,11 +59,18 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             throws IllegalArgumentException {
         validateTextLineRenderable(textLineRenderable, "textLineLength");
 
+        return iterateOverTextLine(textLineRenderable, null);
+    }
+
+    private float iterateOverTextLine(TextLineRenderable textLineRenderable,
+                                      Function<Float, Function<Float, Function<Integer,
+                                              Consumer<FloatBox>>>> renderingAction) {
         boolean italic = false;
         boolean bold = false;
         int nextItalicIndex = 0;
         int nextBoldIndex = 0;
-        float length = 0f;
+        float textLineLengthThusFar = 0f;
+        int textureId;
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
             if (textLineRenderable.italicIndices() != null &&
@@ -59,24 +92,36 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             if (italic) {
                 if (bold) {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBoldItalic(glyph);
+                    textureId = textLineRenderable.font().textureIdBoldItalic();
                 }
                 else {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphItalic(glyph);
+                    textureId = textLineRenderable.font().textureIdItalic();
                 }
             }
             else {
                 if (bold) {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBold(glyph);
+                    textureId = textLineRenderable.font().textureIdBold();
                 }
                 else {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyph(glyph);
+                    textureId = textLineRenderable.font().textureId();
                 }
             }
 
-            length += glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height());
+            float glyphLength =
+                    glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height());
+
+            if (renderingAction != null) {
+                renderingAction.apply(textLineLengthThusFar).apply(glyphLength).apply(textureId)
+                        .accept(glyphBox);
+            }
+
+            textLineLengthThusFar += glyphLength;
         }
 
-        return length;
+        return textLineLengthThusFar;
     }
 
     private void validateTextLineRenderable(TextLineRenderable textLineRenderable,

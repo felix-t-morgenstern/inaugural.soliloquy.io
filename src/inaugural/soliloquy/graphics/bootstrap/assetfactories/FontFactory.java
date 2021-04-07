@@ -24,6 +24,7 @@ public class FontFactory implements AssetFactory<FontDefinition, Font> {
                 fontDefinition.relativeLocation(),
                 fontDefinition.maxLosslessFontSize(),
                 fontDefinition.additionalGlyphPadding(),
+                fontDefinition.leadingAdjustment(),
                 IMAGE_WIDTH,
                 IMAGE_HEIGHT,
                 FLOAT_BOX_FACTORY);

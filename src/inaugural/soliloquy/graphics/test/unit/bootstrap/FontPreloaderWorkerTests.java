@@ -16,6 +16,7 @@ class FontPreloaderWorkerTests {
     private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
     private final float ADDITIONAL_GLYPH_PADDING = 0.123f;
+    private final float LEADING_ADJUSTMENT = 0.456f;
 
     @Test
     void testConstructorWithInvalidParams() {
@@ -24,28 +25,44 @@ class FontPreloaderWorkerTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(null, ID, RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, null, RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, "", RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, ID, null,
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, ID, "",
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, ID, RELATIVE_LOCATION,
-                        0f, ADDITIONAL_GLYPH_PADDING, fonts::add));
+                        0f, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, ID, RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE, -0.001f, fonts::add));
+                        MAX_LOSSLESS_FONT_SIZE, -0.001f, LEADING_ADJUSTMENT,
+                        fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderWorker(FONT_FACTORY, ID, RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, null));
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, -0.001f,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderWorker(FONT_FACTORY, ID, RELATIVE_LOCATION,
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, 1f,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderWorker(FONT_FACTORY, ID, RELATIVE_LOCATION,
+                        MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT,
+                        null));
     }
 
     @Test
@@ -53,7 +70,8 @@ class FontPreloaderWorkerTests {
         ArrayList<Font> fonts = new ArrayList<>();
 
         FontPreloaderWorker fontPreloaderWorker = new FontPreloaderWorker(FONT_FACTORY, ID,
-                RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, fonts::add);
+                RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING,
+                LEADING_ADJUSTMENT, fonts::add);
 
         fontPreloaderWorker.run();
 

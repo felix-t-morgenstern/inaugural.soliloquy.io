@@ -23,8 +23,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Text Line", white, aligned left, at the left edge
- *    of the window, for 4000ms.
+ * 1. This test will display a string of text, "Message!", white, aligned left, at the left edge
+ *    of the window, and at the top of the window, for 4000ms.
  * 2. The window will then close.
  *
  */
@@ -33,13 +33,14 @@ class TextLineRendererSimpleTest {
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
-    private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
+    private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
-    private final static float ADDITIONAL_GLYPH_PADDING = 0.005f;
+    private final static float ADDITIONAL_GLYPH_PADDING = 0.0f;
+    private final static float LEADING_ADJUSTMENT = 0.25f;
     private final static int IMAGE_WIDTH = 2048;
     private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Text Line";
+    private final static String LINE_TEXT = "Message!";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -57,9 +58,13 @@ class TextLineRendererSimpleTest {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
         FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_PADDING, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT,
+                FLOAT_BOX_FACTORY);
 
-        TextLineRenderable = new FakeTextLineRenderable(font, 0.25f, LINE_TEXT, null, null, null);
+        FakeFloatBox renderingArea = new FakeFloatBox(0.0f, 0.0f, 1f, 1f);
+
+        TextLineRenderable = new FakeTextLineRenderable(font, 0.15f, LINE_TEXT, null, null, null,
+                renderingArea);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

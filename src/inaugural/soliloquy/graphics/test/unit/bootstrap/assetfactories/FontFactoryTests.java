@@ -22,6 +22,7 @@ class FontFactoryTests {
     private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
     private final float ADDITIONAL_GLYPH_PADDING = 0.123f;
+    private final float LEADING_ADJUSTMENT = 0.456f;
     private final int IMAGE_WIDTH = 123;
     private final int IMAGE_HEIGHT = 2340;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -62,7 +63,7 @@ class FontFactoryTests {
     @Test
     void testMake() {
         FakeFontDefinition fontDefinition = new FakeFontDefinition(ID, RELATIVE_LOCATION,
-                MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING);
+                MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT);
 
         Font createdFont = _fontFactory.make(fontDefinition);
 
@@ -75,22 +76,28 @@ class FontFactoryTests {
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING)));
+                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING)));
+                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, null, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING)));
+                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, "", MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING)));
+                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, 0,
-                        ADDITIONAL_GLYPH_PADDING)));
+                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        -0.0001f)));
+                        -0.0001f, LEADING_ADJUSTMENT)));
+        assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
+                new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
+                        ADDITIONAL_GLYPH_PADDING, -0.0001f)));
+        assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
+                new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
+                        ADDITIONAL_GLYPH_PADDING, 1f)));
     }
 
     @Test
