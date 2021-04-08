@@ -126,6 +126,157 @@ class AnimationFactoryTests {
     }
 
     @Test
+    void testSnippetAtFrame() {
+        int animationDurationMs = 2000;
+        int snippet1Ms = 0;
+        int snippet2Ms = 10;
+        int snippet3Ms = 30;
+        int snippet4Ms = 60;
+        int snippet5Ms = 100;
+        int snippet6Ms = 150;
+        int snippet7Ms = 210;
+        int snippet8Ms = 280;
+        int snippet9Ms = 360;
+        int snippet10Ms = 450;
+        int snippet11Ms = 550;
+        int snippet12Ms = 660;
+        int snippet13Ms = 780;
+        int snippet14Ms = 910;
+        int snippet15Ms = 1050;
+        int snippet16Ms = 1200;
+        int snippet17Ms = 1360;
+        FakeImage image1 = new FakeImage("image1", 1, 1);
+        FakeImage image2 = new FakeImage("image2", 1, 1);
+        FakeImage image3 = new FakeImage("image3", 1, 1);
+        FakeImage image4 = new FakeImage("image4", 1, 1);
+        FakeImage image5 = new FakeImage("image5", 1, 1);
+        FakeImage image6 = new FakeImage("image6", 1, 1);
+        FakeImage image7 = new FakeImage("image7", 1, 1);
+        FakeImage image8 = new FakeImage("image8", 1, 1);
+        FakeImage image9 = new FakeImage("image9", 1, 1);
+        FakeImage image10 = new FakeImage("image10", 1, 1);
+        FakeImage image11 = new FakeImage("image11", 1, 1);
+        FakeImage image12 = new FakeImage("image12", 1, 1);
+        FakeImage image13 = new FakeImage("image13", 1, 1);
+        FakeImage image14 = new FakeImage("image14", 1, 1);
+        FakeImage image15 = new FakeImage("image15", 1, 1);
+        FakeImage image16 = new FakeImage("image16", 1, 1);
+        FakeImage image17 = new FakeImage("image17", 1, 1);
+        FakeAnimationFrameSnippet snippet1 = new FakeAnimationFrameSnippet(
+                image1, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet2 = new FakeAnimationFrameSnippet(
+                image2, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet3 = new FakeAnimationFrameSnippet(
+                image3, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet4 = new FakeAnimationFrameSnippet(
+                image4, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet5 = new FakeAnimationFrameSnippet(
+                image5, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet6 = new FakeAnimationFrameSnippet(
+                image6, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet7 = new FakeAnimationFrameSnippet(
+                image7, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet8 = new FakeAnimationFrameSnippet(
+                image8, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet9 = new FakeAnimationFrameSnippet(
+                image9, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet10 = new FakeAnimationFrameSnippet(
+                image10, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet11 = new FakeAnimationFrameSnippet(
+                image11, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet12 = new FakeAnimationFrameSnippet(
+                image12, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet13 = new FakeAnimationFrameSnippet(
+                image13, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet14 = new FakeAnimationFrameSnippet(
+                image14, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet15 = new FakeAnimationFrameSnippet(
+                image15, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet16 = new FakeAnimationFrameSnippet(
+                image16, 0, 0, 1, 1, 0f, 0f);
+        FakeAnimationFrameSnippet snippet17 = new FakeAnimationFrameSnippet(
+                image17, 0, 0, 1, 1, 0f, 0f);
+
+        Map<Integer, AnimationFrameSnippet> animationFrameSnippets = new HashMap<>();
+        animationFrameSnippets.put(snippet1Ms, snippet1);
+        animationFrameSnippets.put(snippet2Ms, snippet2);
+        animationFrameSnippets.put(snippet3Ms, snippet3);
+        animationFrameSnippets.put(snippet4Ms, snippet4);
+        animationFrameSnippets.put(snippet5Ms, snippet5);
+        animationFrameSnippets.put(snippet6Ms, snippet6);
+        animationFrameSnippets.put(snippet7Ms, snippet7);
+        animationFrameSnippets.put(snippet8Ms, snippet8);
+        animationFrameSnippets.put(snippet9Ms, snippet9);
+        animationFrameSnippets.put(snippet10Ms, snippet10);
+        animationFrameSnippets.put(snippet11Ms, snippet11);
+        animationFrameSnippets.put(snippet12Ms, snippet12);
+        animationFrameSnippets.put(snippet13Ms, snippet13);
+        animationFrameSnippets.put(snippet14Ms, snippet14);
+        animationFrameSnippets.put(snippet15Ms, snippet15);
+        animationFrameSnippets.put(snippet16Ms, snippet16);
+        animationFrameSnippets.put(snippet17Ms, snippet17);
+
+
+        Animation createdAnimation = _animationFactory.make(
+                new FakeAnimationDefinition(animationDurationMs, _id,
+                        animationFrameSnippets));
+
+        for (int ms = 0; ms < animationDurationMs; ms++) {
+            if (ms < snippet2Ms) {
+                assertSame(snippet1, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet3Ms) {
+                assertSame(snippet2, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet4Ms) {
+                assertSame(snippet3, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet5Ms) {
+                assertSame(snippet4, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet6Ms) {
+                assertSame(snippet5, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet7Ms) {
+                assertSame(snippet6, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet8Ms) {
+                assertSame(snippet7, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet9Ms) {
+                assertSame(snippet8, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet10Ms) {
+                assertSame(snippet9, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet11Ms) {
+                assertSame(snippet10, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet12Ms) {
+                assertSame(snippet11, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet13Ms) {
+                assertSame(snippet12, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet14Ms) {
+                assertSame(snippet13, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet15Ms) {
+                assertSame(snippet14, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet16Ms) {
+                assertSame(snippet15, createdAnimation.snippetAtFrame(ms));
+            }
+            else if (ms < snippet17Ms) {
+                assertSame(snippet16, createdAnimation.snippetAtFrame(ms));
+            }
+            else {
+                assertSame(snippet17, createdAnimation.snippetAtFrame(ms));
+            }
+        }
+    }
+
+    @Test
     void testCreateWithInvalidParams() {
         Map<Integer, AnimationFrameSnippet> animationFrameSnippets = new HashMap<>();
         animationFrameSnippets.put(_snippet1Ms, _animationFrameSnippetDefinition1);
