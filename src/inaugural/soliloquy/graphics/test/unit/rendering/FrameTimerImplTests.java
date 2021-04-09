@@ -8,12 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.FrameTimer;
 
+import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FrameTimerImplTests {
-    private final int MS_PER_SECOND = 1000;
-
     private final FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
     private final FakeFrameRateReporter FRAME_RATE_REPORTER = new FakeFrameRateReporter();
 
@@ -86,8 +85,7 @@ class FrameTimerImplTests {
 
         for (int i = 1; i < FRAME_RATE_REPORTER.Dates.size(); i++) {
             assertEquals(1000,
-                    FRAME_RATE_REPORTER.Dates.get(i).getTime() -
-                            FRAME_RATE_REPORTER.Dates.get(i - 1).getTime());
+                    FRAME_RATE_REPORTER.Dates.get(i) - FRAME_RATE_REPORTER.Dates.get(i - 1));
         }
     }
 

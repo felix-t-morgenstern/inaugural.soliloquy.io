@@ -6,12 +6,9 @@ import soliloquy.specs.graphics.rendering.FrameRateReporter;
 import soliloquy.specs.graphics.rendering.FrameTimer;
 import soliloquy.specs.graphics.rendering.GlobalClock;
 
-import java.util.Date;
+import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 
 public class FrameTimerImpl implements FrameTimer {
-    @SuppressWarnings("FieldCanBeLocal")
-    private final int MS_PER_SECOND = 1000;
-
     private final GlobalClock GLOBAL_CLOCK;
     private final FrameRateReporter FRAME_RATE_REPORTER;
 
@@ -97,7 +94,7 @@ public class FrameTimerImpl implements FrameTimer {
     }
 
     private void reportFrameInformation(long gmtTimestamp, Float targetFps, float actualFps) {
-        FRAME_RATE_REPORTER.reportFrameRate(new Date(gmtTimestamp), targetFps, actualFps);
+        FRAME_RATE_REPORTER.reportFrameRate(gmtTimestamp, targetFps, actualFps);
     }
 
     @Override

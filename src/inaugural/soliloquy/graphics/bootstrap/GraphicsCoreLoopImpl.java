@@ -12,12 +12,11 @@ import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import java.util.Collection;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
-    private final static int MS_PER_SECOND = 1000;
-
     private final String TITLEBAR;
     private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK;
     private final FrameTimer FRAME_TIMER;
