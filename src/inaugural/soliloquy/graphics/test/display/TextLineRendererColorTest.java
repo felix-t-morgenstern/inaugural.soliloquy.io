@@ -9,14 +9,15 @@ import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -24,25 +25,28 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
- *    edge of the window, vertically centered, for 8000ms.
+ * 1. This test will display a string of text, "Rainbow", aligned left, near the left edge
+ *    of the window, and in the vertical center of the window, for 4000ms. The message, "This
+ *    message is in the colors of the rainbow!", will be displayed, with each color having a
+ *    different color in order of the rainbow.
  * 2. The window will then close.
  *
  */
-class TextLineRendererSimpleTest {
+class TextLineRendererColorTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
-    private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
-    private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
-    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
-    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.2f;
-    private final static float LEADING_ADJUSTMENT = 0.0f;
+    private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
+    private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.25f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.1f;
+    private final static float LEADING_ADJUSTMENT = 0f;
     private final static int IMAGE_WIDTH = 2048;
     private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quick Message!";
+    private final static Color DEFAULT_COLOR = Color.WHITE;
+    private final static String LINE_TEXT = "This message is in the colors of the rainbow!";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -65,13 +69,15 @@ class TextLineRendererSimpleTest {
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
-        TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null, null, null,
-                renderingArea);
+        HashMap<Integer, Color> colorIndices = rainbowGradient(LINE_TEXT);
+
+        TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, colorIndices, null,
+                null, renderingArea);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<TextLineRenderable> textLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE);
+        Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, DEFAULT_COLOR);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
@@ -98,8 +104,47 @@ class TextLineRendererSimpleTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(8000);
+        CheckedExceptionWrapper.sleep(6000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+    }
+
+    private static HashMap<Integer, Color> rainbowGradient(String lineText) {
+        HashMap<Integer, Color> rainbowGradient = new HashMap<>();
+
+        float degreePerLetter = 360f / lineText.length();
+        for (int i = 0; i < lineText.length(); i++) {
+            rainbowGradient.put(i, colorAtDegree((float)i * degreePerLetter));
+        }
+        return rainbowGradient;
+    }
+
+    private static Color colorAtDegree(float degree) {
+        float red = getColorComponent(0f, degree);
+        float green = getColorComponent(120f, degree);
+        float blue = getColorComponent(240f, degree);
+
+        return new Color(red, green, blue, 1f);
+    }
+
+    private static float getColorComponent(float componentCenter, float degree) {
+        float degreesInCircle = 360f;
+        float halfOfCircle = 180f;
+        float thirdOfCircle = 120f;
+        float sixthOfCircle = 60f;
+        float degreeModulo = degree % degreesInCircle;
+        float distance = componentCenter - degreeModulo;
+        if (distance < -halfOfCircle) {
+            distance += degreesInCircle;
+        }
+        float absVal = Math.abs(distance);
+        if (absVal <= sixthOfCircle) {
+            return 1f;
+        }
+        absVal -= sixthOfCircle;
+        float absValWithCeiling = Math.min(sixthOfCircle, absVal);
+        float amountOfSixthOfCircle = sixthOfCircle - absValWithCeiling;
+        float colorComponent = amountOfSixthOfCircle / sixthOfCircle;
+        return colorComponent;
     }
 }

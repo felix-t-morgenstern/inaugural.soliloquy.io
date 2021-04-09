@@ -36,13 +36,16 @@ public class FontImpl implements Font {
     private final Map<Character, FloatBox> GLYPHS_BOLD_ITALIC;
 
     public FontImpl(String id, String relativeLocation, float maxLosslessFontSize,
-                    float additionalGlyphPadding, float leadingAdjustment,
+                    float additionalGlyphHorizontalPadding, float additionalGlyphVerticalPadding,
+                    float leadingAdjustment,
                     int imageWidth, int imageHeight,
                     FloatBoxFactory floatBoxFactory) {
         Check.ifNullOrEmpty(id, "id");
         Check.ifNullOrEmpty(relativeLocation, "relativeLocation");
         Check.throwOnLteZero(maxLosslessFontSize, "maxLosslessFontSize");
-        Check.throwOnLtValue(additionalGlyphPadding, 0f, "additionalGlyphPadding");
+        Check.throwOnLtValue(additionalGlyphHorizontalPadding, 0f,
+                "additionalGlyphHorizontalPadding");
+        Check.throwOnLtValue(additionalGlyphVerticalPadding, 0f, "additionalGlyphVerticalPadding");
         Check.throwOnLtValue(leadingAdjustment, 0f, "leadingAdjustment");
         Check.throwOnGteValue(leadingAdjustment, 1f, "leadingAdjustment");
         Check.throwOnLteZero(imageWidth, "imageWidth");
@@ -62,13 +65,13 @@ public class FontImpl implements Font {
                 java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
         TEXTURE_ID = generateFontAsset(fontFromFile, imageWidth, imageHeight,
-                additionalGlyphPadding, leadingAdjustment, GLYPHS, floatBoxFactory);
+                additionalGlyphHorizontalPadding, leadingAdjustment, GLYPHS, floatBoxFactory);
         TEXTURE_ID_ITALIC = generateFontAsset(fontFromFileItalic, imageWidth, imageHeight,
-                additionalGlyphPadding, leadingAdjustment, GLYPHS_ITALIC, floatBoxFactory);
+                additionalGlyphHorizontalPadding, leadingAdjustment, GLYPHS_ITALIC, floatBoxFactory);
         TEXTURE_ID_BOLD = generateFontAsset(fontFromFileBold, imageWidth, imageHeight,
-                additionalGlyphPadding, leadingAdjustment, GLYPHS_BOLD, floatBoxFactory);
+                additionalGlyphHorizontalPadding, leadingAdjustment, GLYPHS_BOLD, floatBoxFactory);
         TEXTURE_ID_BOLD_ITALIC = generateFontAsset(fontFromFileBoldItalic, imageWidth, imageHeight,
-                additionalGlyphPadding, leadingAdjustment, GLYPHS_BOLD_ITALIC, floatBoxFactory);
+                additionalGlyphHorizontalPadding, leadingAdjustment, GLYPHS_BOLD_ITALIC, floatBoxFactory);
     }
 
     private static java.awt.Font loadFontFromFile(String relativeLocation,

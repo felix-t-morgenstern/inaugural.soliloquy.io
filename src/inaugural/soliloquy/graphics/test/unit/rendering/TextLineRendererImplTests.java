@@ -17,20 +17,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class TextLineRendererImplTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final Color DEFAULT_COLOR = Color.BLACK;
 
     private TextLineRenderer _textLineRenderer;
 
     @BeforeEach
     void setUp() {
-        _textLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        _textLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                DEFAULT_COLOR);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(null, FLOAT_BOX_FACTORY));
+                () -> new TextLineRendererImpl(null, FLOAT_BOX_FACTORY, DEFAULT_COLOR));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, null));
+                () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, null, DEFAULT_COLOR));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, null));
     }
 
     @Test

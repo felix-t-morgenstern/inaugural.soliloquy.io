@@ -14,13 +14,19 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
+
 public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         implements TextLineRenderer {
     private static final TextLineRenderable ARCHETYPE = new TextLineRenderableArchetype();
 
+    private final Color DEFAULT_COLOR;
+
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
-                                FloatBoxFactory floatBoxFactory) {
+                                FloatBoxFactory floatBoxFactory,
+                                Color defaultColor) {
         super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+        DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 
     @Override
@@ -30,7 +36,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         System.out.println("Rendering text line...");
 
         iterateOverTextLine(textLineRenderable,
-                textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> {
+                textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                     System.out.println("Rendering glyph...");
 
                     float leftX = textLineRenderable.renderingArea().leftX() +
@@ -43,14 +49,17 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                     textLineRenderable.lineHeight()
                     );
 
-//                    renderingArea = FLOAT_BOX_FACTORY.make(0, 0, 1, 1);
+                    renderingArea = FLOAT_BOX_FACTORY.make(0, 0, 1, 1);
 
                     super.render(renderingArea,
-//                            0, 0, 1, 1,
-                            glyphBox.leftX(), glyphBox.topY(),
-                            glyphBox.rightX(), glyphBox.bottomY(),
+                            0, 0, 1, 1,
+//                            glyphBox.leftX(), glyphBox.topY(),
+//                            glyphBox.rightX(), glyphBox.bottomY(),
                             textureId,
-                            1.0f, 1.0f, 1.0f, 1.0f);
+                            color.getRed() / (float)MAX_CHANNEL_VAL,
+                            color.getGreen() / (float)MAX_CHANNEL_VAL,
+                            color.getBlue() / (float)MAX_CHANNEL_VAL,
+                            color.getAlpha() / (float)MAX_CHANNEL_VAL);
         });
     }
 
@@ -64,15 +73,23 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     private float iterateOverTextLine(TextLineRenderable textLineRenderable,
                                       Function<Float, Function<Float, Function<Integer,
-                                              Consumer<FloatBox>>>> renderingAction) {
-        boolean italic = false;
-        boolean bold = false;
+                                              Function<FloatBox, Consumer<Color>>>>>
+                                              renderingAction) {
+//        boolean italic = false;
+//        boolean bold = false;
+        boolean italic = true;
+        boolean bold = true;
         int nextItalicIndex = 0;
         int nextBoldIndex = 0;
         float textLineLengthThusFar = 0f;
         int textureId;
+        Color color = DEFAULT_COLOR;
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
+            if (textLineRenderable.colorIndices() != null &&
+                    textLineRenderable.colorIndices().containsKey(i)) {
+                color = textLineRenderable.colorIndices().get(i);
+            }
             if (textLineRenderable.italicIndices() != null &&
                     textLineRenderable.italicIndices().size() > nextItalicIndex &&
                     textLineRenderable.italicIndices().get(nextItalicIndex) == i) {
@@ -115,7 +132,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
             if (renderingAction != null) {
                 renderingAction.apply(textLineLengthThusFar).apply(glyphLength).apply(textureId)
-                        .accept(glyphBox);
+                        .apply(glyphBox).accept(color);
             }
 
             textLineLengthThusFar += glyphLength;

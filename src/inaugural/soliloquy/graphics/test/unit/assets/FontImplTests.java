@@ -17,7 +17,8 @@ class FontImplTests {
     private final String ID = "FontId";
     private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
-    private final float ADDITIONAL_GLYPH_PADDING = 0.123f;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.123f;
+    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.123f;
     private final float LEADING_ADJUSTMENT = 0.456f;
     private final int IMAGE_WIDTH = 123;
     private final int IMAGE_HEIGHT = 2340;
@@ -47,45 +48,60 @@ class FontImplTests {
     @BeforeEach
     void setUp() {
         _font = new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT,
-                FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, null, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, "", MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, 0f,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        -0.001f, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        -0.001f, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, -0.001f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, -0.001f,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, 1f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        -0.001f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, 0, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        1f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, 0, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, 0, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, null));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, 0, FLOAT_BOX_FACTORY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, null));
     }
 
     @Test

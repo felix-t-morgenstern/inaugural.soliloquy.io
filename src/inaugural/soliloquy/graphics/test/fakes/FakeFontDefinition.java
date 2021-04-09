@@ -6,15 +6,19 @@ public class FakeFontDefinition implements FontDefinition {
     public String Id;
     public String RelativeLocation;
     public float MaxLosslessFontSize;
-    public float AdditionalGlyphPadding;
+    public float AdditionalGlyphHorizontalPadding;
+    public float AdditionalGlyphVerticalPadding;
     public float LeadingAdjustment;
 
     public FakeFontDefinition(String id, String relativeLocation, float maxLosslessFontSize,
-                              float additionalGlyphPadding, float leadingAdjustment) {
+                              float additionalGlyphHorizontalPadding,
+                              float additionalGlyphVerticalPadding,
+                              float leadingAdjustment) {
         Id = id;
         RelativeLocation = relativeLocation;
         MaxLosslessFontSize = maxLosslessFontSize;
-        AdditionalGlyphPadding = additionalGlyphPadding;
+        AdditionalGlyphHorizontalPadding = additionalGlyphHorizontalPadding;
+        AdditionalGlyphVerticalPadding = additionalGlyphVerticalPadding;
         LeadingAdjustment = leadingAdjustment;
     }
 
@@ -29,8 +33,13 @@ public class FakeFontDefinition implements FontDefinition {
     }
 
     @Override
-    public float additionalGlyphPadding() {
-        return AdditionalGlyphPadding;
+    public float additionalGlyphHorizontalPadding() {
+        return AdditionalGlyphHorizontalPadding;
+    }
+
+    @Override
+    public float additionalGlyphVerticalPadding() {
+        return AdditionalGlyphVerticalPadding;
     }
 
     @Override

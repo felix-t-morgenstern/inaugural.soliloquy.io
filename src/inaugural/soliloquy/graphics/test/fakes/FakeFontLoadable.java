@@ -27,7 +27,8 @@ public class FakeFontLoadable implements Font {
 
     private final String RELATIVE_LOCATION;
     private final float MAX_LOSSLESS_FONT_SIZE;
-    private final float ADDITIONAL_GLYPH_PADDING;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING;
+    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING;
     private final float LEADING_ADJUSTMENT;
     private final int IMAGE_WIDTH;
     private final int IMAGE_HEIGHT;
@@ -43,12 +44,15 @@ public class FakeFontLoadable implements Font {
     private Map<Character, FloatBox> _glyphsBoldItalic;
 
     public FakeFontLoadable(String relativeLocation, float maxLosslessFontSize,
-                            float additionalGlyphPadding, float leadingAdjustment,
+                            float additionalGlyphHorizontalPadding,
+                            float additionalGlyphVerticalPadding,
+                            float leadingAdjustment,
                             int imageWidth, int imageHeight,
                             FloatBoxFactory floatBoxFactory) {
         RELATIVE_LOCATION = relativeLocation;
         MAX_LOSSLESS_FONT_SIZE = maxLosslessFontSize;
-        ADDITIONAL_GLYPH_PADDING = additionalGlyphPadding;
+        ADDITIONAL_GLYPH_HORIZONTAL_PADDING = additionalGlyphHorizontalPadding;
+        ADDITIONAL_GLYPH_VERTICAL_PADDING = additionalGlyphVerticalPadding;
         LEADING_ADJUSTMENT = leadingAdjustment;
         IMAGE_WIDTH = imageWidth;
         IMAGE_HEIGHT = imageHeight;
@@ -68,14 +72,17 @@ public class FakeFontLoadable implements Font {
                 java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
         _textureId = generateFontAsset(fontFromFile, IMAGE_WIDTH, IMAGE_HEIGHT,
-                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, _glyphs, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, _glyphs, FLOAT_BOX_FACTORY);
         _textureIdItalic = generateFontAsset(fontFromFileItalic, IMAGE_WIDTH, IMAGE_HEIGHT,
-                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, _glyphsItalic, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, _glyphsItalic, FLOAT_BOX_FACTORY);
         _textureIdBold = generateFontAsset(fontFromFileBold, IMAGE_WIDTH, IMAGE_HEIGHT,
-                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, _glyphsBold, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, _glyphsBold, FLOAT_BOX_FACTORY);
         _textureIdBoldItalic = generateFontAsset(fontFromFileBoldItalic, IMAGE_WIDTH, IMAGE_HEIGHT,
-                ADDITIONAL_GLYPH_PADDING, LEADING_ADJUSTMENT, _glyphsBoldItalic,
-                FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, _glyphsBoldItalic, FLOAT_BOX_FACTORY);
     }
 
     private static java.awt.Font loadFontFromFile(String relativeLocation,
@@ -89,7 +96,9 @@ public class FakeFontLoadable implements Font {
     }
 
     private static int generateFontAsset(java.awt.Font font, int imageWidth, int imageHeight,
-                                         float additionalGlyphPadding, float leadingAdjustment,
+                                         float additionalGlyphHorizontalPadding,
+                                         float additionalGlyphVerticalPadding,
+                                         float leadingAdjustment,
                                          Map<Character, FloatBox> glyphs,
                                          FloatBoxFactory floatBoxFactory) {
         GraphicsConfiguration graphicsConfiguration =
@@ -109,7 +118,8 @@ public class FakeFontLoadable implements Font {
         int textureId = glGenTextures();
 
         ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics, imageWidth,
-                imageHeight, additionalGlyphPadding, leadingAdjustment, glyphs, floatBoxFactory);
+                imageHeight, additionalGlyphHorizontalPadding, additionalGlyphVerticalPadding,
+                leadingAdjustment, glyphs, floatBoxFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -124,7 +134,9 @@ public class FakeFontLoadable implements Font {
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
                                             FontMetrics fontMetrics,
                                             int imageWidth, int imageHeight,
-                                            float additionalGlyphPadding, float leadingAdjustment,
+                                            float additionalGlyphHorizontalPadding,
+                                            float additionalGlyphVerticalPadding,
+                                            float leadingAdjustment,
                                             Map<Character, FloatBox> glyphs,
                                             FloatBoxFactory floatBoxFactory) {
         Graphics2D graphics2d = (Graphics2D)bufferedImage.getGraphics();
@@ -132,7 +144,8 @@ public class FakeFontLoadable implements Font {
         graphics2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight, additionalGlyphPadding,
+        drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight,
+                additionalGlyphHorizontalPadding, additionalGlyphVerticalPadding,
                 leadingAdjustment, glyphs, floatBoxFactory);
 
         return createBuffer(bufferedImage, imageWidth, imageHeight);
@@ -140,7 +153,9 @@ public class FakeFontLoadable implements Font {
 
     private static void drawCharacters(Graphics2D graphics2d, FontMetrics fontMetrics,
                                        int imageWidth, int imageHeight,
-                                       float additionalGlyphPadding, float leadingAdjustment,
+                                       float additionalGlyphHorizontalPadding,
+                                       float additionalGlyphVerticalPadding,
+                                       float leadingAdjustment,
                                        Map<Character, FloatBox> glyphs,
                                        FloatBoxFactory floatBoxFactory) {
         int tempX = 0;
@@ -163,20 +178,24 @@ public class FakeFontLoadable implements Font {
 
             float glyphWidth = fontMetrics.charWidth(glyph);
 
-            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphPadding);
+            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
 
-            if (tempX + glyphWidthWithPadding > imageWidth) {
+            if (tempX + glyphWidth > imageWidth) {
                 tempX = 0;
                 tempY++;
             }
 
+            float glyphHeightWithAdditionalPadding = glyphHeight *
+                    (1f + additionalGlyphVerticalPadding);
+
+            float glyphDrawTopY = (glyphHeightWithAdditionalPadding * tempY) + glyphHeight - descent;
+
             float leftX = tempX / (float) imageWidth;
-            float topY = (glyphHeight * tempY) / imageHeight;
+            float topY = (glyphDrawTopY - maxAscent) / imageHeight;
             float rightX = (glyphWidth / (float) imageWidth) + leftX;
             float bottomY = topY + (glyphHeight / imageHeight);
             glyphs.put(glyph, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-            float glyphDrawTopY = (glyphHeight * (tempY + 1)) - descent;
             graphics2d.drawString(String.valueOf(glyph), tempX,
                     glyphDrawTopY);
 

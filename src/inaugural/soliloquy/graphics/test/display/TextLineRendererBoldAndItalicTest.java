@@ -9,7 +9,6 @@ import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
@@ -24,25 +23,26 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
- *    edge of the window, vertically centered, for 8000ms.
+ * 1. This test will display a string of text, "Regular, italic, bold, bold-italic", white, aligned
+ *    left, near the left edge of the window, vertically centered, with each of the words rendered
+ *    with the corresponding style.
  * 2. The window will then close.
  *
  */
-class TextLineRendererSimpleTest {
+class TextLineRendererBoldAndItalicTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
     private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
-    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.75f;
     private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.2f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static int IMAGE_WIDTH = 2048;
     private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quick Message!";
+    private final static String LINE_TEXT = "Regular, italic, bold, bold-italic";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -63,14 +63,24 @@ class TextLineRendererSimpleTest {
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
                 LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
 
-        FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
+        FakeFloatBox renderingArea = new FakeFloatBox(0.0f, 0.475f, 1f, 1f);
 
-        TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null, null, null,
-                renderingArea);
+        ArrayList<Integer> italicIndices = new ArrayList<Integer>() {{
+            add(9);
+            add(17);
+            add(23);
+        }};
+
+        ArrayList<Integer> boldIndices = new ArrayList<Integer>() {{
+            add(17);
+        }};
+
+        TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null,
+                italicIndices, boldIndices, renderingArea);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<TextLineRenderable> textLineRenderer =
+        Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
@@ -98,7 +108,7 @@ class TextLineRendererSimpleTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(8000);
+        CheckedExceptionWrapper.sleep(6000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

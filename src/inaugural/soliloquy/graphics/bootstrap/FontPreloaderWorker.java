@@ -12,20 +12,25 @@ public class FontPreloaderWorker implements Runnable {
     private final String ID;
     private final String RELATIVE_LOCATION;
     private final float MAX_LOSSLESS_FONT_SIZE;
-    private final float ADDITIONAL_GLYPH_PADDING;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING;
+    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING;
     private final float LEADING_ADJUSTMENT;
     private final Consumer<Font> ADD_LOADED_FONT;
 
     public FontPreloaderWorker(AssetFactory<FontDefinition, Font> fontFactory,
                                String id, String relativeLocation, float maxLosslessFontSize,
-                               float additionalGlyphPadding, float leadingAdjustment,
+                               float additionalGlyphHorizontalPadding,
+                               float additionalGlyphVerticalPadding,
+                               float leadingAdjustment,
                                Consumer<Font> addLoadedFont) {
         FONT_FACTORY = Check.ifNull(fontFactory, "fontFactory");
         ID = Check.ifNullOrEmpty(id, "id");
         RELATIVE_LOCATION = Check.ifNullOrEmpty(relativeLocation, "relativeLocation");
         MAX_LOSSLESS_FONT_SIZE = Check.throwOnLteZero(maxLosslessFontSize, "maxLosslessFontSize");
-        ADDITIONAL_GLYPH_PADDING = Check.throwOnLteZero(additionalGlyphPadding,
-                "additionalGlyphPadding");
+        ADDITIONAL_GLYPH_HORIZONTAL_PADDING = Check.throwOnLteZero(additionalGlyphHorizontalPadding,
+                "additionalGlyphHorizontalPadding");
+        ADDITIONAL_GLYPH_VERTICAL_PADDING = Check.throwOnLteZero(additionalGlyphVerticalPadding,
+                "additionalGlyphVerticalPadding");
         LEADING_ADJUSTMENT = Check.throwOnLtValue(
                     Check.throwOnGteValue(leadingAdjustment, 1f, "leadingAdjustment"),
                 0f, "leadingAdjustment");
@@ -46,8 +51,13 @@ public class FontPreloaderWorker implements Runnable {
             }
 
             @Override
-            public float additionalGlyphPadding() {
-                return ADDITIONAL_GLYPH_PADDING;
+            public float additionalGlyphHorizontalPadding() {
+                return ADDITIONAL_GLYPH_HORIZONTAL_PADDING;
+            }
+
+            @Override
+            public float additionalGlyphVerticalPadding() {
+                return ADDITIONAL_GLYPH_VERTICAL_PADDING;
             }
 
             @Override
