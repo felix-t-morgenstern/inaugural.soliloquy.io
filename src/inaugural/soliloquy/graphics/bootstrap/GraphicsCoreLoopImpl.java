@@ -118,7 +118,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                STACK_RENDERER.render();
+                // TODO: Offset this silliness to the FrameExecutor
+                STACK_RENDERER.render(0l);
 
                 glfwSwapBuffers(_window);
             }

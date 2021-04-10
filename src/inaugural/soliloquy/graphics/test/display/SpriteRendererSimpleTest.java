@@ -74,7 +74,7 @@ class SpriteRendererSimpleTest {
                     add(spriteRenderer);
         }};
 
-        stackRenderer.RenderAction = () -> spriteRenderer.render(SpriteRenderable);
+        stackRenderer.RenderAction = () -> spriteRenderer.render(SpriteRenderable, 0L);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,

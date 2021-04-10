@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
@@ -76,12 +76,17 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
+    public void delete() {
+
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }
 
     @Override
-    public Renderable<RasterizedLineSegmentRenderable> makeClone() {
+    public EntityUuid id() {
         return null;
     }
 }

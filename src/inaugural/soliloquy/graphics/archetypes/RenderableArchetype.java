@@ -1,10 +1,9 @@
 package inaugural.soliloquy.graphics.archetypes;
 
-import soliloquy.specs.common.shared.Cloneable;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
-@SuppressWarnings("rawtypes")
 public class RenderableArchetype implements Renderable {
     @Override
     public FloatBox renderingArea() {
@@ -16,15 +15,19 @@ public class RenderableArchetype implements Renderable {
         return 0;
     }
 
+    @Override
+    public void delete() {
+
+    }
+
     // TODO: Test this
     @Override
     public String getInterfaceName() {
         return Renderable.class.getCanonicalName();
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public Cloneable makeClone() {
+    public EntityUuid id() {
         return null;
     }
 }

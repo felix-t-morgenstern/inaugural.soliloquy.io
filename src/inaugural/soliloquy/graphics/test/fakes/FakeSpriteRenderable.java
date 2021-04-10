@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.colorshifting.ColorShift;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -61,12 +61,17 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public Renderable<SpriteRenderable> makeClone() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public EntityUuid id() {
         return null;
     }
 }

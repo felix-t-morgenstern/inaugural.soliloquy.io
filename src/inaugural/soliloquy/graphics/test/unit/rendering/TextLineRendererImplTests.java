@@ -67,74 +67,74 @@ class TextLineRendererImplTests {
 
         textLineRenderable.Font = null;
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         textLineRenderable.Font = font;
 
         textLineRenderable.LineHeight = 0f;
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         textLineRenderable.LineHeight = 0.25f;
 
         colorIndices.put(null, Color.BLUE);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorIndices.remove(null);
 
         colorIndices.put(6, null);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorIndices.remove(6);
 
         colorIndices.put(-1, Color.BLUE);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorIndices.remove(-1);
 
         colorIndices.put(textLine.length(), null);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorIndices.remove(textLine.length());
 
         italicIndices.add(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         //noinspection RedundantCast,SuspiciousMethodCalls
         italicIndices.remove((Object)(null));
 
         italicIndices.add(-1);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         italicIndices.remove((Object)(-1));
 
         italicIndices.add(2);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         italicIndices.remove(2);
 
         italicIndices.add(textLine.length());
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         italicIndices.remove((Object)(textLine.length()));
 
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         //noinspection SuspiciousMethodCalls,RedundantCast
         boldIndices.remove((Object)(null));
 
         boldIndices.add(-1);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         boldIndices.remove((Object)(-1));
 
         boldIndices.add(textLine.length());
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         boldIndices.remove((Object)(textLine.length()));
 
         boldIndices.add(3);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
         boldIndices.remove((Object)3);
     }
 
@@ -199,33 +199,33 @@ class TextLineRendererImplTests {
 
         italicIndices.add(2);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         italicIndices.remove(2);
 
         italicIndices.add(textLine.length());
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         italicIndices.remove((Object)(textLine.length()));
 
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         //noinspection SuspiciousMethodCalls,RedundantCast
         boldIndices.remove((Object)(null));
 
         boldIndices.add(-1);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         boldIndices.remove((Object)(-1));
 
         boldIndices.add(textLine.length());
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         boldIndices.remove((Object)(textLine.length()));
 
         boldIndices.add(3);
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable));
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
         boldIndices.remove((Object)3);
     }
 
@@ -280,6 +280,19 @@ class TextLineRendererImplTests {
         //     due to floating point rounding discrepancies
         assertEquals(Math.round(expectedTextLineLength * 10000f) / 10000f,
                 Math.round(textLineLength * 10000f) / 10000f);
+    }
+
+    @Test
+    void testRenderOutdatedTimestamp() {
+        FakeFont font = new FakeFont();
+        float lineHeight = 0.5f;
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
+                "", null, null, null);
+        long timestamp = 100L;
+        _textLineRenderer.render(textLineRenderable, timestamp);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, timestamp - 1));
     }
 
     @Test

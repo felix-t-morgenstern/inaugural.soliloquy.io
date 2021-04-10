@@ -1,14 +1,22 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.Shader;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSegmentRenderable> {
+public class RasterizedLineSegmentRenderer
+        extends AbstractRenderer<RasterizedLineSegmentRenderable>
+        implements Renderer<RasterizedLineSegmentRenderable> {
+    public RasterizedLineSegmentRenderer() {
+        super(ARCHETYPE);
+    }
+
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
         throw new UnsupportedOperationException("RasterizedLineSegmentRenderer.setMesh: " +
@@ -23,7 +31,8 @@ public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSeg
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void render(RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable)
+    public void render(RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable,
+                       long timestamp)
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
@@ -55,6 +64,8 @@ public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSeg
         Check.throwOnGtValue(rasterizedLineSegmentRenderable.alpha(), 1f,
                 "rasterizedLineSegmentRenderable.alpha()");
 
+        validateTimestamp(timestamp);
+
         glLineWidth(rasterizedLineSegmentRenderable.thickness());
 
         glLineStipple(rasterizedLineSegmentRenderable.stippleFactor(),
@@ -77,8 +88,70 @@ public class RasterizedLineSegmentRenderer implements Renderer<RasterizedLineSeg
     }
 
     @Override
-    public String getInterfaceName() {
-        return Renderer.class.getCanonicalName() + "<" +
-                RasterizedLineSegmentRenderable.class.getCanonicalName() + ">";
+    protected String getUnparameterizedInterfaceName() {
+        return Renderer.class.getCanonicalName();
     }
+
+    private static final RasterizedLineSegmentRenderable ARCHETYPE =
+            new RasterizedLineSegmentRenderable() {
+        @Override
+        public String getInterfaceName() {
+            return RasterizedLineSegmentRenderable.class.getCanonicalName();
+        }
+
+        @Override
+        public EntityUuid id() {
+            return null;
+        }
+
+        @Override
+        public FloatBox renderingArea() {
+            return null;
+        }
+
+        @Override
+        public int z() {
+            return 0;
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
+        public float thickness() {
+            return 0;
+        }
+
+        @Override
+        public short stipplePattern() {
+            return 0;
+        }
+
+        @Override
+        public int stippleFactor() {
+            return 0;
+        }
+
+        @Override
+        public float red() {
+            return 0;
+        }
+
+        @Override
+        public float green() {
+            return 0;
+        }
+
+        @Override
+        public float blue() {
+            return 0;
+        }
+
+        @Override
+        public float alpha() {
+            return 0;
+        }
+    };
 }

@@ -8,15 +8,13 @@ import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 public class FakeRenderableStack implements RenderableStack {
-    @SuppressWarnings("rawtypes")
     public Map<Integer, List<Renderable>> RENDERABLES = new FakeMap<>();
 
     @Override
-    public void clear() {
+    public void clearContainedRenderables() {
         RENDERABLES.clear();
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         if (!RENDERABLES.containsKey(renderable.z())) {
@@ -29,7 +27,6 @@ public class FakeRenderableStack implements RenderableStack {
         RENDERABLES.get(renderable.z()).add(renderable);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Map<Integer, List<Renderable>> snapshot() {
         Map<Integer, List<Renderable>> snapshot = new FakeMap<>();

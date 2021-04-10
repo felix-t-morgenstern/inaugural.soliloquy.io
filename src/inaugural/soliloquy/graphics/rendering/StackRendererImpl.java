@@ -13,26 +13,34 @@ import java.util.Collections;
 
 public class StackRendererImpl implements StackRenderer {
     private final RenderableStack RENDERABLE_STACK;
-    @SuppressWarnings("rawtypes")
     private final Renderer<Renderable> RENDERER;
 
-    @SuppressWarnings("rawtypes")
+    private Long _mostRecentTimestamp;
+
     public StackRendererImpl(RenderableStack renderableStack, Renderer<Renderable> renderer) {
         RENDERABLE_STACK = Check.ifNull(renderableStack, "renderableStack");
         RENDERER = Check.ifNull(renderer, "renderer");
     }
 
     // TODO: Refactor how keys are obtained and sorted after having refactored Collection to either extend List, or implement a method which exposes a properly-typed List or Array
-    @SuppressWarnings("rawtypes")
     @Override
-    public void render() {
+    public void render(long timestamp) {
+        if (_mostRecentTimestamp != null) {
+            if (timestamp < _mostRecentTimestamp) {
+                throw new IllegalArgumentException(
+                        "RasterizedLineSegmentRenderer.render: outdated timestamp provided");
+            }
+        }
+        _mostRecentTimestamp = timestamp;
+
         Map<Integer, List<Renderable>> toRender = RENDERABLE_STACK.snapshot();
 
         java.util.List<Integer> keys = new ArrayList<>(toRender.keySet());
 
         keys.sort(Collections.reverseOrder());
 
-        keys.forEach(z -> toRender.get(z).forEach(RENDERER::render));
+        keys.forEach(z -> toRender.get(z).forEach(renderable ->
+                RENDERER.render(renderable, timestamp)));
     }
 
     @Override

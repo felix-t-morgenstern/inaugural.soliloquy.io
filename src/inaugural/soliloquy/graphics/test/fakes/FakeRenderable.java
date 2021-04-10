@@ -1,10 +1,9 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.common.shared.Cloneable;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
-@SuppressWarnings("rawtypes")
 public class FakeRenderable implements Renderable {
     public int Z;
     public FloatBox RenderingArea;
@@ -24,13 +23,17 @@ public class FakeRenderable implements Renderable {
     }
 
     @Override
+    public void delete() {
+
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public Cloneable makeClone() {
+    public EntityUuid id() {
         return null;
     }
 }

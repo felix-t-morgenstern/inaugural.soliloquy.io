@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.HasOneGenericParam;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -9,9 +8,8 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
-@SuppressWarnings("rawtypes")
 abstract class CanRenderSnippets<TRenderable extends Renderable>
-        extends HasOneGenericParam<TRenderable>
+        extends AbstractRenderer<TRenderable>
         implements Renderer<TRenderable> {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 

@@ -1,7 +1,8 @@
 package inaugural.soliloquy.graphics.rendering;
 
-import inaugural.soliloquy.graphics.archetypes.TextLineRenderableArchetype;
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.EntityUuid;
+import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
@@ -9,6 +10,7 @@ import soliloquy.specs.graphics.rendering.TextLineRenderer;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -18,8 +20,6 @@ import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 
 public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         implements TextLineRenderer {
-    private static final TextLineRenderable ARCHETYPE = new TextLineRenderableArchetype();
-
     private final Color DEFAULT_COLOR;
 
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
@@ -30,8 +30,11 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     }
 
     @Override
-    public void render(TextLineRenderable textLineRenderable) throws IllegalArgumentException {
+    public void render(TextLineRenderable textLineRenderable, long timestamp)
+            throws IllegalArgumentException {
         validateTextLineRenderable(textLineRenderable, "render");
+
+        validateTimestamp(timestamp);
 
         System.out.println("Rendering text line...");
 
@@ -49,12 +52,9 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                     textLineRenderable.lineHeight()
                     );
 
-                    renderingArea = FLOAT_BOX_FACTORY.make(0, 0, 1, 1);
-
                     super.render(renderingArea,
-                            0, 0, 1, 1,
-//                            glyphBox.leftX(), glyphBox.topY(),
-//                            glyphBox.rightX(), glyphBox.bottomY(),
+                            glyphBox.leftX(), glyphBox.topY(),
+                            glyphBox.rightX(), glyphBox.bottomY(),
                             textureId,
                             color.getRed() / (float)MAX_CHANNEL_VAL,
                             color.getGreen() / (float)MAX_CHANNEL_VAL,
@@ -75,10 +75,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                       Function<Float, Function<Float, Function<Integer,
                                               Function<FloatBox, Consumer<Color>>>>>
                                               renderingAction) {
-//        boolean italic = false;
-//        boolean bold = false;
-        boolean italic = true;
-        boolean bold = true;
+        boolean italic = false;
+        boolean bold = false;
         int nextItalicIndex = 0;
         int nextBoldIndex = 0;
         float textLineLengthThusFar = 0f;
@@ -198,4 +196,61 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                     dataStructureName + " cannot contain an index out of ascending order");
         }
     }
+
+    private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
+        @Override
+        public String getInterfaceName() {
+            return TextLineRenderable.class.getCanonicalName();
+        }
+
+        @Override
+        public EntityUuid id() {
+            return null;
+        }
+
+        @Override
+        public Font font() {
+            return null;
+        }
+
+        @Override
+        public String lineText() {
+            return null;
+        }
+
+        @Override
+        public FloatBox renderingArea() {
+            return null;
+        }
+
+        @Override
+        public int z() {
+            return 0;
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
+        public float lineHeight() {
+            return 0;
+        }
+
+        @Override
+        public Map<Integer, Color> colorIndices() {
+            return null;
+        }
+
+        @Override
+        public List<Integer> italicIndices() {
+            return null;
+        }
+
+        @Override
+        public List<Integer> boldIndices() {
+            return null;
+        }
+    };
 }

@@ -45,15 +45,16 @@ class RasterizedLineSegmentRendererTest {
         frameTimer.ShouldExecuteNextFrame = true;
 
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
-        Collection<Renderer> renderersWithShader = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         Renderer<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =
                 new RasterizedLineSegmentRenderer();
 
         stackRenderer.RenderAction =
-                () -> rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable());
+                () -> rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable(),
+                        0L);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,

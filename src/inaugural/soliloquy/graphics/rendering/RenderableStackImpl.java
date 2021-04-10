@@ -25,7 +25,7 @@ public class RenderableStackImpl implements RenderableStack {
     }
 
     @Override
-    public void clear() {
+    public void clearContainedRenderables() {
         STACK.clear();
     }
 

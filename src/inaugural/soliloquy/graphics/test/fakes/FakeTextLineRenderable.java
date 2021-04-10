@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -77,12 +77,17 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public Renderable<TextLineRenderable> makeClone() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public EntityUuid id() {
         return null;
     }
 }

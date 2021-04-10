@@ -82,7 +82,7 @@ class TextLineRendererSimpleTest {
                     add(textLineRenderer);
                 }};
 
-        stackRenderer.RenderAction = () -> textLineRenderer.render(TextLineRenderable);
+        stackRenderer.RenderAction = () -> textLineRenderer.render(TextLineRenderable, 0L);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,

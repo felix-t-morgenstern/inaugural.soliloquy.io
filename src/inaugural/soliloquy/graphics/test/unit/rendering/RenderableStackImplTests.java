@@ -40,7 +40,6 @@ class RenderableStackImplTests {
                 _renderableStack.getInterfaceName());
     }
 
-    @SuppressWarnings("rawtypes")
     @Test
     void testAddAndSnapshot() {
         Renderable renderable1 = new FakeRenderable(1);
@@ -77,14 +76,13 @@ class RenderableStackImplTests {
         assertTrue(zIndex2.contains(renderable2));
     }
 
-    @SuppressWarnings("rawtypes")
     @Test
     void testClear() {
         Renderable renderable = new FakeRenderable(0);
 
         _renderableStack.add(renderable);
 
-        _renderableStack.clear();
+        _renderableStack.clearContainedRenderables();
 
         Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
 

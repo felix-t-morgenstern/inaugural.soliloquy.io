@@ -12,6 +12,7 @@ public class FakeRenderer implements Renderer<Renderable> {
     public Mesh Mesh;
     public Shader Shader;
     public List<Renderable> Rendered = new ArrayList<>();
+    public List<Long> Timestamps = new ArrayList<>();
 
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
@@ -24,8 +25,9 @@ public class FakeRenderer implements Renderer<Renderable> {
     }
 
     @Override
-    public void render(Renderable renderable) throws IllegalArgumentException {
+    public void render(Renderable renderable, long timestamp) throws IllegalArgumentException {
         Rendered.add(renderable);
+        Timestamps.add(timestamp);
     }
 
     @Override
