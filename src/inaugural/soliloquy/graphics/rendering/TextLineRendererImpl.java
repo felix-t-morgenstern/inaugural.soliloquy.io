@@ -34,7 +34,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             throws IllegalArgumentException {
         validateTextLineRenderable(textLineRenderable, "render");
 
-        validateTimestamp(timestamp);
+        validateTimestamp(timestamp, "TextLineRendererImpl");
 
         System.out.println("Rendering text line...");
 

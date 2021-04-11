@@ -13,11 +13,12 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
         super(archetype);
     }
 
-    protected void validateTimestamp(long timestamp) {
+    // TODO: Use logic from tools package to determine calling class name
+    protected void validateTimestamp(long timestamp, String className) {
         if (_mostRecentTimestamp != null) {
             if (timestamp < _mostRecentTimestamp) {
                 throw new IllegalArgumentException(
-                        "RasterizedLineSegmentRenderer.render: outdated timestamp provided");
+                        className + ".render: outdated timestamp provided");
             }
         }
         _mostRecentTimestamp = timestamp;

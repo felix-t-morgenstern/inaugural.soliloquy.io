@@ -20,19 +20,11 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
     @Override
     public void render(SpriteRenderable spriteRenderable, long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(spriteRenderable, "spriteRenderable");
+        validateRenderableWithArea(spriteRenderable, "spriteRenderable");
 
         Check.ifNull(spriteRenderable.sprite(), "spriteRenderable.sprite()");
 
-        Check.ifNull(spriteRenderable.colorShifts(), "spriteRenderable.colorShifts()");
-
-        Check.throwOnLteZero(spriteRenderable.renderingArea().width(),
-                "spriteRenderable.width()");
-
-        Check.throwOnLteZero(spriteRenderable.renderingArea().height(),
-                "spriteRenderable.height()");
-
-        validateTimestamp(timestamp);
+        validateTimestamp(timestamp, "SpriteRenderer");
 
         float snippetLeftX =
                 (float)spriteRenderable.sprite().leftX() /

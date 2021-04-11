@@ -64,7 +64,7 @@ public class RasterizedLineSegmentRenderer
         Check.throwOnGtValue(rasterizedLineSegmentRenderable.alpha(), 1f,
                 "rasterizedLineSegmentRenderable.alpha()");
 
-        validateTimestamp(timestamp);
+        validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
 
         glLineWidth(rasterizedLineSegmentRenderable.thickness());
 

@@ -72,7 +72,7 @@ class SpriteRendererTests {
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
-        float bottomY = -0.44f;
+        float bottomY = 0.44f;
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(null, 0L));
 
@@ -89,14 +89,14 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, null,
+                new FakeSpriteRenderable(sprite, colorShifts,
                         new FakeFloatBox(leftX, topY, leftX, bottomY)),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeFloatBox(leftX, topY, leftX, topY)),
+                        new FakeFloatBox(leftX, topY, rightX, topY)),
                 0L
         ));
     }

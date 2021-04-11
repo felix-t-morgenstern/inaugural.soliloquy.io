@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.RenderableWithArea;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
@@ -124,6 +125,19 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         _shader.setUniform("matColor", red, green, blue, alpha);
 
         _mesh.render();
+    }
+
+    protected void validateRenderableWithArea(RenderableWithArea renderableWithArea,
+                                              String paramName) {
+        Check.ifNull(renderableWithArea, "spriteRenderable");
+
+        Check.ifNull(renderableWithArea.colorShifts(), paramName + ".colorShifts()");
+
+        Check.throwOnLteZero(renderableWithArea.renderingArea().width(),
+                paramName + "renderingArea.width()");
+
+        Check.throwOnLteZero(renderableWithArea.renderingArea().height(),
+                paramName + "renderingArea.height()");
     }
 
     @Override
