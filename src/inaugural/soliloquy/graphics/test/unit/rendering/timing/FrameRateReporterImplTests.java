@@ -1,11 +1,11 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameRateReporterImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameRateReporterAggregateOutput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.rendering.FrameRateReporter;
-import soliloquy.specs.graphics.rendering.FrameRateReporterAggregateOutput;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -2,9 +2,9 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.graphics.rendering.FrameRateReporter;
-import soliloquy.specs.graphics.rendering.FrameTimer;
-import soliloquy.specs.graphics.rendering.GlobalClock;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
+import soliloquy.specs.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 

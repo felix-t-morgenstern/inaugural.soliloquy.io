@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.graphics.rendering.FrameTimer;
+import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
 public class FakeFrameTimer implements FrameTimer {
     public boolean ShouldExecuteNextFrame;

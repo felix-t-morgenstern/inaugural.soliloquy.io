@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.graphics.rendering.FrameRateReporter;
-import soliloquy.specs.graphics.rendering.FrameRateReporterAggregateOutput;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
 import java.util.*;
 
@@ -18,7 +18,6 @@ public class FrameRateReporterImpl implements FrameRateReporter {
     private Float _currentActualFps;
     private long _currentAggregateStartDate;
     private Float[] _targetFpsInCurrentAggregate;
-    private int _nullTargetFpsInCurrentAggregate;
     private float[] _actualFpsInCurrentAggregate;
     private int _periodWithinCurrentAggregate;
     private float _aggregateTargetFpsDivisor;
@@ -68,9 +67,7 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                 _currentAggregateStartDate = datetime;
             }
 
-            if (targetFps == null) {
-                _nullTargetFpsInCurrentAggregate++;
-            } else {
+            if (targetFps != null) {
                 _targetFpsInCurrentAggregate[_periodWithinCurrentAggregate] = targetFps;
             }
             _actualFpsInCurrentAggregate[_periodWithinCurrentAggregate] = actualFps;
@@ -136,7 +133,6 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                 }
 
                 _msPausedWithinCurrentAggregate = 0;
-                _nullTargetFpsInCurrentAggregate = 0;
                 _periodWithinCurrentAggregate = 0;
                 _aggregateTargetFpsDivisor = 0f;
             } else {

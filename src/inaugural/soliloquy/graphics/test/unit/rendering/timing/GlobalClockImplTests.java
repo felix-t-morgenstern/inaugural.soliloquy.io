@@ -1,10 +1,10 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.rendering.GlobalClock;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Calendar;
 import java.util.TimeZone;

@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
+import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -27,7 +28,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     @SuppressWarnings("rawtypes")
     private final Collection<Renderer> RENDERERS_WITH_SHADER;
     private final String SHADER_FILENAME_PREFIX;
-    private final Function<float[], Function<float[],Mesh>> MESH_FACTORY;
+    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY;
     @SuppressWarnings("rawtypes")
     private final Collection<Renderer> RENDERERS_WITH_MESH;
     private final float[] MESH_VERTICES;
@@ -119,7 +120,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // TODO: Offset this silliness to the FrameExecutor
-                STACK_RENDERER.render(0l);
+                STACK_RENDERER.render(0L);
 
                 glfwSwapBuffers(_window);
             }

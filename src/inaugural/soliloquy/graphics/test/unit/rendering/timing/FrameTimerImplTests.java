@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameTimerImpl;
 import inaugural.soliloquy.graphics.test.fakes.FakeFrameRateReporter;
@@ -6,7 +6,7 @@ import inaugural.soliloquy.graphics.test.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.rendering.FrameTimer;
+import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.graphics.rendering.GlobalClock;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Calendar;
 import java.util.TimeZone;

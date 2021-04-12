@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.graphics.api.Constants;
-import soliloquy.specs.graphics.rendering.GlobalClock;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Calendar;
 import java.util.TimeZone;

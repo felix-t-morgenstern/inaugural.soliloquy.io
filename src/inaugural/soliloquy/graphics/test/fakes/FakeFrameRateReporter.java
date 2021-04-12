@@ -1,9 +1,8 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.graphics.rendering.FrameRateReporter;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class FakeFrameRateReporter implements FrameRateReporter {
     public ArrayList<Long> Dates = new ArrayList<>();

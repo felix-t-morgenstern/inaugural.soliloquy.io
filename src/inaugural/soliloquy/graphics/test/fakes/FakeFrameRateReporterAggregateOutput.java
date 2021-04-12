@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.fakes;
 
-import soliloquy.specs.graphics.rendering.FrameRateReporterAggregateOutput;
+import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
 import java.util.ArrayList;
 import java.util.Date;
