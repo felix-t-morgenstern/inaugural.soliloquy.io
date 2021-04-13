@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
-import inaugural.soliloquy.graphics.test.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.fakes.FakeRasterizedLineSegmentRenderable;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

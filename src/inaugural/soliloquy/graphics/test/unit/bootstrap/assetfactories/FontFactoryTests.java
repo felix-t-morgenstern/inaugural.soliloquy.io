@@ -2,8 +2,8 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.FontFactory;
-import inaugural.soliloquy.graphics.test.fakes.FakeFloatBoxFactory;
-import inaugural.soliloquy.graphics.test.fakes.FakeFontDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontDefinition;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

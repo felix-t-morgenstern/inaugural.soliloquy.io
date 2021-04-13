@@ -26,25 +26,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
 
         validateTimestamp(timestamp, "SpriteRenderer");
 
-        float snippetLeftX =
-                (float)spriteRenderable.sprite().leftX() /
-                        spriteRenderable.sprite().image().width();
-
-        float snippetTopY =
-                (float)spriteRenderable.sprite().topY() /
-                        spriteRenderable.sprite().image().height();
-
-        float snippetRightX =
-                (float)spriteRenderable.sprite().rightX() /
-                        spriteRenderable.sprite().image().width();
-
-        float snippetBottomY =
-                (float)spriteRenderable.sprite().bottomY() /
-                        spriteRenderable.sprite().image().height();
-
         super.render(spriteRenderable.renderingArea(),
-                snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
-                spriteRenderable.sprite().image().textureId(),
+                spriteRenderable.sprite(),
                 1.0f, 1.0f, 1.0f, 1.0f);
     }
 

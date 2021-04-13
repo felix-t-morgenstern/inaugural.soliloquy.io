@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.test.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameRateReporterImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeFrameRateReporterAggregateOutput;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFrameRateReporterAggregateOutput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;

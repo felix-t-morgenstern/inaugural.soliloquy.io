@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering;
 import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeRenderable;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.factories.ListFactory;

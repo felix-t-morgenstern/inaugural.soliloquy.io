@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.FontPreloaderWorker;
-import inaugural.soliloquy.graphics.test.fakes.FakeFontFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontFactory;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;

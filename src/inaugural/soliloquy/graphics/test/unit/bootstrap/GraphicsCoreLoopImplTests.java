@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.test.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

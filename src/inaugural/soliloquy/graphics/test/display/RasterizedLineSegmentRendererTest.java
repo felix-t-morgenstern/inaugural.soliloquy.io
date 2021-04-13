@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
-import inaugural.soliloquy.graphics.test.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
@@ -52,9 +52,9 @@ class RasterizedLineSegmentRendererTest {
         Renderer<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =
                 new RasterizedLineSegmentRenderer();
 
-        stackRenderer.RenderAction =
-                () -> rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable(),
-                        0L);
+        stackRenderer.RenderAction = timestamp ->
+                rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable(),
+                        timestamp);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,

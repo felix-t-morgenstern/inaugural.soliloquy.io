@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameTimerImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeFrameRateReporter;
-import inaugural.soliloquy.graphics.test.fakes.FakeGlobalClock;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFrameRateReporter;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

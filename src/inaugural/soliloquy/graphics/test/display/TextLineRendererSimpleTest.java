@@ -6,7 +6,7 @@ import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
-import inaugural.soliloquy.graphics.test.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
@@ -82,7 +82,8 @@ class TextLineRendererSimpleTest {
                     add(textLineRenderer);
                 }};
 
-        stackRenderer.RenderAction = () -> textLineRenderer.render(TextLineRenderable, 0L);
+        stackRenderer.RenderAction = timestamp ->
+                textLineRenderer.render(TextLineRenderable, timestamp);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,

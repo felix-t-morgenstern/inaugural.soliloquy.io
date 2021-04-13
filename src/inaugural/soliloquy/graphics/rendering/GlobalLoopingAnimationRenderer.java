@@ -28,6 +28,10 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
                 "globalLoopingAnimationRenderable.loopingAnimation()");
 
         validateTimestamp(timestamp, "GlobalLoopingAnimationRenderer");
+
+        super.render(globalLoopingAnimationRenderable.renderingArea(),
+                globalLoopingAnimationRenderable.loopingAnimation().currentSnippet(timestamp),
+                1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =

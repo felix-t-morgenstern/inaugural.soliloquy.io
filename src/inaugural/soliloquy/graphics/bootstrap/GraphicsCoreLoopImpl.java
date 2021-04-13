@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
+import inaugural.soliloquy.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -9,6 +10,7 @@ import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -111,6 +113,9 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         new Thread(gameThread).start();
 
+        // TODO: Get this shit out of here too; this should be handled by the FrameExecutor
+        GlobalClock globalClock = new GlobalClockImpl();
+
         while(!glfwWindowShouldClose(_window)) {
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
@@ -120,7 +125,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // TODO: Offset this silliness to the FrameExecutor
-                STACK_RENDERER.render(0L);
+                STACK_RENDERER.render(globalClock.globalTimestamp());
 
                 glfwSwapBuffers(_window);
             }

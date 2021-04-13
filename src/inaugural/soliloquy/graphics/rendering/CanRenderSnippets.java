@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
 import soliloquy.specs.graphics.rendering.*;
@@ -35,6 +36,20 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
         _mesh = Check.ifNull(mesh, "mesh");
+    }
+
+    void render(FloatBox renderingArea,
+                AssetSnippet snippet,
+                float red, float green, float blue, float alpha) {
+        float snippetLeftX = (float)snippet.leftX() / snippet.image().width();
+        float snippetTopY = (float)snippet.topY() / snippet.image().height();
+        float snippetRightX = (float)snippet.rightX() / snippet.image().width();
+        float snippetBottomY = (float)snippet.bottomY() / snippet.image().height();
+        int textureId = snippet.image().textureId();
+        render(renderingArea,
+                snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
+                textureId,
+                red, green, blue, alpha);
     }
 
     void render(FloatBox renderingArea,

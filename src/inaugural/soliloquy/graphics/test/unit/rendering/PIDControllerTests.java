@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.api.Settings;
 import inaugural.soliloquy.graphics.rendering.PIDController;
-import inaugural.soliloquy.graphics.test.fakes.FakeSettingsRepo;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSettingsRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.OutputController;

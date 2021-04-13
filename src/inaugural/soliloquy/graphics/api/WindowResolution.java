@@ -69,4 +69,17 @@ public enum WindowResolution {
 
         return WIDTH + " x " + HEIGHT;
     }
+
+    public float widthToHeightRatio() {
+        if (this == WindowResolution.RES_INVALID) {
+            throw new UnsupportedOperationException(
+                    "Cannot obtain width to height ratio of RES_INVALID");
+        }
+        if (this == WindowResolution.RES_WINDOWED_FULLSCREEN) {
+            throw new UnsupportedOperationException(
+                    "Cannot obtain width to height ratio of RES_WINDOWED_FULLSCREEN");
+        }
+
+        return (float)WIDTH / (float)HEIGHT;
+    }
 }

@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.SpriteFactory;
-import inaugural.soliloquy.graphics.test.fakes.FakeImage;
-import inaugural.soliloquy.graphics.test.fakes.FakeSpriteDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteDefinition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;

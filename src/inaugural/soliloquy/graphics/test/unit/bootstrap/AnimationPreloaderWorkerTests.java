@@ -2,9 +2,9 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.api.dto.AnimationDTO;
 import inaugural.soliloquy.graphics.bootstrap.AnimationPreloaderWorker;
-import inaugural.soliloquy.graphics.test.fakes.FakeAnimationFactory;
-import inaugural.soliloquy.graphics.test.fakes.FakeImage;
-import inaugural.soliloquy.graphics.test.fakes.FakeRegistry;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Registry;

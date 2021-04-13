@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.StackRendererImpl;
-import inaugural.soliloquy.graphics.test.fakes.FakeRenderable;
-import inaugural.soliloquy.graphics.test.fakes.FakeRenderableStack;
-import inaugural.soliloquy.graphics.test.fakes.FakeRenderer;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderable;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableStack;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.Renderable;
