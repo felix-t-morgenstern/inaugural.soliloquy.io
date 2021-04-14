@@ -1,11 +1,15 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
-import soliloquy.specs.graphics.rendering.*;
+import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;

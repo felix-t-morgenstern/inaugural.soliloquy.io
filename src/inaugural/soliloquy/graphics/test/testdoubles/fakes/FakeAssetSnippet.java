@@ -10,10 +10,6 @@ public class FakeAssetSnippet implements AssetSnippet {
     public int _rightX;
     public int _bottomY;
 
-    public FakeAssetSnippet() {
-
-    }
-
     public FakeAssetSnippet(Image image, int leftX, int topY, int rightX, int bottomY) {
         _image = image;
         _leftX = leftX;

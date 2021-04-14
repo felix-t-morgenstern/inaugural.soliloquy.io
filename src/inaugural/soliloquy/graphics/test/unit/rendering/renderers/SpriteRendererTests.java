@@ -1,6 +1,6 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.SpriteRenderer;
+import inaugural.soliloquy.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
-import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;

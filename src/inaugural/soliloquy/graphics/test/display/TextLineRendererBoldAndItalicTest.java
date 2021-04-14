@@ -3,15 +3,15 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
-import inaugural.soliloquy.graphics.rendering.TextLineRendererImpl;
+import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;

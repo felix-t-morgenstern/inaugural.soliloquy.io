@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;

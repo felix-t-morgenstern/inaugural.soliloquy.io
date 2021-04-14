@@ -1,6 +1,6 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.RasterizedLineSegmentRenderer;
+import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
 import org.junit.jupiter.api.AfterAll;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;

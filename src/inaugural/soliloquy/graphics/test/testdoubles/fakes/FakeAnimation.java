@@ -5,18 +5,26 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 
 public class FakeAnimation implements Animation {
     public String Id;
+    public int MsDuration;
+    public boolean SnippetAtFrameCalled = false;
 
     public FakeAnimation(String id) {
         Id = id;
     }
 
+    public FakeAnimation(String id, int msDuration) {
+        Id = id;
+        MsDuration = msDuration;
+    }
+
     @Override
     public int msDuration() {
-        return 0;
+        return MsDuration;
     }
 
     @Override
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
+        SnippetAtFrameCalled = true;
         return null;
     }
 

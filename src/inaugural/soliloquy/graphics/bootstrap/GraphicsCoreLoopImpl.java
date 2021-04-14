@@ -7,8 +7,12 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.graphics.rendering.*;
+import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.Shader;
+import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 

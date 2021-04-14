@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
@@ -6,8 +6,8 @@ import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.graphics.rendering.TextLineRenderer;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
+import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
 import java.util.List;

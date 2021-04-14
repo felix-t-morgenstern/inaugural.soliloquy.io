@@ -7,9 +7,9 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Renderer;
-import soliloquy.specs.graphics.rendering.StackRenderer;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;

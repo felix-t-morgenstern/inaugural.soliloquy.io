@@ -1,6 +1,6 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.GlobalLoopingAnimationRenderer;
+import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.graphics.test.testdoubles.spies.SpyRenderableAnimation;
 import org.junit.jupiter.api.AfterAll;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
-import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +58,14 @@ class GlobalLoopingAnimationRendererTests {
 
     @Test
     void testSetMeshWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.setMesh(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> _globalLoopingAnimationRenderer.setMesh(null));
     }
 
     @Test
     void testSetShaderWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.setShader(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> _globalLoopingAnimationRenderer.setShader(null));
     }
 
     @Test

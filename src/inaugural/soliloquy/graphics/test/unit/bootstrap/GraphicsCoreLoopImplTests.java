@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.Collection;

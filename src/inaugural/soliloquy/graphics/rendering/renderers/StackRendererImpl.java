@@ -1,12 +1,12 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
-import soliloquy.specs.graphics.rendering.Renderer;
-import soliloquy.specs.graphics.rendering.StackRenderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collections;

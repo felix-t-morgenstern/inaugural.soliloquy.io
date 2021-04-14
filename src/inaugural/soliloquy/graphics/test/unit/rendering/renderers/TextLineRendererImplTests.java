@@ -1,12 +1,12 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.TextLineRendererImpl;
+import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
-import soliloquy.specs.graphics.rendering.Renderer;
-import soliloquy.specs.graphics.rendering.TextLineRenderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;

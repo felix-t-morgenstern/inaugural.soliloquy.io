@@ -1,8 +1,8 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.generic.HasOneGenericParam;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.rendering.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 public abstract class AbstractRenderer<TRenderable extends Renderable>
         extends HasOneGenericParam<TRenderable>

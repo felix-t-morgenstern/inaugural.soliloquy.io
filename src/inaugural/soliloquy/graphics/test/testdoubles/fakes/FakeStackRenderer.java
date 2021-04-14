@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.graphics.rendering.StackRenderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

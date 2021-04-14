@@ -8,7 +8,7 @@ public class FakeAnimationFrameSnippet extends FakeAssetSnippet implements Anima
     public float _offsetY;
 
     public FakeAnimationFrameSnippet() {
-        super();
+        this(new FakeImage("", 100, 100), 0, 0, 0, 0, 0f, 0f);
     }
 
     public FakeAnimationFrameSnippet(Image image, int leftX, int topY, int rightX, int bottomY,

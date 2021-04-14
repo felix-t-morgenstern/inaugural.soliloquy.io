@@ -2,8 +2,8 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.Shader;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;

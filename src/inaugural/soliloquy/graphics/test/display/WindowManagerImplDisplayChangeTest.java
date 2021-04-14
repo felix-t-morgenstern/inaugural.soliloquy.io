@@ -6,7 +6,11 @@ import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.rendering.*;
+import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.WindowDisplayMode;
+import soliloquy.specs.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +51,7 @@ class WindowManagerImplDisplayChangeTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> null;
+        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> null;
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         StackRenderer stackRenderer = new FakeStackRenderer();

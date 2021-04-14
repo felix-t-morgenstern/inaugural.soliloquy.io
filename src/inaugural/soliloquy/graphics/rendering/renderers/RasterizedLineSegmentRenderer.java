@@ -1,12 +1,12 @@
-package inaugural.soliloquy.graphics.rendering;
+package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Renderer;
 import soliloquy.specs.graphics.rendering.Shader;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import static org.lwjgl.opengl.GL11.*;
 

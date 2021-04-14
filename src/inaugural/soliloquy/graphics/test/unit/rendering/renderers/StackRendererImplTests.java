@@ -1,13 +1,13 @@
-package inaugural.soliloquy.graphics.test.unit.rendering;
+package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.StackRendererImpl;
+import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderable;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableStack;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.rendering.StackRenderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
