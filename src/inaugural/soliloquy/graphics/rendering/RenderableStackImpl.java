@@ -12,7 +12,6 @@ import soliloquy.specs.graphics.rendering.RenderableStack;
 import java.util.HashMap;
 
 public class RenderableStackImpl implements RenderableStack {
-    @SuppressWarnings("rawtypes")
     private final java.util.Map<Integer, List<Renderable>> STACK;
     private final MapFactory MAP_FACTORY;
     private final ListFactory LIST_FACTORY;
@@ -29,7 +28,6 @@ public class RenderableStackImpl implements RenderableStack {
         STACK.clear();
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         if (!STACK.containsKey(renderable.z())) {
@@ -41,7 +39,6 @@ public class RenderableStackImpl implements RenderableStack {
         STACK.get(renderable.z()).add(renderable);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Map<Integer, List<Renderable>> snapshot() {
         Map<Integer, List<Renderable>> snapshot =

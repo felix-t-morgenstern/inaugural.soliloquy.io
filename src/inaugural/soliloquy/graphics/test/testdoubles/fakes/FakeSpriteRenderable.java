@@ -12,12 +12,21 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
     public List<ColorShift> ColorShifts;
     public FloatBox RenderingArea;
+    public int Z;
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
                                 FloatBox renderingArea) {
         Sprite = sprite;
         ColorShifts = colorShifts;
         RenderingArea = renderingArea;
+    }
+
+    public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
+                                FloatBox renderingArea, int z) {
+        Sprite = sprite;
+        ColorShifts = colorShifts;
+        RenderingArea = renderingArea;
+        Z = z;
     }
 
     @Override
@@ -57,7 +66,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
 
     @Override
     public int z() {
-        return 0;
+        return Z;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -13,6 +14,8 @@ public class FakeRenderer implements Renderer<Renderable> {
     public Shader Shader;
     public List<Renderable> Rendered = new ArrayList<>();
     public List<Long> Timestamps = new ArrayList<>();
+
+    public Renderer<SpriteRenderable> SpriteRenderer;
 
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
@@ -28,6 +31,12 @@ public class FakeRenderer implements Renderer<Renderable> {
     public void render(Renderable renderable, long timestamp) throws IllegalArgumentException {
         Rendered.add(renderable);
         Timestamps.add(timestamp);
+
+        if (renderable instanceof SpriteRenderable) {
+            if (SpriteRenderer != null) {
+                SpriteRenderer.render((SpriteRenderable)renderable, timestamp);
+            }
+        }
     }
 
     @Override
