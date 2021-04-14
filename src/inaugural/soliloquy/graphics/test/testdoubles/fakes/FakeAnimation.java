@@ -25,7 +25,7 @@ public class FakeAnimation implements Animation {
     @Override
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
         SnippetAtFrameCalled = true;
-        return null;
+        return new FakeAnimationFrameSnippet();
     }
 
     @Override
