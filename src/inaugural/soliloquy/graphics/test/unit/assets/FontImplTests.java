@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.assets;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +20,6 @@ class FontImplTests {
     private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.123f;
     private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.123f;
     private final float LEADING_ADJUSTMENT = 0.456f;
-    private final int IMAGE_WIDTH = 123;
-    private final int IMAGE_HEIGHT = 2340;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
@@ -49,7 +47,7 @@ class FontImplTests {
     void setUp() {
         _font = new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
+                LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
     }
 
     @Test
@@ -57,51 +55,43 @@ class FontImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, null, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, "", MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, 0f,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         -0.001f, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, -0.001f,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        -0.001f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        -0.001f, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        1f, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
+                        1f, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, 0, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, 0, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, null));
+                        LEADING_ADJUSTMENT, null));
     }
 
     @Test
@@ -140,21 +130,8 @@ class FontImplTests {
         FloatBox spaceUvCoordinates = _font.getUvCoordinatesForGlyph(' ');
         FloatBox bangUvCoordinates = _font.getUvCoordinatesForGlyph('!');
 
-        FloatBox firstCharacterOnSecondLine = null;
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
-            if (i == ASCII_CHAR_DELETE) {
-                continue;
-            }
-            FloatBox glyphUvCoordinates = _font.getUvCoordinatesForGlyph((char)i);
-            if (glyphUvCoordinates.topY() > 0f) {
-                firstCharacterOnSecondLine = glyphUvCoordinates;
-                break;
-            }
-        }
-
         assertNotNull(spaceUvCoordinates);
         assertNotNull(bangUvCoordinates);
-        assertNotNull(firstCharacterOnSecondLine);
 
         assertEquals(0f, spaceUvCoordinates.leftX());
         assertEquals(0f, spaceUvCoordinates.topY());
@@ -163,10 +140,6 @@ class FontImplTests {
         assertEquals(spaceUvCoordinates.rightX(), bangUvCoordinates.leftX());
         assertEquals(0f, bangUvCoordinates.topY());
         assertTrue(bangUvCoordinates.rightX() > 0);
-
-        assertEquals(0f, firstCharacterOnSecondLine.leftX());
-        assertEquals(spaceUvCoordinates.bottomY(), firstCharacterOnSecondLine.topY());
-        assertEquals(spaceUvCoordinates.bottomY() * 2, firstCharacterOnSecondLine.bottomY());
     }
 
     @Test
@@ -174,26 +147,8 @@ class FontImplTests {
         FloatBox spaceUvCoordinatesItalic = _font.getUvCoordinatesForGlyphItalic(' ');
         FloatBox bangUvCoordinatesItalic = _font.getUvCoordinatesForGlyphItalic('!');
 
-        FloatBox lastUvCoordinates =
-                _font.getUvCoordinatesForGlyph((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesItalic =
-                _font.getUvCoordinatesForGlyphItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-
-        FloatBox firstCharacterOnSecondLine = null;
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
-            if (i == ASCII_CHAR_DELETE) {
-                continue;
-            }
-            FloatBox glyphUvCoordinates = _font.getUvCoordinatesForGlyphItalic((char)i);
-            if (glyphUvCoordinates.topY() > 0f) {
-                firstCharacterOnSecondLine = glyphUvCoordinates;
-                break;
-            }
-        }
-
         assertNotNull(spaceUvCoordinatesItalic);
         assertNotNull(bangUvCoordinatesItalic);
-        assertNotNull(firstCharacterOnSecondLine);
 
         assertEquals(0f, spaceUvCoordinatesItalic.leftX());
         assertEquals(0f, spaceUvCoordinatesItalic.topY());
@@ -202,13 +157,6 @@ class FontImplTests {
         assertEquals(spaceUvCoordinatesItalic.rightX(), bangUvCoordinatesItalic.leftX());
         assertEquals(0f, bangUvCoordinatesItalic.topY());
         assertTrue(bangUvCoordinatesItalic.rightX() > 0);
-
-        assertEquals(0f, firstCharacterOnSecondLine.leftX());
-        assertEquals(spaceUvCoordinatesItalic.bottomY(), firstCharacterOnSecondLine.topY());
-        assertEquals(spaceUvCoordinatesItalic.bottomY() * 2, firstCharacterOnSecondLine.bottomY());
-
-        assertNotEquals(lastUvCoordinates.rightX(), lastUvCoordinatesItalic.rightX());
-        assertNotEquals(lastUvCoordinates.bottomY(), lastUvCoordinatesItalic.bottomY());
     }
 
     @Test
@@ -216,28 +164,8 @@ class FontImplTests {
         FloatBox spaceUvCoordinatesBold = _font.getUvCoordinatesForGlyphBold(' ');
         FloatBox bangUvCoordinatesBold = _font.getUvCoordinatesForGlyphBold('!');
 
-        FloatBox lastUvCoordinates =
-                _font.getUvCoordinatesForGlyph((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesItalic =
-                _font.getUvCoordinatesForGlyphItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesBold =
-                _font.getUvCoordinatesForGlyphBold((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-
-        FloatBox firstCharacterOnSecondLine = null;
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
-            if (i == ASCII_CHAR_DELETE) {
-                continue;
-            }
-            FloatBox glyphUvCoordinates = _font.getUvCoordinatesForGlyphBold((char)i);
-            if (glyphUvCoordinates.topY() > 0f) {
-                firstCharacterOnSecondLine = glyphUvCoordinates;
-                break;
-            }
-        }
-
         assertNotNull(spaceUvCoordinatesBold);
         assertNotNull(bangUvCoordinatesBold);
-        assertNotNull(firstCharacterOnSecondLine);
 
         assertEquals(0f, spaceUvCoordinatesBold.leftX());
         assertEquals(0f, spaceUvCoordinatesBold.topY());
@@ -246,18 +174,6 @@ class FontImplTests {
         assertEquals(spaceUvCoordinatesBold.rightX(), bangUvCoordinatesBold.leftX());
         assertEquals(0f, bangUvCoordinatesBold.topY());
         assertTrue(bangUvCoordinatesBold.rightX() > 0);
-
-        assertEquals(0f, firstCharacterOnSecondLine.leftX());
-        assertEquals(spaceUvCoordinatesBold.bottomY(), firstCharacterOnSecondLine.topY());
-        assertEquals(spaceUvCoordinatesBold.bottomY() * 2, firstCharacterOnSecondLine.bottomY());
-
-        assertNotEquals(lastUvCoordinates.rightX(), lastUvCoordinatesBold.rightX());
-        assertNotEquals(lastUvCoordinates.bottomY(), lastUvCoordinatesBold.bottomY());
-        // NB: These tests are commented out, because I couldn't find any fonts whose italic widths
-        // were different from their bold widths; look to display tests to verify this
-        // functionality
-//        assertNotEquals(lastUvCoordinatesItalic.rightX(), lastUvCoordinatesBold.rightX());
-//        assertNotEquals(lastUvCoordinatesItalic.bottomY(), lastUvCoordinatesBold.bottomY());
     }
 
     @Test
@@ -265,30 +181,8 @@ class FontImplTests {
         FloatBox spaceUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic(' ');
         FloatBox bangUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic('!');
 
-        FloatBox lastUvCoordinates =
-                _font.getUvCoordinatesForGlyph((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesItalic =
-                _font.getUvCoordinatesForGlyphItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesBold =
-                _font.getUvCoordinatesForGlyphBold((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-        FloatBox lastUvCoordinatesBoldItalic =
-                _font.getUvCoordinatesForGlyphBoldItalic((char)(NUMBER_EXTENDED_ASCII_CHARS - 1));
-
-        FloatBox firstCharacterOnSecondLine = null;
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
-            if (i == ASCII_CHAR_DELETE) {
-                continue;
-            }
-            FloatBox glyphUvCoordinates = _font.getUvCoordinatesForGlyphBoldItalic((char)i);
-            if (glyphUvCoordinates.topY() > 0f) {
-                firstCharacterOnSecondLine = glyphUvCoordinates;
-                break;
-            }
-        }
-
         assertNotNull(spaceUvCoordinatesBoldItalic);
         assertNotNull(bangUvCoordinatesBoldItalic);
-        assertNotNull(firstCharacterOnSecondLine);
 
         assertEquals(0f, spaceUvCoordinatesBoldItalic.leftX());
         assertEquals(0f, spaceUvCoordinatesBoldItalic.topY());
@@ -297,20 +191,6 @@ class FontImplTests {
         assertEquals(spaceUvCoordinatesBoldItalic.rightX(), bangUvCoordinatesBoldItalic.leftX());
         assertEquals(0f, bangUvCoordinatesBoldItalic.topY());
         assertTrue(bangUvCoordinatesBoldItalic.rightX() > 0);
-
-        assertEquals(0f, firstCharacterOnSecondLine.leftX());
-        assertEquals(spaceUvCoordinatesBoldItalic.bottomY(), firstCharacterOnSecondLine.topY());
-        assertEquals(spaceUvCoordinatesBoldItalic.bottomY() * 2, firstCharacterOnSecondLine.bottomY());
-
-        assertNotEquals(lastUvCoordinates.rightX(), lastUvCoordinatesBoldItalic.rightX());
-        assertNotEquals(lastUvCoordinates.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
-        // NB: These tests are commented out, because I couldn't find any fonts whose italic widths
-        // or bold widths were different from their bold-italic widths; look to display tests to
-        // verify this functionality
-//        assertNotEquals(lastUvCoordinatesItalic.rightX(), lastUvCoordinatesBoldItalic.rightX());
-//        assertNotEquals(lastUvCoordinatesItalic.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
-//        assertNotEquals(lastUvCoordinatesBold.rightX(), lastUvCoordinatesBoldItalic.rightX());
-//        assertNotEquals(lastUvCoordinatesBold.bottomY(), lastUvCoordinatesBoldItalic.bottomY());
     }
 
     @Test

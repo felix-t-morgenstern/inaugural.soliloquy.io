@@ -2,8 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.FontFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +23,6 @@ class FontFactoryTests {
     private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.123f;
     private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.456f;
     private final float LEADING_ADJUSTMENT = 0.456f;
-    private final int IMAGE_WIDTH = 123;
-    private final int IMAGE_HEIGHT = 2340;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
 
     private AssetFactory<FontDefinition, Font> _fontFactory;
@@ -48,17 +45,12 @@ class FontFactoryTests {
 
     @BeforeEach
     void setUp() {
-        _fontFactory = new FontFactory(IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
+        _fontFactory = new FontFactory(FLOAT_BOX_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontFactory(0, IMAGE_HEIGHT, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontFactory(IMAGE_WIDTH, 0, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontFactory(IMAGE_WIDTH, IMAGE_HEIGHT, null));
+        assertThrows(IllegalArgumentException.class, () -> new FontFactory(null));
     }
 
     @Test

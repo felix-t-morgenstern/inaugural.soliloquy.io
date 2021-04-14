@@ -8,13 +8,9 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinit
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 public class FontFactory implements AssetFactory<FontDefinition, Font> {
-    private final int IMAGE_WIDTH;
-    private final int IMAGE_HEIGHT;
     private final FloatBoxFactory FLOAT_BOX_FACTORY;
 
-    public FontFactory(int imageWidth, int imageHeight, FloatBoxFactory floatBoxFactory) {
-        IMAGE_WIDTH = Check.throwOnLteZero(imageWidth, "imageWidth");
-        IMAGE_HEIGHT = Check.throwOnLteZero(imageHeight, "imageHeight");
+    public FontFactory(FloatBoxFactory floatBoxFactory) {
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
     }
 
@@ -26,8 +22,6 @@ public class FontFactory implements AssetFactory<FontDefinition, Font> {
                 fontDefinition.additionalGlyphHorizontalPadding(),
                 fontDefinition.additionalGlyphVerticalPadding(),
                 fontDefinition.leadingAdjustment(),
-                IMAGE_WIDTH,
-                IMAGE_HEIGHT,
                 FLOAT_BOX_FACTORY);
     }
 
