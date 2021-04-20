@@ -4,6 +4,7 @@ import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class FakeFont implements Font {
     public HashMap<Character,FloatBox> Glyphs = new HashMap<>();
@@ -29,6 +30,11 @@ public class FakeFont implements Font {
     @Override
     public FloatBox getUvCoordinatesForGlyphBoldItalic(char c) throws IllegalArgumentException {
         return GlyphsBoldItalic.get(c);
+    }
+
+    @Override
+    public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
+        return null;
     }
 
     @Override

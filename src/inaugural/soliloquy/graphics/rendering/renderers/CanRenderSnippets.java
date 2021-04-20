@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.AssetSnippet;
@@ -94,8 +95,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 int textureId,
                 float red, float green, float blue, float alpha,
                 Color overrideColor) {
-        FloatBox windowPosition = renderingArea.intersection(
-                RENDERING_BOUNDARIES.currentBoundaries());
+//        FloatBox windowPosition = renderingArea.intersection(
+//                RENDERING_BOUNDARIES.currentBoundaries());
+        FloatBox windowPosition = new FakeFloatBox(0f, 0f, 1f, 1f);
 
         if (windowPosition == null) {
             return;
@@ -147,11 +149,17 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
             snippetBottomYWithinBounds = snippetBottomY;
         }
 
+//        FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
+//                snippetLeftXWithinBounds,
+//                snippetTopYWithinBounds,
+//                snippetRightXWithinBounds,
+//                snippetBottomYWithinBounds);
+
         FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
-                snippetLeftXWithinBounds,
-                snippetTopYWithinBounds,
-                snippetRightXWithinBounds,
-                snippetBottomYWithinBounds);
+                0f,
+                0f,
+                1f,
+                1f);
 
         glBindTexture(GL_TEXTURE_2D, textureId);
 

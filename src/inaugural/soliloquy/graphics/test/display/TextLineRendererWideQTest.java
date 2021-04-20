@@ -1,16 +1,15 @@
 package inaugural.soliloquy.graphics.test.display;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
+import inaugural.soliloquy.common.test.fakes.*;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
-import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
+import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -18,19 +17,13 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-/**
- * Test acceptance criteria:
- *
- * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
- *    edge of the window, vertically centered, for 8000ms.
- * 2. The window will then close.
- *
- */
-class TextLineRendererSimpleTest {
+class TextLineRendererWideQTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -39,12 +32,10 @@ class TextLineRendererSimpleTest {
     private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
-    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.2f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
-    private final static int IMAGE_WIDTH = 2048;
-    private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quick Message!";
+//    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
+    private final static String LINE_TEXT = "Q";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -61,8 +52,12 @@ class TextLineRendererSimpleTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
+        Map<Character, Float> glyphwiseAdditionalHorizontalPadding = new HashMap<>();
+        glyphwiseAdditionalHorizontalPadding.put('Q', 0.75f);
+
         FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, glyphwiseAdditionalHorizontalPadding,
+                LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
@@ -71,7 +66,7 @@ class TextLineRendererSimpleTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<TextLineRenderable> textLineRenderer =
+        Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =

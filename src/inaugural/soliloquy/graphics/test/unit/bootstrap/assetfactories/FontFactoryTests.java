@@ -13,7 +13,6 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinit
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL.createCapabilities;
 
 class FontFactoryTests {
@@ -56,7 +55,7 @@ class FontFactoryTests {
     @Test
     void testMake() {
         FakeFontDefinition fontDefinition = new FakeFontDefinition(ID, RELATIVE_LOCATION,
-                MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                MAX_LOSSLESS_FONT_SIZE, ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
                 ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT);
 
         Font createdFont = _fontFactory.make(fontDefinition);
@@ -70,40 +69,40 @@ class FontFactoryTests {
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, null, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, "", MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, 0,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        -0.0001f, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        LEADING_ADJUSTMENT)));
+                        -0.0001f, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, -0.0001f,
-                        LEADING_ADJUSTMENT)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        -0.0001f, LEADING_ADJUSTMENT)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        -0.0001f)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, -0.0001f)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
                 new FakeFontDefinition(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                        1f)));
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, 1f)));
     }
 
     @Test

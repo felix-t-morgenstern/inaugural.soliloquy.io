@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -42,10 +41,7 @@ class TextLineRendererColorTest {
     private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.25f;
-    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
-    private final static int IMAGE_WIDTH = 2048;
-    private final static int IMAGE_HEIGHT = 2048;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static Color DEFAULT_COLOR = Color.WHITE;
     private final static String LINE_TEXT = "This message is in the colors of the rainbow!";
@@ -65,8 +61,7 @@ class TextLineRendererColorTest {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
         FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                LEADING_ADJUSTMENT, IMAGE_WIDTH, IMAGE_HEIGHT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 

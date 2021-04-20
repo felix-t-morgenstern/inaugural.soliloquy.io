@@ -36,12 +36,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         validateTimestamp(timestamp, "TextLineRendererImpl");
 
-        System.out.println("Rendering text line...");
-
         iterateOverTextLine(textLineRenderable,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                    System.out.println("Rendering glyph...");
-
                     float leftX = textLineRenderable.renderingArea().leftX() +
                             textLineLengthThusFar;
                     FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
@@ -82,6 +78,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         float textLineLengthThusFar = 0f;
         int textureId;
         Color color = DEFAULT_COLOR;
+        Map<Character, Float> glyphwiseAdditionalHorizontalPadding =
+                textLineRenderable.font().glyphwiseAdditionalHorizontalPadding();
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
             if (textLineRenderable.colorIndices() != null &&
@@ -133,7 +131,13 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                         .apply(glyphBox).accept(color);
             }
 
-            textLineLengthThusFar += glyphLength;
+            float lengthThusFarAddition = glyphLength;
+            if (glyphwiseAdditionalHorizontalPadding != null &&
+                    glyphwiseAdditionalHorizontalPadding.containsKey(glyph)) {
+                lengthThusFarAddition /= (1f + glyphwiseAdditionalHorizontalPadding.get(glyph));
+            }
+
+            textLineLengthThusFar += lengthThusFarAddition;
         }
 
         return textLineLengthThusFar;
