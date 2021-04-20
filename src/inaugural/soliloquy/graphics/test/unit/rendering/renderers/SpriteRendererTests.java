@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 class SpriteRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
+            new FakeWindowResolutionManager();
 
     private Renderer<SpriteRenderable> _spriteRenderer;
 
@@ -44,15 +47,18 @@ class SpriteRendererTests {
     @BeforeEach
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
-        _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                WINDOW_RESOLUTION_MANAGER);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderer(null, FLOAT_BOX_FACTORY));
+                () -> new SpriteRenderer(null, FLOAT_BOX_FACTORY, WINDOW_RESOLUTION_MANAGER));
         assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderer(RENDERING_BOUNDARIES, null));
+                () -> new SpriteRenderer(RENDERING_BOUNDARIES, null, WINDOW_RESOLUTION_MANAGER));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, null));
     }
 
     @Test
@@ -73,30 +79,53 @@ class SpriteRendererTests {
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
+        Float borderThickness = 0.01f;
+        Color borderColor = Color.RED;
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(null, 0L));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(null, colorShifts,
-                        new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeFloatBox(leftX, topY, rightX, bottomY), null, null),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeFloatBox(leftX, topY, rightX, bottomY), null, null),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShifts,
-                        new FakeFloatBox(leftX, topY, leftX, bottomY)),
+                        new FakeFloatBox(leftX, topY, leftX, bottomY), null, null),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeFloatBox(leftX, topY, rightX, topY)),
+                        new FakeFloatBox(leftX, topY, rightX, topY), null, null),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
+                new FakeSpriteRenderable(sprite, colorShifts,
+                        new FakeFloatBox(leftX, topY, rightX, bottomY),
+                        borderThickness, null),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
+                new FakeSpriteRenderable(sprite, colorShifts,
+                        new FakeFloatBox(leftX, topY, rightX, bottomY),
+                        -0.0001f, borderColor),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
+                new FakeSpriteRenderable(sprite, colorShifts,
+                        new FakeFloatBox(leftX, topY, rightX, bottomY),
+                        1.0001f, borderColor),
                 0L
         ));
     }
@@ -111,7 +140,7 @@ class SpriteRendererTests {
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, colorShifts,
-                new FakeFloatBox(leftX, topY, rightX, bottomY));
+                new FakeFloatBox(leftX, topY, rightX, bottomY), null, null);
         long timestamp = 100L;
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());

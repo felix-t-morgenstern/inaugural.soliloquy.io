@@ -5,8 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FloatBoxImplTests {
     private final float LEFT_X = 0.11f;
@@ -82,6 +81,21 @@ class FloatBoxImplTests {
     @Test
     void testIntersectionWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _floatBox.intersection(null));
+    }
+
+    @Test
+    void testTranslate() {
+        float xTranslation = 0.123f;
+        float yTranslation = 0.456f;
+
+        FloatBox translation = _floatBox.translate(xTranslation, yTranslation);
+
+        assertNotNull(translation);
+        assertNotSame(_floatBox, translation);
+        assertEquals(LEFT_X + xTranslation, translation.leftX());
+        assertEquals(TOP_Y + yTranslation, translation.topY());
+        assertEquals(RIGHT_X + xTranslation, translation.rightX());
+        assertEquals(BOTTOM_Y + yTranslation, translation.bottomY());
     }
 
     @Test

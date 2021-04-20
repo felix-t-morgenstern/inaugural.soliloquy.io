@@ -55,6 +55,15 @@ public class FakeFloatBox implements FloatBox {
     }
 
     @Override
+    public FloatBox translate(float xTranslation, float yTranslation) {
+        return new FakeFloatBox(
+                LeftX + xTranslation,
+                TopY + yTranslation,
+                RightX + xTranslation,
+                BottomY + yTranslation);
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }

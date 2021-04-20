@@ -1,9 +1,11 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 public class FakeWindowResolutionManager implements WindowResolutionManager {
     WindowDisplayMode _windowDisplayMode;
@@ -40,6 +42,12 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     @Override
     public int getHeight() throws UnsupportedOperationException {
         return 0;
+    }
+
+    @Override
+    public void registerResolutionSubscriber(Consumer<Coordinate> consumer)
+            throws IllegalArgumentException {
+
     }
 
     @Override

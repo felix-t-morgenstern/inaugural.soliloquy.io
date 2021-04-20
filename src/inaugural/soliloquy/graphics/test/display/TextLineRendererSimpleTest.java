@@ -1,5 +1,7 @@
 package inaugural.soliloquy.graphics.test.display;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
+import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -30,6 +32,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  *
  */
 class TextLineRendererSimpleTest {
+    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
@@ -50,7 +53,7 @@ class TextLineRendererSimpleTest {
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager =
                 new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED,
-                        WindowResolution.RES_1920x1080);
+                        WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);

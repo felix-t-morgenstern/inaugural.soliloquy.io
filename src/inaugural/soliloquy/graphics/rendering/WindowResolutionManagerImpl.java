@@ -3,9 +3,13 @@ package inaugural.soliloquy.graphics.rendering;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.tools.Check;
 import org.lwjgl.glfw.GLFWVidMode;
+import soliloquy.specs.common.factories.CoordinateFactory;
+import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -13,14 +17,25 @@ import static org.lwjgl.glfw.GLFW.*;
 
 // TODO: Clean up all the mess in this code
 public class WindowResolutionManagerImpl implements WindowResolutionManager {
+    private final CoordinateFactory COORDINATE_FACTORY;
+    private final ArrayList<Consumer<Coordinate>> RESOLUTION_CHANGE_SUBSCRIBERS =
+            new ArrayList<>();
+
     private WindowDisplayMode _windowDisplayMode;
     private WindowResolution _windowResolution;
 
     private WindowDisplayMode _mostRecentlyRenderedWindowDisplayMode;
     private WindowResolution _mostRecentlyRenderedWindowResolution;
 
+    private Integer _windowedFullscreenWidth;
+    private Integer _windowedFullscreenHeight;
+
+    private Integer _previouslyPublishedWidth;
+    private Integer _previouslyPublishedHeight;
+
     public WindowResolutionManagerImpl(WindowDisplayMode startingWindowDisplayMode,
-                                       WindowResolution startingWindowResolution) {
+                                       WindowResolution startingWindowResolution,
+                                       CoordinateFactory coordinateFactory) {
         _windowDisplayMode = Check.ifNull(startingWindowDisplayMode, "startingWindowDisplayMode");
         _windowResolution = Check.ifNull(startingWindowResolution, "startingWindowResolution");
 
@@ -33,6 +48,8 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
         _mostRecentlyRenderedWindowDisplayMode = WindowDisplayMode.UNKNOWN;
         _mostRecentlyRenderedWindowResolution = WindowResolution.RES_INVALID;
+
+        COORDINATE_FACTORY = coordinateFactory;
     }
 
     @Override
@@ -83,23 +100,24 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
     @Override
     public int getWidth() throws UnsupportedOperationException {
-        if (_windowDisplayMode == WindowDisplayMode.WINDOWED_FULLSCREEN) {
-            throw new UnsupportedOperationException(
-                    "WindowResolutionManagerImpl.getHeight: cannot get width while windowed " +
-                            "fullscreen");
+        if (_windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN) {
+            return _windowedFullscreenWidth;
         }
-
         return _windowResolution.WIDTH;
     }
 
     @Override
     public int getHeight() throws UnsupportedOperationException {
-        if (_windowDisplayMode == WindowDisplayMode.WINDOWED_FULLSCREEN) {
-            throw new UnsupportedOperationException(
-                    "WindowResolutionManagerImpl.getHeight: cannot get height while windowed " +
-                            "fullscreen");
+        if (_windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN) {
+            return _windowedFullscreenHeight;
         }
         return _windowResolution.HEIGHT;
+    }
+
+    @Override
+    public void registerResolutionSubscriber(Consumer<Coordinate> subscriber)
+            throws IllegalArgumentException {
+        RESOLUTION_CHANGE_SUBSCRIBERS.add(Check.ifNull(subscriber, "subscriber"));
     }
 
     @Override
@@ -126,6 +144,17 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
             _mostRecentlyRenderedWindowResolution = _windowResolution;
             _mostRecentlyRenderedWindowDisplayMode = _windowDisplayMode;
+
+            int width = getWidth();
+            int height = getHeight();
+            if ((Integer)width != _previouslyPublishedWidth ||
+                    (Integer)height != _previouslyPublishedHeight) {
+                Coordinate resolution = COORDINATE_FACTORY.make(width, height);
+                RESOLUTION_CHANGE_SUBSCRIBERS.forEach(subscriber -> subscriber.accept(resolution));
+
+                _previouslyPublishedWidth = width;
+                _previouslyPublishedHeight = height;
+            }
         }
 
         return windowId;
@@ -146,6 +175,8 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
                             (glfwVidMode.width() - _windowResolution.WIDTH) / 2,
                             (glfwVidMode.height() - _windowResolution.HEIGHT) / 2);
 
+                    _windowedFullscreenWidth = _windowedFullscreenHeight = null;
+
                     return newWindowId;
                 });
     }
@@ -154,8 +185,12 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         return renderWindowForMode(windowId, WindowDisplayMode.FULLSCREEN,
                 currentWindowId -> glfwSetWindowSize(currentWindowId, _windowResolution.WIDTH,
                         _windowResolution.HEIGHT),
-                monitor -> glfwVidMode -> glfwCreateWindow(_windowResolution.WIDTH,
-                        _windowResolution.HEIGHT, titlebar, monitor, 0));
+                monitor -> glfwVidMode -> {
+                    _windowedFullscreenWidth = _windowedFullscreenHeight = null;
+
+                    return glfwCreateWindow(_windowResolution.WIDTH,
+                        _windowResolution.HEIGHT, titlebar, monitor, 0);
+                });
     }
 
     private long renderWindowedFullscreen(long windowId, String titlebar) {
@@ -164,13 +199,19 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
                     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-                    long newWindowId = glfwCreateWindow(glfwVidMode.width(), glfwVidMode.height(), titlebar,
+                    _windowedFullscreenWidth = glfwVidMode.width();
+                    _windowedFullscreenHeight = glfwVidMode.height();
+
+                    long newWindowId = glfwCreateWindow(
+                            _windowedFullscreenWidth,
+                            _windowedFullscreenHeight,
+                            titlebar,
                             0, 0);
                     glfwSetWindowMonitor(newWindowId, 0,
                             0,
                             0,
-                            glfwVidMode.width(),
-                            glfwVidMode.height(),
+                            _windowedFullscreenWidth,
+                            _windowedFullscreenHeight,
                             GLFW_DONT_CARE);
                     return newWindowId;
                 });

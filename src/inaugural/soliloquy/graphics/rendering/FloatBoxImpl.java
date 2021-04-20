@@ -57,6 +57,15 @@ public class FloatBoxImpl implements FloatBox {
     }
 
     @Override
+    public FloatBox translate(float xTranslation, float yTranslation) {
+        return new FloatBoxImpl(
+                LEFT_X + xTranslation,
+                TOP_Y + yTranslation,
+                RIGHT_X + xTranslation,
+                BOTTOM_Y + yTranslation);
+    }
+
+    @Override
     public String getInterfaceName() {
         return FloatBox.class.getCanonicalName();
     }

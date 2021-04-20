@@ -1,15 +1,15 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
-import soliloquy.specs.graphics.rendering.FloatBox;
-import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.graphics.rendering.Shader;
+import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
+
+import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -21,8 +21,18 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     protected final FloatBoxFactory FLOAT_BOX_FACTORY;
 
+    protected float _screenWidthToHeightRatio;
     private Shader _shader;
     private Mesh _mesh;
+
+    protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
+                                FloatBoxFactory floatBoxFactory,
+                                TRenderable archetype,
+                                WindowResolutionManager windowResolutionManager) {
+        this(renderingBoundaries, floatBoxFactory, archetype);
+        Check.ifNull(windowResolutionManager, "windowResolutionManager")
+                .registerResolutionSubscriber(this::registerResolutionChange);
+    }
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
                                 FloatBoxFactory floatBoxFactory,
@@ -30,6 +40,10 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         super(archetype);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
+    }
+
+    private void registerResolutionChange(Coordinate resolution) {
+        _screenWidthToHeightRatio = (float)resolution.getX() / resolution.getY();
     }
 
     @Override
@@ -45,6 +59,13 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
                 float red, float green, float blue, float alpha) {
+        render(renderingArea, snippet, red, green, blue, alpha, null);
+    }
+
+    void render(FloatBox renderingArea,
+                AssetSnippet snippet,
+                float red, float green, float blue, float alpha,
+                Color overrideColor) {
         float snippetLeftX = (float)snippet.leftX() / snippet.image().width();
         float snippetTopY = (float)snippet.topY() / snippet.image().height();
         float snippetRightX = (float)snippet.rightX() / snippet.image().width();
@@ -53,13 +74,26 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         render(renderingArea,
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
                 textureId,
-                red, green, blue, alpha);
+                red, green, blue, alpha,
+                overrideColor);
     }
 
     void render(FloatBox renderingArea,
                 float snippetLeftX, float snippetTopY, float snippetRightX, float snippetBottomY,
                 int textureId,
                 float red, float green, float blue, float alpha) {
+        render(renderingArea,
+                snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
+                textureId,
+                red, green, blue, alpha,
+                null);
+    }
+
+    void render(FloatBox renderingArea,
+                float snippetLeftX, float snippetTopY, float snippetRightX, float snippetBottomY,
+                int textureId,
+                float red, float green, float blue, float alpha,
+                Color overrideColor) {
         FloatBox windowPosition = renderingArea.intersection(
                 RENDERING_BOUNDARIES.currentBoundaries());
 
@@ -142,6 +176,19 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         //     These values are the percentage of each channel (RGBA) to render, where 1f is 100%
         //     of that channel rendered, and 0f is 0% of that channel rendered
         _shader.setUniform("matColor", red, green, blue, alpha);
+        // overrideColor:
+        //     This color entirely overrides the color of the actual object being rendered. This is
+        //     intended for use in borders, shadows, etc. If the x value is less than 0, the shader
+        //     ignores this value.
+        if (overrideColor == null) {
+            _shader.setUniform("overrideColor", -1f, -1f, -1f);
+        }
+        else {
+            _shader.setUniform("overrideColor",
+                    overrideColor.getRed(),
+                    overrideColor.getGreen(),
+                    overrideColor.getBlue());
+        }
 
         _mesh.render();
     }

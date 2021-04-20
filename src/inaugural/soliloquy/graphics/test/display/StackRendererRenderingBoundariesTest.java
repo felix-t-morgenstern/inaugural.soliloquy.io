@@ -1,7 +1,9 @@
 package inaugural.soliloquy.graphics.test.display;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
+import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -47,6 +49,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  *
  */
 class StackRendererRenderingBoundariesTest {
+    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
@@ -64,8 +67,8 @@ class StackRendererRenderingBoundariesTest {
     public static void main(String[] args) {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
 
-        WindowResolutionManagerImpl windowManager =
-                new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED, resolution);
+        WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
+                WindowDisplayMode.WINDOWED, resolution, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
@@ -142,8 +145,8 @@ class StackRendererRenderingBoundariesTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<SpriteRenderable> spriteRenderer =
-                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
+                FLOAT_BOX_FACTORY, windowResolutionManager);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);
@@ -159,7 +162,7 @@ class StackRendererRenderingBoundariesTest {
         renderableStack.add(SpriteRenderable3);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager, stackRenderer,
                 new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 

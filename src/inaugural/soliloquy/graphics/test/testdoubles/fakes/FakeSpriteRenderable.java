@@ -6,19 +6,24 @@ import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.awt.*;
 import java.util.List;
 
 public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
     public List<ColorShift> ColorShifts;
     public FloatBox RenderingArea;
+    public Float BorderThickness;
+    public Color BorderColor;
     public int Z;
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
-                                FloatBox renderingArea) {
+                                FloatBox renderingArea, Float borderThickness, Color borderColor) {
         Sprite = sprite;
         ColorShifts = colorShifts;
         RenderingArea = renderingArea;
+        BorderThickness = borderThickness;
+        BorderColor = borderColor;
     }
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
@@ -32,6 +37,16 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     @Override
     public Sprite sprite() {
         return Sprite;
+    }
+
+    @Override
+    public Float borderThickness() {
+        return BorderThickness;
+    }
+
+    @Override
+    public Color borderColor() {
+        return BorderColor;
     }
 
     @Override

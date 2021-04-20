@@ -1,5 +1,7 @@
 package inaugural.soliloquy.graphics.test.display;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
+import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
@@ -38,6 +40,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  *
  */
 class GlobalLoopingAnimationRendererImplSimpleTest {
+    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
@@ -52,8 +55,8 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
     public static void main(String[] args) {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
 
-        WindowResolutionManagerImpl windowManager =
-                new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED, resolution);
+        WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
+                WindowDisplayMode.WINDOWED, resolution, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
