@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL20.*;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ShaderImpl implements Shader {
     private int _program;
 
@@ -24,6 +25,8 @@ public class ShaderImpl implements Shader {
 
     private final int ATTRIBUTE_LOCATION_VERTICES = 0;
     private final int ATTRIBUTE_LOCATION_UV_COORDS = 1;
+
+    private final HashMap<String,Object> UNIFORM_VALUES = new HashMap<>();
 
     private final Map<String,Integer> UNIFORM_LOCATIONS = new HashMap<>();
 
@@ -108,25 +111,63 @@ public class ShaderImpl implements Shader {
 
     @Override
     public void setUniform(String name, float f) throws IllegalArgumentException {
-        setUniform(name, location -> glUniform1f(location, f));
+        synchronized (this) {
+            if (UNIFORM_VALUES.containsKey(name)) {
+                if (UNIFORM_VALUES.get(name).equals(f)) {
+                    return;
+                }
+            }
+            setUniform(name, location -> glUniform1f(location, f));
+            UNIFORM_VALUES.put(name, f);
+        }
     }
 
+    // NB: In this and the following method, I assume that a uniform's value type does not change.
+    //     This is a valid assumption, so I am content letting the code break if the cast fails or
+    //     if an index is out-of-bounds.
     @Override
     public void setUniform(String name, float f1, float f2) throws IllegalArgumentException {
-        setUniform(name, location -> glUniform2f(location, f1, f2));
+        synchronized (this) {
+            if (UNIFORM_VALUES.containsKey(name)) {
+                float[] uniformValue = (float[]) UNIFORM_VALUES.get(name);
+                if (uniformValue[0] == f1 && uniformValue[1] == f2) {
+                    return;
+                }
+            }
+            setUniform(name, location -> glUniform2f(location, f1, f2));
+            UNIFORM_VALUES.put(name, new float[]{f1, f2});
+        }
     }
 
     @Override
     public void setUniform(String name, float f1, float f2, float f3)
             throws IllegalArgumentException {
-        setUniform(name, location -> glUniform3f(location, f1, f2, f3));
-
+        synchronized (this) {
+            if (UNIFORM_VALUES.containsKey(name)) {
+                float[] uniformValue = (float[]) UNIFORM_VALUES.get(name);
+                if (uniformValue[0] == f1 && uniformValue[1] == f2 && uniformValue[2] == f3) {
+                    return;
+                }
+            }
+            setUniform(name, location -> glUniform3f(location, f1, f2, f3));
+            UNIFORM_VALUES.put(name, new float[]{f1, f2, f3});
+        }
     }
 
     @Override
     public void setUniform(String name, float f1, float f2, float f3, float f4)
             throws IllegalArgumentException {
-        setUniform(name, location -> glUniform4f(location, f1, f2, f3, f4));
+        synchronized (this) {
+            if (UNIFORM_VALUES.containsKey(name)) {
+                float[] uniformValue = (float[]) UNIFORM_VALUES.get(name);
+                if (uniformValue[0] == f1 && uniformValue[1] == f2 && uniformValue[2] == f3 &&
+                        uniformValue[3] == f4) {
+                    return;
+                }
+            }
+            setUniform(name, location -> glUniform4f(location, f1, f2, f3, f4));
+            UNIFORM_VALUES.put(name, new float[]{f1, f2, f3, f4});
+        }
     }
 
     @Override
