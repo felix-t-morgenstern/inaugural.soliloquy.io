@@ -101,30 +101,40 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
             char glyph = textLineRenderable.lineText().charAt(i);
             FloatBox glyphBox;
+            float textureWidthToHeightRatio;
 
             if (italic) {
                 if (bold) {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBoldItalic(glyph);
                     textureId = textLineRenderable.font().textureIdBoldItalic();
+                    textureWidthToHeightRatio =
+                            textLineRenderable.font().textureWidthToHeightRatioBoldItalic();
                 }
                 else {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphItalic(glyph);
                     textureId = textLineRenderable.font().textureIdItalic();
+                    textureWidthToHeightRatio =
+                            textLineRenderable.font().textureWidthToHeightRatioItalic();
                 }
             }
             else {
                 if (bold) {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBold(glyph);
                     textureId = textLineRenderable.font().textureIdBold();
+                    textureWidthToHeightRatio =
+                            textLineRenderable.font().textureWidthToHeightRatioBold();
                 }
                 else {
                     glyphBox = textLineRenderable.font().getUvCoordinatesForGlyph(glyph);
                     textureId = textLineRenderable.font().textureId();
+                    textureWidthToHeightRatio =
+                            textLineRenderable.font().textureWidthToHeightRatio();
                 }
             }
 
             float glyphLength =
-                    glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height());
+                    glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height())
+                    * textureWidthToHeightRatio;
 
             if (renderingAction != null) {
                 renderingAction.apply(textLineLengthThusFar).apply(glyphLength).apply(textureId)

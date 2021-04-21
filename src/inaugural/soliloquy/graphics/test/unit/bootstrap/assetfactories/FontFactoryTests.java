@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.FontFactory;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
@@ -23,6 +24,7 @@ class FontFactoryTests {
     private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.456f;
     private final float LEADING_ADJUSTMENT = 0.456f;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
 
     private AssetFactory<FontDefinition, Font> _fontFactory;
 
@@ -44,12 +46,15 @@ class FontFactoryTests {
 
     @BeforeEach
     void setUp() {
-        _fontFactory = new FontFactory(FLOAT_BOX_FACTORY);
+        _fontFactory = new FontFactory(FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new FontFactory(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontFactory(null, COORDINATE_FACTORY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontFactory(FLOAT_BOX_FACTORY, null));
     }
 
     @Test

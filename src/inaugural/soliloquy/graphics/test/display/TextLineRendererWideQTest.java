@@ -32,10 +32,10 @@ class TextLineRendererWideQTest {
     private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.05f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-//    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
-    private final static String LINE_TEXT = "Q";
+    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -57,7 +57,8 @@ class TextLineRendererWideQTest {
 
         FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, glyphwiseAdditionalHorizontalPadding,
-                LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 

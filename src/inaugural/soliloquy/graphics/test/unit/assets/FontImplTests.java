@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.assets;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.AfterAll;
@@ -15,6 +16,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
+import static org.lwjgl.opengl.GL11.GL_MAX_TEXTURE_SIZE;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 
 class FontImplTests {
     private final String ID = "FontId";
@@ -25,6 +28,7 @@ class FontImplTests {
     private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.123f;
     private final float LEADING_ADJUSTMENT = 0.456f;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
     private final static int NUMBER_EXTENDED_ASCII_CHARS = 256;
@@ -51,7 +55,8 @@ class FontImplTests {
     void setUp() {
         _font = new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY);
     }
 
     @Test
@@ -59,43 +64,58 @@ class FontImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, null, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, "", MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, 0f,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         -0.001f, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        -0.001f, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY));
+                        -0.001f, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, -0.001f, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, -0.001f, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, 1f, FLOAT_BOX_FACTORY));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, 1f, FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
                         ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, null));
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, null,
+                        COORDINATE_FACTORY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
+                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
+                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+                        null));
     }
 
     @Test
@@ -241,6 +261,30 @@ class FontImplTests {
     void testGlyphwiseAdditionalHorizontalPadding() {
         assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
                 _font.glyphwiseAdditionalHorizontalPadding());
+    }
+
+    @Test
+    void testDimensionsAndWidthToHeightRatios() {
+        int maxDimensions = glGetInteger(GL_MAX_TEXTURE_SIZE);
+
+        assertTrue(_font.textureDimensions().getX() <= maxDimensions);
+        assertEquals(_font.textureWidthToHeightRatio(),
+                _font.textureDimensions().getX() / (float)_font.textureDimensions().getY());
+
+        assertTrue(_font.textureDimensionsItalic().getX() <= maxDimensions);
+        assertEquals(_font.textureWidthToHeightRatioItalic(),
+                _font.textureDimensionsItalic().getX() /
+                        (float)_font.textureDimensionsItalic().getY());
+
+        assertTrue(_font.textureDimensionsBold().getX() <= maxDimensions);
+        assertEquals(_font.textureWidthToHeightRatioBold(),
+                _font.textureDimensionsBold().getX() /
+                        (float)_font.textureDimensionsBold().getY());
+
+        assertTrue(_font.textureDimensionsBoldItalic().getX() <= maxDimensions);
+        assertEquals(_font.textureWidthToHeightRatioBoldItalic(),
+                _font.textureDimensionsBoldItalic().getX() /
+                        (float)_font.textureDimensionsBoldItalic().getY());
     }
 
     @Test

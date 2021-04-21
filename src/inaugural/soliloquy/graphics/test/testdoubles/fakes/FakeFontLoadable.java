@@ -1,6 +1,8 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.factories.CoordinateFactory;
+import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -31,55 +33,103 @@ public class FakeFontLoadable implements Font {
     private final float MAX_LOSSLESS_FONT_SIZE;
     private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING;
     private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
+    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING;
     private final float LEADING_ADJUSTMENT;
     private final FloatBoxFactory FLOAT_BOX_FACTORY;
+    private final CoordinateFactory COORDINATE_FACTORY;
 
     private int _textureId;
+    private Coordinate _textureDimensions;
+    private float _textureWidthToHeightRatio;
     private int _textureIdItalic;
+    private Coordinate _textureDimensionsItalic;
+    private float _textureWidthToHeightRatioItalic;
     private int _textureIdBold;
+    private Coordinate _textureDimensionsBold;
+    private float _textureWidthToHeightRatioBold;
     private int _textureIdBoldItalic;
+    private Coordinate _textureDimensionsBoldItalic;
+    private float _textureWidthToHeightRatioBoldItalic;
     private Map<Character, FloatBox> _glyphs;
     private Map<Character, FloatBox> _glyphsItalic;
     private Map<Character, FloatBox> _glyphsBold;
     private Map<Character, FloatBox> _glyphsBoldItalic;
 
+    private static int _maximumTextureDimensionSize = -1;
+
     public FakeFontLoadable(String relativeLocation, float maxLosslessFontSize,
                             float additionalGlyphHorizontalPadding,
                             Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+                            float additionalGlyphVerticalPadding,
                             float leadingAdjustment,
-                            FloatBoxFactory floatBoxFactory) {
+                            FloatBoxFactory floatBoxFactory,
+                            CoordinateFactory coordinateFactory) {
         RELATIVE_LOCATION = relativeLocation;
         MAX_LOSSLESS_FONT_SIZE = maxLosslessFontSize;
         ADDITIONAL_GLYPH_HORIZONTAL_PADDING = additionalGlyphHorizontalPadding;
         GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING = glyphwiseAdditionalHorizontalPadding;
+        ADDITIONAL_GLYPH_VERTICAL_PADDING = additionalGlyphVerticalPadding;
         LEADING_ADJUSTMENT = leadingAdjustment;
         FLOAT_BOX_FACTORY = floatBoxFactory;
+        COORDINATE_FACTORY = coordinateFactory;
     }
 
     public void load() {
+        if (_maximumTextureDimensionSize < 0) {
+            _maximumTextureDimensionSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
+        }
+
         _glyphs = new HashMap<>();
         _glyphsItalic = new HashMap<>();
         _glyphsBold = new HashMap<>();
         _glyphsBoldItalic = new HashMap<>();
 
+
         java.awt.Font fontFromFile = loadFontFromFile(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE);
+
         java.awt.Font fontFromFileItalic = fontFromFile.deriveFont(java.awt.Font.ITALIC);
+
         java.awt.Font fontFromFileBold = fontFromFile.deriveFont(java.awt.Font.BOLD);
+
         java.awt.Font fontFromFileBoldItalic = fontFromFile.deriveFont(
                 java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
-        _textureId = generateFontAsset(fontFromFile,
+
+        FontImageInfo textureInfo = generateFontAsset(fontFromFile,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                LEADING_ADJUSTMENT, _glyphs, FLOAT_BOX_FACTORY);
-        _textureIdItalic = generateFontAsset(fontFromFileItalic,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, _glyphs, FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY);
+        _textureId = textureInfo.TextureId;
+        _textureDimensions = textureInfo.ImageDimensions;
+        _textureWidthToHeightRatio =
+                textureInfo.ImageDimensions.getX() / (float)textureInfo.ImageDimensions.getY();
+
+        FontImageInfo textureInfoItalic = generateFontAsset(fontFromFileItalic,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                LEADING_ADJUSTMENT, _glyphsItalic, FLOAT_BOX_FACTORY);
-        _textureIdBold = generateFontAsset(fontFromFileBold,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, _glyphsItalic,
+                FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+        _textureIdItalic = textureInfoItalic.TextureId;
+        _textureDimensionsItalic = textureInfoItalic.ImageDimensions;
+        _textureWidthToHeightRatioItalic =  textureInfoItalic.ImageDimensions.getX() /
+                (float)textureInfoItalic.ImageDimensions.getY();
+
+        FontImageInfo textureInfoBold = generateFontAsset(fontFromFileBold,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                LEADING_ADJUSTMENT, _glyphsBold, FLOAT_BOX_FACTORY);
-        _textureIdBoldItalic = generateFontAsset(fontFromFileBoldItalic,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, _glyphsBold,
+                FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+        _textureIdBold = textureInfoBold.TextureId;
+        _textureDimensionsBold = textureInfoBold.ImageDimensions;
+        _textureWidthToHeightRatioBold = textureInfoBold.ImageDimensions.getX() /
+                (float)textureInfoBold.ImageDimensions.getY();
+
+        FontImageInfo textureInfoBoldItalic = generateFontAsset(fontFromFileBoldItalic,
                 ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                LEADING_ADJUSTMENT, _glyphsBoldItalic, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, _glyphsBoldItalic,
+                FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+        _textureIdBoldItalic = textureInfoBoldItalic.TextureId;
+        _textureDimensionsBoldItalic = textureInfoBoldItalic.ImageDimensions;
+        _textureWidthToHeightRatioBoldItalic = textureInfoBoldItalic.ImageDimensions.getX() /
+                (float)textureInfoBoldItalic.ImageDimensions.getY();
     }
 
     private static java.awt.Font loadFontFromFile(String relativeLocation,
@@ -92,13 +142,15 @@ public class FakeFontLoadable implements Font {
         }
     }
 
-    private static int generateFontAsset(java.awt.Font font,
-                                         float additionalGlyphPadding,
-                                         Map<Character, Float>
-                                                 glyphwiseAdditionalHorizontalPadding,
-                                         float leadingAdjustment,
-                                         Map<Character, FloatBox> glyphs,
-                                         FloatBoxFactory floatBoxFactory) {
+    private static FontImageInfo generateFontAsset(java.awt.Font font,
+                                                   float additionalGlyphHorizontalPadding,
+                                                   Map<Character, Float>
+                                                           glyphwiseAdditionalHorizontalPadding,
+                                                   float additionalGlyphVerticalPadding,
+                                                   float leadingAdjustment,
+                                                   Map<Character, FloatBox> glyphs,
+                                                   FloatBoxFactory floatBoxFactory,
+                                                   CoordinateFactory coordinateFactory) {
         GraphicsConfiguration graphicsConfiguration =
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
                         .getDefaultConfiguration();
@@ -110,78 +162,95 @@ public class FakeFontLoadable implements Font {
 
         FontMetrics fontMetrics = graphics2d.getFontMetrics();
 
-        FakeFontLoadable.FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
-                additionalGlyphPadding, glyphwiseAdditionalHorizontalPadding, leadingAdjustment,
-                null);
+        FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
+                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
+                additionalGlyphVerticalPadding, leadingAdjustment, null, coordinateFactory);
 
         BufferedImage bufferedImage = graphics2d.getDeviceConfiguration()
-                .createCompatibleImage(fontImageInfo.ImageWidth, fontImageInfo.ImageHeight,
+                .createCompatibleImage(fontImageInfo.ImageDimensions.getX(),
+                        fontImageInfo.ImageDimensions.getY(),
                         Transparency.TRANSLUCENT);
 
         int textureId = glGenTextures();
 
         ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics,
-                fontImageInfo.ImageWidth, fontImageInfo.ImageHeight, additionalGlyphPadding,
-                glyphwiseAdditionalHorizontalPadding, leadingAdjustment, glyphs, floatBoxFactory);
+                fontImageInfo.ImageDimensions.getX(), fontImageInfo.ImageDimensions.getY(),
+                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
+                additionalGlyphVerticalPadding, leadingAdjustment, glyphs, floatBoxFactory,
+                coordinateFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fontImageInfo.ImageWidth,
-                fontImageInfo.ImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, generatedImage);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fontImageInfo.ImageDimensions.getX(),
+                fontImageInfo.ImageDimensions.getY(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                generatedImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        return textureId;
+        fontImageInfo.TextureId = textureId;
+
+        return fontImageInfo;
     }
 
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
                                             FontMetrics fontMetrics,
                                             int imageWidth, int imageHeight,
-                                            float additionalGlyphPadding,
+                                            float additionalGlyphHorizontalPadding,
                                             Map<Character, Float>
                                                     glyphwiseAdditionalHorizontalPadding,
+                                            float additionalGlyphVerticalPadding,
                                             float leadingAdjustment,
                                             Map<Character, FloatBox> glyphs,
-                                            FloatBoxFactory floatBoxFactory) {
+                                            FloatBoxFactory floatBoxFactory,
+                                            CoordinateFactory coordinateFactory) {
         Graphics2D graphics2d = (Graphics2D)bufferedImage.getGraphics();
         graphics2d.setFont(font);
         graphics2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight, additionalGlyphPadding,
-                glyphwiseAdditionalHorizontalPadding, leadingAdjustment, glyphs, floatBoxFactory);
+        drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight,
+                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
+                additionalGlyphVerticalPadding, leadingAdjustment, glyphs, floatBoxFactory,
+                coordinateFactory);
 
         return createBuffer(bufferedImage, imageWidth, imageHeight);
     }
 
     private static void drawCharacters(Graphics2D graphics2d, FontMetrics fontMetrics,
                                        int imageWidth, int imageHeight,
-                                       float additionalGlyphPadding,
+                                       float additionalGlyphHorizontalPadding,
                                        Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+                                       float additionalGlyphVerticalPadding,
                                        float leadingAdjustment,
                                        Map<Character, FloatBox> glyphs,
-                                       FloatBoxFactory floatBoxFactory) {
-        loopOverCharacters(fontMetrics, additionalGlyphPadding, glyphwiseAdditionalHorizontalPadding,
+                                       FloatBoxFactory floatBoxFactory,
+                                       CoordinateFactory coordinateFactory) {
+        loopOverCharacters(fontMetrics, additionalGlyphHorizontalPadding,
+                glyphwiseAdditionalHorizontalPadding, additionalGlyphVerticalPadding,
                 leadingAdjustment,
-                glyph -> widthThusFar -> glyphWidth -> glyphHeight -> descent -> {
+                glyph -> widthThusFar -> rowNumber -> glyphWidth -> glyphHeight -> descent -> {
+                    // NB: Consider eliminating all of these redundant casts
                     float leftX = (widthThusFar / (float)imageWidth);
-                    float topY = 0f;
+                    float topY = ((glyphHeight * (1f + additionalGlyphVerticalPadding)) * rowNumber) / (float)imageHeight; // NB: Same as part of glyphDrawTopY
                     float rightX = (glyphWidth / (float)imageWidth) + leftX;
-                    float bottomY = (glyphHeight / (float)imageHeight);
+                    float bottomY = topY + (glyphHeight / (float)imageHeight);
                     glyphs.put(glyph, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-                    float glyphDrawTopY = glyphHeight - descent;
+                    float glyphDrawTopY = ((glyphHeight * (1f + additionalGlyphVerticalPadding)) * (rowNumber + 1)) - descent;
                     graphics2d.drawString(String.valueOf(glyph), widthThusFar,
                             glyphDrawTopY);
-                });
+                }, coordinateFactory);
     }
 
     private static FakeFontLoadable.FontImageInfo loopOverCharacters(
-            FontMetrics fontMetrics, float additionalGlyphPadding,
-            Map<Character, Float> glyphwiseAdditionalHorizontalPadding, float leadingAdjustment,
-            Function<Character, Function<Integer, Function<Float, Function<Float,
-                    Consumer<Float>>>>> glyphFunction) {
+            FontMetrics fontMetrics, float additionalGlyphHorizontalPadding,
+            Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+            float additionalGlyphVerticalPadding, float leadingAdjustment,
+            Function<Character, Function<Integer, Function<Integer, Function<Float, Function<Float,
+                    Consumer<Float>>>>>> glyphFunction,
+            CoordinateFactory coordinateFactory) {
         int widthThusFar = 0;
+        int rowNumber = 0;
         float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
         float glyphHeight = fontMetrics.getHeight() - leading;
         float descent = fontMetrics.getMaxDescent();
@@ -199,26 +268,37 @@ public class FakeFontLoadable implements Font {
                 glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(glyph));
             }
 
-            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphPadding);
+            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
+
+            if (widthThusFar + glyphWidthWithPadding > _maximumTextureDimensionSize) {
+                widthThusFar = 0;
+                rowNumber++;
+            }
 
             if (glyphFunction != null) {
-                glyphFunction.apply(glyph).apply(widthThusFar).apply(glyphWidth)
+                glyphFunction.apply(glyph).apply(widthThusFar).apply(rowNumber).apply(glyphWidth)
                         .apply(glyphHeight).accept(descent);
             }
 
             widthThusFar += glyphWidthWithPadding;
         }
+        // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
+        int imageHeight = (int)
+                ((glyphHeight * (1f + additionalGlyphVerticalPadding) * (rowNumber + 1)) + 0.5f);
 
-        return new FakeFontLoadable.FontImageInfo(widthThusFar, (int)glyphHeight);
+
+
+        return new FakeFontLoadable.FontImageInfo(coordinateFactory.make(
+                rowNumber > 0 ? _maximumTextureDimensionSize : widthThusFar,
+                imageHeight));
     }
 
     private static class FontImageInfo {
-        int ImageWidth;
-        int ImageHeight;
+        Coordinate ImageDimensions;
+        int TextureId;
 
-        private FontImageInfo(int imageWidth, int imageHeight) {
-            ImageWidth = imageWidth;
-            ImageHeight = imageHeight;
+        private FontImageInfo(Coordinate imageDimensions) {
+            ImageDimensions = imageDimensions;
         }
     }
 
@@ -286,8 +366,28 @@ public class FakeFontLoadable implements Font {
     }
 
     @Override
+    public Coordinate textureDimensions() {
+        return _textureDimensions;
+    }
+
+    @Override
+    public float textureWidthToHeightRatio() {
+        return _textureWidthToHeightRatio;
+    }
+
+    @Override
     public int textureIdItalic() {
         return _textureIdItalic;
+    }
+
+    @Override
+    public Coordinate textureDimensionsItalic() {
+        return _textureDimensionsItalic;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioItalic() {
+        return _textureWidthToHeightRatioItalic;
     }
 
     @Override
@@ -296,8 +396,28 @@ public class FakeFontLoadable implements Font {
     }
 
     @Override
+    public Coordinate textureDimensionsBold() {
+        return _textureDimensionsBold;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioBold() {
+        return _textureWidthToHeightRatioBold;
+    }
+
+    @Override
     public int textureIdBoldItalic() {
         return _textureIdBoldItalic;
+    }
+
+    @Override
+    public Coordinate textureDimensionsBoldItalic() {
+        return _textureDimensionsBoldItalic;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioBoldItalic() {
+        return _textureWidthToHeightRatioBoldItalic;
     }
 
     @Override

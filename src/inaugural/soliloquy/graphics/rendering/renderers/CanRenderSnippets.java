@@ -95,9 +95,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 int textureId,
                 float red, float green, float blue, float alpha,
                 Color overrideColor) {
-//        FloatBox windowPosition = renderingArea.intersection(
-//                RENDERING_BOUNDARIES.currentBoundaries());
-        FloatBox windowPosition = new FakeFloatBox(0f, 0f, 1f, 1f);
+        FloatBox windowPosition = renderingArea.intersection(
+                RENDERING_BOUNDARIES.currentBoundaries());
+//        FloatBox windowPosition = new FakeFloatBox(0f, 0f, 1f, 1f);
 
         if (windowPosition == null) {
             return;
@@ -149,17 +149,17 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
             snippetBottomYWithinBounds = snippetBottomY;
         }
 
-//        FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
-//                snippetLeftXWithinBounds,
-//                snippetTopYWithinBounds,
-//                snippetRightXWithinBounds,
-//                snippetBottomYWithinBounds);
-
         FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
-                0f,
-                0f,
-                1f,
-                1f);
+                snippetLeftXWithinBounds,
+                snippetTopYWithinBounds,
+                snippetRightXWithinBounds,
+                snippetBottomYWithinBounds);
+
+//        FloatBox snippetBox = FLOAT_BOX_FACTORY.make(
+//                0f,
+//                0f,
+//                1f,
+//                1f);
 
         glBindTexture(GL_TEXTURE_2D, textureId);
 

@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -38,7 +39,27 @@ public class FakeFont implements Font {
     }
 
     @Override
+    public Coordinate textureDimensions() {
+        return null;
+    }
+
+    @Override
+    public float textureWidthToHeightRatio() {
+        return 0;
+    }
+
+    @Override
     public int textureIdItalic() {
+        return 0;
+    }
+
+    @Override
+    public Coordinate textureDimensionsItalic() {
+        return null;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioItalic() {
         return 0;
     }
 
@@ -48,7 +69,27 @@ public class FakeFont implements Font {
     }
 
     @Override
+    public Coordinate textureDimensionsBold() {
+        return null;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioBold() {
+        return 0;
+    }
+
+    @Override
     public int textureIdBoldItalic() {
+        return 0;
+    }
+
+    @Override
+    public Coordinate textureDimensionsBoldItalic() {
+        return null;
+    }
+
+    @Override
+    public float textureWidthToHeightRatioBoldItalic() {
         return 0;
     }
 

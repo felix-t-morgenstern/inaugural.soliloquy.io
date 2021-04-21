@@ -38,7 +38,8 @@ class TextLineRendererBoldAndItalicTest {
             new FakeRenderingBoundaries();
     private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
-    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.75f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.05f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static String LINE_TEXT = "Regular, italic, bold, bold-italic";
@@ -58,7 +59,8 @@ class TextLineRendererBoldAndItalicTest {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
         FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY);
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null, ADDITIONAL_GLYPH_VERTICAL_PADDING,
+                LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.0f, 0.475f, 1f, 1f);
 
