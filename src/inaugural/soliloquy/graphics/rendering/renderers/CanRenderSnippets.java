@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
@@ -185,9 +186,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         }
         else {
             _shader.setUniform("overrideColor",
-                    overrideColor.getRed(),
-                    overrideColor.getGreen(),
-                    overrideColor.getBlue());
+                    overrideColor.getRed() / MAX_CHANNEL_VAL,
+                    overrideColor.getGreen() / MAX_CHANNEL_VAL,
+                    overrideColor.getBlue() / MAX_CHANNEL_VAL);
         }
 
         _mesh.render();

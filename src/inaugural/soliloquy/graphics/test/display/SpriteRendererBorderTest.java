@@ -31,7 +31,7 @@ class SpriteRendererBorderTest {
     private final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./res/images/items/RPG_Weapons.png";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
-    private static final Color BORDER_COLOR = new Color(149, 0, 255); // TODO: Why is this color not being recognized properly?
+    private static final Color BORDER_COLOR = Color.getHSBColor(0.75f, 1f, 1f);
     private static final Float BORDER_THICKNESS = 0.005f;
 
     private static FakeSpriteRenderable SpriteRenderable;

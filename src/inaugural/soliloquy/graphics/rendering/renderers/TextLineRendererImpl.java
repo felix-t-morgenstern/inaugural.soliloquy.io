@@ -52,10 +52,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                             glyphBox.leftX(), glyphBox.topY(),
                             glyphBox.rightX(), glyphBox.bottomY(),
                             textureId,
-                            color.getRed() / (float)MAX_CHANNEL_VAL,
-                            color.getGreen() / (float)MAX_CHANNEL_VAL,
-                            color.getBlue() / (float)MAX_CHANNEL_VAL,
-                            color.getAlpha() / (float)MAX_CHANNEL_VAL);
+                            color.getRed() / MAX_CHANNEL_VAL,
+                            color.getGreen() / MAX_CHANNEL_VAL,
+                            color.getBlue() / MAX_CHANNEL_VAL,
+                            color.getAlpha() / MAX_CHANNEL_VAL);
         });
     }
 
