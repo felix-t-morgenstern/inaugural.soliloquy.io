@@ -82,8 +82,7 @@ public class FrameRateReporterImpl implements FrameRateReporter {
             }
             if (targetFps != null) {
                 _aggregateTargetFpsDivisor += (MS_PER_SECOND -
-                        _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate])
-                        / (float) MS_PER_SECOND;
+                        _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate]);
             }
             _msPausedWithinCurrentAggregate +=
                     _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate];
@@ -98,30 +97,32 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                 for (int period = 0; period < PERIODS_PER_AGGREGATE; period++) {
                     if (!entireAggregatePaused) {
                         float percentageOfPeriodPausedAdj =
-                                ((MS_PER_SECOND - _msPausedPerPeriodInCurrentAggregate[period])
+                                1f - (_msPausedPerPeriodInCurrentAggregate[period]
                                         / (float) MS_PER_SECOND);
                         if (_targetFpsInCurrentAggregate[period] != null) {
                             // I hate this statement. It works, but I hate it.
                             float toAddToAggregateTargetFps =
                                     (_targetFpsInCurrentAggregate[period] *
-                                            percentageOfPeriodPausedAdj)
-                                            / _aggregateTargetFpsDivisor;
+                                            percentageOfPeriodPausedAdj);
                             if (aggregateTargetFps == null) {
                                 aggregateTargetFps = toAddToAggregateTargetFps;
                             } else {
                                 aggregateTargetFps += toAddToAggregateTargetFps;
                             }
                         }
-                        aggregateActualFps +=
-                                (_actualFpsInCurrentAggregate[period] *
-                                        percentageOfPeriodPausedAdj)
-                                        / aggregateActualFpsDivisor;
+                        aggregateActualFps += (_actualFpsInCurrentAggregate[period] *
+                                percentageOfPeriodPausedAdj);
                     }
 
                     _targetFpsInCurrentAggregate[period] = null;
                     _actualFpsInCurrentAggregate[period] = 0f;
                     _msPausedPerPeriodInCurrentAggregate[period] = 0;
                 }
+
+                if (aggregateTargetFps != null) {
+                    aggregateTargetFps /= (_aggregateTargetFpsDivisor / (float) MS_PER_SECOND);
+                }
+                aggregateActualFps /= aggregateActualFpsDivisor;
 
                 for (FrameRateReporterAggregateOutput aggregateOutput : AGGREGATE_OUTPUTS) {
                     if (AGGREGATE_OUTPUTS_ACTIVATION_STATUSES.get(aggregateOutput.id())) {

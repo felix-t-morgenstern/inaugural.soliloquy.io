@@ -173,8 +173,8 @@ public class FontImpl implements Font {
         ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics,
                 fontImageInfo.ImageDimensions.getX(), fontImageInfo.ImageDimensions.getY(),
                 additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
-                additionalGlyphVerticalPadding, leadingAdjustment, glyphs, floatBoxFactory,
-                coordinateFactory);
+                additionalGlyphVerticalPadding, leadingAdjustment, fontImageInfo.GlyphHeight,
+                fontImageInfo.GlyphDescent, glyphs, floatBoxFactory, coordinateFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -197,6 +197,8 @@ public class FontImpl implements Font {
                                                     glyphwiseAdditionalHorizontalPadding,
                                             float additionalGlyphVerticalPadding,
                                             float leadingAdjustment,
+                                            float glyphHeight,
+                                            float glyphDescent,
                                             Map<Character, FloatBox> glyphs,
                                             FloatBoxFactory floatBoxFactory,
                                             CoordinateFactory coordinateFactory) {
@@ -207,8 +209,8 @@ public class FontImpl implements Font {
 
         drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight,
                 additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
-                additionalGlyphVerticalPadding, leadingAdjustment, glyphs, floatBoxFactory,
-                coordinateFactory);
+                additionalGlyphVerticalPadding, leadingAdjustment, glyphHeight, glyphDescent,
+                glyphs, floatBoxFactory, coordinateFactory);
 
         return createBuffer(bufferedImage, imageWidth, imageHeight);
     }
@@ -219,22 +221,26 @@ public class FontImpl implements Font {
                                        Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
                                        float additionalGlyphVerticalPadding,
                                        float leadingAdjustment,
+                                       float glyphHeight,
+                                       float glyphDescent,
                                        Map<Character, FloatBox> glyphs,
                                        FloatBoxFactory floatBoxFactory,
                                        CoordinateFactory coordinateFactory) {
+        float imageWidthFloat = (float)imageWidth;
+        float imageHeightFloat = (float)imageHeight;
+        float rowHeight = (glyphHeight * (1f + additionalGlyphVerticalPadding));
         loopOverCharacters(fontMetrics, additionalGlyphHorizontalPadding,
                 glyphwiseAdditionalHorizontalPadding, additionalGlyphVerticalPadding,
                 leadingAdjustment,
-                glyph -> widthThusFar -> rowNumber -> glyphWidth -> glyphHeight -> descent -> {
-                    // NB: Consider eliminating all of these redundant casts
-                    float leftX = (widthThusFar / (float)imageWidth);
-                    float topY = ((glyphHeight * (1f + additionalGlyphVerticalPadding)) * rowNumber) / (float)imageHeight; // NB: Same as part of glyphDrawTopY
-                    float rightX = (glyphWidth / (float)imageWidth) + leftX;
-                    float bottomY = topY + (glyphHeight / (float)imageHeight);
-                    glyphs.put(glyph, floatBoxFactory.make(leftX, topY, rightX, bottomY));
+                character -> widthThusFar -> rowNumber -> glyphWidth -> {
+                    float leftX = (widthThusFar / imageWidthFloat);
+                    float topY = (rowHeight * rowNumber) / imageHeightFloat;
+                    float rightX = (glyphWidth / imageWidthFloat) + leftX;
+                    float bottomY = topY + (glyphHeight / imageHeightFloat);
+                    glyphs.put(character, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-                    float glyphDrawTopY = ((glyphHeight * (1f + additionalGlyphVerticalPadding)) * (rowNumber + 1)) - descent;
-                    graphics2d.drawString(String.valueOf(glyph), widthThusFar,
+                    float glyphDrawTopY = (rowHeight * (rowNumber + 1)) - glyphDescent;
+                    graphics2d.drawString(String.valueOf(character), widthThusFar,
                             glyphDrawTopY);
                 }, coordinateFactory);
     }
@@ -243,26 +249,26 @@ public class FontImpl implements Font {
             FontMetrics fontMetrics, float additionalGlyphHorizontalPadding,
             Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
             float additionalGlyphVerticalPadding, float leadingAdjustment,
-            Function<Character, Function<Integer, Function<Integer, Function<Float, Function<Float,
-                    Consumer<Float>>>>>> glyphFunction,
+            Function<Character, Function<Integer, Function<Integer, Consumer<Float>>>>
+                    glyphFunction,
             CoordinateFactory coordinateFactory) {
         int widthThusFar = 0;
         int rowNumber = 0;
         float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
         float glyphHeight = fontMetrics.getHeight() - leading;
-        float descent = fontMetrics.getMaxDescent();
+        float glyphDescent = fontMetrics.getMaxDescent();
 
         for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
             if (i == ASCII_CHAR_DELETE) {
                 continue;
             }
 
-            char glyph = (char)i;
+            char character = (char)i;
 
-            float glyphWidth = fontMetrics.charWidth(glyph);
+            float glyphWidth = fontMetrics.charWidth(character);
             if (glyphwiseAdditionalHorizontalPadding != null &&
-                    glyphwiseAdditionalHorizontalPadding.containsKey(glyph)) {
-                glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(glyph));
+                    glyphwiseAdditionalHorizontalPadding.containsKey(character)) {
+                glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(character));
             }
 
             float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
@@ -273,8 +279,8 @@ public class FontImpl implements Font {
             }
 
             if (glyphFunction != null) {
-                glyphFunction.apply(glyph).apply(widthThusFar).apply(rowNumber).apply(glyphWidth)
-                        .apply(glyphHeight).accept(descent);
+                glyphFunction.apply(character).apply(widthThusFar).apply(rowNumber)
+                        .accept(glyphWidth);
             }
 
             widthThusFar += glyphWidthWithPadding;
@@ -287,15 +293,21 @@ public class FontImpl implements Font {
 
         return new FontImpl.FontImageInfo(coordinateFactory.make(
                 rowNumber > 0 ? MAXIMUM_TEXTURE_DIMENSION_SIZE : widthThusFar,
-                imageHeight));
+                imageHeight),
+                glyphHeight,
+                glyphDescent);
     }
 
     private static class FontImageInfo {
         Coordinate ImageDimensions;
         int TextureId;
+        float GlyphHeight;
+        float GlyphDescent;
 
-        private FontImageInfo(Coordinate imageDimensions) {
+        private FontImageInfo(Coordinate imageDimensions, float glyphHeight, float glyphDescent) {
             ImageDimensions = imageDimensions;
+            GlyphHeight = glyphHeight;
+            GlyphDescent = glyphDescent;
         }
     }
 
