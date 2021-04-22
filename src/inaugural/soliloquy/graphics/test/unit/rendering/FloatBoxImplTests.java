@@ -79,6 +79,27 @@ class FloatBoxImplTests {
     }
 
     @Test
+    void testIntersectionWithNoOverlap() {
+        float topLeft = 0.25f;
+        float bottomRight = 0.75f;
+        FloatBox floatBox = new FloatBoxImpl(topLeft, topLeft, bottomRight, bottomRight);
+
+        assertNotNull(floatBox.intersection(floatBox));
+
+        FloatBox floatBoxToTheLeft = new FloatBoxImpl(0f, topLeft, topLeft, bottomRight);
+        assertNull(floatBox.intersection(floatBoxToTheLeft));
+
+        FloatBox floatBoxToTheTop = new FloatBoxImpl(topLeft, 0f, bottomRight, topLeft);
+        assertNull(floatBox.intersection(floatBoxToTheTop));
+
+        FloatBox floatBoxToTheRight = new FloatBoxImpl(bottomRight, topLeft, 1f, bottomRight);
+        assertNull(floatBox.intersection(floatBoxToTheRight));
+
+        FloatBox floatBoxToTheBottom = new FloatBoxImpl(topLeft, bottomRight, bottomRight, 1f);
+        assertNull(floatBox.intersection(floatBoxToTheBottom));
+    }
+
+    @Test
     void testIntersectionWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _floatBox.intersection(null));
     }

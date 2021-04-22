@@ -26,14 +26,23 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The 'Q' glyphs will have
- *    trails which extend to the right, underneath the subsequent glyphs, without pushing those
+ * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left, 
+ *    near the left edge of the window, vertically centered, for 2000ms. The 'Q' glyphs will have 
+ *    trails which extend to the right, underneath the subsequent glyphs, without pushing those 
  *    glyphs to the right.
- * 2. The window will then close.
+ * 2. The text displayed will be clipped so that only the portions of the text within the left-most
+ *    and top-most 62.5% of the window are displayed. This will last for 2000ms.
+ * 3. The text displayed will be clipped so that only the portions of the text within the
+ *    right-most and top-most 62.5% of the window are displayed. This will last for 2000ms.
+ * 4. The text displayed will be clipped so that only the portions of the text within the
+ *    right-most and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
+ * 5. The text displayed will be clipped so that only the portions of the text within the left-most
+ *    and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
+ * 6. The entirety of the text will be displayed again for 2000ms.
+ * 7. The window will then close.
  *
  */
-class TextLineRendererWideQTest {
+class TextLineRendererRenderingBoundariesTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -106,7 +115,29 @@ class TextLineRendererWideQTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(8000);
+        int msPerPeriod = 2000;
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
+
+        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.5f, 0.5f);
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
+
+        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.5f, 0.0f, 1.0f, 0.5f);
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
+
+        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.5f, 0.5f, 1.0f, 1.0f);
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
+
+        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.5f, 0.5f, 1.0f);
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
+
+        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

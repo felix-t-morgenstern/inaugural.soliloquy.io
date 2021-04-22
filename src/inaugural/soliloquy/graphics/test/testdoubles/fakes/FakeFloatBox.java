@@ -47,6 +47,18 @@ public class FakeFloatBox implements FloatBox {
 
     @Override
     public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+        if (floatBox.rightX() <= LeftX) {
+            return null;
+        }
+        if (floatBox.bottomY() <= TopY) {
+            return null;
+        }
+        if (floatBox.leftX() >= RightX) {
+            return null;
+        }
+        if (floatBox.topY() >= BottomY) {
+            return null;
+        }
         return new FakeFloatBox(
                 Math.max(LeftX, floatBox.leftX()),
                 Math.max(TopY, floatBox.topY()),

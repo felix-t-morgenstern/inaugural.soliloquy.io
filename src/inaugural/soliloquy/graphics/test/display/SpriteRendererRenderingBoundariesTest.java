@@ -102,27 +102,29 @@ public class SpriteRendererRenderingBoundariesTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(1000);
+        int msPerPeriod = 1000;
+        
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.625f, 0.625f);
 
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.0f, 1.0f, 0.625f);
 
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.375f, 1.0f, 1.0f);
 
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.375f, 0.625f, 1.0f);
 
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        CheckedExceptionWrapper.sleep(1000);
+        CheckedExceptionWrapper.sleep(msPerPeriod);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

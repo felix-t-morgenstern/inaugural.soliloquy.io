@@ -49,6 +49,18 @@ public class FloatBoxImpl implements FloatBox {
     @Override
     public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
         Check.ifNull(floatBox, "floatBox");
+        if (floatBox.rightX() <= LEFT_X) {
+            return null;
+        }
+        if (floatBox.bottomY() <= TOP_Y) {
+            return null;
+        }
+        if (floatBox.leftX() >= RIGHT_X) {
+            return null;
+        }
+        if (floatBox.topY() >= BOTTOM_Y) {
+            return null;
+        }
         return new FloatBoxImpl(
                 Math.max(LEFT_X, floatBox.leftX()),
                 Math.max(TOP_Y, floatBox.topY()),
