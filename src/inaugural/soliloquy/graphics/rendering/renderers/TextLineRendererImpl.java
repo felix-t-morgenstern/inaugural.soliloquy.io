@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
-
 public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         implements TextLineRenderer {
     private final Color DEFAULT_COLOR;
@@ -52,10 +50,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                             glyphBox.leftX(), glyphBox.topY(),
                             glyphBox.rightX(), glyphBox.bottomY(),
                             textureId,
-                            color.getRed() / MAX_CHANNEL_VAL,
-                            color.getGreen() / MAX_CHANNEL_VAL,
-                            color.getBlue() / MAX_CHANNEL_VAL,
-                            color.getAlpha() / MAX_CHANNEL_VAL);
+                            color);
         });
     }
 

@@ -48,48 +48,48 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
             // upper-left
             super.render(spriteRenderable.renderingArea().translate(-xThickness, -yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // upper-center
             super.render(spriteRenderable.renderingArea().translate(0f, -yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // upper-right
             super.render(spriteRenderable.renderingArea().translate(xThickness, -yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // center-right
             super.render(spriteRenderable.renderingArea().translate(xThickness, 0),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // bottom-right
             super.render(spriteRenderable.renderingArea().translate(xThickness, yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // bottom-center
             super.render(spriteRenderable.renderingArea().translate(0f, yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // bottom-left
             super.render(spriteRenderable.renderingArea().translate(-xThickness, yThickness),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
             // center-left
             super.render(spriteRenderable.renderingArea().translate(-xThickness, 0f),
                     spriteRenderable.sprite(),
-                    1.0f, 1.0f, 1.0f, 1.0f,
+                    Color.WHITE,
                     spriteRenderable.borderColor());
         }
 
         super.render(spriteRenderable.renderingArea(),
                 spriteRenderable.sprite(),
-                1.0f, 1.0f, 1.0f, 1.0f);
+                Color.WHITE);
     }
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {

@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.rendering;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.rendering.Shader;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL20.*;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -94,6 +96,7 @@ public class ShaderImpl implements Shader {
     }
 
     private void setUniform(String name, Consumer<Integer> action) {
+        Check.ifNullOrEmpty(name, "name");
         int location;
         if (!UNIFORM_LOCATIONS.containsKey(name)) {
             location = glGetUniformLocation(_program, name);
@@ -168,6 +171,13 @@ public class ShaderImpl implements Shader {
             setUniform(name, location -> glUniform4f(location, f1, f2, f3, f4));
             UNIFORM_VALUES.put(name, new float[]{f1, f2, f3, f4});
         }
+    }
+
+    @Override
+    public void setUniform(String name, Color color) throws IllegalArgumentException {
+        Check.ifNull(color, "color");
+        float[] rgba = color.getColorComponents(null);
+        setUniform(name, rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
     }
 
     @Override

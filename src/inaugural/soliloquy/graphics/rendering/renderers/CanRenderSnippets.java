@@ -11,7 +11,6 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 
-import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
@@ -59,13 +58,13 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
-                float red, float green, float blue, float alpha) {
-        render(renderingArea, snippet, red, green, blue, alpha, null);
+                Color matColor) {
+        render(renderingArea, snippet, matColor, null);
     }
 
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
-                float red, float green, float blue, float alpha,
+                Color matColor,
                 Color overrideColor) {
         float snippetLeftX = (float)snippet.leftX() / snippet.image().width();
         float snippetTopY = (float)snippet.topY() / snippet.image().height();
@@ -75,25 +74,25 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         render(renderingArea,
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
                 textureId,
-                red, green, blue, alpha,
+                matColor,
                 overrideColor);
     }
 
     void render(FloatBox renderingArea,
                 float snippetLeftX, float snippetTopY, float snippetRightX, float snippetBottomY,
                 int textureId,
-                float red, float green, float blue, float alpha) {
+                Color matColor) {
         render(renderingArea,
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
                 textureId,
-                red, green, blue, alpha,
+                matColor,
                 null);
     }
 
     void render(FloatBox renderingArea,
                 float snippetLeftX, float snippetTopY, float snippetRightX, float snippetBottomY,
                 int textureId,
-                float red, float green, float blue, float alpha,
+                Color matColor,
                 Color overrideColor) {
         FloatBox windowPosition = renderingArea.intersection(
                 RENDERING_BOUNDARIES.currentBoundaries());
@@ -176,19 +175,16 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         // matColor:
         //     These values are the percentage of each channel (RGBA) to render, where 1f is 100%
         //     of that channel rendered, and 0f is 0% of that channel rendered
-        _shader.setUniform("matColor", red, green, blue, alpha);
+        _shader.setUniform("matColor", matColor);
         // overrideColor:
         //     This color entirely overrides the color of the actual object being rendered. This is
         //     intended for use in borders, shadows, etc. If the x value is less than 0, the shader
         //     ignores this value.
         if (overrideColor == null) {
-            _shader.setUniform("overrideColor", -1f, -1f, -1f);
+            _shader.setUniform("overrideColor", -1f, -1f, -1f, -1f);
         }
         else {
-            _shader.setUniform("overrideColor",
-                    overrideColor.getRed() / MAX_CHANNEL_VAL,
-                    overrideColor.getGreen() / MAX_CHANNEL_VAL,
-                    overrideColor.getBlue() / MAX_CHANNEL_VAL);
+            _shader.setUniform("overrideColor", overrideColor);
         }
 
         _mesh.render();

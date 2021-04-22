@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.List;
 
 public class FiniteAnimationRenderer
@@ -40,8 +41,7 @@ public class FiniteAnimationRenderer
 
         AnimationFrameSnippet snippet =  finiteAnimationRenderable.currentSnippet(timestamp);
 
-        super.render(finiteAnimationRenderable.renderingArea(), snippet,
-                1.0f, 1.0f, 1.0f, 1.0f);
+        super.render(finiteAnimationRenderable.renderingArea(), snippet, Color.WHITE);
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {

@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
+import java.awt.*;
 import java.util.List;
 
 public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
@@ -31,7 +32,7 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
 
         super.render(globalLoopingAnimationRenderable.renderingArea(),
                 globalLoopingAnimationRenderable.loopingAnimation().currentSnippet(timestamp),
-                1.0f, 1.0f, 1.0f, 1.0f);
+                Color.WHITE);
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =

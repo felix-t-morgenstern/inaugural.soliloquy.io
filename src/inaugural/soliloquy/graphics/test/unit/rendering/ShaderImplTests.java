@@ -8,8 +8,10 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.rendering.Shader;
 
+import java.awt.*;
 import java.nio.FloatBuffer;
 
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.glGetInteger;
@@ -132,6 +134,64 @@ class ShaderImplTests {
         assertEquals(value2, valuesFromShader.get(1));
         assertEquals(value3, valuesFromShader.get(2));
         assertEquals(value4, valuesFromShader.get(3));
+    }
+
+    @Test
+    void testSetUniformColor() {
+        String uniformName = "matColor";
+        int red = 12;
+        int green = 23;
+        int blue = 34;
+        int alpha = 45;
+        Color matColor = new Color(red, green, blue, alpha);
+
+        Shader.bind();
+        Shader.setUniform(uniformName, matColor);
+
+        int program = glGetInteger(GL_CURRENT_PROGRAM);
+        int location = glGetUniformLocation(program, uniformName);
+
+        FloatBuffer valuesFromShader = BufferUtils.createFloatBuffer(4);
+        glGetUniformfv(program, location, valuesFromShader);
+
+        assertEquals(red / MAX_CHANNEL_VAL, valuesFromShader.get(0));
+        assertEquals(green / MAX_CHANNEL_VAL, valuesFromShader.get(1));
+        assertEquals(blue / MAX_CHANNEL_VAL, valuesFromShader.get(2));
+        assertEquals(alpha / MAX_CHANNEL_VAL, valuesFromShader.get(3));
+    }
+
+    @Test
+    void testSetUniformWithInvalidParams() {
+        String uniformName = "matColor";
+
+        Shader.bind();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(null, 0f));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform("", 0f));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(null, 0f, 0f));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform("", 0f, 0f));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(null, 0f, 0f, 0f));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform("", 0f, 0f, 0f));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(null, 0f, 0f, 0f, 0f));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform("", 0f, 0f, 0f, 0f));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(null, Color.RED));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform("", Color.RED));
+        assertThrows(IllegalArgumentException.class,
+                () -> Shader.setUniform(uniformName, (Color)null));
     }
 
     @Test
