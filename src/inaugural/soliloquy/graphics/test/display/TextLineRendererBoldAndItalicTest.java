@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -75,7 +76,7 @@ class TextLineRendererBoldAndItalicTest {
         }};
 
         TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null,
-                italicIndices, boldIndices, renderingArea);
+                italicIndices, boldIndices, new StaticProvider<>(renderingArea));
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

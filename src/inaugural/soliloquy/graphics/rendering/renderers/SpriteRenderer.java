@@ -3,8 +3,9 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -23,88 +24,94 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
     @Override
     public void render(SpriteRenderable spriteRenderable, long timestamp)
             throws IllegalArgumentException {
-        validateRenderableWithArea(spriteRenderable, "spriteRenderable");
-
+        Check.ifNull(spriteRenderable, "spriteRenderable");
         Check.ifNull(spriteRenderable.sprite(), "spriteRenderable.sprite()");
 
         validateTimestamp(timestamp, "SpriteRenderer");
+        
+        // TODO: Throw if rendering area or border thickness or color providers are null
+        
+        Float borderThickness = Check.ifNull(spriteRenderable.borderThicknessProvider(),
+                "spriteRenderable.borderThicknessProvider()")
+                .provide(timestamp);
+        Color borderColor = Check.ifNull(spriteRenderable.borderColorProvider(),
+                "spriteRenderable.borderColorProvider()")
+                .provide(timestamp);
+        FloatBox renderingArea = Check.ifNull(spriteRenderable.renderingAreaProvider(),
+                "spriteRenderable.renderingAreaProvider()")
+                .provide(timestamp);
 
-        if (spriteRenderable.borderThickness() != null) {
-            if (spriteRenderable.borderColor() == null) {
+        validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShifts(),
+                "spriteRenderable");
+
+        if (borderThickness != null) {
+            if (borderColor == null) {
                 throw new IllegalArgumentException("SpriteRenderable.render: spriteRenderable " +
                         "cannot have non-null thickness, and null color");
             }
 
-            Check.throwOnLtValue(spriteRenderable.borderThickness(), 0f,
-                    "spriteRenderable.borderThickness()");
+            Check.throwOnLtValue(borderThickness, 0f, "spriteRenderable borderThickness");
 
-            Check.throwOnGtValue(spriteRenderable.borderThickness(), 1f,
-                    "spriteRenderable.borderThickness()");
+            Check.throwOnGtValue(borderThickness, 1f, "spriteRenderable borderThickness");
 
-            float yThickness = spriteRenderable.borderThickness();
-            // TODO: Get a producer to generate the width-to-height ratio of the window
+            float yThickness = borderThickness;
             float xThickness = yThickness / _screenWidthToHeightRatio;
 
             // upper-left
-            super.render(spriteRenderable.renderingArea().translate(-xThickness, -yThickness),
+            super.render(renderingArea.translate(-xThickness, -yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // upper-center
-            super.render(spriteRenderable.renderingArea().translate(0f, -yThickness),
+            super.render(renderingArea.translate(0f, -yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // upper-right
-            super.render(spriteRenderable.renderingArea().translate(xThickness, -yThickness),
+            super.render(renderingArea.translate(xThickness, -yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // center-right
-            super.render(spriteRenderable.renderingArea().translate(xThickness, 0),
+            super.render(renderingArea.translate(xThickness, 0),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // bottom-right
-            super.render(spriteRenderable.renderingArea().translate(xThickness, yThickness),
+            super.render(renderingArea.translate(xThickness, yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // bottom-center
-            super.render(spriteRenderable.renderingArea().translate(0f, yThickness),
+            super.render(renderingArea.translate(0f, yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // bottom-left
-            super.render(spriteRenderable.renderingArea().translate(-xThickness, yThickness),
+            super.render(renderingArea.translate(-xThickness, yThickness),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
             // center-left
-            super.render(spriteRenderable.renderingArea().translate(-xThickness, 0f),
+            super.render(renderingArea.translate(-xThickness, 0f),
                     spriteRenderable.sprite(),
                     Color.WHITE,
-                    spriteRenderable.borderColor());
+                    borderColor);
         }
 
-        super.render(spriteRenderable.renderingArea(),
+        super.render(renderingArea,
                 spriteRenderable.sprite(),
                 Color.WHITE);
     }
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {
         @Override
-        public String getInterfaceName() {
-            return SpriteRenderable.class.getCanonicalName();
-        }
-
-        @Override
         public EntityUuid id() {
             return null;
         }
 
         @Override
-        public FloatBox renderingArea() {
+        public ProviderAtTime<FloatBox> renderingAreaProvider() {
             return null;
         }
 
@@ -149,13 +156,18 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public Float borderThickness() {
+        public ProviderAtTime<Float> borderThicknessProvider() {
             return null;
         }
 
         @Override
-        public Color borderColor() {
+        public ProviderAtTime<Color> borderColorProvider() {
             return null;
+        }
+
+        @Override
+        public String getInterfaceName() {
+            return SpriteRenderable.class.getCanonicalName();
         }
     };
 }

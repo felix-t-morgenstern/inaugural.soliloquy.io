@@ -12,6 +12,10 @@ public class FakeFont implements Font {
     public HashMap<Character,FloatBox> GlyphsItalic = new HashMap<>();
     public HashMap<Character,FloatBox> GlyphsBold = new HashMap<>();
     public HashMap<Character,FloatBox> GlyphsBoldItalic = new HashMap<>();
+    public float TextureWidthToHeightRatio;
+    public float TextureWidthToHeightRatioItalic;
+    public float TextureWidthToHeightRatioBold;
+    public float TextureWidthToHeightRatioBoldItalic;
 
     @Override
     public FloatBox getUvCoordinatesForGlyph(char c) throws IllegalArgumentException {
@@ -45,7 +49,7 @@ public class FakeFont implements Font {
 
     @Override
     public float textureWidthToHeightRatio() {
-        return 0;
+        return TextureWidthToHeightRatio;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class FakeFont implements Font {
 
     @Override
     public float textureWidthToHeightRatioItalic() {
-        return 0;
+        return TextureWidthToHeightRatioItalic;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class FakeFont implements Font {
 
     @Override
     public float textureWidthToHeightRatioBold() {
-        return 0;
+        return TextureWidthToHeightRatioBold;
     }
 
     @Override
@@ -90,7 +94,7 @@ public class FakeFont implements Font {
 
     @Override
     public float textureWidthToHeightRatioBoldItalic() {
-        return 0;
+        return TextureWidthToHeightRatioBoldItalic;
     }
 
     @Override

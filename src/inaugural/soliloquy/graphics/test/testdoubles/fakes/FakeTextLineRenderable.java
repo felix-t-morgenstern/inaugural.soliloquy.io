@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
@@ -13,27 +14,28 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
     public float LineHeight;
     public String LineText;
-    public Map<Integer, Color> ColorIndices;
+    public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
-    public FloatBox RenderingArea;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
 
     public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
-                                  Map<Integer, Color> colorIndices, List<Integer> italicIndices,
-                                  List<Integer> boldIndices) {
+                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+                                  List<Integer> italicIndices, List<Integer> boldIndices) {
         Font = font;
         LineHeight = lineHeight;
         LineText = lineText;
-        ColorIndices = colorIndices;
+        ColorProviderIndices = colorProviderIndices;
         ItalicIndices = italicIndices;
         BoldIndices = boldIndices;
     }
 
     public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
-                                  Map<Integer, Color> colorIndices, List<Integer> italicIndices,
-                                  List<Integer> boldIndices, FloatBox renderingArea) {
-        this(font, lineHeight, lineText, colorIndices, italicIndices, boldIndices);
-        RenderingArea = renderingArea;
+                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+                                  List<Integer> italicIndices, List<Integer> boldIndices,
+                                  ProviderAtTime<FloatBox> renderingAreaProvider) {
+        this(font, lineHeight, lineText, colorProviderIndices, italicIndices, boldIndices);
+        RenderingAreaProvider = renderingAreaProvider;
     }
 
     @Override
@@ -52,8 +54,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public Map<Integer, Color> colorIndices() {
-        return ColorIndices;
+    public Map<Integer, ProviderAtTime<Color>> colorProviderIndices() {
+        return ColorProviderIndices;
     }
 
     @Override
@@ -67,8 +69,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override

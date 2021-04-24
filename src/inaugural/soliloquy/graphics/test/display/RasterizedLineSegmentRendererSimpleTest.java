@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
@@ -13,6 +14,7 @@ import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -25,15 +27,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
  *    Window"
- * 2. During the 2000ms, random rasterized line segments will radiate from the center of the
- *    screen in random directions. These segments will have an evenly-spaced dash pattern, though
- *    the density of these dashes will be randomized. The colors of the segments will also be
- *    randomized. (The timing of the rendering of these segments is not regulated in any way; it is
- *    expected that new, randomized segments will be generated very rapidly.)
+ * 2. During the 2000ms, a teal rasterized line segment will be rendered, starting from
+ *    (0.25,0.25), and ending at (0.75, 0.5).
  * 3. The window will then close
  *
  */
-class RasterizedLineSegmentRendererTest {
+class RasterizedLineSegmentRendererSimpleTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -54,7 +53,7 @@ class RasterizedLineSegmentRendererTest {
                 new RasterizedLineSegmentRenderer();
 
         stackRenderer.RenderAction = timestamp ->
-                rasterizedLineSegmentRenderer.render(randomRasterizedLineSegmentRenderable(),
+                rasterizedLineSegmentRenderer.render(makeRasterizedLineSegmentRenderable(),
                         timestamp);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
@@ -71,13 +70,11 @@ class RasterizedLineSegmentRendererTest {
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 
-    private static RasterizedLineSegmentRenderable randomRasterizedLineSegmentRenderable() {
-        return new FakeRasterizedLineSegmentRenderable(6f, (short) 0xAAAA,
-                1 + new Random().nextInt(8),
-                new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1f,
-                new FakeFloatBox(0f, 0f,
-                        (2 * new Random().nextFloat()) - 1f,
-                        (2 * new Random().nextFloat()) - 1f),
+    private static RasterizedLineSegmentRenderable makeRasterizedLineSegmentRenderable() {
+        return new FakeRasterizedLineSegmentRenderable(new StaticProvider<>(6f), (short) 0xAAAA,
+                16,
+                new StaticProvider<>(new Color(18, 201, 159)),
+                new StaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.5f)),
                 1);
     }
 }

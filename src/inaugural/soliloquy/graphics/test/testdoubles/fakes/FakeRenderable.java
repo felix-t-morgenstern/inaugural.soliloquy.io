@@ -2,19 +2,20 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class FakeRenderable implements Renderable {
     public int Z;
-    public FloatBox RenderingArea;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
 
     public FakeRenderable(int z) {
         Z = z;
     }
 
     @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override

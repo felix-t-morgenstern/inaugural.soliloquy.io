@@ -2,9 +2,9 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.renderables.RenderableAnimation;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-public class FakeRenderableAnimation implements RenderableAnimation {
+public class FakeRenderableAnimation implements ProviderAtTime<AnimationFrameSnippet> {
     public Animation Animation;
     public long StartTimestamp;
 
@@ -14,7 +14,7 @@ public class FakeRenderableAnimation implements RenderableAnimation {
     }
 
     @Override
-    public AnimationFrameSnippet currentSnippet(long l) throws IllegalArgumentException {
+    public AnimationFrameSnippet provide(long l) throws IllegalArgumentException {
         return Animation.snippetAtFrame((int)(l - StartTimestamp) % Animation.msDuration());
     }
 
@@ -26,5 +26,15 @@ public class FakeRenderableAnimation implements RenderableAnimation {
     @Override
     public void reportUnpause(long l) throws IllegalArgumentException {
 
+    }
+
+    @Override
+    public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public AnimationFrameSnippet getArchetype() {
+        return null;
     }
 }

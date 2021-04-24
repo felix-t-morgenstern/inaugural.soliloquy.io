@@ -1,28 +1,30 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
+import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
-import soliloquy.specs.graphics.renderables.RenderableAnimation;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.List;
 
 public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimationRenderable {
-    public RenderableAnimation LoopingAnimation;
+    public ProviderAtTime<AnimationFrameSnippet> LoopingAnimation;
     public List<ColorShift> ColorShifts;
-    public FloatBox RenderingArea;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
 
-    public FakeGlobalLoopingAnimationRenderable(RenderableAnimation loopingAnimation,
+    public FakeGlobalLoopingAnimationRenderable(ProviderAtTime<AnimationFrameSnippet>
+                                                        loopingAnimation,
                                                 List<ColorShift> colorShifts,
-                                                FloatBox renderingArea) {
+                                                ProviderAtTime<FloatBox> renderingAreaProvider) {
         LoopingAnimation = loopingAnimation;
         ColorShifts = colorShifts;
-        RenderingArea = renderingArea;
+        RenderingAreaProvider = renderingAreaProvider;
     }
 
     @Override
-    public RenderableAnimation loopingAnimation() {
+    public ProviderAtTime<AnimationFrameSnippet> loopingAnimation() {
         return LoopingAnimation;
     }
 
@@ -52,8 +54,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override

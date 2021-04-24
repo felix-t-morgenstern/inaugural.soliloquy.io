@@ -3,8 +3,10 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
+import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -26,7 +28,12 @@ public class FiniteAnimationRenderer
             throws IllegalArgumentException {
         Check.ifNull(finiteAnimationRenderable, "finiteAnimationRenderable");
 
-        validateRenderableWithArea(finiteAnimationRenderable, "finiteAnimationRenderable");
+        FloatBox renderingArea = Check.ifNull(finiteAnimationRenderable.renderingAreaProvider(),
+                "finiteAnimationRenderable.renderingAreaProvider()")
+                .provide(timestamp);
+
+        validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
+                "finiteAnimationRenderable");
 
         validateTimestamp(timestamp, "FiniteAnimationRenderable");
 
@@ -39,24 +46,59 @@ public class FiniteAnimationRenderer
             return;
         }
 
-        AnimationFrameSnippet snippet =  finiteAnimationRenderable.currentSnippet(timestamp);
+        AnimationFrameSnippet snippet =  finiteAnimationRenderable.provide(timestamp);
 
-        super.render(finiteAnimationRenderable.renderingArea(), snippet, Color.WHITE);
+        super.render(renderingArea, snippet, Color.WHITE);
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {
         @Override
-        public long startTimestamp() {
-            return 0;
+        public AnimationFrameSnippet getArchetype() {
+            return new AnimationFrameSnippet() {
+                @Override
+                public float offsetX() {
+                    return 0;
+                }
+
+                @Override
+                public float offsetY() {
+                    return 0;
+                }
+
+                @Override
+                public Image image() {
+                    return null;
+                }
+
+                @Override
+                public int leftX() {
+                    return 0;
+                }
+
+                @Override
+                public int topY() {
+                    return 0;
+                }
+
+                @Override
+                public int rightX() {
+                    return 0;
+                }
+
+                @Override
+                public int bottomY() {
+                    return 0;
+                }
+
+                @Override
+                public String getInterfaceName() {
+                    return AnimationFrameSnippet.class.getCanonicalName();
+                }
+            };
         }
 
         @Override
-        public long endTimestamp() {
-            return 0;
-        }
-
-        @Override
-        public AnimationFrameSnippet currentSnippet(long l) throws IllegalArgumentException {
+        public AnimationFrameSnippet provide(long l) throws IllegalArgumentException {
             return null;
         }
 
@@ -67,6 +109,26 @@ public class FiniteAnimationRenderer
 
         @Override
         public void reportUnpause(long l) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public EntityUuid id() {
+            return null;
+        }
+
+        @Override
+        public ProviderAtTime<FloatBox> renderingAreaProvider() {
+            return null;
+        }
+
+        @Override
+        public int z() {
+            return 0;
+        }
+
+        @Override
+        public void delete() {
 
         }
 
@@ -96,23 +158,13 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public FloatBox renderingArea() {
-            return null;
-        }
-
-        @Override
-        public int z() {
+        public long startTimestamp() {
             return 0;
         }
 
         @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public EntityUuid id() {
-            return null;
+        public long endTimestamp() {
+            return 0;
         }
 
         @Override

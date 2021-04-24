@@ -3,11 +3,15 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
+
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RasterizedLineSegmentRenderer
@@ -36,8 +40,19 @@ public class RasterizedLineSegmentRenderer
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
-        Check.throwOnLteZero(rasterizedLineSegmentRenderable.thickness(),
-                "rasterizedLineSegmentRenderable.thickness()");
+        FloatBox renderingArea =
+                Check.ifNull(rasterizedLineSegmentRenderable.renderingAreaProvider(),
+                        "rasterizedLineSegmentRenderable.renderingAreaProvider()")
+                        .provide(timestamp);
+        float thickness = Check.ifNull(rasterizedLineSegmentRenderable.thicknessProvider(),
+                "rasterizedLineSegmentRenderable.thicknessProvider()")
+                .provide(timestamp);
+        Color color = Check.ifNull(rasterizedLineSegmentRenderable.colorProvider(),
+                "rasterizedLineSegmentRenderable.colorProvider()")
+                .provide(timestamp);
+
+        Check.throwOnLteZero(thickness,
+                "rasterizedLineSegmentRenderable provided thickness");
 
         Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.stipplePattern(), (short)0x0000,
                 "rasterizedLineSegmentRenderable.stipplePattern()");
@@ -47,42 +62,25 @@ public class RasterizedLineSegmentRenderer
         Check.throwOnGtValue(rasterizedLineSegmentRenderable.stippleFactor(), (short)256,
                 "rasterizedLineSegmentRenderable.stippleFactor()");
 
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.red(), 0f,
-                "rasterizedLineSegmentRenderable.red()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.red(), 1f,
-                "rasterizedLineSegmentRenderable.red()");
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.green(), 0f,
-                "rasterizedLineSegmentRenderable.green()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.green(), 1f,
-                "rasterizedLineSegmentRenderable.green()");
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.blue(), 0f,
-                "rasterizedLineSegmentRenderable.blue()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.blue(), 1f,
-                "rasterizedLineSegmentRenderable.blue()");
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.alpha(), 0f,
-                "rasterizedLineSegmentRenderable.alpha()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.alpha(), 1f,
-                "rasterizedLineSegmentRenderable.alpha()");
+        Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
 
         validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
 
-        glLineWidth(rasterizedLineSegmentRenderable.thickness());
+        glLineWidth(thickness);
 
         glLineStipple(rasterizedLineSegmentRenderable.stippleFactor(),
                 rasterizedLineSegmentRenderable.stipplePattern());
 
-        glColor4f(rasterizedLineSegmentRenderable.red(),
-                rasterizedLineSegmentRenderable.green(),
-                rasterizedLineSegmentRenderable.blue(),
-                rasterizedLineSegmentRenderable.alpha());
+        glColor4f(color.getRed() / MAX_CHANNEL_VAL,
+                color.getGreen() / MAX_CHANNEL_VAL,
+                color.getBlue() / MAX_CHANNEL_VAL,
+                color.getAlpha() / MAX_CHANNEL_VAL);
 
         glBegin(GL_LINES);
 
-        glVertex2f(rasterizedLineSegmentRenderable.renderingArea().leftX(),
-                rasterizedLineSegmentRenderable.renderingArea().topY());
+        glVertex2f((renderingArea.leftX() * 2f) - 1f, -((renderingArea.topY() * 2f) - 1f));
 
-        glVertex2f(rasterizedLineSegmentRenderable.renderingArea().rightX(),
-                rasterizedLineSegmentRenderable.renderingArea().bottomY());
+        glVertex2f((renderingArea.rightX() * 2f) - 1f, -((renderingArea.bottomY() * 2f) - 1f));
 
         glEnd();
     }
@@ -94,64 +92,49 @@ public class RasterizedLineSegmentRenderer
 
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
-        @Override
-        public String getInterfaceName() {
-            return RasterizedLineSegmentRenderable.class.getCanonicalName();
-        }
+                @Override
+                public EntityUuid id() {
+                    return null;
+                }
 
-        @Override
-        public EntityUuid id() {
-            return null;
-        }
+                @Override
+                public ProviderAtTime<FloatBox> renderingAreaProvider() {
+                    return null;
+                }
 
-        @Override
-        public FloatBox renderingArea() {
-            return null;
-        }
+                @Override
+                public int z() {
+                    return 0;
+                }
 
-        @Override
-        public int z() {
-            return 0;
-        }
+                @Override
+                public void delete() {
 
-        @Override
-        public void delete() {
+                }
 
-        }
+                @Override
+                public ProviderAtTime<Float> thicknessProvider() {
+                    return null;
+                }
 
-        @Override
-        public float thickness() {
-            return 0;
-        }
+                @Override
+                public short stipplePattern() {
+                    return 0;
+                }
 
-        @Override
-        public short stipplePattern() {
-            return 0;
-        }
+                @Override
+                public int stippleFactor() {
+                    return 0;
+                }
 
-        @Override
-        public int stippleFactor() {
-            return 0;
-        }
+                @Override
+                public ProviderAtTime<Color> colorProvider() {
+                    return null;
+                }
 
-        @Override
-        public float red() {
-            return 0;
-        }
-
-        @Override
-        public float green() {
-            return 0;
-        }
-
-        @Override
-        public float blue() {
-            return 0;
-        }
-
-        @Override
-        public float alpha() {
-            return 0;
-        }
+                @Override
+                public String getInterfaceName() {
+                    return RasterizedLineSegmentRenderable.class.getCanonicalName();
+                }
     };
 }

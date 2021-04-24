@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.display;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
+import inaugural.soliloquy.common.test.fakes.*;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
@@ -82,11 +82,11 @@ class FiniteAnimationRendererSimpleTest {
         int msPadding = 500;
 
         FiniteAnimationRenderable = new FakeFiniteAnimationRenderable(null, new ArrayList<>(),
-                new FakeFloatBox(
+                new StaticProvider<>(new FakeFloatBox(
                         midpoint - (animationWidth / 2f),
                         midpoint - (animationHeight / 2f),
                         midpoint + (animationWidth / 2f),
-                        midpoint + (animationHeight / 2f)),
+                        midpoint + (animationHeight / 2f))),
                 0L);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();

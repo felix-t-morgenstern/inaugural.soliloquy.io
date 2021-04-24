@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -10,6 +11,7 @@ import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -67,10 +69,10 @@ class TextLineRendererColorTest {
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
-        HashMap<Integer, Color> colorIndices = rainbowGradient(LINE_TEXT);
+        HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
         TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, colorIndices, null,
-                null, renderingArea);
+                null, new StaticProvider<>(renderingArea));
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -108,12 +110,13 @@ class TextLineRendererColorTest {
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 
-    private static HashMap<Integer, Color> rainbowGradient(String lineText) {
-        HashMap<Integer, Color> rainbowGradient = new HashMap<>();
+    private static HashMap<Integer, ProviderAtTime<Color>> rainbowGradient(String lineText) {
+        HashMap<Integer, ProviderAtTime<Color>> rainbowGradient = new HashMap<>();
 
         float degreePerLetter = 360f / lineText.length();
         for (int i = 0; i < lineText.length(); i++) {
-            rainbowGradient.put(i, colorAtDegree((float)i * degreePerLetter));
+            rainbowGradient.put(i,
+                    new StaticProvider<>(colorAtDegree((float)i * degreePerLetter)));
         }
         return rainbowGradient;
     }

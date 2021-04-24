@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -66,7 +67,7 @@ class TextLineRendererSimpleTest {
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
         TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null, null, null,
-                renderingArea);
+                new StaticProvider<>(renderingArea));
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

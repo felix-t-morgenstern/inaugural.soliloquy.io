@@ -4,12 +4,13 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.renderables.RenderableWithArea;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -190,17 +191,18 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         _mesh.render();
     }
 
-    protected void validateRenderableWithArea(RenderableWithArea renderableWithArea,
-                                              String paramName) {
-        Check.ifNull(renderableWithArea, "spriteRenderable");
+    protected void validateRenderableWithAreaMembers(FloatBox renderingArea,
+                                                     List<ColorShift> colorShifts,
+                                                     String paramName) {
+        Check.ifNull(renderingArea, paramName + " provided renderingArea");
 
-        Check.ifNull(renderableWithArea.colorShifts(), paramName + ".colorShifts()");
+        Check.ifNull(colorShifts, paramName + ".colorShifts()");
 
-        Check.throwOnLteZero(renderableWithArea.renderingArea().width(),
-                paramName + "renderingArea.width()");
+        Check.throwOnLteZero(renderingArea.width(),
+                paramName + " provided renderingArea.width()");
 
-        Check.throwOnLteZero(renderableWithArea.renderingArea().height(),
-                paramName + "renderingArea.height()");
+        Check.throwOnLteZero(renderingArea.height(),
+                paramName + " provided renderingArea.height()");
     }
 
     @Override

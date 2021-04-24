@@ -2,37 +2,36 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.awt.*;
+
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
-    public float Thickness;
+    public ProviderAtTime<Float> ThicknessProvider;
     public short StipplePattern;
     public int StippleFactor;
-    public float Red;
-    public float Green;
-    public float Blue;
-    public float Alpha;
-    public FloatBox RenderingArea;
+    public ProviderAtTime<Color> ColorProvider;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public int Z;
 
-    public FakeRasterizedLineSegmentRenderable(float thickness, short stipplePattern,
+    public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Float> thicknessProvider,
+                                               short stipplePattern,
                                                int stippleFactor,
-                                               float red, float green, float blue, float alpha,
-                                               FloatBox renderingArea, int z) {
-        Thickness = thickness;
+                                               ProviderAtTime<Color> colorProvider,
+                                               ProviderAtTime<FloatBox> renderingAreaProvider,
+                                               int z) {
+        ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
-        Red = red;
-        Green = green;
-        Blue = blue;
-        Alpha = alpha;
-        RenderingArea = renderingArea;
+        ColorProvider = colorProvider;
+        RenderingAreaProvider = renderingAreaProvider;
         Z = z;
     }
 
     @Override
-    public float thickness() {
-        return Thickness;
+    public ProviderAtTime<Float> thicknessProvider() {
+        return ThicknessProvider;
     }
 
     @Override
@@ -46,28 +45,13 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public float red() {
-        return Red;
+    public ProviderAtTime<Color> colorProvider() {
+        return ColorProvider;
     }
 
     @Override
-    public float green() {
-        return Green;
-    }
-
-    @Override
-    public float blue() {
-        return Blue;
-    }
-
-    @Override
-    public float alpha() {
-        return Alpha;
-    }
-
-    @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override

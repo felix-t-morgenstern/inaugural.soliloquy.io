@@ -3,9 +3,9 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -110,12 +110,12 @@ class StackRendererRenderingBoundariesTest {
         float spriteAxe07TopY = 0.125f;
         float spriteAxe07LeftX = 0.625f - (spriteAxe07ScreenWidth / 2f);
         SpriteRenderable1 = new FakeSpriteRenderable(spriteAxe07, new ArrayList<>(),
-                new FakeFloatBox(
+                new StaticProvider<>(new FakeFloatBox(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
-                ),
+                )),
                 1);
 
         float spriteAxe09ScreenWidth = (spriteAxe09Width / (float)spriteAxe09Height) *
@@ -123,24 +123,24 @@ class StackRendererRenderingBoundariesTest {
         float spriteAxe09TopY = 0.375f;
         float spriteAxe09LeftX = 0.375f - (spriteAxe09ScreenWidth / 2f);
         SpriteRenderable2 = new FakeSpriteRenderable(spriteAxe09, new ArrayList<>(),
-                new FakeFloatBox(
+                new StaticProvider<>(new FakeFloatBox(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
-                ),
+                )),
                 3);
 
         float spriteSword06ScreenWidth = 0.3710f;
         float spriteSword06TopY = 0f;
         float spriteSword06LeftX = 0.5f - (spriteSword06ScreenWidth / 2f);
         SpriteRenderable3 = new FakeSpriteRenderable(spriteSword06, new ArrayList<>(),
-                new FakeFloatBox(
+                new StaticProvider<>(new FakeFloatBox(
                         spriteSword06LeftX,
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
-                ),
+                )),
                 2);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();

@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -34,16 +35,17 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         validateTimestamp(timestamp, "TextLineRendererImpl");
 
-        iterateOverTextLine(textLineRenderable,
+        FloatBox renderingAreaFromRenderable =
+                textLineRenderable.renderingAreaProvider().provide(timestamp);
+
+        iterateOverTextLine(textLineRenderable, timestamp,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                    float leftX = textLineRenderable.renderingArea().leftX() +
-                            textLineLengthThusFar;
+                    float leftX = renderingAreaFromRenderable.leftX() + textLineLengthThusFar;
                     FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                             leftX,
-                            textLineRenderable.renderingArea().topY(),
+                            renderingAreaFromRenderable.topY(),
                             leftX + glyphLength,
-                            textLineRenderable.renderingArea().topY() +
-                                    textLineRenderable.lineHeight()
+                            renderingAreaFromRenderable.topY() + textLineRenderable.lineHeight()
                     );
 
                     super.render(renderingArea,
@@ -59,10 +61,11 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             throws IllegalArgumentException {
         validateTextLineRenderable(textLineRenderable, "textLineLength");
 
-        return iterateOverTextLine(textLineRenderable, null);
+        return iterateOverTextLine(textLineRenderable, null, null);
     }
 
-    private float iterateOverTextLine(TextLineRenderable textLineRenderable,
+    // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't elegant, but this is not front-facing code.
+    private float iterateOverTextLine(TextLineRenderable textLineRenderable, Long timestamp,
                                       Function<Float, Function<Float, Function<Integer,
                                               Function<FloatBox, Consumer<Color>>>>>
                                               renderingAction) {
@@ -77,9 +80,11 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 textLineRenderable.font().glyphwiseAdditionalHorizontalPadding();
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
-            if (textLineRenderable.colorIndices() != null &&
-                    textLineRenderable.colorIndices().containsKey(i)) {
-                color = textLineRenderable.colorIndices().get(i);
+            if (timestamp != null) {
+                if (textLineRenderable.colorProviderIndices() != null &&
+                        textLineRenderable.colorProviderIndices().containsKey(i)) {
+                    color = textLineRenderable.colorProviderIndices().get(i).provide(timestamp);
+                }
             }
             if (textLineRenderable.italicIndices() != null &&
                     textLineRenderable.italicIndices().size() > nextItalicIndex &&
@@ -150,13 +155,16 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     private void validateTextLineRenderable(TextLineRenderable textLineRenderable,
                                             String methodName) {
+        Check.ifNull(textLineRenderable, "textLineRenderable");
         Check.ifNull(textLineRenderable.font(), "textLineRenderable.font()");
         Check.throwOnLteZero(textLineRenderable.lineHeight(), "textLineRenderable.lineHeight()");
-        if (textLineRenderable.colorIndices() != null) {
+        Check.ifNull(textLineRenderable.renderingAreaProvider(),
+                "textLineRenderable.renderingAreaProvider()");
+        if (textLineRenderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
-            Set<Map.Entry<Integer, Color>> colorIndicesEntries =
-                    textLineRenderable.colorIndices().entrySet();
-            for (Map.Entry<Integer, Color> entry : colorIndicesEntries) {
+            Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
+                    textLineRenderable.colorProviderIndices().entrySet();
+            for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
                 validateIndex(entry.getKey(), textLineRenderable.lineText().length(),
                         "textLineRenderable.colorIndices()", methodName, highestIndexThusFar);
                 highestIndexThusFar = entry.getKey();
@@ -208,11 +216,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
         @Override
-        public String getInterfaceName() {
-            return TextLineRenderable.class.getCanonicalName();
-        }
-
-        @Override
         public EntityUuid id() {
             return null;
         }
@@ -228,7 +231,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public FloatBox renderingArea() {
+        public ProviderAtTime<FloatBox> renderingAreaProvider() {
             return null;
         }
 
@@ -248,7 +251,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public Map<Integer, Color> colorIndices() {
+        public Map<Integer, ProviderAtTime<Color>> colorProviderIndices() {
             return null;
         }
 
@@ -260,6 +263,11 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         @Override
         public List<Integer> boldIndices() {
             return null;
+        }
+
+        @Override
+        public String getInterfaceName() {
+            return TextLineRenderable.class.getCanonicalName();
         }
     };
 }

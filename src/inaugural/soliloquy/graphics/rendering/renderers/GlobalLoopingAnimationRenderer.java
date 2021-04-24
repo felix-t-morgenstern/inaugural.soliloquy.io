@@ -2,9 +2,10 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
+import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
-import soliloquy.specs.graphics.renderables.RenderableAnimation;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -22,7 +23,15 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
     public void render(GlobalLoopingAnimationRenderable globalLoopingAnimationRenderable,
                        long timestamp)
             throws IllegalArgumentException {
-        validateRenderableWithArea(globalLoopingAnimationRenderable,
+        Check.ifNull(globalLoopingAnimationRenderable, "globalLoopingAnimationRenderable");
+
+        FloatBox renderingArea =
+                Check.ifNull(globalLoopingAnimationRenderable.renderingAreaProvider(),
+                        "globalLoopingAnimationRenderable.renderingAreaProvider()")
+                        .provide(timestamp);
+
+        validateRenderableWithAreaMembers(renderingArea,
+                globalLoopingAnimationRenderable.colorShifts(),
                 "globalLoopingAnimationRenderable");
 
         Check.ifNull(globalLoopingAnimationRenderable.loopingAnimation(),
@@ -30,25 +39,20 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
 
         validateTimestamp(timestamp, "GlobalLoopingAnimationRenderer");
 
-        super.render(globalLoopingAnimationRenderable.renderingArea(),
-                globalLoopingAnimationRenderable.loopingAnimation().currentSnippet(timestamp),
+        super.render(renderingArea,
+                globalLoopingAnimationRenderable.loopingAnimation().provide(timestamp),
                 Color.WHITE);
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
             new GlobalLoopingAnimationRenderable() {
                 @Override
-                public String getInterfaceName() {
-                    return GlobalLoopingAnimationRenderable.class.getCanonicalName();
-                }
-
-                @Override
                 public EntityUuid id() {
                     return null;
                 }
 
                 @Override
-                public FloatBox renderingArea() {
+                public ProviderAtTime<FloatBox> renderingAreaProvider() {
                     return null;
                 }
 
@@ -88,8 +92,13 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
                 }
 
                 @Override
-                public RenderableAnimation loopingAnimation() {
+                public ProviderAtTime<AnimationFrameSnippet> loopingAnimation() {
                     return null;
+                }
+
+                @Override
+                public String getInterfaceName() {
+                    return GlobalLoopingAnimationRenderable.class.getCanonicalName();
                 }
             };
 }

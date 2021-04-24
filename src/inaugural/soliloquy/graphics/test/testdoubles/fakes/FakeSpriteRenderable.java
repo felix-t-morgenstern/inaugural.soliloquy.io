@@ -2,8 +2,9 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
@@ -12,26 +13,30 @@ import java.util.List;
 public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
     public List<ColorShift> ColorShifts;
-    public FloatBox RenderingArea;
-    public Float BorderThickness;
-    public Color BorderColor;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<Float> BorderThicknessProvider;
+    public ProviderAtTime<Color> BorderColorProvider;
     public int Z;
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
-                                FloatBox renderingArea, Float borderThickness, Color borderColor) {
+                                ProviderAtTime<FloatBox> renderingAreaProvider,
+                                ProviderAtTime<Float> borderThicknessProvider,
+                                ProviderAtTime<Color> borderColorProvider) {
         Sprite = sprite;
         ColorShifts = colorShifts;
-        RenderingArea = renderingArea;
-        BorderThickness = borderThickness;
-        BorderColor = borderColor;
+        RenderingAreaProvider = renderingAreaProvider;
+        BorderThicknessProvider = borderThicknessProvider;
+        BorderColorProvider = borderColorProvider;
     }
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
-                                FloatBox renderingArea, int z) {
+                                ProviderAtTime<FloatBox> renderingAreaProvider, int z) {
         Sprite = sprite;
         ColorShifts = colorShifts;
-        RenderingArea = renderingArea;
+        RenderingAreaProvider = renderingAreaProvider;
         Z = z;
+        BorderThicknessProvider = new FakeStaticProviderAtTime<>(null);
+        BorderColorProvider = new FakeStaticProviderAtTime<>(null);
     }
 
     @Override
@@ -40,13 +45,13 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public Float borderThickness() {
-        return BorderThickness;
+    public ProviderAtTime<Float> borderThicknessProvider() {
+        return BorderThicknessProvider;
     }
 
     @Override
-    public Color borderColor() {
-        return BorderColor;
+    public ProviderAtTime<Color> borderColorProvider() {
+        return BorderColorProvider;
     }
 
     @Override
@@ -75,8 +80,8 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override

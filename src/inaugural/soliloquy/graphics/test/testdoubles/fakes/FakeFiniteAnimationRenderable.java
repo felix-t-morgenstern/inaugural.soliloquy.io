@@ -3,8 +3,9 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.List;
@@ -12,20 +13,21 @@ import java.util.List;
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
     public Animation Animation;
     public List<ColorShift> ColorShifts;
-    public FloatBox RenderingArea;
+    public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public long StartTimestamp;
     public boolean Deleted;
 
     public FakeFiniteAnimationRenderable(Animation animation, List<ColorShift> colorShifts,
-                                         FloatBox renderingArea, long startTimestamp) {
+                                         ProviderAtTime<FloatBox> renderingAreaProvider,
+                                         long startTimestamp) {
         Animation = animation;
         ColorShifts = colorShifts;
-        RenderingArea = renderingArea;
+        RenderingAreaProvider = renderingAreaProvider;
         StartTimestamp = startTimestamp;
     }
 
     @Override
-    public AnimationFrameSnippet currentSnippet(long timestamp) throws IllegalArgumentException {
+    public AnimationFrameSnippet provide(long timestamp) throws IllegalArgumentException {
         int frameMs = (int)(timestamp - StartTimestamp);
         return Animation.snippetAtFrame(frameMs);
     }
@@ -66,8 +68,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public FloatBox renderingArea() {
-        return RenderingArea;
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+        return RenderingAreaProvider;
     }
 
     @Override
@@ -98,5 +100,10 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     @Override
     public long endTimestamp() {
         return StartTimestamp + Animation.msDuration();
+    }
+
+    @Override
+    public AnimationFrameSnippet getArchetype() {
+        return null;
     }
 }

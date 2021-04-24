@@ -7,8 +7,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
@@ -82,25 +82,41 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(null, colorShifts,
-                        new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY))),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY))),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
-                        new FakeFloatBox(leftX, topY, leftX, bottomY)),
+                        null),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        new FakeStaticProviderAtTime<>(null)),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, leftX, bottomY))),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeFloatBox(leftX, topY, rightX, topY)),
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, topY))),
                 0L
         ));
     }
@@ -115,7 +131,8 @@ class GlobalLoopingAnimationRendererTests {
         float bottomY = 0.44f;
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
-                        new FakeFloatBox(leftX, topY, rightX, bottomY));
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)));
         long timestamp = 100L;
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());

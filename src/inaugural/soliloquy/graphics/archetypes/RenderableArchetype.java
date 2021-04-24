@@ -2,11 +2,18 @@ package inaugural.soliloquy.graphics.archetypes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class RenderableArchetype implements Renderable {
+    // TODO: Test this
     @Override
-    public FloatBox renderingArea() {
+    public String getInterfaceName() {
+        return Renderable.class.getCanonicalName();
+    }
+
+    @Override
+    public ProviderAtTime<FloatBox> renderingAreaProvider() {
         return null;
     }
 
@@ -18,12 +25,6 @@ public class RenderableArchetype implements Renderable {
     @Override
     public void delete() {
 
-    }
-
-    // TODO: Test this
-    @Override
-    public String getInterfaceName() {
-        return Renderable.class.getCanonicalName();
     }
 
     @Override

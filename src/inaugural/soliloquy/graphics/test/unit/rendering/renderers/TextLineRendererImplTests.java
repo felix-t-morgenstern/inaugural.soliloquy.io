@@ -1,10 +1,13 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
+import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
@@ -52,18 +55,27 @@ class TextLineRendererImplTests {
         FakeFont font = new FakeFont();
         float lineHeight = 0.25f;
         String textLine = "Text line";
-        HashMap<Integer, Color> colorIndices = new HashMap<>();
-        colorIndices.put(4, Color.RED);
+        HashMap<Integer, ProviderAtTime<Color>> colorProviderIndices = new HashMap<>();
+        colorProviderIndices.put(4, new FakeStaticProviderAtTime<>(Color.RED));
         ArrayList<Integer> italicIndices = new ArrayList<>();
         italicIndices.add(2);
         italicIndices.add(6);
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
+        ProviderAtTime<FloatBox> renderingAreaProvider =
+                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorIndices, italicIndices, boldIndices);
+                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider);
 
 
+
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderer.render(null, 0L));
+
+        textLineRenderable.RenderingAreaProvider = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.RenderingAreaProvider = renderingAreaProvider;
 
         textLineRenderable.Font = null;
         assertThrows(IllegalArgumentException.class,
@@ -75,25 +87,25 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         textLineRenderable.LineHeight = 0.25f;
 
-        colorIndices.put(null, Color.BLUE);
+        colorProviderIndices.put(null, new FakeStaticProviderAtTime<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        colorIndices.remove(null);
+        colorProviderIndices.remove(null);
 
-        colorIndices.put(6, null);
+        colorProviderIndices.put(6, null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        colorIndices.remove(6);
+        colorProviderIndices.remove(6);
 
-        colorIndices.put(-1, Color.BLUE);
+        colorProviderIndices.put(-1, new FakeStaticProviderAtTime<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        colorIndices.remove(-1);
+        colorProviderIndices.remove(-1);
 
-        colorIndices.put(textLine.length(), null);
+        colorProviderIndices.put(textLine.length(), null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        colorIndices.remove(textLine.length());
+        colorProviderIndices.remove(textLine.length());
 
         italicIndices.add(null);
         assertThrows(IllegalArgumentException.class,
@@ -143,18 +155,27 @@ class TextLineRendererImplTests {
         FakeFont font = new FakeFont();
         float lineHeight = 0.25f;
         String textLine = "Text line";
-        HashMap<Integer, Color> colorIndices = new HashMap<>();
-        colorIndices.put(4, Color.RED);
+        HashMap<Integer, ProviderAtTime<Color>> colorProviderIndices = new HashMap<>();
+        colorProviderIndices.put(4, new FakeStaticProviderAtTime<>(Color.RED));
         ArrayList<Integer> italicIndices = new ArrayList<>();
         italicIndices.add(2);
         italicIndices.add(6);
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
+        ProviderAtTime<FloatBox> renderingAreaProvider =
+                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorIndices, italicIndices, boldIndices);
+                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider);
 
 
+
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderer.render(null, 0L));
+
+        textLineRenderable.RenderingAreaProvider = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.RenderingAreaProvider = renderingAreaProvider;
 
         textLineRenderable.Font = null;
         assertThrows(IllegalArgumentException.class,
@@ -166,25 +187,25 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
         textLineRenderable.LineHeight = 0.25f;
 
-        colorIndices.put(null, Color.BLUE);
+        colorProviderIndices.put(null, new FakeStaticProviderAtTime<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        colorIndices.remove(null);
+        colorProviderIndices.remove(null);
 
-        colorIndices.put(6, null);
+        colorProviderIndices.put(6, null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        colorIndices.remove(6);
+        colorProviderIndices.remove(6);
 
-        colorIndices.put(-1, Color.BLUE);
+        colorProviderIndices.put(-1, new FakeStaticProviderAtTime<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        colorIndices.remove(-1);
+        colorProviderIndices.remove(-1);
 
-        colorIndices.put(textLine.length(), null);
+        colorProviderIndices.put(textLine.length(), null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        colorIndices.remove(textLine.length());
+        colorProviderIndices.remove(textLine.length());
 
         italicIndices.add(null);
         assertThrows(IllegalArgumentException.class,
@@ -252,6 +273,15 @@ class TextLineRendererImplTests {
         font.GlyphsBold.put('B', glyphBBold);
         font.GlyphsBoldItalic.put('B', glyphBBoldItalic);
 
+        float textureWidthToHeightRatio = 0.12f;
+        float textureWidthToHeightRatioItalic = 0.34f;
+        float textureWidthToHeightRatioBold = 0.56f;
+        float textureWidthToHeightRatioBoldItalic = 0.78f;
+        font.TextureWidthToHeightRatio = textureWidthToHeightRatio;
+        font.TextureWidthToHeightRatioItalic = textureWidthToHeightRatioItalic;
+        font.TextureWidthToHeightRatioBold = textureWidthToHeightRatioBold;
+        font.TextureWidthToHeightRatioBoldItalic = textureWidthToHeightRatioBoldItalic;
+
         float lineHeight = 0.5f;
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
         ArrayList<Integer> italicIndices = new ArrayList<Integer>(){{
@@ -264,16 +294,17 @@ class TextLineRendererImplTests {
         }};
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                lineText, null, italicIndices, boldIndices);
+                lineText, null, italicIndices, boldIndices,
+                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)));
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable);
 
-        float expectedTextLineLength = ((glyphA.width() * 1) +
-                (glyphAItalic.width() * 5) +
-                (glyphABoldItalic.width() * 2) +
-                (glyphBBoldItalic.width() * 1) +
-                (glyphBBold.width() * 5) +
-                (glyphB.width() * 2)) *
+        float expectedTextLineLength = ((glyphA.width() * 1 * textureWidthToHeightRatio) +
+                (glyphAItalic.width() * 5 * textureWidthToHeightRatioItalic) +
+                (glyphABoldItalic.width() * 2 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBoldItalic.width() * 1 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBold.width() * 5 * textureWidthToHeightRatioBold) +
+                (glyphB.width() * 2 * textureWidthToHeightRatio)) *
                 (lineHeight / glyphHeight);
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
@@ -287,7 +318,8 @@ class TextLineRendererImplTests {
         FakeFont font = new FakeFont();
         float lineHeight = 0.5f;
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                "", null, null, null);
+                "", null, null, null,
+                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f)));
         long timestamp = 100L;
         _textLineRenderer.render(textLineRenderable, timestamp);
 
