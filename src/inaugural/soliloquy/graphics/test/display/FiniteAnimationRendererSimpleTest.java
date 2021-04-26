@@ -10,6 +10,7 @@ import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -87,7 +88,7 @@ class FiniteAnimationRendererSimpleTest {
                         midpoint - (animationHeight / 2f),
                         midpoint + (animationWidth / 2f),
                         midpoint + (animationHeight / 2f))),
-                0L);
+                0L, new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

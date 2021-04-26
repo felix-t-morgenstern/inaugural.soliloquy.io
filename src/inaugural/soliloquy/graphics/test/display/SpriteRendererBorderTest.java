@@ -56,7 +56,8 @@ class SpriteRendererBorderTest {
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProvider<>(new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
                 new StaticProvider<>(BORDER_THICKNESS),
-                new StaticProvider<>(BORDER_COLOR));
+                new StaticProvider<>(BORDER_COLOR),
+                new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =

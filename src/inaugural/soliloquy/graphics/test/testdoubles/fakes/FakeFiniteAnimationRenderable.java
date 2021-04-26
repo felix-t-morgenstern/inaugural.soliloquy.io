@@ -16,14 +16,16 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public long StartTimestamp;
     public boolean Deleted;
+    public EntityUuid Id;
 
     public FakeFiniteAnimationRenderable(Animation animation, List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
-                                         long startTimestamp) {
+                                         long startTimestamp, EntityUuid id) {
         Animation = animation;
         ColorShifts = colorShifts;
         RenderingAreaProvider = renderingAreaProvider;
         StartTimestamp = startTimestamp;
+        Id = id;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
 
     @Override
     public EntityUuid id() {
-        return null;
+        return Id;
     }
 
     @Override

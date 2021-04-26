@@ -67,7 +67,7 @@ class TextLineRendererSimpleTest {
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
         TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null, null, null,
-                new StaticProvider<>(renderingArea));
+                new StaticProvider<>(renderingArea), new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

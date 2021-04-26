@@ -160,6 +160,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Check.throwOnLteZero(textLineRenderable.lineHeight(), "textLineRenderable.lineHeight()");
         Check.ifNull(textLineRenderable.renderingAreaProvider(),
                 "textLineRenderable.renderingAreaProvider()");
+        Check.ifNull(textLineRenderable.id(), "textLineRenderable.id()");
         if (textLineRenderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =

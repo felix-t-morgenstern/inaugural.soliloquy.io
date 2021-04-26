@@ -89,7 +89,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -98,7 +99,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -106,7 +108,8 @@ class SpriteRendererTests {
                 new FakeSpriteRenderable(sprite, colorShifts,
                         null,
                         new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -115,7 +118,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         null,
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -124,7 +128,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
-                        null),
+                        null,
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -132,7 +137,8 @@ class SpriteRendererTests {
                 new FakeSpriteRenderable(sprite, colorShifts,
                         new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -141,7 +147,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
                         new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -150,7 +157,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(borderThickness),
-                        new FakeStaticProviderAtTime<>(null)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -159,7 +167,8 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(-0.0001f),
-                        new FakeStaticProviderAtTime<>(borderColor)),
+                        new FakeStaticProviderAtTime<>(borderColor),
+                        new FakeEntityUuid()),
                 0L
         ));
 
@@ -168,7 +177,18 @@ class SpriteRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(1.0001f),
-                        new FakeStaticProviderAtTime<>(borderColor)),
+                        new FakeStaticProviderAtTime<>(borderColor),
+                        new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
+                new FakeSpriteRenderable(sprite, null,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProviderAtTime<>(null),
+                        null),
                 0L
         ));
     }
@@ -185,7 +205,8 @@ class SpriteRendererTests {
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, colorShifts,
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
                 new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null));
+                new FakeStaticProviderAtTime<>(null),
+                new FakeEntityUuid());
         long timestamp = 100L;
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());

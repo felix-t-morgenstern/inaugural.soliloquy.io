@@ -32,7 +32,7 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
 
         validateRenderableWithAreaMembers(renderingArea,
                 globalLoopingAnimationRenderable.colorShifts(),
-                "globalLoopingAnimationRenderable");
+                globalLoopingAnimationRenderable.id(), "globalLoopingAnimationRenderable");
 
         Check.ifNull(globalLoopingAnimationRenderable.loopingAnimation(),
                 "globalLoopingAnimationRenderable.loopingAnimation()");

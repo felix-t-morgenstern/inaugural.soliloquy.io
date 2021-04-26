@@ -83,40 +83,54 @@ class GlobalLoopingAnimationRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(null, colorShifts,
                         new FakeStaticProviderAtTime<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY))),
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProviderAtTime<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY))),
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        null,
+                        new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, leftX, bottomY)),
+                        new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, topY)),
+                        new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         null),
-                0L
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
-                        new FakeStaticProviderAtTime<>(null)),
-                0L
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
-                        new FakeStaticProviderAtTime<>(
-                                new FakeFloatBox(leftX, topY, leftX, bottomY))),
-                0L
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeStaticProviderAtTime<>(
-                                new FakeFloatBox(leftX, topY, rightX, topY))),
                 0L
         ));
     }
@@ -132,7 +146,8 @@ class GlobalLoopingAnimationRendererTests {
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
                         new FakeStaticProviderAtTime<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)));
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeEntityUuid());
         long timestamp = 100L;
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());

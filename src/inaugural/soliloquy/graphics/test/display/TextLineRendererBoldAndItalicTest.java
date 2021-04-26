@@ -76,7 +76,8 @@ class TextLineRendererBoldAndItalicTest {
         }};
 
         TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null,
-                italicIndices, boldIndices, new StaticProvider<>(renderingArea));
+                italicIndices, boldIndices, new StaticProvider<>(renderingArea),
+                new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

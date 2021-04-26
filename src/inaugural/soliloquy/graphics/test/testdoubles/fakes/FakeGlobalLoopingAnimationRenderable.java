@@ -13,14 +13,17 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     public ProviderAtTime<AnimationFrameSnippet> LoopingAnimation;
     public List<ColorShift> ColorShifts;
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public EntityUuid Id;
 
     public FakeGlobalLoopingAnimationRenderable(ProviderAtTime<AnimationFrameSnippet>
                                                         loopingAnimation,
                                                 List<ColorShift> colorShifts,
-                                                ProviderAtTime<FloatBox> renderingAreaProvider) {
+                                                ProviderAtTime<FloatBox> renderingAreaProvider,
+                                                EntityUuid id) {
         LoopingAnimation = loopingAnimation;
         ColorShifts = colorShifts;
         RenderingAreaProvider = renderingAreaProvider;
+        Id = id;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
 
     @Override
     public EntityUuid id() {
-        return null;
+        return Id;
     }
 
     @Override

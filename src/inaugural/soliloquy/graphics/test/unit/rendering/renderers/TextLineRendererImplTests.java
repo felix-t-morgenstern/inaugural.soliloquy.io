@@ -65,8 +65,10 @@ class TextLineRendererImplTests {
         boldIndices.add(5);
         ProviderAtTime<FloatBox> renderingAreaProvider =
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+        FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider);
+                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider,
+                id);
 
 
 
@@ -147,7 +149,12 @@ class TextLineRendererImplTests {
         boldIndices.add(3);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        boldIndices.remove((Object)3);
+        boldIndices.remove(2);
+
+        textLineRenderable.Id = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.Id = id;
     }
 
     @Test
@@ -165,8 +172,10 @@ class TextLineRendererImplTests {
         boldIndices.add(5);
         ProviderAtTime<FloatBox> renderingAreaProvider =
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+        FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider);
+                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider,
+                id);
 
 
 
@@ -247,7 +256,12 @@ class TextLineRendererImplTests {
         boldIndices.add(3);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        boldIndices.remove((Object)3);
+        boldIndices.remove(2);
+
+        textLineRenderable.Id = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.Id = id;
     }
 
     @Test
@@ -295,7 +309,8 @@ class TextLineRendererImplTests {
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 lineText, null, italicIndices, boldIndices,
-                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)));
+                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)),
+                new FakeEntityUuid());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable);
 
@@ -319,7 +334,8 @@ class TextLineRendererImplTests {
         float lineHeight = 0.5f;
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 "", null, null, null,
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f)));
+                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f)),
+                new FakeEntityUuid());
         long timestamp = 100L;
         _textLineRenderer.render(textLineRenderable, timestamp);
 

@@ -14,19 +14,21 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public ProviderAtTime<Color> ColorProvider;
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public int Z;
+    public EntityUuid Id;
 
     public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern,
                                                int stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox> renderingAreaProvider,
-                                               int z) {
+                                               int z, EntityUuid id) {
         ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
         ColorProvider = colorProvider;
         RenderingAreaProvider = renderingAreaProvider;
         Z = z;
+        Id = id;
     }
 
     @Override
@@ -71,6 +73,6 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
 
     @Override
     public EntityUuid id() {
-        return null;
+        return Id;
     }
 }

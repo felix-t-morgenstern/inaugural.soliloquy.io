@@ -116,7 +116,7 @@ class StackRendererRenderingBoundariesTest {
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
                 )),
-                1);
+                1, new FakeEntityUuid());
 
         float spriteAxe09ScreenWidth = (spriteAxe09Width / (float)spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
@@ -129,7 +129,7 @@ class StackRendererRenderingBoundariesTest {
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
                 )),
-                3);
+                3, new FakeEntityUuid());
 
         float spriteSword06ScreenWidth = 0.3710f;
         float spriteSword06TopY = 0f;
@@ -141,7 +141,7 @@ class StackRendererRenderingBoundariesTest {
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
                 )),
-                2);
+                2, new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

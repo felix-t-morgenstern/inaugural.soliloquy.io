@@ -66,7 +66,8 @@ class SpriteRendererSimpleTest {
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProvider<>(
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProvider<>(null, 0f), new StaticProvider<>(null, Color.WHITE));
+                new StaticProvider<>(null, 0f), new StaticProvider<>(null, Color.WHITE),
+                new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,

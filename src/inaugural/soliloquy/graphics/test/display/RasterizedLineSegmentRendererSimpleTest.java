@@ -74,7 +74,9 @@ class RasterizedLineSegmentRendererSimpleTest {
         return new FakeRasterizedLineSegmentRenderable(new StaticProvider<>(6f), (short) 0xAAAA,
                 16,
                 new StaticProvider<>(new Color(18, 201, 159)),
-                new StaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.5f)),
-                1);
+                // NB: The parameters are in this order to ensure that
+                //     RasterizedLineSegmentRenderable does not care about order
+                new StaticProvider<>(new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f)),
+                1, new FakeEntityUuid());
     }
 }

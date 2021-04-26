@@ -42,7 +42,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShifts(),
-                "spriteRenderable");
+                spriteRenderable.id(), "spriteRenderable");
 
         if (borderThickness != null) {
             if (borderColor == null) {

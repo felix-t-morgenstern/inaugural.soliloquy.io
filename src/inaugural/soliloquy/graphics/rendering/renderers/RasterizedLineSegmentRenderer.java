@@ -63,6 +63,9 @@ public class RasterizedLineSegmentRenderer
                 "rasterizedLineSegmentRenderable.stippleFactor()");
 
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
+        Check.ifNull(renderingArea,
+                "rasterizedLineSegmentRenderable provided rendering area");
+        Check.ifNull(rasterizedLineSegmentRenderable.id(), "rasterizedLineSegmentRenderable.id()");
 
         validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
 

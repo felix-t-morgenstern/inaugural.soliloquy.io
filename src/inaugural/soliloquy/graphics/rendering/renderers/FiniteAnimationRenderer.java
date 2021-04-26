@@ -33,7 +33,7 @@ public class FiniteAnimationRenderer
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
-                "finiteAnimationRenderable");
+                finiteAnimationRenderable.id(), "finiteAnimationRenderable");
 
         validateTimestamp(timestamp, "FiniteAnimationRenderable");
 

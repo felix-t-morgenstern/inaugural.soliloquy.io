@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Coordinate;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -193,6 +194,7 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     protected void validateRenderableWithAreaMembers(FloatBox renderingArea,
                                                      List<ColorShift> colorShifts,
+                                                     EntityUuid id,
                                                      String paramName) {
         Check.ifNull(renderingArea, paramName + " provided renderingArea");
 
@@ -203,6 +205,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
         Check.throwOnLteZero(renderingArea.height(),
                 paramName + " provided renderingArea.height()");
+
+        Check.ifNull(id, paramName + " provided id()");
     }
 
     @Override
