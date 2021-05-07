@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
+import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -74,10 +75,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         int nextItalicIndex = 0;
         int nextBoldIndex = 0;
         float textLineLengthThusFar = 0f;
-        int textureId;
         Color color = DEFAULT_COLOR;
-        Map<Character, Float> glyphwiseAdditionalHorizontalPadding =
-                textLineRenderable.font().glyphwiseAdditionalHorizontalPadding();
+        FontStyleInfo fontStyleInfo;
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
             if (timestamp != null) {
@@ -99,53 +98,43 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 nextBoldIndex++;
             }
 
-            char glyph = textLineRenderable.lineText().charAt(i);
-            FloatBox glyphBox;
-            float textureWidthToHeightRatio;
 
             if (italic) {
                 if (bold) {
-                    glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBoldItalic(glyph);
-                    textureId = textLineRenderable.font().textureIdBoldItalic();
-                    textureWidthToHeightRatio =
-                            textLineRenderable.font().textureWidthToHeightRatioBoldItalic();
+                    fontStyleInfo = textLineRenderable.font().boldItalic();
                 }
                 else {
-                    glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphItalic(glyph);
-                    textureId = textLineRenderable.font().textureIdItalic();
-                    textureWidthToHeightRatio =
-                            textLineRenderable.font().textureWidthToHeightRatioItalic();
+                    fontStyleInfo = textLineRenderable.font().italic();
                 }
             }
             else {
                 if (bold) {
-                    glyphBox = textLineRenderable.font().getUvCoordinatesForGlyphBold(glyph);
-                    textureId = textLineRenderable.font().textureIdBold();
-                    textureWidthToHeightRatio =
-                            textLineRenderable.font().textureWidthToHeightRatioBold();
+                    fontStyleInfo = textLineRenderable.font().bold();
                 }
                 else {
-                    glyphBox = textLineRenderable.font().getUvCoordinatesForGlyph(glyph);
-                    textureId = textLineRenderable.font().textureId();
-                    textureWidthToHeightRatio =
-                            textLineRenderable.font().textureWidthToHeightRatio();
+                    fontStyleInfo = textLineRenderable.font().plain();
                 }
             }
 
+            char character = textLineRenderable.lineText().charAt(i);
+            FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
                     glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height())
-                    * textureWidthToHeightRatio;
+                    * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
-                renderingAction.apply(textLineLengthThusFar).apply(glyphLength).apply(textureId)
-                        .apply(glyphBox).accept(color);
+                renderingAction.apply(textLineLengthThusFar).apply(glyphLength)
+                        .apply(fontStyleInfo.textureId()).apply(glyphBox).accept(color);
             }
 
             float lengthThusFarAddition = glyphLength;
-            if (glyphwiseAdditionalHorizontalPadding != null &&
-                    glyphwiseAdditionalHorizontalPadding.containsKey(glyph)) {
-                lengthThusFarAddition /= (1f + glyphwiseAdditionalHorizontalPadding.get(glyph));
+            float paddingPercentage = 1f + fontStyleInfo.additionalHorizontalPadding();
+            if (fontStyleInfo.glyphwiseAdditionalHorizontalPadding() != null &&
+                    fontStyleInfo.glyphwiseAdditionalHorizontalPadding().containsKey(character)) {
+                paddingPercentage +=
+                        fontStyleInfo.glyphwiseAdditionalHorizontalPadding().get(character);
             }
+            lengthThusFarAddition /= paddingPercentage;
 
             textLineLengthThusFar += lengthThusFarAddition;
         }

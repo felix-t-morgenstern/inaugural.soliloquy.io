@@ -266,7 +266,12 @@ class TextLineRendererImplTests {
 
     @Test
     void testTextLineLength() {
-        FakeFont font = new FakeFont();
+        FakeFontStyleInfo plain = new FakeFontStyleInfo();
+        FakeFontStyleInfo italic = new FakeFontStyleInfo();
+        FakeFontStyleInfo bold = new FakeFontStyleInfo();
+        FakeFontStyleInfo boldItalic = new FakeFontStyleInfo();
+        FakeFont font = new FakeFont(plain, italic, bold, boldItalic);
+
         float glyphHeight = 0.1f;
         FakeFloatBox glyphA = new FakeFloatBox(0.0f, 0.0f, 0.356659007059121f, glyphHeight);
         FakeFloatBox glyphAItalic = new FakeFloatBox(0.0f, 0.0f, 0.48381785202459f, glyphHeight);
@@ -278,23 +283,24 @@ class TextLineRendererImplTests {
         FakeFloatBox glyphBBold = new FakeFloatBox(0.0f, 0.0f, 0.709300081504505f, glyphHeight);
         FakeFloatBox glyphBBoldItalic = new FakeFloatBox(0.0f, 0.0f, 0.0767894524389122f,
                 glyphHeight);
-        font.Glyphs.put('A', glyphA);
-        font.GlyphsItalic.put('A', glyphAItalic);
-        font.GlyphsBold.put('A', glyphABold);
-        font.GlyphsBoldItalic.put('A', glyphABoldItalic);
-        font.Glyphs.put('B', glyphB);
-        font.GlyphsItalic.put('B', glyphBItalic);
-        font.GlyphsBold.put('B', glyphBBold);
-        font.GlyphsBoldItalic.put('B', glyphBBoldItalic);
+
+        plain.Glyphs.put('A', glyphA);
+        italic.Glyphs.put('A', glyphAItalic);
+        bold.Glyphs.put('A', glyphABold);
+        boldItalic.Glyphs.put('A', glyphABoldItalic);
+        plain.Glyphs.put('B', glyphB);
+        italic.Glyphs.put('B', glyphBItalic);
+        bold.Glyphs.put('B', glyphBBold);
+        boldItalic.Glyphs.put('B', glyphBBoldItalic);
 
         float textureWidthToHeightRatio = 0.12f;
         float textureWidthToHeightRatioItalic = 0.34f;
         float textureWidthToHeightRatioBold = 0.56f;
         float textureWidthToHeightRatioBoldItalic = 0.78f;
-        font.TextureWidthToHeightRatio = textureWidthToHeightRatio;
-        font.TextureWidthToHeightRatioItalic = textureWidthToHeightRatioItalic;
-        font.TextureWidthToHeightRatioBold = textureWidthToHeightRatioBold;
-        font.TextureWidthToHeightRatioBoldItalic = textureWidthToHeightRatioBoldItalic;
+        plain.TextureWidthToHeightRatio = textureWidthToHeightRatio;
+        italic.TextureWidthToHeightRatio = textureWidthToHeightRatioItalic;
+        bold.TextureWidthToHeightRatio = textureWidthToHeightRatioBold;
+        boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
 
         float lineHeight = 0.5f;
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";

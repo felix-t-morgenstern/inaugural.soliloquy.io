@@ -53,6 +53,8 @@ class TextLineRendererRenderingBoundariesTest {
     private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.5f;
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING =
+            new HashMap<>();
     private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.05f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -73,12 +75,30 @@ class TextLineRendererRenderingBoundariesTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        Map<Character, Float> glyphwiseAdditionalHorizontalPadding = new HashMap<>();
-        glyphwiseAdditionalHorizontalPadding.put('Q', 0.75f);
+        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING.put('Q', 0.75f);
 
-        FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, glyphwiseAdditionalHorizontalPadding,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
+        FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontDefinition fontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION,
+                MAX_LOSSLESS_FONT_SIZE,
+                plain, italic, bold, boldItalic,
+                LEADING_ADJUSTMENT);
+
+        FakeFontLoadable font = new FakeFontLoadable(fontDefinition, FLOAT_BOX_FACTORY,
                 COORDINATE_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);

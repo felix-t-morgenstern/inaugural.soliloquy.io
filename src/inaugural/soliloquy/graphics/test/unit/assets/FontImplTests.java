@@ -20,20 +20,33 @@ import static org.lwjgl.opengl.GL11.GL_MAX_TEXTURE_SIZE;
 import static org.lwjgl.opengl.GL11.glGetInteger;
 
 class FontImplTests {
-    private final String ID = "FontId";
-    private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
-    private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
-    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.123f;
-    private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING = new HashMap<>();
-    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.123f;
-    private final float LEADING_ADJUSTMENT = 0.456f;
-    private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
+    private final static String ID = "FontId";
+    private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
+    private final static float MAX_LOSSLESS_FONT_SIZE = 300f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN = 0.123f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC = 0.234f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD = 0.345f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC = 0.456f;
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN =
+            new HashMap<>();
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC =
+            new HashMap<>();
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD =
+            new HashMap<>();
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC =
+            new HashMap<>();
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN = 0.567f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC = 0.678f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD = 0.789f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC = 0.890f;
+    private final static float LEADING_ADJUSTMENT = 0.090f;
+    private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
     private final static int NUMBER_EXTENDED_ASCII_CHARS = 256;
 
-    private Font _font;
+    private static Font Font;
 
     @BeforeAll
     static void setUpFixture() {
@@ -44,6 +57,37 @@ class FontImplTests {
         long window = glfwCreateWindow(1, 1, "", 0, 0);
         glfwMakeContextCurrent(window);
         createCapabilities();
+
+        Font = new FontImpl(
+                new FakeFontDefinition(
+                        ID,
+                        RELATIVE_LOCATION,
+                        MAX_LOSSLESS_FONT_SIZE,
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                        ),
+                        LEADING_ADJUSTMENT
+                ),
+                FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY
+        );
     }
 
     @AfterAll
@@ -53,123 +97,793 @@ class FontImplTests {
 
     @BeforeEach
     void setUp() {
-        _font = new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                COORDINATE_FACTORY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(null, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                null,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl("", RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                "",
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, null, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                null,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, "", MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                "",
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, 0f,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                0f,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        -0.001f, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                null,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        -0.001f, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        -0.0001f,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, -0.001f, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        -0.0001f
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, 1f, FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        1f - LEADING_ADJUSTMENT
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, null,
-                        COORDINATE_FACTORY));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                null,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(ID, RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING, LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY,
-                        null));
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        -0.0001f,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        -0.0001f
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        1f - LEADING_ADJUSTMENT
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                null,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        -0.0001f,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        -0.0001f
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        1f - LEADING_ADJUSTMENT
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                null,
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        -0.0001f,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        -0.0001f
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        1f - LEADING_ADJUSTMENT
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                1f
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        null,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        null
+                ));
     }
 
     @Test
     void testId() {
-        assertEquals(ID, _font.id());
+        assertEquals(ID, Font.id());
     }
 
     @Test
     void testTextureId() {
-        assertNotEquals(0, _font.textureId());
+        assertNotEquals(0, Font.plain().textureId());
     }
 
     @Test
     void testTextureIdItalic() {
-        assertNotEquals(0, _font.textureIdItalic());
-        assertNotEquals(_font.textureId(), _font.textureIdItalic());
+        assertNotEquals(0, Font.italic().textureId());
+        assertNotEquals(Font.plain().textureId(), Font.italic().textureId());
     }
 
     @Test
     void testTextureIdBold() {
-        assertNotEquals(0, _font.textureIdBold());
-        assertNotEquals(_font.textureId(), _font.textureIdBold());
-        assertNotEquals(_font.textureIdItalic(), _font.textureIdBold());
+        assertNotEquals(0, Font.bold().textureId());
+        assertNotEquals(Font.plain().textureId(), Font.bold().textureId());
+        assertNotEquals(Font.italic().textureId(), Font.bold().textureId());
     }
 
     @Test
     void testTextureIdBoldItalic() {
-        assertNotEquals(0, _font.textureIdBoldItalic());
-        assertNotEquals(_font.textureId(), _font.textureIdBoldItalic());
-        assertNotEquals(_font.textureIdItalic(), _font.textureIdBoldItalic());
-        assertNotEquals(_font.textureIdBold(), _font.textureIdBoldItalic());
+        assertNotEquals(0, Font.boldItalic().textureId());
+        assertNotEquals(Font.plain().textureId(), Font.boldItalic().textureId());
+        assertNotEquals(Font.italic().textureId(), Font.boldItalic().textureId());
+        assertNotEquals(Font.bold().textureId(), Font.boldItalic().textureId());
     }
 
     @Test
-    void testGetUvCoordinatesForGlyph() {
-        FloatBox spaceUvCoordinates = _font.getUvCoordinatesForGlyph(' ');
-        FloatBox bangUvCoordinates = _font.getUvCoordinatesForGlyph('!');
+    void testGetUvCoordinatesForGlyphPlain() {
+        FloatBox spaceUvCoordinatesPlain = Font.plain().getUvCoordinatesForGlyph(' ');
+        FloatBox bangUvCoordinatesPlain = Font.plain().getUvCoordinatesForGlyph('!');
 
-        assertNotNull(spaceUvCoordinates);
-        assertNotNull(bangUvCoordinates);
+        assertNotNull(spaceUvCoordinatesPlain);
+        assertNotNull(bangUvCoordinatesPlain);
 
-        assertEquals(0f, spaceUvCoordinates.leftX());
-        assertEquals(0f, spaceUvCoordinates.topY());
-        assertTrue(spaceUvCoordinates.rightX() > 0);
+        assertEquals(0f, spaceUvCoordinatesPlain.leftX());
+        assertEquals(0f, spaceUvCoordinatesPlain.topY());
+        assertTrue(spaceUvCoordinatesPlain.rightX() > 0);
 
-        assertEquals(spaceUvCoordinates.rightX(), bangUvCoordinates.leftX());
-        assertEquals(0f, bangUvCoordinates.topY());
-        assertTrue(bangUvCoordinates.rightX() > 0);
+        assertEquals(Math.round(spaceUvCoordinatesPlain.rightX() * 1000f) / 1000f,
+                Math.round(bangUvCoordinatesPlain.leftX() * 1000f) / 1000f);
+        assertEquals(0f, bangUvCoordinatesPlain.topY());
+        assertTrue(bangUvCoordinatesPlain.rightX() > 0);
     }
 
     @Test
     void testGetUvCoordinatesForGlyphItalic() {
-        FloatBox spaceUvCoordinatesItalic = _font.getUvCoordinatesForGlyphItalic(' ');
-        FloatBox bangUvCoordinatesItalic = _font.getUvCoordinatesForGlyphItalic('!');
+        FloatBox spaceUvCoordinatesItalic = Font.italic().getUvCoordinatesForGlyph(' ');
+        FloatBox bangUvCoordinatesItalic = Font.italic().getUvCoordinatesForGlyph('!');
 
         assertNotNull(spaceUvCoordinatesItalic);
         assertNotNull(bangUvCoordinatesItalic);
@@ -178,15 +892,16 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesItalic.topY());
         assertTrue(spaceUvCoordinatesItalic.rightX() > 0);
 
-        assertEquals(spaceUvCoordinatesItalic.rightX(), bangUvCoordinatesItalic.leftX());
+        assertEquals(Math.round(spaceUvCoordinatesItalic.rightX() * 1000f) / 1000f,
+                Math.round(bangUvCoordinatesItalic.leftX() * 1000f) / 1000f);
         assertEquals(0f, bangUvCoordinatesItalic.topY());
         assertTrue(bangUvCoordinatesItalic.rightX() > 0);
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBold() {
-        FloatBox spaceUvCoordinatesBold = _font.getUvCoordinatesForGlyphBold(' ');
-        FloatBox bangUvCoordinatesBold = _font.getUvCoordinatesForGlyphBold('!');
+        FloatBox spaceUvCoordinatesBold = Font.bold().getUvCoordinatesForGlyph(' ');
+        FloatBox bangUvCoordinatesBold = Font.bold().getUvCoordinatesForGlyph('!');
 
         assertNotNull(spaceUvCoordinatesBold);
         assertNotNull(bangUvCoordinatesBold);
@@ -195,15 +910,16 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesBold.topY());
         assertTrue(spaceUvCoordinatesBold.rightX() > 0);
 
-        assertEquals(spaceUvCoordinatesBold.rightX(), bangUvCoordinatesBold.leftX());
+        assertEquals(Math.round(spaceUvCoordinatesBold.rightX() * 1000f) / 1000f,
+                Math.round(bangUvCoordinatesBold.leftX() * 1000f) / 1000f);
         assertEquals(0f, bangUvCoordinatesBold.topY());
         assertTrue(bangUvCoordinatesBold.rightX() > 0);
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBoldItalic() {
-        FloatBox spaceUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic(' ');
-        FloatBox bangUvCoordinatesBoldItalic = _font.getUvCoordinatesForGlyphBoldItalic('!');
+        FloatBox spaceUvCoordinatesBoldItalic = Font.boldItalic().getUvCoordinatesForGlyph(' ');
+        FloatBox bangUvCoordinatesBoldItalic = Font.boldItalic().getUvCoordinatesForGlyph('!');
 
         assertNotNull(spaceUvCoordinatesBoldItalic);
         assertNotNull(bangUvCoordinatesBoldItalic);
@@ -212,7 +928,8 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesBoldItalic.topY());
         assertTrue(spaceUvCoordinatesBoldItalic.rightX() > 0);
 
-        assertEquals(spaceUvCoordinatesBoldItalic.rightX(), bangUvCoordinatesBoldItalic.leftX());
+        assertEquals(Math.round(spaceUvCoordinatesBoldItalic.rightX() * 1000f) / 1000f,
+                Math.round(bangUvCoordinatesBoldItalic.leftX() * 1000f) / 1000f);
         assertEquals(0f, bangUvCoordinatesBoldItalic.topY());
         assertTrue(bangUvCoordinatesBoldItalic.rightX() > 0);
     }
@@ -220,75 +937,94 @@ class FontImplTests {
     @Test
     void testGetUvCoordinatesForGlyphWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.plain().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
+                () -> Font.plain().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.plain().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphItalicWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphItalic((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.italic().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphItalic((char)ASCII_CHAR_DELETE));
+                () -> Font.italic().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphItalic((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.italic().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBoldWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)ASCII_CHAR_DELETE));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBoldItalicWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)ASCII_CHAR_DELETE));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> _font.getUvCoordinatesForGlyphBold((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.bold().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
-    void testGlyphwiseAdditionalHorizontalPadding() {
-        assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                _font.glyphwiseAdditionalHorizontalPadding());
+    void testGlyphwiseAdditionalHorizontalPaddingPlain() {
+        assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_PLAIN,
+                Font.plain().glyphwiseAdditionalHorizontalPadding());
+    }
+
+    @Test
+    void testGlyphwiseAdditionalHorizontalPaddingItalic() {
+        assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_ITALIC,
+                Font.italic().glyphwiseAdditionalHorizontalPadding());
+    }
+
+    @Test
+    void testGlyphwiseAdditionalHorizontalPaddingBold() {
+        assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD,
+                Font.bold().glyphwiseAdditionalHorizontalPadding());
+    }
+
+    @Test
+    void testGlyphwiseAdditionalHorizontalPaddingBoldItalic() {
+        assertSame(GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING_BOLD_ITALIC,
+                Font.boldItalic().glyphwiseAdditionalHorizontalPadding());
     }
 
     @Test
     void testDimensionsAndWidthToHeightRatios() {
         int maxDimensions = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
-        assertTrue(_font.textureDimensions().getX() <= maxDimensions);
-        assertEquals(_font.textureWidthToHeightRatio(),
-                _font.textureDimensions().getX() / (float)_font.textureDimensions().getY());
+        assertTrue(Font.plain().textureDimensions().getX() <= maxDimensions);
+        assertEquals(Font.plain().textureWidthToHeightRatio(),
+                Font.plain().textureDimensions().getX() /
+                        (float) Font.plain().textureDimensions().getY());
 
-        assertTrue(_font.textureDimensionsItalic().getX() <= maxDimensions);
-        assertEquals(_font.textureWidthToHeightRatioItalic(),
-                _font.textureDimensionsItalic().getX() /
-                        (float)_font.textureDimensionsItalic().getY());
+        assertTrue(Font.italic().textureDimensions().getX() <= maxDimensions);
+        assertEquals(Font.italic().textureWidthToHeightRatio(),
+                Font.italic().textureDimensions().getX() /
+                        (float) Font.italic().textureDimensions().getY());
 
-        assertTrue(_font.textureDimensionsBold().getX() <= maxDimensions);
-        assertEquals(_font.textureWidthToHeightRatioBold(),
-                _font.textureDimensionsBold().getX() /
-                        (float)_font.textureDimensionsBold().getY());
+        assertTrue(Font.bold().textureDimensions().getX() <= maxDimensions);
+        assertEquals(Font.bold().textureWidthToHeightRatio(),
+                Font.bold().textureDimensions().getX() /
+                        (float) Font.bold().textureDimensions().getY());
 
-        assertTrue(_font.textureDimensionsBoldItalic().getX() <= maxDimensions);
-        assertEquals(_font.textureWidthToHeightRatioBoldItalic(),
-                _font.textureDimensionsBoldItalic().getX() /
-                        (float)_font.textureDimensionsBoldItalic().getY());
+        assertTrue(Font.boldItalic().textureDimensions().getX() <= maxDimensions);
+        assertEquals(Font.boldItalic().textureWidthToHeightRatio(),
+                Font.boldItalic().textureDimensions().getX() /
+                        (float) Font.boldItalic().textureDimensions().getY());
     }
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(Font.class.getCanonicalName(), _font.getInterfaceName());
+        assertEquals(Font.class.getCanonicalName(), Font.getInterfaceName());
     }
 }

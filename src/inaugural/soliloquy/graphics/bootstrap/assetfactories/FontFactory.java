@@ -19,14 +19,7 @@ public class FontFactory implements AssetFactory<FontDefinition, Font> {
 
     @Override
     public Font make(FontDefinition fontDefinition) throws IllegalArgumentException {
-        return new FontImpl(fontDefinition.id(),
-                fontDefinition.relativeLocation(),
-                fontDefinition.maxLosslessFontSize(),
-                fontDefinition.additionalGlyphHorizontalPadding(),
-                fontDefinition.glyphwiseAdditionalHorizontalPadding(),
-                fontDefinition.additionalGlyphVerticalPadding(),
-                fontDefinition.leadingAdjustment(),
-                FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+        return new FontImpl(fontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
     }
 
     @Override

@@ -4,6 +4,9 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.factories.CoordinateFactory;
 import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.assets.Font;
+import soliloquy.specs.graphics.assets.FontStyleInfo;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
@@ -19,7 +22,7 @@ import java.util.function.Function;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class FontImpl implements Font {
+public class FontImpl extends CanValidateFontDefinitions implements Font {
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
     private final static int NUMBER_EXTENDED_ASCII_CHARS = 256;
@@ -32,42 +35,18 @@ public class FontImpl implements Font {
     // NB: This field is static, since the GPU's maximum texture dimension size is unlikely to
     //     change from one font to the next
     @SuppressWarnings("FieldCanBeLocal")
-    private static int MAXIMUM_TEXTURE_DIMENSION_SIZE = -1;
+    protected static int MAXIMUM_TEXTURE_DIMENSION_SIZE = -1;
 
     private final String ID;
-    private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
-    private final int TEXTURE_ID;
-    private final int TEXTURE_ID_ITALIC;
-    private final int TEXTURE_ID_BOLD;
-    private final int TEXTURE_ID_BOLD_ITALIC;
-    private final Coordinate TEXTURE_DIMENSIONS;
-    private final Coordinate TEXTURE_DIMENSIONS_ITALIC;
-    private final Coordinate TEXTURE_DIMENSIONS_BOLD;
-    private final Coordinate TEXTURE_DIMENSIONS_BOLD_ITALIC;
-    private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO;
-    private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO_ITALIC;
-    private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD;
-    private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD_ITALIC;
-    private final Map<Character, FloatBox> GLYPHS;
-    private final Map<Character, FloatBox> GLYPHS_ITALIC;
-    private final Map<Character, FloatBox> GLYPHS_BOLD;
-    private final Map<Character, FloatBox> GLYPHS_BOLD_ITALIC;
+    private final FontStyleInfoImpl PLAIN;
+    private final FontStyleInfoImpl ITALIC;
+    private final FontStyleInfoImpl BOLD;
+    private final FontStyleInfoImpl BOLD_ITALIC;
 
-    public FontImpl(String id, String relativeLocation, float maxLosslessFontSize,
-                    float additionalGlyphHorizontalPadding,
-                    Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
-                    float additionalGlyphVerticalPadding,
-                    float leadingAdjustment,
+    public FontImpl(FontDefinition fontDefinition,
                     FloatBoxFactory floatBoxFactory,
                     CoordinateFactory coordinateFactory) {
-        Check.ifNullOrEmpty(id, "id");
-        Check.ifNullOrEmpty(relativeLocation, "relativeLocation");
-        Check.throwOnLteZero(maxLosslessFontSize, "maxLosslessFontSize");
-        Check.throwOnLtValue(additionalGlyphHorizontalPadding, 0f,
-                "additionalGlyphHorizontalPadding");
-        Check.throwOnLtValue(additionalGlyphVerticalPadding, 0f, "additionalGlyphVerticalPadding");
-        Check.throwOnLtValue(leadingAdjustment, 0f, "leadingAdjustment");
-        Check.throwOnGteValue(leadingAdjustment, 1f, "leadingAdjustment");
+        validateFontDefinition(fontDefinition);
         Check.ifNull(floatBoxFactory, "floatBoxFactory");
         Check.ifNull(coordinateFactory, "coordinateFactory");
 
@@ -75,16 +54,12 @@ public class FontImpl implements Font {
             MAXIMUM_TEXTURE_DIMENSION_SIZE = glGetInteger(GL_MAX_TEXTURE_SIZE);
         }
 
-        ID = id;
-        GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING = glyphwiseAdditionalHorizontalPadding;
-        GLYPHS = new HashMap<>();
-        GLYPHS_ITALIC = new HashMap<>();
-        GLYPHS_BOLD = new HashMap<>();
-        GLYPHS_BOLD_ITALIC = new HashMap<>();
+        ID = fontDefinition.id();
 
 
 
-        java.awt.Font fontFromFile = loadFontFromFile(relativeLocation, maxLosslessFontSize);
+        java.awt.Font fontFromFile = loadFontFromFile(fontDefinition.relativeLocation(),
+                fontDefinition.maxLosslessFontSize());
         java.awt.Font fontFromFileItalic = fontFromFile.deriveFont(java.awt.Font.ITALIC);
         java.awt.Font fontFromFileBold = fontFromFile.deriveFont(java.awt.Font.BOLD);
         java.awt.Font fontFromFileBoldItalic = fontFromFile.deriveFont(
@@ -92,45 +67,57 @@ public class FontImpl implements Font {
 
 
 
-        FontImageInfo textureInfo = generateFontAsset(fontFromFile,
-                additionalGlyphHorizontalPadding, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                additionalGlyphVerticalPadding, leadingAdjustment, GLYPHS, floatBoxFactory,
-                coordinateFactory);
-        TEXTURE_ID = textureInfo.TextureId;
-        TEXTURE_DIMENSIONS = textureInfo.ImageDimensions;
-        TEXTURE_WIDTH_TO_HEIGHT_RATIO = textureInfo.ImageDimensions.getX() /
-                (float)textureInfo.ImageDimensions.getY();
+        PLAIN = loadFontStyle(fontFromFile, fontDefinition.plain(),
+                fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
 
-        FontImageInfo textureInfoItalic = generateFontAsset(fontFromFileItalic,
-                additionalGlyphHorizontalPadding, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                additionalGlyphVerticalPadding, leadingAdjustment, GLYPHS_ITALIC, floatBoxFactory,
-                coordinateFactory);
-        TEXTURE_ID_ITALIC = textureInfoItalic.TextureId;
-        TEXTURE_DIMENSIONS_ITALIC = textureInfoItalic.ImageDimensions;
-        TEXTURE_WIDTH_TO_HEIGHT_RATIO_ITALIC = textureInfoItalic.ImageDimensions.getX() /
-                (float)textureInfoItalic.ImageDimensions.getY();
+        ITALIC = loadFontStyle(fontFromFileItalic, fontDefinition.italic(),
+                fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
 
-        FontImageInfo textureInfoBold = generateFontAsset(fontFromFileBold,
-                additionalGlyphHorizontalPadding, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                additionalGlyphVerticalPadding, leadingAdjustment, GLYPHS_BOLD, floatBoxFactory,
-                coordinateFactory);
-        TEXTURE_ID_BOLD = textureInfoBold.TextureId;
-        TEXTURE_DIMENSIONS_BOLD = textureInfoBold.ImageDimensions;
-        TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD = textureInfoBold.ImageDimensions.getX() /
-                (float)textureInfoBold.ImageDimensions.getY();
+        BOLD = loadFontStyle(fontFromFileBold, fontDefinition.bold(),
+                fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
 
-        FontImageInfo textureInfoBoldItalic = generateFontAsset(fontFromFileBoldItalic,
-                additionalGlyphHorizontalPadding, GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                additionalGlyphVerticalPadding, leadingAdjustment, GLYPHS_BOLD_ITALIC,
-                floatBoxFactory, coordinateFactory);
-        TEXTURE_ID_BOLD_ITALIC = textureInfoBoldItalic.TextureId;
-        TEXTURE_DIMENSIONS_BOLD_ITALIC = textureInfoBoldItalic.ImageDimensions;
-        TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD_ITALIC = textureInfoBoldItalic.ImageDimensions.getX() /
-                (float)textureInfoBoldItalic.ImageDimensions.getY();
+        BOLD_ITALIC = loadFontStyle(fontFromFileBoldItalic, fontDefinition.boldItalic(),
+                fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
     }
 
-    private static java.awt.Font loadFontFromFile(String relativeLocation,
-                                                  float maxLosslessFontSize) {
+    // NB: This constructor exists for the purpose of FakeFontLoadable
+    protected FontImpl() {
+        ID = null;
+        PLAIN = ITALIC = BOLD = BOLD_ITALIC = null;
+    }
+
+    // NB: This method is protected so that it can be used by FakeFontLoadable for display testing
+    //     without duplicating the logic of the class and introducing potentially horrendous errors
+    //     and hassles.
+    protected FontStyleInfoImpl loadFontStyle(java.awt.Font fontFromFile,
+                                              FontStyleDefinition fontStyleDefinition,
+                                              float leadingAdjustment,
+                                              FloatBoxFactory floatBoxFactory,
+                                              CoordinateFactory coordinateFactory) {
+        Map<Character, FloatBox> glyphs = new HashMap<>();
+
+        FontImageInfo textureInfo = generateFontAsset(
+                fontFromFile,
+                fontStyleDefinition.additionalGlyphHorizontalPadding(),
+                fontStyleDefinition.glyphwiseAdditionalHorizontalPadding(),
+                fontStyleDefinition.additionalGlyphVerticalPadding(),
+                leadingAdjustment,
+                glyphs,
+                floatBoxFactory,
+                coordinateFactory);
+
+        return new FontStyleInfoImpl(
+                glyphs,
+                textureInfo.ImageDimensions,
+                textureInfo.ImageDimensions.getX() / (float)textureInfo.ImageDimensions.getY(),
+                fontStyleDefinition.additionalGlyphHorizontalPadding(),
+                fontStyleDefinition.glyphwiseAdditionalHorizontalPadding(),
+                textureInfo.TextureId
+        );
+    }
+
+    protected static java.awt.Font loadFontFromFile(String relativeLocation,
+                                                    float maxLosslessFontSize) {
         try {
             return java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
                     new File(relativeLocation)).deriveFont(maxLosslessFontSize);
@@ -139,15 +126,15 @@ public class FontImpl implements Font {
         }
     }
 
-    private static FontImpl.FontImageInfo generateFontAsset(java.awt.Font font,
-                                                            float additionalGlyphHorizontalPadding,
-                                                            Map<Character, Float>
-                                                                    glyphwiseAdditionalHorizontalPadding,
-                                                            float additionalGlyphVerticalPadding,
-                                                            float leadingAdjustment,
-                                                            Map<Character, FloatBox> glyphs,
-                                                            FloatBoxFactory floatBoxFactory,
-                                                            CoordinateFactory coordinateFactory) {
+    private static FontImageInfo generateFontAsset(java.awt.Font font,
+                                                   float additionalGlyphHorizontalPadding,
+                                                   Map<Character, Float>
+                                                           glyphwiseAdditionalHorizontalPadding,
+                                                   float additionalGlyphVerticalPadding,
+                                                   float leadingAdjustment,
+                                                   Map<Character, FloatBox> glyphs,
+                                                   FloatBoxFactory floatBoxFactory,
+                                                   CoordinateFactory coordinateFactory) {
         GraphicsConfiguration graphicsConfiguration =
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
                         .getDefaultConfiguration();
@@ -159,7 +146,7 @@ public class FontImpl implements Font {
 
         FontMetrics fontMetrics = graphics2d.getFontMetrics();
 
-        FontImpl.FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
+        FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
                 additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
                 additionalGlyphVerticalPadding, leadingAdjustment, null, coordinateFactory);
 
@@ -187,6 +174,61 @@ public class FontImpl implements Font {
         fontImageInfo.TextureId = textureId;
 
         return fontImageInfo;
+    }
+
+    private static FontImageInfo loopOverCharacters(
+            FontMetrics fontMetrics, float additionalGlyphHorizontalPadding,
+            Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+            float additionalGlyphVerticalPadding, float leadingAdjustment,
+            Function<Character, Function<Integer, Function<Integer, Consumer<Float>>>>
+                    glyphFunction,
+            CoordinateFactory coordinateFactory) {
+        int widthThusFar = 0;
+        int rowNumber = 0;
+        float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
+        float glyphHeight = fontMetrics.getHeight() - leading;
+        float glyphDescent = fontMetrics.getMaxDescent();
+
+        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
+            if (i == ASCII_CHAR_DELETE) {
+                continue;
+            }
+
+            char character = (char)i;
+
+            float glyphWidth = fontMetrics.charWidth(character);
+            if (glyphwiseAdditionalHorizontalPadding != null &&
+                    glyphwiseAdditionalHorizontalPadding.containsKey(character)) {
+                glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(character));
+            }
+
+            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
+
+            if (widthThusFar + glyphWidthWithPadding > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
+                widthThusFar = 0;
+                rowNumber++;
+            }
+
+            if (glyphFunction != null) {
+                glyphFunction.apply(character).apply(widthThusFar).apply(rowNumber)
+                        .accept(glyphWidthWithPadding);
+            }
+
+            widthThusFar += glyphWidthWithPadding;
+        }
+        // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
+        int imageHeight = (int)
+                ((glyphHeight * (1f + additionalGlyphVerticalPadding) * (rowNumber + 1))
+                        - (glyphHeight * additionalGlyphVerticalPadding)
+                        + 0.5f);
+
+
+
+        return new FontImageInfo(coordinateFactory.make(
+                rowNumber > 0 ? MAXIMUM_TEXTURE_DIMENSION_SIZE : widthThusFar,
+                imageHeight),
+                glyphHeight,
+                glyphDescent);
     }
 
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
@@ -245,59 +287,6 @@ public class FontImpl implements Font {
                 }, coordinateFactory);
     }
 
-    private static FontImpl.FontImageInfo loopOverCharacters(
-            FontMetrics fontMetrics, float additionalGlyphHorizontalPadding,
-            Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
-            float additionalGlyphVerticalPadding, float leadingAdjustment,
-            Function<Character, Function<Integer, Function<Integer, Consumer<Float>>>>
-                    glyphFunction,
-            CoordinateFactory coordinateFactory) {
-        int widthThusFar = 0;
-        int rowNumber = 0;
-        float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
-        float glyphHeight = fontMetrics.getHeight() - leading;
-        float glyphDescent = fontMetrics.getMaxDescent();
-
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
-            if (i == ASCII_CHAR_DELETE) {
-                continue;
-            }
-
-            char character = (char)i;
-
-            float glyphWidth = fontMetrics.charWidth(character);
-            if (glyphwiseAdditionalHorizontalPadding != null &&
-                    glyphwiseAdditionalHorizontalPadding.containsKey(character)) {
-                glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(character));
-            }
-
-            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
-
-            if (widthThusFar + glyphWidthWithPadding > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
-                widthThusFar = 0;
-                rowNumber++;
-            }
-
-            if (glyphFunction != null) {
-                glyphFunction.apply(character).apply(widthThusFar).apply(rowNumber)
-                        .accept(glyphWidth);
-            }
-
-            widthThusFar += glyphWidthWithPadding;
-        }
-        // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
-        int imageHeight = (int)
-                ((glyphHeight * (1f + additionalGlyphVerticalPadding) * (rowNumber + 1)) + 0.5f);
-
-
-
-        return new FontImpl.FontImageInfo(coordinateFactory.make(
-                rowNumber > 0 ? MAXIMUM_TEXTURE_DIMENSION_SIZE : widthThusFar,
-                imageHeight),
-                glyphHeight,
-                glyphDescent);
-    }
-
     private static class FontImageInfo {
         Coordinate ImageDimensions;
         int TextureId;
@@ -331,9 +320,91 @@ public class FontImpl implements Font {
         return byteBuffer;
     }
 
+    private static class FontStyleInfoImpl implements FontStyleInfo {
+        private final Map<Character, FloatBox> GLYPHS;
+        private final Coordinate TEXTURE_DIMENSIONS;
+        private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO;
+        private final float ADDITIONAL_HORIZONTAL_PADDING;
+        private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
+        private final int TEXTURE_ID;
+
+        private FontStyleInfoImpl(Map<Character, FloatBox> glyphs,
+                                  Coordinate textureDimensions,
+                                  float textureWidthToHeightRatio,
+                                  float additionalHorizontalPadding,
+                                  Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+                                  int textureId) {
+            GLYPHS = glyphs;
+            TEXTURE_DIMENSIONS = textureDimensions;
+            TEXTURE_WIDTH_TO_HEIGHT_RATIO = textureWidthToHeightRatio;
+            ADDITIONAL_HORIZONTAL_PADDING = additionalHorizontalPadding;
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING = glyphwiseAdditionalHorizontalPadding;
+            TEXTURE_ID = textureId;
+        }
+
+        @Override
+        public FloatBox getUvCoordinatesForGlyph(char glyph) throws IllegalArgumentException {
+            Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
+            Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
+            Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
+            return GLYPHS.get(glyph);
+        }
+
+        @Override
+        public Coordinate textureDimensions() {
+            return TEXTURE_DIMENSIONS;
+        }
+
+        @Override
+        public float textureWidthToHeightRatio() {
+            return TEXTURE_WIDTH_TO_HEIGHT_RATIO;
+        }
+
+        @Override
+        public float additionalHorizontalPadding() {
+            return ADDITIONAL_HORIZONTAL_PADDING;
+        }
+
+        @Override
+        public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
+            return GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
+        }
+
+        @Override
+        public int textureId() {
+            return TEXTURE_ID;
+        }
+
+        // TODO: Test and implement
+        @Override
+        public String getInterfaceName() {
+            return null;
+        }
+    }
+
     @Override
     public String id() throws IllegalStateException {
         return ID;
+    }
+
+    @Override
+    public FontStyleInfo plain() {
+        return PLAIN;
+    }
+
+    @Override
+    public FontStyleInfo italic() {
+        return ITALIC;
+    }
+
+    @Override
+    public FontStyleInfo bold() {
+        return BOLD;
+    }
+
+    @Override
+    public FontStyleInfo boldItalic() {
+        return BOLD_ITALIC;
     }
 
     @Override
@@ -341,101 +412,11 @@ public class FontImpl implements Font {
         return Font.class.getCanonicalName();
     }
 
-    @Override
-    public FloatBox getUvCoordinatesForGlyph(char glyph) throws IllegalArgumentException {
-        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
-        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
-        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
-        return GLYPHS.get(glyph);
-    }
-
-    @Override
-    public FloatBox getUvCoordinatesForGlyphItalic(char glyph) throws IllegalArgumentException {
-        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
-        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
-        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
-        return GLYPHS_ITALIC.get(glyph);
-    }
-
-    @Override
-    public FloatBox getUvCoordinatesForGlyphBold(char glyph) throws IllegalArgumentException {
-        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
-        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
-        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
-        return GLYPHS_BOLD.get(glyph);
-    }
-
-    @Override
-    public FloatBox getUvCoordinatesForGlyphBoldItalic(char glyph)
-            throws IllegalArgumentException {
-        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
-        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
-        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
-        return GLYPHS_BOLD_ITALIC.get(glyph);
-    }
-
-    @Override
-    public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
-        return GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
-    }
-
-    @Override
-    public Coordinate textureDimensions() {
-        return TEXTURE_DIMENSIONS;
-    }
-
-    @Override
-    public float textureWidthToHeightRatio() {
-        return TEXTURE_WIDTH_TO_HEIGHT_RATIO;
-    }
-
-    @Override
-    public int textureIdItalic() {
-        return TEXTURE_ID_ITALIC;
-    }
-
-    @Override
-    public Coordinate textureDimensionsItalic() {
-        return TEXTURE_DIMENSIONS_ITALIC;
-    }
-
-    @Override
-    public float textureWidthToHeightRatioItalic() {
-        return TEXTURE_WIDTH_TO_HEIGHT_RATIO_ITALIC;
-    }
-
-    @Override
-    public int textureIdBold() {
-        return TEXTURE_ID_BOLD;
-    }
-
-    @Override
-    public Coordinate textureDimensionsBold() {
-        return TEXTURE_DIMENSIONS_BOLD;
-    }
-
-    @Override
-    public float textureWidthToHeightRatioBold() {
-        return TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD;
-    }
-
-    @Override
-    public int textureIdBoldItalic() {
-        return TEXTURE_ID_BOLD_ITALIC;
-    }
-
-    @Override
-    public Coordinate textureDimensionsBoldItalic() {
-        return TEXTURE_DIMENSIONS_BOLD_ITALIC;
-    }
-
-    @Override
-    public float textureWidthToHeightRatioBoldItalic() {
-        return TEXTURE_WIDTH_TO_HEIGHT_RATIO_BOLD_ITALIC;
-    }
-
-    @Override
-    public int textureId() {
-        return TEXTURE_ID;
-    }
+//    @Override
+//    public FloatBox getUvCoordinatesForGlyph(char glyph) throws IllegalArgumentException {
+//        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
+//        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
+//        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
+//        return GLYPHS.get(glyph);
+//    }
 }

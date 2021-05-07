@@ -20,6 +20,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -43,11 +44,13 @@ class TextLineRendererColorTest {
     private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.25f;
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING =
+            new HashMap<>();
     private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static Color DEFAULT_COLOR = Color.WHITE;
-    private final static String LINE_TEXT = "This message is in the colors of the rainbow!";
+    private final static String LINE_TEXT = "Wow, this message is in the colors of the rainbow!";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -63,9 +66,29 @@ class TextLineRendererColorTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeFontLoadable font = new FakeFontLoadable(RELATIVE_LOCATION, MAX_LOSSLESS_FONT_SIZE,
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING, null, ADDITIONAL_GLYPH_VERTICAL_PADDING,
-                LEADING_ADJUSTMENT, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+        FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
+                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
+                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+        FakeFontDefinition fontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION,
+                MAX_LOSSLESS_FONT_SIZE,
+                plain, italic, bold, boldItalic,
+                LEADING_ADJUSTMENT);
+
+        FakeFontLoadable font = new FakeFontLoadable(fontDefinition, FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY);
 
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
