@@ -4,6 +4,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -49,10 +50,8 @@ class SpriteRendererBorderTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeImageLoadable renderableImage =
-                new FakeImageLoadable(RPG_WEAPONS_RELATIVE_LOCATION);
         FakeSprite sprite =
-                new FakeSprite(renderableImage, 266, 271, 313, 343);
+                new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProvider<>(new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
                 new StaticProvider<>(BORDER_THICKNESS),
@@ -82,7 +81,7 @@ class SpriteRendererBorderTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            renderableImage.load();
+            sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

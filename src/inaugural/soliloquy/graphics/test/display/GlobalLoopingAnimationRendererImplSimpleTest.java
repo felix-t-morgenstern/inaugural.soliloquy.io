@@ -4,6 +4,7 @@ import inaugural.soliloquy.common.test.fakes.*;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -14,6 +15,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
+import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
@@ -66,8 +68,6 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeImageLoadable renderableImage = new FakeImageLoadable(TORCH_RELATIVE_LOCATION);
-
         FakeGlobalClock globalClock = new FakeGlobalClock();
 
         AssetFactory<AnimationDefinition, Animation> animationFactory = new AnimationFactory();
@@ -79,10 +79,6 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
         int frameHeight = 64;
         int frameDuration = MS_PER_SECOND / 4;
         int loopsToDisplay = 3;
-        for (int i = 0; i < numberOfFrames; i++) {
-            frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
-                    frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
-        }
 
         FakeAnimationDefinition animationDefinition =
                 new FakeAnimationDefinition(frameDuration * numberOfFrames, "torch", frames);
@@ -126,7 +122,12 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            renderableImage.load();
+            Image renderableImage = new ImageFactoryImpl(0.5f)
+                    .make(TORCH_RELATIVE_LOCATION, false);
+            for (int i = 0; i < numberOfFrames; i++) {
+                frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
+                        frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
+            }
             renderableAnimation.Animation = animationFactory.make(animationDefinition);
             renderableAnimation.StartTimestamp = globalClock.globalTimestamp();
             frameTimer.ShouldExecuteNextFrame = true;

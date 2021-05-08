@@ -1,19 +1,20 @@
 package inaugural.soliloquy.graphics.test.display;
 
-import inaugural.soliloquy.common.test.fakes.*;
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
+import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
@@ -56,8 +57,6 @@ class FiniteAnimationRendererSimpleTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeImageLoadable renderableImage = new FakeImageLoadable(EXPLOSION_RELATIVE_LOCATION);
-
         FakeGlobalClock globalClock = new FakeGlobalClock();
 
         AssetFactory<AnimationDefinition, Animation> animationFactory = new AnimationFactory();
@@ -68,10 +67,6 @@ class FiniteAnimationRendererSimpleTest {
         int frameWidth = 96;
         int frameHeight = 96;
         int frameDuration = MS_PER_SECOND / 16;
-        for (int i = 0; i < numberOfFrames; i++) {
-            frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
-                    frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
-        }
 
         FakeAnimationDefinition animationDefinition =
                 new FakeAnimationDefinition(frameDuration * numberOfFrames, "explosion", frames);
@@ -113,7 +108,12 @@ class FiniteAnimationRendererSimpleTest {
 
         graphicsPreloader.LoadAction = () -> {
             long timestamp = globalClock.globalTimestamp();
-            renderableImage.load();
+            Image renderableImage = new ImageFactoryImpl(0.5f)
+                    .make(EXPLOSION_RELATIVE_LOCATION, false);
+            for (int i = 0; i < numberOfFrames; i++) {
+                frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
+                        frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
+            }
             FiniteAnimationRenderable.Animation = animationFactory.make(animationDefinition);
             FiniteAnimationRenderable.StartTimestamp = timestamp + msPadding;
             frameTimer.ShouldExecuteNextFrame = true;

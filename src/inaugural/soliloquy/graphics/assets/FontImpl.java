@@ -35,7 +35,7 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
     // NB: This field is static, since the GPU's maximum texture dimension size is unlikely to
     //     change from one font to the next
     @SuppressWarnings("FieldCanBeLocal")
-    protected static int MAXIMUM_TEXTURE_DIMENSION_SIZE = -1;
+    private static int MAXIMUM_TEXTURE_DIMENSION_SIZE = -1;
 
     private final String ID;
     private final FontStyleInfoImpl PLAIN;
@@ -80,20 +80,11 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                 fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
     }
 
-    // NB: This constructor exists for the purpose of FakeFontLoadable
-    protected FontImpl() {
-        ID = null;
-        PLAIN = ITALIC = BOLD = BOLD_ITALIC = null;
-    }
-
-    // NB: This method is protected so that it can be used by FakeFontLoadable for display testing
-    //     without duplicating the logic of the class and introducing potentially horrendous errors
-    //     and hassles.
-    protected FontStyleInfoImpl loadFontStyle(java.awt.Font fontFromFile,
-                                              FontStyleDefinition fontStyleDefinition,
-                                              float leadingAdjustment,
-                                              FloatBoxFactory floatBoxFactory,
-                                              CoordinateFactory coordinateFactory) {
+    private FontStyleInfoImpl loadFontStyle(java.awt.Font fontFromFile,
+                                            FontStyleDefinition fontStyleDefinition,
+                                            float leadingAdjustment,
+                                            FloatBoxFactory floatBoxFactory,
+                                            CoordinateFactory coordinateFactory) {
         Map<Character, FloatBox> glyphs = new HashMap<>();
 
         FontImageInfo textureInfo = generateFontAsset(
@@ -116,8 +107,8 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
         );
     }
 
-    protected static java.awt.Font loadFontFromFile(String relativeLocation,
-                                                    float maxLosslessFontSize) {
+    private static java.awt.Font loadFontFromFile(String relativeLocation,
+                                                  float maxLosslessFontSize) {
         try {
             return java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
                     new File(relativeLocation)).deriveFont(maxLosslessFontSize);

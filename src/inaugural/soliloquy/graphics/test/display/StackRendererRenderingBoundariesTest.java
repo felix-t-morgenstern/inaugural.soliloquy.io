@@ -5,6 +5,7 @@ import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
@@ -84,23 +85,18 @@ class StackRendererRenderingBoundariesTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        FakeImageLoadable renderableImageAxe07 = new FakeImageLoadable(AXE_07_LOCATION);
-        FakeImageLoadable renderableImageAxe09 = new FakeImageLoadable(AXE_09_LOCATION);
-        FakeImageLoadable renderableImageSword06 = new FakeImageLoadable(SWORD_06_LOCATION);
-
         int spriteAxe07Width = 512;
         int spriteAxe07Height = 512;
         FakeSprite spriteAxe07 =
-                new FakeSprite(renderableImageAxe07, 0, 0, spriteAxe07Width, spriteAxe07Height);
+                new FakeSprite(null, 0, 0, spriteAxe07Width, spriteAxe07Height);
         int spriteAxe09Width = 512;
         int spriteAxe09Height = 512;
         FakeSprite spriteAxe09 =
-                new FakeSprite(renderableImageAxe09, 0, 0, spriteAxe09Width, spriteAxe09Height);
+                new FakeSprite(null, 0, 0, spriteAxe09Width, spriteAxe09Height);
         int spriteSword06Width = 986;
         int spriteSword06Height = 2658;
         FakeSprite spriteSword06 =
-                new FakeSprite(renderableImageSword06, 0, 0, spriteSword06Width,
-                        spriteSword06Height);
+                new FakeSprite(null, 0, 0, spriteSword06Width, spriteSword06Height);
 
         float axeScreenHeight = 0.5f;
         float swordScreenHeight = 1.0f;
@@ -167,9 +163,9 @@ class StackRendererRenderingBoundariesTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            renderableImageAxe07.load();
-            renderableImageAxe09.load();
-            renderableImageSword06.load();
+            spriteAxe07.Image = new ImageFactoryImpl(0.5f).make(AXE_07_LOCATION, false);
+            spriteAxe09.Image = new ImageFactoryImpl(0.5f).make(AXE_09_LOCATION, false);
+            spriteSword06.Image = new ImageFactoryImpl(0.5f).make(SWORD_06_LOCATION, false);
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

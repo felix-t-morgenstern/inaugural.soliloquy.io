@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
+import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -90,9 +91,6 @@ class TextLineRendererBoldAndItalicTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakeFontLoadable font = new FakeFontLoadable(fontDefinition, FLOAT_BOX_FACTORY,
-                COORDINATE_FACTORY);
-
         FakeFloatBox renderingArea = new FakeFloatBox(0.0f, 0.5f - LINE_HEIGHT, 1f, 1f);
 
         ArrayList<Integer> italicIndices = new ArrayList<Integer>() {{
@@ -105,7 +103,7 @@ class TextLineRendererBoldAndItalicTest {
             add(17);
         }};
 
-        TextLineRenderable = new FakeTextLineRenderable(font, LINE_HEIGHT, LINE_TEXT, null,
+        TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, LINE_TEXT, null,
                 italicIndices, boldIndices, new StaticProvider<>(renderingArea),
                 new FakeEntityUuid());
 
@@ -132,7 +130,8 @@ class TextLineRendererBoldAndItalicTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            font.load();
+            TextLineRenderable.Font =
+                    new FontImpl(fontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

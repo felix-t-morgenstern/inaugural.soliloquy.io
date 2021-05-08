@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.*;
 import inaugural.soliloquy.graphics.api.WindowResolution;
+import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -98,12 +99,9 @@ class TextLineRendererRenderingBoundariesTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakeFontLoadable font = new FakeFontLoadable(fontDefinition, FLOAT_BOX_FACTORY,
-                COORDINATE_FACTORY);
-
         FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
 
-        TextLineRenderable = new FakeTextLineRenderable(font, 0.05f, LINE_TEXT, null, null, null,
+        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, LINE_TEXT, null, null, null,
                 new StaticProvider<>(renderingArea), new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
@@ -129,7 +127,8 @@ class TextLineRendererRenderingBoundariesTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            font.load();
+            TextLineRenderable.Font =
+                    new FontImpl(fontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
             frameTimer.ShouldExecuteNextFrame = true;
         };
 
