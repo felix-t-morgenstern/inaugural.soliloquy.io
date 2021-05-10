@@ -17,11 +17,11 @@ import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
@@ -65,7 +65,7 @@ class SpriteRendererSimpleTest {
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProvider<>(
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProvider<>(null, 0f), new StaticProvider<>(null, Color.WHITE),
+                new StaticProvider<>(null, 0f), new StaticProvider<>(null, INTACT_COLOR),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

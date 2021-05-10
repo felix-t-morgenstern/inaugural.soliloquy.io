@@ -13,6 +13,8 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.awt.*;
 import java.util.List;
 
+import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+
 public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                           FloatBoxFactory floatBoxFactory) {
@@ -41,7 +43,7 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
 
         super.render(renderingArea,
                 globalLoopingAnimationRenderable.loopingAnimation().provide(timestamp),
-                Color.WHITE);
+                INTACT_COLOR);
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =

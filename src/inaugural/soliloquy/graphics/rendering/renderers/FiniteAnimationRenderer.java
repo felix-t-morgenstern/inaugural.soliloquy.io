@@ -15,6 +15,8 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.List;
 
+import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+
 public class FiniteAnimationRenderer
         extends CanRenderSnippets<FiniteAnimationRenderable>
         implements Renderer<FiniteAnimationRenderable> {
@@ -48,7 +50,7 @@ public class FiniteAnimationRenderer
 
         AnimationFrameSnippet snippet =  finiteAnimationRenderable.provide(timestamp);
 
-        super.render(renderingArea, snippet, Color.WHITE);
+        super.render(renderingArea, snippet, INTACT_COLOR);
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {

@@ -14,6 +14,8 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.awt.*;
 import java.util.List;
 
+import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+
 public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
     public SpriteRenderer(RenderingBoundaries renderingBoundaries,
                           FloatBoxFactory floatBoxFactory,
@@ -60,48 +62,48 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
             // upper-left
             super.render(renderingArea.translate(-xThickness, -yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // upper-center
             super.render(renderingArea.translate(0f, -yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // upper-right
             super.render(renderingArea.translate(xThickness, -yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // center-right
             super.render(renderingArea.translate(xThickness, 0),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // bottom-right
             super.render(renderingArea.translate(xThickness, yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // bottom-center
             super.render(renderingArea.translate(0f, yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // bottom-left
             super.render(renderingArea.translate(-xThickness, yThickness),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
             // center-left
             super.render(renderingArea.translate(-xThickness, 0f),
                     spriteRenderable.sprite(),
-                    Color.WHITE,
+                    INTACT_COLOR,
                     borderColor);
         }
 
         super.render(renderingArea,
                 spriteRenderable.sprite(),
-                Color.WHITE);
+                INTACT_COLOR);
     }
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {
