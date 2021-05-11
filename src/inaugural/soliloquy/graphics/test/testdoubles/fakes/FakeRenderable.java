@@ -34,7 +34,7 @@ public class FakeRenderable implements Renderable {
     }
 
     @Override
-    public EntityUuid id() {
+    public EntityUuid uuid() {
         return null;
     }
 }

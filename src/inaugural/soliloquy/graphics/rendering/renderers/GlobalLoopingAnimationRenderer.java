@@ -10,7 +10,6 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
-import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
@@ -34,7 +33,7 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
 
         validateRenderableWithAreaMembers(renderingArea,
                 globalLoopingAnimationRenderable.colorShifts(),
-                globalLoopingAnimationRenderable.id(), "globalLoopingAnimationRenderable");
+                globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
 
         Check.ifNull(globalLoopingAnimationRenderable.loopingAnimation(),
                 "globalLoopingAnimationRenderable.loopingAnimation()");
@@ -49,7 +48,7 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
             new GlobalLoopingAnimationRenderable() {
                 @Override
-                public EntityUuid id() {
+                public EntityUuid uuid() {
                     return null;
                 }
 

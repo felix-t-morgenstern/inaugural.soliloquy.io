@@ -44,7 +44,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShifts(),
-                spriteRenderable.id(), "spriteRenderable");
+                spriteRenderable.uuid(), "spriteRenderable");
 
         if (borderThickness != null) {
             if (borderColor == null) {
@@ -108,7 +108,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {
         @Override
-        public EntityUuid id() {
+        public EntityUuid uuid() {
             return null;
         }
 

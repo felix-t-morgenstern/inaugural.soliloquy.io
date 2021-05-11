@@ -17,18 +17,18 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
     public int Z;
-    public EntityUuid Id;
+    public EntityUuid Uuid;
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                 ProviderAtTime<Float> borderThicknessProvider,
-                                ProviderAtTime<Color> borderColorProvider, EntityUuid id) {
+                                ProviderAtTime<Color> borderColorProvider, EntityUuid uuid) {
         Sprite = sprite;
         ColorShifts = colorShifts;
         RenderingAreaProvider = renderingAreaProvider;
         BorderThicknessProvider = borderThicknessProvider;
         BorderColorProvider = borderColorProvider;
-        Id = id;
+        Uuid = uuid;
     }
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
@@ -40,7 +40,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
         Z = z;
         BorderThicknessProvider = new FakeStaticProviderAtTime<>(null);
         BorderColorProvider = new FakeStaticProviderAtTime<>(null);
-        Id = id;
+        Uuid = id;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public EntityUuid id() {
-        return Id;
+    public EntityUuid uuid() {
+        return Uuid;
     }
 }

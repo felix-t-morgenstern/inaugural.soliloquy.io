@@ -149,7 +149,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Check.throwOnLteZero(textLineRenderable.lineHeight(), "textLineRenderable.lineHeight()");
         Check.ifNull(textLineRenderable.renderingAreaProvider(),
                 "textLineRenderable.renderingAreaProvider()");
-        Check.ifNull(textLineRenderable.id(), "textLineRenderable.id()");
+        Check.ifNull(textLineRenderable.uuid(), "textLineRenderable.id()");
         if (textLineRenderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
@@ -206,7 +206,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
         @Override
-        public EntityUuid id() {
+        public EntityUuid uuid() {
             return null;
         }
 

@@ -151,10 +151,10 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         boldIndices.remove(2);
 
-        textLineRenderable.Id = null;
+        textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.Id = id;
+        textLineRenderable.Uuid = id;
     }
 
     @Test
@@ -258,10 +258,10 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
         boldIndices.remove(2);
 
-        textLineRenderable.Id = null;
+        textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        textLineRenderable.Id = id;
+        textLineRenderable.Uuid = id;
     }
 
     @Test

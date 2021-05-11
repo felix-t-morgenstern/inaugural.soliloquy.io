@@ -65,7 +65,7 @@ public class RasterizedLineSegmentRenderer
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
         Check.ifNull(renderingArea,
                 "rasterizedLineSegmentRenderable provided rendering area");
-        Check.ifNull(rasterizedLineSegmentRenderable.id(), "rasterizedLineSegmentRenderable.id()");
+        Check.ifNull(rasterizedLineSegmentRenderable.uuid(), "rasterizedLineSegmentRenderable.id()");
 
         validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
 
@@ -96,7 +96,7 @@ public class RasterizedLineSegmentRenderer
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
                 @Override
-                public EntityUuid id() {
+                public EntityUuid uuid() {
                     return null;
                 }
 

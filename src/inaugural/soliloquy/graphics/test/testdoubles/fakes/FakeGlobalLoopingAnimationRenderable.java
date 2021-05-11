@@ -72,7 +72,7 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public EntityUuid id() {
+    public EntityUuid uuid() {
         return Id;
     }
 

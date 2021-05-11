@@ -18,7 +18,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
-    public EntityUuid Id;
+    public EntityUuid Uuid;
 
     public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
@@ -30,14 +30,15 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         ColorProviderIndices = colorProviderIndices;
         ItalicIndices = italicIndices;
         BoldIndices = boldIndices;
-        Id = id;
+        Uuid = id;
     }
 
     public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<FloatBox> renderingAreaProvider, EntityUuid id) {
-        this(font, lineHeight, lineText, colorProviderIndices, italicIndices, boldIndices, id);
+                                  ProviderAtTime<FloatBox> renderingAreaProvider,
+                                  EntityUuid uuid) {
+        this(font, lineHeight, lineText, colorProviderIndices, italicIndices, boldIndices, uuid);
         RenderingAreaProvider = renderingAreaProvider;
     }
 
@@ -92,7 +93,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public EntityUuid id() {
-        return Id;
+    public EntityUuid uuid() {
+        return Uuid;
     }
 }

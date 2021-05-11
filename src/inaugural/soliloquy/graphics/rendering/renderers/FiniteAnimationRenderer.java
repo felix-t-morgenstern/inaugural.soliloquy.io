@@ -12,7 +12,6 @@ import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
@@ -35,7 +34,7 @@ public class FiniteAnimationRenderer
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
-                finiteAnimationRenderable.id(), "finiteAnimationRenderable");
+                finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
 
         validateTimestamp(timestamp, "FiniteAnimationRenderable");
 
@@ -115,7 +114,7 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public EntityUuid id() {
+        public EntityUuid uuid() {
             return null;
         }
 

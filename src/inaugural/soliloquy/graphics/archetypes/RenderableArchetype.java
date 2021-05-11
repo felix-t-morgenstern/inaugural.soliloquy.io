@@ -28,7 +28,7 @@ public class RenderableArchetype implements Renderable {
     }
 
     @Override
-    public EntityUuid id() {
+    public EntityUuid uuid() {
         return null;
     }
 }
