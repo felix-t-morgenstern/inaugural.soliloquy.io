@@ -25,7 +25,7 @@ class GraphicsCoreLoopImplTests {
     private final int FRAME_TIMER_POLLING_INTERVAL = 20;
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
-    private final FakeStackRenderer STACK_RENDERER = new FakeStackRenderer();
+    private final FakeFrameExecutor FRAME_EXECUTOR = new FakeFrameExecutor();
     private final FakeShaderFactory SHADER_FACTORY = new FakeShaderFactory();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
     private final FakeRenderer RENDERER = new FakeRenderer();
@@ -64,7 +64,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -84,7 +84,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -100,7 +100,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -116,7 +116,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -132,7 +132,7 @@ class GraphicsCoreLoopImplTests {
                 null,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -148,7 +148,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 -1,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -164,7 +164,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 1000,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -180,7 +180,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 null,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -212,7 +212,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 null,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -228,7 +228,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 null,
                 SHADER_FILE_PREFIX,
@@ -244,7 +244,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 null,
@@ -260,7 +260,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 "",
@@ -276,7 +276,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -292,7 +292,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -308,7 +308,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -324,7 +324,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -340,7 +340,7 @@ class GraphicsCoreLoopImplTests {
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 WINDOW_RESOLUTION_MANAGER,
-                STACK_RENDERER,
+                FRAME_EXECUTOR,
                 SHADER_FACTORY,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
@@ -371,7 +371,7 @@ class GraphicsCoreLoopImplTests {
 
         // Should be 1, since it is called to create the initial window
         assertEquals(1, WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
-        assertEquals(0, STACK_RENDERER.NumberOfTimesRenderCalled);
+        assertEquals(0, FRAME_EXECUTOR.NumberOfTimesExecuteCalled);
     }
 
     @Test
@@ -390,7 +390,7 @@ class GraphicsCoreLoopImplTests {
         //     the interval should be very small in practice (e.g. 2-5ms), this slight
         //     indeterminacy should not radically affect performance.
         assertTrue(WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
-        assertTrue(STACK_RENDERER.NumberOfTimesRenderCalled > 1);
+        assertTrue(FRAME_EXECUTOR.NumberOfTimesExecuteCalled > 1);
     }
 
     @Test

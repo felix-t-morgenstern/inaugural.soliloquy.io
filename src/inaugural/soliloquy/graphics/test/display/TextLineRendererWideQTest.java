@@ -112,8 +112,10 @@ class TextLineRendererWideQTest {
         stackRenderer.RenderAction = timestamp ->
                 textLineRenderer.render(TextLineRenderable, timestamp);
 
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
+
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
                 new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 

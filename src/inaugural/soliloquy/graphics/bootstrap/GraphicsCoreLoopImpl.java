@@ -1,20 +1,18 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
-import inaugural.soliloquy.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
+import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
-import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
-import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -29,7 +27,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final FrameTimer FRAME_TIMER;
     private final int FRAME_TIMER_POLLING_INTERVAL;
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
-    private final StackRenderer STACK_RENDERER;
+    private final FrameExecutor FRAME_EXECUTOR;
     private final ShaderFactory SHADER_FACTORY;
     @SuppressWarnings("rawtypes")
     private final Collection<Renderer> RENDERERS_WITH_SHADER;
@@ -48,7 +46,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                 FrameTimer frameTimer,
                                 int frameTimerPollingInterval,
                                 WindowResolutionManager windowResolutionManager,
-                                StackRenderer stackRenderer,
+                                FrameExecutor frameExecutor,
                                 ShaderFactory shaderFactory,
                                 @SuppressWarnings("rawtypes") Collection<Renderer>
                                         renderersWithShader,
@@ -69,7 +67,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         );
         WINDOW_RESOLUTION_MANAGER = Check.ifNull(windowResolutionManager,
                 "windowResolutionManager");
-        STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
+        FRAME_EXECUTOR = Check.ifNull(frameExecutor, "frameExecutor");
         SHADER_FACTORY = Check.ifNull(shaderFactory, "shaderFactory");
         RENDERERS_WITH_SHADER = Check.ifNull(renderersWithShader, "renderersWithShader");
         SHADER_FILENAME_PREFIX = Check.ifNullOrEmpty(shaderFilenamePrefix, "shaderFilenamePrefix");
@@ -117,9 +115,6 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         new Thread(gameThread).start();
 
-        // TODO: Get this shit out of here too; this should be handled by the FrameExecutor
-        GlobalClock globalClock = new GlobalClockImpl();
-
         while(!glfwWindowShouldClose(_window)) {
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
@@ -128,8 +123,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                // TODO: Offset this silliness to the FrameExecutor
-                STACK_RENDERER.render(globalClock.globalTimestamp());
+                FRAME_EXECUTOR.execute();
 
                 glfwSwapBuffers(_window);
             }

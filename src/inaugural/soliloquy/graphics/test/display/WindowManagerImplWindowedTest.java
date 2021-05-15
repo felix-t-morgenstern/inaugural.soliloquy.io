@@ -40,12 +40,15 @@ class WindowManagerImplWindowedTest {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
+        //noinspection rawtypes
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        StackRenderer stackRenderer = new FakeStackRenderer();
+        FakeFrameExecutor fakeFrameExecutor = new FakeFrameExecutor();
+
+        //noinspection rawtypes
         Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, fakeFrameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
                 MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 

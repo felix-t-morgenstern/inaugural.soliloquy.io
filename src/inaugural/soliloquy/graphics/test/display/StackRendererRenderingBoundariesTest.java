@@ -61,10 +61,6 @@ class StackRendererRenderingBoundariesTest {
     private final static String SWORD_06_LOCATION = "./res/images/items/Sword06_986×2658.png";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
-    private static FakeSpriteRenderable SpriteRenderable1;
-    private static FakeSpriteRenderable SpriteRenderable2;
-    private static FakeSpriteRenderable SpriteRenderable3;
-
     public static void main(String[] args) {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
 
@@ -105,7 +101,8 @@ class StackRendererRenderingBoundariesTest {
                 axeScreenHeight / resolution.widthToHeightRatio();
         float spriteAxe07TopY = 0.125f;
         float spriteAxe07LeftX = 0.625f - (spriteAxe07ScreenWidth / 2f);
-        SpriteRenderable1 = new FakeSpriteRenderable(spriteAxe07, new ArrayList<>(),
+        FakeSpriteRenderable spriteRenderable1 = new FakeSpriteRenderable(spriteAxe07,
+                new ArrayList<>(),
                 new StaticProvider<>(new FakeFloatBox(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
@@ -118,7 +115,8 @@ class StackRendererRenderingBoundariesTest {
                 axeScreenHeight / resolution.widthToHeightRatio();
         float spriteAxe09TopY = 0.375f;
         float spriteAxe09LeftX = 0.375f - (spriteAxe09ScreenWidth / 2f);
-        SpriteRenderable2 = new FakeSpriteRenderable(spriteAxe09, new ArrayList<>(),
+        FakeSpriteRenderable spriteRenderable2 = new FakeSpriteRenderable(spriteAxe09,
+                new ArrayList<>(),
                 new StaticProvider<>(new FakeFloatBox(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
@@ -130,7 +128,8 @@ class StackRendererRenderingBoundariesTest {
         float spriteSword06ScreenWidth = 0.3710f;
         float spriteSword06TopY = 0f;
         float spriteSword06LeftX = 0.5f - (spriteSword06ScreenWidth / 2f);
-        SpriteRenderable3 = new FakeSpriteRenderable(spriteSword06, new ArrayList<>(),
+        FakeSpriteRenderable spriteRenderable3 = new FakeSpriteRenderable(spriteSword06,
+                new ArrayList<>(),
                 new StaticProvider<>(new FakeFloatBox(
                         spriteSword06LeftX,
                         spriteSword06TopY,
@@ -153,14 +152,17 @@ class StackRendererRenderingBoundariesTest {
                 }};
 
         renderer.SpriteRenderer = spriteRenderer;
-        renderableStack.add(SpriteRenderable1);
-        renderableStack.add(SpriteRenderable2);
-        renderableStack.add(SpriteRenderable3);
+        renderableStack.add(spriteRenderable1);
+        renderableStack.add(spriteRenderable2);
+        renderableStack.add(spriteRenderable3);
+
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager, stackRenderer,
-                new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
-                renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
+                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
+                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
+                graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
             spriteAxe07.Image = new ImageFactoryImpl(0.5f).make(AXE_07_LOCATION, false);

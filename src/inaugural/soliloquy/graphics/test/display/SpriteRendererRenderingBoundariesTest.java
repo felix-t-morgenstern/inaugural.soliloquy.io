@@ -91,10 +91,13 @@ public class SpriteRendererRenderingBoundariesTest {
         stackRenderer.RenderAction = timestamp ->
                 spriteRenderer.render(SpriteRenderable, timestamp);
 
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
+
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager, stackRenderer,
-                new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
-                renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
+                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
+                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
+                graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
             sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);

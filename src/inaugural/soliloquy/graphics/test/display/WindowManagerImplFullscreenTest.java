@@ -42,11 +42,12 @@ class WindowManagerImplFullscreenTest {
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        StackRenderer stackRenderer = new FakeStackRenderer();
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
+
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                stackRenderer, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
+                frameExecutor, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));

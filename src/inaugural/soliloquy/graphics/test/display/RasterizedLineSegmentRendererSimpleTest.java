@@ -17,7 +17,6 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -56,8 +55,10 @@ class RasterizedLineSegmentRendererSimpleTest {
                 rasterizedLineSegmentRenderer.render(makeRasterizedLineSegmentRenderable(),
                         timestamp);
 
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
+
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
                 MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 

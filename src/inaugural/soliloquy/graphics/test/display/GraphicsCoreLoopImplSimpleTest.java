@@ -6,7 +6,6 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
-import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +29,7 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
-        StackRenderer stackRenderer = new FakeStackRenderer();
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
@@ -38,7 +37,7 @@ class GraphicsCoreLoopImplSimpleTest {
 
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, WindowManager, stackRenderer,
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, WindowManager, frameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
                 MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 

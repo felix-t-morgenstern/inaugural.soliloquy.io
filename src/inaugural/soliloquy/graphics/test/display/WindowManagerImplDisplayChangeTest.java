@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -12,7 +11,6 @@ import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
-import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,11 +55,12 @@ class WindowManagerImplDisplayChangeTest {
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> null;
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        StackRenderer stackRenderer = new FakeStackRenderer();
+        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
+
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                stackRenderer, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
+                frameExecutor, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                 renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
         graphicsCoreLoop.startup(() ->
