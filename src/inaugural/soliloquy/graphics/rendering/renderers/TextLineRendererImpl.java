@@ -128,13 +128,13 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
 
             float lengthThusFarAddition = glyphLength;
-            float paddingPercentage = 1f + fontStyleInfo.additionalHorizontalPadding();
+            float paddingPercentage = fontStyleInfo.additionalHorizontalPadding();
             if (fontStyleInfo.glyphwiseAdditionalHorizontalPadding() != null &&
                     fontStyleInfo.glyphwiseAdditionalHorizontalPadding().containsKey(character)) {
                 paddingPercentage +=
                         fontStyleInfo.glyphwiseAdditionalHorizontalPadding().get(character);
             }
-            lengthThusFarAddition /= paddingPercentage;
+            lengthThusFarAddition -= paddingPercentage * textLineRenderable.lineHeight();
 
             textLineLengthThusFar += lengthThusFarAddition;
         }

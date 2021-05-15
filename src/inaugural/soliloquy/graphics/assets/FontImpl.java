@@ -190,10 +190,11 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
             float glyphWidth = fontMetrics.charWidth(character);
             if (glyphwiseAdditionalHorizontalPadding != null &&
                     glyphwiseAdditionalHorizontalPadding.containsKey(character)) {
-                glyphWidth *= (1f + glyphwiseAdditionalHorizontalPadding.get(character));
+                glyphWidth += (glyphHeight * glyphwiseAdditionalHorizontalPadding.get(character));
             }
 
-            float glyphWidthWithPadding = glyphWidth * (1f + additionalGlyphHorizontalPadding);
+            float glyphWidthWithPadding = glyphWidth +
+                    (glyphHeight * additionalGlyphHorizontalPadding);
 
             if (widthThusFar + glyphWidthWithPadding > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
                 widthThusFar = 0;
@@ -205,7 +206,9 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                         .accept(glyphWidthWithPadding);
             }
 
-            widthThusFar += glyphWidthWithPadding;
+            // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels
+            //     overlap
+            widthThusFar += glyphWidthWithPadding + 0.5f;
         }
         // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
         int imageHeight = (int)
@@ -261,18 +264,21 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                                        CoordinateFactory coordinateFactory) {
         float imageWidthFloat = (float)imageWidth;
         float imageHeightFloat = (float)imageHeight;
-        float rowHeight = (glyphHeight * (1f + additionalGlyphVerticalPadding));
+        float rowHeightInclPadding = (glyphHeight * (1f + additionalGlyphVerticalPadding));
+        float rowPadding = (additionalGlyphVerticalPadding * glyphHeight);
+        float glyphHeightInImage = glyphHeight / imageHeightFloat;
         loopOverCharacters(fontMetrics, additionalGlyphHorizontalPadding,
                 glyphwiseAdditionalHorizontalPadding, additionalGlyphVerticalPadding,
                 leadingAdjustment,
                 character -> widthThusFar -> rowNumber -> glyphWidth -> {
                     float leftX = (widthThusFar / imageWidthFloat);
-                    float topY = (rowHeight * rowNumber) / imageHeightFloat;
+                    float topY = (rowHeightInclPadding * rowNumber) / imageHeightFloat;
                     float rightX = (glyphWidth / imageWidthFloat) + leftX;
-                    float bottomY = topY + (glyphHeight / imageHeightFloat);
+                    float bottomY = topY + glyphHeightInImage;
                     glyphs.put(character, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-                    float glyphDrawTopY = (rowHeight * (rowNumber + 1)) - glyphDescent;
+                    float glyphDrawTopY = (rowHeightInclPadding * (rowNumber + 1)) - glyphDescent
+                            - rowPadding;
                     graphics2d.drawString(String.valueOf(character), widthThusFar,
                             glyphDrawTopY);
                 }, coordinateFactory);
