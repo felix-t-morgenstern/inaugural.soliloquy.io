@@ -14,18 +14,21 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
     public float LineHeight;
     public String LineText;
+    public float PaddingBetweenGlyphs;
     public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public EntityUuid Uuid;
 
-    public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
+    public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
+                                  String lineText,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   EntityUuid id) {
         Font = font;
         LineHeight = lineHeight;
+        PaddingBetweenGlyphs = paddingBetweenGlyphs;
         LineText = lineText;
         ColorProviderIndices = colorProviderIndices;
         ItalicIndices = italicIndices;
@@ -33,12 +36,14 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         Uuid = id;
     }
 
-    public FakeTextLineRenderable(Font font, float lineHeight, String lineText,
+    public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
+                                  String lineText,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<FloatBox> renderingAreaProvider,
                                   EntityUuid uuid) {
-        this(font, lineHeight, lineText, colorProviderIndices, italicIndices, boldIndices, uuid);
+        this(font, lineHeight, paddingBetweenGlyphs, lineText, colorProviderIndices, italicIndices,
+                boldIndices, uuid);
         RenderingAreaProvider = renderingAreaProvider;
     }
 
@@ -50,6 +55,11 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     @Override
     public float lineHeight() {
         return LineHeight;
+    }
+
+    @Override
+    public float paddingBetweenGlyphs() {
+        return PaddingBetweenGlyphs;
     }
 
     @Override

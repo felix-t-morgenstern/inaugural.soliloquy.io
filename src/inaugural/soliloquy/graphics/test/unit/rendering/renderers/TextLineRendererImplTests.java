@@ -67,8 +67,8 @@ class TextLineRendererImplTests {
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider,
-                id);
+                0f, textLine, colorProviderIndices, italicIndices, boldIndices,
+                renderingAreaProvider, id);
 
 
 
@@ -174,8 +174,8 @@ class TextLineRendererImplTests {
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                textLine, colorProviderIndices, italicIndices, boldIndices, renderingAreaProvider,
-                id);
+                0f, textLine, colorProviderIndices, italicIndices, boldIndices,
+                renderingAreaProvider, id);
 
 
 
@@ -314,7 +314,7 @@ class TextLineRendererImplTests {
         }};
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                lineText, null, italicIndices, boldIndices,
+                0f, lineText, null, italicIndices, boldIndices,
                 new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)),
                 new FakeEntityUuid());
 
@@ -335,11 +335,84 @@ class TextLineRendererImplTests {
     }
 
     @Test
+    void testTextLineLengthWithPaddingBetweenGlyphs() {
+        FakeFontStyleInfo plain = new FakeFontStyleInfo();
+        FakeFontStyleInfo italic = new FakeFontStyleInfo();
+        FakeFontStyleInfo bold = new FakeFontStyleInfo();
+        FakeFontStyleInfo boldItalic = new FakeFontStyleInfo();
+        FakeFont font = new FakeFont(plain, italic, bold, boldItalic);
+
+        float glyphHeight = 0.1f;
+        FakeFloatBox glyphA = new FakeFloatBox(0.0f, 0.0f, 0.356659007059121f, glyphHeight);
+        FakeFloatBox glyphAItalic = new FakeFloatBox(0.0f, 0.0f, 0.48381785202459f, glyphHeight);
+        FakeFloatBox glyphABold = new FakeFloatBox(0.0f, 0.0f, 0.677026478f, glyphHeight);
+        FakeFloatBox glyphABoldItalic = new FakeFloatBox(0.0f, 0.0f, 0.24048836420184f,
+                glyphHeight);
+        FakeFloatBox glyphB = new FakeFloatBox(0.0f, 0.0f, 0.213723488507345f, glyphHeight);
+        FakeFloatBox glyphBItalic = new FakeFloatBox(0.0f, 0.0f, 0.331731488913315f, glyphHeight);
+        FakeFloatBox glyphBBold = new FakeFloatBox(0.0f, 0.0f, 0.709300081504505f, glyphHeight);
+        FakeFloatBox glyphBBoldItalic = new FakeFloatBox(0.0f, 0.0f, 0.0767894524389122f,
+                glyphHeight);
+
+        plain.Glyphs.put('A', glyphA);
+        italic.Glyphs.put('A', glyphAItalic);
+        bold.Glyphs.put('A', glyphABold);
+        boldItalic.Glyphs.put('A', glyphABoldItalic);
+        plain.Glyphs.put('B', glyphB);
+        italic.Glyphs.put('B', glyphBItalic);
+        bold.Glyphs.put('B', glyphBBold);
+        boldItalic.Glyphs.put('B', glyphBBoldItalic);
+
+        float textureWidthToHeightRatio = 0.12f;
+        float textureWidthToHeightRatioItalic = 0.34f;
+        float textureWidthToHeightRatioBold = 0.56f;
+        float textureWidthToHeightRatioBoldItalic = 0.78f;
+        plain.TextureWidthToHeightRatio = textureWidthToHeightRatio;
+        italic.TextureWidthToHeightRatio = textureWidthToHeightRatioItalic;
+        bold.TextureWidthToHeightRatio = textureWidthToHeightRatioBold;
+        boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
+
+        float lineHeight = 0.5f;
+        @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
+        ArrayList<Integer> italicIndices = new ArrayList<Integer>(){{
+            add(1);
+            add(9);
+        }};
+        ArrayList<Integer> boldIndices = new ArrayList<Integer>(){{
+            add(6);
+            add(14);
+        }};
+
+        float paddingBetweenGlyphs = 0.123f;
+
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
+                paddingBetweenGlyphs, lineText, null, italicIndices, boldIndices,
+                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)),
+                new FakeEntityUuid());
+
+        float textLineLength = _textLineRenderer.textLineLength(textLineRenderable);
+
+        float expectedTextLineLength = ((glyphA.width() * 1 * textureWidthToHeightRatio) +
+                (glyphAItalic.width() * 5 * textureWidthToHeightRatioItalic) +
+                (glyphABoldItalic.width() * 2 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBoldItalic.width() * 1 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBold.width() * 5 * textureWidthToHeightRatioBold) +
+                (glyphB.width() * 2 * textureWidthToHeightRatio)) *
+                (lineHeight / glyphHeight) +
+                (lineHeight * paddingBetweenGlyphs * (lineText.length() - 1));
+
+        // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
+        //     due to floating point rounding discrepancies
+        assertEquals(Math.round(expectedTextLineLength * 10000f) / 10000f,
+                Math.round(textLineLength * 10000f) / 10000f);
+    }
+
+    @Test
     void testRenderOutdatedTimestamp() {
         FakeFont font = new FakeFont();
         float lineHeight = 0.5f;
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                "", null, null, null,
+                0f, "", null, null, null,
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f)),
                 new FakeEntityUuid());
         long timestamp = 100L;

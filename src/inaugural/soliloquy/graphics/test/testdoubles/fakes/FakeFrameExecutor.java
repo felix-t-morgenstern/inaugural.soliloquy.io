@@ -1,10 +1,12 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.gamestate.entities.gameevents.firings.FrameBlockingEvent;
 import soliloquy.specs.gamestate.entities.gameevents.firings.TriggeredEvent;
+import soliloquy.specs.gamestate.entities.timers.ClockBasedTimer;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
+
+import java.util.function.Consumer;
 
 public class FakeFrameExecutor implements FrameExecutor {
     public StackRenderer StackRenderer;
@@ -21,22 +23,27 @@ public class FakeFrameExecutor implements FrameExecutor {
     }
 
     @Override
-    public void placeEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
+    public void placeTriggeredEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
 
     }
 
     @Override
-    public void releaseEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
+    public void releaseTriggeredEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
 
     }
 
     @Override
-    public void registerTriggeredEvent(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
+    public void registerTriggeredEventToFire(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
 
     }
 
     @Override
-    public void registerFrameBlockingEvent(FrameBlockingEvent frameBlockingEvent) throws IllegalArgumentException {
+    public void registerFrameBlockingEvent(Consumer<Long> consumer) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public void registerClockBasedTimer(ClockBasedTimer clockBasedTimer) throws IllegalArgumentException {
 
     }
 

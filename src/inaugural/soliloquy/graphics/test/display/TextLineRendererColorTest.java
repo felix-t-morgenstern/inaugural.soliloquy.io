@@ -44,10 +44,10 @@ class TextLineRendererColorTest {
             new FakeRenderingBoundaries();
     private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
-    private final static float ADDITIONAL_GLYPH_HORIZONTAL_PADDING = 0.25f;
-    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING =
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING = 0.25f;
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
             new HashMap<>();
-    private final static float ADDITIONAL_GLYPH_VERTICAL_PADDING = 0.1f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final static Color DEFAULT_COLOR = Color.WHITE;
@@ -68,21 +68,21 @@ class TextLineRendererColorTest {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
         FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
-                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
-                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
-                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
-                ADDITIONAL_GLYPH_HORIZONTAL_PADDING,
-                GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING,
-                ADDITIONAL_GLYPH_VERTICAL_PADDING);
+                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontDefinition fontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION,
                 MAX_LOSSLESS_FONT_SIZE,
                 plain, italic, bold, boldItalic,
@@ -92,8 +92,8 @@ class TextLineRendererColorTest {
 
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, LINE_TEXT, colorIndices, null,
-                null, new StaticProvider<>(renderingArea), new FakeEntityUuid());
+        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, colorIndices,
+                null, null, new StaticProvider<>(renderingArea), new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

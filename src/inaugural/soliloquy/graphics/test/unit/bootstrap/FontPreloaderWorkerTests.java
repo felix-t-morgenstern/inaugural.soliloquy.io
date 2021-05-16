@@ -15,14 +15,14 @@ class FontPreloaderWorkerTests {
     private final String ID = "FontId";
     private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
     private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
-    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN = 0.123f;
-    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC = 0.234f;
-    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD = 0.345f;
-    private final float ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC = 0.456f;
-    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN = 0.567f;
-    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC = 0.678f;
-    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD = 0.789f;
-    private final float ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC = 0.890f;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN = 0.123f;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC = 0.234f;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD = 0.345f;
+    private final float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC = 0.456f;
+    private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN = 0.567f;
+    private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC = 0.678f;
+    private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD = 0.789f;
+    private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC = 0.890f;
     private final float LEADING_ADJUSTMENT = 0.090f;
 
     @Test
@@ -38,24 +38,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -72,24 +72,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -101,24 +101,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -130,24 +130,24 @@ class FontPreloaderWorkerTests {
                                 null,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -159,24 +159,24 @@ class FontPreloaderWorkerTests {
                                 "",
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -188,24 +188,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 0f,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -218,19 +218,19 @@ class FontPreloaderWorkerTests {
                                 MAX_LOSSLESS_FONT_SIZE,
                                 null,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -244,22 +244,22 @@ class FontPreloaderWorkerTests {
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -271,24 +271,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -300,24 +300,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -329,20 +329,20 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 null,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -354,24 +354,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -383,24 +383,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -412,24 +412,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -441,20 +441,20 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 null,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -466,24 +466,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -495,24 +495,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -524,24 +524,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -553,19 +553,19 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 null,
                                 LEADING_ADJUSTMENT),
@@ -578,24 +578,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         fonts::add));
@@ -607,22 +607,22 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
                                         -0.0001f
                                 ),
@@ -636,22 +636,22 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
                                         1f - LEADING_ADJUSTMENT
                                 ),
@@ -665,24 +665,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 1f),
                         fonts::add));
@@ -694,24 +694,24 @@ class FontPreloaderWorkerTests {
                                 RELATIVE_LOCATION,
                                 MAX_LOSSLESS_FONT_SIZE,
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         null,
-                                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT),
                         null));
@@ -726,24 +726,24 @@ class FontPreloaderWorkerTests {
                 RELATIVE_LOCATION,
                 MAX_LOSSLESS_FONT_SIZE,
                 new FakeFontStyleDefinition(
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_PLAIN,
+                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                         null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING_PLAIN
+                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                 ),
                 new FakeFontStyleDefinition(
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_ITALIC,
+                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                         null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING_ITALIC
+                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                 ),
                 new FakeFontStyleDefinition(
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD,
+                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                         null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD
+                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                 ),
                 new FakeFontStyleDefinition(
-                        ADDITIONAL_GLYPH_HORIZONTAL_PADDING_BOLD_ITALIC,
+                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                         null,
-                        ADDITIONAL_GLYPH_VERTICAL_PADDING_BOLD_ITALIC
+                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                 ),
                 LEADING_ADJUSTMENT);
 

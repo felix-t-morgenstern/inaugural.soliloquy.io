@@ -77,6 +77,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         float textLineLengthThusFar = 0f;
         Color color = DEFAULT_COLOR;
         FontStyleInfo fontStyleInfo;
+        float paddingBetweenGlyphs =
+                textLineRenderable.paddingBetweenGlyphs() * textLineRenderable.lineHeight();
 
         for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
             if (timestamp != null) {
@@ -98,7 +100,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 nextBoldIndex++;
             }
 
-
             if (italic) {
                 if (bold) {
                     fontStyleInfo = textLineRenderable.font().boldItalic();
@@ -116,6 +117,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 }
             }
 
+            if (i > 0) {
+                textLineLengthThusFar += paddingBetweenGlyphs;
+            }
+
             char character = textLineRenderable.lineText().charAt(i);
             FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
@@ -128,11 +133,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
 
             float lengthThusFarAddition = glyphLength;
-            float paddingPercentage = fontStyleInfo.additionalHorizontalPadding();
-            if (fontStyleInfo.glyphwiseAdditionalHorizontalPadding() != null &&
-                    fontStyleInfo.glyphwiseAdditionalHorizontalPadding().containsKey(character)) {
+            float paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
+            if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing() != null &&
+                    fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
+                            .containsKey(character)) {
                 paddingPercentage +=
-                        fontStyleInfo.glyphwiseAdditionalHorizontalPadding().get(character);
+                        fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(character);
             }
             lengthThusFarAddition -= paddingPercentage * textLineRenderable.lineHeight();
 
@@ -237,6 +243,11 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         @Override
         public float lineHeight() {
+            return 0;
+        }
+
+        @Override
+        public float paddingBetweenGlyphs() {
             return 0;
         }
 

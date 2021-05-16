@@ -89,9 +89,9 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
 
         FontImageInfo textureInfo = generateFontAsset(
                 fontFromFile,
-                fontStyleDefinition.additionalGlyphHorizontalPadding(),
-                fontStyleDefinition.glyphwiseAdditionalHorizontalPadding(),
-                fontStyleDefinition.additionalGlyphVerticalPadding(),
+                fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(),
+                fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
+                fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
                 leadingAdjustment,
                 glyphs,
                 floatBoxFactory,
@@ -101,8 +101,8 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                 glyphs,
                 textureInfo.ImageDimensions,
                 textureInfo.ImageDimensions.getX() / (float)textureInfo.ImageDimensions.getY(),
-                fontStyleDefinition.additionalGlyphHorizontalPadding(),
-                fontStyleDefinition.glyphwiseAdditionalHorizontalPadding(),
+                fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(),
+                fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
                 textureInfo.TextureId
         );
     }
@@ -118,10 +118,10 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
     }
 
     private static FontImageInfo generateFontAsset(java.awt.Font font,
-                                                   float additionalGlyphHorizontalPadding,
+                                                   float additionalGlyphHorizontalTextureSpacing,
                                                    Map<Character, Float>
-                                                           glyphwiseAdditionalHorizontalPadding,
-                                                   float additionalGlyphVerticalPadding,
+                                                           glyphwiseAdditionalHorizontalTextureSpacing,
+                                                   float additionalGlyphVerticalTextureSpacing,
                                                    float leadingAdjustment,
                                                    Map<Character, FloatBox> glyphs,
                                                    FloatBoxFactory floatBoxFactory,
@@ -138,8 +138,9 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
         FontMetrics fontMetrics = graphics2d.getFontMetrics();
 
         FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
-                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
-                additionalGlyphVerticalPadding, leadingAdjustment, null, coordinateFactory);
+                additionalGlyphHorizontalTextureSpacing,
+                glyphwiseAdditionalHorizontalTextureSpacing, additionalGlyphVerticalTextureSpacing,
+                leadingAdjustment, null, coordinateFactory);
 
         BufferedImage bufferedImage = graphics2d.getDeviceConfiguration()
                 .createCompatibleImage(fontImageInfo.ImageDimensions.getX(),
@@ -150,9 +151,10 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
 
         ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics,
                 fontImageInfo.ImageDimensions.getX(), fontImageInfo.ImageDimensions.getY(),
-                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
-                additionalGlyphVerticalPadding, leadingAdjustment, fontImageInfo.GlyphHeight,
-                fontImageInfo.GlyphDescent, glyphs, floatBoxFactory, coordinateFactory);
+                additionalGlyphHorizontalTextureSpacing,
+                glyphwiseAdditionalHorizontalTextureSpacing, additionalGlyphVerticalTextureSpacing,
+                leadingAdjustment, fontImageInfo.GlyphHeight, fontImageInfo.GlyphDescent, glyphs,
+                floatBoxFactory, coordinateFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -168,9 +170,9 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
     }
 
     private static FontImageInfo loopOverCharacters(
-            FontMetrics fontMetrics, float additionalGlyphHorizontalPadding,
-            Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
-            float additionalGlyphVerticalPadding, float leadingAdjustment,
+            FontMetrics fontMetrics, float additionalGlyphHorizontalTextureSpacing,
+            Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
+            float additionalGlyphVerticalTextureSpacing, float leadingAdjustment,
             Function<Character, Function<Integer, Function<Integer, Consumer<Float>>>>
                     glyphFunction,
             CoordinateFactory coordinateFactory) {
@@ -188,32 +190,33 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
             char character = (char)i;
 
             float glyphWidth = fontMetrics.charWidth(character);
-            if (glyphwiseAdditionalHorizontalPadding != null &&
-                    glyphwiseAdditionalHorizontalPadding.containsKey(character)) {
-                glyphWidth += (glyphHeight * glyphwiseAdditionalHorizontalPadding.get(character));
+            if (glyphwiseAdditionalHorizontalTextureSpacing != null &&
+                    glyphwiseAdditionalHorizontalTextureSpacing.containsKey(character)) {
+                glyphWidth +=
+                        (glyphHeight * glyphwiseAdditionalHorizontalTextureSpacing.get(character));
             }
 
-            float glyphWidthWithPadding = glyphWidth +
-                    (glyphHeight * additionalGlyphHorizontalPadding);
+            float glyphWidthWithTextureSpacing = glyphWidth +
+                    (glyphHeight * additionalGlyphHorizontalTextureSpacing);
 
-            if (widthThusFar + glyphWidthWithPadding > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
+            if (widthThusFar + glyphWidthWithTextureSpacing > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
                 widthThusFar = 0;
                 rowNumber++;
             }
 
             if (glyphFunction != null) {
                 glyphFunction.apply(character).apply(widthThusFar).apply(rowNumber)
-                        .accept(glyphWidthWithPadding);
+                        .accept(glyphWidthWithTextureSpacing);
             }
 
             // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels
             //     overlap
-            widthThusFar += glyphWidthWithPadding + 0.5f;
+            widthThusFar += glyphWidthWithTextureSpacing + 0.5f;
         }
         // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
         int imageHeight = (int)
-                ((glyphHeight * (1f + additionalGlyphVerticalPadding) * (rowNumber + 1))
-                        - (glyphHeight * additionalGlyphVerticalPadding)
+                ((glyphHeight * (1f + additionalGlyphVerticalTextureSpacing) * (rowNumber + 1))
+                        - (glyphHeight * additionalGlyphVerticalTextureSpacing)
                         + 0.5f);
 
 
@@ -228,10 +231,10 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
                                             FontMetrics fontMetrics,
                                             int imageWidth, int imageHeight,
-                                            float additionalGlyphHorizontalPadding,
+                                            float additionalGlyphHorizontalTextureSpacing,
                                             Map<Character, Float>
-                                                    glyphwiseAdditionalHorizontalPadding,
-                                            float additionalGlyphVerticalPadding,
+                                                    glyphwiseAdditionalHorizontalTextureSpacing,
+                                            float additionalGlyphVerticalTextureSpacing,
                                             float leadingAdjustment,
                                             float glyphHeight,
                                             float glyphDescent,
@@ -244,8 +247,8 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         drawCharacters(graphics2d, fontMetrics, imageWidth, imageHeight,
-                additionalGlyphHorizontalPadding, glyphwiseAdditionalHorizontalPadding,
-                additionalGlyphVerticalPadding, leadingAdjustment, glyphHeight, glyphDescent,
+                additionalGlyphHorizontalTextureSpacing, glyphwiseAdditionalHorizontalTextureSpacing,
+                additionalGlyphVerticalTextureSpacing, leadingAdjustment, glyphHeight, glyphDescent,
                 glyphs, floatBoxFactory, coordinateFactory);
 
         return createBuffer(bufferedImage, imageWidth, imageHeight);
@@ -253,9 +256,10 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
 
     private static void drawCharacters(Graphics2D graphics2d, FontMetrics fontMetrics,
                                        int imageWidth, int imageHeight,
-                                       float additionalGlyphHorizontalPadding,
-                                       Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
-                                       float additionalGlyphVerticalPadding,
+                                       float additionalGlyphHorizontalTextureSpacing,
+                                       Map<Character, Float>
+                                               glyphwiseAdditionalHorizontalTextureSpacing,
+                                       float additionalGlyphVerticalTextureSpacing,
                                        float leadingAdjustment,
                                        float glyphHeight,
                                        float glyphDescent,
@@ -264,21 +268,22 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
                                        CoordinateFactory coordinateFactory) {
         float imageWidthFloat = (float)imageWidth;
         float imageHeightFloat = (float)imageHeight;
-        float rowHeightInclPadding = (glyphHeight * (1f + additionalGlyphVerticalPadding));
-        float rowPadding = (additionalGlyphVerticalPadding * glyphHeight);
+        float rowHeightInclTextureSpacing =
+                (glyphHeight * (1f + additionalGlyphVerticalTextureSpacing));
+        float rowTextureSpacing = (additionalGlyphVerticalTextureSpacing * glyphHeight);
         float glyphHeightInImage = glyphHeight / imageHeightFloat;
-        loopOverCharacters(fontMetrics, additionalGlyphHorizontalPadding,
-                glyphwiseAdditionalHorizontalPadding, additionalGlyphVerticalPadding,
+        loopOverCharacters(fontMetrics, additionalGlyphHorizontalTextureSpacing,
+                glyphwiseAdditionalHorizontalTextureSpacing, additionalGlyphVerticalTextureSpacing,
                 leadingAdjustment,
                 character -> widthThusFar -> rowNumber -> glyphWidth -> {
                     float leftX = (widthThusFar / imageWidthFloat);
-                    float topY = (rowHeightInclPadding * rowNumber) / imageHeightFloat;
+                    float topY = (rowHeightInclTextureSpacing * rowNumber) / imageHeightFloat;
                     float rightX = (glyphWidth / imageWidthFloat) + leftX;
                     float bottomY = topY + glyphHeightInImage;
                     glyphs.put(character, floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-                    float glyphDrawTopY = (rowHeightInclPadding * (rowNumber + 1)) - glyphDescent
-                            - rowPadding;
+                    float glyphDrawTopY = (rowHeightInclTextureSpacing * (rowNumber + 1))
+                            - glyphDescent - rowTextureSpacing;
                     graphics2d.drawString(String.valueOf(character), widthThusFar,
                             glyphDrawTopY);
                 }, coordinateFactory);
@@ -321,21 +326,23 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
         private final Map<Character, FloatBox> GLYPHS;
         private final Coordinate TEXTURE_DIMENSIONS;
         private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO;
-        private final float ADDITIONAL_HORIZONTAL_PADDING;
-        private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
+        private final float ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
+        private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
         private final int TEXTURE_ID;
 
         private FontStyleInfoImpl(Map<Character, FloatBox> glyphs,
                                   Coordinate textureDimensions,
                                   float textureWidthToHeightRatio,
-                                  float additionalHorizontalPadding,
-                                  Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
+                                  float additionalHorizontalTextureSpacing,
+                                  Map<Character, Float>
+                                          glyphwiseAdditionalHorizontalTextureSpacing,
                                   int textureId) {
             GLYPHS = glyphs;
             TEXTURE_DIMENSIONS = textureDimensions;
             TEXTURE_WIDTH_TO_HEIGHT_RATIO = textureWidthToHeightRatio;
-            ADDITIONAL_HORIZONTAL_PADDING = additionalHorizontalPadding;
-            GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING = glyphwiseAdditionalHorizontalPadding;
+            ADDITIONAL_HORIZONTAL_TEXTURE_SPACING = additionalHorizontalTextureSpacing;
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
+                    glyphwiseAdditionalHorizontalTextureSpacing;
             TEXTURE_ID = textureId;
         }
 
@@ -358,13 +365,13 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
         }
 
         @Override
-        public float additionalHorizontalPadding() {
-            return ADDITIONAL_HORIZONTAL_PADDING;
+        public float additionalHorizontalTextureSpacing() {
+            return ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
         }
 
         @Override
-        public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
-            return GLYPHWISE_ADDITIONAL_HORIZONTAL_PADDING;
+        public Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing() {
+            return GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
         }
 
         @Override
@@ -408,12 +415,4 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
     public String getInterfaceName() {
         return Font.class.getCanonicalName();
     }
-
-//    @Override
-//    public FloatBox getUvCoordinatesForGlyph(char glyph) throws IllegalArgumentException {
-//        Check.throwOnLtValue(glyph, ASCII_CHAR_SPACE, "glyph");
-//        Check.throwOnEqualsValue(glyph, ASCII_CHAR_DELETE, "glyph");
-//        Check.throwOnGteValue(glyph, NUMBER_EXTENDED_ASCII_CHARS, "glyph");
-//        return GLYPHS.get(glyph);
-//    }
 }

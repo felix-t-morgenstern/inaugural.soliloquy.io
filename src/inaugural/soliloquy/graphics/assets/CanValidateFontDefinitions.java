@@ -32,14 +32,15 @@ public abstract class CanValidateFontDefinitions {
 
     private static void validateFontStyleDefinition(FontStyleDefinition fontStyleDefinition,
                                                     float leadingAdjustment) {
-        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphHorizontalPadding(), 0f,
-                "fontStyleDefinition.additionalGlyphHorizontalPadding()");
-        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphVerticalPadding(), 0f,
-                "fontStyleDefinition.additionalGlyphVerticalPadding()");
+        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(), 0f,
+                "fontStyleDefinition.additionalGlyphHorizontalTextureSpacing()");
+        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), 0f,
+                "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
         Check.throwOnGteValue(
-                leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalPadding(), 1f,
+                leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
+                1f,
                 "sum of leadingAdjustment and " +
-                        "fontStyleDefinition.additionalGlyphVerticalPadding()");
-        // TODO: Check whether glyphwiseAdditionalHorizontalPadding is null
+                        "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
+        // TODO: Check whether glyphwiseAdditionalHorizontalTextureSpacing is null
     }
 }

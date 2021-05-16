@@ -5,31 +5,32 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDe
 import java.util.Map;
 
 public class FakeFontStyleDefinition implements FontStyleDefinition {
-    public float AdditionalGlyphHorizontalPadding;
-    public Map<Character, Float> GlyphwiseAdditionalHorizontalPadding;
-    public float AdditionalGlyphVerticalPadding;
+    public float AdditionalGlyphHorizontalTextureSpacing;
+    public Map<Character, Float> GlyphwiseAdditionalHorizontalTextureSpacing;
+    public float AdditionalGlyphVerticalTextureSpacing;
 
-    public FakeFontStyleDefinition(float additionalGlyphHorizontalPadding,
-                                   Map<Character, Float> glyphwiseAdditionalHorizontalPadding,
-                                   float additionalGlyphVerticalPadding) {
-        AdditionalGlyphHorizontalPadding = additionalGlyphHorizontalPadding;
-        GlyphwiseAdditionalHorizontalPadding = glyphwiseAdditionalHorizontalPadding;
-        AdditionalGlyphVerticalPadding = additionalGlyphVerticalPadding;
+    public FakeFontStyleDefinition(float additionalGlyphHorizontalTextureSpacing,
+                                   Map<Character, Float>
+                                           glyphwiseAdditionalHorizontalTextureSpacing,
+                                   float additionalGlyphVerticalTextureSpacing) {
+        AdditionalGlyphHorizontalTextureSpacing = additionalGlyphHorizontalTextureSpacing;
+        GlyphwiseAdditionalHorizontalTextureSpacing = glyphwiseAdditionalHorizontalTextureSpacing;
+        AdditionalGlyphVerticalTextureSpacing = additionalGlyphVerticalTextureSpacing;
     }
 
     @Override
-    public float additionalGlyphHorizontalPadding() {
-        return AdditionalGlyphHorizontalPadding;
+    public float additionalGlyphHorizontalTextureSpacing() {
+        return AdditionalGlyphHorizontalTextureSpacing;
     }
 
     @Override
-    public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
-        return GlyphwiseAdditionalHorizontalPadding;
+    public Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing() {
+        return GlyphwiseAdditionalHorizontalTextureSpacing;
     }
 
     @Override
-    public float additionalGlyphVerticalPadding() {
-        return AdditionalGlyphVerticalPadding;
+    public float additionalGlyphVerticalTextureSpacing() {
+        return AdditionalGlyphVerticalTextureSpacing;
     }
 
     @Override

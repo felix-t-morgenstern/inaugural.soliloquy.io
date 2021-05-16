@@ -27,12 +27,12 @@ public class FakeFontStyleInfo implements FontStyleInfo {
     }
 
     @Override
-    public float additionalHorizontalPadding() {
+    public float additionalHorizontalTextureSpacing() {
         return 0;
     }
 
     @Override
-    public Map<Character, Float> glyphwiseAdditionalHorizontalPadding() {
+    public Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing() {
         return null;
     }
 
