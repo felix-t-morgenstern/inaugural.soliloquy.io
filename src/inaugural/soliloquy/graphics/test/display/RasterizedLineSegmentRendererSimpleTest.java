@@ -73,7 +73,7 @@ class RasterizedLineSegmentRendererSimpleTest {
 
     private static RasterizedLineSegmentRenderable makeRasterizedLineSegmentRenderable() {
         return new FakeRasterizedLineSegmentRenderable(new StaticProvider<>(6f), (short) 0xAAAA,
-                16,
+                (short) 16,
                 new StaticProvider<>(new Color(18, 201, 159)),
                 // NB: The parameters are in this order to ensure that
                 //     RasterizedLineSegmentRenderable does not care about order

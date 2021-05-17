@@ -126,7 +126,7 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public int stippleFactor() {
+                public short stippleFactor() {
                     return 0;
                 }
 

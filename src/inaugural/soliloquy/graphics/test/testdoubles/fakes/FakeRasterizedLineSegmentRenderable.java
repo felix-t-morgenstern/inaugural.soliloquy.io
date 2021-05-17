@@ -10,7 +10,7 @@ import java.awt.*;
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
     public ProviderAtTime<Float> ThicknessProvider;
     public short StipplePattern;
-    public int StippleFactor;
+    public short StippleFactor;
     public ProviderAtTime<Color> ColorProvider;
     public ProviderAtTime<FloatBox> RenderingAreaProvider;
     public int Z;
@@ -18,7 +18,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
 
     public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern,
-                                               int stippleFactor,
+                                               short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox> renderingAreaProvider,
                                                int z, EntityUuid uuid) {
@@ -42,7 +42,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public int stippleFactor() {
+    public short stippleFactor() {
         return StippleFactor;
     }
 
