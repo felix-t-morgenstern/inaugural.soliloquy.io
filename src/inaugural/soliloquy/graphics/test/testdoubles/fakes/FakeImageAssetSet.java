@@ -6,6 +6,9 @@ import soliloquy.specs.graphics.assets.ImageAssetSet;
 public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
 
+    public FakeImageAssetSet() {
+    }
+
     public FakeImageAssetSet(String id) {
         Id = id;
     }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -23,11 +24,11 @@ class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = 789;
     private final EntityUuid UUID = new FakeEntityUuid();
-    private final Consumer<RasterizedLineSegmentRenderable> DELETE_CONSUMER =
+    private final Consumer<Renderable> DELETE_CONSUMER =
             rasterizedLineSegmentRenderable ->
-                    _consumedRasterizedLineSegmentRenderable = rasterizedLineSegmentRenderable;
+                    _consumedRenderable = rasterizedLineSegmentRenderable;
 
-    private static RasterizedLineSegmentRenderable _consumedRasterizedLineSegmentRenderable;
+    private static Renderable _consumedRenderable;
 
     private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
 
@@ -115,7 +116,7 @@ class RasterizedLineSegmentRenderableImplTests {
     void testDelete() {
         _rasterizedLineSegmentRenderable.delete();
 
-        assertSame(_rasterizedLineSegmentRenderable, _consumedRasterizedLineSegmentRenderable);
+        assertSame(_rasterizedLineSegmentRenderable, _consumedRenderable);
     }
 
     @Test

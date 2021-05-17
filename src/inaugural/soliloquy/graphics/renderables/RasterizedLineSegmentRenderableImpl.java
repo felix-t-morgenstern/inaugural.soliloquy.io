@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -17,15 +18,14 @@ public class RasterizedLineSegmentRenderableImpl implements RasterizedLineSegmen
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER;
     private final int Z;
     private final EntityUuid UUID;
-    private final Consumer<RasterizedLineSegmentRenderable> DELETE_CONSUMER;
+    private final Consumer<Renderable> DELETE_CONSUMER;
 
     public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox> renderingAreaProvider,
                                                int z, EntityUuid uuid,
-                                               Consumer<RasterizedLineSegmentRenderable>
-                                                       deleteConsumer) {
+                                               Consumer<Renderable> deleteConsumer) {
         THICKNESS_PROVIDER = Check.ifNull(thicknessProvider, "thicknessProvider");
         STIPPLE_PATTERN = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
         STIPPLE_FACTOR = Check.throwOnLtValue(

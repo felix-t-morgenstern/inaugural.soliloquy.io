@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -29,20 +30,19 @@ class SpriteRenderableImplTests {
             new FakeProviderAtTime<>();
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
-
-    private static SpriteRenderable _spriteRenderableWithMouseEventsDeleteConsumerInput;
-    private static SpriteRenderable _spriteRenderableWithoutMouseEventsDeleteConsumerInput;
-
-    private SpriteRenderable _spriteRenderableWithMouseEvents;
-    private SpriteRenderable _spriteRenderableWithoutMouseEvents;
-
-    private final Consumer<SpriteRenderable> SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER =
+    private final Consumer<Renderable> SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER =
             spriteRenderable ->
                     _spriteRenderableWithMouseEventsDeleteConsumerInput = spriteRenderable;
-    private final Consumer<SpriteRenderable>
+    private final Consumer<Renderable>
             SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER =
             spriteRenderable ->
                     _spriteRenderableWithoutMouseEventsDeleteConsumerInput = spriteRenderable;
+
+    private static Renderable _spriteRenderableWithMouseEventsDeleteConsumerInput;
+    private static Renderable _spriteRenderableWithoutMouseEventsDeleteConsumerInput;
+
+    private SpriteRenderable _spriteRenderableWithMouseEvents;
+    private SpriteRenderable _spriteRenderableWithoutMouseEvents;
 
     @BeforeEach
     void setUp() {
