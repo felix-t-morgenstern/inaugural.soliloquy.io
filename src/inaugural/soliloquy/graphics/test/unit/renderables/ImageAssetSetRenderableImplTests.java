@@ -20,11 +20,11 @@ class ImageAssetSetRenderableImplTests {
     private final String TYPE = "type";
     private final String DIRECTION = "direction";
     /** @noinspection rawtypes*/
-    private final FakeAction CLICK_ACTION = new FakeAction();
+    private final FakeAction ON_CLICK = new FakeAction();
     /** @noinspection rawtypes*/
-    private final FakeAction MOUSE_OVER_ACTION = new FakeAction();
+    private final FakeAction ON_MOUSE_OVER = new FakeAction();
     /** @noinspection rawtypes*/
-    private final FakeAction MOUSE_LEAVE_ACTION = new FakeAction();
+    private final FakeAction ON_MOUSE_LEAVE = new FakeAction();
     private final ArrayList<ColorShift> COLOR_SHIFTS = new ArrayList<>();
     private final FakeProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeProviderAtTime<>();
@@ -48,7 +48,7 @@ class ImageAssetSetRenderableImplTests {
     @BeforeEach
     void setUp() {
         _imageAssetSetRenderableWithMouseEvents = new ImageAssetSetRenderableImpl(IMAGE_ASSET_SET,
-                TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION, MOUSE_LEAVE_ACTION, COLOR_SHIFTS,
+                TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER);
 
@@ -60,48 +60,48 @@ class ImageAssetSetRenderableImplTests {
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                null, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                null, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, null, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, null, null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, "", CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, null, "", ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", null, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, "", null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", "", CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, "", "", ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                null, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, null, Z, UUID,
+                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, null, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
+                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 null
         ));
 
@@ -181,9 +181,9 @@ class ImageAssetSetRenderableImplTests {
                 _imageAssetSetRenderableWithoutMouseEvents::click);
 
         _imageAssetSetRenderableWithMouseEvents.click();
-        assertEquals(1, CLICK_ACTION.NumberOfTimesCalled);
-        assertEquals(1, CLICK_ACTION.Inputs.size());
-        assertNull(CLICK_ACTION.Inputs.get(0));
+        assertEquals(1, ON_CLICK.NumberOfTimesCalled);
+        assertEquals(1, ON_CLICK.Inputs.size());
+        assertNull(ON_CLICK.Inputs.get(0));
     }
 
     @Test
@@ -192,9 +192,9 @@ class ImageAssetSetRenderableImplTests {
                 _imageAssetSetRenderableWithoutMouseEvents::mouseOver);
 
         _imageAssetSetRenderableWithMouseEvents.mouseOver();
-        assertEquals(1, MOUSE_OVER_ACTION.NumberOfTimesCalled);
-        assertEquals(1, MOUSE_OVER_ACTION.Inputs.size());
-        assertNull(MOUSE_OVER_ACTION.Inputs.get(0));
+        assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
+        assertEquals(1, ON_MOUSE_OVER.Inputs.size());
+        assertNull(ON_MOUSE_OVER.Inputs.get(0));
     }
 
     @Test
@@ -203,9 +203,9 @@ class ImageAssetSetRenderableImplTests {
                 _imageAssetSetRenderableWithoutMouseEvents::mouseLeave);
 
         _imageAssetSetRenderableWithMouseEvents.mouseLeave();
-        assertEquals(1, MOUSE_LEAVE_ACTION.NumberOfTimesCalled);
-        assertEquals(1, MOUSE_LEAVE_ACTION.Inputs.size());
-        assertNull(MOUSE_LEAVE_ACTION.Inputs.get(0));
+        assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
+        assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
+        assertNull(ON_MOUSE_LEAVE.Inputs.get(0));
     }
 
     @Test

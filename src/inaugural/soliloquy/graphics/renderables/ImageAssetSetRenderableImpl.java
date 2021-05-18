@@ -31,11 +31,11 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea impl
 
     /** @noinspection rawtypes*/
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
-                                       Action clickAction, Action mouseOverAction,
-                                       Action mouseLeaveAction, List<ColorShift> colorShifts,
+                                       Action onClick, Action onMouseOver, Action onMouseLeave,
+                                       List<ColorShift> colorShifts,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                        EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
-        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts, renderingAreaProvider,
+        super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider,
                 z, uuid, deleteConsumer);
         throwOnBothNullOrEmpty(type, direction);
         IMAGE_ASSET_SET = Check.ifNull(imageAssetSet, "imageAssetSet");

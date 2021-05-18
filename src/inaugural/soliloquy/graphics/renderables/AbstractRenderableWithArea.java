@@ -15,11 +15,11 @@ import java.util.function.Consumer;
 public abstract class AbstractRenderableWithArea implements RenderableWithArea {
     private final boolean CAPTURES_MOUSE_EVENTS;
     /** @noinspection rawtypes*/
-    private final Action CLICK_ACTION;
+    private final Action ON_CLICK;
     /** @noinspection rawtypes*/
-    private final Action MOUSE_OVER_ACTION;
+    private final Action ON_MOUSE_OVER;
     /** @noinspection rawtypes*/
-    private final Action MOUSE_LEAVE_ACTION;
+    private final Action ON_MOUSE_LEAVE;
     private final List<ColorShift> COLOR_SHIFTS;
     private final Consumer<Renderable> DELETE_CONSUMER;
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER;
@@ -33,24 +33,24 @@ public abstract class AbstractRenderableWithArea implements RenderableWithArea {
     }
 
     /** @noinspection rawtypes*/
-    protected AbstractRenderableWithArea(Action clickAction, Action mouseOverAction,
-                                         Action mouseLeaveAction, List<ColorShift> colorShifts,
+    protected AbstractRenderableWithArea(Action onClick, Action onMouseOver, Action onMouseLeave,
+                                         List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
-        this(true, clickAction, mouseOverAction, mouseLeaveAction, colorShifts,
+        this(true, onClick, onMouseOver, onMouseLeave, colorShifts,
                 renderingAreaProvider, z, uuid, deleteConsumer);
     }
 
     /** @noinspection rawtypes*/
-    private AbstractRenderableWithArea(boolean capturesMouseEvents, Action clickAction,
-                                       Action mouseOverAction, Action mouseLeaveAction,
+    private AbstractRenderableWithArea(boolean capturesMouseEvents, Action onClick,
+                                       Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                        EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
         CAPTURES_MOUSE_EVENTS = capturesMouseEvents;
-        CLICK_ACTION = clickAction;
-        MOUSE_OVER_ACTION = mouseOverAction;
-        MOUSE_LEAVE_ACTION = mouseLeaveAction;
+        ON_CLICK = onClick;
+        ON_MOUSE_OVER = onMouseOver;
+        ON_MOUSE_LEAVE = onMouseLeave;
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         RENDERING_AREA_PROVIDER = Check.ifNull(renderingAreaProvider, "renderingAreaProvider");
         Z = z;
@@ -65,17 +65,17 @@ public abstract class AbstractRenderableWithArea implements RenderableWithArea {
 
     @Override
     public void click() throws UnsupportedOperationException {
-        callAction(CLICK_ACTION, "click");
+        callAction(ON_CLICK, "click");
     }
 
     @Override
     public void mouseOver() throws UnsupportedOperationException {
-        callAction(MOUSE_OVER_ACTION, "mouseOver");
+        callAction(ON_MOUSE_OVER, "mouseOver");
     }
 
     @Override
     public void mouseLeave() throws UnsupportedOperationException {
-        callAction(MOUSE_LEAVE_ACTION, "mouseLeave");
+        callAction(ON_MOUSE_LEAVE, "mouseLeave");
     }
 
     /** @noinspection rawtypes*/ // TODO: Can avoid accepting methodName as parameter; may not be worth the time
