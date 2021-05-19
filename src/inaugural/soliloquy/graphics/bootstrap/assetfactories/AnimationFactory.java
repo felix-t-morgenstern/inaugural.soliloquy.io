@@ -31,22 +31,25 @@ public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, 
         private final Map<Integer, AnimationFrameSnippet> FRAMES;
         private final NearestFloorTree FRAMES_MS_NEAREST_FLOOR_TREE;
         private final String ID;
+        private final boolean CAPTURES_MOUSE_EVENTS;
 
         public AnimationImpl(String id, int msDuration,
                              Map<Integer, AnimationFrameSnippet> frames) {
             MS_DURATION = Check.ifNonNegative(msDuration, "msDuration");
             ID = Check.ifNullOrEmpty(id, "id");
-            FRAMES = checkFramesValidity(frames);
+            CAPTURES_MOUSE_EVENTS = checkFramesValidityAndReturnCaptures(frames);
+            FRAMES = frames;
             FRAMES_MS_NEAREST_FLOOR_TREE = new NearestFloorTree(FRAMES.keySet());
         }
 
-        private Map<Integer, AnimationFrameSnippet> checkFramesValidity(
-                Map<Integer, AnimationFrameSnippet> frames) {
+        private boolean checkFramesValidityAndReturnCaptures(Map<Integer, AnimationFrameSnippet>
+                                                                     frames) {
             Check.ifNull(frames, "frames");
             if (frames.isEmpty()) {
                 throw new IllegalArgumentException("AnimationImpl: frames cannot be empty");
             }
             boolean frameAt0Ms = false;
+            boolean capturesMouseEvents = true;
             for (Map.Entry<Integer, AnimationFrameSnippet> frameWithMs : frames.entrySet()) {
                 Check.ifNonNegative(frameWithMs.getKey(), "frameWithMs.getKey()");
                 Check.throwOnSecondLte(frameWithMs.getKey(), MS_DURATION, "frameWithMs.getKey()",
@@ -55,11 +58,18 @@ public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, 
                     frameAt0Ms = true;
                 }
                 throwOnInvalidSnippetDefinition(frameWithMs.getValue(), "frameWithMs.getValue()");
+
+                if (capturesMouseEvents) {
+                    capturesMouseEvents =
+                            frameWithMs.getValue().image().supportsMouseEventCapturing();
+                }
             }
             if (!frameAt0Ms) {
                 throw new IllegalArgumentException("AnimationImpl: No frame at 0 ms");
             }
-            return frames;
+
+            // TODO: Ensure that this value is returned properly
+            return capturesMouseEvents;
         }
 
         @Override
@@ -72,6 +82,11 @@ public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, 
             Check.ifNonNegative(ms, "ms");
             Check.throwOnSecondGt(MS_DURATION, ms, "MS_DURATION", "ms");
             return FRAMES.get(FRAMES_MS_NEAREST_FLOOR_TREE.getNearestFloor(ms));
+        }
+
+        @Override
+        public boolean capturesMouseEvents() {
+            return CAPTURES_MOUSE_EVENTS;
         }
 
         @Override

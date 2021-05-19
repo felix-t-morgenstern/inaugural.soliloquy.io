@@ -7,6 +7,7 @@ import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.HashMap;
@@ -41,7 +42,10 @@ public class ImageAssetSetFactory
 
         Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection = new HashMap<>();
 
-        imageAssetSetDefinition.assetDefinitions().forEach(assetDefinition -> {
+        boolean capturesMouseEvents = true;
+
+        for (ImageAssetSetAssetDefinition assetDefinition :
+                imageAssetSetDefinition.assetDefinitions()) {
             Check.ifNullOrEmpty(assetDefinition.assetId(), "assetDefinition.assetId()");
 
             String type = nullIfEmpty(assetDefinition.type());
@@ -56,6 +60,10 @@ public class ImageAssetSetFactory
                                 assetDefinition.assetId() + ")");
                     }
                     imageAsset = SPRITES_REGISTRY.get(assetDefinition.assetId());
+                    if (capturesMouseEvents) {
+                        capturesMouseEvents =
+                                ((Sprite)imageAsset).image().supportsMouseEventCapturing();
+                    }
                     break;
                 case ANIMATION:
                     if (!ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
@@ -64,6 +72,9 @@ public class ImageAssetSetFactory
                                         assetDefinition.assetId() + ")");
                     }
                     imageAsset = ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
+                    if (capturesMouseEvents) {
+                        capturesMouseEvents = ((Animation)imageAsset).capturesMouseEvents();
+                    }
                     break;
                 case UNKNOWN:
                 default:
@@ -71,6 +82,8 @@ public class ImageAssetSetFactory
                             "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
                             assetDefinition.assetType().toString() + ")");
             }
+
+            // TODO: If mouse event capturing is supported, verify whether imageAsset does so
 
             Map<String, ImageAsset> assetsByDirection;
             if (assetsByTypeAndDirection.containsKey(type)) {
@@ -85,9 +98,10 @@ public class ImageAssetSetFactory
                         direction + ")");
             }
             assetsByDirection.put(direction, imageAsset);
-        });
+        }
 
-        return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id());
+        return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id(),
+                capturesMouseEvents);
     }
 
     private static String nullIfEmpty(String string) {
@@ -105,11 +119,13 @@ public class ImageAssetSetFactory
     class ImageAssetSetImpl implements ImageAssetSet {
         private final Map<String, Map<String, ImageAsset>> ASSETS_BY_TYPE_AND_DIRECTION;
         private final String ID;
+        private final boolean CAPTURES_MOUSE_EVENTS;
 
         public ImageAssetSetImpl(Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection,
-                                 String id) {
+                                 String id, boolean capturesMouseEvents) {
             ASSETS_BY_TYPE_AND_DIRECTION = assetsByTypeAndDirection;
             ID = id;
+            CAPTURES_MOUSE_EVENTS = capturesMouseEvents;
         }
 
         @Override
@@ -118,6 +134,11 @@ public class ImageAssetSetFactory
             type = emptyIfNull(type);
             direction = emptyIfNull(direction);
             return ASSETS_BY_TYPE_AND_DIRECTION.get(nullIfEmpty(type)).get(nullIfEmpty(direction));
+        }
+
+        @Override
+        public boolean capturesMouseEvents() {
+            return CAPTURES_MOUSE_EVENTS;
         }
 
         @Override

@@ -7,6 +7,7 @@ public class FakeAnimation implements Animation {
     public String Id;
     public int MsDuration;
     public boolean SnippetAtFrameCalled = false;
+    public boolean CapturesMouseEvents;
 
     public FakeAnimation(String id) {
         Id = id;
@@ -15,6 +16,11 @@ public class FakeAnimation implements Animation {
     public FakeAnimation(String id, int msDuration) {
         Id = id;
         MsDuration = msDuration;
+    }
+
+    public FakeAnimation(String id, boolean capturesMouseEvents) {
+        Id = id;
+        CapturesMouseEvents = capturesMouseEvents;
     }
 
     @Override
@@ -26,6 +32,11 @@ public class FakeAnimation implements Animation {
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
         SnippetAtFrameCalled = true;
         return new FakeAnimationFrameSnippet();
+    }
+
+    @Override
+    public boolean capturesMouseEvents() {
+        return CapturesMouseEvents;
     }
 
     @Override

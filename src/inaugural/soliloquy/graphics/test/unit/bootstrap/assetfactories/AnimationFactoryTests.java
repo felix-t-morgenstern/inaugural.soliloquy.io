@@ -1,9 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationDefinition;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Animation;
@@ -21,7 +19,7 @@ class AnimationFactoryTests {
     private int _image1Width = 111;
     private int _image1Height = 222;
     private FakeImage _image1 =
-            new FakeImage(_image1RelativeLocation, _image1Width, _image1Height);
+            new FakeImage(_image1RelativeLocation, _image1Width, _image1Height, true);
 
     private int _snippet1LeftX = 11;
     private int _snippet1TopY = 22;
@@ -39,7 +37,7 @@ class AnimationFactoryTests {
     private int _image2Width = 333;
     private int _image2Height = 444;
     private FakeImage _image2 =
-            new FakeImage(_image2RelativeLocation, _image2Width, _image2Height);
+            new FakeImage(_image2RelativeLocation, _image2Width, _image2Height, true);
 
     private int _snippet2LeftX = 55;
     private int _snippet2TopY = 66;
@@ -57,7 +55,7 @@ class AnimationFactoryTests {
     private int _image3Width = 555;
     private int _image3Height = 666;
     private FakeImage _image3 =
-            new FakeImage(_image3RelativeLocation, _image3Width, _image3Height);
+            new FakeImage(_image3RelativeLocation, _image3Width, _image3Height, true);
 
     private int _snippet3LeftX = 111;
     private int _snippet3TopY = 222;
@@ -106,6 +104,8 @@ class AnimationFactoryTests {
 
         assertEquals(_animationDurationMs, createdAnimation.msDuration());
 
+        assertTrue(createdAnimation.capturesMouseEvents());
+
         assertEquals(Animation.class.getCanonicalName(), createdAnimation.getInterfaceName());
 
         assertThrows(IllegalArgumentException.class, () -> createdAnimation.snippetAtFrame(-1));
@@ -123,6 +123,15 @@ class AnimationFactoryTests {
         AnimationFrameSnippet frame3 = createdAnimation.snippetAtFrame(_animationDurationMs);
         assertNotNull(frame3);
         assertSame(_animationFrameSnippetDefinition3, frame3);
+
+
+
+        _image1.CapturesMouseEvents = false;
+
+        Animation createdAnimationNonCapturing = _animationFactory.make(
+                new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets));
+
+        assertFalse(createdAnimationNonCapturing.capturesMouseEvents());
     }
 
     @Test
@@ -345,31 +354,31 @@ class AnimationFactoryTests {
 
 
 
-        _image1._relativeLocation = null;
+        _image1.RelativeLocation = null;
         assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets)
         ));
-        _image1._relativeLocation = _image1RelativeLocation;
+        _image1.RelativeLocation = _image1RelativeLocation;
 
-        _image1._relativeLocation = "";
+        _image1.RelativeLocation = "";
         assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets)
         ));
-        _image1._relativeLocation = _image1RelativeLocation;
+        _image1.RelativeLocation = _image1RelativeLocation;
 
 
 
-        _image1._width = 0;
+        _image1.Width = 0;
         assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets)
         ));
-        _image1._width = _image1Width;
+        _image1.Width = _image1Width;
 
-        _image1._height = 0;
+        _image1.Height = 0;
         assertThrows(IllegalArgumentException.class, () -> _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets)
         ));
-        _image1._height = _image1Height;
+        _image1.Height = _image1Height;
 
 
 

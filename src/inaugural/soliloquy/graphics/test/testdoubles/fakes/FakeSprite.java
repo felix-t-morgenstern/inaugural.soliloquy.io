@@ -18,6 +18,11 @@ public class FakeSprite implements Sprite {
         Id = id;
     }
 
+    public FakeSprite(String id, Image image) {
+        Id = id;
+        Image = image;
+    }
+
     public FakeSprite(Image image, int leftX, int topY, int rightX, int bottomY) {
         Image = image;
         LeftX = leftX;

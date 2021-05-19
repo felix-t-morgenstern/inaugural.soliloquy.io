@@ -3,19 +3,32 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.graphics.assets.Image;
 
 public class FakeImage implements Image {
-    public String _relativeLocation;
+    public String RelativeLocation;
 
-    public int _width;
-    public int _height;
+    public int Width;
+    public int Height;
+
+    public boolean CapturesMouseEvents;
 
     public FakeImage(String relativeLocation) {
-        _relativeLocation = relativeLocation;
+        RelativeLocation = relativeLocation;
     }
 
     public FakeImage(String relativeLocation, int width, int height) {
-        _relativeLocation = relativeLocation;
-        _width = width;
-        _height = height;
+        RelativeLocation = relativeLocation;
+        Width = width;
+        Height = height;
+    }
+
+    public FakeImage(String relativeLocation, int width, int height, boolean capturesMouseEvents) {
+        RelativeLocation = relativeLocation;
+        Width = width;
+        Height = height;
+        CapturesMouseEvents = capturesMouseEvents;
+    }
+
+    public FakeImage(boolean capturesMouseEvents) {
+        CapturesMouseEvents = capturesMouseEvents;
     }
 
     @Override
@@ -25,22 +38,22 @@ public class FakeImage implements Image {
 
     @Override
     public String relativeLocation() {
-        return _relativeLocation;
+        return RelativeLocation;
     }
 
     @Override
     public int width() {
-        return _width;
+        return Width;
     }
 
     @Override
     public int height() {
-        return _height;
+        return Height;
     }
 
     @Override
     public boolean supportsMouseEventCapturing() {
-        return false;
+        return CapturesMouseEvents;
     }
 
     @Override

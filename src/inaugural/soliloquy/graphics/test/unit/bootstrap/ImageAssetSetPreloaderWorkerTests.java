@@ -2,8 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDTO;
 import inaugural.soliloquy.graphics.bootstrap.ImageAssetSetPreloaderWorker;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetSetFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Registry;
@@ -21,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ImageAssetSetPreloaderWorkerTests {
     private final FakeImageAssetSetFactory FACTORY = new FakeImageAssetSetFactory();
-    private final Registry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY = new FakeRegistry<>();
+    private final Registry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY =
+            new FakeRegistry<ImageAssetSet>();
 
     private ImageAssetSetPreloaderWorker _imageAssetSetPreloaderWorker;
 

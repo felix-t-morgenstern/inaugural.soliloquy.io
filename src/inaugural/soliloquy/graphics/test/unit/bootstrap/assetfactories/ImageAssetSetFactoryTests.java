@@ -20,20 +20,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class ImageAssetSetFactoryTests {
     private final String IMAGE_ASSET_SET_ID = "imageAssetSetId";
 
+    // TODO: Refactor these tests to ensure that containing ImageAssets are tested, both Sprites AND AnimationFrameSnippets
+    private final FakeImage CAPTURING_IMAGE = new FakeImage(true);
+    private final FakeImage NON_CAPTURING_IMAGE = new FakeImage(false);
+
     private final String SPRITE_1_ID = "sprite1Id";
-    private final FakeSprite SPRITE_1 = new FakeSprite(SPRITE_1_ID);
+    private final FakeSprite SPRITE_1 = new FakeSprite(SPRITE_1_ID, CAPTURING_IMAGE);
 
     private final String SPRITE_2_ID = "sprite2Id";
-    private final FakeSprite SPRITE_2 = new FakeSprite(SPRITE_2_ID);
+    private final FakeSprite SPRITE_2 = new FakeSprite(SPRITE_2_ID, CAPTURING_IMAGE);
 
     private final String ANIMATION_1_ID = "animation1Id";
-    private final FakeAnimation ANIMATION_1 = new FakeAnimation(ANIMATION_1_ID);
+    private final FakeAnimation ANIMATION_1 = new FakeAnimation(ANIMATION_1_ID, true);
 
     private final String ANIMATION_2_ID = "animation2Id";
-    private final FakeAnimation ANIMATION_2 = new FakeAnimation(ANIMATION_2_ID);
+    private final FakeAnimation ANIMATION_2 = new FakeAnimation(ANIMATION_2_ID, true);
 
-    private final FakeRegistry<Sprite> SPRITES_REGISTRY = new FakeRegistry<>();
-    private final FakeRegistry<Animation> ANIMATIONS_REGISTRY = new FakeRegistry<>();
+    private final FakeRegistry<Sprite> SPRITES_REGISTRY = new FakeRegistry<Sprite>();
+    private final FakeRegistry<Animation> ANIMATIONS_REGISTRY = new FakeRegistry<Animation>();
 
     private final String TYPE1 = "type1";
     private final String TYPE2 = "type2";
@@ -146,19 +150,18 @@ class ImageAssetSetFactoryTests {
         ASSET_3_DEFINITION.Type = TYPE1;
         assertThrows(IllegalArgumentException.class,
                 () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
-
         ASSET_3_DEFINITION.Type = TYPE2;
     }
 
     @Test
-    void testCreatedSpriteSetId() {
+    void testCreatedImageAssetSetId() {
         ImageAssetSet imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         assertEquals(IMAGE_ASSET_SET_ID, imageAssetSet.id());
     }
 
     @Test
-    void testCreatedSpriteSetGetImageAssetForTypeAndDirection() {
+    void testCreatedImageAssetSetGetImageAssetForTypeAndDirection() {
         ImageAssetSet imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         // NB: The invocations here use null, whereas the asset definitions fed to the factory use
@@ -171,7 +174,33 @@ class ImageAssetSetFactoryTests {
     }
 
     @Test
-    void testCreatedSpriteSetGetInterfaceName() {
+    void testCreatedImageAssetSetCapturesMouseEvents() {
+        ImageAssetSet imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
+
+        assertTrue(imageAssetSet.capturesMouseEvents());
+
+        SPRITE_1.Image = NON_CAPTURING_IMAGE;
+
+        imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
+
+        assertFalse(imageAssetSet.capturesMouseEvents());
+
+        SPRITE_1.Image = CAPTURING_IMAGE;
+
+        imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
+
+        assertTrue(imageAssetSet.capturesMouseEvents());
+
+        ANIMATION_1.CapturesMouseEvents = false;
+
+        imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
+
+        assertFalse(imageAssetSet.capturesMouseEvents());
+
+    }
+
+    @Test
+    void testCreatedImageAssetSetGetInterfaceName() {
         ImageAssetSet imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         assertEquals(ImageAssetSet.class.getCanonicalName(), imageAssetSet.getInterfaceName());

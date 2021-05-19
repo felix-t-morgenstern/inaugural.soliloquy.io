@@ -5,6 +5,7 @@ import soliloquy.specs.graphics.assets.ImageAssetSet;
 
 public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
+    public boolean CapturesMouseEvents;
 
     public FakeImageAssetSet() {
     }
@@ -13,9 +14,19 @@ public class FakeImageAssetSet implements ImageAssetSet {
         Id = id;
     }
 
+    public FakeImageAssetSet(String id, boolean capturesMouseEvents) {
+        Id = id;
+        CapturesMouseEvents = capturesMouseEvents;
+    }
+
     @Override
     public ImageAsset getImageAssetForTypeAndDirection(String s, String s1) throws IllegalArgumentException {
         return null;
+    }
+
+    @Override
+    public boolean capturesMouseEvents() {
+        return false;
     }
 
     @Override

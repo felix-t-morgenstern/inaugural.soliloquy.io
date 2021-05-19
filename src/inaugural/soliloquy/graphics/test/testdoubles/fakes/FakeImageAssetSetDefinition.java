@@ -9,7 +9,8 @@ public class FakeImageAssetSetDefinition implements ImageAssetSetDefinition {
     public List<ImageAssetSetAssetDefinition> ImageAssetSetAssetDefinitions;
     public String Id;
 
-    public FakeImageAssetSetDefinition(List<ImageAssetSetAssetDefinition> imageAssetSetAssetDefinitions,
+    public FakeImageAssetSetDefinition(List<ImageAssetSetAssetDefinition>
+                                               imageAssetSetAssetDefinitions,
                                        String id) {
         ImageAssetSetAssetDefinitions = imageAssetSetAssetDefinitions;
         Id = id;
