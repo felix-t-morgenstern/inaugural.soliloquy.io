@@ -31,12 +31,10 @@ class SpriteRenderableImplTests {
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER =
-            spriteRenderable ->
-                    _spriteRenderableWithMouseEventsDeleteConsumerInput = spriteRenderable;
+            renderable -> _spriteRenderableWithMouseEventsDeleteConsumerInput = renderable;
     private final Consumer<Renderable>
             SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER =
-            spriteRenderable ->
-                    _spriteRenderableWithoutMouseEventsDeleteConsumerInput = spriteRenderable;
+            renderable -> _spriteRenderableWithoutMouseEventsDeleteConsumerInput = renderable;
 
     private static Renderable _spriteRenderableWithMouseEventsDeleteConsumerInput;
     private static Renderable _spriteRenderableWithoutMouseEventsDeleteConsumerInput;
