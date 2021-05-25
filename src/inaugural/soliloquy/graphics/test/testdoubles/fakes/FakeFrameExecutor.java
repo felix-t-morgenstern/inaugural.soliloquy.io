@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.gamestate.entities.gameevents.firings.TriggeredEvent;
-import soliloquy.specs.gamestate.entities.timers.ClockBasedTimer;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
@@ -39,11 +38,6 @@ public class FakeFrameExecutor implements FrameExecutor {
 
     @Override
     public void registerFrameBlockingEvent(Consumer<Long> consumer) throws IllegalArgumentException {
-
-    }
-
-    @Override
-    public void registerClockBasedTimer(ClockBasedTimer clockBasedTimer) throws IllegalArgumentException {
 
     }
 

@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.renderables.providers.factories.StaticProviderFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ class StaticProviderFactoryImplTests {
         assertNotNull(staticProvider);
         assertSame(VALUE, staticProvider.provide(0L));
         assertSame(ARCHETYPE, staticProvider.getArchetype());
+        assertTrue(staticProvider instanceof StaticProviderImpl);
     }
 
     @Test

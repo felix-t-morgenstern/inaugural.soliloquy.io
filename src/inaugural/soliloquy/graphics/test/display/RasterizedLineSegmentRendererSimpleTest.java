@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.display;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
@@ -72,12 +72,12 @@ class RasterizedLineSegmentRendererSimpleTest {
     }
 
     private static RasterizedLineSegmentRenderable makeRasterizedLineSegmentRenderable() {
-        return new FakeRasterizedLineSegmentRenderable(new StaticProvider<>(6f), (short) 0xAAAA,
+        return new FakeRasterizedLineSegmentRenderable(new StaticProviderImpl<>(6f), (short) 0xAAAA,
                 (short) 16,
-                new StaticProvider<>(new Color(18, 201, 159)),
+                new StaticProviderImpl<>(new Color(18, 201, 159)),
                 // NB: The parameters are in this order to ensure that
                 //     RasterizedLineSegmentRenderable does not care about order
-                new StaticProvider<>(new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f)),
+                new StaticProviderImpl<>(new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f)),
                 1, new FakeEntityUuid());
     }
 }

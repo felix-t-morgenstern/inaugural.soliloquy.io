@@ -4,7 +4,7 @@ import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
@@ -104,7 +104,7 @@ class TextLineRendererBoldAndItalicTest {
         }};
 
         TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, 0f, LINE_TEXT, null,
-                italicIndices, boldIndices, new StaticProvider<>(renderingArea),
+                italicIndices, boldIndices, new StaticProviderImpl<>(renderingArea),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();

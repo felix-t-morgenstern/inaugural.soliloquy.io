@@ -2,25 +2,25 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.HasOneGenericParam;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
-public class StaticProvider<T> extends HasOneGenericParam<T> implements ProviderAtTime<T> {
+public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements StaticProvider<T> {
     private final T VALUE;
 
     private Long _mostRecentTimestamp;
 
-    public StaticProvider(T value) {
+    public StaticProviderImpl(T value) {
         this(value, value);
     }
 
-    public StaticProvider(T value, T archetype) {
+    public StaticProviderImpl(T value, T archetype) {
         super(archetype);
         VALUE = value;
     }
 
     @Override
     protected String getUnparameterizedInterfaceName() {
-        return ProviderAtTime.class.getCanonicalName();
+        return StaticProvider.class.getCanonicalName();
     }
 
     @Override

@@ -4,7 +4,7 @@ import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -93,7 +93,7 @@ class TextLineRendererColorTest {
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, colorIndices,
-                null, null, new StaticProvider<>(renderingArea), new FakeEntityUuid());
+                null, null, new StaticProviderImpl<>(renderingArea), new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -140,7 +140,7 @@ class TextLineRendererColorTest {
         float degreePerLetter = 360f / lineText.length();
         for (int i = 0; i < lineText.length(); i++) {
             rainbowGradient.put(i,
-                    new StaticProvider<>(colorAtDegree((float)i * degreePerLetter)));
+                    new StaticProviderImpl<>(colorAtDegree((float)i * degreePerLetter)));
         }
         return rainbowGradient;
     }

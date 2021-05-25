@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.ArrayList;
 
-public class FakeStaticProviderAtTime<T> implements ProviderAtTime<T> {
+public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
     public T ProvidedValue;
     public ArrayList<Long> TimestampInputs = new ArrayList<>();
 

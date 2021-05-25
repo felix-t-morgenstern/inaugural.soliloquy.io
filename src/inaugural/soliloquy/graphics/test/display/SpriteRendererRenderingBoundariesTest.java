@@ -4,7 +4,7 @@ import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
@@ -69,9 +69,9 @@ public class SpriteRendererRenderingBoundariesTest {
         FakeSprite sprite =
                 new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
-                new StaticProvider<>(
+                new StaticProviderImpl<>(
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProvider<>(null, 0f), new StaticProvider<>(null, INTACT_COLOR),
+                new StaticProviderImpl<>(null, 0f), new StaticProviderImpl<>(null, INTACT_COLOR),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

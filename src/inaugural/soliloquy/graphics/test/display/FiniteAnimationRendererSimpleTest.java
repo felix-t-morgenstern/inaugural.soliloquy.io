@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
@@ -78,7 +78,7 @@ class FiniteAnimationRendererSimpleTest {
         int msPadding = 500;
 
         FiniteAnimationRenderable = new FakeFiniteAnimationRenderable(null, new ArrayList<>(),
-                new StaticProvider<>(new FakeFloatBox(
+                new StaticProviderImpl<>(new FakeFloatBox(
                         midpoint - (animationWidth / 2f),
                         midpoint - (animationHeight / 2f),
                         midpoint + (animationWidth / 2f),

@@ -1,27 +1,27 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.graphics.renderables.providers.StaticProvider;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StaticProviderTests {
+class StaticProviderImplTests {
     private final Object PROVIDED_VALUE = new Object();
 
-    private ProviderAtTime<Object> _staticProvider;
+    private StaticProvider<Object> _staticProvider;
 
     @BeforeEach
     void setUp() {
-        _staticProvider = new StaticProvider<>(PROVIDED_VALUE);
+        _staticProvider = new StaticProviderImpl<>(PROVIDED_VALUE);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new StaticProvider<>(null));
+        assertThrows(IllegalArgumentException.class, () -> new StaticProviderImpl<>(null));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProvider<>(PROVIDED_VALUE, null));
+                () -> new StaticProviderImpl<>(PROVIDED_VALUE, null));
     }
 
     @Test
@@ -65,7 +65,7 @@ class StaticProviderTests {
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
+        assertEquals(StaticProvider.class.getCanonicalName() + "<" +
                 Object.class.getCanonicalName() + ">",
                 _staticProvider.getInterfaceName());
     }
