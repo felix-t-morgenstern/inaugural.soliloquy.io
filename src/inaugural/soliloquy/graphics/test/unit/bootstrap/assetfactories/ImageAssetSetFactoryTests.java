@@ -168,9 +168,13 @@ class ImageAssetSetFactoryTests {
         //     empty strings; this is to test that the factory and SpriteSet treat null and empty
         //     strings interchangeably
         assertSame(SPRITE_1, imageAssetSet.getImageAssetForTypeAndDirection(TYPE1, null));
+        assertSame(SPRITE_1, imageAssetSet.getImageAssetForTypeAndDirection(TYPE1, ""));
         assertSame(SPRITE_2, imageAssetSet.getImageAssetForTypeAndDirection(null, DIRECTION1));
+        assertSame(SPRITE_2, imageAssetSet.getImageAssetForTypeAndDirection("", DIRECTION1));
         assertSame(ANIMATION_1, imageAssetSet.getImageAssetForTypeAndDirection(TYPE2, null));
+        assertSame(ANIMATION_1, imageAssetSet.getImageAssetForTypeAndDirection(TYPE2, ""));
         assertSame(ANIMATION_2, imageAssetSet.getImageAssetForTypeAndDirection(null, DIRECTION2));
+        assertSame(ANIMATION_2, imageAssetSet.getImageAssetForTypeAndDirection("", DIRECTION2));
     }
 
     @Test

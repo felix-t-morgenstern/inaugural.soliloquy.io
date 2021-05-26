@@ -65,26 +65,6 @@ class ImageAssetSetRenderableImplTests {
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, "", ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", "", ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
                 null, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
@@ -107,22 +87,6 @@ class ImageAssetSetRenderableImplTests {
 
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 null, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, null, "", COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, "", "", COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(

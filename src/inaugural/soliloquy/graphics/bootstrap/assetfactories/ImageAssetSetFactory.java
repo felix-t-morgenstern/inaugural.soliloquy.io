@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.Tools.emptyIfNull;
+import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
 public class ImageAssetSetFactory
         extends AssetFactoryAbstract<ImageAssetSetDefinition, ImageAssetSet> {
@@ -102,10 +103,6 @@ public class ImageAssetSetFactory
 
         return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id(),
                 capturesMouseEvents);
-    }
-
-    private static String nullIfEmpty(String string) {
-        return "".equals(string) ? null : string;
     }
 
     @Override

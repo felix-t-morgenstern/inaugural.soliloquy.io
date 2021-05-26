@@ -79,26 +79,6 @@ class ImageAssetSetRenderableFactoryImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, null, null, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, null, "", CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, "", null, CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, "", "", CLICK_ACTION, MOUSE_OVER_ACTION,
-                MOUSE_LEAVE_ACTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET, TYPE, DIRECTION, CLICK_ACTION, MOUSE_OVER_ACTION,
                 MOUSE_LEAVE_ACTION, null, RENDERING_AREA_PROVIDER, Z, UUID,
                 REMOVE_FROM_CONTAINER
@@ -121,22 +101,6 @@ class ImageAssetSetRenderableFactoryImplTests {
 
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 null, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, null, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, null, "", COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, "", null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET, "", "", COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(

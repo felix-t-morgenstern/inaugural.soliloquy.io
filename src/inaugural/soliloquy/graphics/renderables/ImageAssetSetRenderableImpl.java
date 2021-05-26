@@ -13,6 +13,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
+
 public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea implements ImageAssetSetRenderable {
     private final ImageAssetSet IMAGE_ASSET_SET;
     private final String TYPE;
@@ -23,10 +25,9 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea impl
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                        EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
         super(colorShifts, renderingAreaProvider, z, uuid, deleteConsumer);
-        throwOnBothNullOrEmpty(type, direction);
         IMAGE_ASSET_SET = Check.ifNull(imageAssetSet, "imageAssetSet");
-        TYPE = type;
-        DIRECTION = direction;
+        TYPE = nullIfEmpty(type);
+        DIRECTION = nullIfEmpty(direction);
     }
 
     /** @noinspection rawtypes*/
@@ -37,17 +38,9 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea impl
                                        EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
         super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider,
                 z, uuid, deleteConsumer);
-        throwOnBothNullOrEmpty(type, direction);
         IMAGE_ASSET_SET = Check.ifNull(imageAssetSet, "imageAssetSet");
-        TYPE = type;
-        DIRECTION = direction;
-    }
-
-    private void throwOnBothNullOrEmpty(String type, String direction) {
-        if ((type == null || "".equals(type)) && (direction == null || "".equals(direction))) {
-            throw new IllegalArgumentException(
-                    "ImageAssetSetRenderableImpl: both type and direction cannot be null or empty");
-        }
+        TYPE = nullIfEmpty(type);
+        DIRECTION = nullIfEmpty(direction);
     }
 
     @Override
