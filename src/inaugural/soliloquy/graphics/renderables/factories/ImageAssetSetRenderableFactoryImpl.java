@@ -31,7 +31,6 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                 updateZIndexInContainer, removeFromContainer);
     }
 
-    /** @noinspection rawtypes*/
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet, String type, String direction,
                                         Action onClick, Action onMouseOver, Action onMouseLeave,

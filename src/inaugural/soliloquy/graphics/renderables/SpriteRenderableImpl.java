@@ -31,13 +31,13 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
 
     /** @noinspection rawtypes*/
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
-                                ProviderAtTime<Color> borderColorProvider, Action clickAction,
-                                Action mouseOverAction, Action mouseLeaveAction,
+                                ProviderAtTime<Color> borderColorProvider, Action onClick,
+                                Action onMouseOver, Action onMouseLeave,
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts, borderThicknessProvider,
+        super(onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setSprite(sprite);
