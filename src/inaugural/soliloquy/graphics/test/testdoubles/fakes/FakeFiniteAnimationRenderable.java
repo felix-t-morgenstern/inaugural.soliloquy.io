@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.awt.*;
 import java.util.List;
 
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
@@ -89,6 +90,26 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     @Override
     public List<ColorShift> colorShifts() {
         return ColorShifts;
+    }
+
+    @Override
+    public ProviderAtTime<Float> getBorderThicknessProvider() {
+        return null;
+    }
+
+    @Override
+    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public ProviderAtTime<Color> getBorderColorProvider() {
+        return null;
+    }
+
+    @Override
+    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
     }
 
     @Override

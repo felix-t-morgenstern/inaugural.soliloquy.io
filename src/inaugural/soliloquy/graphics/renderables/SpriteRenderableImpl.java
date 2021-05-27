@@ -16,8 +16,6 @@ import java.util.function.Consumer;
 
 public class SpriteRenderableImpl extends AbstractRenderableWithArea implements SpriteRenderable {
     private Sprite _sprite;
-    private ProviderAtTime<Float> _borderThicknessProvider;
-    private ProviderAtTime<Color> _borderColorProvider;
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
@@ -25,11 +23,10 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+        super(colorShifts, borderThicknessProvider, borderColorProvider,
+                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setSprite(sprite);
-        setBorderThicknessProvider(borderThicknessProvider);
-        setBorderColorProvider(borderColorProvider);
     }
 
     /** @noinspection rawtypes*/
@@ -40,12 +37,10 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts,
-                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setSprite(sprite);
-        setBorderThicknessProvider(borderThicknessProvider);
-        setBorderColorProvider(borderColorProvider);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }
 
@@ -57,29 +52,6 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
     @Override
     public void setSprite(Sprite sprite) throws IllegalArgumentException {
         _sprite = Check.ifNull(sprite, "sprite");
-    }
-
-    @Override
-    public ProviderAtTime<Float> getBorderThicknessProvider() {
-        return _borderThicknessProvider;
-    }
-
-    @Override
-    public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
-            throws IllegalArgumentException {
-        _borderThicknessProvider = Check.ifNull(borderThicknessProvider,
-                "borderThicknessProvider");
-    }
-
-    @Override
-    public ProviderAtTime<Color> getBorderColorProvider() {
-        return _borderColorProvider;
-    }
-
-    @Override
-    public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
-            throws IllegalArgumentException {
-        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 
     @Override

@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.awt.*;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -23,11 +24,14 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        List<ColorShift> colorShifts,
+                                       ProviderAtTime<Float> borderThicknessProvider,
+                                       ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+        super(colorShifts, borderThicknessProvider, borderColorProvider,
+                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setImageAssetSet(imageAssetSet);
         setType(type);
@@ -39,12 +43,15 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        Action onClick, Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
+                                       ProviderAtTime<Float> borderThicknessProvider,
+                                       ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingDimensionsProvider,
-                z, uuid, updateZIndexInContainer, removeFromContainer);
+        super(onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);

@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.awt.*;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -23,33 +24,42 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     private Action _onMouseOver;
     /** @noinspection rawtypes*/
     private Action _onMouseLeave;
+    private ProviderAtTime<Float> _borderThicknessProvider;
+    private ProviderAtTime<Color> _borderColorProvider;
 
     protected AbstractRenderableWithArea(List<ColorShift> colorShifts,
+                                         ProviderAtTime<Float> borderThicknessProvider,
+                                         ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          EntityUuid uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(false, null, null, null, colorShifts, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+        this(false, null, null, null, colorShifts, borderThicknessProvider, borderColorProvider,
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     /** @noinspection rawtypes*/
     protected AbstractRenderableWithArea(Action onClick, Action onMouseOver, Action onMouseLeave,
                                          List<ColorShift> colorShifts,
+                                         ProviderAtTime<Float> borderThicknessProvider,
+                                         ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          EntityUuid uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(true, onClick, onMouseOver, onMouseLeave, colorShifts,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        this(true, onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
     }
 
     /** @noinspection rawtypes*/
     private AbstractRenderableWithArea(boolean capturesMouseEvents, Action onClick,
                                        Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
+                                       ProviderAtTime<Float> borderThicknessProvider,
+                                       ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
@@ -60,6 +70,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
+        setBorderThicknessProvider(borderThicknessProvider);
+        setBorderColorProvider(borderColorProvider);
     }
 
     protected void throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport() {
@@ -140,5 +152,28 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public List<ColorShift> colorShifts() {
         return COLOR_SHIFTS;
+    }
+
+    @Override
+    public ProviderAtTime<Float> getBorderThicknessProvider() {
+        return _borderThicknessProvider;
+    }
+
+    @Override
+    public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
+            throws IllegalArgumentException {
+        _borderThicknessProvider = Check.ifNull(borderThicknessProvider,
+                "borderThicknessProvider");
+    }
+
+    @Override
+    public ProviderAtTime<Color> getBorderColorProvider() {
+        return _borderColorProvider;
+    }
+
+    @Override
+    public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
+            throws IllegalArgumentException {
+        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 }

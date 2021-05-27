@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
+import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
@@ -121,6 +122,26 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
                 @Override
                 public List<ColorShift> colorShifts() {
                     return null;
+                }
+
+                @Override
+                public ProviderAtTime<Float> getBorderThicknessProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public ProviderAtTime<Color> getBorderColorProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
                 }
 
                 @Override
