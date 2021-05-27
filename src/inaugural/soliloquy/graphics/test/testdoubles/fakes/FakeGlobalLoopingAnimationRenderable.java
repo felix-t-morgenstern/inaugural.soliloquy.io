@@ -13,17 +13,17 @@ import java.util.List;
 public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimationRenderable {
     public ProviderAtTime<AnimationFrameSnippet> LoopingAnimation;
     public List<ColorShift> ColorShifts;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public EntityUuid Id;
 
     public FakeGlobalLoopingAnimationRenderable(ProviderAtTime<AnimationFrameSnippet>
                                                         loopingAnimation,
                                                 List<ColorShift> colorShifts,
-                                                ProviderAtTime<FloatBox> renderingAreaProvider,
+                                                ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                                 EntityUuid id) {
         LoopingAnimation = loopingAnimation;
         ColorShifts = colorShifts;
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingDimensionsProvider = renderingDimensionsProvider;
         Id = id;
     }
 
@@ -78,12 +78,13 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return RenderingDimensionsProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
+                                                           renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

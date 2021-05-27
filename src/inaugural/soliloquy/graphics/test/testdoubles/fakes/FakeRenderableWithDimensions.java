@@ -1,25 +1,26 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
-public class FakeRenderable implements Renderable {
+public class FakeRenderableWithDimensions implements RenderableWithDimensions {
     public int Z;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
 
-    public FakeRenderable(int z) {
+    public FakeRenderableWithDimensions(int z) {
         Z = z;
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return RenderingDimensionsProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

@@ -165,21 +165,22 @@ class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetRenderingAreaProvider() {
+    void testSetAndGetRenderingDimensionsProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _rasterizedLineSegmentRenderable.getRenderingAreaProvider());
+                _rasterizedLineSegmentRenderable.getRenderingDimensionsProvider());
 
-        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
-        _rasterizedLineSegmentRenderable.setRenderingAreaProvider(newRenderingAreaProvider);
+        FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
+        _rasterizedLineSegmentRenderable
+                .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
 
-        assertSame(newRenderingAreaProvider,
-                _rasterizedLineSegmentRenderable.getRenderingAreaProvider());
+        assertSame(newRenderingDimensionsProvider,
+                _rasterizedLineSegmentRenderable.getRenderingDimensionsProvider());
     }
 
     @Test
-    void testSetRenderingAreaProviderWithInvalidParams() {
+    void testSetRenderingDimensionsProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setRenderingAreaProvider(null));
+                _rasterizedLineSegmentRenderable.setRenderingDimensionsProvider(null));
     }
 
     @Test

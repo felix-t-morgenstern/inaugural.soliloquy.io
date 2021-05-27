@@ -302,30 +302,31 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    void testGetAndSetRenderingAreaProvider() {
+    void testGetAndSetRenderingDimensionsProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _imageAssetSetRenderableWithMouseEvents.getRenderingAreaProvider());
+                _imageAssetSetRenderableWithMouseEvents.getRenderingDimensionsProvider());
         assertSame(RENDERING_AREA_PROVIDER,
-                _imageAssetSetRenderableWithoutMouseEvents.getRenderingAreaProvider());
+                _imageAssetSetRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
 
-        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+        FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
 
-        _imageAssetSetRenderableWithMouseEvents.setRenderingAreaProvider(newRenderingAreaProvider);
+        _imageAssetSetRenderableWithMouseEvents
+                .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
         _imageAssetSetRenderableWithoutMouseEvents
-                .setRenderingAreaProvider(newRenderingAreaProvider);
+                .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
 
-        assertSame(newRenderingAreaProvider,
-                _imageAssetSetRenderableWithMouseEvents.getRenderingAreaProvider());
-        assertSame(newRenderingAreaProvider,
-                _imageAssetSetRenderableWithoutMouseEvents.getRenderingAreaProvider());
+        assertSame(newRenderingDimensionsProvider,
+                _imageAssetSetRenderableWithMouseEvents.getRenderingDimensionsProvider());
+        assertSame(newRenderingDimensionsProvider,
+                _imageAssetSetRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
     }
 
     @Test
-    void testSetRenderingAreaProviderWithInvalidParams() {
+    void testSetRenderingDimensionsProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.setRenderingAreaProvider(null));
+                _imageAssetSetRenderableWithMouseEvents.setRenderingDimensionsProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithoutMouseEvents.setRenderingAreaProvider(null));
+                _imageAssetSetRenderableWithoutMouseEvents.setRenderingDimensionsProvider(null));
     }
 
     @Test

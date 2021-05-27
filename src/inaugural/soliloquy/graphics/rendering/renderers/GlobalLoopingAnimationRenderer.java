@@ -28,8 +28,8 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
         Check.ifNull(globalLoopingAnimationRenderable, "globalLoopingAnimationRenderable");
 
         FloatBox renderingArea =
-                Check.ifNull(globalLoopingAnimationRenderable.getRenderingAreaProvider(),
-                        "globalLoopingAnimationRenderable.renderingAreaProvider()")
+                Check.ifNull(globalLoopingAnimationRenderable.getRenderingDimensionsProvider(),
+                        "globalLoopingAnimationRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea,
@@ -49,18 +49,18 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
             new GlobalLoopingAnimationRenderable() {
                 @Override
+                public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
                 public EntityUuid uuid() {
                     return null;
-                }
-
-                @Override
-                public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
-
                 }
 
                 @Override

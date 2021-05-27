@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
@@ -21,19 +21,22 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private Font _font;
     private String _lineText;
     private float _lineHeight;
+    private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
     private float _paddingBetweenGlyphs;
 
     public TextLineRenderableImpl(Font font, String lineText, float lineHeight,
                                   float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                  EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  int z, EntityUuid uuid,
+                                  Consumer<Renderable> updateZIndexInContainer,
                                   Consumer<Renderable> removeFromContainer) {
-        super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        super(z, uuid, updateZIndexInContainer, removeFromContainer);
         setFont(font);
         setLineText(lineText);
         setLineHeight(lineHeight);
+        setRenderingLocationProvider(renderingLocationProvider);
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
         COLOR_PROVIDER_INDICES = colorProviderIndices;
         ITALIC_INDICES = Check.ifNull(italicIndices, "italicIndices");
@@ -58,6 +61,19 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     @Override
     public void setLineText(String lineText) throws IllegalArgumentException {
         _lineText = Check.ifNull(lineText, "lineText");
+    }
+
+    @Override
+    public ProviderAtTime<Pair<Float,Float>> getRenderingLocationProvider() {
+        return _renderingLocationProvider;
+    }
+
+    @Override
+    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float,Float>>
+                                                         renderingLocationProvider)
+            throws IllegalArgumentException {
+        _renderingLocationProvider = Check.ifNull(renderingLocationProvider,
+                "renderingLocationProvider");
     }
 
     @Override

@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering;
 import inaugural.soliloquy.common.test.fakes.FakeListFactory;
 import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderable;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.factories.ListFactory;
@@ -42,9 +42,9 @@ class RenderableStackImplTests {
 
     @Test
     void testAddAndSnapshot() {
-        Renderable renderable1 = new FakeRenderable(1);
-        Renderable renderable2 = new FakeRenderable(2);
-        Renderable renderable3 = new FakeRenderable(1);
+        Renderable renderable1 = new FakeRenderableWithDimensions(1);
+        Renderable renderable2 = new FakeRenderableWithDimensions(2);
+        Renderable renderable3 = new FakeRenderableWithDimensions(1);
 
         _renderableStack.add(renderable1);
         _renderableStack.add(renderable2);
@@ -78,7 +78,7 @@ class RenderableStackImplTests {
 
     @Test
     void testClear() {
-        Renderable renderable = new FakeRenderable(0);
+        Renderable renderable = new FakeRenderableWithDimensions(0);
 
         _renderableStack.add(renderable);
 

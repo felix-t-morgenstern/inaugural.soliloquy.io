@@ -13,29 +13,15 @@ abstract class AbstractRenderable implements Renderable {
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER;
     private final EntityUuid UUID;
 
-    private ProviderAtTime<FloatBox> _renderingAreaProvider;
     private int _z;
 
-    public AbstractRenderable(ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                              EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+    public AbstractRenderable(int z, EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                               Consumer<Renderable> removeFromContainer) {
-        setRenderingAreaProvider(renderingAreaProvider);
         _z = z;
         UUID = Check.ifNull(uuid, "uuid");
         UPDATE_Z_INDEX_IN_CONTAINER = Check.ifNull(updateZIndexInContainer,
                 "updateZIndexInContainer");
         REMOVE_FROM_CONTAINER = Check.ifNull(removeFromContainer, "removeFromContainer");
-    }
-
-    @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return _renderingAreaProvider;
-    }
-
-    @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> renderingAreaProvider)
-            throws IllegalArgumentException {
-        _renderingAreaProvider = Check.ifNull(renderingAreaProvider, "renderingAreaProvider");
     }
 
     @Override

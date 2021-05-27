@@ -30,8 +30,9 @@ public class FiniteAnimationRenderer
             throws IllegalArgumentException {
         Check.ifNull(finiteAnimationRenderable, "finiteAnimationRenderable");
 
-        FloatBox renderingArea = Check.ifNull(finiteAnimationRenderable.getRenderingAreaProvider(),
-                "finiteAnimationRenderable.renderingAreaProvider()")
+        FloatBox renderingArea = Check.ifNull(
+                finiteAnimationRenderable.getRenderingDimensionsProvider(),
+                "finiteAnimationRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
@@ -54,6 +55,16 @@ public class FiniteAnimationRenderer
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {
+        @Override
+        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+            return null;
+        }
+
+        @Override
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+        }
+
         @Override
         public AnimationFrameSnippet getArchetype() {
             return new AnimationFrameSnippet() {
@@ -117,16 +128,6 @@ public class FiniteAnimationRenderer
         @Override
         public EntityUuid uuid() {
             return null;
-        }
-
-        @Override
-        public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-            return null;
-        }
-
-        @Override
-        public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
-
         }
 
         @Override

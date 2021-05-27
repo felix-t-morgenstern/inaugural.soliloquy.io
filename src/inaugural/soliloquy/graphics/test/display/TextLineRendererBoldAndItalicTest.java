@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
+import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
@@ -91,7 +92,7 @@ class TextLineRendererBoldAndItalicTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakeFloatBox renderingArea = new FakeFloatBox(0.0f, 0.5f - LINE_HEIGHT, 1f, 1f);
+        FakePair<Float,Float> renderingLocation = new FakePair<>(0.0f, 0.5f - LINE_HEIGHT);
 
         ArrayList<Integer> italicIndices = new ArrayList<Integer>() {{
             add(9);
@@ -104,7 +105,7 @@ class TextLineRendererBoldAndItalicTest {
         }};
 
         TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, 0f, LINE_TEXT, null,
-                italicIndices, boldIndices, new StaticProviderImpl<>(renderingArea),
+                italicIndices, boldIndices, new StaticProviderImpl<>(renderingLocation),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();

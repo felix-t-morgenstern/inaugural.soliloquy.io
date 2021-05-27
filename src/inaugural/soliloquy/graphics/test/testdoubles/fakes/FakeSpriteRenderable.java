@@ -14,30 +14,30 @@ import java.util.List;
 public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
     public List<ColorShift> ColorShifts;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
     public int Z;
     public EntityUuid Uuid;
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
-                                ProviderAtTime<FloatBox> renderingAreaProvider,
+                                ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                 ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider, EntityUuid uuid) {
         Sprite = sprite;
         ColorShifts = colorShifts;
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingDimensionsProvider = renderingDimensionsProvider;
         BorderThicknessProvider = borderThicknessProvider;
         BorderColorProvider = borderColorProvider;
         Uuid = uuid;
     }
 
     public FakeSpriteRenderable(Sprite sprite, List<ColorShift> colorShifts,
-                                ProviderAtTime<FloatBox> renderingAreaProvider, int z,
+                                ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid id) {
         Sprite = sprite;
         ColorShifts = colorShifts;
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
         BorderThicknessProvider = new FakeStaticProviderAtTime<>(null);
         BorderColorProvider = new FakeStaticProviderAtTime<>(null);
@@ -122,12 +122,13 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return RenderingDimensionsProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

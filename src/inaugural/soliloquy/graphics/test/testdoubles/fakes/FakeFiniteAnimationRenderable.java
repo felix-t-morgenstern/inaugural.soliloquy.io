@@ -14,17 +14,17 @@ import java.util.List;
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
     public Animation Animation;
     public List<ColorShift> ColorShifts;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public long StartTimestamp;
     public boolean Deleted;
     public EntityUuid Uuid;
 
     public FakeFiniteAnimationRenderable(Animation animation, List<ColorShift> colorShifts,
-                                         ProviderAtTime<FloatBox> renderingAreaProvider,
+                                         ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          long startTimestamp, EntityUuid uuid) {
         Animation = animation;
         ColorShifts = colorShifts;
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingDimensionsProvider = renderingDimensionsProvider;
         StartTimestamp = startTimestamp;
         Uuid = uuid;
     }
@@ -92,12 +92,13 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return RenderingDimensionsProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> renderingAreaProvider)
+    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
+                                                           renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

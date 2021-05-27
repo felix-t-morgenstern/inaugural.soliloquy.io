@@ -22,10 +22,10 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
                                 List<ColorShift> colorShifts,
-                                ProviderAtTime<FloatBox> renderingAreaProvider, int z,
+                                ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+        super(colorShifts, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setSprite(sprite);
         setBorderThicknessProvider(borderThicknessProvider);
@@ -37,11 +37,12 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
                                 ProviderAtTime<Color> borderColorProvider, Action clickAction,
                                 Action mouseOverAction, Action mouseLeaveAction,
                                 List<ColorShift> colorShifts,
-                                ProviderAtTime<FloatBox> renderingAreaProvider, int z,
+                                ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts,  renderingAreaProvider,
-                z, uuid, updateZIndexInContainer, removeFromContainer);
+        super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts,
+                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
         setSprite(sprite);
         setBorderThicknessProvider(borderThicknessProvider);
         setBorderColorProvider(borderColorProvider);

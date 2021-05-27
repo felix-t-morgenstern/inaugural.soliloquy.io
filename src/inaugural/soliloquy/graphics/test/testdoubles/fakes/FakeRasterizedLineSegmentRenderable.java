@@ -12,7 +12,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public short StipplePattern;
     public short StippleFactor;
     public ProviderAtTime<Color> ColorProvider;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public int Z;
     public EntityUuid Uuid;
 
@@ -20,13 +20,13 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
                                                short stipplePattern,
                                                short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
-                                               ProviderAtTime<FloatBox> renderingAreaProvider,
+                                               ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                                int z, EntityUuid uuid) {
         ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
         ColorProvider = colorProvider;
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
         Uuid = uuid;
     }
@@ -74,12 +74,13 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return RenderingDimensionsProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

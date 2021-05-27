@@ -10,7 +10,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class RasterizedLineSegmentRenderableImpl extends AbstractRenderable
+public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithDimensions
         implements RasterizedLineSegmentRenderable {
     private ProviderAtTime<Float> _thicknessProvider;
     private short _stipplePattern;

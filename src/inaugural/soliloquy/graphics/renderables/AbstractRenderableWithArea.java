@@ -12,7 +12,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.util.List;
 import java.util.function.Consumer;
 
-abstract class AbstractRenderableWithArea extends AbstractRenderable implements RenderableWithArea {
+abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensions
+        implements RenderableWithArea {
     private final List<ColorShift> COLOR_SHIFTS;
 
     private boolean _capturesMouseEvents;
@@ -84,6 +85,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderable implements 
         _capturesMouseEvents = capturesMouseEvents;
     }
 
+    /** @noinspection BooleanMethodIsAlwaysInverted*/
     protected abstract boolean underlyingAssetSupportsMouseEvents();
 
     @Override

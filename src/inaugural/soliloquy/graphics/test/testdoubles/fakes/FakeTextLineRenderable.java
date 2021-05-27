@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
@@ -18,7 +18,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
-    public ProviderAtTime<FloatBox> RenderingAreaProvider;
+    public ProviderAtTime<Pair<Float,Float>> RenderingLocationProvider;
     public EntityUuid Uuid;
 
     public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
@@ -40,11 +40,11 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   String lineText,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<FloatBox> renderingAreaProvider,
+                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
                                   EntityUuid uuid) {
         this(font, lineHeight, paddingBetweenGlyphs, lineText, colorProviderIndices, italicIndices,
                 boldIndices, uuid);
-        RenderingAreaProvider = renderingAreaProvider;
+        RenderingLocationProvider = renderingLocationProvider;
     }
 
     @Override
@@ -103,12 +103,13 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-        return RenderingAreaProvider;
+    public ProviderAtTime<Pair<Float,Float>> getRenderingLocationProvider() {
+        return RenderingLocationProvider;
     }
 
     @Override
-    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float,Float>>
+                                                         renderingLocationProvider)
             throws IllegalArgumentException {
 
     }

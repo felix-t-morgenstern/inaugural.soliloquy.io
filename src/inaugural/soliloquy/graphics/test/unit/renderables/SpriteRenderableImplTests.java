@@ -343,19 +343,21 @@ class SpriteRenderableImplTests {
     @Test
     void testGetAndSetRenderingAreaProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _spriteRenderableWithMouseEvents.getRenderingAreaProvider());
+                _spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
         assertSame(RENDERING_AREA_PROVIDER,
-                _spriteRenderableWithoutMouseEvents.getRenderingAreaProvider());
+                _spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
 
-        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+        FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
 
-        _spriteRenderableWithMouseEvents.setRenderingAreaProvider(newRenderingAreaProvider);
-        _spriteRenderableWithoutMouseEvents.setRenderingAreaProvider(newRenderingAreaProvider);
+        _spriteRenderableWithMouseEvents
+                .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
+        _spriteRenderableWithoutMouseEvents
+                .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
 
-        assertSame(newRenderingAreaProvider,
-                _spriteRenderableWithMouseEvents.getRenderingAreaProvider());
-        assertSame(newRenderingAreaProvider,
-                _spriteRenderableWithoutMouseEvents.getRenderingAreaProvider());
+        assertSame(newRenderingDimensionsProvider,
+                _spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
+        assertSame(newRenderingDimensionsProvider,
+                _spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
     }
 
     @Test

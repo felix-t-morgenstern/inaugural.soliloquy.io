@@ -99,7 +99,7 @@ class TextLineRendererRenderingBoundariesTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
+        FakePair<Float,Float> renderingArea = new FakePair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, null, null,
                 null, new StaticProviderImpl<>(renderingArea), new FakeEntityUuid());

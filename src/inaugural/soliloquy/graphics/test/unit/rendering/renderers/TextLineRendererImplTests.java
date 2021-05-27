@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
-import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
+import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
@@ -15,7 +15,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TextLineRendererImplTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
@@ -63,8 +64,8 @@ class TextLineRendererImplTests {
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
-        ProviderAtTime<FloatBox> renderingAreaProvider =
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+        ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 0f, textLine, colorProviderIndices, italicIndices, boldIndices,
@@ -74,10 +75,10 @@ class TextLineRendererImplTests {
 
         assertThrows(IllegalArgumentException.class, () -> _textLineRenderer.render(null, 0L));
 
-        textLineRenderable.RenderingAreaProvider = null;
+        textLineRenderable.RenderingLocationProvider = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.RenderingAreaProvider = renderingAreaProvider;
+        textLineRenderable.RenderingLocationProvider = renderingAreaProvider;
 
         textLineRenderable.Font = null;
         assertThrows(IllegalArgumentException.class,
@@ -170,8 +171,8 @@ class TextLineRendererImplTests {
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
-        ProviderAtTime<FloatBox> renderingAreaProvider =
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+        ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 0f, textLine, colorProviderIndices, italicIndices, boldIndices,
@@ -181,10 +182,10 @@ class TextLineRendererImplTests {
 
         assertThrows(IllegalArgumentException.class, () -> _textLineRenderer.render(null, 0L));
 
-        textLineRenderable.RenderingAreaProvider = null;
+        textLineRenderable.RenderingLocationProvider = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
-        textLineRenderable.RenderingAreaProvider = renderingAreaProvider;
+        textLineRenderable.RenderingLocationProvider = renderingAreaProvider;
 
         textLineRenderable.Font = null;
         assertThrows(IllegalArgumentException.class,
@@ -315,7 +316,7 @@ class TextLineRendererImplTests {
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 0f, lineText, null, italicIndices, boldIndices,
-                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable);
@@ -387,7 +388,7 @@ class TextLineRendererImplTests {
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 paddingBetweenGlyphs, lineText, null, italicIndices, boldIndices,
-                new FakeStaticProviderAtTime<>(new FloatBoxImpl(0f, 0f, 1f, 1f)),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable);
@@ -413,7 +414,7 @@ class TextLineRendererImplTests {
         float lineHeight = 0.5f;
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
                 0f, "", null, null, null,
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f)),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
         long timestamp = 100L;
         _textLineRenderer.render(textLineRenderable, timestamp);

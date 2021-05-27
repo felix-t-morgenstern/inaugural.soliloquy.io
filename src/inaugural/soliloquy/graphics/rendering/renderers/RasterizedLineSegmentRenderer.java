@@ -41,8 +41,8 @@ public class RasterizedLineSegmentRenderer
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
         FloatBox renderingArea =
-                Check.ifNull(rasterizedLineSegmentRenderable.getRenderingAreaProvider(),
-                        "rasterizedLineSegmentRenderable.getRenderingAreaProvider()")
+                Check.ifNull(rasterizedLineSegmentRenderable.getRenderingDimensionsProvider(),
+                        "rasterizedLineSegmentRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);
         float thickness = Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
                 "rasterizedLineSegmentRenderable.getThicknessProvider()")
@@ -96,6 +96,16 @@ public class RasterizedLineSegmentRenderer
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
                 @Override
+                public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
                 public ProviderAtTime<Float> getThicknessProvider() {
                     return null;
                 }
@@ -138,16 +148,6 @@ public class RasterizedLineSegmentRenderer
                 @Override
                 public EntityUuid uuid() {
                     return null;
-                }
-
-                @Override
-                public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
-
                 }
 
                 @Override

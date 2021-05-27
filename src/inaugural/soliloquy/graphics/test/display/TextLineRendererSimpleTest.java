@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
+import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
@@ -86,7 +87,7 @@ class TextLineRendererSimpleTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakeFloatBox renderingArea = new FakeFloatBox(0.1f, 0.475f, 1f, 1f);
+        FakePair<Float,Float> renderingArea = new FakePair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, null, null,
                 null, new StaticProviderImpl<>(renderingArea), new FakeEntityUuid());

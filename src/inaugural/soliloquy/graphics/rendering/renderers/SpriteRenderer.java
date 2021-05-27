@@ -40,8 +40,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         Color borderColor = Check.ifNull(spriteRenderable.getBorderColorProvider(),
                 "spriteRenderable.getBorderColorProvider()")
                 .provide(timestamp);
-        FloatBox renderingArea = Check.ifNull(spriteRenderable.getRenderingAreaProvider(),
-                "spriteRenderable.getRenderingAreaProvider()")
+        FloatBox renderingArea = Check.ifNull(spriteRenderable.getRenderingDimensionsProvider(),
+                "spriteRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShifts(),
@@ -109,6 +109,16 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {
         @Override
+        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+            return null;
+        }
+
+        @Override
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
         public Sprite getSprite() {
             return null;
         }
@@ -141,16 +151,6 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         @Override
         public EntityUuid uuid() {
             return null;
-        }
-
-        @Override
-        public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
-            return null;
-        }
-
-        @Override
-        public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
-
         }
 
         @Override

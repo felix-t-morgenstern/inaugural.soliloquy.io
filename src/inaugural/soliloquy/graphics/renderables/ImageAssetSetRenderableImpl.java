@@ -23,11 +23,11 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        List<ColorShift> colorShifts,
-                                       ProviderAtTime<FloatBox> renderingAreaProvider, int z,
+                                       ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+        super(colorShifts, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setImageAssetSet(imageAssetSet);
         setType(type);
@@ -39,11 +39,11 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        Action onClick, Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
-                                       ProviderAtTime<FloatBox> renderingAreaProvider, int z,
+                                       ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider,
+        super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingDimensionsProvider,
                 z, uuid, updateZIndexInContainer, removeFromContainer);
         setImageAssetSet(imageAssetSet);
         setType(type);

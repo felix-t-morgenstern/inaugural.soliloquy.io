@@ -6,10 +6,10 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ class TextLineRenderableImplTests {
     private final HashMap<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = new HashMap<>();
     private final ArrayList<Integer> ITALIC_INDICES = new ArrayList<>();
     private final ArrayList<Integer> BOLD_INDICES = new ArrayList<>();
-    private final FakeProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
+    private final FakeProviderAtTime<Pair<Float,Float>> RENDERING_LOCATION_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
@@ -44,7 +44,7 @@ class TextLineRenderableImplTests {
     void setUp() {
         _textLineRenderable = new TextLineRenderableImpl(FONT, LINE_TEXT, LINE_HEIGHT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                RENDERING_LOCATION_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
     }
 
@@ -52,23 +52,23 @@ class TextLineRenderableImplTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 null, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, null, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, 0f, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                null, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                null, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, null, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
@@ -76,15 +76,15 @@ class TextLineRenderableImplTests {
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, null,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, null,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, null));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
                 null, REMOVE_FROM_CONTAINER));
     }
 
@@ -169,20 +169,22 @@ class TextLineRenderableImplTests {
     }
 
     @Test
-    void testGetAndSetRenderingAreaProvider() {
-        assertSame(RENDERING_AREA_PROVIDER, _textLineRenderable.getRenderingAreaProvider());
+    void testGetAndSetRenderingLocationProvider() {
+        assertSame(RENDERING_LOCATION_PROVIDER,
+                _textLineRenderable.getRenderingLocationProvider());
 
-        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+        FakeProviderAtTime<Pair<Float,Float>> newRenderingLocationProvider = new FakeProviderAtTime<>();
 
-        _textLineRenderable.setRenderingAreaProvider(newRenderingAreaProvider);
+        _textLineRenderable.setRenderingLocationProvider(newRenderingLocationProvider);
 
-        assertSame(newRenderingAreaProvider, _textLineRenderable.getRenderingAreaProvider());
+        assertSame(newRenderingLocationProvider,
+                _textLineRenderable.getRenderingLocationProvider());
     }
 
     @Test
-    void testSetRenderingAreaProviderWithInvalidParams() {
+    void testSetRenderingLocationProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _textLineRenderable.setRenderingAreaProvider(null));
+                _textLineRenderable.setRenderingLocationProvider(null));
     }
 
     @Test

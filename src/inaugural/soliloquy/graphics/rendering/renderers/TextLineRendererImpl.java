@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
@@ -36,17 +37,17 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         validateTimestamp(timestamp, "TextLineRendererImpl");
 
-        FloatBox renderingAreaFromRenderable =
-                textLineRenderable.getRenderingAreaProvider().provide(timestamp);
+        Pair<Float,Float> renderingLocation =
+                textLineRenderable.getRenderingLocationProvider().provide(timestamp);
 
         iterateOverTextLine(textLineRenderable, timestamp,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                    float leftX = renderingAreaFromRenderable.leftX() + textLineLengthThusFar;
+                    float leftX = renderingLocation.getItem1() + textLineLengthThusFar;
                     FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                             leftX,
-                            renderingAreaFromRenderable.topY(),
+                            renderingLocation.getItem2(),
                             leftX + glyphLength,
-                            renderingAreaFromRenderable.topY() + textLineRenderable.getLineHeight()
+                            renderingLocation.getItem2() + textLineRenderable.getLineHeight()
                     );
 
                     super.render(renderingArea,
@@ -154,8 +155,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Check.ifNull(textLineRenderable.getFont(), "textLineRenderable.getFont()");
         Check.throwOnLteZero(textLineRenderable.getLineHeight(),
                 "textLineRenderable.getLineHeight()");
-        Check.ifNull(textLineRenderable.getRenderingAreaProvider(),
-                "textLineRenderable.getRenderingAreaProvider()");
+        Check.ifNull(textLineRenderable.getRenderingLocationProvider(),
+                "textLineRenderable.getRenderingLocationProvider()");
         Check.ifNull(textLineRenderable.uuid(), "textLineRenderable.id()");
         if (textLineRenderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
@@ -243,12 +244,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
+        public ProviderAtTime<Pair<Float, Float>> getRenderingLocationProvider() {
             return null;
         }
 
         @Override
-        public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+        public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime) throws IllegalArgumentException {
 
         }
 
