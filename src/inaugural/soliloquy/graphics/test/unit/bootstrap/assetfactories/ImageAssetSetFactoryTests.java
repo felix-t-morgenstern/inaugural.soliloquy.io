@@ -178,28 +178,28 @@ class ImageAssetSetFactoryTests {
     }
 
     @Test
-    void testCreatedImageAssetSetCapturesMouseEvents() {
+    void testCreatedImageAssetSetSupportsMouseEventsCapturing() {
         ImageAssetSet imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
-        assertTrue(imageAssetSet.capturesMouseEvents());
+        assertTrue(imageAssetSet.supportsMouseEventCapturing());
 
         SPRITE_1.Image = NON_CAPTURING_IMAGE;
 
         imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
-        assertFalse(imageAssetSet.capturesMouseEvents());
+        assertFalse(imageAssetSet.supportsMouseEventCapturing());
 
         SPRITE_1.Image = CAPTURING_IMAGE;
 
         imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
-        assertTrue(imageAssetSet.capturesMouseEvents());
+        assertTrue(imageAssetSet.supportsMouseEventCapturing());
 
-        ANIMATION_1.CapturesMouseEvents = false;
+        ANIMATION_1.SupportsMouseEventCapturing = false;
 
         imageAssetSet = _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
-        assertFalse(imageAssetSet.capturesMouseEvents());
+        assertFalse(imageAssetSet.supportsMouseEventCapturing());
 
     }
 

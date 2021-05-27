@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -45,12 +46,23 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public boolean capturesMouseEvents() {
+    public boolean getCapturesMouseEvents() {
         return false;
     }
 
     @Override
+    public void setCapturesMouseEvents(boolean capturesMouseEvents)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
     public void click() throws UnsupportedOperationException {
+
+    }
+
+    @Override
+    public void setOnClick(Action action) {
 
     }
 
@@ -60,7 +72,17 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public void setOnMouseOver(Action action) {
+
+    }
+
+    @Override
     public void mouseLeave() throws UnsupportedOperationException {
+
+    }
+
+    @Override
+    public void setOnMouseLeave(Action action) {
 
     }
 
@@ -70,13 +92,24 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return RenderingAreaProvider;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> renderingAreaProvider)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return 0;
+    }
+
+    @Override
+    public void setZ(int z) {
+
     }
 
     @Override

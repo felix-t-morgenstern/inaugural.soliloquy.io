@@ -48,23 +48,43 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public Font font() {
+    public Font getFont() {
         return Font;
     }
 
     @Override
-    public float lineHeight() {
+    public void setFont(Font font) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public float getLineHeight() {
         return LineHeight;
     }
 
     @Override
-    public float paddingBetweenGlyphs() {
+    public void setLineHeight(float v) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public float getPaddingBetweenGlyphs() {
         return PaddingBetweenGlyphs;
     }
 
     @Override
-    public String lineText() {
+    public void setPaddingBetweenGlyphs(float v) {
+
+    }
+
+    @Override
+    public String getLineText() {
         return LineText;
+    }
+
+    @Override
+    public void setLineText(String s) throws IllegalArgumentException {
+
     }
 
     @Override
@@ -83,13 +103,24 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return RenderingAreaProvider;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return 0;
+    }
+
+    @Override
+    public void setZ(int i) {
+
     }
 
     @Override

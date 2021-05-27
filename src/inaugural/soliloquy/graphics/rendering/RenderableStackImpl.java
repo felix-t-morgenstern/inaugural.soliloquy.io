@@ -28,15 +28,16 @@ public class RenderableStackImpl implements RenderableStack {
         STACK.clear();
     }
 
+    // TODO: Test whether adding the same Renderable with a different z-index updates that Renderable's z-index in the Stack
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
-        if (!STACK.containsKey(renderable.z())) {
+        if (!STACK.containsKey(renderable.getZ())) {
             List<Renderable> renderables = LIST_FACTORY.make(RENDERABLE_ARCHETYPE);
             renderables.add(renderable);
-            STACK.put(renderable.z(), renderables);
+            STACK.put(renderable.getZ(), renderables);
             return;
         }
-        STACK.get(renderable.z()).add(renderable);
+        STACK.get(renderable.getZ()).add(renderable);
     }
 
     @Override

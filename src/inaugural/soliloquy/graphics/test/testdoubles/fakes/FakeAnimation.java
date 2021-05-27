@@ -7,7 +7,7 @@ public class FakeAnimation implements Animation {
     public String Id;
     public int MsDuration;
     public boolean SnippetAtFrameCalled = false;
-    public boolean CapturesMouseEvents;
+    public boolean SupportsMouseEventCapturing;
 
     public FakeAnimation(String id) {
         Id = id;
@@ -18,9 +18,9 @@ public class FakeAnimation implements Animation {
         MsDuration = msDuration;
     }
 
-    public FakeAnimation(String id, boolean capturesMouseEvents) {
+    public FakeAnimation(String id, boolean supportsMouseEventCapturing) {
         Id = id;
-        CapturesMouseEvents = capturesMouseEvents;
+        SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }
 
     @Override
@@ -35,8 +35,8 @@ public class FakeAnimation implements Animation {
     }
 
     @Override
-    public boolean capturesMouseEvents() {
-        return CapturesMouseEvents;
+    public boolean supportsMouseEventCapturing() {
+        return SupportsMouseEventCapturing;
     }
 
     @Override

@@ -104,7 +104,7 @@ class AnimationFactoryTests {
 
         assertEquals(_animationDurationMs, createdAnimation.msDuration());
 
-        assertTrue(createdAnimation.capturesMouseEvents());
+        assertTrue(createdAnimation.supportsMouseEventCapturing());
 
         assertEquals(Animation.class.getCanonicalName(), createdAnimation.getInterfaceName());
 
@@ -126,12 +126,12 @@ class AnimationFactoryTests {
 
 
 
-        _image1.CapturesMouseEvents = false;
+        _image1.SupportsMouseEventCapturing = false;
 
         Animation createdAnimationNonCapturing = _animationFactory.make(
                 new FakeAnimationDefinition(_animationDurationMs, _id, animationFrameSnippets));
 
-        assertFalse(createdAnimationNonCapturing.capturesMouseEvents());
+        assertFalse(createdAnimationNonCapturing.supportsMouseEventCapturing());
     }
 
     @Test

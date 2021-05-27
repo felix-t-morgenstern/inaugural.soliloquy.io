@@ -24,11 +24,13 @@ class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = 789;
     private final EntityUuid UUID = new FakeEntityUuid();
-    private final Consumer<Renderable> DELETE_CONSUMER =
-            rasterizedLineSegmentRenderable ->
-                    _consumedRenderable = rasterizedLineSegmentRenderable;
+    private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable ->
+            _renderableRemovedFromContainer = renderable;
+    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable ->
+            _renderableUpdatedInContainer = renderable;
 
-    private static Renderable _consumedRenderable;
+    private static Renderable _renderableUpdatedInContainer;
+    private static Renderable _renderableRemovedFromContainer;
 
     private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
 
@@ -36,42 +38,56 @@ class RasterizedLineSegmentRenderableImplTests {
     void setUp() {
         _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER);
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 null, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, null,
-                RENDERING_AREA_PROVIDER, Z, UUID, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                null, Z, UUID, DELETE_CONSUMER
+                null, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, null, DELETE_CONSUMER
+                RENDERING_AREA_PROVIDER, Z, null, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, null
+                RENDERING_AREA_PROVIDER, Z, UUID, null,
+                REMOVE_FROM_CONTAINER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
+                THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                null
         ));
     }
 
@@ -82,41 +98,106 @@ class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testThicknessProvider() {
-        assertSame(THICKNESS_PROVIDER, _rasterizedLineSegmentRenderable.thicknessProvider());
+    void testGetAndSetThicknessProvider() {
+        assertSame(THICKNESS_PROVIDER, _rasterizedLineSegmentRenderable.getThicknessProvider());
+
+        FakeProviderAtTime<Float> newThicknessProvider = new FakeProviderAtTime<>();
+
+        _rasterizedLineSegmentRenderable.setThicknessProvider(newThicknessProvider);
+
+        assertSame(newThicknessProvider, _rasterizedLineSegmentRenderable.getThicknessProvider());
     }
 
     @Test
-    void testStipplePattern() {
-        assertEquals(STIPPLE_PATTERN, _rasterizedLineSegmentRenderable.stipplePattern());
+    void testSetThicknessProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setThicknessProvider(null));
     }
 
     @Test
-    void testStippleFactor() {
-        assertEquals(STIPPLE_FACTOR, _rasterizedLineSegmentRenderable.stippleFactor());
+    void testGetAndSetStipplePattern() {
+        assertEquals(STIPPLE_PATTERN, _rasterizedLineSegmentRenderable.getStipplePattern());
+
+        short newStipplePattern = 789;
+        _rasterizedLineSegmentRenderable.setStipplePattern(newStipplePattern);
+
+        assertEquals(newStipplePattern, _rasterizedLineSegmentRenderable.getStipplePattern());
     }
 
     @Test
-    void testColorProvider() {
-        assertSame(COLOR_PROVIDER, _rasterizedLineSegmentRenderable.colorProvider());
+    void testSetStipplePatternWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setStipplePattern((short) 0));
     }
 
     @Test
-    void testRenderingAreaProvider() {
+    void testGetAndSetStippleFactor() {
+        assertEquals(STIPPLE_FACTOR, _rasterizedLineSegmentRenderable.getStippleFactor());
+
+        short newStippleFactor = 234;
+        _rasterizedLineSegmentRenderable.setStippleFactor(newStippleFactor);
+
+        assertEquals(newStippleFactor, _rasterizedLineSegmentRenderable.getStippleFactor());
+    }
+
+    @Test
+    void testSetStippleFactorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setStippleFactor((short) 0));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setStippleFactor((short) 257));
+    }
+
+    @Test
+    void testGetAndSetColorProvider() {
+        assertSame(COLOR_PROVIDER, _rasterizedLineSegmentRenderable.getColorProvider());
+
+        FakeProviderAtTime<Color> newColorProvider = new FakeProviderAtTime<>();
+        _rasterizedLineSegmentRenderable.setColorProvider(newColorProvider);
+
+        assertSame(newColorProvider, _rasterizedLineSegmentRenderable.getColorProvider());
+    }
+
+    @Test
+    void testSetColorProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setColorProvider(null));
+    }
+
+    @Test
+    void testSetAndGetRenderingAreaProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _rasterizedLineSegmentRenderable.renderingAreaProvider());
+                _rasterizedLineSegmentRenderable.getRenderingAreaProvider());
+
+        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+        _rasterizedLineSegmentRenderable.setRenderingAreaProvider(newRenderingAreaProvider);
+
+        assertSame(newRenderingAreaProvider,
+                _rasterizedLineSegmentRenderable.getRenderingAreaProvider());
     }
 
     @Test
-    void testZ() {
-        assertEquals(Z, _rasterizedLineSegmentRenderable.z());
+    void testSetRenderingAreaProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _rasterizedLineSegmentRenderable.setRenderingAreaProvider(null));
+    }
+
+    @Test
+    void testGetAndSetZ() {
+        assertEquals(Z, _rasterizedLineSegmentRenderable.getZ());
+
+        int newZ = 456;
+        _rasterizedLineSegmentRenderable.setZ(newZ);
+
+        assertEquals(newZ, _rasterizedLineSegmentRenderable.getZ());
+        assertSame(_rasterizedLineSegmentRenderable, _renderableUpdatedInContainer);
     }
 
     @Test
     void testDelete() {
         _rasterizedLineSegmentRenderable.delete();
 
-        assertSame(_rasterizedLineSegmentRenderable, _consumedRenderable);
+        assertSame(_rasterizedLineSegmentRenderable, _renderableRemovedFromContainer);
     }
 
     @Test

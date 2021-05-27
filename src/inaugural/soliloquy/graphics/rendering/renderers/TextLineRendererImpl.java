@@ -37,7 +37,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         validateTimestamp(timestamp, "TextLineRendererImpl");
 
         FloatBox renderingAreaFromRenderable =
-                textLineRenderable.renderingAreaProvider().provide(timestamp);
+                textLineRenderable.getRenderingAreaProvider().provide(timestamp);
 
         iterateOverTextLine(textLineRenderable, timestamp,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
@@ -46,7 +46,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                             leftX,
                             renderingAreaFromRenderable.topY(),
                             leftX + glyphLength,
-                            renderingAreaFromRenderable.topY() + textLineRenderable.lineHeight()
+                            renderingAreaFromRenderable.topY() + textLineRenderable.getLineHeight()
                     );
 
                     super.render(renderingArea,
@@ -78,9 +78,9 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Color color = DEFAULT_COLOR;
         FontStyleInfo fontStyleInfo;
         float paddingBetweenGlyphs =
-                textLineRenderable.paddingBetweenGlyphs() * textLineRenderable.lineHeight();
+                textLineRenderable.getPaddingBetweenGlyphs() * textLineRenderable.getLineHeight();
 
-        for (int i = 0; i < textLineRenderable.lineText().length(); i++) {
+        for (int i = 0; i < textLineRenderable.getLineText().length(); i++) {
             if (timestamp != null) {
                 if (textLineRenderable.colorProviderIndices() != null &&
                         textLineRenderable.colorProviderIndices().containsKey(i)) {
@@ -102,18 +102,18 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
             if (italic) {
                 if (bold) {
-                    fontStyleInfo = textLineRenderable.font().boldItalic();
+                    fontStyleInfo = textLineRenderable.getFont().boldItalic();
                 }
                 else {
-                    fontStyleInfo = textLineRenderable.font().italic();
+                    fontStyleInfo = textLineRenderable.getFont().italic();
                 }
             }
             else {
                 if (bold) {
-                    fontStyleInfo = textLineRenderable.font().bold();
+                    fontStyleInfo = textLineRenderable.getFont().bold();
                 }
                 else {
-                    fontStyleInfo = textLineRenderable.font().plain();
+                    fontStyleInfo = textLineRenderable.getFont().plain();
                 }
             }
 
@@ -121,10 +121,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 textLineLengthThusFar += paddingBetweenGlyphs;
             }
 
-            char character = textLineRenderable.lineText().charAt(i);
+            char character = textLineRenderable.getLineText().charAt(i);
             FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
-                    glyphBox.width() * (textLineRenderable.lineHeight() / glyphBox.height())
+                    glyphBox.width() * (textLineRenderable.getLineHeight() / glyphBox.height())
                     * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
@@ -140,7 +140,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 paddingPercentage +=
                         fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(character);
             }
-            lengthThusFarAddition -= paddingPercentage * textLineRenderable.lineHeight();
+            lengthThusFarAddition -= paddingPercentage * textLineRenderable.getLineHeight();
 
             textLineLengthThusFar += lengthThusFarAddition;
         }
@@ -151,17 +151,18 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     private void validateTextLineRenderable(TextLineRenderable textLineRenderable,
                                             String methodName) {
         Check.ifNull(textLineRenderable, "textLineRenderable");
-        Check.ifNull(textLineRenderable.font(), "textLineRenderable.font()");
-        Check.throwOnLteZero(textLineRenderable.lineHeight(), "textLineRenderable.lineHeight()");
-        Check.ifNull(textLineRenderable.renderingAreaProvider(),
-                "textLineRenderable.renderingAreaProvider()");
+        Check.ifNull(textLineRenderable.getFont(), "textLineRenderable.getFont()");
+        Check.throwOnLteZero(textLineRenderable.getLineHeight(),
+                "textLineRenderable.getLineHeight()");
+        Check.ifNull(textLineRenderable.getRenderingAreaProvider(),
+                "textLineRenderable.getRenderingAreaProvider()");
         Check.ifNull(textLineRenderable.uuid(), "textLineRenderable.id()");
         if (textLineRenderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
                     textLineRenderable.colorProviderIndices().entrySet();
             for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
-                validateIndex(entry.getKey(), textLineRenderable.lineText().length(),
+                validateIndex(entry.getKey(), textLineRenderable.getLineText().length(),
                         "textLineRenderable.colorIndices()", methodName, highestIndexThusFar);
                 highestIndexThusFar = entry.getKey();
                 if (entry.getValue() == null) {
@@ -173,7 +174,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         if (textLineRenderable.italicIndices() != null) {
             Integer highestIndexThusFar = null;
             for (Integer index : textLineRenderable.italicIndices()) {
-                validateIndex(index, textLineRenderable.lineText().length(),
+                validateIndex(index, textLineRenderable.getLineText().length(),
                         "textLineRenderable.italicIndices()", methodName,
                         highestIndexThusFar);
                 highestIndexThusFar = index;
@@ -182,7 +183,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         if (textLineRenderable.boldIndices() != null) {
             Integer highestIndexThusFar = null;
             for (Integer index : textLineRenderable.boldIndices()) {
-                validateIndex(index, textLineRenderable.lineText().length(),
+                validateIndex(index, textLineRenderable.getLineText().length(),
                         "textLineRenderable.italicIndices()", methodName,
                         highestIndexThusFar);
                 highestIndexThusFar = index;
@@ -217,38 +218,68 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public Font font() {
-            return null;
-        }
-
-        @Override
-        public String lineText() {
-            return null;
-        }
-
-        @Override
-        public ProviderAtTime<FloatBox> renderingAreaProvider() {
-            return null;
-        }
-
-        @Override
-        public int z() {
-            return 0;
-        }
-
-        @Override
         public void delete() {
 
         }
 
         @Override
-        public float lineHeight() {
+        public Font getFont() {
+            return null;
+        }
+
+        @Override
+        public void setFont(Font font) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public String getLineText() {
+            return null;
+        }
+
+        @Override
+        public void setLineText(String s) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
+            return null;
+        }
+
+        @Override
+        public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public int getZ() {
             return 0;
         }
 
         @Override
-        public float paddingBetweenGlyphs() {
+        public void setZ(int i) {
+
+        }
+
+        @Override
+        public float getLineHeight() {
             return 0;
+        }
+
+        @Override
+        public void setLineHeight(float v) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public float getPaddingBetweenGlyphs() {
+            return 0;
+        }
+
+        @Override
+        public void setPaddingBetweenGlyphs(float v) {
+
         }
 
         @Override

@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
@@ -32,12 +33,22 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public boolean capturesMouseEvents() {
+    public boolean getCapturesMouseEvents() {
         return false;
     }
 
     @Override
+    public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
+
+    }
+
+    @Override
     public void click() throws UnsupportedOperationException {
+
+    }
+
+    @Override
+    public void setOnClick(Action action) {
 
     }
 
@@ -47,7 +58,17 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
+    public void setOnMouseOver(Action action) {
+
+    }
+
+    @Override
     public void mouseLeave() throws UnsupportedOperationException {
+
+    }
+
+    @Override
+    public void setOnMouseLeave(Action action) {
 
     }
 
@@ -57,13 +78,24 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return RenderingAreaProvider;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return 0;
+    }
+
+    @Override
+    public void setZ(int i) {
+
     }
 
     @Override

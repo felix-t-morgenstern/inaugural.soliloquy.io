@@ -13,30 +13,36 @@ import java.util.List;
 import java.util.function.Consumer;
 
 abstract class AbstractRenderableWithArea extends AbstractRenderable implements RenderableWithArea {
-    private final boolean CAPTURES_MOUSE_EVENTS;
-    /** @noinspection rawtypes*/
-    private final Action ON_CLICK;
-    /** @noinspection rawtypes*/
-    private final Action ON_MOUSE_OVER;
-    /** @noinspection rawtypes*/
-    private final Action ON_MOUSE_LEAVE;
     private final List<ColorShift> COLOR_SHIFTS;
+
+    private boolean _capturesMouseEvents;
+    /** @noinspection rawtypes*/
+    private Action _onClick;
+    /** @noinspection rawtypes*/
+    private Action _onMouseOver;
+    /** @noinspection rawtypes*/
+    private Action _onMouseLeave;
 
     protected AbstractRenderableWithArea(List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                         EntityUuid uuid,  Consumer<Renderable> removeFromContainer)
+                                         EntityUuid uuid,
+                                         Consumer<Renderable> updateZIndexInContainer,
+                                         Consumer<Renderable> removeFromContainer)
     {
-        this(false, null, null, null, colorShifts, renderingAreaProvider, z, uuid, removeFromContainer);
+        this(false, null, null, null, colorShifts, renderingAreaProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
     }
 
     /** @noinspection rawtypes*/
     protected AbstractRenderableWithArea(Action onClick, Action onMouseOver, Action onMouseLeave,
                                          List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                         EntityUuid uuid, Consumer<Renderable> removeFromContainer)
+                                         EntityUuid uuid,
+                                         Consumer<Renderable> updateZIndexInContainer,
+                                         Consumer<Renderable> removeFromContainer)
     {
         this(true, onClick, onMouseOver, onMouseLeave, colorShifts,
-                renderingAreaProvider, z, uuid, removeFromContainer);
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     /** @noinspection rawtypes*/
@@ -44,43 +50,87 @@ abstract class AbstractRenderableWithArea extends AbstractRenderable implements 
                                        Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                       EntityUuid uuid, Consumer<Renderable> removeFromContainer) {
-        super(renderingAreaProvider, z, uuid, removeFromContainer);
-        CAPTURES_MOUSE_EVENTS = capturesMouseEvents;
-        ON_CLICK = onClick;
-        ON_MOUSE_OVER = onMouseOver;
-        ON_MOUSE_LEAVE = onMouseLeave;
+                                       EntityUuid uuid,
+                                       Consumer<Renderable> updateZIndexInContainer,
+                                       Consumer<Renderable> removeFromContainer) {
+        super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        _capturesMouseEvents = capturesMouseEvents;
+        _onClick = onClick;
+        _onMouseOver = onMouseOver;
+        _onMouseLeave = onMouseLeave;
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
     }
 
-    @Override
-    public boolean capturesMouseEvents() {
-        return CAPTURES_MOUSE_EVENTS;
+    protected void throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport() {
+        if (!underlyingAssetSupportsMouseEvents()) {
+            throw new IllegalArgumentException(className() +
+                    ": underlying asset does not support capturing mouse events");
+        }
     }
 
     @Override
+    public boolean getCapturesMouseEvents() {
+        return _capturesMouseEvents;
+    }
+
+    // TODO: Ensure that this value can only be set to true when the underlying asset supports mouse event capturing
+    @Override
+    public void setCapturesMouseEvents(boolean capturesMouseEvents) {
+        if (!underlyingAssetSupportsMouseEvents()) {
+            throw new UnsupportedOperationException(className() + ".setCapturesMouseEvents: " +
+                    "underlying asset does not support mouse event capturing");
+        }
+
+        _capturesMouseEvents = capturesMouseEvents;
+    }
+
+    protected abstract boolean underlyingAssetSupportsMouseEvents();
+
+    @Override
     public void click() throws UnsupportedOperationException {
-        callAction(ON_CLICK, "click");
+        callAction(_onClick, "click");
+    }
+
+    @Override
+    public void setOnClick(Action onClick) {
+        throwIfNotSupportingMouseEvents("setOnClick");
+        _onClick = onClick;
     }
 
     @Override
     public void mouseOver() throws UnsupportedOperationException {
-        callAction(ON_MOUSE_OVER, "mouseOver");
+        callAction(_onMouseOver, "mouseOver");
+    }
+
+    @Override
+    public void setOnMouseOver(Action onMouseOver) {
+        throwIfNotSupportingMouseEvents("setOnMouseOver");
+        _onMouseOver = onMouseOver;
     }
 
     @Override
     public void mouseLeave() throws UnsupportedOperationException {
-        callAction(ON_MOUSE_LEAVE, "mouseLeave");
+        callAction(_onMouseLeave, "mouseLeave");
+    }
+
+    @Override
+    public void setOnMouseLeave(Action onMouseLeave) {
+        throwIfNotSupportingMouseEvents("setOnMouseLeave");
+        _onMouseLeave = onMouseLeave;
     }
 
     /** @noinspection rawtypes*/ // TODO: Can avoid accepting methodName as parameter; may not be worth the time
     private void callAction(Action action, String methodName) {
-        if (!CAPTURES_MOUSE_EVENTS) {
+        throwIfNotSupportingMouseEvents(methodName);
+        //noinspection unchecked
+        action.run(null);
+    }
+
+    private void throwIfNotSupportingMouseEvents(String methodName) {
+        if (!_capturesMouseEvents) {
             throw new UnsupportedOperationException(className() + "." + methodName +
                     ": mouse events not supported");
         }
-        //noinspection unchecked
-        action.run(null);
     }
 
     abstract protected String className();

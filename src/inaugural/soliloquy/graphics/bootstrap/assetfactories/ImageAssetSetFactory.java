@@ -43,7 +43,7 @@ public class ImageAssetSetFactory
 
         Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection = new HashMap<>();
 
-        boolean capturesMouseEvents = true;
+        boolean supportsMouseEventCapturing = true;
 
         for (ImageAssetSetAssetDefinition assetDefinition :
                 imageAssetSetDefinition.assetDefinitions()) {
@@ -61,8 +61,8 @@ public class ImageAssetSetFactory
                                 assetDefinition.assetId() + ")");
                     }
                     imageAsset = SPRITES_REGISTRY.get(assetDefinition.assetId());
-                    if (capturesMouseEvents) {
-                        capturesMouseEvents =
+                    if (supportsMouseEventCapturing) {
+                        supportsMouseEventCapturing =
                                 ((Sprite)imageAsset).image().supportsMouseEventCapturing();
                     }
                     break;
@@ -73,8 +73,9 @@ public class ImageAssetSetFactory
                                         assetDefinition.assetId() + ")");
                     }
                     imageAsset = ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
-                    if (capturesMouseEvents) {
-                        capturesMouseEvents = ((Animation)imageAsset).capturesMouseEvents();
+                    if (supportsMouseEventCapturing) {
+                        supportsMouseEventCapturing =
+                                ((Animation)imageAsset).supportsMouseEventCapturing();
                     }
                     break;
                 case UNKNOWN:
@@ -102,7 +103,7 @@ public class ImageAssetSetFactory
         }
 
         return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id(),
-                capturesMouseEvents);
+                supportsMouseEventCapturing);
     }
 
     @Override
@@ -116,13 +117,13 @@ public class ImageAssetSetFactory
     class ImageAssetSetImpl implements ImageAssetSet {
         private final Map<String, Map<String, ImageAsset>> ASSETS_BY_TYPE_AND_DIRECTION;
         private final String ID;
-        private final boolean CAPTURES_MOUSE_EVENTS;
+        private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
 
         public ImageAssetSetImpl(Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection,
-                                 String id, boolean capturesMouseEvents) {
+                                 String id, boolean supportsMouseEventCapturing) {
             ASSETS_BY_TYPE_AND_DIRECTION = assetsByTypeAndDirection;
             ID = id;
-            CAPTURES_MOUSE_EVENTS = capturesMouseEvents;
+            SUPPORTS_MOUSE_EVENT_CAPTURING = supportsMouseEventCapturing;
         }
 
         @Override
@@ -134,8 +135,8 @@ public class ImageAssetSetFactory
         }
 
         @Override
-        public boolean capturesMouseEvents() {
-            return CAPTURES_MOUSE_EVENTS;
+        public boolean supportsMouseEventCapturing() {
+            return SUPPORTS_MOUSE_EVENT_CAPTURING;
         }
 
         @Override

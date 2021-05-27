@@ -32,33 +32,66 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public ProviderAtTime<Float> thicknessProvider() {
+    public ProviderAtTime<Float> getThicknessProvider() {
         return ThicknessProvider;
     }
 
     @Override
-    public short stipplePattern() {
+    public void setThicknessProvider(ProviderAtTime<Float> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public short getStipplePattern() {
         return StipplePattern;
     }
 
     @Override
-    public short stippleFactor() {
+    public void setStipplePattern(short i) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public short getStippleFactor() {
         return StippleFactor;
     }
 
     @Override
-    public ProviderAtTime<Color> colorProvider() {
+    public void setStippleFactor(short i) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public ProviderAtTime<Color> getColorProvider() {
         return ColorProvider;
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public void setColorProvider(ProviderAtTime<Color> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return RenderingAreaProvider;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return Z;
+    }
+
+    @Override
+    public void setZ(int i) {
+
     }
 
     @Override

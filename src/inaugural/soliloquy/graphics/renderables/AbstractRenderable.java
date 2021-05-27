@@ -9,27 +9,44 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.util.function.Consumer;
 
 abstract class AbstractRenderable implements Renderable {
+    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER;
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER;
-    private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER;
-    private final int Z;
     private final EntityUuid UUID;
 
+    private ProviderAtTime<FloatBox> _renderingAreaProvider;
+    private int _z;
+
     public AbstractRenderable(ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                              EntityUuid uuid,  Consumer<Renderable> removeFromContainer) {
-        RENDERING_AREA_PROVIDER = Check.ifNull(renderingAreaProvider, "renderingAreaProvider");
-        Z = z;
+                              EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+                              Consumer<Renderable> removeFromContainer) {
+        setRenderingAreaProvider(renderingAreaProvider);
+        _z = z;
         UUID = Check.ifNull(uuid, "uuid");
+        UPDATE_Z_INDEX_IN_CONTAINER = Check.ifNull(updateZIndexInContainer,
+                "updateZIndexInContainer");
         REMOVE_FROM_CONTAINER = Check.ifNull(removeFromContainer, "removeFromContainer");
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
-        return RENDERING_AREA_PROVIDER;
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
+        return _renderingAreaProvider;
     }
 
     @Override
-    public int z() {
-        return Z;
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> renderingAreaProvider)
+            throws IllegalArgumentException {
+        _renderingAreaProvider = Check.ifNull(renderingAreaProvider, "renderingAreaProvider");
+    }
+
+    @Override
+    public int getZ() {
+        return _z;
+    }
+
+    @Override
+    public void setZ(int z) {
+        _z = z;
+        UPDATE_Z_INDEX_IN_CONTAINER.accept(this);
     }
 
     // NB: deleted SpriteRenderables should _NOT_ make other calls unsupported, unlike

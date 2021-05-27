@@ -41,26 +41,26 @@ public class RasterizedLineSegmentRenderer
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
         FloatBox renderingArea =
-                Check.ifNull(rasterizedLineSegmentRenderable.renderingAreaProvider(),
-                        "rasterizedLineSegmentRenderable.renderingAreaProvider()")
+                Check.ifNull(rasterizedLineSegmentRenderable.getRenderingAreaProvider(),
+                        "rasterizedLineSegmentRenderable.getRenderingAreaProvider()")
                         .provide(timestamp);
-        float thickness = Check.ifNull(rasterizedLineSegmentRenderable.thicknessProvider(),
-                "rasterizedLineSegmentRenderable.thicknessProvider()")
+        float thickness = Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
+                "rasterizedLineSegmentRenderable.getThicknessProvider()")
                 .provide(timestamp);
-        Color color = Check.ifNull(rasterizedLineSegmentRenderable.colorProvider(),
-                "rasterizedLineSegmentRenderable.colorProvider()")
+        Color color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
+                "rasterizedLineSegmentRenderable.getColorProvider()")
                 .provide(timestamp);
 
         Check.throwOnLteZero(thickness,
                 "rasterizedLineSegmentRenderable provided thickness");
 
-        Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.stipplePattern(), (short)0x0000,
-                "rasterizedLineSegmentRenderable.stipplePattern()");
+        Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.getStipplePattern(), (short)0x0000,
+                "rasterizedLineSegmentRenderable.getStipplePattern()");
 
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.stippleFactor(), (short)1,
-                "rasterizedLineSegmentRenderable.stippleFactor()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.stippleFactor(), (short)256,
-                "rasterizedLineSegmentRenderable.stippleFactor()");
+        Check.throwOnLtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short)1,
+                "rasterizedLineSegmentRenderable.getStippleFactor()");
+        Check.throwOnGtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short)256,
+                "rasterizedLineSegmentRenderable.getStippleFactor()");
 
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
         Check.ifNull(renderingArea,
@@ -71,8 +71,8 @@ public class RasterizedLineSegmentRenderer
 
         glLineWidth(thickness);
 
-        glLineStipple(rasterizedLineSegmentRenderable.stippleFactor(),
-                rasterizedLineSegmentRenderable.stipplePattern());
+        glLineStipple(rasterizedLineSegmentRenderable.getStippleFactor(),
+                rasterizedLineSegmentRenderable.getStipplePattern());
 
         glColor4f(color.getRed() / MAX_CHANNEL_VAL,
                 color.getGreen() / MAX_CHANNEL_VAL,
@@ -96,43 +96,73 @@ public class RasterizedLineSegmentRenderer
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
                 @Override
+                public ProviderAtTime<Float> getThicknessProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public short getStipplePattern() {
+                    return 0;
+                }
+
+                @Override
+                public void setStipplePattern(short i) throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public short getStippleFactor() {
+                    return 0;
+                }
+
+                @Override
+                public void setStippleFactor(short i) throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public ProviderAtTime<Color> getColorProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
                 public EntityUuid uuid() {
                     return null;
                 }
 
                 @Override
-                public ProviderAtTime<FloatBox> renderingAreaProvider() {
+                public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
                     return null;
                 }
 
                 @Override
-                public int z() {
+                public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public int getZ() {
                     return 0;
+                }
+
+                @Override
+                public void setZ(int i) {
+
                 }
 
                 @Override
                 public void delete() {
 
-                }
-
-                @Override
-                public ProviderAtTime<Float> thicknessProvider() {
-                    return null;
-                }
-
-                @Override
-                public short stipplePattern() {
-                    return 0;
-                }
-
-                @Override
-                public short stippleFactor() {
-                    return 0;
-                }
-
-                @Override
-                public ProviderAtTime<Color> colorProvider() {
-                    return null;
                 }
 
                 @Override

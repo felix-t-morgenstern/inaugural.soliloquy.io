@@ -10,73 +10,70 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class RasterizedLineSegmentRenderableImpl implements RasterizedLineSegmentRenderable {
-    private final ProviderAtTime<Float> THICKNESS_PROVIDER;
-    private final short STIPPLE_PATTERN;
-    private final short STIPPLE_FACTOR;
-    private final ProviderAtTime<Color> COLOR_PROVIDER;
-    private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER;
-    private final int Z;
-    private final EntityUuid UUID;
-    private final Consumer<Renderable> DELETE_CONSUMER;
+public class RasterizedLineSegmentRenderableImpl extends AbstractRenderable
+        implements RasterizedLineSegmentRenderable {
+    private ProviderAtTime<Float> _thicknessProvider;
+    private short _stipplePattern;
+    private short _stippleFactor;
+    private ProviderAtTime<Color> _colorProvider;
 
     public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox> renderingAreaProvider,
                                                int z, EntityUuid uuid,
-                                               Consumer<Renderable> deleteConsumer) {
-        THICKNESS_PROVIDER = Check.ifNull(thicknessProvider, "thicknessProvider");
-        STIPPLE_PATTERN = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
-        STIPPLE_FACTOR = Check.throwOnLtValue(
+                                               Consumer<Renderable> updateZIndexInContainer,
+                                               Consumer<Renderable> removeFromContainer) {
+        super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        setThicknessProvider(thicknessProvider);
+        setStipplePattern(stipplePattern);
+        setStippleFactor(stippleFactor);
+        setColorProvider(colorProvider);
+    }
+
+    @Override
+    public ProviderAtTime<Float> getThicknessProvider() {
+        return _thicknessProvider;
+    }
+
+    @Override
+    public void setThicknessProvider(ProviderAtTime<Float> thicknessProvider)
+            throws IllegalArgumentException {
+        _thicknessProvider = Check.ifNull(thicknessProvider, "thicknessProvider");
+    }
+
+    @Override
+    public short getStipplePattern() {
+        return _stipplePattern;
+    }
+
+    @Override
+    public void setStipplePattern(short stipplePattern) throws IllegalArgumentException {
+        _stipplePattern = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
+    }
+
+    @Override
+    public short getStippleFactor() {
+        return _stippleFactor;
+    }
+
+    @Override
+    public void setStippleFactor(short stippleFactor) throws IllegalArgumentException {
+        _stippleFactor = Check.throwOnLtValue(
                 Check.throwOnGtValue(stippleFactor, (short) 256, "stippleFactor"),
                 (short) 1, "stippleFactor"
         );
-        COLOR_PROVIDER = Check.ifNull(colorProvider, "colorProvider");
-        RENDERING_AREA_PROVIDER = Check.ifNull(renderingAreaProvider, "renderingAreaProvider");
-        Z = z;
-        UUID = Check.ifNull(uuid, "uuid");
-        DELETE_CONSUMER = Check.ifNull(deleteConsumer, "deleteConsumer");
     }
 
     @Override
-    public ProviderAtTime<Float> thicknessProvider() {
-        return THICKNESS_PROVIDER;
+    public ProviderAtTime<Color> getColorProvider() {
+        return _colorProvider;
     }
 
     @Override
-    public short stipplePattern() {
-        return STIPPLE_PATTERN;
-    }
-
-    @Override
-    public short stippleFactor() {
-        return STIPPLE_FACTOR;
-    }
-
-    @Override
-    public ProviderAtTime<Color> colorProvider() {
-        return COLOR_PROVIDER;
-    }
-
-    @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
-        return RENDERING_AREA_PROVIDER;
-    }
-
-    @Override
-    public int z() {
-        return Z;
-    }
-
-    @Override
-    public void delete() {
-        DELETE_CONSUMER.accept(this);
-    }
-
-    @Override
-    public EntityUuid uuid() {
-        return UUID;
+    public void setColorProvider(ProviderAtTime<Color> colorProvider)
+            throws IllegalArgumentException {
+        _colorProvider = Check.ifNull(colorProvider, "colorProvider");
     }
 
     @Override

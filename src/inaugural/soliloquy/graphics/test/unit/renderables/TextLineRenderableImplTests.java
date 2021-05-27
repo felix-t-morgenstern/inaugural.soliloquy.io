@@ -32,7 +32,10 @@ class TextLineRenderableImplTests {
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER =
             renderable -> _removeFromContainerInput = renderable;
+    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER =
+            renderable -> _updateZIndexInContainerInput = renderable;
 
+    private static Renderable _updateZIndexInContainerInput;
     private static Renderable _removeFromContainerInput;
 
     private TextLineRenderable _textLineRenderable;
@@ -41,7 +44,8 @@ class TextLineRenderableImplTests {
     void setUp() {
         _textLineRenderable = new TextLineRenderableImpl(FONT, LINE_TEXT, LINE_HEIGHT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                RENDERING_AREA_PROVIDER, Z, UUID, REMOVE_FROM_CONTAINER);
+                RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER);
     }
 
     @Test
@@ -49,27 +53,39 @@ class TextLineRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 null, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER));
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, null, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER));
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, 0f, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
-                REMOVE_FROM_CONTAINER));
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
+                null, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
+                ITALIC_INDICES, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, null, Z, UUID,
-                REMOVE_FROM_CONTAINER));
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, null,
-                REMOVE_FROM_CONTAINER));
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
                 ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
-                null));
+                UPDATE_Z_INDEX_IN_CONTAINER, null));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
+                ITALIC_INDICES, BOLD_INDICES, RENDERING_AREA_PROVIDER, Z, UUID,
+                null, REMOVE_FROM_CONTAINER));
     }
 
     @Test
@@ -79,23 +95,62 @@ class TextLineRenderableImplTests {
     }
 
     @Test
-    void testFont() {
-        assertSame(FONT, _textLineRenderable.font());
+    void testGetAndSetFont() {
+        assertSame(FONT, _textLineRenderable.getFont());
+
+        FakeFont newFont = new FakeFont();
+
+        _textLineRenderable.setFont(newFont);
+
+        assertSame(newFont, _textLineRenderable.getFont());
     }
 
     @Test
-    void testLineText() {
-        assertEquals(LINE_TEXT, _textLineRenderable.lineText());
+    void testSetFontWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderable.setFont(null));
     }
 
     @Test
-    void testLineHeight() {
-        assertEquals(LINE_HEIGHT, _textLineRenderable.lineHeight());
+    void testGetAndSetLineText() {
+        assertEquals(LINE_TEXT, _textLineRenderable.getLineText());
+
+        String newLineText = "newLineText";
+
+        _textLineRenderable.setLineText(newLineText);
+
+        assertEquals(newLineText, _textLineRenderable.getLineText());
     }
 
     @Test
-    void testPaddingBetweenGlyphs() {
-        assertEquals(PADDING_BETWEEN_GLYPHS, _textLineRenderable.paddingBetweenGlyphs());
+    void testSetLineTextWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderable.setLineText(null));
+    }
+
+    @Test
+    void testGetAndSetLineHeight() {
+        assertEquals(LINE_HEIGHT, _textLineRenderable.getLineHeight());
+
+        float newLineHeight = 0.456f;
+
+        _textLineRenderable.setLineHeight(newLineHeight);
+
+        assertEquals(newLineHeight, _textLineRenderable.getLineHeight());
+    }
+
+    @Test
+    void testSetLineHeightWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderable.setLineHeight(0f));
+    }
+
+    @Test
+    void testGetAndSetPaddingBetweenGlyphs() {
+        assertEquals(PADDING_BETWEEN_GLYPHS, _textLineRenderable.getPaddingBetweenGlyphs());
+
+        float newPaddingBetweenGlyphs = 0.789f;
+
+        _textLineRenderable.setPaddingBetweenGlyphs(newPaddingBetweenGlyphs);
+
+        assertEquals(newPaddingBetweenGlyphs, _textLineRenderable.getPaddingBetweenGlyphs());
     }
 
     @Test
@@ -114,13 +169,32 @@ class TextLineRenderableImplTests {
     }
 
     @Test
-    void testRenderingAreaProvider() {
-        assertSame(RENDERING_AREA_PROVIDER, _textLineRenderable.renderingAreaProvider());
+    void testGetAndSetRenderingAreaProvider() {
+        assertSame(RENDERING_AREA_PROVIDER, _textLineRenderable.getRenderingAreaProvider());
+
+        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+
+        _textLineRenderable.setRenderingAreaProvider(newRenderingAreaProvider);
+
+        assertSame(newRenderingAreaProvider, _textLineRenderable.getRenderingAreaProvider());
     }
 
     @Test
-    void testZ() {
-        assertEquals(Z, _textLineRenderable.z());
+    void testSetRenderingAreaProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderable.setRenderingAreaProvider(null));
+    }
+
+    @Test
+    void testGetAndSetZ() {
+        assertEquals(Z, _textLineRenderable.getZ());
+
+        int newZ = 456;
+
+        _textLineRenderable.setZ(newZ);
+
+        assertEquals(newZ, _textLineRenderable.getZ());
+        assertSame(_textLineRenderable, _updateZIndexInContainerInput);
     }
 
     @Test

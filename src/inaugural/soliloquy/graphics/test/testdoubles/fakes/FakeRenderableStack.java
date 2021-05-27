@@ -15,16 +15,17 @@ public class FakeRenderableStack implements RenderableStack {
         RENDERABLES.clear();
     }
 
+    // TODO: Consider having this fake implementation copy over the z-index updating functionality from the real implementation
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
-        if (!RENDERABLES.containsKey(renderable.z())) {
+        if (!RENDERABLES.containsKey(renderable.getZ())) {
             List<Renderable> renderablesAtZ = new FakeList<>();
             renderablesAtZ.add(renderable);
-            RENDERABLES.put(renderable.z(), renderablesAtZ);
+            RENDERABLES.put(renderable.getZ(), renderablesAtZ);
             return;
         }
 
-        RENDERABLES.get(renderable.z()).add(renderable);
+        RENDERABLES.get(renderable.getZ()).add(renderable);
     }
 
     @Override

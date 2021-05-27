@@ -8,7 +8,7 @@ public class FakeImage implements Image {
     public int Width;
     public int Height;
 
-    public boolean CapturesMouseEvents;
+    public boolean SupportsMouseEventCapturing;
 
     public FakeImage(String relativeLocation) {
         RelativeLocation = relativeLocation;
@@ -20,15 +20,15 @@ public class FakeImage implements Image {
         Height = height;
     }
 
-    public FakeImage(String relativeLocation, int width, int height, boolean capturesMouseEvents) {
+    public FakeImage(String relativeLocation, int width, int height, boolean supportsMouseEventCapturing) {
         RelativeLocation = relativeLocation;
         Width = width;
         Height = height;
-        CapturesMouseEvents = capturesMouseEvents;
+        SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }
 
-    public FakeImage(boolean capturesMouseEvents) {
-        CapturesMouseEvents = capturesMouseEvents;
+    public FakeImage(boolean supportsMouseEventCapturing) {
+        SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FakeImage implements Image {
 
     @Override
     public boolean supportsMouseEventCapturing() {
-        return CapturesMouseEvents;
+        return SupportsMouseEventCapturing;
     }
 
     @Override

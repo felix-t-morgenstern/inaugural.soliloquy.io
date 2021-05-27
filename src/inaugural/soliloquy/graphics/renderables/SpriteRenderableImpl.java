@@ -15,20 +15,21 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class SpriteRenderableImpl extends AbstractRenderableWithArea implements SpriteRenderable {
-    private final Sprite SPRITE;
-    private final ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER;
-    private final ProviderAtTime<Color> BORDER_COLOR_PROVIDER;
+    private Sprite _sprite;
+    private ProviderAtTime<Float> _borderThicknessProvider;
+    private ProviderAtTime<Color> _borderColorProvider;
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
-        super(colorShifts, renderingAreaProvider, z, uuid, deleteConsumer);
-        SPRITE = Check.ifNull(sprite, "sprite");
-        BORDER_THICKNESS_PROVIDER = Check.ifNull(borderThicknessProvider,
-                "borderThicknessProvider");
-        BORDER_COLOR_PROVIDER = Check.ifNull(borderColorProvider, "borderColorProvider");
+                                EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+                                Consumer<Renderable> removeFromContainer) {
+        super(colorShifts, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
+        setSprite(sprite);
+        setBorderThicknessProvider(borderThicknessProvider);
+        setBorderColorProvider(borderColorProvider);
     }
 
     /** @noinspection rawtypes*/
@@ -37,33 +38,57 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
                                 Action mouseOverAction, Action mouseLeaveAction,
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
+                                EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+                                Consumer<Renderable> removeFromContainer) {
         super(clickAction, mouseOverAction, mouseLeaveAction, colorShifts,  renderingAreaProvider,
-                z, uuid, deleteConsumer);
-        SPRITE = Check.ifNull(sprite, "sprite");
-        BORDER_THICKNESS_PROVIDER = Check.ifNull(borderThicknessProvider,
+                z, uuid, updateZIndexInContainer, removeFromContainer);
+        setSprite(sprite);
+        setBorderThicknessProvider(borderThicknessProvider);
+        setBorderColorProvider(borderColorProvider);
+        throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return _sprite;
+    }
+
+    @Override
+    public void setSprite(Sprite sprite) throws IllegalArgumentException {
+        _sprite = Check.ifNull(sprite, "sprite");
+    }
+
+    @Override
+    public ProviderAtTime<Float> getBorderThicknessProvider() {
+        return _borderThicknessProvider;
+    }
+
+    @Override
+    public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
+            throws IllegalArgumentException {
+        _borderThicknessProvider = Check.ifNull(borderThicknessProvider,
                 "borderThicknessProvider");
-        BORDER_COLOR_PROVIDER = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 
     @Override
-    public Sprite sprite() {
-        return SPRITE;
+    public ProviderAtTime<Color> getBorderColorProvider() {
+        return _borderColorProvider;
     }
 
     @Override
-    public ProviderAtTime<Float> borderThicknessProvider() {
-        return BORDER_THICKNESS_PROVIDER;
-    }
-
-    @Override
-    public ProviderAtTime<Color> borderColorProvider() {
-        return BORDER_COLOR_PROVIDER;
+    public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
+            throws IllegalArgumentException {
+        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 
     @Override
     public String getInterfaceName() {
         return SpriteRenderable.class.getCanonicalName();
+    }
+
+    @Override
+    protected boolean underlyingAssetSupportsMouseEvents() {
+        return _sprite.image().supportsMouseEventCapturing();
     }
 
     @Override

@@ -13,13 +13,23 @@ public class RenderableArchetype implements Renderable {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return null;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return 0;
+    }
+
+    @Override
+    public void setZ(int i) {
+
     }
 
     @Override

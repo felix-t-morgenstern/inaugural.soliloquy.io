@@ -14,6 +14,10 @@ public class FakeImageAssetSet implements ImageAssetSet {
         Id = id;
     }
 
+    public FakeImageAssetSet(boolean capturesMouseEvents) {
+        CapturesMouseEvents = capturesMouseEvents;
+    }
+
     public FakeImageAssetSet(String id, boolean capturesMouseEvents) {
         Id = id;
         CapturesMouseEvents = capturesMouseEvents;
@@ -25,8 +29,8 @@ public class FakeImageAssetSet implements ImageAssetSet {
     }
 
     @Override
-    public boolean capturesMouseEvents() {
-        return false;
+    public boolean supportsMouseEventCapturing() {
+        return CapturesMouseEvents;
     }
 
     @Override

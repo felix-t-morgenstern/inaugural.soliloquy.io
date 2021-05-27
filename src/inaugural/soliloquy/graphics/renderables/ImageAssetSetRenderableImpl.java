@@ -15,47 +15,75 @@ import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
-public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea implements ImageAssetSetRenderable {
-    private final ImageAssetSet IMAGE_ASSET_SET;
-    private final String TYPE;
-    private final String DIRECTION;
+public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
+        implements ImageAssetSetRenderable {
+    private ImageAssetSet _imageAssetSet;
+    private String _type;
+    private String _direction;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                       EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
-        super(colorShifts, renderingAreaProvider, z, uuid, deleteConsumer);
-        IMAGE_ASSET_SET = Check.ifNull(imageAssetSet, "imageAssetSet");
-        TYPE = nullIfEmpty(type);
-        DIRECTION = nullIfEmpty(direction);
+                                       EntityUuid uuid,
+                                       Consumer<Renderable> updateZIndexInContainer,
+                                       Consumer<Renderable> removeFromContainer) {
+        super(colorShifts, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
+        setImageAssetSet(imageAssetSet);
+        setType(type);
+        setDirection(direction);
     }
 
+    // TODO: Throw an exception if the underlying ImageAssetSet cannot support mouse events
     /** @noinspection rawtypes*/
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        Action onClick, Action onMouseOver, Action onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                       EntityUuid uuid, Consumer<Renderable> deleteConsumer) {
+                                       EntityUuid uuid,
+                                       Consumer<Renderable> updateZIndexInContainer,
+                                       Consumer<Renderable> removeFromContainer) {
         super(onClick, onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider,
-                z, uuid, deleteConsumer);
-        IMAGE_ASSET_SET = Check.ifNull(imageAssetSet, "imageAssetSet");
-        TYPE = nullIfEmpty(type);
-        DIRECTION = nullIfEmpty(direction);
+                z, uuid, updateZIndexInContainer, removeFromContainer);
+        setImageAssetSet(imageAssetSet);
+        setType(type);
+        setDirection(direction);
+        throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }
 
     @Override
-    public ImageAssetSet imageAssetSet() {
-        return IMAGE_ASSET_SET;
+    public ImageAssetSet getImageAssetSet() {
+        return _imageAssetSet;
     }
 
     @Override
-    public String type() {
-        return TYPE;
+    public void setImageAssetSet(ImageAssetSet imageAssetSet) throws IllegalArgumentException {
+        _imageAssetSet = Check.ifNull(imageAssetSet, "imageAssetSet");
     }
 
     @Override
-    public String direction() {
-        return DIRECTION;
+    public String getType() {
+        return _type;
+    }
+
+    @Override
+    public void setType(String type) {
+        _type = nullIfEmpty(type);
+    }
+
+    @Override
+    public String getDirection() {
+        return _direction;
+    }
+
+    @Override
+    public void setDirection(String direction) {
+        _direction = nullIfEmpty(direction);
+    }
+
+    @Override
+    protected boolean underlyingAssetSupportsMouseEvents() {
+        return _imageAssetSet.supportsMouseEventCapturing();
     }
 
     @Override

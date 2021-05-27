@@ -16,7 +16,10 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ImageAssetSetRenderableImplTests {
-    private final ImageAssetSet IMAGE_ASSET_SET = new FakeImageAssetSet();
+    private final ImageAssetSet IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS =
+            new FakeImageAssetSet(true);
+    private final ImageAssetSet IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS =
+            new FakeImageAssetSet(false);
     private final String TYPE = "type";
     private final String DIRECTION = "direction";
     /** @noinspection rawtypes*/
@@ -31,78 +34,128 @@ class ImageAssetSetRenderableImplTests {
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
-            IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER =
+            IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER =
             renderable ->
-                    _imageAssetSetRenderableWithMouseEventsDeleteConsumerInput = renderable;
+                    _imageAssetSetRenderableWithMouseEventsUpdateZIndexInConsumerInput =
+                            renderable;
     private final Consumer<Renderable>
-            IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER =
+            IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER =
             renderable ->
-                    _imageAssetSetRenderableWithoutMouseEventsDeleteConsumerInput = renderable;
+                    _imageAssetSetRenderableWithoutMouseEventsUpdateZIndexInConsumerInput =
+                            renderable;
+    private final Consumer<Renderable>
+            IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER =
+            renderable ->
+                    _imageAssetSetRenderableWithMouseEventsRemoveFromConsumerInput = renderable;
+    private final Consumer<Renderable>
+            IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER =
+            renderable ->
+                    _imageAssetSetRenderableWithoutMouseEventsRemoveFromConsumerInput = renderable;
 
-    private static Renderable _imageAssetSetRenderableWithMouseEventsDeleteConsumerInput;
-    private static Renderable _imageAssetSetRenderableWithoutMouseEventsDeleteConsumerInput;
+    private static Renderable
+            _imageAssetSetRenderableWithMouseEventsUpdateZIndexInConsumerInput;
+    private static Renderable
+            _imageAssetSetRenderableWithoutMouseEventsUpdateZIndexInConsumerInput;
+    private static Renderable _imageAssetSetRenderableWithMouseEventsRemoveFromConsumerInput;
+    private static Renderable _imageAssetSetRenderableWithoutMouseEventsRemoveFromConsumerInput;
 
     private ImageAssetSetRenderable _imageAssetSetRenderableWithMouseEvents;
     private ImageAssetSetRenderable _imageAssetSetRenderableWithoutMouseEvents;
 
     @BeforeEach
     void setUp() {
-        _imageAssetSetRenderableWithMouseEvents = new ImageAssetSetRenderableImpl(IMAGE_ASSET_SET,
-                TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER);
+        _imageAssetSetRenderableWithMouseEvents = new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER);
 
         _imageAssetSetRenderableWithoutMouseEvents = new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER);
+                IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                null, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
+                null, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                null, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, null, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
-                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, null, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                null,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 null
         ));
 
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                null, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
+                null, TYPE, DIRECTION, COLOR_SHIFTS,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, null, RENDERING_AREA_PROVIDER, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, null,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, COLOR_SHIFTS, null, Z, UUID,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                null, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
-                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_DELETE_CONSUMER
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                RENDERING_AREA_PROVIDER, Z, null,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET, TYPE, DIRECTION, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                null,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 null
         ));
     }
@@ -116,60 +169,130 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    void testImageAssetSet() {
-        assertSame(IMAGE_ASSET_SET, _imageAssetSetRenderableWithMouseEvents.imageAssetSet());
-        assertSame(IMAGE_ASSET_SET, _imageAssetSetRenderableWithoutMouseEvents.imageAssetSet());
+    void testGetAndSetImageAssetSet() {
+        assertSame(IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS,
+                _imageAssetSetRenderableWithMouseEvents.getImageAssetSet());
+        assertSame(IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS,
+                _imageAssetSetRenderableWithoutMouseEvents.getImageAssetSet());
+
+        FakeImageAssetSet newImageAssetSet = new FakeImageAssetSet();
+
+        _imageAssetSetRenderableWithMouseEvents.setImageAssetSet(newImageAssetSet);
+        _imageAssetSetRenderableWithoutMouseEvents.setImageAssetSet(newImageAssetSet);
+
+        assertSame(newImageAssetSet, _imageAssetSetRenderableWithMouseEvents.getImageAssetSet());
+        assertSame(newImageAssetSet,
+                _imageAssetSetRenderableWithoutMouseEvents.getImageAssetSet());
     }
 
     @Test
-    void testType() {
-        assertEquals(TYPE, _imageAssetSetRenderableWithMouseEvents.type());
-        assertEquals(TYPE, _imageAssetSetRenderableWithoutMouseEvents.type());
+    void testSetImageAssetSetWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setImageAssetSet(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setImageAssetSet(null));
     }
 
     @Test
-    void testDirection() {
-        assertEquals(DIRECTION, _imageAssetSetRenderableWithMouseEvents.direction());
-        assertEquals(DIRECTION, _imageAssetSetRenderableWithoutMouseEvents.direction());
+    void testGetAndSetType() {
+        assertEquals(TYPE, _imageAssetSetRenderableWithMouseEvents.getType());
+        assertEquals(TYPE, _imageAssetSetRenderableWithoutMouseEvents.getType());
+
+        _imageAssetSetRenderableWithMouseEvents.setType("");
+        _imageAssetSetRenderableWithoutMouseEvents.setType("");
+
+        assertNull(_imageAssetSetRenderableWithMouseEvents.getType());
+        assertNull(_imageAssetSetRenderableWithoutMouseEvents.getType());
     }
 
     @Test
-    void testCapturesMouseEvents() {
-        assertTrue(_imageAssetSetRenderableWithMouseEvents.capturesMouseEvents());
-        assertFalse(_imageAssetSetRenderableWithoutMouseEvents.capturesMouseEvents());
+    void testGetAndSetDirection() {
+        assertEquals(DIRECTION, _imageAssetSetRenderableWithMouseEvents.getDirection());
+        assertEquals(DIRECTION, _imageAssetSetRenderableWithoutMouseEvents.getDirection());
+
+        _imageAssetSetRenderableWithMouseEvents.setDirection("");
+        _imageAssetSetRenderableWithoutMouseEvents.setDirection("");
+
+        assertNull(_imageAssetSetRenderableWithMouseEvents.getDirection());
+        assertNull(_imageAssetSetRenderableWithoutMouseEvents.getDirection());
     }
 
     @Test
-    void testClick() {
+    void testGetAndSetCapturesMouseEvents() {
+        assertTrue(_imageAssetSetRenderableWithMouseEvents.getCapturesMouseEvents());
+        assertFalse(_imageAssetSetRenderableWithoutMouseEvents.getCapturesMouseEvents());
+
+        _imageAssetSetRenderableWithMouseEvents.setCapturesMouseEvents(false);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setCapturesMouseEvents(false));
+
+        assertFalse(_imageAssetSetRenderableWithMouseEvents.getCapturesMouseEvents());
+    }
+
+    @Test
+    void testClickAndSetOnClick() {
         assertThrows(UnsupportedOperationException.class,
                 _imageAssetSetRenderableWithoutMouseEvents::click);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setOnClick(ON_CLICK));
 
         _imageAssetSetRenderableWithMouseEvents.click();
         assertEquals(1, ON_CLICK.NumberOfTimesCalled);
         assertEquals(1, ON_CLICK.Inputs.size());
         assertNull(ON_CLICK.Inputs.get(0));
+
+        //noinspection rawtypes
+        FakeAction newOnClick = new FakeAction();
+        _imageAssetSetRenderableWithMouseEvents.setOnClick(newOnClick);
+
+        _imageAssetSetRenderableWithMouseEvents.click();
+        assertEquals(1, newOnClick.NumberOfTimesCalled);
+        assertEquals(1, newOnClick.Inputs.size());
+        assertNull(newOnClick.Inputs.get(0));
     }
 
     @Test
-    void testMouseOver() {
+    void testMouseOverAndSetOnMouseOver() {
         assertThrows(UnsupportedOperationException.class,
                 _imageAssetSetRenderableWithoutMouseEvents::mouseOver);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setOnMouseOver(ON_MOUSE_OVER));
 
         _imageAssetSetRenderableWithMouseEvents.mouseOver();
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
         assertNull(ON_MOUSE_OVER.Inputs.get(0));
+
+        //noinspection rawtypes
+        FakeAction newOnMouseOver = new FakeAction();
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
+
+        _imageAssetSetRenderableWithMouseEvents.mouseOver();
+        assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
+        assertEquals(1, newOnMouseOver.Inputs.size());
+        assertNull(newOnMouseOver.Inputs.get(0));
     }
 
     @Test
-    void testMouseLeave() {
+    void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class,
                 _imageAssetSetRenderableWithoutMouseEvents::mouseLeave);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setOnMouseLeave(ON_MOUSE_LEAVE));
 
         _imageAssetSetRenderableWithMouseEvents.mouseLeave();
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
         assertNull(ON_MOUSE_LEAVE.Inputs.get(0));
+
+        //noinspection rawtypes
+        FakeAction newOnMouseLeave = new FakeAction();
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
+
+        _imageAssetSetRenderableWithMouseEvents.mouseLeave();
+        assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
+        assertEquals(1, newOnMouseLeave.Inputs.size());
+        assertNull(newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -179,28 +302,60 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    void testRenderingAreaProvider() {
+    void testGetAndSetRenderingAreaProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _imageAssetSetRenderableWithMouseEvents.renderingAreaProvider());
+                _imageAssetSetRenderableWithMouseEvents.getRenderingAreaProvider());
         assertSame(RENDERING_AREA_PROVIDER,
-                _imageAssetSetRenderableWithoutMouseEvents.renderingAreaProvider());
+                _imageAssetSetRenderableWithoutMouseEvents.getRenderingAreaProvider());
+
+        FakeProviderAtTime<FloatBox> newRenderingAreaProvider = new FakeProviderAtTime<>();
+
+        _imageAssetSetRenderableWithMouseEvents.setRenderingAreaProvider(newRenderingAreaProvider);
+        _imageAssetSetRenderableWithoutMouseEvents
+                .setRenderingAreaProvider(newRenderingAreaProvider);
+
+        assertSame(newRenderingAreaProvider,
+                _imageAssetSetRenderableWithMouseEvents.getRenderingAreaProvider());
+        assertSame(newRenderingAreaProvider,
+                _imageAssetSetRenderableWithoutMouseEvents.getRenderingAreaProvider());
     }
 
     @Test
-    void testZ() {
-        assertSame(Z, _imageAssetSetRenderableWithMouseEvents.z());
-        assertSame(Z, _imageAssetSetRenderableWithoutMouseEvents.z());
+    void testSetRenderingAreaProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setRenderingAreaProvider(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setRenderingAreaProvider(null));
+    }
+
+    @Test
+    void testGetAndSetZ() {
+        assertSame(Z, _imageAssetSetRenderableWithMouseEvents.getZ());
+        assertSame(Z, _imageAssetSetRenderableWithoutMouseEvents.getZ());
+
+        int newZ = 456;
+
+        _imageAssetSetRenderableWithMouseEvents.setZ(newZ);
+        _imageAssetSetRenderableWithoutMouseEvents.setZ(newZ);
+
+        assertEquals(newZ, _imageAssetSetRenderableWithMouseEvents.getZ());
+        assertEquals(newZ, _imageAssetSetRenderableWithoutMouseEvents.getZ());
+
+        assertSame(_imageAssetSetRenderableWithMouseEvents,
+                _imageAssetSetRenderableWithMouseEventsUpdateZIndexInConsumerInput);
+        assertSame(_imageAssetSetRenderableWithoutMouseEvents,
+                _imageAssetSetRenderableWithoutMouseEventsUpdateZIndexInConsumerInput);
     }
 
     @Test
     void testDelete() {
         _imageAssetSetRenderableWithMouseEvents.delete();
-        assertSame(_imageAssetSetRenderableWithMouseEventsDeleteConsumerInput,
-                _imageAssetSetRenderableWithMouseEvents);
+        assertSame(_imageAssetSetRenderableWithMouseEvents,
+                _imageAssetSetRenderableWithMouseEventsRemoveFromConsumerInput);
 
         _imageAssetSetRenderableWithoutMouseEvents.delete();
-        assertSame(_imageAssetSetRenderableWithoutMouseEventsDeleteConsumerInput,
-                _imageAssetSetRenderableWithoutMouseEvents);
+        assertSame(_imageAssetSetRenderableWithoutMouseEvents,
+                _imageAssetSetRenderableWithoutMouseEventsRemoveFromConsumerInput);
     }
 
     @Test

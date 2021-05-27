@@ -14,13 +14,24 @@ public class FakeRenderable implements Renderable {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> renderingAreaProvider() {
+    public ProviderAtTime<FloatBox> getRenderingAreaProvider() {
         return RenderingAreaProvider;
     }
 
     @Override
-    public int z() {
+    public void setRenderingAreaProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public int getZ() {
         return Z;
+    }
+
+    @Override
+    public void setZ(int i) {
+
     }
 
     @Override

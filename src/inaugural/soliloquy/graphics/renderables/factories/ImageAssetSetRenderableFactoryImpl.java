@@ -19,10 +19,12 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet, String type, String direction,
                                         List<ColorShift> colorShifts,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                        EntityUuid uuid, Consumer<Renderable> removeFromContainer)
+                                        EntityUuid uuid,
+                                        Consumer<Renderable> updateZIndexInContainer,
+                                        Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, colorShifts,
-                renderingAreaProvider, z, uuid, removeFromContainer);
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     @Override
@@ -30,11 +32,13 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Action onClick, Action onMouseOver, Action onMouseLeave,
                                         List<ColorShift> colorShifts,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                        EntityUuid uuid, Consumer<Renderable> removeFromContainer)
+                                        EntityUuid uuid,
+                                        Consumer<Renderable> updateZIndexInContainer,
+                                        Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onClick,
                 onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider, z, uuid,
-                removeFromContainer);
+                updateZIndexInContainer, removeFromContainer);
     }
 
     @Override

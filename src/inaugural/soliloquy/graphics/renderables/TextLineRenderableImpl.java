@@ -14,48 +14,70 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class TextLineRenderableImpl extends AbstractRenderable implements TextLineRenderable {
-    private final Font FONT;
-    private final String LINE_TEXT;
-    private final float LINE_HEIGHT;
-    private final float PADDING_BETWEEN_GLYPHS;
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES;
     private final List<Integer> ITALIC_INDICES;
     private final List<Integer> BOLD_INDICES;
+
+    private Font _font;
+    private String _lineText;
+    private float _lineHeight;
+    private float _paddingBetweenGlyphs;
 
     public TextLineRenderableImpl(Font font, String lineText, float lineHeight,
                                   float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                  EntityUuid uuid,  Consumer<Renderable> removeFromContainer) {
-        super(renderingAreaProvider, z, uuid, removeFromContainer);
-        FONT = Check.ifNull(font, "font");
-        LINE_TEXT = Check.ifNull(lineText, "lineText");
-        LINE_HEIGHT = Check.throwOnLteZero(lineHeight, "lineHeight");
-        PADDING_BETWEEN_GLYPHS = paddingBetweenGlyphs;
+                                  EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+                                  Consumer<Renderable> removeFromContainer) {
+        super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        setFont(font);
+        setLineText(lineText);
+        setLineHeight(lineHeight);
+        setPaddingBetweenGlyphs(paddingBetweenGlyphs);
         COLOR_PROVIDER_INDICES = colorProviderIndices;
-        ITALIC_INDICES = italicIndices;
-        BOLD_INDICES = boldIndices;
+        ITALIC_INDICES = Check.ifNull(italicIndices, "italicIndices");
+        BOLD_INDICES = Check.ifNull(boldIndices, "boldIndices");
     }
 
     @Override
-    public Font font() {
-        return FONT;
+    public Font getFont() {
+        return _font;
     }
 
     @Override
-    public String lineText() {
-        return LINE_TEXT;
+    public void setFont(Font font) throws IllegalArgumentException {
+        _font = Check.ifNull(font, "font");
     }
 
     @Override
-    public float lineHeight() {
-        return LINE_HEIGHT;
+    public String getLineText() {
+        return _lineText;
     }
 
     @Override
-    public float paddingBetweenGlyphs() {
-        return PADDING_BETWEEN_GLYPHS;
+    public void setLineText(String lineText) throws IllegalArgumentException {
+        _lineText = Check.ifNull(lineText, "lineText");
+    }
+
+    @Override
+    public float getLineHeight() {
+        return _lineHeight;
+    }
+
+    @Override
+    public void setLineHeight(float lineHeight) throws IllegalArgumentException {
+        _lineHeight = Check.throwOnLteZero(lineHeight, "lineHeight");
+    }
+
+    @Override
+    public float getPaddingBetweenGlyphs() {
+        return _paddingBetweenGlyphs;
+    }
+
+    @Override
+    public void setPaddingBetweenGlyphs(float paddingBetweenGlyphs) {
+        _paddingBetweenGlyphs = paddingBetweenGlyphs;
     }
 
     @Override
