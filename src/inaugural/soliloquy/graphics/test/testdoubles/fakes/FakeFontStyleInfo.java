@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class FakeFontStyleInfo implements FontStyleInfo {
     public HashMap<Character,FloatBox> Glyphs = new HashMap<>();
+    public HashMap<Character,Float> GlyphwiseAdditionalHorizontalTextureSpacing = new HashMap<>();
     public float TextureWidthToHeightRatio;
 
     @Override
@@ -33,7 +34,7 @@ public class FakeFontStyleInfo implements FontStyleInfo {
 
     @Override
     public Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing() {
-        return null;
+        return GlyphwiseAdditionalHorizontalTextureSpacing;
     }
 
     @Override

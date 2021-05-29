@@ -36,6 +36,10 @@ public abstract class CanValidateFontDefinitions {
                 "fontStyleDefinition.additionalGlyphHorizontalTextureSpacing()");
         Check.throwOnLtValue(fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), 0f,
                 "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
+        Check.ifNull(fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
+                "fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing()");
+        Check.ifNull(fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift(),
+                "fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift()");
         Check.throwOnGteValue(
                 leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
                 1f,

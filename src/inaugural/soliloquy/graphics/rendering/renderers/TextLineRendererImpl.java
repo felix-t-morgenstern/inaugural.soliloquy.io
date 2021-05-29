@@ -135,9 +135,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
             float lengthThusFarAddition = glyphLength;
             float paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
-            if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing() != null &&
-                    fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
-                            .containsKey(character)) {
+            if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
+                    .containsKey(character)) {
                 paddingPercentage +=
                         fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(character);
             }

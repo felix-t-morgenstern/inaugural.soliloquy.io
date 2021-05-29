@@ -56,6 +56,8 @@ class TextLineRendererRenderingBoundariesTest {
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING = 0.5f;
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
             new HashMap<>();
+    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT =
+            new HashMap<>();
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.05f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -81,18 +83,22 @@ class TextLineRendererRenderingBoundariesTest {
         FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
+                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
         FakeFontDefinition fontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION,
                 MAX_LOSSLESS_FONT_SIZE,

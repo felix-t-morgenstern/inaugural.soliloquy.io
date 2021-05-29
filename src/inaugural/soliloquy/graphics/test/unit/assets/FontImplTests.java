@@ -27,14 +27,22 @@ class FontImplTests {
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC = 0.234f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD = 0.345f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC = 0.456f;
-    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN =
-            new HashMap<>();
-    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC =
-            new HashMap<>();
-    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD =
-            new HashMap<>();
-    private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC =
-            new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD = new HashMap<>();
+    private final static Map<Character, Float>
+            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC = new HashMap<>();
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN = 0.567f;
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC = 0.678f;
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD = 0.789f;
@@ -66,21 +74,25 @@ class FontImplTests {
                         new FakeFontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
                         new FakeFontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
                         new FakeFontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
                         new FakeFontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                         ),
                         LEADING_ADJUSTMENT
@@ -110,21 +122,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -141,21 +157,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -172,21 +192,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -203,21 +227,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -234,21 +262,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -266,16 +298,19 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -292,21 +327,60 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        null,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -323,21 +397,60 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        null,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -354,21 +467,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -385,17 +502,20 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 null,
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -412,21 +532,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -443,21 +567,95 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        null,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        null,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -474,21 +672,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -505,17 +707,20 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 null,
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -532,21 +737,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -563,21 +772,95 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        null,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        null,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         -0.0001f
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -594,21 +877,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -625,16 +912,19 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 null,
@@ -652,21 +942,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         -0.0001f,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -683,21 +977,95 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        null,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        null,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                ),
+                                LEADING_ADJUSTMENT
+                        ),
+                        FLOAT_BOX_FACTORY,
+                        COORDINATE_FACTORY
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontImpl(
+                        new FakeFontDefinition(
+                                ID,
+                                RELATIVE_LOCATION,
+                                MAX_LOSSLESS_FONT_SIZE,
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                ),
+                                new FakeFontStyleDefinition(
+                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         -0.0001f
                                 ),
                                 LEADING_ADJUSTMENT
@@ -714,21 +1082,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 LEADING_ADJUSTMENT
@@ -745,21 +1117,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 1f
@@ -776,21 +1152,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -807,21 +1187,25 @@ class FontImplTests {
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                 ),
                                 new FakeFontStyleDefinition(
                                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT
@@ -932,6 +1316,128 @@ class FontImplTests {
                 Math.round(bangUvCoordinatesBoldItalic.leftX() * 1000f) / 1000f);
         assertEquals(0f, bangUvCoordinatesBoldItalic.topY());
         assertTrue(bangUvCoordinatesBoldItalic.rightX() > 0);
+    }
+
+    @Test
+    void testGlyphwiseAdditionalLeftBoundaryShift() {
+        HashMap<Character, Float> glyphwiseAdditionalLeftBoundaryShiftPlain = new HashMap<>();
+        HashMap<Character, Float> glyphwiseAdditionalLeftBoundaryShiftItalic = new HashMap<>();
+        HashMap<Character, Float> glyphwiseAdditionalLeftBoundaryShiftBold = new HashMap<>();
+        HashMap<Character, Float> glyphwiseAdditionalLeftBoundaryShiftBoldItalic = new HashMap<>();
+
+        float plainLeftBoundaryShift = 0.1f;
+        float italicLeftBoundaryShift = 0.2f;
+        float boldLeftBoundaryShift = 0.3f;
+        float boldItalicLeftBoundaryShift = 0.4f;
+
+        glyphwiseAdditionalLeftBoundaryShiftPlain.put('j', plainLeftBoundaryShift);
+        glyphwiseAdditionalLeftBoundaryShiftItalic.put('j', italicLeftBoundaryShift);
+        glyphwiseAdditionalLeftBoundaryShiftBold.put('j', boldLeftBoundaryShift);
+        glyphwiseAdditionalLeftBoundaryShiftBoldItalic.put('j', boldItalicLeftBoundaryShift);
+
+        Font fontWithGlyphwiseAdditionalLeftBoundaryShift = new FontImpl(
+                new FakeFontDefinition(
+                        ID,
+                        RELATIVE_LOCATION,
+                        MAX_LOSSLESS_FONT_SIZE,
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                glyphwiseAdditionalLeftBoundaryShiftPlain,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                glyphwiseAdditionalLeftBoundaryShiftItalic,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                glyphwiseAdditionalLeftBoundaryShiftBold,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                        ),
+                        new FakeFontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                glyphwiseAdditionalLeftBoundaryShiftBoldItalic,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                        ),
+                        LEADING_ADJUSTMENT
+                ),
+                FLOAT_BOX_FACTORY,
+                COORDINATE_FACTORY
+        );
+
+        FloatBox glyphBoxPlain_i = Font.plain().getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxPlain_j = Font.plain().getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxItalic_i = Font.italic().getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxItalic_j = Font.italic().getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxBold_i = Font.bold().getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxBold_j = Font.bold().getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxBoldItalic_i = Font.boldItalic().getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxBoldItalic_j = Font.boldItalic().getUvCoordinatesForGlyph('j');
+
+        FloatBox glyphBoxWithLeftBoundaryShiftPlain_i =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.plain()
+                        .getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxWithLeftBoundaryShiftPlain_j =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.plain()
+                        .getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxWithLeftBoundaryShiftItalic_i =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.italic()
+                        .getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxWithLeftBoundaryShiftItalic_j =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.italic()
+                        .getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxWithLeftBoundaryShiftBold_i =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.bold()
+                        .getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxWithLeftBoundaryShiftBold_j =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.bold()
+                        .getUvCoordinatesForGlyph('j');
+        FloatBox glyphBoxWithLeftBoundaryShiftBoldItalic_i =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.boldItalic()
+                        .getUvCoordinatesForGlyph('i');
+        FloatBox glyphBoxWithLeftBoundaryShiftBoldItalic_j =
+                fontWithGlyphwiseAdditionalLeftBoundaryShift.boldItalic()
+                        .getUvCoordinatesForGlyph('j');
+
+        assertEquals(
+                Math.round((glyphBoxPlain_i.rightX() -
+                        (glyphBoxPlain_i.height() * plainLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftPlain_i.rightX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxPlain_j.leftX() -
+                        (glyphBoxPlain_j.height() * plainLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftPlain_j.leftX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxItalic_i.rightX() -
+                        (glyphBoxItalic_i.height() * italicLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftItalic_i.rightX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxItalic_j.leftX() -
+                        (glyphBoxItalic_j.height() * italicLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftItalic_j.leftX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxBold_i.rightX() -
+                        (glyphBoxBold_i.height() * boldLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftBold_i.rightX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxBold_j.leftX() -
+                        (glyphBoxBold_j.height() * boldLeftBoundaryShift)) * 10000f) / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftBold_j.leftX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxBoldItalic_i.rightX() -
+                        (glyphBoxBoldItalic_i.height() * boldItalicLeftBoundaryShift)) * 10000f)
+                        / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftBoldItalic_i.rightX() * 10000f) / 10000f);
+        assertEquals(
+                Math.round((glyphBoxBoldItalic_j.leftX() -
+                        (glyphBoxBoldItalic_j.height() * boldItalicLeftBoundaryShift)) * 10000f)
+                        / 10000f,
+                Math.round(glyphBoxWithLeftBoundaryShiftBoldItalic_j.leftX() * 10000f) / 10000f);
     }
 
     @Test
