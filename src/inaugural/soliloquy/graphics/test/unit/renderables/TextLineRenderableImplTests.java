@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
@@ -22,6 +23,7 @@ class TextLineRenderableImplTests {
     private final FakeFont FONT = new FakeFont();
     private final String LINE_TEXT = "lineText";
     private final float LINE_HEIGHT = 0.123f;
+    private final TextJustification JUSTIFICATION = TextJustification.LEFT;
     private final float PADDING_BETWEEN_GLYPHS = 0.456f;
     private final HashMap<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = new HashMap<>();
     private final ArrayList<Integer> ITALIC_INDICES = new ArrayList<>();
@@ -43,49 +45,57 @@ class TextLineRenderableImplTests {
     @BeforeEach
     void setUp() {
         _textLineRenderable = new TextLineRenderableImpl(FONT, LINE_TEXT, LINE_HEIGHT,
-                PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                RENDERING_LOCATION_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                JUSTIFICATION, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES,
+                BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                null, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                null, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, null, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, null, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, 0f, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, 0f, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                null, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, LINE_HEIGHT, null, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, null, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, LINE_HEIGHT, TextJustification.UNKNOWN, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, null, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, null, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, null,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, null, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, null));
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, null,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, LINE_TEXT, LINE_HEIGHT, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES,
-                ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID,
-                null, REMOVE_FROM_CONTAINER));
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, null, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, null));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
+                Z, UUID, null, REMOVE_FROM_CONTAINER));
     }
 
     @Test
@@ -135,6 +145,21 @@ class TextLineRenderableImplTests {
         _textLineRenderable.setLineHeight(newLineHeight);
 
         assertEquals(newLineHeight, _textLineRenderable.getLineHeight());
+    }
+
+    @Test
+    void testGetAndSetJustification() {
+        _textLineRenderable.setJustification(TextJustification.CENTER);
+
+        assertEquals(TextJustification.CENTER, _textLineRenderable.getJustification());
+    }
+
+    @Test
+    void testSetJustificationWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderable.setJustification(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderable.setJustification(TextJustification.UNKNOWN));
     }
 
     @Test

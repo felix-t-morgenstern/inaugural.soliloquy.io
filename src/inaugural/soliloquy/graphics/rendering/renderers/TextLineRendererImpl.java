@@ -5,6 +5,7 @@ import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -39,15 +40,34 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         Pair<Float,Float> renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
+        float startX;
+        float startY = renderingLocation.getItem2();
 
+        if (textLineRenderable.getJustification() == TextJustification.LEFT) {
+            startX = renderingLocation.getItem1();
+        }
+        else {
+            float lineLength = textLineLength(textLineRenderable);
+            if (textLineRenderable.getJustification() == TextJustification.CENTER) {
+                startX = renderingLocation.getItem1() - (lineLength / 2f);
+            }
+            else {
+                startX = renderingLocation.getItem1() - lineLength;
+            }
+        }
+        renderAtLocation(textLineRenderable, timestamp, startX, startY);
+    }
+
+    private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
+                                  float startX, float startY) {
         iterateOverTextLine(textLineRenderable, timestamp,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                    float leftX = renderingLocation.getItem1() + textLineLengthThusFar;
+                    float leftX = startX + textLineLengthThusFar;
                     FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                             leftX,
-                            renderingLocation.getItem2(),
+                            startY,
                             leftX + glyphLength,
-                            renderingLocation.getItem2() + textLineRenderable.getLineHeight()
+                            startY + textLineRenderable.getLineHeight()
                     );
 
                     super.render(renderingArea,
@@ -55,7 +75,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                             glyphBox.rightX(), glyphBox.bottomY(),
                             textureId,
                             color);
-        });
+                });
     }
 
     @Override
@@ -171,23 +191,29 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 }
             }
         }
-        if (textLineRenderable.italicIndices() != null) {
-            Integer highestIndexThusFar = null;
-            for (Integer index : textLineRenderable.italicIndices()) {
-                validateIndex(index, textLineRenderable.getLineText().length(),
-                        "textLineRenderable.italicIndices()", methodName,
-                        highestIndexThusFar);
-                highestIndexThusFar = index;
-            }
+
+        Check.ifNull(textLineRenderable.italicIndices(), "textLineRenderable.italicIndices()");
+        Integer highestIndexThusFar = null;
+        for (Integer index : textLineRenderable.italicIndices()) {
+            validateIndex(index, textLineRenderable.getLineText().length(),
+                    "textLineRenderable.italicIndices()", methodName,
+                    highestIndexThusFar);
+            highestIndexThusFar = index;
         }
-        if (textLineRenderable.boldIndices() != null) {
-            Integer highestIndexThusFar = null;
-            for (Integer index : textLineRenderable.boldIndices()) {
-                validateIndex(index, textLineRenderable.getLineText().length(),
-                        "textLineRenderable.italicIndices()", methodName,
-                        highestIndexThusFar);
-                highestIndexThusFar = index;
-            }
+
+        Check.ifNull(textLineRenderable.boldIndices(), "textLineRenderable.boldIndices()");
+        highestIndexThusFar = null;
+        for (Integer index : textLineRenderable.boldIndices()) {
+            validateIndex(index, textLineRenderable.getLineText().length(),
+                    "textLineRenderable.italicIndices()", methodName,
+                    highestIndexThusFar);
+            highestIndexThusFar = index;
+        }
+
+        if (Check.ifNull(textLineRenderable.getJustification(),
+                "textLineRenderable.getJustification()") == TextJustification.UNKNOWN) {
+            throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
+                    "justification cannot be UNKNOWN");
         }
     }
 
@@ -279,6 +305,16 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         @Override
         public void setPaddingBetweenGlyphs(float v) {
+
+        }
+
+        @Override
+        public TextJustification getJustification() {
+            return null;
+        }
+
+        @Override
+        public void setJustification(TextJustification textJustification) throws IllegalArgumentException {
 
         }
 

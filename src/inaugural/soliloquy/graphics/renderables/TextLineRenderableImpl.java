@@ -5,6 +5,7 @@ import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
@@ -21,11 +22,12 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private Font _font;
     private String _lineText;
     private float _lineHeight;
+    private TextJustification _justification;
     private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
     private float _paddingBetweenGlyphs;
 
     public TextLineRenderableImpl(Font font, String lineText, float lineHeight,
-                                  float paddingBetweenGlyphs,
+                                  TextJustification justification, float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
@@ -35,6 +37,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         super(z, uuid, updateZIndexInContainer, removeFromContainer);
         setFont(font);
         setLineText(lineText);
+        setJustification(justification);
         setLineHeight(lineHeight);
         setRenderingLocationProvider(renderingLocationProvider);
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
@@ -94,6 +97,21 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     @Override
     public void setPaddingBetweenGlyphs(float paddingBetweenGlyphs) {
         _paddingBetweenGlyphs = paddingBetweenGlyphs;
+    }
+
+    @Override
+    public TextJustification getJustification() {
+        return _justification;
+    }
+
+    @Override
+    public void setJustification(TextJustification justification) throws IllegalArgumentException {
+        Check.ifNull(justification, "justification");
+        if (justification == TextJustification.UNKNOWN) {
+            throw new IllegalArgumentException(
+                    "TextLineRenderableImpl.setJustification: justification cannot be UNKNOWN");
+        }
+        _justification = justification;
     }
 
     @Override

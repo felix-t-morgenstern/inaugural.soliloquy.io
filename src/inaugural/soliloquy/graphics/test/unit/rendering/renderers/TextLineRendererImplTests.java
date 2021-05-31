@@ -6,6 +6,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -131,6 +132,11 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         italicIndices.remove((Object)(textLine.length()));
 
+        textLineRenderable.ItalicIndices = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.ItalicIndices = italicIndices;
+
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
@@ -152,10 +158,25 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         boldIndices.remove(2);
 
+        textLineRenderable.BoldIndices = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.BoldIndices = boldIndices;
+
         textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         textLineRenderable.Uuid = id;
+
+        textLineRenderable.Justification = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.Justification = TextJustification.LEFT;
+
+        textLineRenderable.Justification = TextJustification.UNKNOWN;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.render(textLineRenderable, 0L));
+        textLineRenderable.Justification = TextJustification.LEFT;
     }
 
     @Test
@@ -238,6 +259,11 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
         italicIndices.remove((Object)(textLine.length()));
 
+        textLineRenderable.ItalicIndices = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.ItalicIndices = italicIndices;
+
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
@@ -259,10 +285,25 @@ class TextLineRendererImplTests {
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
         boldIndices.remove(2);
 
+        textLineRenderable.BoldIndices = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.BoldIndices = boldIndices;
+
         textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable));
         textLineRenderable.Uuid = id;
+
+        textLineRenderable.Justification = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.Justification = TextJustification.LEFT;
+
+        textLineRenderable.Justification = TextJustification.UNKNOWN;
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderer.textLineLength(textLineRenderable));
+        textLineRenderable.Justification = TextJustification.LEFT;
     }
 
     @Test
@@ -413,7 +454,7 @@ class TextLineRendererImplTests {
         FakeFont font = new FakeFont();
         float lineHeight = 0.5f;
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font, lineHeight,
-                0f, "", null, null, null,
+                0f, "", null, new ArrayList<>(), new ArrayList<>(),
                 new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
         long timestamp = 100L;

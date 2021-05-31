@@ -13,6 +13,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -26,17 +27,7 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-/**
- * Test acceptance criteria:
- *
- * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The 'Q' glyphs will have
- *    trails which extend to the right, underneath the subsequent glyphs, without pushing those
- *    glyphs to the right.
- * 2. The window will then close.
- *
- */
-class TextLineRendererWideQTest {
+class TextLineRendererJustificationsTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -52,10 +43,14 @@ class TextLineRendererWideQTest {
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.2f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
+    private final static String LINE_TEXT_LEFT = "This is left-aligned";
+    private final static String LINE_TEXT_CENTER = "This is center-aligned";
+    private final static String LINE_TEXT_RIGHT = "This is right-aligned";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
-    private static FakeTextLineRenderable TextLineRenderable;
+    private static FakeTextLineRenderable TextLineRenderableLeft;
+    private static FakeTextLineRenderable TextLineRenderableCenter;
+    private static FakeTextLineRenderable TextLineRenderableRight;
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager =
@@ -97,10 +92,22 @@ class TextLineRendererWideQTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakePair<Float,Float> renderingArea = new FakePair<>(0.1f, 0.475f);
+        FakePair<Float,Float> renderingAreaLeft = new FakePair<>(0.05f, 0.225f);
+        FakePair<Float,Float> renderingAreaCenter = new FakePair<>(0.5f, 0.475f);
+        FakePair<Float,Float> renderingAreaRight = new FakePair<>(0.95f, 0.725f);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, null, null,
-                null, new StaticProviderImpl<>(renderingArea), new FakeEntityUuid());
+        TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT, null,
+                null, null, new StaticProviderImpl<>(renderingAreaLeft), new FakeEntityUuid());
+        TextLineRenderableCenter = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_CENTER,
+                null, null, null, new StaticProviderImpl<>(renderingAreaCenter),
+                new FakeEntityUuid());
+        TextLineRenderableRight = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_RIGHT,
+                null, null, null, new StaticProviderImpl<>(renderingAreaRight),
+                new FakeEntityUuid());
+
+        TextLineRenderableLeft.Justification = TextJustification.LEFT;
+        TextLineRenderableCenter.Justification = TextJustification.CENTER;
+        TextLineRenderableRight.Justification = TextJustification.RIGHT;
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -116,8 +123,11 @@ class TextLineRendererWideQTest {
                     add(textLineRenderer);
                 }};
 
-        stackRenderer.RenderAction = timestamp ->
-                textLineRenderer.render(TextLineRenderable, timestamp);
+        stackRenderer.RenderAction = timestamp -> {
+            textLineRenderer.render(TextLineRenderableLeft, timestamp);
+            textLineRenderer.render(TextLineRenderableCenter, timestamp);
+            textLineRenderer.render(TextLineRenderableRight, timestamp);
+        };
 
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
@@ -127,8 +137,9 @@ class TextLineRendererWideQTest {
                 renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
-            TextLineRenderable.Font =
-                    new FontImpl(fontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+            TextLineRenderableLeft.Font =  TextLineRenderableCenter.Font =
+                    TextLineRenderableRight.Font =
+                                    new FontImpl(fontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

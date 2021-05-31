@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
+import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
@@ -15,6 +16,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public float LineHeight;
     public String LineText;
     public float PaddingBetweenGlyphs;
+    public TextJustification Justification = TextJustification.LEFT;
     public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
@@ -75,6 +77,16 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     @Override
     public void setPaddingBetweenGlyphs(float v) {
 
+    }
+
+    @Override
+    public TextJustification getJustification() {
+        return Justification;
+    }
+
+    @Override
+    public void setJustification(TextJustification justification) throws IllegalArgumentException {
+        Justification = justification;
     }
 
     @Override
