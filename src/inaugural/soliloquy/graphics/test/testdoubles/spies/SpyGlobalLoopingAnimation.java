@@ -2,11 +2,11 @@ package inaugural.soliloquy.graphics.test.testdoubles.spies;
 
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 
 import java.util.ArrayList;
 
-public class SpyRenderableAnimation implements ProviderAtTime<AnimationFrameSnippet> {
+public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public ArrayList<Long> Timestamps = new ArrayList<>();
     public ArrayList<AnimationFrameSnippet> OutputSnippets = new ArrayList<>();
 
@@ -35,6 +35,21 @@ public class SpyRenderableAnimation implements ProviderAtTime<AnimationFrameSnip
 
     @Override
     public AnimationFrameSnippet getArchetype() {
+        return null;
+    }
+
+    @Override
+    public boolean supportsMouseEvents() {
+        return false;
+    }
+
+    @Override
+    public int periodModuloOffset() {
+        return 0;
+    }
+
+    @Override
+    public Long pausedTimestamp() {
         return null;
     }
 }

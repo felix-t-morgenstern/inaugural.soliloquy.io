@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
-import inaugural.soliloquy.graphics.test.testdoubles.spies.SpyRenderableAnimation;
+import inaugural.soliloquy.graphics.test.testdoubles.spies.SpyGlobalLoopingAnimation;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +70,7 @@ class GlobalLoopingAnimationRendererTests {
 
     @Test
     void testRenderWithInvalidParams() {
-        SpyRenderableAnimation renderableAnimation = new SpyRenderableAnimation();
+        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
         List<ColorShift> colorShifts = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
@@ -137,7 +137,7 @@ class GlobalLoopingAnimationRendererTests {
 
     @Test
     void testRenderOutdatedTimestamp() {
-        SpyRenderableAnimation renderableAnimation = new SpyRenderableAnimation();
+        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
         List<ColorShift> colorShifts = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;

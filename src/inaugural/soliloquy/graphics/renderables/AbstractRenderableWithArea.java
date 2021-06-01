@@ -17,7 +17,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         implements RenderableWithArea {
     private final List<ColorShift> COLOR_SHIFTS;
 
-    private boolean _capturesMouseEvents;
+    protected boolean _capturesMouseEvents;
+
     /** @noinspection rawtypes*/
     private Action _onClick;
     /** @noinspection rawtypes*/
@@ -70,8 +71,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
-        setBorderThicknessProvider(borderThicknessProvider);
         setBorderColorProvider(borderColorProvider);
+        setBorderThicknessProvider(borderThicknessProvider);
     }
 
     protected void throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport() {
@@ -162,8 +163,11 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
             throws IllegalArgumentException {
-        _borderThicknessProvider = Check.ifNull(borderThicknessProvider,
-                "borderThicknessProvider");
+        if (borderThicknessProvider != null && _borderColorProvider == null) {
+            throw new IllegalArgumentException(className() + ".setBorderColorProvider: cannot " +
+                    "set borderThicknessProvider to non-null while borderColorProvider is null");
+        }
+        _borderThicknessProvider = borderThicknessProvider;
     }
 
     @Override
@@ -174,6 +178,10 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
             throws IllegalArgumentException {
-        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
+        if (_borderThicknessProvider != null && borderColorProvider == null) {
+            throw new IllegalArgumentException(className() + ".setBorderColorProvider: cannot " +
+                    "set borderColorProvider to null while borderThicknessProvider is non-null");
+        }
+        _borderColorProvider = borderColorProvider;
     }
 }

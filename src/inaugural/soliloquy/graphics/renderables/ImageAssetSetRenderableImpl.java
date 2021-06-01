@@ -65,7 +65,13 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
 
     @Override
     public void setImageAssetSet(ImageAssetSet imageAssetSet) throws IllegalArgumentException {
-        _imageAssetSet = Check.ifNull(imageAssetSet, "imageAssetSet");
+        Check.ifNull(imageAssetSet, "imageAssetSet");
+        if (_capturesMouseEvents && !imageAssetSet.supportsMouseEventCapturing()) {
+            throw new IllegalArgumentException("ImageAssetSetRenderableImpl.setImageAssetSet: " +
+                    "cannot assign ImageAssetSet which does not support mouse events to an " +
+                    "ImageAssetSetRenderable which does support mouse events");
+        }
+        _imageAssetSet = imageAssetSet;
     }
 
     @Override

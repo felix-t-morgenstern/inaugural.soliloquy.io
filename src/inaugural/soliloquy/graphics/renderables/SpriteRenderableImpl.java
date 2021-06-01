@@ -51,7 +51,13 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
 
     @Override
     public void setSprite(Sprite sprite) throws IllegalArgumentException {
-        _sprite = Check.ifNull(sprite, "sprite");
+        Check.ifNull(sprite, "sprite");
+        if (_capturesMouseEvents && !sprite.image().supportsMouseEventCapturing()) {
+            throw new IllegalArgumentException("SpriteRenderableImpl.setSprite: cannot assign " +
+                    "Sprite whose Image does not support mouse events to a SpriteRenderable " +
+                    "which does support mouse events");
+        }
+        _sprite = sprite;
     }
 
     @Override

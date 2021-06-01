@@ -2,15 +2,24 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
+import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-public class FakeRenderableAnimation implements ProviderAtTime<AnimationFrameSnippet> {
+public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public Animation Animation;
     public long StartTimestamp;
+    public boolean SupportsMouseEvents;
 
-    public FakeRenderableAnimation(Animation animation, long startTimestamp) {
+    public FakeGlobalLoopingAnimation() {
+    }
+
+    public FakeGlobalLoopingAnimation(Animation animation, long startTimestamp) {
         Animation = animation;
         StartTimestamp = startTimestamp;
+    }
+
+    public FakeGlobalLoopingAnimation(boolean supportsMouseEvents) {
+        SupportsMouseEvents = supportsMouseEvents;
     }
 
     @Override
@@ -35,6 +44,21 @@ public class FakeRenderableAnimation implements ProviderAtTime<AnimationFrameSni
 
     @Override
     public AnimationFrameSnippet getArchetype() {
+        return null;
+    }
+
+    @Override
+    public boolean supportsMouseEvents() {
+        return SupportsMouseEvents;
+    }
+
+    @Override
+    public int periodModuloOffset() {
+        return 0;
+    }
+
+    @Override
+    public Long pausedTimestamp() {
         return null;
     }
 }

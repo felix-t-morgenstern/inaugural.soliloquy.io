@@ -56,7 +56,8 @@ class SpriteRenderableImplTests {
 
     @BeforeEach
     void setUp() {
-        _spriteRenderableWithMouseEvents = new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
+        _spriteRenderableWithMouseEvents = new SpriteRenderableImpl(
+                SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
                 COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
@@ -83,12 +84,19 @@ class SpriteRenderableImplTests {
                 UUID, SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
-        assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
+        // NB: These following two constructors should _not_ throw exceptions
+        new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
                 ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
                 UUID, SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        ));
+        );
+        new SpriteRenderableImpl(
+                SPRITE_SUPPORTING_MOUSE_EVENTS, null, null,
+                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                UUID, SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
+                SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
+        );
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
                 ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
@@ -132,12 +140,19 @@ class SpriteRenderableImplTests {
                 SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
-        assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
+        // NB: These following two constructors should _not_ throw exceptions
+        new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, null,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        ));
+        );
+        new SpriteRenderableImpl(
+                SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, null,
+                null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
+                SPRITE_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
+        );
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
@@ -187,7 +202,7 @@ class SpriteRenderableImplTests {
         assertSame(SPRITE_SUPPORTING_MOUSE_EVENTS, _spriteRenderableWithMouseEvents.getSprite());
         assertSame(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, _spriteRenderableWithoutMouseEvents.getSprite());
 
-        FakeSprite newSprite = new FakeSprite();
+        FakeSprite newSprite = new FakeSprite(new FakeImage(true));
 
         _spriteRenderableWithMouseEvents.setSprite(newSprite);
         _spriteRenderableWithoutMouseEvents.setSprite(newSprite);
@@ -202,6 +217,8 @@ class SpriteRenderableImplTests {
                 _spriteRenderableWithMouseEvents.setSprite(null));
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithoutMouseEvents.setSprite(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.setSprite(new FakeSprite(new FakeImage(false))));
     }
 
     @Test
@@ -224,10 +241,17 @@ class SpriteRenderableImplTests {
 
     @Test
     void testSetBorderThicknessProviderWithInvalidParams() {
+        _spriteRenderableWithMouseEvents.setBorderThicknessProvider(null);
+        _spriteRenderableWithoutMouseEvents.setBorderThicknessProvider(null);
+        _spriteRenderableWithMouseEvents.setBorderColorProvider(null);
+        _spriteRenderableWithoutMouseEvents.setBorderColorProvider(null);
+
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setBorderThicknessProvider(null));
+                _spriteRenderableWithMouseEvents
+                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setBorderThicknessProvider(null));
+                _spriteRenderableWithoutMouseEvents
+                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
     }
 
     @Test
@@ -250,6 +274,9 @@ class SpriteRenderableImplTests {
 
     @Test
     void testSetBorderColorProviderWithInvalidParams() {
+        _spriteRenderableWithMouseEvents.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+        _spriteRenderableWithoutMouseEvents.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.setBorderColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->

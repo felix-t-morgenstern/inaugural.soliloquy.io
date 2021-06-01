@@ -3,9 +3,9 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
@@ -37,18 +37,28 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
                 globalLoopingAnimationRenderable.colorShifts(),
                 globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
 
-        Check.ifNull(globalLoopingAnimationRenderable.loopingAnimation(),
-                "globalLoopingAnimationRenderable.loopingAnimation()");
+        Check.ifNull(globalLoopingAnimationRenderable.getGlobalLoopingAnimation(),
+                "globalLoopingAnimationRenderable.getGlobalLoopingAnimation()");
 
         validateTimestamp(timestamp, "GlobalLoopingAnimationRenderer");
 
         super.render(renderingArea,
-                globalLoopingAnimationRenderable.loopingAnimation().provide(timestamp),
+                globalLoopingAnimationRenderable.getGlobalLoopingAnimation().provide(timestamp),
                 INTACT_COLOR);
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
             new GlobalLoopingAnimationRenderable() {
+                @Override
+                public GlobalLoopingAnimation getGlobalLoopingAnimation() {
+                    return null;
+                }
+
+                @Override
+                public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation) throws IllegalArgumentException {
+
+                }
+
                 @Override
                 public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
                     return null;
@@ -142,11 +152,6 @@ public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoop
                 @Override
                 public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
 
-                }
-
-                @Override
-                public ProviderAtTime<AnimationFrameSnippet> loopingAnimation() {
-                    return null;
                 }
 
                 @Override

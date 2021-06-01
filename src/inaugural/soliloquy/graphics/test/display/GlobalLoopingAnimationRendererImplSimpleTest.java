@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -53,8 +54,6 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
             "./res/images/fixtures/animated_torch.png";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
-    private static FakeGlobalLoopingAnimationRenderable GlobalLoopingAnimationRenderable;
-
     public static void main(String[] args) {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
 
@@ -83,22 +82,33 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
         FakeAnimationDefinition animationDefinition =
                 new FakeAnimationDefinition(frameDuration * numberOfFrames, "torch", frames);
 
-        FakeRenderableAnimation renderableAnimation = new FakeRenderableAnimation(null, 0L);
+        FakeGlobalLoopingAnimation globalLoopingAnimation =
+                new FakeGlobalLoopingAnimation(null, 0L);
 
         float animationHeight = 0.5f;
         float animationWidth = ((float)frameWidth / (float)frameHeight)
                 / resolution.widthToHeightRatio();
         float midpoint = 0.5f;
 
-        GlobalLoopingAnimationRenderable = new FakeGlobalLoopingAnimationRenderable(
-                renderableAnimation,
-                new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(
-                        midpoint - (animationWidth / 2f),
-                        midpoint - (animationHeight / 2f),
-                        midpoint + (animationWidth / 2f),
-                        midpoint + (animationHeight / 2f))),
-                new FakeEntityUuid());
+//        GlobalLoopingAnimationRenderable = new FakeGlobalLoopingAnimationRenderable(
+//                globalLoopingAnimation,
+//                new ArrayList<>(),
+//                new StaticProviderImpl<>(new FakeFloatBox(
+//                        midpoint - (animationWidth / 2f),
+//                        midpoint - (animationHeight / 2f),
+//                        midpoint + (animationWidth / 2f),
+//                        midpoint + (animationHeight / 2f))),
+//                new FakeEntityUuid());
+
+        GlobalLoopingAnimationRenderableImpl globalLoopingAnimationRenderable =
+                new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation, null, null,
+                        new ArrayList<>(),
+                        new StaticProviderImpl<>(new FakeFloatBox(
+                                midpoint - (animationWidth / 2f),
+                                midpoint - (animationHeight / 2f),
+                                midpoint + (animationWidth / 2f),
+                                midpoint + (animationHeight / 2f))),
+                        0, new FakeEntityUuid(), renderable -> {}, renderable -> {});
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -114,7 +124,7 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
                 }};
 
         stackRenderer.RenderAction = timestamp ->
-                globalLoopingAnimationRenderer.render(GlobalLoopingAnimationRenderable, timestamp);
+                globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable, timestamp);
 
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, globalClock);
 
@@ -130,8 +140,8 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
                 frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
                         frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
             }
-            renderableAnimation.Animation = animationFactory.make(animationDefinition);
-            renderableAnimation.StartTimestamp = globalClock.globalTimestamp();
+            globalLoopingAnimation.Animation = animationFactory.make(animationDefinition);
+            globalLoopingAnimation.StartTimestamp = globalClock.globalTimestamp();
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

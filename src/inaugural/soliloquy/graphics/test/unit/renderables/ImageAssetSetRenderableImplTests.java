@@ -104,13 +104,21 @@ class ImageAssetSetRenderableImplTests {
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+        // NB: The following two constructors should _not_ throw exceptions
+        new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFTS, null, BORDER_COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
-        ));
+        );
+        new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, null, null,
+                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
+        );
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, null,
@@ -159,12 +167,19 @@ class ImageAssetSetRenderableImplTests {
                 IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
-        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+        // NB: The following two constructors should _not_ throw exceptions
+        new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
                 null, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
-        ));
+        );
+        new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
+                null, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
+                IMAGE_ASSET_SET_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
+        );
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFTS,
                 BORDER_THICKNESS_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID,
@@ -212,7 +227,7 @@ class ImageAssetSetRenderableImplTests {
         assertSame(IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS,
                 _imageAssetSetRenderableWithoutMouseEvents.getImageAssetSet());
 
-        FakeImageAssetSet newImageAssetSet = new FakeImageAssetSet();
+        FakeImageAssetSet newImageAssetSet = new FakeImageAssetSet(true);
 
         _imageAssetSetRenderableWithMouseEvents.setImageAssetSet(newImageAssetSet);
         _imageAssetSetRenderableWithoutMouseEvents.setImageAssetSet(newImageAssetSet);
@@ -228,6 +243,9 @@ class ImageAssetSetRenderableImplTests {
                 _imageAssetSetRenderableWithMouseEvents.setImageAssetSet(null));
         assertThrows(IllegalArgumentException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents.setImageAssetSet(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setImageAssetSet(
+                        new FakeImageAssetSet(false)));
     }
 
     @Test
@@ -274,10 +292,17 @@ class ImageAssetSetRenderableImplTests {
 
     @Test
     void testSetBorderThicknessProviderWithInvalidParams() {
+        _imageAssetSetRenderableWithMouseEvents.setBorderThicknessProvider(null);
+        _imageAssetSetRenderableWithoutMouseEvents.setBorderThicknessProvider(null);
+        _imageAssetSetRenderableWithMouseEvents.setBorderColorProvider(null);
+        _imageAssetSetRenderableWithoutMouseEvents.setBorderColorProvider(null);
+
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.setBorderThicknessProvider(null));
+                _imageAssetSetRenderableWithMouseEvents
+                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithoutMouseEvents.setBorderThicknessProvider(null));
+                _imageAssetSetRenderableWithoutMouseEvents
+                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
     }
 
     @Test
@@ -300,6 +325,11 @@ class ImageAssetSetRenderableImplTests {
 
     @Test
     void testSetBorderColorProviderWithInvalidParams() {
+        _imageAssetSetRenderableWithMouseEvents
+                .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+        _imageAssetSetRenderableWithoutMouseEvents
+                .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+
         assertThrows(IllegalArgumentException.class, () ->
                 _imageAssetSetRenderableWithMouseEvents.setBorderColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->

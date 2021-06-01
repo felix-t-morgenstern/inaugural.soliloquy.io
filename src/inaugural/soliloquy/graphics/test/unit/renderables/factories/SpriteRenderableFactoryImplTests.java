@@ -87,12 +87,19 @@ class SpriteRenderableFactoryImplTests {
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
+        // NB: The following two constructors should _not_ throw exceptions
+        _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
                 ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
-        ));
+        );
+        _spriteRenderableFactory.make(
+                SPRITE_SUPPORTS_MOUSE_EVENTS, null, null,
+                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
+        );
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
                 ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
@@ -135,11 +142,17 @@ class SpriteRenderableFactoryImplTests {
                 COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
+        // NB: The following two constructors should _not_ throw exceptions
+        _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
                 COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
-        ));
+        );
+        _spriteRenderableFactory.make(
+                SPRITE_SUPPORTS_MOUSE_EVENTS, null, null,
+                COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER
+        );
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
                 COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
