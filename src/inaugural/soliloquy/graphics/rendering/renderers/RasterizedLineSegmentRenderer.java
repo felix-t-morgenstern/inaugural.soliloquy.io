@@ -40,7 +40,7 @@ public class RasterizedLineSegmentRenderer
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
-        FloatBox renderingArea =
+        FloatBox renderingDimensions =
                 Check.ifNull(rasterizedLineSegmentRenderable.getRenderingDimensionsProvider(),
                         "rasterizedLineSegmentRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);
@@ -63,8 +63,8 @@ public class RasterizedLineSegmentRenderer
                 "rasterizedLineSegmentRenderable.getStippleFactor()");
 
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
-        Check.ifNull(renderingArea,
-                "rasterizedLineSegmentRenderable provided rendering area");
+        Check.ifNull(renderingDimensions,
+                "rasterizedLineSegmentRenderable provided rendering dimensions");
         Check.ifNull(rasterizedLineSegmentRenderable.uuid(), "rasterizedLineSegmentRenderable.id()");
 
         validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
@@ -81,9 +81,9 @@ public class RasterizedLineSegmentRenderer
 
         glBegin(GL_LINES);
 
-        glVertex2f((renderingArea.leftX() * 2f) - 1f, -((renderingArea.topY() * 2f) - 1f));
+        glVertex2f((renderingDimensions.leftX() * 2f) - 1f, -((renderingDimensions.topY() * 2f) - 1f));
 
-        glVertex2f((renderingArea.rightX() * 2f) - 1f, -((renderingArea.bottomY() * 2f) - 1f));
+        glVertex2f((renderingDimensions.rightX() * 2f) - 1f, -((renderingDimensions.bottomY() * 2f) - 1f));
 
         glEnd();
     }

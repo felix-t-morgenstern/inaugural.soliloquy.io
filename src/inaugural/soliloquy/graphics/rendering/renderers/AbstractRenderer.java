@@ -16,11 +16,16 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
     // TODO: Use logic from tools package to determine calling class name
     protected void validateTimestamp(long timestamp, String className) {
         if (_mostRecentTimestamp != null) {
-            if (timestamp < _mostRecentTimestamp) {
+            if (timestamp <= _mostRecentTimestamp) {
                 throw new IllegalArgumentException(
-                        className + ".render: outdated timestamp provided");
+                        className + ".render: outdated timestamp provided (" + timestamp + ")");
             }
         }
         _mostRecentTimestamp = timestamp;
+    }
+
+    @Override
+    protected String getUnparameterizedInterfaceName() {
+        return Renderer.class.getCanonicalName();
     }
 }

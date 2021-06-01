@@ -208,9 +208,4 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
         Check.ifNull(id, paramName + " provided id()");
     }
-
-    @Override
-    protected String getUnparameterizedInterfaceName() {
-        return Renderer.class.getCanonicalName();
-    }
 }

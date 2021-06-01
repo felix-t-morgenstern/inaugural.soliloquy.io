@@ -461,7 +461,7 @@ class TextLineRendererImplTests {
         _textLineRenderer.render(textLineRenderable, timestamp);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable, timestamp - 1));
+                () -> _textLineRenderer.render(textLineRenderable, timestamp));
     }
 
     @Test

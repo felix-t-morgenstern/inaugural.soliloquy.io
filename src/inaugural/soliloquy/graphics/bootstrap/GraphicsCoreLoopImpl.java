@@ -96,6 +96,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glDepthMask(false);
+        glEnable(GL_TEXTURE_2D);
 
         glfwSetMouseButtonCallback(_window, MOUSE_BUTTON_CALLBACK);
 

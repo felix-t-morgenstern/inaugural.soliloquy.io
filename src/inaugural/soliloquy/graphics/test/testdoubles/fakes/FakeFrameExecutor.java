@@ -18,7 +18,7 @@ public class FakeFrameExecutor implements FrameExecutor {
 
     public FakeFrameExecutor(StackRenderer stackRenderer, GlobalClock globalClock) {
         StackRenderer = stackRenderer;
-        GlobalClock = globalClock;
+        GlobalClock = globalClock == null ? new FakeGlobalClock() : globalClock;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FakeFrameExecutor implements FrameExecutor {
     @Override
     public void execute() {
         if (StackRenderer != null) {
-            StackRenderer.render(GlobalClock != null ? GlobalClock.globalTimestamp() : 0L);
+            StackRenderer.render(GlobalClock.globalTimestamp());
         }
         NumberOfTimesExecuteCalled++;
     }

@@ -155,7 +155,7 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
-                        timestamp - 1L));
+                        timestamp));
     }
 
     @Test
