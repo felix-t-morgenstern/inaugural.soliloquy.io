@@ -1,13 +1,18 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import inaugural.soliloquy.common.test.fakes.FakePair;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
+
+import java.util.ArrayList;
 
 public class FakeAnimation implements Animation {
     public String Id;
     public int MsDuration;
     public boolean SnippetAtFrameCalled = false;
     public boolean SupportsMouseEventCapturing;
+    public ArrayList<Pair<Integer,AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
 
     public FakeAnimation(String id) {
         Id = id;
@@ -16,6 +21,11 @@ public class FakeAnimation implements Animation {
     public FakeAnimation(String id, int msDuration) {
         Id = id;
         MsDuration = msDuration;
+    }
+
+    public FakeAnimation(int msDuration, boolean supportsMouseEventCapturing) {
+        MsDuration = msDuration;
+        SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }
 
     public FakeAnimation(String id, boolean supportsMouseEventCapturing) {
@@ -31,7 +41,9 @@ public class FakeAnimation implements Animation {
     @Override
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
         SnippetAtFrameCalled = true;
-        return new FakeAnimationFrameSnippet();
+        AnimationFrameSnippet snippetProvided = new FakeAnimationFrameSnippet();
+        SnippetsProvided.add(new FakePair<>(i, snippetProvided));
+        return snippetProvided;
     }
 
     @Override
