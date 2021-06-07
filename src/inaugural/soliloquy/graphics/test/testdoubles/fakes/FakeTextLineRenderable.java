@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +21,14 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
     public List<Integer> ItalicIndices;
     public List<Integer> BoldIndices;
+    public ProviderAtTime<Float> BorderThicknessProvider;
+    public ProviderAtTime<Color> BorderColorProvider;
     public ProviderAtTime<Pair<Float,Float>> RenderingLocationProvider;
     public EntityUuid Uuid;
 
     public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
-                                  String lineText,
+                                  String lineText, ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   EntityUuid id) {
@@ -32,20 +36,23 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         LineHeight = lineHeight;
         PaddingBetweenGlyphs = paddingBetweenGlyphs;
         LineText = lineText;
+        BorderThicknessProvider = borderThicknessProvider;
+        BorderColorProvider = borderColorProvider;
         ColorProviderIndices = colorProviderIndices;
-        ItalicIndices = italicIndices;
-        BoldIndices = boldIndices;
+        ItalicIndices = italicIndices == null ? new ArrayList<>() : italicIndices;
+        BoldIndices = boldIndices == null ? new ArrayList<>() : boldIndices;
         Uuid = id;
     }
 
     public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
-                                  String lineText,
+                                  String lineText, ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
                                   EntityUuid uuid) {
-        this(font, lineHeight, paddingBetweenGlyphs, lineText, colorProviderIndices, italicIndices,
-                boldIndices, uuid);
+        this(font, lineHeight, paddingBetweenGlyphs, lineText, borderThicknessProvider,
+                borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
         RenderingLocationProvider = renderingLocationProvider;
     }
 
@@ -149,5 +156,25 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     @Override
     public EntityUuid uuid() {
         return Uuid;
+    }
+
+    @Override
+    public ProviderAtTime<Float> getBorderThicknessProvider() {
+        return BorderThicknessProvider;
+    }
+
+    @Override
+    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public ProviderAtTime<Color> getBorderColorProvider() {
+        return BorderColorProvider;
+    }
+
+    @Override
+    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
     }
 }

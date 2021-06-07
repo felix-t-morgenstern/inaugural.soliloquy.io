@@ -60,7 +60,7 @@ class TextLineRendererColorTest {
     private static FakeTextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
+        WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
                 WindowDisplayMode.WINDOWED, WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
@@ -97,17 +97,20 @@ class TextLineRendererColorTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakePair<Float,Float> renderingArea = new FakePair<>(0.1f, 0.475f);
+        FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT, colorIndices,
-                null, null, new StaticProviderImpl<>(renderingArea), new FakeEntityUuid());
+        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT,
+                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null),
+                colorIndices, null, null, new StaticProviderImpl<>(renderingLocation),
+                new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, DEFAULT_COLOR);
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, DEFAULT_COLOR,
+                        windowResolutionManager);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
@@ -124,9 +127,10 @@ class TextLineRendererColorTest {
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
-                new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
-                renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
+                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
+                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
+                graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
             TextLineRenderable.Font =

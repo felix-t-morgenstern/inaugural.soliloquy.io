@@ -53,7 +53,7 @@ class TextLineRendererJustificationsTest {
     private static FakeTextLineRenderable TextLineRenderableRight;
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowManager =
+        WindowResolutionManagerImpl windowResolutionManager =
                 new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED,
                         WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
 
@@ -92,17 +92,20 @@ class TextLineRendererJustificationsTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakePair<Float,Float> renderingAreaLeft = new FakePair<>(0.05f, 0.225f);
-        FakePair<Float,Float> renderingAreaCenter = new FakePair<>(0.5f, 0.475f);
-        FakePair<Float,Float> renderingAreaRight = new FakePair<>(0.95f, 0.725f);
+        FakePair<Float,Float> renderingLocationLeft = new FakePair<>(0.05f, 0.225f);
+        FakePair<Float,Float> renderingLocationCenter = new FakePair<>(0.5f, 0.475f);
+        FakePair<Float,Float> renderingLocationRight = new FakePair<>(0.95f, 0.725f);
 
-        TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT, null,
-                null, null, new StaticProviderImpl<>(renderingAreaLeft), new FakeEntityUuid());
+        TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT,
+                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                null, null, new StaticProviderImpl<>(renderingLocationLeft), new FakeEntityUuid());
         TextLineRenderableCenter = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_CENTER,
-                null, null, null, new StaticProviderImpl<>(renderingAreaCenter),
+                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                null, null, new StaticProviderImpl<>(renderingLocationCenter),
                 new FakeEntityUuid());
         TextLineRenderableRight = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_RIGHT,
-                null, null, null, new StaticProviderImpl<>(renderingAreaRight),
+                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                null, null, new StaticProviderImpl<>(renderingLocationRight),
                 new FakeEntityUuid());
 
         TextLineRenderableLeft.Justification = TextJustification.LEFT;
@@ -112,7 +115,8 @@ class TextLineRendererJustificationsTest {
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE);
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
+                        windowResolutionManager);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
@@ -132,9 +136,10 @@ class TextLineRendererJustificationsTest {
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
-                new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
-                renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
+                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
+                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
+                graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
             TextLineRenderableLeft.Font =  TextLineRenderableCenter.Font =

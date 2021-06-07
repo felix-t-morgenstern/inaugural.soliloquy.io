@@ -10,7 +10,6 @@ public class FakeFont implements Font {
     public FakeFontStyleInfo BoldItalic;
 
     public FakeFont() {
-
     }
 
     public FakeFont(FakeFontStyleInfo plain, FakeFontStyleInfo italic, FakeFontStyleInfo bold,

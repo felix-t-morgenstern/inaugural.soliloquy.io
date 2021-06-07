@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
@@ -25,9 +26,9 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     private final Color DEFAULT_COLOR;
 
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
-                                FloatBoxFactory floatBoxFactory,
-                                Color defaultColor) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+                                FloatBoxFactory floatBoxFactory, Color defaultColor,
+                                WindowResolutionManager windowResolutionManager) {
+        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 
@@ -37,6 +38,19 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         validateTextLineRenderable(textLineRenderable, "render");
 
         validateTimestamp(timestamp, "TextLineRendererImpl");
+
+        Float borderThickness = null;
+        Color borderColor = null;
+
+        if (textLineRenderable.getBorderThicknessProvider() != null) {
+            borderThickness = textLineRenderable.getBorderThicknessProvider().provide(timestamp);
+            if (borderThickness != null) {
+                Check.throwOnLtValue(borderThickness, 0f, "provided border thickness");
+                borderColor = Check.ifNull(textLineRenderable.getBorderColorProvider(),
+                        "textLineRenderable.getBorderColorProvider()")
+                        .provide(timestamp);
+            }
+        }
 
         Pair<Float,Float> renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
@@ -55,11 +69,153 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 startX = renderingLocation.getItem1() - lineLength;
             }
         }
-        renderAtLocation(textLineRenderable, timestamp, startX, startY);
+        renderAtLocation(textLineRenderable, timestamp, startX, startY, borderThickness,
+                borderColor);
     }
 
     private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
-                                  float startX, float startY) {
+                                  float startX, float startY, Float borderThickness,
+                                  Color borderColor) {
+        if (borderThickness != null) {
+            float yThickness = borderThickness;
+            float xThickness = yThickness / _screenWidthToHeightRatio;
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX - xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY - yThickness,
+                                leftX + glyphLength,
+                                startY - yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY - yThickness,
+                                leftX + glyphLength,
+                                startY - yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY - yThickness,
+                                leftX + glyphLength,
+                                startY - yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY,
+                                leftX + glyphLength,
+                                startY + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY + yThickness,
+                                leftX + glyphLength,
+                                startY + yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY + yThickness,
+                                leftX + glyphLength,
+                                startY + yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX - xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY + yThickness,
+                                leftX + glyphLength,
+                                startY + yThickness + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+
+            iterateOverTextLine(textLineRenderable, timestamp,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX - xThickness + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY,
+                                leftX + glyphLength,
+                                startY + textLineRenderable.getLineHeight()
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                borderColor);
+                    });
+        }
         iterateOverTextLine(textLineRenderable, timestamp,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                     float leftX = startX + textLineLengthThusFar;
@@ -238,6 +394,26 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     }
 
     private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
+        @Override
+        public ProviderAtTime<Float> getBorderThicknessProvider() {
+            return null;
+        }
+
+        @Override
+        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Color> getBorderColorProvider() {
+            return null;
+        }
+
+        @Override
+        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
+        }
+
         @Override
         public EntityUuid uuid() {
             return null;

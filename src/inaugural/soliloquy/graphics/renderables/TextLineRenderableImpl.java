@@ -25,11 +25,15 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private TextJustification _justification;
     private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
     private float _paddingBetweenGlyphs;
+    private ProviderAtTime<Float> _borderThicknessProvider;
+    private ProviderAtTime<Color> _borderColorProvider;
 
     public TextLineRenderableImpl(Font font, String lineText, float lineHeight,
                                   TextJustification justification, float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
+                                  ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
                                   int z, EntityUuid uuid,
                                   Consumer<Renderable> updateZIndexInContainer,
@@ -41,6 +45,8 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         setLineHeight(lineHeight);
         setRenderingLocationProvider(renderingLocationProvider);
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
+        setBorderColorProvider(borderColorProvider);
+        setBorderThicknessProvider(borderThicknessProvider);
         COLOR_PROVIDER_INDICES = colorProviderIndices;
         ITALIC_INDICES = Check.ifNull(italicIndices, "italicIndices");
         BOLD_INDICES = Check.ifNull(boldIndices, "boldIndices");
@@ -132,5 +138,37 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     @Override
     public String getInterfaceName() {
         return TextLineRenderable.class.getCanonicalName();
+    }
+
+    @Override
+    public ProviderAtTime<Float> getBorderThicknessProvider() {
+        return _borderThicknessProvider;
+    }
+
+    @Override
+    public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
+            throws IllegalArgumentException {
+        if (borderThicknessProvider != null && _borderColorProvider == null) {
+            throw new IllegalArgumentException("TextLineRenderableImpl.setBorderColorProvider: " +
+                    "cannot set borderThicknessProvider to non-null while borderColorProvider " +
+                    "is null");
+        }
+        _borderThicknessProvider = borderThicknessProvider;
+    }
+
+    @Override
+    public ProviderAtTime<Color> getBorderColorProvider() {
+        return _borderColorProvider;
+    }
+
+    @Override
+    public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
+            throws IllegalArgumentException {
+        if (_borderThicknessProvider != null && borderColorProvider == null) {
+            throw new IllegalArgumentException("TextLineRenderableImpl.setBorderColorProvider: " +
+                    "cannot set borderColorProvider to null while borderThicknessProvider is " +
+                    "non-null");
+        }
+        _borderColorProvider = borderColorProvider;
     }
 }

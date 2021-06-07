@@ -28,6 +28,8 @@ class TextLineRenderableImplTests {
     private final HashMap<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = new HashMap<>();
     private final ArrayList<Integer> ITALIC_INDICES = new ArrayList<>();
     private final ArrayList<Integer> BOLD_INDICES = new ArrayList<>();
+    private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Pair<Float,Float>> RENDERING_LOCATION_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
@@ -46,7 +48,8 @@ class TextLineRenderableImplTests {
     void setUp() {
         _textLineRenderable = new TextLineRenderableImpl(FONT, LINE_TEXT, LINE_HEIGHT,
                 JUSTIFICATION, PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES,
-                BOLD_INDICES, RENDERING_LOCATION_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                BOLD_INDICES, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
+                RENDERING_LOCATION_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
     }
 
@@ -54,48 +57,75 @@ class TextLineRenderableImplTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 null, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, null, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, 0f, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, null, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, TextJustification.UNKNOWN, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, null, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, null, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, null, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, null, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                null, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+        // NB: These should not throw any exceptions
+        new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
                 COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, null,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                null, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
+        new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, null,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, null, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, null, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, null));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, null,
+                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, RENDERING_LOCATION_PROVIDER,
-                Z, UUID, null, REMOVE_FROM_CONTAINER));
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER, null));
+        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
+                FONT, LINE_TEXT, LINE_HEIGHT, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, Z, UUID,
+                null, REMOVE_FROM_CONTAINER));
     }
 
     @Test
@@ -191,6 +221,46 @@ class TextLineRenderableImplTests {
     @Test
     void testBoldIndices() {
         assertSame(BOLD_INDICES, _textLineRenderable.boldIndices());
+    }
+
+    @Test
+    void testGetAndSetBorderThicknessProvider() {
+        assertSame(BORDER_THICKNESS_PROVIDER, _textLineRenderable.getBorderThicknessProvider());
+
+        FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
+
+        _textLineRenderable.setBorderThicknessProvider(newBorderThicknessProvider);
+
+        assertSame(newBorderThicknessProvider, _textLineRenderable.getBorderThicknessProvider());
+    }
+
+    @Test
+    void testSetBorderThicknessProviderWithInvalidParams() {
+        _textLineRenderable.setBorderThicknessProvider(null);
+        _textLineRenderable.setBorderColorProvider(null);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
+    }
+
+    @Test
+    void testGetAndSetBorderColorProvider() {
+        assertSame(BORDER_COLOR_PROVIDER, _textLineRenderable.getBorderColorProvider());
+
+        FakeProviderAtTime<Color> newBorderColorProvider = new FakeProviderAtTime<>();
+
+        _textLineRenderable.setBorderColorProvider(newBorderColorProvider);
+
+        assertSame(newBorderColorProvider, _textLineRenderable.getBorderColorProvider());
+    }
+
+    @Test
+    void testSetBorderColorProviderWithInvalidParams() {
+        _textLineRenderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+
+        assertThrows(IllegalArgumentException.class, () -> _textLineRenderable.setBorderColorProvider(null));
     }
 
     @Test

@@ -13,6 +13,8 @@ import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.TextJustification;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -26,40 +28,31 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-/**
- * Test acceptance criteria:
- *
- * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The glyphs will have an
- *    additional padding between each other equal to 10% of the line height.
- * 2. The window will then close.
- *
- */
-public class TextLineRendererPaddingTest {
+class TextLineRendererBorderTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
-    private final static String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
-    private final static float MAX_LOSSLESS_FONT_SIZE = 100f;
-    private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING = 0.5f;
+    private final static String RELATIVE_LOCATION = "./res/fonts/Oswald-VariableFont_wght.ttf";
+    private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
+    private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING = 0.25f;
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
             new HashMap<>();
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT =
             new HashMap<>();
-    private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.05f;
-    private final static float LEADING_ADJUSTMENT = 0.0f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.1f;
+    private final static float LEADING_ADJUSTMENT = 0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
+    private final static Color DEFAULT_COLOR = Color.WHITE;
+    private final static String LINE_TEXT = "Wow, this message has a border!";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowResolutionManager =
-                new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED,
-                        WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
+        WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
@@ -68,8 +61,7 @@ public class TextLineRendererPaddingTest {
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
-        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
-        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);
+        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT.put('j', 0.000625f);
 
         FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
@@ -96,16 +88,19 @@ public class TextLineRendererPaddingTest {
                 plain, italic, bold, boldItalic,
                 LEADING_ADJUSTMENT);
 
-        FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
+        FakePair<Float,Float> renderingLocation = new FakePair<>(0.5f, 0.45f);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0.1f, LINE_TEXT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(renderingLocation), new FakeEntityUuid());
+        TextLineRenderable = new FakeTextLineRenderable(null, 0.1f, 0f, LINE_TEXT,
+                new FakeStaticProviderAtTime<>(0.00125f),
+                new FakeStaticProviderAtTime<>(new Color(255, 25, 119)),
+                null, null, null, new StaticProviderImpl<>(renderingLocation),
+                new FakeEntityUuid());
+        TextLineRenderable.Justification = TextJustification.CENTER;
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, DEFAULT_COLOR,
                         windowResolutionManager);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
@@ -123,10 +118,9 @@ public class TextLineRendererPaddingTest {
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
-                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
-                graphicsPreloader);
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager, frameExecutor,
+                new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX, meshFactory,
+                renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader);
 
         graphicsPreloader.LoadAction = () -> {
             TextLineRenderable.Font =
@@ -138,7 +132,7 @@ public class TextLineRendererPaddingTest {
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(8000);
+        CheckedExceptionWrapper.sleep(6000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
