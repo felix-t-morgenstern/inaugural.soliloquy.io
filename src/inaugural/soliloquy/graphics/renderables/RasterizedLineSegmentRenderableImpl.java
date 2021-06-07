@@ -20,11 +20,12 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithD
     public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
-                                               ProviderAtTime<FloatBox> renderingAreaProvider,
+                                               ProviderAtTime<FloatBox>
+                                                       renderingDimensionsProvider,
                                                int z, EntityUuid uuid,
                                                Consumer<Renderable> updateZIndexInContainer,
                                                Consumer<Renderable> removeFromContainer) {
-        super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        super(renderingDimensionsProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
         setThicknessProvider(thicknessProvider);
         setStipplePattern(stipplePattern);
         setStippleFactor(stippleFactor);
