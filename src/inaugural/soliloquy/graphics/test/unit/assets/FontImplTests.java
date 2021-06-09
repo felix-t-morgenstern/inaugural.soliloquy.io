@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.assets;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -1258,8 +1259,8 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesPlain.topY());
         assertTrue(spaceUvCoordinatesPlain.rightX() > 0);
 
-        assertEquals(Math.round(spaceUvCoordinatesPlain.rightX() * 1000f) / 1000f,
-                Math.round(bangUvCoordinatesPlain.leftX() * 1000f) / 1000f);
+        assertEquals(Tools.round(spaceUvCoordinatesPlain.rightX(), 3),
+                Tools.round(bangUvCoordinatesPlain.leftX(), 3));
         assertEquals(0f, bangUvCoordinatesPlain.topY());
         assertTrue(bangUvCoordinatesPlain.rightX() > 0);
     }
@@ -1276,8 +1277,8 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesItalic.topY());
         assertTrue(spaceUvCoordinatesItalic.rightX() > 0);
 
-        assertEquals(Math.round(spaceUvCoordinatesItalic.rightX() * 1000f) / 1000f,
-                Math.round(bangUvCoordinatesItalic.leftX() * 1000f) / 1000f);
+        assertEquals(Tools.round(spaceUvCoordinatesItalic.rightX(), 3),
+                Tools.round(bangUvCoordinatesItalic.leftX(), 3));
         assertEquals(0f, bangUvCoordinatesItalic.topY());
         assertTrue(bangUvCoordinatesItalic.rightX() > 0);
     }
@@ -1294,8 +1295,8 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesBold.topY());
         assertTrue(spaceUvCoordinatesBold.rightX() > 0);
 
-        assertEquals(Math.round(spaceUvCoordinatesBold.rightX() * 1000f) / 1000f,
-                Math.round(bangUvCoordinatesBold.leftX() * 1000f) / 1000f);
+        assertEquals(Tools.round(spaceUvCoordinatesBold.rightX(), 3),
+                Tools.round(bangUvCoordinatesBold.leftX(), 3));
         assertEquals(0f, bangUvCoordinatesBold.topY());
         assertTrue(bangUvCoordinatesBold.rightX() > 0);
     }
@@ -1312,8 +1313,8 @@ class FontImplTests {
         assertEquals(0f, spaceUvCoordinatesBoldItalic.topY());
         assertTrue(spaceUvCoordinatesBoldItalic.rightX() > 0);
 
-        assertEquals(Math.round(spaceUvCoordinatesBoldItalic.rightX() * 1000f) / 1000f,
-                Math.round(bangUvCoordinatesBoldItalic.leftX() * 1000f) / 1000f);
+        assertEquals(Tools.round(spaceUvCoordinatesBoldItalic.rightX(), 3),
+                Tools.round(bangUvCoordinatesBoldItalic.leftX(), 3));
         assertEquals(0f, bangUvCoordinatesBoldItalic.topY());
         assertTrue(bangUvCoordinatesBoldItalic.rightX() > 0);
     }
@@ -1405,39 +1406,37 @@ class FontImplTests {
                         .getUvCoordinatesForGlyph('j');
 
         assertEquals(
-                Math.round((glyphBoxPlain_i.rightX() -
-                        (glyphBoxPlain_i.height() * plainLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftPlain_i.rightX() * 10000f) / 10000f);
+                Tools.round((glyphBoxPlain_i.rightX() -
+                        (glyphBoxPlain_i.height() * plainLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftPlain_i.rightX(), 4));
         assertEquals(
-                Math.round((glyphBoxPlain_j.leftX() -
-                        (glyphBoxPlain_j.height() * plainLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftPlain_j.leftX() * 10000f) / 10000f);
+                Tools.round((glyphBoxPlain_j.leftX() -
+                        (glyphBoxPlain_j.height() * plainLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftPlain_j.leftX(), 4));
         assertEquals(
-                Math.round((glyphBoxItalic_i.rightX() -
-                        (glyphBoxItalic_i.height() * italicLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftItalic_i.rightX() * 10000f) / 10000f);
+                Tools.round((glyphBoxItalic_i.rightX() -
+                        (glyphBoxItalic_i.height() * italicLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftItalic_i.rightX(), 4));
         assertEquals(
-                Math.round((glyphBoxItalic_j.leftX() -
-                        (glyphBoxItalic_j.height() * italicLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftItalic_j.leftX() * 10000f) / 10000f);
+                Tools.round((glyphBoxItalic_j.leftX() -
+                        (glyphBoxItalic_j.height() * italicLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftItalic_j.leftX(), 4));
         assertEquals(
-                Math.round((glyphBoxBold_i.rightX() -
-                        (glyphBoxBold_i.height() * boldLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftBold_i.rightX() * 10000f) / 10000f);
+                Tools.round((glyphBoxBold_i.rightX() -
+                        (glyphBoxBold_i.height() * boldLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftBold_i.rightX(), 4));
         assertEquals(
-                Math.round((glyphBoxBold_j.leftX() -
-                        (glyphBoxBold_j.height() * boldLeftBoundaryShift)) * 10000f) / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftBold_j.leftX() * 10000f) / 10000f);
+                Tools.round((glyphBoxBold_j.leftX() -
+                        (glyphBoxBold_j.height() * boldLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftBold_j.leftX(), 4));
         assertEquals(
-                Math.round((glyphBoxBoldItalic_i.rightX() -
-                        (glyphBoxBoldItalic_i.height() * boldItalicLeftBoundaryShift)) * 10000f)
-                        / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftBoldItalic_i.rightX() * 10000f) / 10000f);
+                Tools.round((glyphBoxBoldItalic_i.rightX() -
+                        (glyphBoxBoldItalic_i.height() * boldItalicLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftBoldItalic_i.rightX(), 4));
         assertEquals(
-                Math.round((glyphBoxBoldItalic_j.leftX() -
-                        (glyphBoxBoldItalic_j.height() * boldItalicLeftBoundaryShift)) * 10000f)
-                        / 10000f,
-                Math.round(glyphBoxWithLeftBoundaryShiftBoldItalic_j.leftX() * 10000f) / 10000f);
+                Tools.round((glyphBoxBoldItalic_j.leftX() -
+                        (glyphBoxBoldItalic_j.height() * boldItalicLeftBoundaryShift)), 4),
+                Tools.round(glyphBoxWithLeftBoundaryShiftBoldItalic_j.leftX(), 4));
     }
 
     @Test

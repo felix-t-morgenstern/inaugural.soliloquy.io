@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
@@ -685,8 +686,7 @@ class TextLineRendererImplTests {
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
         //     due to floating point rounding discrepancies
-        assertEquals(Math.round(expectedTextLineLength * 10000f) / 10000f,
-                Math.round(textLineLength * 10000f) / 10000f);
+        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
     }
 
     @Test
@@ -759,8 +759,7 @@ class TextLineRendererImplTests {
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
         //     due to floating point rounding discrepancies
-        assertEquals(Math.round(expectedTextLineLength * 10000f) / 10000f,
-                Math.round(textLineLength * 10000f) / 10000f);
+        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
     }
 
     @Test

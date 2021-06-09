@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameRateReporterImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
@@ -133,10 +134,9 @@ class FrameRateReporterImplTests {
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
         assertEquals(new Date(_startingDatetime),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(0));
-        assertEquals(Math.round(((targetFps1 / 3f) + (targetFps2 / 3f) + (targetFps3 / 3f))
-                        * 1000f) / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0)
-                        * 1000f) / 1000f);
+        assertEquals(Tools.round(((targetFps1 / 3f) + (targetFps2 / 3f) + (targetFps3 / 3f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0), 3));
         assertEquals((Float)((actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(0));
     }
@@ -191,17 +191,15 @@ class FrameRateReporterImplTests {
         assertEquals(new Date(_startingDatetime + 3000),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(1));
         assertEquals(
-                Math.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)) * 1000f)
-                        / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(1)
-                        * 1000f) / 1000f);
+                Tools.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(1),
+                        3));
         assertEquals(
-                Math.round(
-                        ((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)) * 1000)
-                        / 1000f,
-                Math.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1)
-                                * 1000f) / 1000f);
+                Tools.round(((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1),
+                        3));
     }
 
     @Test
@@ -286,15 +284,15 @@ class FrameRateReporterImplTests {
         assertEquals(new Date(_startingDatetime + 3000),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(0));
         assertEquals(
-                Math.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)) * 1000f)
-                        / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0)
-                        * 1000f) / 1000f);
+                Tools.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0),
+                        3));
         assertEquals(
-                Math.round(((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)) * 1000f)
-                        / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(0)
-                        * 1000f) / 1000f);
+                Tools.round(((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(0),
+                        3));
     }
 
     @Test
@@ -399,9 +397,10 @@ class FrameRateReporterImplTests {
         assertEquals(new Date(_startingDatetime),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(0));
         assertEquals(
-                Math.round(((targetFps1 / 1.8f) + ((targetFps2 * 0.8f) / 1.8f)) * 1000f) / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0)
-                        * 1000f) / 1000f);
+                Tools.round(((targetFps1 / 1.8f) + ((targetFps2 * 0.8f) / 1.8f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(0),
+                        3));
         assertEquals((Float)((actualFps1 / 1.8f) + ((actualFps2 * 0.8f) / 1.8f)),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(0));
 
@@ -410,11 +409,11 @@ class FrameRateReporterImplTests {
         assertEquals((Float)(((targetFps4 * 0.5f) / 1.2f) + ((targetFps5 * 0.7f) / 1.2f)),
                 FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(1));
         assertEquals(
-                Math.round(
-                        (((actualFps4 * 0.5f) / 2.2f) + ((actualFps5 * 0.7f) / 2.2f) +
-                        ((actualFps6 * 1.0f) / 2.2f)) * 1000f) / 1000f,
-                Math.round(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1)
-                        * 1000f) / 1000f);
+                Tools.round((((actualFps4 * 0.5f) / 2.2f) + ((actualFps5 * 0.7f) / 2.2f) +
+                        ((actualFps6 * 1.0f) / 2.2f)), 3),
+                Tools.round(
+                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1),
+                        3));
     }
 
     @Test
