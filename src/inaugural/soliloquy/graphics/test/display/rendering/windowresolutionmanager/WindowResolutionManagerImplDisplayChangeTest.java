@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.rendering.windowresolutionmanager;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
@@ -40,7 +40,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 11. The window will close.
  *
  */
-class WindowManagerImplDisplayChangeTest {
+class WindowResolutionManagerImplDisplayChangeTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};

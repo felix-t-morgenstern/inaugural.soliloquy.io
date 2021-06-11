@@ -16,7 +16,8 @@ import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
-public class GlobalLoopingAnimationRenderer extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
+public class GlobalLoopingAnimationRenderer
+        extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                           FloatBoxFactory floatBoxFactory) {
         super(renderingBoundaries, floatBoxFactory, ARCHETYPE);

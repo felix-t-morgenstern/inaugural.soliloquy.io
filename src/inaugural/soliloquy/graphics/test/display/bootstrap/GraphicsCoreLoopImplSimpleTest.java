@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;

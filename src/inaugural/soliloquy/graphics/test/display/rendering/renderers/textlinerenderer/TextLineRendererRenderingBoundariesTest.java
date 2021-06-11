@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.common.test.fakes.*;
 import inaugural.soliloquy.graphics.api.WindowResolution;

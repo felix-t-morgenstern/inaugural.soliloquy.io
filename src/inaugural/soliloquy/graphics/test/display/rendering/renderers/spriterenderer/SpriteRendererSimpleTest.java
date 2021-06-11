@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;

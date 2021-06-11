@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.rendering.windowresolutionmanager;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.common.test.fakes.FakePairFactory;
@@ -22,39 +22,41 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a window in fullscreen mode, changing the resolution of the monitor to
- *    3840x2160, for 3000ms.
+ * 1. This test will display a window in windowed mode, with a resolution of 800x600 pixels, for
+ *    3000ms. This window will appear in the center of the screen, and will have a titlebar reading
+ *    "My title bar".
  * 2. The window will then close
  *
  */
-class WindowManagerImplFullscreenTest {
+class WindowResolutionManagerImplWindowedTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowResolutionManager =
-                new WindowResolutionManagerImpl(WindowDisplayMode.FULLSCREEN,
-                        WindowResolution.RES_3840x2160, COORDINATE_FACTORY);
+        WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_800x600, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
+        //noinspection rawtypes
+        Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
+        FakeFrameExecutor fakeFrameExecutor = new FakeFrameExecutor();
 
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
+        //noinspection rawtypes
+        Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                frameExecutor, new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
-                renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
+                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, fakeFrameExecutor,
+                new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
+                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(3000);
+        CheckedExceptionWrapper.sleep(2000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display;
+package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.common.test.fakes.FakePair;
@@ -13,6 +13,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -29,14 +30,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The 'Q' glyphs will have
- *    trails which extend to the right, underneath the subsequent glyphs, without pushing those
- *    glyphs to the right.
+ * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
+ *    edge of the window, vertically centered, for 8000ms.
  * 2. The window will then close.
  *
  */
-class TextLineRendererWideQTest {
+class TextLineRendererSimpleTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -49,10 +48,10 @@ class TextLineRendererWideQTest {
             new HashMap<>();
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT =
             new HashMap<>();
-    private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.2f;
+    private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.05f;
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
+    private final static String LINE_TEXT = "Quick Message!";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -68,9 +67,6 @@ class TextLineRendererWideQTest {
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
-
-        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
-        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);
 
         FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING,
@@ -105,7 +101,7 @@ class TextLineRendererWideQTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
+        Renderer<TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
                         windowResolutionManager);
 
