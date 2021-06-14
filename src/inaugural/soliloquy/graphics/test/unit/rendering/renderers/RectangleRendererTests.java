@@ -154,6 +154,6 @@ class RectangleRendererTests {
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                        null, RENDERING_AREA_PROVIDER, UUID), timestamp));
+                        null, RENDERING_AREA_PROVIDER, UUID), timestamp - 1L));
     }
 }

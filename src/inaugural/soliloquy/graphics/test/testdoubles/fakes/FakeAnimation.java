@@ -23,7 +23,8 @@ public class FakeAnimation implements Animation {
         MsDuration = msDuration;
     }
 
-    public FakeAnimation(int msDuration, boolean supportsMouseEventCapturing) {
+    public FakeAnimation(String id, int msDuration, boolean supportsMouseEventCapturing) {
+        Id = id;
         MsDuration = msDuration;
         SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }

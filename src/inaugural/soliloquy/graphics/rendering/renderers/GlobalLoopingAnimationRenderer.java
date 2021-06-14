@@ -41,7 +41,7 @@ public class GlobalLoopingAnimationRenderer
         Check.ifNull(globalLoopingAnimationRenderable.getGlobalLoopingAnimation(),
                 "globalLoopingAnimationRenderable.getGlobalLoopingAnimation()");
 
-        validateTimestamp(timestamp, "GlobalLoopingAnimationRenderer");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         super.render(renderingArea,
                 globalLoopingAnimationRenderable.getGlobalLoopingAnimation().provide(timestamp),

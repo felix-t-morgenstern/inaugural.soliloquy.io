@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
+import inaugural.soliloquy.graphics.shared.TimestampValidator;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
@@ -14,24 +15,18 @@ import java.util.Collections;
 public class StackRendererImpl implements StackRenderer {
     private final RenderableStack RENDERABLE_STACK;
     private final Renderer<Renderable> RENDERER;
-
-    private Long _mostRecentTimestamp;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     public StackRendererImpl(RenderableStack renderableStack, Renderer<Renderable> renderer) {
         RENDERABLE_STACK = Check.ifNull(renderableStack, "renderableStack");
         RENDERER = Check.ifNull(renderer, "renderer");
+        TIMESTAMP_VALIDATOR = new TimestampValidator();
     }
 
     // TODO: Refactor how keys are obtained and sorted after having refactored Collection to either extend List, or implement a method which exposes a properly-typed List or Array
     @Override
     public void render(long timestamp) {
-        if (_mostRecentTimestamp != null) {
-            if (timestamp < _mostRecentTimestamp) {
-                throw new IllegalArgumentException(
-                        "RasterizedLineSegmentRenderer.render: outdated timestamp provided");
-            }
-        }
-        _mostRecentTimestamp = timestamp;
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
         Map<Integer, List<Renderable>> toRender = RENDERABLE_STACK.snapshot();
 

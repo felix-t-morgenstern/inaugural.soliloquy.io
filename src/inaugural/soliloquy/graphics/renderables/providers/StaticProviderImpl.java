@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
+import inaugural.soliloquy.graphics.shared.TimestampValidator;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.HasOneGenericParam;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements StaticProvider<T> {
     private final T VALUE;
-
-    private Long _mostRecentTimestamp;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     public StaticProviderImpl(T value) {
         this(value, value);
@@ -16,6 +16,7 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
     public StaticProviderImpl(T value, T archetype) {
         super(archetype);
         VALUE = value;
+        TIMESTAMP_VALIDATOR = new TimestampValidator();
     }
 
     @Override
@@ -25,24 +26,17 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
 
     @Override
     public T provide(long timestamp) throws IllegalArgumentException {
-        validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         return VALUE;
     }
 
     @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
-        validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
     }
 
     @Override
     public void reportUnpause(long timestamp) throws IllegalArgumentException {
-        validateTimestamp(timestamp);
-    }
-
-    private void validateTimestamp(long timestamp) {
-        if (_mostRecentTimestamp != null) {
-            Check.throwOnLtValue(timestamp, _mostRecentTimestamp, "timestamp");
-        }
-        _mostRecentTimestamp = timestamp;
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
     }
 }

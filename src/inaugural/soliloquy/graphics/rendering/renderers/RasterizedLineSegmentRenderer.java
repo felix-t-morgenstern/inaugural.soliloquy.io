@@ -67,7 +67,7 @@ public class RasterizedLineSegmentRenderer
                 "rasterizedLineSegmentRenderable provided rendering dimensions");
         Check.ifNull(rasterizedLineSegmentRenderable.uuid(), "rasterizedLineSegmentRenderable.id()");
 
-        validateTimestamp(timestamp, "RasterizedLineSegmentRenderer");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         glLineWidth(thickness);
 

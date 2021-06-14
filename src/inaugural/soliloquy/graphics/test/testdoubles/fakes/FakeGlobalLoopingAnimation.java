@@ -53,6 +53,11 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
+    public String animationId() {
+        return null;
+    }
+
+    @Override
     public int periodModuloOffset() {
         return 0;
     }

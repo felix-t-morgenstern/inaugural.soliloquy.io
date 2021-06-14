@@ -179,6 +179,6 @@ class RasterizedLineSegmentRendererTests {
         _lineSegmentRenderer.render(lineSegmentRenderable, timestamp);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _lineSegmentRenderer.render(lineSegmentRenderable, timestamp));
+                () -> _lineSegmentRenderer.render(lineSegmentRenderable, timestamp - 1L));
     }
 }

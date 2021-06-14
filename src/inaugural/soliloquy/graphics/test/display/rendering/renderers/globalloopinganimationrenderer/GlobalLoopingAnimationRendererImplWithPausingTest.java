@@ -111,17 +111,19 @@ public class GlobalLoopingAnimationRendererImplWithPausingTest {
                 frames.put(frameDuration * i, new FakeAnimationFrameSnippet(renderableImage,
                         frameWidth * i, 0, frameWidth * (i + 1), frameHeight, 0f, 0f));
             }
+            // TODO: Ensure that animation starts on the first frame, if possible
             long globalLoopingAnimationStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-            FakeAnimationDefinition animationDefinition =
-                    new FakeAnimationDefinition(frameDuration * numberOfFrames, "torch", frames);
+            int msDuration = frameDuration * numberOfFrames;
+
+            FakeAnimationDefinition animationDefinition = new FakeAnimationDefinition(msDuration,
+                    "torch", frames);
 
             Animation animation = animationFactory.make(animationDefinition);
 
             System.out.println("Animation duration = " + animation.msDuration());
 
-            int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp
-                    % (frameDuration * numberOfFrames));
+            int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp % (msDuration));
 
             GlobalLoopingAnimation = new GlobalLoopingAnimationImpl(animation, periodModuloOffset);
 

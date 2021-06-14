@@ -213,7 +213,7 @@ class SpriteRendererTests {
         _spriteRenderer.render(spriteRenderable, timestamp);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _spriteRenderer.render(spriteRenderable, timestamp));
+                () -> _spriteRenderer.render(spriteRenderable, timestamp - 1L));
     }
 
     @Test

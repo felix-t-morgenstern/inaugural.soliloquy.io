@@ -13,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class GlobalLoopingAnimationImplTests {
     private final int MS_DURATION = 456;
     private final int PERIOD_MODULO_OFFSET = 123;
-    private final FakeAnimation ANIMATION = new FakeAnimation(MS_DURATION, true);
+    private final String ANIMATION_ID = "animationId";
+    private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
 
     private GlobalLoopingAnimation _globalLoopingAnimation;
 
@@ -36,6 +37,11 @@ class GlobalLoopingAnimationImplTests {
     void testGetInterfaceName() {
         assertEquals(GlobalLoopingAnimation.class.getCanonicalName(),
                 _globalLoopingAnimation.getInterfaceName());
+    }
+
+    @Test
+    void testAnimationId() {
+        assertEquals(ANIMATION_ID, _globalLoopingAnimation.animationId());
     }
 
     @Test
@@ -157,5 +163,24 @@ class GlobalLoopingAnimationImplTests {
                 (int)providedSnippetAndMsPositionAfterUnpaused.getItem1());
         assertSame(providedSnippetAfterUnpaused,
                 providedSnippetAndMsPositionAfterUnpaused.getItem2());
+    }
+
+    @Test
+    void testReportPauseOrProvideWithOutdatedTimestamp() {
+        long timestamp = 123123L;
+
+        _globalLoopingAnimation.provide(timestamp);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.provide(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportPause(timestamp - 1));
+
+        _globalLoopingAnimation.reportPause(timestamp + 1);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.provide(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportUnpause(timestamp));
     }
 }

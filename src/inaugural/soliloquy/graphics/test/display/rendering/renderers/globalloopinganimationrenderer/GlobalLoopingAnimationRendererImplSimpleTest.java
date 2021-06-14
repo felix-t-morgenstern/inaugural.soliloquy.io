@@ -109,13 +109,14 @@ class GlobalLoopingAnimationRendererImplSimpleTest {
             }
             long globalLoopingAnimationStartTimestamp = globalClock.globalTimestamp();
 
-            FakeAnimationDefinition animationDefinition =
-                    new FakeAnimationDefinition(frameDuration * numberOfFrames, "torch", frames);
+            int msDuration = frameDuration * numberOfFrames;
+
+            FakeAnimationDefinition animationDefinition = new FakeAnimationDefinition(msDuration,
+                    "torch", frames);
 
             Animation animation = animationFactory.make(animationDefinition);
 
-            int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp
-                    % (frameDuration * numberOfFrames));
+            int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp % (msDuration));
 
                     GlobalLoopingAnimationImpl globalLoopingAnimation =
                             new GlobalLoopingAnimationImpl(animation, periodModuloOffset);

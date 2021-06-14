@@ -78,7 +78,7 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
         Check.ifNull(rectangleRenderable.uuid(), "rectangleRenderable.uuid()");
 
-        validateTimestamp(timestamp, "RectangleRenderer");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         float leftX = (renderingDimensions.leftX() * 2f) - 1f;
         float topY = -((renderingDimensions.topY() * 2f) - 1f);

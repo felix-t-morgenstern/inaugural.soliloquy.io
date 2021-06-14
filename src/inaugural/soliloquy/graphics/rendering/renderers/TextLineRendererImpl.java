@@ -37,7 +37,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             throws IllegalArgumentException {
         validateTextLineRenderable(textLineRenderable, "render");
 
-        validateTimestamp(timestamp, "TextLineRendererImpl");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         Float borderThickness = null;
         Color borderColor = null;

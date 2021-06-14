@@ -30,7 +30,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         Check.ifNull(spriteRenderable, "spriteRenderable");
         Check.ifNull(spriteRenderable.getSprite(), "spriteRenderable.getSprite()");
 
-        validateTimestamp(timestamp, "SpriteRenderer");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
         
         // TODO: Throw if rendering area or border thickness or color providers are null
         

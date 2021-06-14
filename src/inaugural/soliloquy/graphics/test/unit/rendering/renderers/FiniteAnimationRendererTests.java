@@ -146,7 +146,7 @@ class FiniteAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> _finiteAnimationRenderer.render(finiteAnimationRenderable,
-                        START_TIMESTAMP + timestamp));
+                        START_TIMESTAMP + timestamp - 1L));
     }
 
     @Test

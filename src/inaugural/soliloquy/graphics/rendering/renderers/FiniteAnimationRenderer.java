@@ -39,7 +39,7 @@ public class FiniteAnimationRenderer
         validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
                 finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
 
-        validateTimestamp(timestamp, "FiniteAnimationRenderable");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         if (timestamp < finiteAnimationRenderable.startTimestamp()) {
             return;
