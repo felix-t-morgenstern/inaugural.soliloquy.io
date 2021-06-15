@@ -5,6 +5,8 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -18,9 +20,14 @@ import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
 public class GlobalLoopingAnimationRenderer
         extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
+    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
+
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                          FloatBoxFactory floatBoxFactory) {
+                                          FloatBoxFactory floatBoxFactory,
+                                          ColorShiftStackAggregator colorShiftStackAggregator) {
         super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
+                "colorShiftStackAggregator");
     }
 
     @Override
@@ -43,9 +50,14 @@ public class GlobalLoopingAnimationRenderer
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        super.render(renderingArea,
+        NetColorShifts netColorShifts = COLOR_SHIFT_STACK_AGGREGATOR.aggregate(
+                globalLoopingAnimationRenderable.colorShifts(), timestamp);
+
+        super.render(
+                renderingArea,
                 globalLoopingAnimationRenderable.getGlobalLoopingAnimation().provide(timestamp),
-                INTACT_COLOR);
+                INTACT_COLOR,
+                netColorShifts.netColorRotationShift());
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =

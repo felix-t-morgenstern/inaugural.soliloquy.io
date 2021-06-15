@@ -7,6 +7,8 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
@@ -21,9 +23,14 @@ import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 public class FiniteAnimationRenderer
         extends CanRenderSnippets<FiniteAnimationRenderable>
         implements Renderer<FiniteAnimationRenderable> {
+    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
+
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                   FloatBoxFactory floatBoxFactory) {
+                                   FloatBoxFactory floatBoxFactory,
+                                   ColorShiftStackAggregator colorShiftStackAggregator) {
         super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
+                "colorShiftStackAggregator");
     }
 
     @Override
@@ -50,9 +57,16 @@ public class FiniteAnimationRenderer
             return;
         }
 
+        NetColorShifts netColorShifts = COLOR_SHIFT_STACK_AGGREGATOR.aggregate(
+                finiteAnimationRenderable.colorShifts(), timestamp);
+
         AnimationFrameSnippet snippet =  finiteAnimationRenderable.provide(timestamp);
 
-        super.render(renderingArea, snippet, INTACT_COLOR);
+        super.render(
+                renderingArea,
+                snippet,
+                INTACT_COLOR,
+                netColorShifts.netColorRotationShift());
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {

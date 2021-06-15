@@ -22,6 +22,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 class GlobalLoopingAnimationRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
+            new FakeColorShiftStackAggregator();
 
     private Renderer<GlobalLoopingAnimationRenderable> _globalLoopingAnimationRenderer;
 
@@ -45,15 +47,21 @@ class GlobalLoopingAnimationRendererTests {
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
         _globalLoopingAnimationRenderer =
-                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                        COLOR_SHIFT_STACK_AGGREGATOR);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderer(null, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new GlobalLoopingAnimationRenderer(null, FLOAT_BOX_FACTORY,
+                        COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, null,
+                        COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                        null));
     }
 
     @Test
@@ -156,6 +164,27 @@ class GlobalLoopingAnimationRendererTests {
         assertThrows(IllegalArgumentException.class,
                 () -> _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
                         timestamp - 1L));
+    }
+
+    @Test
+    void testRenderPassesTimestampToColorShiftStackAggregator() {
+        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
+        List<ColorShift> colorShifts = new ArrayList<>();
+        float leftX = 0.11f;
+        float topY = 0.22f;
+        float rightX = 0.33f;
+        float bottomY = 0.44f;
+        FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeEntityUuid());
+        long timestamp = 100L;
+        _globalLoopingAnimationRenderer.setShader(new FakeShader());
+        _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
+        _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable, timestamp);
+
+        assertEquals(timestamp, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test

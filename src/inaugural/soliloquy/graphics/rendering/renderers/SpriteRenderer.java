@@ -6,6 +6,8 @@ import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
@@ -18,10 +20,15 @@ import java.util.List;
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
 public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
+    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
+
     public SpriteRenderer(RenderingBoundaries renderingBoundaries,
                           FloatBoxFactory floatBoxFactory,
-                          WindowResolutionManager windowResolutionManager) {
+                          WindowResolutionManager windowResolutionManager,
+                          ColorShiftStackAggregator colorShiftStackAggregator) {
         super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager);
+        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
+                "colorShiftStackAggregator");
     }
 
     @Override
@@ -102,9 +109,13 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                     borderColor);
         }
 
+        NetColorShifts netColorShifts =
+                COLOR_SHIFT_STACK_AGGREGATOR.aggregate(spriteRenderable.colorShifts(), timestamp);
+
         super.render(renderingArea,
                 spriteRenderable.getSprite(),
-                INTACT_COLOR);
+                INTACT_COLOR,
+                netColorShifts.netColorRotationShift());
     }
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {

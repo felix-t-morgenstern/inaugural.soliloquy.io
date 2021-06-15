@@ -24,6 +24,17 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
+/**
+ * Test acceptance criteria:
+ *
+ * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 3000ms
+ *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
+ *    centered in the window, taking up half of the width and three-fourths of the height of the
+ *    window. This sprite will have a purple border with a thickness of 1% of the height of the
+ *    screen.
+ * 2. The window will then close.
+ *
+ */
 class SpriteRendererBorderTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
@@ -61,7 +72,7 @@ class SpriteRendererBorderTest {
 
         Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
                 new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        windowResolutionManager);
+                        windowResolutionManager, new FakeColorShiftStackAggregator());
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

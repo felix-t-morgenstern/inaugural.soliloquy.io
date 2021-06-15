@@ -61,13 +61,28 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
                 Color matColor) {
-        render(renderingArea, snippet, matColor, null);
+        render(renderingArea, snippet, matColor, null, 0f);
     }
 
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
                 Color matColor,
                 Color overrideColor) {
+        render(renderingArea, snippet, matColor, overrideColor, 0f);
+    }
+
+    void render(FloatBox renderingArea,
+                AssetSnippet snippet,
+                Color matColor,
+                float colorRotationShift) {
+        render(renderingArea, snippet, matColor, null, colorRotationShift);
+    }
+
+    void render(FloatBox renderingArea,
+                AssetSnippet snippet,
+                Color matColor,
+                Color overrideColor,
+                float colorRotationShift) {
         float snippetLeftX = (float)snippet.leftX() / snippet.image().width();
         float snippetTopY = (float)snippet.topY() / snippet.image().height();
         float snippetRightX = (float)snippet.rightX() / snippet.image().width();
@@ -77,7 +92,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
                 textureId,
                 matColor,
-                overrideColor);
+                overrideColor,
+                colorRotationShift);
     }
 
     void render(FloatBox renderingArea,
@@ -88,14 +104,16 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,
                 textureId,
                 matColor,
-                null);
+                null,
+                0f);
     }
 
     void render(FloatBox renderingArea,
                 float snippetLeftX, float snippetTopY, float snippetRightX, float snippetBottomY,
                 int textureId,
                 Color matColor,
-                Color overrideColor) {
+                Color overrideColor,
+                float colorRotationShift) {
         FloatBox windowPosition = renderingArea.intersection(
                 RENDERING_BOUNDARIES.currentBoundaries());
 
@@ -155,6 +173,11 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 snippetRightXWithinBounds,
                 snippetBottomYWithinBounds);
 
+        colorRotationShift %= 1.0f;
+        if (colorRotationShift < 0) {
+            colorRotationShift += 1.0f;
+        }
+
         glBindTexture(GL_TEXTURE_2D, textureId);
 
         // offset:
@@ -178,6 +201,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         //     These values are the percentage of each channel (RGBA) to render, where 1f is 100%
         //     of that channel rendered, and 0f is 0% of that channel rendered
         _shader.setUniform("matColor", matColor);
+        // colorRotationShift:
+        //     The degree to which the colors are rotated on the color wheel, ranging from [0,1]
+        _shader.setUniform("colorRotationShift", colorRotationShift);
         // overrideColor:
         //     This color entirely overrides the color of the actual object being rendered. This is
         //     intended for use in borders, shadows, etc. If the x value is less than 0, the shader

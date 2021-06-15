@@ -141,7 +141,7 @@ class StackRendererRenderingBoundariesTest {
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, windowResolutionManager);
+                FLOAT_BOX_FACTORY, windowResolutionManager, new FakeColorShiftStackAggregator());
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);

@@ -25,6 +25,8 @@ class SpriteRendererTests {
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
+    private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
+            new FakeColorShiftStackAggregator();
 
     private Renderer<SpriteRenderable> _spriteRenderer;
 
@@ -48,17 +50,23 @@ class SpriteRendererTests {
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
         _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                WINDOW_RESOLUTION_MANAGER);
+                WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderer(null, FLOAT_BOX_FACTORY, WINDOW_RESOLUTION_MANAGER));
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderer(RENDERING_BOUNDARIES, null, WINDOW_RESOLUTION_MANAGER));
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new SpriteRenderer(null, FLOAT_BOX_FACTORY,
+                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new SpriteRenderer(RENDERING_BOUNDARIES, null,
+                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                        null, COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                        WINDOW_RESOLUTION_MANAGER, null));
     }
 
     @Test
@@ -214,6 +222,28 @@ class SpriteRendererTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> _spriteRenderer.render(spriteRenderable, timestamp - 1L));
+    }
+
+    @Test
+    void testRenderPassesTimestampToColorShiftStackAggregator() {
+        FakeSprite sprite = new FakeSprite();
+        sprite.Image = new FakeImage("imageId");
+        List<ColorShift> colorShifts = new ArrayList<>();
+        float leftX = 0.11f;
+        float topY = 0.22f;
+        float rightX = 0.33f;
+        float bottomY = 0.44f;
+        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProviderAtTime<>(null),
+                new FakeEntityUuid());
+        long timestamp = 100L;
+        _spriteRenderer.setShader(new FakeShader());
+        _spriteRenderer.setMesh(new FakeMesh());
+        _spriteRenderer.render(spriteRenderable, timestamp);
+
+        assertEquals(timestamp, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test

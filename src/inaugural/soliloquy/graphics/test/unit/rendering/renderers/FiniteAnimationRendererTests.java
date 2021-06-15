@@ -19,6 +19,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 class FiniteAnimationRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
+            new FakeColorShiftStackAggregator();
     private final long START_TIMESTAMP = 123123L;
 
     private Renderer<FiniteAnimationRenderable> _finiteAnimationRenderer;
@@ -42,16 +44,21 @@ class FiniteAnimationRendererTests {
     @BeforeEach
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
-        _finiteAnimationRenderer =
-                new FiniteAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY);
+        _finiteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
+                FLOAT_BOX_FACTORY, COLOR_SHIFT_STACK_AGGREGATOR);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderer(null, FLOAT_BOX_FACTORY));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderer(RENDERING_BOUNDARIES, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteAnimationRenderer(null, FLOAT_BOX_FACTORY,
+                        COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteAnimationRenderer(RENDERING_BOUNDARIES, null,
+                        COLOR_SHIFT_STACK_AGGREGATOR));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                        null));
     }
 
     @Test
@@ -68,7 +75,7 @@ class FiniteAnimationRendererTests {
 
     @Test
     void testRenderWithInvalidParams() {
-        FakeAnimation animation = new FakeAnimation("id");
+        FakeAnimation animation = new FakeAnimation("id", 5000);
         ArrayList<ColorShift> colorShifts = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
@@ -128,7 +135,7 @@ class FiniteAnimationRendererTests {
 
     @Test
     void testRenderOutdatedTimestamp() {
-        FakeAnimation animation = new FakeAnimation("id");
+        FakeAnimation animation = new FakeAnimation("id", 5000);
         ArrayList<ColorShift> colorShifts = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
@@ -151,7 +158,7 @@ class FiniteAnimationRendererTests {
 
     @Test
     void testRenderBeforeStartingTimestamp() {
-        FakeAnimation animation = new FakeAnimation("id");
+        FakeAnimation animation = new FakeAnimation("id", 5000);
         ArrayList<ColorShift> colorShifts = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
@@ -168,6 +175,27 @@ class FiniteAnimationRendererTests {
         _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP - 1L);
 
         assertFalse(animation.SnippetAtFrameCalled);
+    }
+
+    @Test
+    void testRenderPassesTimestampToColorShiftStackAggregator() {
+        FakeAnimation animation = new FakeAnimation("id", 5000);
+        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        float leftX = 0.11f;
+        float topY = 0.22f;
+        float rightX = 0.33f;
+        float bottomY = 0.44f;
+        FakeFiniteAnimationRenderable finiteAnimationRenderable =
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        START_TIMESTAMP, new FakeEntityUuid());
+        long timestamp = 100L;
+        _finiteAnimationRenderer.setShader(new FakeShader());
+        _finiteAnimationRenderer.setMesh(new FakeMesh());
+        _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP);
+
+        assertEquals(START_TIMESTAMP, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test

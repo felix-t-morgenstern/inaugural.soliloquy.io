@@ -77,7 +77,7 @@ public class SpriteRendererRenderingBoundariesTest {
 
         Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
                 new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        windowResolutionManager);
+                        windowResolutionManager, new FakeColorShiftStackAggregator());
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

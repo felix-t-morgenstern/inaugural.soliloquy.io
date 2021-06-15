@@ -30,11 +30,13 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 3000ms
  *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
  *    centered in the window, taking up half of the width and three-fourths of the height of the
- *    window.
+ *    window. This sprite will have its colors shifted by 50% of the color wheel, i.e., red (0
+ *    degrees) will be cyan (180 degrees), yellow-green (60 degrees) will be blue (240 degrees),
+ *    etc.
  * 2. The window will then close.
  *
  */
-class SpriteRendererSimpleTest {
+public class SpriteRendererColorRotationShiftTest {
     private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
@@ -44,8 +46,6 @@ class SpriteRendererSimpleTest {
     private final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./res/images/items/RPG_Weapons.png";
     private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
-
-    private static FakeSpriteRenderable SpriteRenderable;
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowResolutionManager =
@@ -61,27 +61,33 @@ class SpriteRendererSimpleTest {
 
         FakeSprite sprite =
                 new FakeSprite(null, 266, 271, 313, 343);
-        SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
+        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
                 new StaticProviderImpl<>(null, 0f), new StaticProviderImpl<>(null, INTACT_COLOR),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
+        FakeNetColorShifts netColorShifts = new FakeNetColorShifts();
+        // NB: This should be brought up to 0.5f
+        netColorShifts.NetColorRotationShift = 30.5f;
+        FakeColorShiftStackAggregator colorShiftStackAggregator =
+                new FakeColorShiftStackAggregator(netColorShifts);
+
         Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, windowResolutionManager, new FakeColorShiftStackAggregator());
+                FLOAT_BOX_FACTORY, windowResolutionManager, colorShiftStackAggregator);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);
-        }};
+                }};
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);
-        }};
+                }};
 
         stackRenderer.RenderAction = timestamp ->
-                spriteRenderer.render(SpriteRenderable, timestamp);
+                spriteRenderer.render(spriteRenderable, timestamp);
 
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
