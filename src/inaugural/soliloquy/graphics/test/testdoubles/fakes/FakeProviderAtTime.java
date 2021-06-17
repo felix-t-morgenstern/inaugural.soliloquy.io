@@ -28,6 +28,11 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     }
 
     @Override
+    public Long pausedTimestamp() {
+        return null;
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }

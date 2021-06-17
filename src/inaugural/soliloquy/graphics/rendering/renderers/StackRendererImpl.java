@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
-import inaugural.soliloquy.graphics.shared.TimestampValidator;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;

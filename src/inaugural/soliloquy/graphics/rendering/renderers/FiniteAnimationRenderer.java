@@ -141,6 +141,11 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public Long pausedTimestamp() {
+            return null;
+        }
+
+        @Override
         public EntityUuid uuid() {
             return null;
         }

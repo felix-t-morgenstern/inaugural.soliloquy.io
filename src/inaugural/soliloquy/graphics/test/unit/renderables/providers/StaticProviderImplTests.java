@@ -64,6 +64,11 @@ class StaticProviderImplTests {
     }
 
     @Test
+    void testPausedTimestamp() {
+        assertThrows(UnsupportedOperationException.class, _staticProvider::pausedTimestamp);
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(StaticProvider.class.getCanonicalName() + "<" +
                 Object.class.getCanonicalName() + ">",

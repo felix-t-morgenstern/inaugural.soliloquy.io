@@ -30,6 +30,11 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
     }
 
     @Override
+    public Long pausedTimestamp() {
+        return null;
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }

@@ -6,7 +6,7 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 
 public class GlobalLoopingAnimationImpl
-        extends PausableProviderWithOffsetAbstract<AnimationFrameSnippet>
+        extends LoopingProviderAbstract<AnimationFrameSnippet>
         implements GlobalLoopingAnimation {
     private final Animation ANIMATION;
 
@@ -39,10 +39,5 @@ public class GlobalLoopingAnimationImpl
     @Override
     public String getInterfaceName() {
         return GlobalLoopingAnimation.class.getCanonicalName();
-    }
-
-    @Override
-    protected String getUnparameterizedInterfaceName() {
-        throw new UnsupportedOperationException();
     }
 }

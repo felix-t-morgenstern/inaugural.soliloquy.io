@@ -43,6 +43,11 @@ public class FakeFrameRateReporter implements FrameRateReporter {
     }
 
     @Override
+    public Long pausedTimestamp() {
+        return null;
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }

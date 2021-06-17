@@ -464,6 +464,11 @@ class FrameRateReporterImplTests {
     }
 
     @Test
+    void testPausedTimestamp() {
+        assertThrows(UnsupportedOperationException.class, _frameRateReporter::pausedTimestamp);
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(FrameRateReporter.class.getCanonicalName(),
                 _frameRateReporter.getInterfaceName());

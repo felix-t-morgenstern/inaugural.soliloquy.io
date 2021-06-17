@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RectangleAnimatedBackgroundTextureIdProvider
-        extends PausableProviderWithOffsetAbstract<Integer>
+        extends LoopingProviderAbstract<Integer>
         implements LoopingMovingProvider<Integer> {
     private final FloorFrameProvider<Integer> FLOOR_FRAME_PROVIDER;
 
     public RectangleAnimatedBackgroundTextureIdProvider(int periodDuration, int periodModuloOffset,
                                                         Map<Integer, Integer> valuesWithinPeriod) {
-        super(periodDuration, periodModuloOffset, 0);
+        super(periodDuration, periodModuloOffset);
         FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null, null);
     }
 
@@ -38,7 +38,17 @@ public class RectangleAnimatedBackgroundTextureIdProvider
     }
 
     @Override
-    protected String getUnparameterizedInterfaceName() {
-        return LoopingMovingProvider.class.getCanonicalName();
+    public Integer getArchetype() {
+        return 0;
+    }
+
+    // NB: Handling this manually rather than via HasOneGenericParam from Tools, since Java classes
+    //     cannot extend multiple classes, and accessing LoopingPausableAtTime shared functionality
+    //     via inheritance rather than composition seems more parsimonious and elegant at the
+    //     moment
+    @Override
+    public String getInterfaceName() {
+        return LoopingMovingProvider.class.getCanonicalName() + "<" +
+                Integer.class.getCanonicalName() + ">";
     }
 }

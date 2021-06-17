@@ -47,6 +47,11 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public Long pausedTimestamp() {
+        return null;
+    }
+
+    @Override
     public boolean getCapturesMouseEvents() {
         return false;
     }

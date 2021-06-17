@@ -1,8 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
-import inaugural.soliloquy.graphics.shared.TimestampValidator;
-import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.HasOneGenericParam;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements StaticProvider<T> {
@@ -38,5 +37,10 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
     @Override
     public void reportUnpause(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+    }
+
+    @Override
+    public Long pausedTimestamp() {
+        throw new UnsupportedOperationException();
     }
 }

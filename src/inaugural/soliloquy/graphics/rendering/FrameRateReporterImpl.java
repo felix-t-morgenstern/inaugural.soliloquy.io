@@ -202,6 +202,12 @@ public class FrameRateReporterImpl implements FrameRateReporter {
         }
     }
 
+    // NB: This is unsupported FOR NOW; it can easily be implemented later
+    @Override
+    public Long pausedTimestamp() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public String getInterfaceName() {
         return FrameRateReporter.class.getCanonicalName();

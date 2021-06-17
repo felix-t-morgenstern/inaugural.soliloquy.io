@@ -222,4 +222,10 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
         assertThrows(IllegalArgumentException.class,
                 () -> _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp));
     }
+
+    @Test
+    void testGetArchetype() {
+        assertEquals(0,
+                (int)_rectangleAnimatedBackgroundTextureIdProvider.getArchetype());
+    }
 }
