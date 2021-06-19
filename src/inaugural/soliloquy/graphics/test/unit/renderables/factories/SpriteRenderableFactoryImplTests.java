@@ -24,12 +24,8 @@ class SpriteRenderableFactoryImplTests {
             new FakeSprite(new FakeImage(false));
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_CLICK = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_OVER = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_LEAVE = new FakeAction();
+    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
+    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
     private final ArrayList<ColorShift> COLOR_SHIFTS = new ArrayList<>();
     private final FakeProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER =
             new FakeProviderAtTime<>();
@@ -55,7 +51,7 @@ class SpriteRenderableFactoryImplTests {
     void testMake() {
         SpriteRenderable spriteRenderableWithMouseEvents = _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
 
@@ -77,62 +73,62 @@ class SpriteRenderableFactoryImplTests {
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_NOT_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         // NB: The following two constructors should _not_ throw exceptions
         _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         );
         _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, null, null,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         );
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 null, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, null, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, null,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 null
         ));

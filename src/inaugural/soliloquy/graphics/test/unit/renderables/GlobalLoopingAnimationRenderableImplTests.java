@@ -7,6 +7,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalLoopingAnim
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -14,6 +15,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,12 +27,10 @@ class GlobalLoopingAnimationRenderableImplTests {
             new FakeGlobalLoopingAnimation(false);
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_CLICK = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_OVER = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_LEAVE = new FakeAction();
+    private final FakeAction<Long> ON_PRESS_ACTION = new FakeAction<>();
+    private final HashMap<Integer, Action<Long>> ON_PRESS_ACTIONS = new HashMap<>();
+    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
+    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
     private final ArrayList<ColorShift> COLOR_SHIFTS = new ArrayList<>();
     private final FakeProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeProviderAtTime<>();
@@ -71,89 +71,95 @@ class GlobalLoopingAnimationRenderableImplTests {
 
     @BeforeEach
     void setUp() {
-        _globalLoopingAnimationRenderableWithMouseEvents = new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
-                GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER);
-        _globalLoopingAnimationRenderableWithoutMouseEvents = new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
-                GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
-                GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER);
+        ON_PRESS_ACTIONS.put(2, ON_PRESS_ACTION);
+        
+        _globalLoopingAnimationRenderableWithMouseEvents =
+                new GlobalLoopingAnimationRenderableImpl(
+                        GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS,
+                        null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
+                        GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
+                        GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER);
+        _globalLoopingAnimationRenderableWithoutMouseEvents =
+                new GlobalLoopingAnimationRenderableImpl(
+                        GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
+                        GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
+                        GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER);
     }
 
     @Test
     void testConstructorWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 null, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         // NB: The following two constructors should _not_ throw exceptions
         new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         );
         new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
-                null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         );
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                null, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, null, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                null, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, null, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, null,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 null,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 null
         ));
@@ -247,7 +253,8 @@ class GlobalLoopingAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents.setGlobalLoopingAnimation(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationRenderableWithoutMouseEvents.setGlobalLoopingAnimation(null));
+                _globalLoopingAnimationRenderableWithoutMouseEvents
+                        .setGlobalLoopingAnimation(null));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents.setGlobalLoopingAnimation(
                         new FakeGlobalLoopingAnimation(false)));
@@ -262,8 +269,10 @@ class GlobalLoopingAnimationRenderableImplTests {
 
         FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
 
-        _globalLoopingAnimationRenderableWithMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
-        _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
+        _globalLoopingAnimationRenderableWithMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
+        _globalLoopingAnimationRenderableWithoutMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
 
         assertSame(newBorderThicknessProvider,
                 _globalLoopingAnimationRenderableWithMouseEvents.getBorderThicknessProvider());
@@ -295,8 +304,10 @@ class GlobalLoopingAnimationRenderableImplTests {
 
         FakeProviderAtTime<Color> newBorderColorProvider = new FakeProviderAtTime<>();
 
-        _globalLoopingAnimationRenderableWithMouseEvents.setBorderColorProvider(newBorderColorProvider);
-        _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderColorProvider(newBorderColorProvider);
+        _globalLoopingAnimationRenderableWithMouseEvents
+                .setBorderColorProvider(newBorderColorProvider);
+        _globalLoopingAnimationRenderableWithoutMouseEvents
+                .setBorderColorProvider(newBorderColorProvider);
 
         assertSame(newBorderColorProvider,
                 _globalLoopingAnimationRenderableWithMouseEvents.getBorderColorProvider());
@@ -325,69 +336,90 @@ class GlobalLoopingAnimationRenderableImplTests {
     }
 
     @Test
-    void testClickAndSetOnClick() {
-        assertThrows(UnsupportedOperationException.class,
-                _globalLoopingAnimationRenderableWithoutMouseEvents::click);
+    void testPressAndSetOnPress() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _globalLoopingAnimationRenderableWithoutMouseEvents.setOnClick(ON_CLICK));
+                _globalLoopingAnimationRenderableWithoutMouseEvents.press(2, 0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                _globalLoopingAnimationRenderableWithoutMouseEvents.setOnPress(0,
+                        ON_PRESS_ACTION));
 
-        _globalLoopingAnimationRenderableWithMouseEvents.click();
-        assertEquals(1, ON_CLICK.NumberOfTimesCalled);
-        assertEquals(1, ON_CLICK.Inputs.size());
-        assertNull(ON_CLICK.Inputs.get(0));
+        long timestamp = 456456L;
+        _globalLoopingAnimationRenderableWithMouseEvents.press(2, timestamp);
+        assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
+        assertEquals(1, ON_PRESS_ACTION.Inputs.size());
+        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnClick = new FakeAction();
-        _globalLoopingAnimationRenderableWithMouseEvents.setOnClick(newOnClick);
+        FakeAction<Long> newOnPress = new FakeAction<>();
+        _globalLoopingAnimationRenderableWithMouseEvents.setOnPress(0, newOnPress);
 
-        _globalLoopingAnimationRenderableWithMouseEvents.click();
-        assertEquals(1, newOnClick.NumberOfTimesCalled);
-        assertEquals(1, newOnClick.Inputs.size());
-        assertNull(newOnClick.Inputs.get(0));
+        _globalLoopingAnimationRenderableWithMouseEvents.press(2, timestamp + 1);
+        assertEquals(1, newOnPress.NumberOfTimesCalled);
+        assertEquals(1, newOnPress.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+    }
+
+    @Test
+    void testReleaseAndSetOnRelease() {
+        assertThrows(UnsupportedOperationException.class, () ->
+                _globalLoopingAnimationRenderableWithoutMouseEvents.release(2, 0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                _globalLoopingAnimationRenderableWithoutMouseEvents.setOnRelease(2,
+                        new FakeAction<>()));
+
+        long timestamp = 456456L;
+        _globalLoopingAnimationRenderableWithMouseEvents.release(2, timestamp);
+
+        FakeAction<Long> newOnRelease = new FakeAction<>();
+        _globalLoopingAnimationRenderableWithMouseEvents.setOnRelease(2, newOnRelease);
+
+        _globalLoopingAnimationRenderableWithMouseEvents.release(2, timestamp + 1);
+        assertEquals(1, newOnRelease.NumberOfTimesCalled);
+        assertEquals(1, newOnRelease.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
     }
 
     @Test
     void testMouseOverAndSetOnMouseOver() {
-        assertThrows(UnsupportedOperationException.class,
-                _globalLoopingAnimationRenderableWithoutMouseEvents::mouseOver);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _globalLoopingAnimationRenderableWithoutMouseEvents.mouseOver(0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 _globalLoopingAnimationRenderableWithoutMouseEvents.setOnMouseOver(ON_MOUSE_OVER));
 
-        _globalLoopingAnimationRenderableWithMouseEvents.mouseOver();
+        long timestamp = 456456L;
+        _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertNull(ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnMouseOver = new FakeAction();
+        FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _globalLoopingAnimationRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
 
-        _globalLoopingAnimationRenderableWithMouseEvents.mouseOver();
+        _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertNull(newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
     }
 
     @Test
     void testMouseLeaveAndSetOnMouseLeave() {
-        assertThrows(UnsupportedOperationException.class,
-                _globalLoopingAnimationRenderableWithoutMouseEvents::mouseLeave);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _globalLoopingAnimationRenderableWithoutMouseEvents.mouseLeave(0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 _globalLoopingAnimationRenderableWithoutMouseEvents.setOnMouseLeave(ON_MOUSE_LEAVE));
 
-        _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave();
+        long timestamp = 456456L;
+        _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertNull(ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnMouseLeave = new FakeAction();
+        FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _globalLoopingAnimationRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
 
-        _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave();
+        _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertNull(newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
     }
 
     @Test

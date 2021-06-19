@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
     public Animation Animation;
@@ -63,27 +64,57 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void click() throws UnsupportedOperationException {
+    public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
     @Override
-    public void setOnClick(Action action) {
+    public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
 
     }
 
     @Override
-    public void mouseOver() throws UnsupportedOperationException {
+    public Map<Integer, String> pressActionIds() {
+        return null;
+    }
 
+    @Override
+    public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public Map<Integer, String> releaseActionIds() {
+        return null;
+    }
+
+    @Override
+    public void mouseOver(long l) throws UnsupportedOperationException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public String mouseOverActionId() {
+        return null;
+    }
+
+    @Override
+    public void mouseLeave(long l) throws UnsupportedOperationException, IllegalArgumentException {
+
+    }
+
+    @Override
+    public String mouseLeaveActionId() {
+        return null;
     }
 
     @Override
     public void setOnMouseOver(Action action) {
-
-    }
-
-    @Override
-    public void mouseLeave() throws UnsupportedOperationException {
 
     }
 

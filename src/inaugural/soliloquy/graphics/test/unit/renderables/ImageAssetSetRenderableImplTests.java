@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -12,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,12 +25,10 @@ class ImageAssetSetRenderableImplTests {
             new FakeImageAssetSet(false);
     private final String TYPE = "type";
     private final String DIRECTION = "direction";
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_CLICK = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_OVER = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_LEAVE = new FakeAction();
+    private final HashMap<Integer, Action<Long>> ON_PRESS_ACTIONS = new HashMap<>();
+    private final FakeAction<Long> ON_PRESS_ACTION = new FakeAction<>();
+    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
+    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
     private final ArrayList<ColorShift> COLOR_SHIFTS = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -67,10 +67,12 @@ class ImageAssetSetRenderableImplTests {
 
     @BeforeEach
     void setUp() {
+        ON_PRESS_ACTIONS.put(2, ON_PRESS_ACTION);
+
         _imageAssetSetRenderableWithMouseEvents = new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER);
 
@@ -84,73 +86,73 @@ class ImageAssetSetRenderableImplTests {
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                null, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
+                null, TYPE, DIRECTION, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
-                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS,
+                null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         // NB: The following two constructors should _not_ throw exceptions
         new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, null, BORDER_COLOR_PROVIDER,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null, BORDER_COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         );
         new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, null, null,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null, null,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         );
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, null,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                null, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                null, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, null, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, null,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 null,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
-                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID,
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 null
         ));
@@ -349,69 +351,88 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    void testClickAndSetOnClick() {
-        assertThrows(UnsupportedOperationException.class,
-                _imageAssetSetRenderableWithoutMouseEvents::click);
+    void testPressAndSetOnPress() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _imageAssetSetRenderableWithoutMouseEvents.setOnClick(ON_CLICK));
+                _imageAssetSetRenderableWithoutMouseEvents.press(2, 0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
 
-        _imageAssetSetRenderableWithMouseEvents.click();
-        assertEquals(1, ON_CLICK.NumberOfTimesCalled);
-        assertEquals(1, ON_CLICK.Inputs.size());
-        assertNull(ON_CLICK.Inputs.get(0));
+        long timestamp = 456456L;
+        _imageAssetSetRenderableWithMouseEvents.press(2, timestamp);
+        assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
+        assertEquals(1, ON_PRESS_ACTION.Inputs.size());
+        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnClick = new FakeAction();
-        _imageAssetSetRenderableWithMouseEvents.setOnClick(newOnClick);
+        FakeAction<Long> newOnPress = new FakeAction<>();
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(2, newOnPress);
 
-        _imageAssetSetRenderableWithMouseEvents.click();
-        assertEquals(1, newOnClick.NumberOfTimesCalled);
-        assertEquals(1, newOnClick.Inputs.size());
-        assertNull(newOnClick.Inputs.get(0));
+        _imageAssetSetRenderableWithMouseEvents.press(2, timestamp + 1);
+        assertEquals(1, newOnPress.NumberOfTimesCalled);
+        assertEquals(1, newOnPress.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+    }
+
+    @Test
+    void testReleaseAndSetOnRelease() {
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.release(2, 0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.setOnRelease(2, new FakeAction<>()));
+
+        long timestamp = 456456L;
+        _imageAssetSetRenderableWithMouseEvents.release(2, timestamp);
+
+        FakeAction<Long> newOnRelease = new FakeAction<>();
+        _imageAssetSetRenderableWithMouseEvents.setOnRelease(2, newOnRelease);
+
+        _imageAssetSetRenderableWithMouseEvents.release(2, timestamp + 1);
+        assertEquals(1, newOnRelease.NumberOfTimesCalled);
+        assertEquals(1, newOnRelease.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
     }
 
     @Test
     void testMouseOverAndSetOnMouseOver() {
-        assertThrows(UnsupportedOperationException.class,
-                _imageAssetSetRenderableWithoutMouseEvents::mouseOver);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.mouseOver(0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents.setOnMouseOver(ON_MOUSE_OVER));
 
-        _imageAssetSetRenderableWithMouseEvents.mouseOver();
+        long timestamp = 456456L;
+        _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertNull(ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnMouseOver = new FakeAction();
+        FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
 
-        _imageAssetSetRenderableWithMouseEvents.mouseOver();
+        _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertNull(newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
     }
 
     @Test
     void testMouseLeaveAndSetOnMouseLeave() {
-        assertThrows(UnsupportedOperationException.class,
-                _imageAssetSetRenderableWithoutMouseEvents::mouseLeave);
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.mouseLeave(0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents.setOnMouseLeave(ON_MOUSE_LEAVE));
 
-        _imageAssetSetRenderableWithMouseEvents.mouseLeave();
+        long timestamp = 456456L;
+        _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertNull(ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
 
-        //noinspection rawtypes
-        FakeAction newOnMouseLeave = new FakeAction();
+        FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _imageAssetSetRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
 
-        _imageAssetSetRenderableWithMouseEvents.mouseLeave();
+        _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertNull(newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
     }
 
     @Test

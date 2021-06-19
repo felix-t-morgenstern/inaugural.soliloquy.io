@@ -12,6 +12,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
@@ -39,9 +40,10 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     }
 
     // TODO: Throw an exception if the underlying ImageAssetSet cannot support mouse events
-    /** @noinspection rawtypes*/
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
-                                       Action onClick, Action onMouseOver, Action onMouseLeave,
+                                       Map<Integer, Action<Long>> onPress,
+                                       Map<Integer, Action<Long>> onRelease,
+                                       Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
@@ -49,7 +51,7 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setImageAssetSet(imageAssetSet);

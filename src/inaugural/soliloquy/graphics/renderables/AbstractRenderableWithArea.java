@@ -10,7 +10,9 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensions
@@ -19,12 +21,10 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
 
     protected boolean _capturesMouseEvents;
 
-    /** @noinspection rawtypes*/
-    private Action _onClick;
-    /** @noinspection rawtypes*/
-    private Action _onMouseOver;
-    /** @noinspection rawtypes*/
-    private Action _onMouseLeave;
+    private Map<Integer, Action<Long>> _onPress;
+    private Map<Integer, Action<Long>> _onRelease;
+    private Action<Long> _onMouseOver;
+    private Action<Long> _onMouseLeave;
     private ProviderAtTime<Float> _borderThicknessProvider;
     private ProviderAtTime<Color> _borderColorProvider;
 
@@ -36,12 +36,14 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(false, null, null, null, colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        this(false, null, null, null, null, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
     }
 
-    /** @noinspection rawtypes*/
-    protected AbstractRenderableWithArea(Action onClick, Action onMouseOver, Action onMouseLeave,
+    protected AbstractRenderableWithArea(Map<Integer, Action<Long>> onPress,
+                                         Map<Integer, Action<Long>> onRelease,
+                                         Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                          List<ColorShift> colorShifts,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
@@ -50,14 +52,16 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(true, onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+        this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
     }
 
-    /** @noinspection rawtypes*/
-    private AbstractRenderableWithArea(boolean capturesMouseEvents, Action onClick,
-                                       Action onMouseOver, Action onMouseLeave,
+    // TODO: If onPress or onRelease are null, ensure that a Map is created in their stead
+    private AbstractRenderableWithArea(boolean capturesMouseEvents,
+                                       Map<Integer, Action<Long>> onPress,
+                                       Map<Integer, Action<Long>> onRelease,
+                                       Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
@@ -67,7 +71,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                        Consumer<Renderable> removeFromContainer) {
         super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
         _capturesMouseEvents = capturesMouseEvents;
-        _onClick = onClick;
+        _onPress = onPress == null ? new HashMap<>() : onPress;
+        _onRelease = onRelease;
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
@@ -101,43 +106,88 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     /** @noinspection BooleanMethodIsAlwaysInverted*/
     protected abstract boolean underlyingAssetSupportsMouseEvents();
 
+    // TODO: Ensure that event only responds to correct mouse button
+    // TODO: Ensure checking whether such a mouse event for the provided button exists
+    // TODO: Ensure that mouse button event Actions receive proper timestamp
+    // TODO: Ensure that mouse events test whether timestamps are out of date
     @Override
-    public void click() throws UnsupportedOperationException {
-        callAction(_onClick, "click");
+    public void press(int mouseButton, long timestamp) throws UnsupportedOperationException {
+        callAction(_onPress.get(mouseButton), timestamp, "press");
     }
 
     @Override
-    public void setOnClick(Action onClick) {
-        throwIfNotSupportingMouseEvents("setOnClick");
-        _onClick = onClick;
+    public void setOnPress(int mouseButton, Action<Long> onPress) {
+        throwIfNotSupportingMouseEvents("setOnPress");
+        _onPress.put(mouseButton, onPress);
+    }
+
+    // TODO: Test and implement; ensure that returned object is clone
+    // TODO: Ensure that mouse button links to actions are accurate
+    @Override
+    public Map<Integer, String> pressActionIds() {
+        return null;
+    }
+
+    // TODO: Ensure that event only responds to correct mouse button
+    // TODO: Ensure checking whether such a mouse event for the provided button exists
+    // TODO: Ensure that mouse button event Actions receive proper timestamp
+    // TODO: Ensure that mouse events test whether timestamps are out of date
+    @Override
+    public void release(int mouseButton, long timestamp) throws UnsupportedOperationException {
+        callAction(_onRelease.get(mouseButton), timestamp, "release");
     }
 
     @Override
-    public void mouseOver() throws UnsupportedOperationException {
-        callAction(_onMouseOver, "mouseOver");
+    public void setOnRelease(int mouseButton, Action<Long> onRelease) {
+        throwIfNotSupportingMouseEvents("setOnRelease");
+        _onPress.put(mouseButton, onRelease);
+    }
+
+    // TODO: Test and implement; ensure that returned object is clone
+    // TODO: Ensure that mouse button links to actions are accurate
+    @Override
+    public Map<Integer, String> releaseActionIds() {
+        return null;
     }
 
     @Override
-    public void setOnMouseOver(Action onMouseOver) {
+    public void mouseOver(long timestamp) throws UnsupportedOperationException {
+        callAction(_onMouseOver, timestamp, "mouseOver");
+    }
+
+    @Override
+    public void setOnMouseOver(Action<Long> onMouseOver) {
         throwIfNotSupportingMouseEvents("setOnMouseOver");
         _onMouseOver = onMouseOver;
     }
 
+    // TODO: Ensure that correct value is returned
     @Override
-    public void mouseLeave() throws UnsupportedOperationException {
-        callAction(_onMouseLeave, "mouseLeave");
+    public String mouseOverActionId() {
+        return null;
     }
 
     @Override
-    public void setOnMouseLeave(Action onMouseLeave) {
+    public void mouseLeave(long timestamp) throws UnsupportedOperationException {
+        callAction(_onMouseLeave, timestamp, "mouseLeave");
+    }
+
+    @Override
+    public void setOnMouseLeave(Action<Long> onMouseLeave) {
         throwIfNotSupportingMouseEvents("setOnMouseLeave");
         _onMouseLeave = onMouseLeave;
     }
 
-    /** @noinspection rawtypes*/ // TODO: Can avoid accepting methodName as parameter; may not be worth the time
-    private void callAction(Action action, String methodName) {
+    // TODO: Ensure that correct value is returned
+    @Override
+    public String mouseLeaveActionId() {
+        return null;
+    }
+
+    // TODO: Ensure that timestamp is fed
+    // TODO: Can avoid accepting methodName as parameter; may not be worth the time
+    private void callAction(Action<Long> action, long timestamp, String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
-        //noinspection unchecked
         action.run(null);
     }
 

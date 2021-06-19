@@ -12,9 +12,11 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class GlobalLoopingAnimationRenderableImpl extends AbstractRenderableWithArea
+public class GlobalLoopingAnimationRenderableImpl
+        extends AbstractRenderableWithArea
         implements GlobalLoopingAnimationRenderable {
     private GlobalLoopingAnimation _globalLoopingAnimation;
 
@@ -31,17 +33,19 @@ public class GlobalLoopingAnimationRenderableImpl extends AbstractRenderableWith
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
-    /** @noinspection rawtypes*/
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                Action onClick, Action onMouseOver,
-                                                Action onMouseLeave, List<ColorShift> colorShifts,
+                                                Map<Integer, Action<Long>> onClick,
+                                                Map<Integer, Action<Long>> onRelease,
+                                                Action<Long> onMouseOver,
+                                                Action<Long> onMouseLeave,
+                                                List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, EntityUuid uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
-        super(onClick, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+        super(onClick, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setGlobalLoopingAnimation(globalLoopingAnimation);

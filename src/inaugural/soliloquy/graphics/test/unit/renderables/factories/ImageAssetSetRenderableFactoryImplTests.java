@@ -28,12 +28,8 @@ class ImageAssetSetRenderableFactoryImplTests {
             new FakeImageAssetSet(false);
     private final String TYPE = "type";
     private final String DIRECTION = "direction";
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_CLICK = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_OVER = new FakeAction();
-    /** @noinspection rawtypes*/
-    private final FakeAction ON_MOUSE_LEAVE = new FakeAction();
+    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
+    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
     private final ArrayList<ColorShift> COLOR_SHIFTS = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -61,7 +57,7 @@ class ImageAssetSetRenderableFactoryImplTests {
     void testMake() {
         ImageAssetSetRenderable imageAssetSetRenderableWithMouseEvents =
                 _imageAssetSetRenderableFactory.make(IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE,
-                        DIRECTION, ON_CLICK, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
+                        DIRECTION, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                         RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                         REMOVE_FROM_CONTAINER);
@@ -85,56 +81,56 @@ class ImageAssetSetRenderableFactoryImplTests {
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                null, TYPE, DIRECTION, ON_CLICK,
+                null, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER,  null, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         // NB: The following two constructors should _not_ throw exceptions
         _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         );
         _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null,
                 null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         );
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, null,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, null
         ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
-                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, ON_CLICK,
+                IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 null, REMOVE_FROM_CONTAINER

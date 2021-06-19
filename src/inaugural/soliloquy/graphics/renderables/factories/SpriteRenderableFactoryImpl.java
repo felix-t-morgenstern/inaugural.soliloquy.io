@@ -13,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
@@ -32,15 +33,18 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     @Override
     public SpriteRenderable make(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                  ProviderAtTime<Color> borderColorProvider,
-                                 Action onClick, Action onMouseOver, Action onMouseLeave,
+                                 Map<Integer, Action<Long>> onPress,
+                                 Map<Integer, Action<Long>> onRelease,
+                                 Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                  List<ColorShift> colorShifts,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                onClick, onMouseOver, onMouseLeave, colorShifts, renderingDimensionsProvider, z,
-                uuid, updateZIndexInContainer, removeFromContainer);
+                onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
+                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+                removeFromContainer);
     }
 
     @Override

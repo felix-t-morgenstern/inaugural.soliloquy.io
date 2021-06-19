@@ -13,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
@@ -33,7 +34,9 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
 
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet, String type, String direction,
-                                        Action onClick, Action onMouseOver, Action onMouseLeave,
+                                        Map<Integer, Action<Long>> onPress,
+                                        Map<Integer, Action<Long>> onRelease,
+                                        Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                         List<ColorShift> colorShifts,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
@@ -42,7 +45,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Consumer<Renderable> updateZIndexInContainer,
                                         Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onClick,
+        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onPress, onRelease,
                 onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
