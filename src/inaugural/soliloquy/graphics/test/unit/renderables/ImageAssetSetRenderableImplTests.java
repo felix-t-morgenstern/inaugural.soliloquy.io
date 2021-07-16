@@ -14,6 +14,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -357,6 +358,8 @@ class ImageAssetSetRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
 
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(2, ON_PRESS_ACTION);
+
         long timestamp = 456456L;
         _imageAssetSetRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
@@ -367,9 +370,35 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.setOnPress(2, newOnPress);
 
         _imageAssetSetRenderableWithMouseEvents.press(2, timestamp + 1);
+
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+
+        _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 2);
+
+        assertEquals(1, newOnPress.NumberOfTimesCalled);
+        assertEquals(1, newOnPress.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+    }
+
+    @Test
+    void testPressActionIds() {
+        String id1 = "id1";
+        String id2 = "id2";
+        String id3 = "id3";
+
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(0, new FakeAction<>(id1));
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(2, new FakeAction<>(id2));
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
+        _imageAssetSetRenderableWithMouseEvents.setOnPress(2, null);
+
+        Map<Integer, String> pressActionIds = _imageAssetSetRenderableWithMouseEvents.pressActionIds();
+
+        assertNotNull(pressActionIds);
+        assertEquals(2, pressActionIds.size());
+        assertEquals(id1, pressActionIds.get(0));
+        assertEquals(id3, pressActionIds.get(7));
     }
 
     @Test
@@ -389,6 +418,49 @@ class ImageAssetSetRenderableImplTests {
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+    }
+
+    @Test
+    void testReleaseActionIds() {
+        String id1 = "id1";
+        String id2 = "id2";
+        String id3 = "id3";
+
+        _imageAssetSetRenderableWithMouseEvents.setOnRelease(0, new FakeAction<>(id1));
+        _imageAssetSetRenderableWithMouseEvents.setOnRelease(2, new FakeAction<>(id2));
+        _imageAssetSetRenderableWithMouseEvents.setOnRelease(7, new FakeAction<>(id3));
+        _imageAssetSetRenderableWithMouseEvents.setOnRelease(2, null);
+
+        Map<Integer, String> releaseActionIds =
+                _imageAssetSetRenderableWithMouseEvents.releaseActionIds();
+
+        assertNotNull(releaseActionIds);
+        assertEquals(2, releaseActionIds.size());
+        assertEquals(id1, releaseActionIds.get(0));
+        assertEquals(id3, releaseActionIds.get(7));
+    }
+
+    @Test
+    void testPressOrReleaseMethodsWithInvalidButtons() {
+        long timestamp = 456456L;
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setOnPress(-1, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setOnRelease(-1, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(-1, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(-1, timestamp + 1));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setOnPress(8, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.setOnRelease(8, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(8, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(8, timestamp + 3));
     }
 
     @Test
@@ -414,6 +486,22 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
+    void testMouseOverActionId() {
+        String mouseOverActionId = "mouseOverActionId";
+
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.mouseOverActionId());
+
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(null);
+
+        assertNull(_imageAssetSetRenderableWithMouseEvents.mouseOverActionId());
+
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+
+        assertEquals(mouseOverActionId, _imageAssetSetRenderableWithMouseEvents.mouseOverActionId());
+    }
+
+    @Test
     void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents.mouseLeave(0L));
@@ -433,6 +521,69 @@ class ImageAssetSetRenderableImplTests {
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+    }
+
+    @Test
+    void testMouseLeaveActionId() {
+        String mouseLeaveActionId = "mouseLeaveActionId";
+
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents.mouseLeaveActionId());
+
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseLeave(null);
+
+        assertNull(_imageAssetSetRenderableWithMouseEvents.mouseLeaveActionId());
+
+        _imageAssetSetRenderableWithMouseEvents.setOnMouseLeave(
+                new FakeAction<>(mouseLeaveActionId));
+
+        assertEquals(mouseLeaveActionId,
+                _imageAssetSetRenderableWithMouseEvents.mouseLeaveActionId());
+    }
+
+    @Test
+    void testMouseEventCallsToOutdatedTimestamps() {
+        long timestamp = 456456L;
+
+        _imageAssetSetRenderableWithMouseEvents.press(0, timestamp);
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp - 1));
+
+        _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 1);
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp));
+
+        _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 2);
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 1));
+
+        _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 3);
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 2));
     }
 
     @Test

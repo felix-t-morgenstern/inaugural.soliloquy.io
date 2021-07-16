@@ -9,6 +9,15 @@ import java.util.ArrayList;
 public class FakeAction<T> implements Action<T> {
     public ArrayList<T> Inputs = new ArrayList<>();
     public int NumberOfTimesCalled;
+    public String Id;
+
+    public FakeAction() {
+
+    }
+
+    public FakeAction(String id) {
+        Id = id;
+    }
 
     @Override
     public void run(T t) throws IllegalArgumentException {
@@ -28,7 +37,7 @@ public class FakeAction<T> implements Action<T> {
 
     @Override
     public String id() throws IllegalStateException {
-        return null;
+        return Id;
     }
 
     @Override

@@ -13,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -311,6 +312,8 @@ class SpriteRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 _spriteRenderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
 
+        _spriteRenderableWithMouseEvents.setOnPress(2, ON_PRESS_ACTION);
+
         long timestamp = 456456L;
         _spriteRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
@@ -321,9 +324,35 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.setOnPress(2, newOnPress);
 
         _spriteRenderableWithMouseEvents.press(2, timestamp + 1);
+
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+
+        _spriteRenderableWithMouseEvents.press(0, timestamp + 2);
+
+        assertEquals(1, newOnPress.NumberOfTimesCalled);
+        assertEquals(1, newOnPress.Inputs.size());
+        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+    }
+
+    @Test
+    void testPressActionIds() {
+        String id1 = "id1";
+        String id2 = "id2";
+        String id3 = "id3";
+
+        _spriteRenderableWithMouseEvents.setOnPress(0, new FakeAction<>(id1));
+        _spriteRenderableWithMouseEvents.setOnPress(2, new FakeAction<>(id2));
+        _spriteRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
+        _spriteRenderableWithMouseEvents.setOnPress(2, null);
+
+        Map<Integer, String> pressActionIds = _spriteRenderableWithMouseEvents.pressActionIds();
+
+        assertNotNull(pressActionIds);
+        assertEquals(2, pressActionIds.size());
+        assertEquals(id1, pressActionIds.get(0));
+        assertEquals(id3, pressActionIds.get(7));
     }
 
     @Test
@@ -343,6 +372,49 @@ class SpriteRenderableImplTests {
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+    }
+
+    @Test
+    void testReleaseActionIds() {
+        String id1 = "id1";
+        String id2 = "id2";
+        String id3 = "id3";
+
+        _spriteRenderableWithMouseEvents.setOnRelease(0, new FakeAction<>(id1));
+        _spriteRenderableWithMouseEvents.setOnRelease(2, new FakeAction<>(id2));
+        _spriteRenderableWithMouseEvents.setOnRelease(7, new FakeAction<>(id3));
+        _spriteRenderableWithMouseEvents.setOnRelease(2, null);
+
+        Map<Integer, String> releaseActionIds =
+                _spriteRenderableWithMouseEvents.releaseActionIds();
+
+        assertNotNull(releaseActionIds);
+        assertEquals(2, releaseActionIds.size());
+        assertEquals(id1, releaseActionIds.get(0));
+        assertEquals(id3, releaseActionIds.get(7));
+    }
+
+    @Test
+    void testPressOrReleaseMethodsWithInvalidButtons() {
+        long timestamp = 456456L;
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.setOnPress(-1, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.setOnRelease(-1, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(-1, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(-1, timestamp + 1));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.setOnPress(8, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.setOnRelease(8, new FakeAction<>()));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(8, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(8, timestamp + 3));
     }
 
     @Test
@@ -368,6 +440,22 @@ class SpriteRenderableImplTests {
     }
 
     @Test
+    void testMouseOverActionId() {
+        String mouseOverActionId = "mouseOverActionId";
+
+        assertThrows(UnsupportedOperationException.class, () ->
+                _spriteRenderableWithoutMouseEvents.mouseOverActionId());
+
+        _spriteRenderableWithMouseEvents.setOnMouseOver(null);
+
+        assertNull(_spriteRenderableWithMouseEvents.mouseOverActionId());
+
+        _spriteRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+
+        assertEquals(mouseOverActionId, _spriteRenderableWithMouseEvents.mouseOverActionId());
+    }
+
+    @Test
     void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class, () ->
                 _spriteRenderableWithoutMouseEvents.mouseLeave(0L));
@@ -387,6 +475,67 @@ class SpriteRenderableImplTests {
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
         assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+    }
+
+    @Test
+    void testMouseLeaveActionId() {
+        String mouseLeaveActionId = "mouseLeaveActionId";
+
+        assertThrows(UnsupportedOperationException.class, () ->
+                _spriteRenderableWithoutMouseEvents.mouseLeaveActionId());
+
+        _spriteRenderableWithMouseEvents.setOnMouseLeave(null);
+
+        assertNull(_spriteRenderableWithMouseEvents.mouseLeaveActionId());
+
+        _spriteRenderableWithMouseEvents.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+
+        assertEquals(mouseLeaveActionId, _spriteRenderableWithMouseEvents.mouseLeaveActionId());
+    }
+
+    @Test
+    void testMouseEventCallsToOutdatedTimestamps() {
+        long timestamp = 456456L;
+
+        _spriteRenderableWithMouseEvents.press(0, timestamp);
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(0, timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.release(0, timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseOver(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseLeave(timestamp - 1));
+
+        _spriteRenderableWithMouseEvents.release(0, timestamp + 1);
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(0, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.release(0, timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseOver(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseLeave(timestamp));
+
+        _spriteRenderableWithMouseEvents.mouseOver(timestamp + 2);
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(0, timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.release(0, timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseOver(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseLeave(timestamp + 1));
+
+        _spriteRenderableWithMouseEvents.mouseLeave(timestamp + 3);
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.press(0, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.release(0, timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseOver(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderableWithMouseEvents.mouseLeave(timestamp + 2));
     }
 
     @Test
