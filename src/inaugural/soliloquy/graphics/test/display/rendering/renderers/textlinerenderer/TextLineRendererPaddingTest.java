@@ -100,7 +100,8 @@ public class TextLineRendererPaddingTest {
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0.1f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(renderingLocation), new FakeEntityUuid());
+                null, null, new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
+                new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

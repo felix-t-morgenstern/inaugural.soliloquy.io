@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
@@ -34,6 +35,11 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public EntityUuid uuid() {
         return null;
     }
 }

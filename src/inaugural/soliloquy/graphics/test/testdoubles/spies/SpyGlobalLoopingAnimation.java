@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.spies;
 
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 
@@ -55,6 +56,11 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
 
     @Override
     public Long pausedTimestamp() {
+        return null;
+    }
+
+    @Override
+    public EntityUuid uuid() {
         return null;
     }
 }

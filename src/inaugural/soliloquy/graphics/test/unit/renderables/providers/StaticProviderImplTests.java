@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
@@ -8,20 +9,31 @@ import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StaticProviderImplTests {
+    private final FakeEntityUuid ID = new FakeEntityUuid();
     private final Object PROVIDED_VALUE = new Object();
 
     private StaticProvider<Object> _staticProvider;
 
     @BeforeEach
     void setUp() {
-        _staticProvider = new StaticProviderImpl<>(PROVIDED_VALUE);
+        _staticProvider = new StaticProviderImpl<>(ID, PROVIDED_VALUE);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new StaticProviderImpl<>(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new StaticProviderImpl<>(null, PROVIDED_VALUE));
+        assertThrows(IllegalArgumentException.class, () ->
+                new StaticProviderImpl<>(ID, null));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(PROVIDED_VALUE, null));
+                () -> new StaticProviderImpl<>(ID, PROVIDED_VALUE, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, PROVIDED_VALUE));
+    }
+
+    @Test
+    void testUuid() {
+        assertSame(ID, _staticProvider.uuid());
     }
 
     @Test

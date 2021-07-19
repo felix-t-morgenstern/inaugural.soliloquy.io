@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.RectangleAnimatedBackgroundTextureIdProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
@@ -12,28 +13,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** @noinspection FieldCanBeLocal*/
 public class RectangleAnimatedBackgroundTextureIdProviderTests {
-    private int PERIOD_DURATION = 4000;
-    private int PERIOD_MODULO_OFFSET = 123;
+    private final FakeEntityUuid ID = new FakeEntityUuid();
+    private final int PERIOD_DURATION = 4000;
+    private final int PERIOD_MODULO_OFFSET = 123;
 
-    private int MS_1 = 0;
-    private int MS_1_VALUE = 111;
-    private int MS_2 = 100;
-    private int MS_2_VALUE = 222;
-    private int MS_3 = 300;
-    private int MS_3_VALUE = 333;
-    private int MS_4 = 600;
-    private int MS_4_VALUE = 444;
-    private int MS_5 = 1000;
-    private int MS_5_VALUE = 555;
-    private int MS_6 = 1500;
-    private int MS_6_VALUE = 666;
-    private int MS_7 = 2100;
-    private int MS_7_VALUE = 777;
-    private int MS_8 = 2800;
-    private int MS_8_VALUE = 888;
-    private int MS_9 = 3600;
-    private int MS_9_VALUE = 999;
-    private HashMap<Integer, Integer> VALUES_WITHIN_PERIOD = new HashMap<>();
+    private final int MS_1 = 0;
+    private final int MS_1_VALUE = 111;
+    private final int MS_2 = 100;
+    private final int MS_2_VALUE = 222;
+    private final int MS_3 = 300;
+    private final int MS_3_VALUE = 333;
+    private final int MS_4 = 600;
+    private final int MS_4_VALUE = 444;
+    private final int MS_5 = 1000;
+    private final int MS_5_VALUE = 555;
+    private final int MS_6 = 1500;
+    private final int MS_6_VALUE = 666;
+    private final int MS_7 = 2100;
+    private final int MS_7_VALUE = 777;
+    private final int MS_8 = 2800;
+    private final int MS_8_VALUE = 888;
+    private final int MS_9 = 3600;
+    private final int MS_9_VALUE = 999;
+    private final HashMap<Integer, Integer> VALUES_WITHIN_PERIOD = new HashMap<>();
 
     private LoopingMovingProvider<Integer> _rectangleAnimatedBackgroundTextureIdProvider;
 
@@ -50,57 +52,62 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
         VALUES_WITHIN_PERIOD.put(MS_9, MS_9_VALUE);
 
         _rectangleAnimatedBackgroundTextureIdProvider =
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION,
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(0, 0, VALUES_WITHIN_PERIOD));
+                new RectangleAnimatedBackgroundTextureIdProvider(null, PERIOD_DURATION,
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, PERIOD_DURATION,
-                        VALUES_WITHIN_PERIOD));
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, 0,
+                        0, VALUES_WITHIN_PERIOD));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, -1,
-                        VALUES_WITHIN_PERIOD));
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
+                        PERIOD_DURATION, VALUES_WITHIN_PERIOD));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION,
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
+                        -1, VALUES_WITHIN_PERIOD));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, null));
 
         // NB: Constructors being invoked here are simply to test whether no exception is thrown
         //     when no exception is expected
-        new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD);
 
         VALUES_WITHIN_PERIOD.remove(MS_1);
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION,
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
         VALUES_WITHIN_PERIOD.put(MS_1, MS_1_VALUE);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD);
 
         VALUES_WITHIN_PERIOD.put(PERIOD_DURATION, 123);
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION,
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
         VALUES_WITHIN_PERIOD.remove(PERIOD_DURATION);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD);
 
         VALUES_WITHIN_PERIOD.put(-1, 123);
         assertThrows(IllegalArgumentException.class, () ->
-                new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION,
+                new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
         VALUES_WITHIN_PERIOD.remove(-1);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD);
     }
 
@@ -109,6 +116,11 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
         assertEquals(LoopingMovingProvider.class.getCanonicalName() + "<" +
                 Integer.class.getCanonicalName() + ">",
                 _rectangleAnimatedBackgroundTextureIdProvider.getInterfaceName());
+    }
+
+    @Test
+    void testUuid() {
+        assertSame(ID, _rectangleAnimatedBackgroundTextureIdProvider.uuid());
     }
 
     @Test

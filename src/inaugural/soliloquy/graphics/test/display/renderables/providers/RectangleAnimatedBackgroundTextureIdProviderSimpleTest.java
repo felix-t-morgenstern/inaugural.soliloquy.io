@@ -125,8 +125,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
 
             RectangleAnimatedBackgroundTextureIdProvider
                     rectangleAnimatedBackgroundTextureIdProvider =
-                    new RectangleAnimatedBackgroundTextureIdProvider(msDuration,
-                            (int)(currentTimestamp % msDuration), frames);
+                    new RectangleAnimatedBackgroundTextureIdProvider(new FakeEntityUuid(),
+                            msDuration, (int)(currentTimestamp % msDuration), frames);
 
             FakeRectangleRenderable rectangleRenderable =
                     new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

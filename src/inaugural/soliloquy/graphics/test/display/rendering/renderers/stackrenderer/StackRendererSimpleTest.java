@@ -94,7 +94,7 @@ class StackRendererSimpleTest {
         float spriteAxe07LeftX = 0.625f - (spriteAxe07ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable1 = new FakeSpriteRenderable(spriteAxe07,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(
+                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
@@ -108,7 +108,7 @@ class StackRendererSimpleTest {
         float spriteAxe09LeftX = 0.375f - (spriteAxe09ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable2 = new FakeSpriteRenderable(spriteAxe09,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(
+                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
@@ -121,7 +121,7 @@ class StackRendererSimpleTest {
         float spriteSword06LeftX = 0.5f - (spriteSword06ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable3 = new FakeSpriteRenderable(spriteSword06,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(
+                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                         spriteSword06LeftX,
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,

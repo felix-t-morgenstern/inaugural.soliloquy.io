@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimationImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
@@ -11,6 +12,7 @@ import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GlobalLoopingAnimationImplTests {
+    private final FakeEntityUuid ID = new FakeEntityUuid();
     private final int MS_DURATION = 456;
     private final int PERIOD_MODULO_OFFSET = 123;
     private final String ANIMATION_ID = "animationId";
@@ -20,23 +22,31 @@ class GlobalLoopingAnimationImplTests {
 
     @BeforeEach
     void setUp() {
-        _globalLoopingAnimation = new GlobalLoopingAnimationImpl(ANIMATION, PERIOD_MODULO_OFFSET);
+        _globalLoopingAnimation =
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, PERIOD_MODULO_OFFSET);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(null, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ANIMATION, -1));
+                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ANIMATION, MS_DURATION));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1));
+        assertThrows(IllegalArgumentException.class, () ->
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION));
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(GlobalLoopingAnimation.class.getCanonicalName(),
                 _globalLoopingAnimation.getInterfaceName());
+    }
+
+    @Test
+    void testUuid() {
+        assertSame(ID, _globalLoopingAnimation.uuid());
     }
 
     @Test

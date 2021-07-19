@@ -1,18 +1,23 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.LoopingPausableAtTimeAbstract;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingProvider;
 
 public abstract class LoopingProviderAbstract<T>
         extends LoopingPausableAtTimeAbstract
         implements LoopingProvider<T> {
+    private final EntityUuid ID;
+
     private long _timestampSentToProviderMostRecently;
     private int _periodModuloOffsetAtMostRecentProvision;
     private T _mostRecentlyProvidedValue;
 
-    public LoopingProviderAbstract(int periodDuration, int periodModuloOffset) {
+    public LoopingProviderAbstract(EntityUuid uuid, int periodDuration, int periodModuloOffset) {
         // TODO: Draft a constructor with a pausedTimestamp
         super(periodDuration, periodModuloOffset, null);
+        ID = Check.ifNull(uuid, "uuid");
     }
 
     @Override
@@ -37,4 +42,9 @@ public abstract class LoopingProviderAbstract<T>
     }
 
     protected abstract T provideValueAtMsWithinPeriod(int msWithinPeriod);
+
+    @Override
+    public EntityUuid uuid() {
+        return ID;
+    }
 }

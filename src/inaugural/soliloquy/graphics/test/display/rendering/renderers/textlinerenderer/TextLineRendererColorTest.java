@@ -103,7 +103,8 @@ class TextLineRendererColorTest {
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null),
-                colorIndices, null, null, new StaticProviderImpl<>(renderingLocation),
+                colorIndices, null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
@@ -153,7 +154,8 @@ class TextLineRendererColorTest {
         float degreePerLetter = 360f / lineText.length();
         for (int i = 0; i < lineText.length(); i++) {
             rainbowGradient.put(i,
-                    new StaticProviderImpl<>(colorAtDegree((float)i * degreePerLetter)));
+                    new StaticProviderImpl<>(new FakeEntityUuid(),
+                            colorAtDegree((float)i * degreePerLetter)));
         }
         return rainbowGradient;
     }

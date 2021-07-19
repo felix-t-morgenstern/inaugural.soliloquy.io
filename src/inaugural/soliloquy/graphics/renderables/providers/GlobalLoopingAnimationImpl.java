@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
@@ -11,8 +12,9 @@ public class GlobalLoopingAnimationImpl
     private final Animation ANIMATION;
 
     /** @noinspection ConstantConditions*/
-    public GlobalLoopingAnimationImpl(Animation animation, int periodModuloOffset) {
-        super(Check.ifNull(animation, "animation").msDuration(), periodModuloOffset);
+    public GlobalLoopingAnimationImpl(EntityUuid uuid, Animation animation,
+                                      int periodModuloOffset) {
+        super(uuid, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset);
         ANIMATION = animation;
     }
 

@@ -93,7 +93,8 @@ class TextLineRendererBorderTest {
         TextLineRenderable = new FakeTextLineRenderable(null, 0.1f, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(0.00125f),
                 new FakeStaticProviderAtTime<>(new Color(255, 25, 119)),
-                null, null, null, new StaticProviderImpl<>(renderingLocation),
+                null, null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
                 new FakeEntityUuid());
         TextLineRenderable.Justification = TextJustification.CENTER;
 

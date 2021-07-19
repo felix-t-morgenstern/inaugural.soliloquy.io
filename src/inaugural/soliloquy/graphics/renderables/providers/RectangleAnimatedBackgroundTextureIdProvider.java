@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.graphics.shared.FloorFrameProvider;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
 
 import java.util.HashMap;
@@ -11,10 +12,12 @@ public class RectangleAnimatedBackgroundTextureIdProvider
         implements LoopingMovingProvider<Integer> {
     private final FloorFrameProvider<Integer> FLOOR_FRAME_PROVIDER;
 
-    public RectangleAnimatedBackgroundTextureIdProvider(int periodDuration, int periodModuloOffset,
+    public RectangleAnimatedBackgroundTextureIdProvider(EntityUuid uuid, int periodDuration,
+                                                        int periodModuloOffset,
                                                         Map<Integer, Integer> valuesWithinPeriod) {
-        super(periodDuration, periodModuloOffset);
-        FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null, null);
+        super(uuid, periodDuration, periodModuloOffset);
+        FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null,
+                null);
     }
 
     @Override

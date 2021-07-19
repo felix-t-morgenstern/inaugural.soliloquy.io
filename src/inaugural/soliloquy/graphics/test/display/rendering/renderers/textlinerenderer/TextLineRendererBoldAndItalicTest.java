@@ -112,7 +112,8 @@ class TextLineRendererBoldAndItalicTest {
 
         TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                italicIndices, boldIndices, new StaticProviderImpl<>(renderingLocation),
+                italicIndices, boldIndices,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();

@@ -120,7 +120,8 @@ class GlobalLoopingAnimationRendererSimpleTest {
             int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp % (msDuration));
 
                     GlobalLoopingAnimationImpl globalLoopingAnimation =
-                            new GlobalLoopingAnimationImpl(animation, periodModuloOffset);
+                            new GlobalLoopingAnimationImpl(new FakeEntityUuid(), animation,
+                                    periodModuloOffset);
 
             float animationHeight = 0.5f;
             float animationWidth = ((float)frameWidth / (float)frameHeight)
@@ -130,7 +131,7 @@ class GlobalLoopingAnimationRendererSimpleTest {
             GlobalLoopingAnimationRenderableImpl globalLoopingAnimationRenderable =
                     new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation, null, null,
                             new ArrayList<>(),
-                            new StaticProviderImpl<>(new FakeFloatBox(
+                            new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                                     midpoint - (animationWidth / 2f),
                                     midpoint - (animationHeight / 2f),
                                     midpoint + (animationWidth / 2f),

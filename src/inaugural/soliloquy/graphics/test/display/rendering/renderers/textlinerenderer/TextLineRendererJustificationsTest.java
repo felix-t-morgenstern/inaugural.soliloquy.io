@@ -98,14 +98,18 @@ class TextLineRendererJustificationsTest {
 
         TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(renderingLocationLeft), new FakeEntityUuid());
+                null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationLeft),
+                new FakeEntityUuid());
         TextLineRenderableCenter = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_CENTER,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(renderingLocationCenter),
+                null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationCenter),
                 new FakeEntityUuid());
         TextLineRenderableRight = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_RIGHT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(renderingLocationRight),
+                null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationRight),
                 new FakeEntityUuid());
 
         TextLineRenderableLeft.Justification = TextJustification.LEFT;

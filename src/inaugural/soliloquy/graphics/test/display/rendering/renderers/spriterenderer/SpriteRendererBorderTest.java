@@ -64,9 +64,10 @@ class SpriteRendererBorderTest {
         FakeSprite sprite =
                 new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProviderImpl<>(BORDER_THICKNESS),
-                new StaticProviderImpl<>(BORDER_COLOR),
+                new StaticProviderImpl<>(new FakeEntityUuid(),
+                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
+                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_THICKNESS),
+                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_COLOR),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

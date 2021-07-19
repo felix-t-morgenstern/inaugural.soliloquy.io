@@ -129,8 +129,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTestWithPausing {
             frames.put((msDuration * 7) / 8, frame8TextureId);
 
             RectangleAnimatedBackgroundTextureIdProvider =
-                    new RectangleAnimatedBackgroundTextureIdProvider(msDuration,
-                            (int)(currentTimestamp % msDuration), frames);
+                    new RectangleAnimatedBackgroundTextureIdProvider(new FakeEntityUuid(),
+                            msDuration, (int)(currentTimestamp % msDuration), frames);
 
             FakeRectangleRenderable rectangleRenderable =
                     new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

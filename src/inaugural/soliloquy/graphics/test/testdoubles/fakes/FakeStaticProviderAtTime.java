@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.ArrayList;
@@ -41,6 +42,11 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
 
     @Override
     public T getArchetype() {
+        return null;
+    }
+
+    @Override
+    public EntityUuid uuid() {
         return null;
     }
 }

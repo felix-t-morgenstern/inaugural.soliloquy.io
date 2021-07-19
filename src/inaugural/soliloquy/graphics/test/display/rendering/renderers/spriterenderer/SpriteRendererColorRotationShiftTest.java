@@ -63,6 +63,7 @@ public class SpriteRendererColorRotationShiftTest {
                 new FakeSprite(null, 266, 271, 313, 343);
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(
+                        new FakeEntityUuid(),
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
                 new StaticProviderImpl<>(null, 0f), new StaticProviderImpl<>(null, INTACT_COLOR),
                 new FakeEntityUuid());

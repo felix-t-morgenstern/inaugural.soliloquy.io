@@ -86,7 +86,7 @@ public class FiniteAnimationRendererColorRotationShiftTest {
         int msPadding = 500;
 
         FiniteAnimationRenderable = new FakeFiniteAnimationRenderable(null, new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeFloatBox(
+                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                         midpoint - (animationWidth / 2f),
                         midpoint - (animationHeight / 2f),
                         midpoint + (animationWidth / 2f),
