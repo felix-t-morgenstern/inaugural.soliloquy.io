@@ -89,7 +89,7 @@ public class GlobalLoopingAnimationRendererColorRotationShiftTest {
 
         Renderer<GlobalLoopingAnimationRenderable> globalLoopingAnimationRenderer =
                 new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        colorShiftStackAggregator);
+                        colorShiftStackAggregator, null);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(globalLoopingAnimationRenderer);
@@ -126,7 +126,7 @@ public class GlobalLoopingAnimationRendererColorRotationShiftTest {
 
             GlobalLoopingAnimationImpl globalLoopingAnimation =
                     new GlobalLoopingAnimationImpl(new FakeEntityUuid(), animation,
-                            periodModuloOffset);
+                            periodModuloOffset, null);
 
             float animationHeight = 0.5f;
             float animationWidth = ((float)frameWidth / (float)frameHeight)
@@ -140,7 +140,7 @@ public class GlobalLoopingAnimationRendererColorRotationShiftTest {
                                     midpoint - (animationWidth / 2f),
                                     midpoint - (animationHeight / 2f),
                                     midpoint + (animationWidth / 2f),
-                                    midpoint + (animationHeight / 2f))),
+                                    midpoint + (animationHeight / 2f)), null),
                             0, new FakeEntityUuid(), renderable -> {}, renderable -> {});
             frameTimer.ShouldExecuteNextFrame = true;
 

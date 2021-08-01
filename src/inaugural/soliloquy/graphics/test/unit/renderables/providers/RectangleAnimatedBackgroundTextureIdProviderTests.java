@@ -16,6 +16,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     private final FakeEntityUuid ID = new FakeEntityUuid();
     private final int PERIOD_DURATION = 4000;
     private final int PERIOD_MODULO_OFFSET = 123;
+    private final long MOST_RECENT_TIMESTAMP = 45L;
 
     private final int MS_1 = 0;
     private final int MS_1_VALUE = 111;
@@ -53,62 +54,62 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
 
         _rectangleAnimatedBackgroundTextureIdProvider =
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD);
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(null, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, 0,
-                        0, VALUES_WITHIN_PERIOD));
+                        0, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_DURATION, VALUES_WITHIN_PERIOD));
+                        PERIOD_DURATION, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        -1, VALUES_WITHIN_PERIOD));
+                        -1, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, null));
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
 
         // NB: Constructors being invoked here are simply to test whether no exception is thrown
         //     when no exception is expected
         new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
-                VALUES_WITHIN_PERIOD);
+                VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.remove(MS_1);
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.put(MS_1, MS_1_VALUE);
 
         new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
-                VALUES_WITHIN_PERIOD);
+                VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.put(PERIOD_DURATION, 123);
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.remove(PERIOD_DURATION);
 
         new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
-                VALUES_WITHIN_PERIOD);
+                VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.put(-1, 123);
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD));
+                        PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.remove(-1);
 
         new RectangleAnimatedBackgroundTextureIdProvider(ID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
-                VALUES_WITHIN_PERIOD);
+                VALUES_WITHIN_PERIOD, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
@@ -214,25 +215,34 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
 
     @Test
     void testReportPauseAndUnpauseWithInvalidParams() {
-        long timestamp = 123L;
+        assertThrows(IllegalArgumentException.class,
+                () -> _rectangleAnimatedBackgroundTextureIdProvider
+                        .reportUnpause(MOST_RECENT_TIMESTAMP));
+
+        _rectangleAnimatedBackgroundTextureIdProvider.reportPause(MOST_RECENT_TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp));
-
-        _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp);
-
+                () -> _rectangleAnimatedBackgroundTextureIdProvider
+                        .reportUnpause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp));
+                () -> _rectangleAnimatedBackgroundTextureIdProvider
+                        .reportPause(MOST_RECENT_TIMESTAMP));
 
-        _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp);
+        _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(MOST_RECENT_TIMESTAMP);
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp - 1));
+                () -> _rectangleAnimatedBackgroundTextureIdProvider
+                        .reportPause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp));
+                () -> _rectangleAnimatedBackgroundTextureIdProvider
+                        .reportUnpause(MOST_RECENT_TIMESTAMP));
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP,
+                (long)_rectangleAnimatedBackgroundTextureIdProvider.mostRecentTimestamp());
     }
 
     @Test

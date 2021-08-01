@@ -24,6 +24,7 @@ class GlobalLoopingAnimationRendererTests {
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
             new FakeColorShiftStackAggregator();
+    private final long MOST_RECENT_TIMESTAMP = 123123L;
 
     private Renderer<GlobalLoopingAnimationRenderable> _globalLoopingAnimationRenderer;
 
@@ -48,20 +49,20 @@ class GlobalLoopingAnimationRendererTests {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
         _globalLoopingAnimationRenderer =
                 new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        COLOR_SHIFT_STACK_AGGREGATOR);
+                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationRenderer(null, FLOAT_BOX_FACTORY,
-                        COLOR_SHIFT_STACK_AGGREGATOR));
+                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, null,
-                        COLOR_SHIFT_STACK_AGGREGATOR));
+                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        null));
+                        null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -156,14 +157,12 @@ class GlobalLoopingAnimationRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());
-        long timestamp = 100L;
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
-        _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable, timestamp);
 
         assertThrows(IllegalArgumentException.class,
                 () -> _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
-                        timestamp - 1L));
+                        MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
@@ -179,12 +178,18 @@ class GlobalLoopingAnimationRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());
-        long timestamp = 100L;
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
-        _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable, timestamp);
+        _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
+                MOST_RECENT_TIMESTAMP + 123);
 
-        assertEquals(timestamp, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP,
+                (long)_globalLoopingAnimationRenderer.mostRecentTimestamp());
     }
 
     @Test

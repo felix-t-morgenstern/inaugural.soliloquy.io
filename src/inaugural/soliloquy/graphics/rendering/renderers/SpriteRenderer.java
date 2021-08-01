@@ -26,8 +26,10 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
     public SpriteRenderer(RenderingBoundaries renderingBoundaries,
                           FloatBoxFactory floatBoxFactory,
                           WindowResolutionManager windowResolutionManager,
-                          ColorShiftStackAggregator colorShiftStackAggregator) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager);
+                          ColorShiftStackAggregator colorShiftStackAggregator,
+                          Long mostRecentTimestamp) {
+        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager,
+                mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }

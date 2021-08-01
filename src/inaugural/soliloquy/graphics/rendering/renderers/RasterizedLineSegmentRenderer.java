@@ -17,8 +17,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class RasterizedLineSegmentRenderer
         extends AbstractRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
-    public RasterizedLineSegmentRenderer() {
-        super(ARCHETYPE);
+    public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
+        super(ARCHETYPE, mostRecentTimestamp);
     }
 
     @Override

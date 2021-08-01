@@ -11,24 +11,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class StaticProviderImplTests {
     private final FakeEntityUuid ID = new FakeEntityUuid();
     private final Object PROVIDED_VALUE = new Object();
+    private final long MOST_RECENT_TIMESTAMP = 111L;
 
     private StaticProvider<Object> _staticProvider;
 
     @BeforeEach
     void setUp() {
-        _staticProvider = new StaticProviderImpl<>(ID, PROVIDED_VALUE);
+        _staticProvider = new StaticProviderImpl<>(ID, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticProviderImpl<>(null, PROVIDED_VALUE));
+                new StaticProviderImpl<>(null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticProviderImpl<>(ID, null));
+                new StaticProviderImpl<>(ID, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(ID, PROVIDED_VALUE, null));
+                () -> new StaticProviderImpl<>(ID, PROVIDED_VALUE, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, PROVIDED_VALUE));
+                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, PROVIDED_VALUE,
+                        MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -38,7 +40,7 @@ class StaticProviderImplTests {
 
     @Test
     void testProvide() {
-        assertSame(PROVIDED_VALUE, _staticProvider.provide(0L));
+        assertSame(PROVIDED_VALUE, _staticProvider.provide(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -78,6 +80,11 @@ class StaticProviderImplTests {
     @Test
     void testPausedTimestamp() {
         assertThrows(UnsupportedOperationException.class, _staticProvider::pausedTimestamp);
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_staticProvider.mostRecentTimestamp());
     }
 
     @Test

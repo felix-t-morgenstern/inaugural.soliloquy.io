@@ -64,8 +64,9 @@ public class SpriteRendererColorRotationShiftTest {
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(
                         new FakeEntityUuid(),
-                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProviderImpl<>(null, 0f), new StaticProviderImpl<>(null, INTACT_COLOR),
+                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
+                new StaticProviderImpl<>(new FakeEntityUuid(), 0f, null),
+                new StaticProviderImpl<>(new FakeEntityUuid(), INTACT_COLOR, null),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -76,7 +77,7 @@ public class SpriteRendererColorRotationShiftTest {
                 new FakeColorShiftStackAggregator(netColorShifts);
 
         Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, windowResolutionManager, colorShiftStackAggregator);
+                FLOAT_BOX_FACTORY, windowResolutionManager, colorShiftStackAggregator, null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

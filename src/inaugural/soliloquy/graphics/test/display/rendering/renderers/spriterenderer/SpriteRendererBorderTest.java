@@ -65,15 +65,15 @@ class SpriteRendererBorderTest {
                 new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(new FakeEntityUuid(),
-                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f)),
-                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_THICKNESS),
-                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_COLOR),
+                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
+                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_THICKNESS, null),
+                new StaticProviderImpl<>(new FakeEntityUuid(), BORDER_COLOR, null),
                 new FakeEntityUuid());
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
                 new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        windowResolutionManager, new FakeColorShiftStackAggregator());
+                        windowResolutionManager, new FakeColorShiftStackAggregator(), null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

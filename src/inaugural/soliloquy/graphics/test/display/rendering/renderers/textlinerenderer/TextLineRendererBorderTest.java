@@ -14,7 +14,6 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.TextJustification;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -94,7 +93,7 @@ class TextLineRendererBorderTest {
                 new FakeStaticProviderAtTime<>(0.00125f),
                 new FakeStaticProviderAtTime<>(new Color(255, 25, 119)),
                 null, null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
                 new FakeEntityUuid());
         TextLineRenderable.Justification = TextJustification.CENTER;
 
@@ -102,7 +101,7 @@ class TextLineRendererBorderTest {
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, DEFAULT_COLOR,
-                        windowResolutionManager);
+                        windowResolutionManager, null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

@@ -49,4 +49,9 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
     public EntityUuid uuid() {
         return null;
     }
+
+    @Override
+    public Long mostRecentTimestamp() {
+        return null;
+    }
 }

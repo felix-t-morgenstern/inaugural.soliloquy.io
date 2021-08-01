@@ -113,14 +113,14 @@ class TextLineRendererBoldAndItalicTest {
         TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 italicIndices, boldIndices,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager);
+                        windowResolutionManager, null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

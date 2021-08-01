@@ -22,8 +22,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
 
-    public RectangleRenderer() {
-        super(ARCHETYPE);
+    public RectangleRenderer(Long mostRecentTimestamp) {
+        super(ARCHETYPE, mostRecentTimestamp);
     }
 
     @Override

@@ -27,6 +27,7 @@ class SpriteRendererTests {
             new FakeWindowResolutionManager();
     private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
             new FakeColorShiftStackAggregator();
+    private final long MOST_RECENT_TIMESTAMP = 123123L;
 
     private Renderer<SpriteRenderable> _spriteRenderer;
 
@@ -50,23 +51,27 @@ class SpriteRendererTests {
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
         _spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR);
+                WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new SpriteRenderer(null, FLOAT_BOX_FACTORY,
-                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR));
+                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpriteRenderer(RENDERING_BOUNDARIES, null,
-                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR));
+                        WINDOW_RESOLUTION_MANAGER, COLOR_SHIFT_STACK_AGGREGATOR,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        null, COLOR_SHIFT_STACK_AGGREGATOR));
+                        null, COLOR_SHIFT_STACK_AGGREGATOR,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        WINDOW_RESOLUTION_MANAGER, null));
+                        WINDOW_RESOLUTION_MANAGER, null,
+                        MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -215,13 +220,11 @@ class SpriteRendererTests {
                 new FakeStaticProviderAtTime<>(null),
                 new FakeStaticProviderAtTime<>(null),
                 new FakeEntityUuid());
-        long timestamp = 100L;
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());
-        _spriteRenderer.render(spriteRenderable, timestamp);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> _spriteRenderer.render(spriteRenderable, timestamp - 1L));
+        assertThrows(IllegalArgumentException.class, () ->
+                _spriteRenderer.render(spriteRenderable, MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
@@ -238,12 +241,16 @@ class SpriteRendererTests {
                 new FakeStaticProviderAtTime<>(null),
                 new FakeStaticProviderAtTime<>(null),
                 new FakeEntityUuid());
-        long timestamp = 100L;
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());
-        _spriteRenderer.render(spriteRenderable, timestamp);
+        _spriteRenderer.render(spriteRenderable, MOST_RECENT_TIMESTAMP + 123);
 
-        assertEquals(timestamp, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_spriteRenderer.mostRecentTimestamp());
     }
 
     @Test

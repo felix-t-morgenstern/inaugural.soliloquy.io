@@ -28,8 +28,9 @@ public class FiniteAnimationRenderer
 
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                    FloatBoxFactory floatBoxFactory,
-                                   ColorShiftStackAggregator colorShiftStackAggregator) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+                                   ColorShiftStackAggregator colorShiftStackAggregator,
+                                   Long mostRecentTimestamp) {
+        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }
@@ -71,6 +72,11 @@ public class FiniteAnimationRenderer
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {
+        @Override
+        public Long mostRecentTimestamp() {
+            return null;
+        }
+
         @Override
         public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
             return null;

@@ -70,7 +70,7 @@ class RectangleRendererTileTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        RectangleRenderer rectangleRenderer = new RectangleRenderer();
+        RectangleRenderer rectangleRenderer = new RectangleRenderer(null);
 
         FakeRectangleRenderable rectangleRenderable =
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

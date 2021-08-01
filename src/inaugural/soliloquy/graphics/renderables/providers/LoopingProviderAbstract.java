@@ -14,9 +14,10 @@ public abstract class LoopingProviderAbstract<T>
     private int _periodModuloOffsetAtMostRecentProvision;
     private T _mostRecentlyProvidedValue;
 
-    public LoopingProviderAbstract(EntityUuid uuid, int periodDuration, int periodModuloOffset) {
+    public LoopingProviderAbstract(EntityUuid uuid, int periodDuration, int periodModuloOffset,
+                                   Long mostRecentTimestamp) {
         // TODO: Draft a constructor with a pausedTimestamp
-        super(periodDuration, periodModuloOffset, null);
+        super(periodDuration, periodModuloOffset, null, mostRecentTimestamp);
         ID = Check.ifNull(uuid, "uuid");
     }
 
@@ -46,5 +47,11 @@ public abstract class LoopingProviderAbstract<T>
     @Override
     public EntityUuid uuid() {
         return ID;
+    }
+
+    // TODO: Test and implement
+    @Override
+    public Long mostRecentTimestamp() {
+        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 }

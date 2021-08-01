@@ -12,6 +12,8 @@ import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StackRendererImplTests {
+    private final long MOST_RECENT_TIMESTAMP = 123123L;
+
     private FakeRenderableStack _renderableStack;
     private FakeRenderer _renderer;
 
@@ -22,15 +24,15 @@ class StackRendererImplTests {
         _renderableStack = new FakeRenderableStack();
         _renderer = new FakeRenderer();
 
-        _stackRenderer = new StackRendererImpl(_renderableStack, _renderer);
+        _stackRenderer = new StackRendererImpl(_renderableStack, _renderer, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new StackRendererImpl(null, _renderer));
+                () -> new StackRendererImpl(null, _renderer, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StackRendererImpl(_renderableStack, null));
+                () -> new StackRendererImpl(_renderableStack, null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -43,13 +45,12 @@ class StackRendererImplTests {
         Renderable renderable1 = new FakeRenderableWithDimensions(1);
         Renderable renderable2 = new FakeRenderableWithDimensions(2);
         Renderable renderable3 = new FakeRenderableWithDimensions(2);
-        long timestamp = 123L;
 
         _renderableStack.add(renderable1);
         _renderableStack.add(renderable2);
         _renderableStack.add(renderable3);
 
-        _stackRenderer.render(timestamp);
+        _stackRenderer.render(MOST_RECENT_TIMESTAMP);
 
         assertEquals(3, _renderer.Rendered.size());
         assertTrue(_renderer.Rendered.get(0) == renderable2 ||
@@ -58,18 +59,17 @@ class StackRendererImplTests {
                 _renderer.Rendered.get(1) == renderable3);
         assertSame(renderable1, _renderer.Rendered.get(2));
         assertEquals(3, _renderer.Timestamps.size());
-        assertEquals((Long)timestamp, _renderer.Timestamps.get(0));
-        assertEquals((Long)timestamp, _renderer.Timestamps.get(1));
-        assertEquals((Long)timestamp, _renderer.Timestamps.get(2));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(0));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(1));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(2));
     }
 
     @Test
     void testRenderOutdatedTimestamp() {
         FakeRenderableWithDimensions renderable = new FakeRenderableWithDimensions(0);
         _renderableStack.add(renderable);
-        long timestamp = 100L;
-        _stackRenderer.render(timestamp);
 
-        assertThrows(IllegalArgumentException.class, () -> _stackRenderer.render(timestamp - 1L));
+        assertThrows(IllegalArgumentException.class, () ->
+                _stackRenderer.render(MOST_RECENT_TIMESTAMP - 1L));
     }
 }

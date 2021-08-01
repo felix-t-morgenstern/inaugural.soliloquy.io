@@ -77,7 +77,7 @@ class StackRendererRenderingBoundariesTest {
 
         RenderableStack renderableStack = new RenderableStackImpl(mapFactory, listFactory);
 
-        StackRenderer stackRenderer = new StackRendererImpl(renderableStack, renderer);
+        StackRenderer stackRenderer = new StackRendererImpl(renderableStack, renderer, null);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -108,7 +108,7 @@ class StackRendererRenderingBoundariesTest {
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
-                )),
+                ), null),
                 1, new FakeEntityUuid());
 
         float spriteAxe09ScreenWidth = (spriteAxe09Width / (float)spriteAxe09Height) *
@@ -122,7 +122,7 @@ class StackRendererRenderingBoundariesTest {
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
-                )),
+                ), null),
                 3, new FakeEntityUuid());
 
         float spriteSword06ScreenWidth = 0.3710f;
@@ -135,13 +135,14 @@ class StackRendererRenderingBoundariesTest {
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
-                )),
+                ), null),
                 2, new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<SpriteRenderable> spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, windowResolutionManager, new FakeColorShiftStackAggregator());
+                FLOAT_BOX_FACTORY, windowResolutionManager, new FakeColorShiftStackAggregator(),
+                null);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(spriteRenderer);

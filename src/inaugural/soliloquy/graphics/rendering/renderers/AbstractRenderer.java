@@ -10,13 +10,19 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
         implements Renderer<TRenderable> {
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    protected AbstractRenderer(TRenderable archetype) {
+    protected AbstractRenderer(TRenderable archetype, Long mostRecentTimestamp) {
         super(archetype);
-        TIMESTAMP_VALIDATOR = new TimestampValidator();
+        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
     }
 
     @Override
     protected String getUnparameterizedInterfaceName() {
         return Renderer.class.getCanonicalName();
+    }
+
+    // TODO: Test and implement
+    @Override
+    public Long mostRecentTimestamp() {
+        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 }

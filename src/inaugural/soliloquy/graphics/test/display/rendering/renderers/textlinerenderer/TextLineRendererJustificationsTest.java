@@ -99,17 +99,17 @@ class TextLineRendererJustificationsTest {
         TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationLeft),
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationLeft, null),
                 new FakeEntityUuid());
         TextLineRenderableCenter = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_CENTER,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationCenter),
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationCenter, null),
                 new FakeEntityUuid());
         TextLineRenderableRight = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_RIGHT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationRight),
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationRight, null),
                 new FakeEntityUuid());
 
         TextLineRenderableLeft.Justification = TextJustification.LEFT;
@@ -120,7 +120,7 @@ class TextLineRendererJustificationsTest {
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager);
+                        windowResolutionManager, null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

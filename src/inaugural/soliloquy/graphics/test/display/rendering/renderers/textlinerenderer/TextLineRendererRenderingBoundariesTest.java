@@ -109,14 +109,15 @@ class TextLineRendererRenderingBoundariesTest {
 
         TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                null, null, new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation),
+                null, null,
+                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
                 new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<soliloquy.specs.graphics.renderables.TextLineRenderable> textLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager);
+                        windowResolutionManager, null);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{

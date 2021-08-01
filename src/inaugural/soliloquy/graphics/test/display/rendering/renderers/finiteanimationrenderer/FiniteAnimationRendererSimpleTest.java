@@ -90,14 +90,14 @@ class FiniteAnimationRendererSimpleTest {
                         midpoint - (animationWidth / 2f),
                         midpoint - (animationHeight / 2f),
                         midpoint + (animationWidth / 2f),
-                        midpoint + (animationHeight / 2f))),
+                        midpoint + (animationHeight / 2f)), null),
                 0L, new FakeEntityUuid());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
         Renderer<FiniteAnimationRenderable> finiteAnimationRenderer =
                 new FiniteAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        new FakeColorShiftStackAggregator());
+                        new FakeColorShiftStackAggregator(), null);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
                 new ArrayList<Renderer>() {{
                     add(finiteAnimationRenderer);

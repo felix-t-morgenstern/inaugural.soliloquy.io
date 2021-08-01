@@ -30,16 +30,17 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
                                 FloatBoxFactory floatBoxFactory,
                                 TRenderable archetype,
-                                WindowResolutionManager windowResolutionManager) {
-        this(renderingBoundaries, floatBoxFactory, archetype);
+                                WindowResolutionManager windowResolutionManager,
+                                Long mostRecentTimestamp) {
+        this(renderingBoundaries, floatBoxFactory, archetype, mostRecentTimestamp);
         Check.ifNull(windowResolutionManager, "windowResolutionManager")
                 .registerResolutionSubscriber(this::registerResolutionChange);
     }
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
                                 FloatBoxFactory floatBoxFactory,
-                                TRenderable archetype) {
-        super(archetype);
+                                TRenderable archetype, Long mostRecentTimestamp) {
+        super(archetype, mostRecentTimestamp);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
     }

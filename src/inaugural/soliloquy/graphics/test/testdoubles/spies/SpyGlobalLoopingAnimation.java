@@ -63,4 +63,9 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public EntityUuid uuid() {
         return null;
     }
+
+    @Override
+    public Long mostRecentTimestamp() {
+        return null;
+    }
 }

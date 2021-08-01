@@ -7,9 +7,10 @@ import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFa
 
 public class StaticProviderFactoryImpl implements StaticProviderFactory {
     @Override
-    public <T> StaticProvider<T> make(EntityUuid id, T value, T archetype)
+    public <T> StaticProvider<T> make(EntityUuid id, T value, T archetype,
+                                      Long mostRecentTimestamp)
             throws IllegalArgumentException {
-        return new StaticProviderImpl<>(id, value, archetype);
+        return new StaticProviderImpl<>(id, value, archetype, mostRecentTimestamp);
     }
 
     @Override

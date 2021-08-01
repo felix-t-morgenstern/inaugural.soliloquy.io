@@ -22,6 +22,7 @@ class FiniteAnimationRendererTests {
     private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
             new FakeColorShiftStackAggregator();
     private final long START_TIMESTAMP = 123123L;
+    private final long MOST_RECENT_TIMESTAMP = 456L;
 
     private Renderer<FiniteAnimationRenderable> _finiteAnimationRenderer;
 
@@ -45,20 +46,20 @@ class FiniteAnimationRendererTests {
     void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
         _finiteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, COLOR_SHIFT_STACK_AGGREGATOR);
+                FLOAT_BOX_FACTORY, COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteAnimationRenderer(null, FLOAT_BOX_FACTORY,
-                        COLOR_SHIFT_STACK_AGGREGATOR));
+                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteAnimationRenderer(RENDERING_BOUNDARIES, null,
-                        COLOR_SHIFT_STACK_AGGREGATOR));
+                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        null));
+                        null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -146,14 +147,14 @@ class FiniteAnimationRendererTests {
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid());
-        long timestamp = 100L;
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
-        _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP + timestamp);
+        _finiteAnimationRenderer.render(finiteAnimationRenderable,
+                START_TIMESTAMP + MOST_RECENT_TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class,
                 () -> _finiteAnimationRenderer.render(finiteAnimationRenderable,
-                        START_TIMESTAMP + timestamp - 1L));
+                        START_TIMESTAMP + MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
@@ -224,6 +225,11 @@ class FiniteAnimationRendererTests {
                 START_TIMESTAMP + animationMsDuration);
 
         assertTrue(finiteAnimationRenderable.Deleted);
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_finiteAnimationRenderer.mostRecentTimestamp());
     }
 
     @Test

@@ -79,7 +79,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setBorderColorProvider(borderColorProvider);
         setBorderThicknessProvider(borderThicknessProvider);
-        TIMESTAMP_VALIDATOR = new TimestampValidator();
+        TIMESTAMP_VALIDATOR = new TimestampValidator(null);
     }
 
     protected void throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport() {

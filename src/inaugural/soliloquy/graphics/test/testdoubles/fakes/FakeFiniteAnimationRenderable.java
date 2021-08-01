@@ -199,4 +199,9 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     public AnimationFrameSnippet getArchetype() {
         return null;
     }
+
+    @Override
+    public Long mostRecentTimestamp() {
+        return null;
+    }
 }

@@ -42,4 +42,9 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     public EntityUuid uuid() {
         return null;
     }
+
+    @Override
+    public Long mostRecentTimestamp() {
+        return null;
+    }
 }

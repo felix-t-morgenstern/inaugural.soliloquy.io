@@ -25,26 +25,27 @@ class TextLineRendererImplTests {
     private final Color DEFAULT_COLOR = Color.BLACK;
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
+    private final long MOST_RECENT_TIMESTAMP = 123123L;
 
     private TextLineRenderer _textLineRenderer;
 
     @BeforeEach
     void setUp() {
         _textLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                DEFAULT_COLOR, WINDOW_RESOLUTION_MANAGER);
+                DEFAULT_COLOR, WINDOW_RESOLUTION_MANAGER, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRendererImpl(null, FLOAT_BOX_FACTORY, DEFAULT_COLOR,
-                        WINDOW_RESOLUTION_MANAGER));
+                        WINDOW_RESOLUTION_MANAGER, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, null, DEFAULT_COLOR,
-                        WINDOW_RESOLUTION_MANAGER));
+                        WINDOW_RESOLUTION_MANAGER, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, null,
-                        WINDOW_RESOLUTION_MANAGER));
+                        WINDOW_RESOLUTION_MANAGER, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -77,7 +78,7 @@ class TextLineRendererImplTests {
                 0f, textLine, new FakeStaticProviderAtTime<>(1f),
                 new FakeStaticProviderAtTime<>(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, id);
-        long timestamp = 0L;
+        long timestamp = MOST_RECENT_TIMESTAMP;
 
 
 
@@ -771,11 +772,14 @@ class TextLineRendererImplTests {
                 null, new ArrayList<>(), new ArrayList<>(),
                 new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
-        long timestamp = 100L;
-        _textLineRenderer.render(textLineRenderable, timestamp);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.render(textLineRenderable, timestamp - 1L));
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP - 1L));
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_textLineRenderer.mostRecentTimestamp());
     }
 
     @Test

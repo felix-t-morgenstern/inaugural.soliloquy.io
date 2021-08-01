@@ -17,10 +17,11 @@ public class StackRendererImpl implements StackRenderer {
     private final Renderer<Renderable> RENDERER;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StackRendererImpl(RenderableStack renderableStack, Renderer<Renderable> renderer) {
+    public StackRendererImpl(RenderableStack renderableStack, Renderer<Renderable> renderer,
+                             Long mostRecentTimestamp) {
         RENDERABLE_STACK = Check.ifNull(renderableStack, "renderableStack");
         RENDERER = Check.ifNull(renderer, "renderer");
-        TIMESTAMP_VALIDATOR = new TimestampValidator();
+        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
     }
 
     // TODO: Refactor how keys are obtained and sorted after having refactored Collection to either extend List, or implement a method which exposes a properly-typed List or Array

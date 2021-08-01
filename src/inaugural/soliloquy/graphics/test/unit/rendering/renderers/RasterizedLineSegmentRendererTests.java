@@ -20,6 +20,8 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL.createCapabilities;
 
 class RasterizedLineSegmentRendererTests {
+    private final long MOST_RECENT_TIMESTAMP = 123123L;
+
     private RasterizedLineSegmentRenderer _lineSegmentRenderer;
 
     @BeforeAll
@@ -40,7 +42,7 @@ class RasterizedLineSegmentRendererTests {
 
     @BeforeEach
     void setUp() {
-        _lineSegmentRenderer = new RasterizedLineSegmentRenderer();
+        _lineSegmentRenderer = new RasterizedLineSegmentRenderer(MOST_RECENT_TIMESTAMP);
     }
 
     @Test
@@ -175,10 +177,13 @@ class RasterizedLineSegmentRendererTests {
                         new FakeStaticProviderAtTime<>(Color.WHITE),
                         new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid());
-        long timestamp = 100L;
-        _lineSegmentRenderer.render(lineSegmentRenderable, timestamp);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> _lineSegmentRenderer.render(lineSegmentRenderable, timestamp - 1L));
+        assertThrows(IllegalArgumentException.class, () ->
+                _lineSegmentRenderer.render(lineSegmentRenderable, MOST_RECENT_TIMESTAMP - 1L));
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_lineSegmentRenderer.mostRecentTimestamp());
     }
 }

@@ -27,8 +27,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
                                 FloatBoxFactory floatBoxFactory, Color defaultColor,
-                                WindowResolutionManager windowResolutionManager) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager);
+                                WindowResolutionManager windowResolutionManager,
+                                Long mostRecentTimestamp) {
+        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager,
+                mostRecentTimestamp);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 

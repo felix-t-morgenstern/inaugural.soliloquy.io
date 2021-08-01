@@ -83,7 +83,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        RectangleRenderer rectangleRenderer = new RectangleRenderer();
+        RectangleRenderer rectangleRenderer = new RectangleRenderer(null);
 
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
 
@@ -126,7 +126,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
             RectangleAnimatedBackgroundTextureIdProvider
                     rectangleAnimatedBackgroundTextureIdProvider =
                     new RectangleAnimatedBackgroundTextureIdProvider(new FakeEntityUuid(),
-                            msDuration, (int)(currentTimestamp % msDuration), frames);
+                            msDuration, (int)(currentTimestamp % msDuration), frames, null);
 
             FakeRectangleRenderable rectangleRenderable =
                     new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

@@ -43,4 +43,9 @@ public class FakeRenderer implements Renderer<Renderable> {
     public String getInterfaceName() {
         return null;
     }
+
+    @Override
+    public Long mostRecentTimestamp() {
+        return null;
+    }
 }

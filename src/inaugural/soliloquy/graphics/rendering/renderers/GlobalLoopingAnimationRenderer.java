@@ -25,8 +25,9 @@ public class GlobalLoopingAnimationRenderer
 
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                           FloatBoxFactory floatBoxFactory,
-                                          ColorShiftStackAggregator colorShiftStackAggregator) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE);
+                                          ColorShiftStackAggregator colorShiftStackAggregator,
+                                          Long mostRecentTimestamp) {
+        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }

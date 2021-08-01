@@ -49,7 +49,7 @@ class RasterizedLineSegmentRendererSimpleTest {
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
         Renderer<RasterizedLineSegmentRenderable> rasterizedLineSegmentRenderer =
-                new RasterizedLineSegmentRenderer();
+                new RasterizedLineSegmentRenderer(null);
 
         stackRenderer.RenderAction = timestamp ->
                 rasterizedLineSegmentRenderer.render(makeRasterizedLineSegmentRenderable(),
@@ -73,13 +73,13 @@ class RasterizedLineSegmentRendererSimpleTest {
 
     private static RasterizedLineSegmentRenderable makeRasterizedLineSegmentRenderable() {
         return new FakeRasterizedLineSegmentRenderable(
-                new StaticProviderImpl<>(new FakeEntityUuid(), 6f), (short) 0xAAAA,
+                new StaticProviderImpl<>(new FakeEntityUuid(), 6f, null), (short) 0xAAAA,
                 (short) 16,
-                new StaticProviderImpl<>(new FakeEntityUuid(), new Color(18, 201, 159)),
+                new StaticProviderImpl<>(new FakeEntityUuid(), new Color(18, 201, 159), null),
                 // NB: The parameters are in this order to ensure that
                 //     RasterizedLineSegmentRenderable does not care about order
                 new StaticProviderImpl<>(new FakeEntityUuid(),
-                        new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f)),
+                        new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f), null),
                 1, new FakeEntityUuid());
     }
 }

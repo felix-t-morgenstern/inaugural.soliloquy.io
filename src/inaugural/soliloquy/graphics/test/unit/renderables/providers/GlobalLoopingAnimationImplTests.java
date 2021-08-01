@@ -17,25 +17,30 @@ class GlobalLoopingAnimationImplTests {
     private final int PERIOD_MODULO_OFFSET = 123;
     private final String ANIMATION_ID = "animationId";
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
+    private final long MOST_RECENT_TIMESTAMP = 123L;
 
     private GlobalLoopingAnimation _globalLoopingAnimation;
 
     @BeforeEach
     void setUp() {
-        _globalLoopingAnimation =
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, PERIOD_MODULO_OFFSET);
+        _globalLoopingAnimation = new GlobalLoopingAnimationImpl(ID, ANIMATION,
+                PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1,
+                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION,
+                        MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -109,25 +114,23 @@ class GlobalLoopingAnimationImplTests {
 
     @Test
     void testReportPauseAndUnpauseWithInvalidParams() {
-        long timestamp = 123L;
+        assertThrows(IllegalArgumentException.class,
+                () -> _globalLoopingAnimation.reportUnpause(MOST_RECENT_TIMESTAMP));
+
+        _globalLoopingAnimation.reportPause(MOST_RECENT_TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimation.reportUnpause(timestamp));
-
-        _globalLoopingAnimation.reportPause(timestamp);
-
+                () -> _globalLoopingAnimation.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimation.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimation.reportPause(timestamp));
+                () -> _globalLoopingAnimation.reportPause(MOST_RECENT_TIMESTAMP));
 
-        _globalLoopingAnimation.reportUnpause(timestamp);
+        _globalLoopingAnimation.reportUnpause(MOST_RECENT_TIMESTAMP);
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimation.reportPause(timestamp - 1));
+                () -> _globalLoopingAnimation.reportPause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimation.reportUnpause(timestamp));
+                () -> _globalLoopingAnimation.reportUnpause(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -192,5 +195,10 @@ class GlobalLoopingAnimationImplTests {
                 _globalLoopingAnimation.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimation.reportUnpause(timestamp));
+    }
+
+    @Test
+    void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long)_globalLoopingAnimation.mostRecentTimestamp());
     }
 }

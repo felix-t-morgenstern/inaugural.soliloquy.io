@@ -11,15 +11,15 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StaticProviderImpl(EntityUuid uuid, T value) {
-        this(uuid, value, value);
+    public StaticProviderImpl(EntityUuid uuid, T value, Long mostRecentTimestamp) {
+        this(uuid, value, value, mostRecentTimestamp);
     }
 
-    public StaticProviderImpl(EntityUuid uuid, T value, T archetype) {
+    public StaticProviderImpl(EntityUuid uuid, T value, T archetype, Long mostRecentTimestamp) {
         super(archetype);
         ID = Check.ifNull(uuid, "uuid");
         VALUE = value;
-        TIMESTAMP_VALIDATOR = new TimestampValidator();
+        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
     }
 
     @Override
@@ -51,5 +51,11 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
     @Override
     public EntityUuid uuid() {
         return ID;
+    }
+
+    // TODO: Test and implement
+    @Override
+    public Long mostRecentTimestamp() {
+        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 }
