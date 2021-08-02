@@ -35,7 +35,7 @@ public class GlobalLoopingAnimationRenderableImpl
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                Map<Integer, Action<Long>> onClick,
+                                                Map<Integer, Action<Long>> onPress,
                                                 Map<Integer, Action<Long>> onRelease,
                                                 Action<Long> onMouseOver,
                                                 Action<Long> onMouseLeave,
@@ -44,7 +44,7 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 int z, EntityUuid uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
-        super(onClick, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setGlobalLoopingAnimation(globalLoopingAnimation);
