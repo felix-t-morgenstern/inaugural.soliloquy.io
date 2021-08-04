@@ -15,7 +15,6 @@ import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-// TODO: Clean up all the mess in this code
 public class WindowResolutionManagerImpl implements WindowResolutionManager {
     private final CoordinateFactory COORDINATE_FACTORY;
     private final ArrayList<Consumer<Coordinate>> RESOLUTION_CHANGE_SUBSCRIBERS =

@@ -54,7 +54,6 @@ public class FloorFrameProvider<T> {
             throw new IllegalArgumentException("AnimationImpl: No frame at 0 ms");
         }
 
-        // TODO: Ensure that this value is returned properly
         return supportsMouseEventCapturing;
     }
 

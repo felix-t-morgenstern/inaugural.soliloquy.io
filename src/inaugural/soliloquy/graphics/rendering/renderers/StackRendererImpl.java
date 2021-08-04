@@ -24,7 +24,6 @@ public class StackRendererImpl implements StackRenderer {
         TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
     }
 
-    // TODO: Refactor how keys are obtained and sorted after having refactored Collection to either extend List, or implement a method which exposes a properly-typed List or Array
     @Override
     public void render(long timestamp) {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);

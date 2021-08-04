@@ -53,7 +53,6 @@ public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements Stat
         return ID;
     }
 
-    // TODO: Test and implement
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();

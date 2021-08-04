@@ -39,7 +39,6 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
         setDirection(direction);
     }
 
-    // TODO: Throw an exception if the underlying ImageAssetSet cannot support mouse events
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        Map<Integer, Action<Long>> onPress,
                                        Map<Integer, Action<Long>> onRelease,

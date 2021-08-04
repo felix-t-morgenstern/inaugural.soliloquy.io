@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ImageAssetSetFactoryTests {
     private final String IMAGE_ASSET_SET_ID = "imageAssetSetId";
 
-    // TODO: Refactor these tests to ensure that containing ImageAssets are tested, both Sprites AND AnimationFrameSnippets
     private final FakeImage CAPTURING_IMAGE = new FakeImage(true);
     private final FakeImage NON_CAPTURING_IMAGE = new FakeImage(false);
 
@@ -96,7 +95,6 @@ class ImageAssetSetFactoryTests {
                 _imageAssetSetFactory.getInterfaceName());
     }
 
-    // TODO: Consider breaking out into separate test cases
     @Test
     void testCreateWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(null));

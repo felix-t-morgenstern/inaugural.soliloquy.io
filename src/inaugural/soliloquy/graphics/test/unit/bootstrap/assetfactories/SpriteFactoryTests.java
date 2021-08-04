@@ -1,8 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.SpriteFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
@@ -56,7 +55,6 @@ class SpriteFactoryTests {
         assertEquals(_bottomY, createdSprite.bottomY());
     }
 
-    // TODO: Consider breaking out into separate test cases
     @Test
     void testCreateWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(null));

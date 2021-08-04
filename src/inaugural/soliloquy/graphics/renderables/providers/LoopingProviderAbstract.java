@@ -49,7 +49,6 @@ public abstract class LoopingProviderAbstract<T>
         return ID;
     }
 
-    // TODO: Test and implement
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();

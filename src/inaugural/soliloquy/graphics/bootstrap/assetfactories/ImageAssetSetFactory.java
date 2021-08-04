@@ -85,8 +85,6 @@ public class ImageAssetSetFactory
                             assetDefinition.assetType().toString() + ")");
             }
 
-            // TODO: If mouse event capturing is supported, verify whether imageAsset does so
-
             Map<String, ImageAsset> assetsByDirection;
             if (assetsByTypeAndDirection.containsKey(type)) {
                 assetsByDirection = assetsByTypeAndDirection.get(type);

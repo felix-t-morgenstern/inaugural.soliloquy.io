@@ -20,7 +20,6 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
         return Renderer.class.getCanonicalName();
     }
 
-    // TODO: Test and implement
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
