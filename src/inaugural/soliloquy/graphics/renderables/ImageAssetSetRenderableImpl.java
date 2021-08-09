@@ -24,14 +24,14 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     private String _direction;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
-                                       List<ColorShift> colorShifts,
+                                       List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, borderThicknessProvider, borderColorProvider,
+        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setImageAssetSet(imageAssetSet);
@@ -43,16 +43,16 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
                                        Map<Integer, Action<Long>> onPress,
                                        Map<Integer, Action<Long>> onRelease,
                                        Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                       List<ColorShift> colorShifts,
+                                       List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                        EntityUuid uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
+                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);

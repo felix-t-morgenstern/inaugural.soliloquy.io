@@ -54,7 +54,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 "spriteRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
-        validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShifts(),
+        validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShiftProviders(),
                 spriteRenderable.uuid(), "spriteRenderable");
 
         if (borderThickness != null) {
@@ -112,8 +112,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                     borderColor);
         }
 
-        NetColorShifts netColorShifts =
-                COLOR_SHIFT_STACK_AGGREGATOR.aggregate(spriteRenderable.colorShifts(), timestamp);
+        NetColorShifts netColorShifts = netColorShifts(spriteRenderable.colorShiftProviders(),
+                COLOR_SHIFT_STACK_AGGREGATOR, timestamp);
 
         super.render(renderingArea,
                 spriteRenderable.getSprite(),
@@ -243,6 +243,11 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
+        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+            return null;
+        }
+
+        @Override
         public void setOnMouseOver(Action action) {
 
         }
@@ -250,11 +255,6 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         @Override
         public void setOnMouseLeave(Action action) {
 
-        }
-
-        @Override
-        public List<ColorShift> colorShifts() {
-            return null;
         }
 
         @Override

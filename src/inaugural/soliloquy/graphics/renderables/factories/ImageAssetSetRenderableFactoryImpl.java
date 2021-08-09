@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet, String type, String direction,
-                                        List<ColorShift> colorShifts,
+                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
@@ -27,7 +27,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Consumer<Renderable> updateZIndexInContainer,
                                         Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, colorShifts,
+        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
                 updateZIndexInContainer, removeFromContainer);
     }
@@ -37,7 +37,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Map<Integer, Action<Long>> onPress,
                                         Map<Integer, Action<Long>> onRelease,
                                         Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                        List<ColorShift> colorShifts,
+                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
@@ -46,7 +46,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onPress, onRelease,
-                onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                onMouseOver, onMouseLeave, colorShiftProviders, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
     }

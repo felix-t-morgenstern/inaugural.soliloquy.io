@@ -6,11 +6,15 @@ import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -57,6 +61,16 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
         _mesh = Check.ifNull(mesh, "mesh");
+    }
+
+    protected NetColorShifts netColorShifts(List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                            ColorShiftStackAggregator colorShiftStackAggregator,
+                                            long timestamp) {
+        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        colorShiftProviders.forEach(provider ->
+                colorShifts.add(provider.provide(timestamp)));
+
+        return colorShiftStackAggregator.aggregate(colorShifts, timestamp);
     }
 
     void render(FloatBox renderingArea,
@@ -220,12 +234,13 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     }
 
     protected void validateRenderableWithAreaMembers(FloatBox renderingArea,
-                                                     List<ColorShift> colorShifts,
+                                                     List<ProviderAtTime<ColorShift>>
+                                                             colorShiftProviders,
                                                      EntityUuid id,
                                                      String paramName) {
         Check.ifNull(renderingArea, paramName + " provided renderingArea");
 
-        Check.ifNull(colorShifts, paramName + ".colorShifts()");
+        Check.ifNull(colorShiftProviders, paramName + ".colorShiftProviders()");
 
         Check.throwOnLteZero(renderingArea.width(),
                 paramName + " provided renderingArea.width()");

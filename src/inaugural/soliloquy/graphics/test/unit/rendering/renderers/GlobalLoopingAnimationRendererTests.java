@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -80,7 +80,7 @@ class GlobalLoopingAnimationRendererTests {
     @Test
     void testRenderWithInvalidParams() {
         SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
@@ -90,7 +90,7 @@ class GlobalLoopingAnimationRendererTests {
                 () -> _globalLoopingAnimationRenderer.render(null, 0L));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(null, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(null, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid()),
@@ -106,21 +106,21 @@ class GlobalLoopingAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         null,
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         new FakeEntityUuid()),
@@ -147,13 +147,13 @@ class GlobalLoopingAnimationRendererTests {
     @Test
     void testRenderOutdatedTimestamp() {
         SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());
@@ -168,13 +168,13 @@ class GlobalLoopingAnimationRendererTests {
     @Test
     void testRenderPassesTimestampToColorShiftStackAggregator() {
         SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
-                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShifts,
+                new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());

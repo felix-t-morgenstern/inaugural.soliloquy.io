@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ class FiniteAnimationRendererTests {
     @Test
     void testRenderWithInvalidParams() {
         FakeAnimation animation = new FakeAnimation("id", 5000);
-        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
@@ -95,14 +96,14 @@ class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         null,
                         START_TIMESTAMP, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 null),
                         START_TIMESTAMP, new FakeEntityUuid()),
@@ -110,7 +111,7 @@ class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid()),
@@ -118,7 +119,7 @@ class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
                         START_TIMESTAMP, new FakeEntityUuid()),
@@ -126,7 +127,7 @@ class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, null),
@@ -137,13 +138,13 @@ class FiniteAnimationRendererTests {
     @Test
     void testRenderOutdatedTimestamp() {
         FakeAnimation animation = new FakeAnimation("id", 5000);
-        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeFiniteAnimationRenderable finiteAnimationRenderable =
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid());
@@ -160,13 +161,13 @@ class FiniteAnimationRendererTests {
     @Test
     void testRenderBeforeStartingTimestamp() {
         FakeAnimation animation = new FakeAnimation("id", 5000);
-        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeFiniteAnimationRenderable finiteAnimationRenderable =
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid());
@@ -181,17 +182,16 @@ class FiniteAnimationRendererTests {
     @Test
     void testRenderPassesTimestampToColorShiftStackAggregator() {
         FakeAnimation animation = new FakeAnimation("id", 5000);
-        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeFiniteAnimationRenderable finiteAnimationRenderable =
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid());
-        long timestamp = 100L;
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
         _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP);
@@ -203,13 +203,13 @@ class FiniteAnimationRendererTests {
     void testRenderAfterAnimationEndDeletes() {
         int animationMsDuration = 456;
         FakeAnimation animation = new FakeAnimation("id", animationMsDuration);
-        ArrayList<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
         FakeFiniteAnimationRenderable finiteAnimationRenderable =
-                new FakeFiniteAnimationRenderable(animation, colorShifts,
+                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, new FakeEntityUuid());

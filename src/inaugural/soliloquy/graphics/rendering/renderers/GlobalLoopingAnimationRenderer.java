@@ -44,7 +44,7 @@ public class GlobalLoopingAnimationRenderer
                         .provide(timestamp);
 
         validateRenderableWithAreaMembers(renderingArea,
-                globalLoopingAnimationRenderable.colorShifts(),
+                globalLoopingAnimationRenderable.colorShiftProviders(),
                 globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
 
         Check.ifNull(globalLoopingAnimationRenderable.getGlobalLoopingAnimation(),
@@ -52,8 +52,10 @@ public class GlobalLoopingAnimationRenderer
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        NetColorShifts netColorShifts = COLOR_SHIFT_STACK_AGGREGATOR.aggregate(
-                globalLoopingAnimationRenderable.colorShifts(), timestamp);
+        NetColorShifts netColorShifts = netColorShifts(
+                globalLoopingAnimationRenderable.colorShiftProviders(),
+                COLOR_SHIFT_STACK_AGGREGATOR,
+                timestamp);
 
         super.render(
                 renderingArea,
@@ -165,6 +167,11 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
+                public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+                    return null;
+                }
+
+                @Override
                 public void setOnMouseOver(Action action) {
 
                 }
@@ -172,11 +179,6 @@ public class GlobalLoopingAnimationRenderer
                 @Override
                 public void setOnMouseLeave(Action action) {
 
-                }
-
-                @Override
-                public List<ColorShift> colorShifts() {
-                    return null;
                 }
 
                 @Override

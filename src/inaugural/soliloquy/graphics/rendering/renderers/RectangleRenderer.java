@@ -292,6 +292,11 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
+        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+            return null;
+        }
+
+        @Override
         public void setOnMouseOver(Action action) {
 
         }
@@ -299,11 +304,6 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         @Override
         public void setOnMouseLeave(Action action) {
 
-        }
-
-        @Override
-        public List<ColorShift> colorShifts() {
-            return null;
         }
 
         @Override

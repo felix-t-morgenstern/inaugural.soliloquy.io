@@ -14,17 +14,18 @@ import java.util.Map;
 
 public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimationRenderable {
     public GlobalLoopingAnimation GlobalLoopingAnimation;
-    public List<ColorShift> ColorShifts;
+    public List<ProviderAtTime<ColorShift>> ColorShiftProviders;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public EntityUuid Id;
 
     public FakeGlobalLoopingAnimationRenderable(GlobalLoopingAnimation globalLoopingAnimation,
-                                                List<ColorShift> colorShifts,
+                                                List<ProviderAtTime<ColorShift>>
+                                                        colorShiftProviders,
                                                 ProviderAtTime<FloatBox>
                                                         renderingDimensionsProvider,
                                                 EntityUuid id) {
         GlobalLoopingAnimation = globalLoopingAnimation;
-        ColorShifts = colorShifts;
+        ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Id = id;
     }
@@ -111,8 +112,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public List<ColorShift> colorShifts() {
-        return ColorShifts;
+    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+        return ColorShiftProviders;
     }
 
     @Override

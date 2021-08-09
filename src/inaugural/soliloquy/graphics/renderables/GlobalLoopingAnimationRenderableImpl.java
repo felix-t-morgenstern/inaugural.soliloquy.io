@@ -22,13 +22,14 @@ public class GlobalLoopingAnimationRenderableImpl
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                List<ColorShift> colorShifts,
+                                                List<ProviderAtTime<ColorShift>>
+                                                        colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, EntityUuid uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, updateZIndexInContainer, removeFromContainer);
+        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -39,14 +40,15 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 Map<Integer, Action<Long>> onRelease,
                                                 Action<Long> onMouseOver,
                                                 Action<Long> onMouseLeave,
-                                                List<ColorShift> colorShifts,
+                                                List<ProviderAtTime<ColorShift>>
+                                                        colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, EntityUuid uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
+                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 

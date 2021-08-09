@@ -187,6 +187,11 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
+    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+        return null;
+    }
+
+    @Override
     public void setOnMouseOver(Action action) {
 
     }
@@ -194,11 +199,6 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     @Override
     public void setOnMouseLeave(Action action) {
 
-    }
-
-    @Override
-    public List<ColorShift> colorShifts() {
-        return null;
     }
 
     @Override

@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -87,7 +87,7 @@ class SpriteRendererTests {
     @Test
     void testRenderWithInvalidParams() {
         Sprite sprite = new FakeSprite();
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
@@ -98,7 +98,7 @@ class SpriteRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(null, 0L));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(null, colorShifts,
+                new FakeSpriteRenderable(null, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
@@ -118,7 +118,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         null,
                         new FakeStaticProviderAtTime<>(null),
                         new FakeStaticProviderAtTime<>(null),
@@ -127,7 +127,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         null,
@@ -137,7 +137,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
@@ -147,8 +147,9 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, leftX, bottomY)),
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
+                        new FakeStaticProviderAtTime<>(
+                                new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         new FakeStaticProviderAtTime<>(null),
                         new FakeStaticProviderAtTime<>(null),
                         new FakeEntityUuid()),
@@ -166,7 +167,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(borderThickness),
@@ -176,7 +177,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(-0.0001f),
@@ -186,7 +187,7 @@ class SpriteRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShifts,
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProviderAtTime<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProviderAtTime<>(1.0001f),
@@ -210,12 +211,13 @@ class SpriteRendererTests {
     void testRenderOutdatedTimestamp() {
         FakeSprite sprite = new FakeSprite();
         sprite.Image = new FakeImage("imageId");
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
-        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, colorShifts,
+        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite,
+                colorShiftProviders,
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
                 new FakeStaticProviderAtTime<>(null),
                 new FakeStaticProviderAtTime<>(null),
@@ -231,12 +233,13 @@ class SpriteRendererTests {
     void testRenderPassesTimestampToColorShiftStackAggregator() {
         FakeSprite sprite = new FakeSprite();
         sprite.Image = new FakeImage("imageId");
-        List<ColorShift> colorShifts = new ArrayList<>();
+        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
         float leftX = 0.11f;
         float topY = 0.22f;
         float rightX = 0.33f;
         float bottomY = 0.44f;
-        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite, colorShifts,
+        FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite,
+                colorShiftProviders,
                 new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
                 new FakeStaticProviderAtTime<>(null),
                 new FakeStaticProviderAtTime<>(null),

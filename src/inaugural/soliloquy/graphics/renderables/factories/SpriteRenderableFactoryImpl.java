@@ -20,13 +20,13 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     @Override
     public SpriteRenderable make(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                  ProviderAtTime<Color> borderColorProvider,
-                                 List<ColorShift> colorShifts,
+                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                colorShifts, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
+                colorShiftProviders, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
     }
 
@@ -36,13 +36,13 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  Map<Integer, Action<Long>> onPress,
                                  Map<Integer, Action<Long>> onRelease,
                                  Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                 List<ColorShift> colorShifts,
+                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
+                onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
     }

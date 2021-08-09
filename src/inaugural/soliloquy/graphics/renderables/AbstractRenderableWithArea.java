@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensions
         implements RenderableWithArea {
-    private final List<ColorShift> COLOR_SHIFTS;
+    private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS;
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
     protected boolean _capturesMouseEvents;
@@ -30,7 +30,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     private ProviderAtTime<Float> _borderThicknessProvider;
     private ProviderAtTime<Color> _borderColorProvider;
 
-    protected AbstractRenderableWithArea(List<ColorShift> colorShifts,
+    protected AbstractRenderableWithArea(List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
@@ -38,7 +38,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(false, null, null, null, null, colorShifts, borderThicknessProvider,
+        this(false, null, null, null, null, colorShiftProviders, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
     }
@@ -46,7 +46,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     protected AbstractRenderableWithArea(Map<Integer, Action<Long>> onPress,
                                          Map<Integer, Action<Long>> onRelease,
                                          Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                         List<ColorShift> colorShifts,
+                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
@@ -54,16 +54,16 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
-        this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+        this(true, onPress, onRelease, onMouseOver, onMouseLeave,
+                colorShiftProviders, borderThicknessProvider, borderColorProvider,
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     private AbstractRenderableWithArea(boolean capturesMouseEvents,
                                        Map<Integer, Action<Long>> onPress,
                                        Map<Integer, Action<Long>> onRelease,
                                        Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                       List<ColorShift> colorShifts,
+                                       List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
@@ -76,7 +76,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         _onRelease = onRelease == null ? new HashMap<>() : onRelease;
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
-        COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
+        COLOR_SHIFT_PROVIDERS = Check.ifNull(colorShiftProviders, "colorShiftProviders");
         setBorderColorProvider(borderColorProvider);
         setBorderThicknessProvider(borderThicknessProvider);
         TIMESTAMP_VALIDATOR = new TimestampValidator(null);
@@ -226,8 +226,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     abstract protected String className();
 
     @Override
-    public List<ColorShift> colorShifts() {
-        return COLOR_SHIFTS;
+    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+        return COLOR_SHIFT_PROVIDERS;
     }
 
     @Override

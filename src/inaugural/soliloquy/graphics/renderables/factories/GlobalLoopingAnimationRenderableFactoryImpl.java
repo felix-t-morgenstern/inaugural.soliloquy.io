@@ -22,15 +22,16 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
     public GlobalLoopingAnimationRenderable make(GlobalLoopingAnimation globalLoopingAnimation,
                                                  ProviderAtTime<Float> borderThicknessProvider,
                                                  ProviderAtTime<Color> borderColorProvider,
-                                                 List<ColorShift> colorShifts,
+                                                 List<ProviderAtTime<ColorShift>>
+                                                             colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, EntityUuid uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,
                                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
-                borderThicknessProvider, borderColorProvider, colorShifts, renderingAreaProvider,
-                z, uuid, updateZIndexInContainer, removeFromContainer);
+                borderThicknessProvider, borderColorProvider, colorShiftProviders,
+                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     @Override
@@ -41,7 +42,8 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  Map<Integer, Action<Long>> onRelease,
                                                  Action<Long> onMouseOver,
                                                  Action<Long> onMouseLeave,
-                                                 List<ColorShift> colorShifts,
+                                                 List<ProviderAtTime<ColorShift>>
+                                                             colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, EntityUuid uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,
@@ -49,8 +51,8 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
-                onMouseLeave, colorShifts, renderingAreaProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                onMouseLeave, colorShiftProviders, renderingAreaProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
     }
 
     @Override

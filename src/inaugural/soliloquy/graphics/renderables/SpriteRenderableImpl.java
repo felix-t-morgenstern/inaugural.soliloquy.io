@@ -20,11 +20,11 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
-                                List<ColorShift> colorShifts,
+                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(colorShifts, borderThicknessProvider, borderColorProvider,
+        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
         setSprite(sprite);
@@ -35,13 +35,13 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
                                 Map<Integer, Action<Long>> onPress,
                                 Map<Integer, Action<Long>> onRelease,
                                 Action<Long> onMouseOver, Action<Long> onMouseLeave,
-                                List<ColorShift> colorShifts,
+                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
                                 Consumer<Renderable> removeFromContainer) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
+                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

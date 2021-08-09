@@ -16,6 +16,7 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,8 @@ public class FiniteAnimationRenderer
                 "finiteAnimationRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
-        validateRenderableWithAreaMembers(renderingArea, finiteAnimationRenderable.colorShifts(),
+        validateRenderableWithAreaMembers(renderingArea,
+                finiteAnimationRenderable.colorShiftProviders(),
                 finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
@@ -59,8 +61,10 @@ public class FiniteAnimationRenderer
             return;
         }
 
-        NetColorShifts netColorShifts = COLOR_SHIFT_STACK_AGGREGATOR.aggregate(
-                finiteAnimationRenderable.colorShifts(), timestamp);
+        NetColorShifts netColorShifts = netColorShifts(
+                finiteAnimationRenderable.colorShiftProviders(),
+                COLOR_SHIFT_STACK_AGGREGATOR,
+                timestamp);
 
         AnimationFrameSnippet snippet =  finiteAnimationRenderable.provide(timestamp);
 
@@ -233,6 +237,11 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+            return null;
+        }
+
+        @Override
         public void setOnMouseOver(Action action) {
 
         }
@@ -240,11 +249,6 @@ public class FiniteAnimationRenderer
         @Override
         public void setOnMouseLeave(Action action) {
 
-        }
-
-        @Override
-        public List<ColorShift> colorShifts() {
-            return null;
         }
 
         @Override
