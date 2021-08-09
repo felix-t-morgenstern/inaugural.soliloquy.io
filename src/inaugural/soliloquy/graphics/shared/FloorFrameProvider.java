@@ -1,9 +1,8 @@
 package inaugural.soliloquy.graphics.shared;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -13,7 +12,7 @@ public class FloorFrameProvider<T> {
     public final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
     public final Map<Integer, T> FRAMES;
 
-    private final NearestFloorTree FRAMES_MS_NEAREST_FLOOR_TREE;
+    private final NearestFloorAndCeilingTree FRAMES_MS_NEAREST_FLOOR_AND_CEILING_TREE;
 
     public FloorFrameProvider(int msDuration, Map<Integer, T> frames, Consumer<T> checkValue,
                               Function<T, Boolean> valueSupportsMouseEvents) {
@@ -21,7 +20,8 @@ public class FloorFrameProvider<T> {
         SUPPORTS_MOUSE_EVENT_CAPTURING =
                 checkFramesValidityAndReturnCaptures(frames, checkValue, valueSupportsMouseEvents);
         FRAMES = frames;
-        FRAMES_MS_NEAREST_FLOOR_TREE = new NearestFloorTree(FRAMES.keySet());
+        FRAMES_MS_NEAREST_FLOOR_AND_CEILING_TREE =
+                NearestFloorAndCeilingTree.FromIntegers(FRAMES.keySet());
     }
 
     private boolean checkFramesValidityAndReturnCaptures(Map<Integer, T> frames,
@@ -60,90 +60,6 @@ public class FloorFrameProvider<T> {
     public T valueAtFrame(int ms) throws IllegalArgumentException {
         Check.ifNonNegative(ms, "ms");
         Check.throwOnSecondGt(MS_DURATION, ms, "MS_DURATION", "ms");
-        return FRAMES.get(FRAMES_MS_NEAREST_FLOOR_TREE.getNearestFloor(ms));
-    }
-
-    static class NearestFloorTree {
-        int nodeValue;
-        NearestFloorTree _leftNode;
-        NearestFloorTree _rightNode;
-
-        NearestFloorTree(int floor) {
-            nodeValue = floor;
-        }
-
-        NearestFloorTree(int[] floors) {
-            populateFromSortedArray(floors);
-        }
-
-        NearestFloorTree(Collection<Integer> unsorted) {
-            int[] toSort = new int[unsorted.size()];
-            int index = 0;
-            for(Integer i : unsorted) {
-                toSort[index++] = i;
-            }
-            Arrays.sort(toSort);
-            populateFromSortedArray(toSort);
-        }
-
-        private void populateFromSortedArray(int[] floors) {
-            if (floors.length == 1) {
-                nodeValue = floors[0];
-            }
-            if (floors.length == 2) {
-                nodeValue = floors[0];
-                _rightNode = new NearestFloorTree(floors[1]);
-            }
-            if (floors.length == 3) {
-                _leftNode = new NearestFloorTree(floors[0]);
-                nodeValue = floors[1];
-                _rightNode = new NearestFloorTree(floors[2]);
-            }
-            if (floors.length > 3) {
-                int centerIndex;
-                if (floors.length % 2 == 1) {
-                    centerIndex = (floors.length / 2) + 1;
-                }
-                else {
-                    float middleOfRange = (floors[0] + floors[floors.length - 1]) / 2f;
-                    int leftOfCenterIndex = floors.length / 2;
-                    int rightOfCenterIndex = leftOfCenterIndex + 1;
-                    if (Math.abs(middleOfRange - floors[leftOfCenterIndex]) <
-                            Math.abs(middleOfRange - floors[rightOfCenterIndex])) {
-                        centerIndex = leftOfCenterIndex;
-                    }
-                    else {
-                        centerIndex = rightOfCenterIndex;
-                    }
-                }
-                nodeValue = floors[centerIndex];
-                _leftNode = new NearestFloorTree(Arrays.copyOfRange(floors, 0, centerIndex));
-                _rightNode = new NearestFloorTree(Arrays.copyOfRange(floors, centerIndex + 1,
-                        floors.length));
-            }
-        }
-
-        int getNearestFloor(int value) {
-            return getNearestFloor(value, null);
-        }
-
-        private int getNearestFloor(int value, Integer nearestFloor) {
-            if (value == nodeValue) {
-                return nodeValue;
-            }
-            if (value > nodeValue) {
-                nearestFloor = nodeValue;
-                if (_rightNode == null) {
-                    return nearestFloor;
-                }
-                return _rightNode.getNearestFloor(value, nearestFloor);
-            }
-
-            //if (value < nodeValue) {
-            if (_leftNode == null) {
-                return nearestFloor;
-            }
-            return _leftNode.getNearestFloor(value, nearestFloor);
-        }
+        return FRAMES.get((int) FRAMES_MS_NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(ms));
     }
 }
