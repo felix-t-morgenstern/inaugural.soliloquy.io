@@ -1,26 +1,20 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectanglerenderer;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.graphics.api.WindowResolution;
-import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.graphics.test.display.DisplayTest;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRectangleRenderable;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderAtTime;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.FloatBox;
-import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.WindowDisplayMode;
+import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.function.Function;
-
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import java.util.List;
 
 /**
  * Test acceptance criteria:
@@ -33,11 +27,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 3. The window will then close
  *
  */
-class RectangleRendererTileTest {
-    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
-    private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
-
+class RectangleRendererTileTest extends RectangleRendererTest {
     private final static FakeStaticProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
             new FakeStaticProviderAtTime<>(null);
     private final static FakeStaticProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
@@ -57,49 +47,30 @@ class RectangleRendererTileTest {
             "./res/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_800x600, COORDINATE_FACTORY);
-
-        FakeFrameTimer frameTimer = new FakeFrameTimer();
-        frameTimer.ShouldExecuteNextFrame = false;
-
-        FakeStackRenderer stackRenderer = new FakeStackRenderer();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
-
-        FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
-
-        RectangleRenderer rectangleRenderer = new RectangleRenderer(null);
-
-        FakeRectangleRenderable rectangleRenderable =
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, RENDERING_AREA_PROVIDER, UUID);
-
-        stackRenderer.RenderAction = timestamp ->
-                rectangleRenderer.render(rectangleRenderable, timestamp);
-
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
-
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
-                new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
-                MESH_DATA, MESH_DATA, graphicsPreloader);
-
-        graphicsPreloader.LoadAction = () -> {
-            BACKGROUND_TEXTURE_ID_PROVIDER.ProvidedValue =
-                    new ImageFactoryImpl(0.5f).make(TILE_LOCATION, false).textureId();
-            frameTimer.ShouldExecuteNextFrame = true;
-        };
-
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        runTest(
+                RectangleRendererTileTest::generateRenderablesAndRenderersWithMeshAndShader,
+                timestamp -> RectangleRenderer.render(RectangleRenderable, timestamp),
+                () -> {
+                    BACKGROUND_TEXTURE_ID_PROVIDER.ProvidedValue =
+                            new ImageFactoryImpl(0.5f).make(TILE_LOCATION, false).textureId();
+                    FrameTimer.ShouldExecuteNextFrame = true;
+                },
+                DisplayTest::closeAfterSomeTime
+        );
     }
 
-    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(3000);
+    /** @noinspection rawtypes*/
+    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+            WindowResolutionManager windowResolutionManager) {
+        RectangleRenderer = new RectangleRenderer(null);
+        RectangleRenderable = new FakeRectangleRenderable(
+                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
+                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, RENDERING_AREA_PROVIDER, UUID);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        return new ArrayList<Renderer>() {{
+            add(RectangleRenderer);
+        }};
     }
 }

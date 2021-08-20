@@ -21,6 +21,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
+    private Mesh _mesh;
+    private Shader _shader;
 
     public RectangleRenderer(Long mostRecentTimestamp) {
         super(ARCHETYPE, mostRecentTimestamp);
@@ -28,14 +30,12 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(
-                "RectangleRenderer.setMesh: this renderer does not require a Mesh");
+        _mesh = Check.ifNull(mesh, "mesh");
     }
 
     @Override
     public void setShader(Shader shader) throws IllegalArgumentException {
-        throw new UnsupportedOperationException(
-                "RectangleRenderer.setShader: this renderer does not require a Shader");
+        _shader = Check.ifNull(shader, "shader");
     }
 
     @Override
@@ -79,6 +79,16 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         Check.ifNull(rectangleRenderable.uuid(), "rectangleRenderable.uuid()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
+
+        if (_mesh == null) {
+            throw new IllegalStateException("RectangleRenderer.render: mesh cannot be null");
+        }
+        if (_shader == null) {
+            throw new IllegalStateException("RectangleRenderer.render: shader cannot be null");
+        }
+
+        _mesh.unbind();
+        _shader.unbind();
 
         float leftX = (renderingDimensions.leftX() * 2f) - 1f;
         float topY = -((renderingDimensions.topY() * 2f) - 1f);

@@ -1,10 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +17,8 @@ import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL.createCapabilities;
 
 class RasterizedLineSegmentRendererTests {
+    private final FakeMesh MESH = new FakeMesh();
+    private final FakeShader SHADER = new FakeShader();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
 
     private RasterizedLineSegmentRenderer _lineSegmentRenderer;
@@ -53,15 +52,9 @@ class RasterizedLineSegmentRendererTests {
     }
 
     @Test
-    void testSetMesh() {
-        assertThrows(UnsupportedOperationException.class,
-                () -> _lineSegmentRenderer.setMesh(null));
-    }
-
-    @Test
-    void testSetShader() {
-        assertThrows(UnsupportedOperationException.class,
-                () -> _lineSegmentRenderer.setShader(null));
+    void testSetMeshOrShaderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.setMesh(null));
+        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.setShader(null));
     }
 
     // TODO: Add test cases for null providers
@@ -177,9 +170,37 @@ class RasterizedLineSegmentRendererTests {
                         new FakeStaticProviderAtTime<>(Color.WHITE),
                         new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid());
+        _lineSegmentRenderer.setMesh(MESH);
+        _lineSegmentRenderer.setShader(SHADER);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _lineSegmentRenderer.render(lineSegmentRenderable, MOST_RECENT_TIMESTAMP - 1L));
+    }
+
+    @Test
+    void testRenderWithoutMeshOrShader() {
+        FakeRasterizedLineSegmentRenderable lineSegmentRenderable =
+                new FakeRasterizedLineSegmentRenderable(
+                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProviderAtTime<>(Color.WHITE),
+                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        1, new FakeEntityUuid());
+
+        Renderer<RasterizedLineSegmentRenderable> lineSegmentRendererWithoutMesh =
+                new RasterizedLineSegmentRenderer(MOST_RECENT_TIMESTAMP);
+
+        lineSegmentRendererWithoutMesh.setShader(SHADER);
+
+        assertThrows(IllegalStateException.class, () -> lineSegmentRendererWithoutMesh
+                .render(lineSegmentRenderable, MOST_RECENT_TIMESTAMP));
+
+        Renderer<RasterizedLineSegmentRenderable> lineSegmentRendererWithoutShader =
+                new RasterizedLineSegmentRenderer(MOST_RECENT_TIMESTAMP);
+
+        lineSegmentRendererWithoutShader.setMesh(MESH);
+
+        assertThrows(IllegalStateException.class, () -> lineSegmentRendererWithoutShader
+                .render(lineSegmentRenderable, MOST_RECENT_TIMESTAMP));
     }
 
     @Test

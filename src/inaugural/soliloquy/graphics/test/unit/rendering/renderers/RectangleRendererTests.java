@@ -2,6 +2,8 @@ package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.valueobjects.EntityUuid;
@@ -13,6 +15,9 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.opengl.GL.createCapabilities;
 
 class RectangleRendererTests {
     private final ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -29,8 +34,26 @@ class RectangleRendererTests {
             new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
     private final EntityUuid UUID = new FakeEntityUuid();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
+    private final FakeMesh MESH = new FakeMesh();
+    private final FakeShader SHADER = new FakeShader();
 
     private Renderer<RectangleRenderable> _rectangleRenderable;
+
+    @BeforeAll
+    static void setUpFixture() {
+        if (!glfwInit()) {
+            throw new RuntimeException("GLFW failed to initialize");
+        }
+
+        long window = glfwCreateWindow(1, 1, "", 0, 0);
+        glfwMakeContextCurrent(window);
+        createCapabilities();
+    }
+
+    @AfterAll
+    static void tearDownFixture() {
+        glfwTerminate();
+    }
 
     @BeforeEach
     void setUp() {
@@ -45,19 +68,16 @@ class RectangleRendererTests {
     }
 
     @Test
-    void testSetMesh() {
-        assertThrows(UnsupportedOperationException.class,
-                () -> _rectangleRenderable.setMesh(null));
-    }
-
-    @Test
-    void testSetShader() {
-        assertThrows(UnsupportedOperationException.class,
-                () -> _rectangleRenderable.setShader(null));
+    void testSetMeshAndShaderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.setMesh(null));
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.setShader(null));
     }
 
     @Test
     void testRenderWithInvalidParams() {
+        _rectangleRenderable.setMesh(MESH);
+        _rectangleRenderable.setShader(SHADER);
+
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(null, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
@@ -154,12 +174,39 @@ class RectangleRendererTests {
 
     @Test
     void testRenderWithInvalidTimestamp() {
+        _rectangleRenderable.setMesh(MESH);
+        _rectangleRenderable.setShader(SHADER);
+
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null,
                         null, RENDERING_AREA_PROVIDER, UUID), MOST_RECENT_TIMESTAMP - 1L));
+    }
+
+    @Test
+    void testRenderWithoutMeshOrShader() {
+        RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
+                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
+                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null,
+                null, RENDERING_AREA_PROVIDER, UUID);
+
+        Renderer<RectangleRenderable> rectangleRendererWithoutMesh =
+                new RectangleRenderer(MOST_RECENT_TIMESTAMP);
+        rectangleRendererWithoutMesh.setShader(SHADER);
+
+        assertThrows(IllegalStateException.class, () ->
+                rectangleRendererWithoutMesh.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
+
+        Renderer<RectangleRenderable> rectangleRendererWithoutShader =
+                new RectangleRenderer(MOST_RECENT_TIMESTAMP);
+        rectangleRendererWithoutShader.setMesh(MESH);
+
+        assertThrows(IllegalStateException.class, () ->
+                rectangleRendererWithoutShader.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
     }
 
     @Test

@@ -42,74 +42,21 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 7. The window will then close.
  *
  */
-public class SpriteRendererRenderingBoundariesTest {
-    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
-    private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
-    private final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
-            new FakeRenderingBoundaries();
-    private final static String RPG_WEAPONS_RELATIVE_LOCATION =
-            "./res/images/items/RPG_Weapons.png";
-    private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private static final String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
-
-    private static FakeSpriteRenderable SpriteRenderable;
-
+public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
-
-        FakeFrameTimer frameTimer = new FakeFrameTimer();
-        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
-
-        FakeStackRenderer stackRenderer = new FakeStackRenderer();
-
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
-
-        FakeSprite sprite =
-                new FakeSprite(null, 266, 271, 313, 343);
-        SpriteRenderable = new FakeSpriteRenderable(sprite, new ArrayList<>(),
-                new StaticProviderImpl<>(
-                        new FakeEntityUuid(),
-                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), 0f, null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), INTACT_COLOR, null),
-                new FakeEntityUuid());
-        FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
-
-        Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> spriteRenderer =
-                new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
-                        windowResolutionManager, new FakeColorShiftStackAggregator(), null);
-
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh =
-                new ArrayList<Renderer>() {{
-                    add(spriteRenderer);
-                }};
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader =
-                new ArrayList<Renderer>() {{
-                    add(spriteRenderer);
-                }};
-
-        stackRenderer.RenderAction = timestamp ->
-                spriteRenderer.render(SpriteRenderable, timestamp);
-
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
-
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
-                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
-                graphicsPreloader);
-
-        graphicsPreloader.LoadAction = () -> {
-            sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
-            frameTimer.ShouldExecuteNextFrame = true;
-        };
-
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        runTest(
+                windowResolutionManager -> SpriteRendererTest
+                        .generateRenderablesAndRenderersWithMeshAndShader(
+                                0f,
+                                INTACT_COLOR,
+                                null,
+                                windowResolutionManager),
+                SpriteRendererTest::stackRendererAction,
+                SpriteRendererTest::graphicsPreloaderLoadAction,
+                SpriteRendererRenderingBoundariesTest::closeAfterSomeTime);
     }
 
-    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         int msPerPeriod = 1000;
         
         CheckedExceptionWrapper.sleep(msPerPeriod);

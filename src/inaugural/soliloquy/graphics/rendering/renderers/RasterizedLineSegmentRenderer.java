@@ -17,20 +17,21 @@ import static org.lwjgl.opengl.GL11.*;
 public class RasterizedLineSegmentRenderer
         extends AbstractRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
+    private Mesh _mesh;
+    private Shader _shader;
+
     public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
         super(ARCHETYPE, mostRecentTimestamp);
     }
 
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("RasterizedLineSegmentRenderer.setMesh: " +
-                "this Renderer does not require a Mesh");
+        _mesh = Check.ifNull(mesh, "mesh");
     }
 
     @Override
     public void setShader(Shader shader) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("RasterizedLineSegmentRenderer.setShader: " +
-                "this Renderer does not require a Shader");
+        _shader = Check.ifNull(shader, "shader");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -68,6 +69,17 @@ public class RasterizedLineSegmentRenderer
         Check.ifNull(rasterizedLineSegmentRenderable.uuid(), "rasterizedLineSegmentRenderable.id()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
+
+        if (_mesh == null) {
+            throw new IllegalStateException(
+                    "RasterizedLineSegmentRenderer.render: mesh cannot be null");
+        }
+        if (_shader == null) {
+            throw new IllegalStateException(
+                    "RasterizedLineSegmentRenderer.render: shader cannot be null");
+        }
+        _mesh.unbind();
+        _shader.unbind();
 
         glLineWidth(thickness);
 
