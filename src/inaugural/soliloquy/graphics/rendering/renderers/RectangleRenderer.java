@@ -149,25 +149,12 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
     private void renderColor(Color color) {
         if (color != null) {
-            float[] topLeftRgba = getColorComponents(color);
-            glColor4f(topLeftRgba[0], topLeftRgba[1], topLeftRgba[2], topLeftRgba[3]);
+            float[] rgba = color.getColorComponents(null);
+            glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
         }
         else {
             glColor4f(1f, 1f, 1f, 1f);
         }
-    }
-
-    // TODO: Consider moving this to Tools (it is also used in SpriteRenderer)
-    private float[] getColorComponents(Color color) {
-        if (color == null) {
-            return new float[] { 0f, 0f, 0f, 0f };
-        }
-        return new float[] {
-                color.getRed() / MAX_CHANNEL_VAL,
-                color.getGreen() / MAX_CHANNEL_VAL,
-                color.getBlue() / MAX_CHANNEL_VAL,
-                color.getAlpha() / MAX_CHANNEL_VAL
-        };
     }
 
     private static final RectangleRenderable ARCHETYPE = new RectangleRenderable() {
