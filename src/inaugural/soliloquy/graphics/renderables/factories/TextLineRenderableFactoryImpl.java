@@ -17,7 +17,8 @@ import java.util.function.Consumer;
 
 public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
     @Override
-    public TextLineRenderable make(Font font, String lineText, float lineHeight,
+    public TextLineRenderable make(Font font, String lineText,
+                                   ProviderAtTime<Float> lineHeightProvider,
                                    TextJustification justification, float paddingBetweenGlyphs,
                                    Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                    List<Integer> italicIndices, List<Integer> boldIndices,
@@ -28,7 +29,7 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    Consumer<Renderable> updateZIndexInContainer,
                                    Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new TextLineRenderableImpl(font, lineText, lineHeight, justification,
+        return new TextLineRenderableImpl(font, lineText, lineHeightProvider, justification,
                 paddingBetweenGlyphs, colorProviderIndices, italicIndices, boldIndices,
                 borderThicknessProvider, borderColorProvider, renderingLocationProvider, z, uuid,
                 updateZIndexInContainer, removeFromContainer);

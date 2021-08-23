@@ -21,14 +21,15 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
 
     private Font _font;
     private String _lineText;
-    private float _lineHeight;
+    private ProviderAtTime<Float> _lineHeightProvider;
     private TextJustification _justification;
     private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
     private float _paddingBetweenGlyphs;
     private ProviderAtTime<Float> _borderThicknessProvider;
     private ProviderAtTime<Color> _borderColorProvider;
 
-    public TextLineRenderableImpl(Font font, String lineText, float lineHeight,
+    public TextLineRenderableImpl(Font font, String lineText,
+                                  ProviderAtTime<Float> lineHeightProvider,
                                   TextJustification justification, float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
@@ -42,7 +43,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         setFont(font);
         setLineText(lineText);
         setJustification(justification);
-        setLineHeight(lineHeight);
+        setLineHeightProvider(lineHeightProvider);
         setRenderingLocationProvider(renderingLocationProvider);
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
         setBorderColorProvider(borderColorProvider);
@@ -86,13 +87,14 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     }
 
     @Override
-    public float getLineHeight() {
-        return _lineHeight;
+    public ProviderAtTime<Float> lineHeightProvider() {
+        return _lineHeightProvider;
     }
 
     @Override
-    public void setLineHeight(float lineHeight) throws IllegalArgumentException {
-        _lineHeight = Check.throwOnLteZero(lineHeight, "lineHeight");
+    public void setLineHeightProvider(ProviderAtTime<Float> lineHeightProvider)
+            throws IllegalArgumentException {
+        _lineHeightProvider = Check.ifNull(lineHeightProvider, "lineHeightProvider");
     }
 
     @Override

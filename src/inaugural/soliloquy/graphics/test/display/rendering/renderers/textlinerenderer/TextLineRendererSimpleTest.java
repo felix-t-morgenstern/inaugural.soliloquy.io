@@ -70,7 +70,8 @@ class TextLineRendererSimpleTest extends TextLineRendererTest {
 
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT,
+        TextLineRenderable = new FakeTextLineRenderable(null,
+                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),

@@ -29,15 +29,13 @@ public class FakeSettingsRepo implements SettingsRepo {
         SETTINGS.put(s, new FakeSetting<>(s, v));
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public List<EntityGroupItem<Setting>> getAllGrouped() {
+    public List<EntityGroupItem<Setting>> getAllGroupedRepresentation() {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public List<Setting> getAllUngrouped() {
+    public List<Setting> getAllUngroupedRepresentation() {
         return null;
     }
 

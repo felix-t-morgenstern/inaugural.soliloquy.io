@@ -84,17 +84,20 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocationCenter = new FakePair<>(0.5f, 0.475f);
         FakePair<Float,Float> renderingLocationRight = new FakePair<>(0.95f, 0.725f);
 
-        TextLineRenderableLeft = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_LEFT,
+        TextLineRenderableLeft = new FakeTextLineRenderable(null,
+                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_LEFT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationLeft, null),
                 new FakeEntityUuid());
-        TextLineRenderableCenter = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_CENTER,
+        TextLineRenderableCenter = new FakeTextLineRenderable(null,
+                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_CENTER,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationCenter, null),
                 new FakeEntityUuid());
-        TextLineRenderableRight = new FakeTextLineRenderable(null, 0.05f, 0f, LINE_TEXT_RIGHT,
+        TextLineRenderableRight = new FakeTextLineRenderable(null,
+                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_RIGHT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 null, null,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationRight, null),

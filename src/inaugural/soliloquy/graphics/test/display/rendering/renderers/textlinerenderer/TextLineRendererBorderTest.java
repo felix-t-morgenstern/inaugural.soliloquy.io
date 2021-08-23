@@ -78,7 +78,8 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
 
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.5f, 0.45f);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, 0.1f, 0f, LINE_TEXT,
+        TextLineRenderable = new FakeTextLineRenderable(null,
+                new FakeStaticProviderAtTime<>(0.1f), 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(0.00125f),
                 new FakeStaticProviderAtTime<>(new Color(255, 25, 119)),
                 null, null, null,

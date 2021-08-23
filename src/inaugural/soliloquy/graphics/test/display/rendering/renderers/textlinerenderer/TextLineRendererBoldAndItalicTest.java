@@ -35,6 +35,8 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
     private final static float LINE_HEIGHT = 0.05f;
+    private final static FakeStaticProviderAtTime<Float> LINE_HEIGHT_PROVIDER =
+            new FakeStaticProviderAtTime<>(LINE_HEIGHT);
     private final static String LINE_TEXT = "Regular, italic, bold, bold-italic";
 
     private static FakeTextLineRenderable TextLineRenderable;
@@ -96,7 +98,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
             add(17);
         }};
 
-        TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT, 0f, LINE_TEXT,
+        TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT,
                 new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
                 italicIndices, boldIndices,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
-    public float LineHeight;
+    public ProviderAtTime<Float> LineHeightProvider;
     public String LineText;
     public float PaddingBetweenGlyphs;
     public TextJustification Justification = TextJustification.LEFT;
@@ -26,14 +26,15 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public ProviderAtTime<Pair<Float,Float>> RenderingLocationProvider;
     public EntityUuid Uuid;
 
-    public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
-                                  String lineText, ProviderAtTime<Float> borderThicknessProvider,
+    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
+                                  float paddingBetweenGlyphs, String lineText,
+                                  ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   EntityUuid id) {
         Font = font;
-        LineHeight = lineHeight;
+        LineHeightProvider = lineHeightProvider;
         PaddingBetweenGlyphs = paddingBetweenGlyphs;
         LineText = lineText;
         BorderThicknessProvider = borderThicknessProvider;
@@ -44,14 +45,15 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         Uuid = id;
     }
 
-    public FakeTextLineRenderable(Font font, float lineHeight, float paddingBetweenGlyphs,
-                                  String lineText, ProviderAtTime<Float> borderThicknessProvider,
+    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
+                                  float paddingBetweenGlyphs, String lineText,
+                                  ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
                                   EntityUuid uuid) {
-        this(font, lineHeight, paddingBetweenGlyphs, lineText, borderThicknessProvider,
+        this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
         RenderingLocationProvider = renderingLocationProvider;
     }
@@ -67,12 +69,12 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public float getLineHeight() {
-        return LineHeight;
+    public ProviderAtTime<Float> lineHeightProvider() {
+        return LineHeightProvider;
     }
 
     @Override
-    public void setLineHeight(float v) throws IllegalArgumentException {
+    public void setLineHeightProvider(ProviderAtTime v) throws IllegalArgumentException {
 
     }
 

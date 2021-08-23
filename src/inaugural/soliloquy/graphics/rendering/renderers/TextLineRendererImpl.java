@@ -37,7 +37,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     @Override
     public void render(TextLineRenderable textLineRenderable, long timestamp)
             throws IllegalArgumentException {
-        validateTextLineRenderable(textLineRenderable, "render");
+        float lineHeight = validateTextLineRenderableAndGetLineHeight(textLineRenderable,
+                timestamp, "render");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
@@ -63,7 +64,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             startX = renderingLocation.getItem1();
         }
         else {
-            float lineLength = textLineLength(textLineRenderable);
+            float lineLength = textLineLength(textLineRenderable, timestamp);
             if (textLineRenderable.getJustification() == TextJustification.CENTER) {
                 startX = renderingLocation.getItem1() - (lineLength / 2f);
             }
@@ -71,25 +72,25 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 startX = renderingLocation.getItem1() - lineLength;
             }
         }
-        renderAtLocation(textLineRenderable, timestamp, startX, startY, borderThickness,
-                borderColor);
+        renderAtLocation(textLineRenderable, timestamp, lineHeight, startX, startY,
+                borderThickness, borderColor);
     }
 
     private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
-                                  float startX, float startY, Float borderThickness,
-                                  Color borderColor) {
+                                  float lineHeight, float startX, float startY,
+                                  Float borderThickness, Color borderColor) {
         if (borderThickness != null) {
             float yThickness = borderThickness;
             float xThickness = yThickness / _screenWidthToHeightRatio;
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY - yThickness,
                                 leftX + glyphLength,
-                                startY - yThickness + textLineRenderable.getLineHeight()
+                                startY - yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -99,14 +100,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY - yThickness,
                                 leftX + glyphLength,
-                                startY - yThickness + textLineRenderable.getLineHeight()
+                                startY - yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -116,14 +117,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY - yThickness,
                                 leftX + glyphLength,
-                                startY - yThickness + textLineRenderable.getLineHeight()
+                                startY - yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -133,14 +134,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY,
                                 leftX + glyphLength,
-                                startY + textLineRenderable.getLineHeight()
+                                startY + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -150,14 +151,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY + yThickness,
                                 leftX + glyphLength,
-                                startY + yThickness + textLineRenderable.getLineHeight()
+                                startY + yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -167,14 +168,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY + yThickness,
                                 leftX + glyphLength,
-                                startY + yThickness + textLineRenderable.getLineHeight()
+                                startY + yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -184,14 +185,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY + yThickness,
                                 leftX + glyphLength,
-                                startY + yThickness + textLineRenderable.getLineHeight()
+                                startY + yThickness + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -201,14 +202,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp,
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                                 leftX,
                                 startY,
                                 leftX + glyphLength,
-                                startY + textLineRenderable.getLineHeight()
+                                startY + lineHeight
                         );
 
                         super.render(renderingArea,
@@ -218,14 +219,14 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
         }
-        iterateOverTextLine(textLineRenderable, timestamp,
+        iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                     float leftX = startX + textLineLengthThusFar;
                     FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
                             leftX,
                             startY,
                             leftX + glyphLength,
-                            startY + textLineRenderable.getLineHeight()
+                            startY + lineHeight
                     );
 
                     super.render(renderingArea,
@@ -237,15 +238,18 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     }
 
     @Override
-    public float textLineLength(TextLineRenderable textLineRenderable)
+    public float textLineLength(TextLineRenderable textLineRenderable, long timestamp)
             throws IllegalArgumentException {
-        validateTextLineRenderable(textLineRenderable, "textLineLength");
+        float lineHeight = validateTextLineRenderableAndGetLineHeight(textLineRenderable,
+                timestamp, "textLineLength");
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        return iterateOverTextLine(textLineRenderable, null, null);
+        return iterateOverTextLine(textLineRenderable, timestamp, lineHeight, null);
     }
 
     // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't elegant, but this is not front-facing code.
     private float iterateOverTextLine(TextLineRenderable textLineRenderable, Long timestamp,
+                                      float lineHeight,
                                       Function<Float, Function<Float, Function<Integer,
                                               Function<FloatBox, Consumer<Color>>>>>
                                               renderingAction) {
@@ -257,10 +261,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Color color = DEFAULT_COLOR;
         FontStyleInfo fontStyleInfo;
         float paddingBetweenGlyphs =
-                textLineRenderable.getPaddingBetweenGlyphs() * textLineRenderable.getLineHeight();
+                textLineRenderable.getPaddingBetweenGlyphs() * lineHeight;
 
         for (int i = 0; i < textLineRenderable.getLineText().length(); i++) {
-            if (timestamp != null) {
+            if (renderingAction != null) {
                 if (textLineRenderable.colorProviderIndices() != null &&
                         textLineRenderable.colorProviderIndices().containsKey(i)) {
                     color = textLineRenderable.colorProviderIndices().get(i).provide(timestamp);
@@ -303,7 +307,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             char character = textLineRenderable.getLineText().charAt(i);
             FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
-                    glyphBox.width() * (textLineRenderable.getLineHeight() / glyphBox.height())
+                    glyphBox.width() * (lineHeight / glyphBox.height())
                     * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
@@ -318,7 +322,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 paddingPercentage +=
                         fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(character);
             }
-            lengthThusFarAddition -= paddingPercentage * textLineRenderable.getLineHeight();
+            lengthThusFarAddition -= paddingPercentage * lineHeight;
 
             textLineLengthThusFar += lengthThusFarAddition;
         }
@@ -326,12 +330,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         return textLineLengthThusFar;
     }
 
-    private void validateTextLineRenderable(TextLineRenderable textLineRenderable,
-                                            String methodName) {
+    private float validateTextLineRenderableAndGetLineHeight(TextLineRenderable textLineRenderable,
+                                                             long timestamp, String methodName) {
         Check.ifNull(textLineRenderable, "textLineRenderable");
         Check.ifNull(textLineRenderable.getFont(), "textLineRenderable.getFont()");
-        Check.throwOnLteZero(textLineRenderable.getLineHeight(),
-                "textLineRenderable.getLineHeight()");
+        Check.ifNull(textLineRenderable.lineHeightProvider(),
+                "textLineRenderable.lineHeightProvider()");
         Check.ifNull(textLineRenderable.getRenderingLocationProvider(),
                 "textLineRenderable.getRenderingLocationProvider()");
         Check.ifNull(textLineRenderable.uuid(), "textLineRenderable.id()");
@@ -373,6 +377,16 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
                     "justification cannot be UNKNOWN");
         }
+
+        Float lineHeight = textLineRenderable.lineHeightProvider().provide(timestamp);
+        Check.ifNull(lineHeight, "value provided from textLineRenderable.lineHeightProvider()");
+        if (lineHeight <= 0) {
+            throw new IllegalArgumentException("TextLineRendererImpl." + methodName +
+                    ": value provided from textLineRenderable.lineHeightProvider() must be " +
+                    "greater than 0");
+        }
+
+        return lineHeight;
     }
 
     private void validateIndex(Integer index, int textLineLength, String dataStructureName,
@@ -457,22 +471,22 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
+        public ProviderAtTime<Float> lineHeightProvider() {
+            return null;
+        }
+
+        @Override
+        public void setLineHeightProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
         public int getZ() {
             return 0;
         }
 
         @Override
         public void setZ(int i) {
-
-        }
-
-        @Override
-        public float getLineHeight() {
-            return 0;
-        }
-
-        @Override
-        public void setLineHeight(float v) throws IllegalArgumentException {
 
         }
 
