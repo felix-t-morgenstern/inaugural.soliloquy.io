@@ -12,13 +12,15 @@ import soliloquy.specs.graphics.rendering.RenderableStack;
 import java.util.HashMap;
 
 public class RenderableStackImpl implements RenderableStack {
-    private final java.util.Map<Integer, List<Renderable>> STACK;
+    private final HashMap<Integer, List<Renderable>> STACK;
+    private final HashMap<Renderable, Integer> Z_INDICES_OF_INTEGERS;
     private final MapFactory MAP_FACTORY;
     private final ListFactory LIST_FACTORY;
     private final static RenderableArchetype RENDERABLE_ARCHETYPE = new RenderableArchetype();
 
     public RenderableStackImpl(MapFactory mapFactory, ListFactory listFactory) {
         STACK = new HashMap<>();
+        Z_INDICES_OF_INTEGERS = new HashMap<>();
         MAP_FACTORY = Check.ifNull(mapFactory, "mapFactory");
         LIST_FACTORY = Check.ifNull(listFactory, "listFactory");
     }
@@ -31,6 +33,17 @@ public class RenderableStackImpl implements RenderableStack {
     // TODO: Test whether adding the same Renderable with a different z-index updates that Renderable's z-index in the Stack
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
+        if (Z_INDICES_OF_INTEGERS.containsKey(renderable)) {
+            int previousZIndex = Z_INDICES_OF_INTEGERS.get(renderable);
+            if (previousZIndex == renderable.getZ()) {
+                return;
+            }
+            STACK.get(previousZIndex).remove(renderable);
+            if (STACK.get(previousZIndex).isEmpty()) {
+                STACK.remove(previousZIndex);
+            }
+        }
+        Z_INDICES_OF_INTEGERS.put(renderable, renderable.getZ());
         if (!STACK.containsKey(renderable.getZ())) {
             List<Renderable> renderables = LIST_FACTORY.make(RENDERABLE_ARCHETYPE);
             renderables.add(renderable);

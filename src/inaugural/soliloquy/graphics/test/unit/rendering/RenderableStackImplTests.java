@@ -77,6 +77,23 @@ class RenderableStackImplTests {
     }
 
     @Test
+    void testAddSameRenderableUpdatesZIndex() {
+        FakeRenderableWithDimensions renderable = new FakeRenderableWithDimensions(1);
+
+        _renderableStack.add(renderable);
+
+        renderable.Z = 123;
+
+        _renderableStack.add(renderable);
+
+        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
+
+        assertEquals(1, snapshot.size());
+        assertEquals(1, snapshot.get(123).size());
+        assertSame(renderable, snapshot.get(123).get(0));
+    }
+
+    @Test
     void testClear() {
         Renderable renderable = new FakeRenderableWithDimensions(0);
 
