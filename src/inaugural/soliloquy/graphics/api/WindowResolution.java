@@ -8,9 +8,6 @@ public enum WindowResolution {
 
     RES_WINDOWED_FULLSCREEN(0, 0),
 
-    // TODO: Consider minimum resolution to support
-    RES_800x600(800, 600),
-    RES_832x624(832, 624),
     RES_1024x768(1024, 768),
     RES_1152x872(1152, 872),
     RES_1280x720(1280, 720),

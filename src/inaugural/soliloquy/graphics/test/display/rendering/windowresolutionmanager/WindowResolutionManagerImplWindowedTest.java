@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.rendering.windowresolutionmanager;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -11,7 +10,6 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
-import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +20,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a window in windowed mode, with a resolution of 800x600 pixels, for
+ * 1. This test will display a window in windowed mode, with a resolution of 1024x768 pixels, for
  *    3000ms. This window will appear in the center of the screen, and will have a titlebar reading
  *    "My title bar".
  * 2. The window will then close
@@ -35,7 +33,7 @@ class WindowResolutionManagerImplWindowedTest {
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_800x600, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;

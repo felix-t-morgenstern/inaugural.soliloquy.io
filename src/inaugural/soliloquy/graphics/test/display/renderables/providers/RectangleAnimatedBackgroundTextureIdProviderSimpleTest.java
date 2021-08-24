@@ -27,7 +27,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /*
   Test acceptance criteria:
   <p>
-  1. This test will display a window of 800x600 pixels for 8000ms with a titlebar reading "New
+  1. This test will display a window of 1024x768 pixels for 8000ms with a titlebar reading "New
      Window"
   2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have
      background tile of a stone floor, moving to the right, repeating every 2000ms. Each tile will
@@ -71,7 +71,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_800x600, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768, COORDINATE_FACTORY);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = false;
