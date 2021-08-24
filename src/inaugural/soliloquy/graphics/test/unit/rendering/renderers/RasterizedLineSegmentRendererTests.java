@@ -57,7 +57,6 @@ class RasterizedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.setShader(null));
     }
 
-    // TODO: Add test cases for null providers
     @Test
     void testRenderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(null, 0L));
@@ -73,6 +72,15 @@ class RasterizedLineSegmentRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
+                        new FakeStaticProviderAtTime<>(null), (short)0xAAAA, (short) 1,
+                        new FakeStaticProviderAtTime<>(Color.WHITE),
+                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        1, new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
+                new FakeRasterizedLineSegmentRenderable(
                         new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
                         null,
                         new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
@@ -83,8 +91,26 @@ class RasterizedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
                         new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        1, new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
+                new FakeRasterizedLineSegmentRenderable(
+                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
                         new FakeStaticProviderAtTime<>(Color.WHITE),
                         null,
+                        1, new FakeEntityUuid()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
+                new FakeRasterizedLineSegmentRenderable(
+                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProviderAtTime<>(Color.WHITE),
+                        new FakeStaticProviderAtTime<>(null),
                         1, new FakeEntityUuid()),
                 0L
         ));

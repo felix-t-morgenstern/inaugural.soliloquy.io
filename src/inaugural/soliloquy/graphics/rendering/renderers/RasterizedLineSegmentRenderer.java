@@ -45,9 +45,12 @@ public class RasterizedLineSegmentRenderer
                 Check.ifNull(rasterizedLineSegmentRenderable.getRenderingDimensionsProvider(),
                         "rasterizedLineSegmentRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);
-        float thickness = Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
+        float thickness = Check.ifNull(
+                Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
                 "rasterizedLineSegmentRenderable.getThicknessProvider()")
-                .provide(timestamp);
+                .provide(timestamp),
+                "value provided by " +
+                        "rasterizedLineSegmentRenderable.getThicknessProvider()");
         Color color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
                 "rasterizedLineSegmentRenderable.getColorProvider()")
                 .provide(timestamp);
