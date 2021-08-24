@@ -2,8 +2,11 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
+import java.util.List;
+
 public class FakeFrameTimer implements FrameTimer {
     public boolean ShouldExecuteNextFrame;
+    public List<Object> AddThisWhenLoadIsCalled;
 
     @Override
     public void setTargetFps(Float i) throws IllegalArgumentException {
@@ -27,6 +30,9 @@ public class FakeFrameTimer implements FrameTimer {
 
     @Override
     public boolean shouldExecuteNextFrame() {
+        if (AddThisWhenLoadIsCalled != null) {
+            AddThisWhenLoadIsCalled.add(this);
+        }
         return ShouldExecuteNextFrame;
     }
 

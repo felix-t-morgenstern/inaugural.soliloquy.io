@@ -394,6 +394,19 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
+    void testGraphicsPreloaderCalledBeforeFrameTimer() {
+        ArrayList<Object> invokedClassesInOrder = new ArrayList<>();
+        FRAME_TIMER.AddThisWhenLoadIsCalled = GRAPHICS_PRELOADER.AddThisWhenLoadIsCalled =
+                invokedClassesInOrder;
+
+        _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
+
+        assertTrue(invokedClassesInOrder.size() >= 2);
+        assertSame(GRAPHICS_PRELOADER, invokedClassesInOrder.get(0));
+        assertSame(FRAME_TIMER, invokedClassesInOrder.get(1));
+    }
+
+    @Test
     void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalled() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
