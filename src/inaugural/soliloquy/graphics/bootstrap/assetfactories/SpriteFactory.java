@@ -6,7 +6,7 @@ import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
-public class SpriteFactory extends AssetFactoryAbstract<SpriteDefinition, Sprite> {
+public class SpriteFactory extends AbstractAssetFactory<SpriteDefinition, Sprite> {
     @Override
     public Sprite make(SpriteDefinition spriteDefinition) throws IllegalArgumentException {
         Check.ifNull(spriteDefinition, "spriteDefinition");

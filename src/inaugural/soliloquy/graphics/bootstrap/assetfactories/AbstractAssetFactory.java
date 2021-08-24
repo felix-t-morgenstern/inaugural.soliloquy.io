@@ -7,7 +7,7 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AssetDefini
 
 import static inaugural.soliloquy.tools.Check.*;
 
-abstract class AssetFactoryAbstract<TAssetDefinition extends AssetDefinition<TAsset>,
+abstract class AbstractAssetFactory<TAssetDefinition extends AssetDefinition<TAsset>,
         TAsset extends Asset> implements AssetFactory<TAssetDefinition, TAsset> {
     void throwOnInvalidSnippetDefinition(AssetSnippet snippet, String paramName) {
         ifNull(snippet.image(), paramName + ".image()");

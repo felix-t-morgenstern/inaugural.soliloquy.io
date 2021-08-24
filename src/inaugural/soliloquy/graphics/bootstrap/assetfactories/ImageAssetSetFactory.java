@@ -17,7 +17,7 @@ import static inaugural.soliloquy.tools.Tools.emptyIfNull;
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
 public class ImageAssetSetFactory
-        extends AssetFactoryAbstract<ImageAssetSetDefinition, ImageAssetSet> {
+        extends AbstractAssetFactory<ImageAssetSetDefinition, ImageAssetSet> {
     private final Registry<Sprite> SPRITES_REGISTRY;
     private final Registry<Animation> ANIMATIONS_REGISTRY;
 

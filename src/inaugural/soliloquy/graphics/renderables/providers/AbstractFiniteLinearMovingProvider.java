@@ -3,15 +3,14 @@ package inaugural.soliloquy.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import inaugural.soliloquy.tools.timing.FinitePausableAtTimeAbstract;
+import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractFiniteLinearMovingProvider<T>
-        extends FinitePausableAtTimeAbstract
+public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFinitePausableAtTime
         implements FiniteLinearMovingProvider<T> {
     private final EntityUuid UUID;
     private final HashMap<Long, T> VALUES_AT_TIMES;

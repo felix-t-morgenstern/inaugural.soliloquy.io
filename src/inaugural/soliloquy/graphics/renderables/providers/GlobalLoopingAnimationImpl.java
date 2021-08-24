@@ -7,7 +7,7 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 
 public class GlobalLoopingAnimationImpl
-        extends LoopingProviderAbstract<AnimationFrameSnippet>
+        extends AbstractLoopingProvider<AnimationFrameSnippet>
         implements GlobalLoopingAnimation {
     private final Animation ANIMATION;
 

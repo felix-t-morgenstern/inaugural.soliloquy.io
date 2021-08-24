@@ -9,7 +9,7 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDe
 
 import java.util.Map;
 
-public class AnimationFactory extends AssetFactoryAbstract<AnimationDefinition, Animation> {
+public class AnimationFactory extends AbstractAssetFactory<AnimationDefinition, Animation> {
     @Override
     public Animation make(AnimationDefinition animationDefinition) throws IllegalArgumentException {
         Check.ifNull(animationDefinition, "animationDefinition");

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RectangleAnimatedBackgroundTextureIdProvider
-        extends LoopingProviderAbstract<Integer>
+        extends AbstractLoopingProvider<Integer>
         implements LoopingMovingProvider<Integer> {
     private final FloorFrameProvider<Integer> FLOOR_FRAME_PROVIDER;
 
