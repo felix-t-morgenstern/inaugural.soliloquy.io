@@ -99,6 +99,9 @@ public class FrameTimerImpl implements FrameTimer {
 
     @Override
     public boolean shouldExecuteNextFrame() throws UnsupportedOperationException {
+        if (_stopped) {
+            return false;
+        }
         if (_targetFps == null) {
             return true;
         }

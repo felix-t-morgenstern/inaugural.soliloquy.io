@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FrameTimerImplTests {
     private final FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
@@ -166,6 +165,18 @@ class FrameTimerImplTests {
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
         assertEquals(numberOfFramesToExecute, (float)FRAME_RATE_REPORTER.ActualFps.get(0));
+    }
+
+    @Test
+    void testShouldExecuteNextFrameWhenStopped() {
+        new Thread(() -> {
+            _frameTimer.start();
+            CheckedExceptionWrapper.sleep(50);
+        }).start();
+        CheckedExceptionWrapper.sleep(10);
+        _frameTimer.stop();
+
+        assertFalse(_frameTimer.shouldExecuteNextFrame());
     }
 
     @Test
