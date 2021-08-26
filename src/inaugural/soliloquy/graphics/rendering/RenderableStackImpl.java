@@ -30,7 +30,6 @@ public class RenderableStackImpl implements RenderableStack {
         STACK.clear();
     }
 
-    // TODO: Test whether adding the same Renderable with a different z-index updates that Renderable's z-index in the Stack
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         if (Z_INDICES_OF_INTEGERS.containsKey(renderable)) {
