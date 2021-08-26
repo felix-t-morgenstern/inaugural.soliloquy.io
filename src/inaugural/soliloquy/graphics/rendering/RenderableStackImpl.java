@@ -91,7 +91,7 @@ public class RenderableStackImpl implements RenderableStack {
 
         @Override
         public String getInterfaceName() {
-            return null;
+            return Renderable.class.getCanonicalName();
         }
     }
 }
