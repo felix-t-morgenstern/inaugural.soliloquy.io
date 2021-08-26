@@ -29,12 +29,12 @@ public class FakeRenderableStack implements RenderableStack {
     }
 
     @Override
-    public Map<Integer, List<Renderable>> snapshot() {
-        Map<Integer, List<Renderable>> snapshot = new FakeMap<>();
+    public Map<Integer, List<Renderable>> representation() {
+        Map<Integer, List<Renderable>> representation = new FakeMap<>();
 
-        RENDERABLES.forEach(snapshot::put);
+        RENDERABLES.forEach(representation::put);
 
-        return snapshot;
+        return representation;
     }
 
     @Override

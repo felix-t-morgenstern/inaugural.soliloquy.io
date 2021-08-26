@@ -41,7 +41,7 @@ class RenderableStackImplTests {
     }
 
     @Test
-    void testAddAndSnapshot() {
+    void testAddAndRepresentation() {
         Renderable renderable1 = new FakeRenderableWithDimensions(1);
         Renderable renderable2 = new FakeRenderableWithDimensions(2);
         Renderable renderable3 = new FakeRenderableWithDimensions(1);
@@ -50,17 +50,22 @@ class RenderableStackImplTests {
         _renderableStack.add(renderable2);
         _renderableStack.add(renderable3);
 
-        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
+        Map<Integer, List<Renderable>> representation = _renderableStack.representation();
+        Map<Integer, List<Renderable>> representation2 = _renderableStack.representation();
+        representation2.remove(2);
 
-        assertNotNull(snapshot);
+        assertNotNull(representation);
 
-        assertNotNull(snapshot.getFirstArchetype());
-        assertNotNull(snapshot.getSecondArchetype());
+        assertNotSame(representation, representation2);
+        assertEquals(representation.size() - 1, representation2.size());
+
+        assertNotNull(representation.getFirstArchetype());
+        assertNotNull(representation.getSecondArchetype());
         assertEquals(List.class.getCanonicalName() + "<" +
                 Renderable.class.getCanonicalName() + ">",
-                snapshot.getSecondArchetype().getInterfaceName());
+                representation.getSecondArchetype().getInterfaceName());
 
-        List<Renderable> zIndex1 = snapshot.get(1);
+        List<Renderable> zIndex1 = representation.get(1);
         assertNotNull(zIndex1.getArchetype());
         assertEquals(Renderable.class.getCanonicalName(),
                 zIndex1.getArchetype().getInterfaceName());
@@ -68,7 +73,7 @@ class RenderableStackImplTests {
         assertTrue(zIndex1.contains(renderable1));
         assertTrue(zIndex1.contains(renderable3));
 
-        List<Renderable> zIndex2 = snapshot.get(2);
+        List<Renderable> zIndex2 = representation.get(2);
         assertNotNull(zIndex2.getArchetype());
         assertEquals(Renderable.class.getCanonicalName(),
                 zIndex2.getArchetype().getInterfaceName());
@@ -86,11 +91,11 @@ class RenderableStackImplTests {
 
         _renderableStack.add(renderable);
 
-        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
+        Map<Integer, List<Renderable>> representation = _renderableStack.representation();
 
-        assertEquals(1, snapshot.size());
-        assertEquals(1, snapshot.get(123).size());
-        assertSame(renderable, snapshot.get(123).get(0));
+        assertEquals(1, representation.size());
+        assertEquals(1, representation.get(123).size());
+        assertSame(renderable, representation.get(123).get(0));
     }
 
     @Test
@@ -101,8 +106,8 @@ class RenderableStackImplTests {
 
         _renderableStack.clearContainedRenderables();
 
-        Map<Integer, List<Renderable>> snapshot = _renderableStack.snapshot();
+        Map<Integer, List<Renderable>> representation = _renderableStack.representation();
 
-        assertEquals(0, snapshot.size());
+        assertEquals(0, representation.size());
     }
 }

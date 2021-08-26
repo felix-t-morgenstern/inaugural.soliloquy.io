@@ -364,7 +364,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public Map<Integer, soliloquy.specs.common.infrastructure.List<Renderable>> snapshot() {
+        public Map<Integer, soliloquy.specs.common.infrastructure.List<Renderable>>
+            representation() {
             return null;
         }
 

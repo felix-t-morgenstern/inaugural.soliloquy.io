@@ -54,13 +54,13 @@ public class RenderableStackImpl implements RenderableStack {
     }
 
     @Override
-    public Map<Integer, List<Renderable>> snapshot() {
-        Map<Integer, List<Renderable>> snapshot =
+    public Map<Integer, List<Renderable>> representation() {
+        Map<Integer, List<Renderable>> representation =
                 MAP_FACTORY.make(0, LIST_FACTORY.make(RENDERABLE_ARCHETYPE));
 
-        STACK.forEach((z, renderables) -> snapshot.put(z, renderables.makeClone()));
+        STACK.forEach((z, renderables) -> representation.put(z, renderables.makeClone()));
 
-        return snapshot;
+        return representation;
     }
 
     @Override
