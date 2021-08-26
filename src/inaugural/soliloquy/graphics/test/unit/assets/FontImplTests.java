@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Font;
+import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
@@ -1526,6 +1527,14 @@ class FontImplTests {
         assertEquals(Font.boldItalic().textureWidthToHeightRatio(),
                 Font.boldItalic().textureDimensions().getX() /
                         (float) Font.boldItalic().textureDimensions().getY());
+    }
+
+    @Test
+    void testFontStyleInfoGetInterfaceName() {
+        assertEquals(FontStyleInfo.class.getCanonicalName(), Font.plain().getInterfaceName());
+        assertEquals(FontStyleInfo.class.getCanonicalName(), Font.italic().getInterfaceName());
+        assertEquals(FontStyleInfo.class.getCanonicalName(), Font.bold().getInterfaceName());
+        assertEquals(FontStyleInfo.class.getCanonicalName(), Font.boldItalic().getInterfaceName());
     }
 
     @Test

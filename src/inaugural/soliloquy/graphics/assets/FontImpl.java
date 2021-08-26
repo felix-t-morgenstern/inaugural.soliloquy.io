@@ -408,7 +408,7 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
         // TODO: Test and implement
         @Override
         public String getInterfaceName() {
-            return null;
+            return FontStyleInfo.class.getCanonicalName();
         }
     }
 
