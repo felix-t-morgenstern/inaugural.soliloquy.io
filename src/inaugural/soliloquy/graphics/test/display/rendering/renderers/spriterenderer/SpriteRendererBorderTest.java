@@ -1,7 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
 
-// TODO: Get rid of any direct dependencies on the Common module for fake implementations
-
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 
 import java.awt.*;
