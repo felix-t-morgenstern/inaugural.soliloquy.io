@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.rendering;
 
-import inaugural.soliloquy.graphics.archetypes.RenderableArchetype;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.factories.ListFactory;
 import soliloquy.specs.common.factories.MapFactory;
 import soliloquy.specs.common.infrastructure.List;
 import soliloquy.specs.common.infrastructure.Map;
+import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
@@ -66,5 +66,32 @@ public class RenderableStackImpl implements RenderableStack {
     @Override
     public String getInterfaceName() {
         return RenderableStack.class.getCanonicalName();
+    }
+
+    private static class RenderableArchetype implements Renderable {
+        @Override
+        public int getZ() {
+            return 0;
+        }
+
+        @Override
+        public void setZ(int i) {
+
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
+        public EntityUuid uuid() {
+            return null;
+        }
+
+        @Override
+        public String getInterfaceName() {
+            return null;
+        }
     }
 }
