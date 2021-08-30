@@ -24,6 +24,9 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
     public ProviderAtTime<Pair<Float,Float>> RenderingLocationProvider;
+    public ProviderAtTime<Float> DropShadowSizeProvider;
+    public ProviderAtTime<Pair<Float, Float>> DropShadowOffsetProvider;
+    public ProviderAtTime<Color> DropShadowColorProvider;
     public EntityUuid Uuid;
 
     public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
@@ -42,6 +45,9 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         ColorProviderIndices = colorProviderIndices;
         ItalicIndices = italicIndices == null ? new ArrayList<>() : italicIndices;
         BoldIndices = boldIndices == null ? new ArrayList<>() : boldIndices;
+        DropShadowSizeProvider = new FakeStaticProviderAtTime<>(null);
+        DropShadowOffsetProvider = new FakeStaticProviderAtTime<>(null);
+        DropShadowColorProvider = new FakeStaticProviderAtTime<>(null);
         Uuid = id;
     }
 
@@ -56,6 +62,25 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
         RenderingLocationProvider = renderingLocationProvider;
+    }
+
+    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
+                                  float paddingBetweenGlyphs, String lineText,
+                                  ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
+                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+                                  List<Integer> italicIndices, List<Integer> boldIndices,
+                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Float> dropShadowSizeProvider,
+                                  ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
+                                  ProviderAtTime<Color> dropShadowColorProvider,
+                                  EntityUuid uuid) {
+        this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
+                borderColorProvider, colorProviderIndices, italicIndices, boldIndices,
+                renderingLocationProvider, uuid);
+        DropShadowSizeProvider = dropShadowSizeProvider;
+        DropShadowOffsetProvider = dropShadowOffsetProvider;
+        DropShadowColorProvider = dropShadowColorProvider;
     }
 
     @Override
@@ -121,6 +146,40 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     @Override
     public List<Integer> boldIndices() {
         return BoldIndices;
+    }
+
+    @Override
+    public ProviderAtTime<Float> dropShadowSizeProvider() {
+        return DropShadowSizeProvider;
+    }
+
+    @Override
+    public void setDropShadowSizeProvider(ProviderAtTime<Float> dropShadowSizeProvider)
+            throws IllegalArgumentException {
+        DropShadowSizeProvider = dropShadowSizeProvider;
+    }
+
+    @Override
+    public ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider() {
+        return DropShadowOffsetProvider;
+    }
+
+    @Override
+    public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>>
+                                                        dropShadowOffsetProvider)
+            throws IllegalArgumentException {
+        DropShadowOffsetProvider = dropShadowOffsetProvider;
+    }
+
+    @Override
+    public ProviderAtTime<Color> dropShadowColorProvider() {
+        return DropShadowColorProvider;
+    }
+
+    @Override
+    public void setDropShadowColorProvider(ProviderAtTime<Color> dropShadowColorProvider)
+            throws IllegalArgumentException {
+        DropShadowColorProvider = dropShadowColorProvider;
     }
 
     @Override

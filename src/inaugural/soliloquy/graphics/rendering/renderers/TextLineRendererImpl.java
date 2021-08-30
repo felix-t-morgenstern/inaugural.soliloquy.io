@@ -55,6 +55,26 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
         }
 
+        Float dropShadowSize;
+        Pair<Float, Float> dropShadowOffset = null;
+        Color dropShadowColor = null;
+
+        dropShadowSize = textLineRenderable.dropShadowSizeProvider().provide(timestamp);
+        if (dropShadowSize != null) {
+            if (dropShadowSize < 0f) {
+                throw new IllegalArgumentException(
+                        "TextLineRendererImpl.render: dropShadowSize cannot be less than 0");
+            }
+            dropShadowOffset = textLineRenderable.dropShadowOffsetProvider().provide(timestamp);
+            Check.ifNull(dropShadowOffset, "dropShadowOffset provided by textLineRenderable");
+            Check.ifNull(dropShadowOffset.getItem1(),
+                    "dropShadowOffset's x offset provided by textLineRenderable");
+            Check.ifNull(dropShadowOffset.getItem2(),
+                    "dropShadowOffset's y offset provided by textLineRenderable");
+            dropShadowColor = textLineRenderable.dropShadowColorProvider().provide(timestamp);
+            Check.ifNull(dropShadowColor, "dropShadowColor provided by textLineRenderable");
+        }
+
         Pair<Float,Float> renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
         float startX;
@@ -73,12 +93,36 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
         }
         renderAtLocation(textLineRenderable, timestamp, lineHeight, startX, startY,
-                borderThickness, borderColor);
+                borderThickness, borderColor, dropShadowSize, dropShadowOffset, dropShadowColor);
     }
 
     private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
                                   float lineHeight, float startX, float startY,
-                                  Float borderThickness, Color borderColor) {
+                                  Float borderThickness, Color borderColor, Float dropShadowSize,
+                                  Pair<Float, Float> dropShadowOffset, Color dropShadowColor) {
+        if (dropShadowSize != null) {
+            float xOffset = dropShadowOffset.getItem1() / _screenWidthToHeightRatio;
+            float yOffset = dropShadowOffset.getItem2();
+            float sizeAdjustment = dropShadowSize / lineHeight;
+
+            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                        float leftX = startX + xOffset + textLineLengthThusFar;
+                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
+                                leftX,
+                                startY + yOffset,
+                                leftX + (glyphLength * sizeAdjustment),
+                                startY + yOffset + (lineHeight * sizeAdjustment)
+                        );
+
+                        super.render(renderingArea,
+                                glyphBox.leftX(), glyphBox.topY(),
+                                glyphBox.rightX(), glyphBox.bottomY(),
+                                textureId,
+                                dropShadowColor);
+                    });
+        }
+
         if (borderThickness != null) {
             float yThickness = borderThickness;
             float xThickness = yThickness / _screenWidthToHeightRatio;
@@ -386,6 +430,13 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                     "greater than 0");
         }
 
+        Check.ifNull(textLineRenderable.dropShadowSizeProvider(),
+                "textLineRenderable.dropShadowSizeProvider()");
+        Check.ifNull(textLineRenderable.dropShadowOffsetProvider(),
+                "textLineRenderable.dropShadowOffsetProvider()");
+        Check.ifNull(textLineRenderable.dropShadowColorProvider(),
+                "textLineRenderable.dropShadowColorProvider()");
+
         return lineHeight;
     }
 
@@ -523,6 +574,36 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         @Override
         public List<Integer> boldIndices() {
             return null;
+        }
+
+        @Override
+        public ProviderAtTime<Float> dropShadowSizeProvider() {
+            return null;
+        }
+
+        @Override
+        public void setDropShadowSizeProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider() {
+            return null;
+        }
+
+        @Override
+        public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Color> dropShadowColorProvider() {
+            return null;
+        }
+
+        @Override
+        public void setDropShadowColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+
         }
 
         @Override

@@ -27,6 +27,9 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private float _paddingBetweenGlyphs;
     private ProviderAtTime<Float> _borderThicknessProvider;
     private ProviderAtTime<Color> _borderColorProvider;
+    private ProviderAtTime<Float> _dropShadowSizeProvider;
+    private ProviderAtTime<Pair<Float, Float>> _dropShadowOffsetProvider;
+    private ProviderAtTime<Color> _dropShadowColorProvider;
 
     public TextLineRenderableImpl(Font font, String lineText,
                                   ProviderAtTime<Float> lineHeightProvider,
@@ -36,6 +39,9 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Float> dropShadowSizeProvider,
+                                  ProviderAtTime<Pair<Float,Float>> dropShadowOffsetProvider,
+                                  ProviderAtTime<Color> dropShadowColorProvider,
                                   int z, EntityUuid uuid,
                                   Consumer<Renderable> updateZIndexInContainer,
                                   Consumer<Renderable> removeFromContainer) {
@@ -48,6 +54,9 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
         setBorderColorProvider(borderColorProvider);
         setBorderThicknessProvider(borderThicknessProvider);
+        setDropShadowSizeProvider(dropShadowSizeProvider);
+        setDropShadowOffsetProvider(dropShadowOffsetProvider);
+        setDropShadowColorProvider(dropShadowColorProvider);
         COLOR_PROVIDER_INDICES = colorProviderIndices;
         ITALIC_INDICES = Check.ifNull(italicIndices, "italicIndices");
         BOLD_INDICES = Check.ifNull(boldIndices, "boldIndices");
@@ -135,6 +144,42 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     @Override
     public List<Integer> boldIndices() {
         return BOLD_INDICES;
+    }
+
+    @Override
+    public ProviderAtTime<Float> dropShadowSizeProvider() {
+        return _dropShadowSizeProvider;
+    }
+
+    @Override
+    public void setDropShadowSizeProvider(ProviderAtTime<Float> dropShadowSizeProvider)
+            throws IllegalArgumentException {
+        _dropShadowSizeProvider = Check.ifNull(dropShadowSizeProvider, "dropShadowSizeProvider");
+    }
+
+    @Override
+    public ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider() {
+        return _dropShadowOffsetProvider;
+    }
+
+    @Override
+    public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>>
+                                                        dropShadowOffsetProvider)
+            throws IllegalArgumentException {
+        _dropShadowOffsetProvider = Check.ifNull(dropShadowOffsetProvider,
+                "dropShadowOffsetProvider");
+    }
+
+    @Override
+    public ProviderAtTime<Color> dropShadowColorProvider() {
+        return _dropShadowColorProvider;
+    }
+
+    @Override
+    public void setDropShadowColorProvider(ProviderAtTime<Color> dropShadowColorProvider)
+            throws IllegalArgumentException {
+        _dropShadowColorProvider = Check.ifNull(dropShadowColorProvider,
+                "dropShadowColorProvider");
     }
 
     @Override

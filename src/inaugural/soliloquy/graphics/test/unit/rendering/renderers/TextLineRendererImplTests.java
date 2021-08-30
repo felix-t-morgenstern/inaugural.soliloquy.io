@@ -773,6 +773,85 @@ class TextLineRendererImplTests {
     }
 
     @Test
+    void testRenderWithNullDropShadowProviders() {
+        FakeFont font = new FakeFont();
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
+                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                null,
+                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f)),
+                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeEntityUuid());
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+
+        textLineRenderable.DropShadowSizeProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.DropShadowOffsetProvider = null;
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+
+        textLineRenderable.DropShadowOffsetProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.DropShadowColorProvider = null;
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+    }
+
+    @Test
+    void testRenderWithNegativeDropShadowSize() {
+        FakeFont font = new FakeFont();
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
+                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProviderAtTime<>(-.123f),
+                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f)),
+                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeEntityUuid());
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+    }
+
+    @Test
+    void testRenderWithPositiveDropShadowSizeAndOtherNullDropShadowValues() {
+        FakeFont font = new FakeFont();
+        FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
+                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProviderAtTime<>(.123f),
+                new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeEntityUuid());
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+
+        textLineRenderable.DropShadowOffsetProvider =
+                new FakeStaticProviderAtTime<>(new FakePair<>(null, .789f));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+
+        textLineRenderable.DropShadowOffsetProvider =
+                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, null));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+
+        textLineRenderable.DropShadowOffsetProvider =
+                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f));
+        textLineRenderable.DropShadowColorProvider = new FakeStaticProviderAtTime<>(null);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
+    }
+
+    @Test
     void testRenderOrGetLineLengthWithOutdatedTimestamp() {
         FakeFont font = new FakeFont();
         FakeStaticProviderAtTime<Float> lineHeightProvider = new FakeStaticProviderAtTime<>(0.5f);

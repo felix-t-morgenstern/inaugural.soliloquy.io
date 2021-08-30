@@ -25,13 +25,17 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    ProviderAtTime<Float> borderThicknessProvider,
                                    ProviderAtTime<Color> borderColorProvider,
                                    ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                   ProviderAtTime<Float> dropShadowSizeProvider,
+                                   ProviderAtTime<Pair<Float,Float>> dropShadowOffsetProvider,
+                                   ProviderAtTime<Color> dropShadowColorProvider,
                                    int z, EntityUuid uuid,
                                    Consumer<Renderable> updateZIndexInContainer,
                                    Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
         return new TextLineRenderableImpl(font, lineText, lineHeightProvider, justification,
                 paddingBetweenGlyphs, colorProviderIndices, italicIndices, boldIndices,
-                borderThicknessProvider, borderColorProvider, renderingLocationProvider, z, uuid,
+                borderThicknessProvider, borderColorProvider, renderingLocationProvider,
+                dropShadowSizeProvider, dropShadowOffsetProvider, dropShadowColorProvider, z, uuid,
                 updateZIndexInContainer, removeFromContainer);
     }
 
