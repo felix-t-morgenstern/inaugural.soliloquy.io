@@ -13,9 +13,8 @@ public class GlobalLoopingAnimationImpl
 
     /** @noinspection ConstantConditions*/
     public GlobalLoopingAnimationImpl(EntityUuid uuid, Animation animation,
-                                      int periodModuloOffset, Long mostRecentTimestamp) {
-        super(uuid, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset,
-                mostRecentTimestamp);
+                                      int periodModuloOffset) {
+        super(uuid, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset, null);
         ANIMATION = animation;
     }
 

@@ -24,23 +24,19 @@ class GlobalLoopingAnimationImplTests {
     @BeforeEach
     void setUp() {
         _globalLoopingAnimation = new GlobalLoopingAnimationImpl(ID, ANIMATION,
-                PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP);
+                PERIOD_MODULO_OFFSET);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET,
-                        MOST_RECENT_TIMESTAMP));
+                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET,
-                        MOST_RECENT_TIMESTAMP));
+                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1,
-                        MOST_RECENT_TIMESTAMP));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION,
-                        MOST_RECENT_TIMESTAMP));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION));
     }
 
     @Test
@@ -74,12 +70,13 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testProvide() {
+    void testProvideAndMostRecentTimestamp() {
         long timestamp = 789789L;
         int expectedFrame = (int)((timestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
 
         AnimationFrameSnippet providedSnippet = _globalLoopingAnimation.provide(timestamp);
 
+        assertEquals(timestamp, (long)_globalLoopingAnimation.mostRecentTimestamp());
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetWithFrame =
                 ANIMATION.SnippetsProvided.get(0);
@@ -195,10 +192,5 @@ class GlobalLoopingAnimationImplTests {
                 _globalLoopingAnimation.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimation.reportUnpause(timestamp));
-    }
-
-    @Test
-    void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_globalLoopingAnimation.mostRecentTimestamp());
     }
 }
