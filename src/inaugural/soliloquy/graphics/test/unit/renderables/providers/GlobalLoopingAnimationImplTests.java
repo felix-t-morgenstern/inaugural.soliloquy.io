@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimationImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
@@ -12,7 +11,7 @@ import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GlobalLoopingAnimationImplTests {
-    private final FakeEntityUuid ID = new FakeEntityUuid();
+    private final String ID = "globalLoopingAnimationId";
     private final int MS_DURATION = 456;
     private final int PERIOD_MODULO_OFFSET = 123;
     private final String ANIMATION_ID = "animationId";
@@ -32,6 +31,8 @@ class GlobalLoopingAnimationImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
+                new GlobalLoopingAnimationImpl("", ANIMATION, PERIOD_MODULO_OFFSET));
+        assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationImpl(ID, ANIMATION, -1));
@@ -46,8 +47,13 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
+    void testId() {
+        assertEquals(ID, _globalLoopingAnimation.id());
+    }
+
+    @Test
     void testUuid() {
-        assertSame(ID, _globalLoopingAnimation.uuid());
+        assertThrows(UnsupportedOperationException.class, _globalLoopingAnimation::uuid);
     }
 
     @Test
