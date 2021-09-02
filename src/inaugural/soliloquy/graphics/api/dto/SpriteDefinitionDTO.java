@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.api.dto;
 
-public class SpriteDTO {
-    public SpriteDTO (String id, String imgLoc, int leftX, int topY, int rightX, int bottomY) {
+public class SpriteDefinitionDTO {
+    public SpriteDefinitionDTO(String id, String imgLoc, int leftX, int topY, int rightX, int bottomY) {
         this.id = id;
         this.imgLoc = imgLoc;
         this.leftX = leftX;

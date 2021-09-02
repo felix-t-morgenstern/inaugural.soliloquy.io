@@ -9,12 +9,16 @@ import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 public class GlobalLoopingAnimationImpl
         extends AbstractLoopingProvider<AnimationFrameSnippet>
         implements GlobalLoopingAnimation {
+    private final String ID;
     private final Animation ANIMATION;
 
+    private static final EntityUuid PLACEHOLDER_UUID = new PlaceholderUuid();
+
     /** @noinspection ConstantConditions*/
-    public GlobalLoopingAnimationImpl(EntityUuid uuid, Animation animation,
+    public GlobalLoopingAnimationImpl(String id, Animation animation,
                                       int periodModuloOffset) {
-        super(uuid, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset, null);
+        super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset, null);
+        ID = Check.ifNullOrEmpty(id, "id");
         ANIMATION = animation;
     }
 
@@ -41,5 +45,33 @@ public class GlobalLoopingAnimationImpl
     @Override
     public String getInterfaceName() {
         return GlobalLoopingAnimation.class.getCanonicalName();
+    }
+
+    @Override
+    public String id() throws IllegalStateException {
+        return ID;
+    }
+
+    @Override
+    public EntityUuid uuid() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(
+                "GlobalLoopingAnimationImpl: uuid is not supported");
+    }
+
+    private static class PlaceholderUuid implements EntityUuid {
+        @Override
+        public long getMostSignificantBits() {
+            return 0;
+        }
+
+        @Override
+        public long getLeastSignificantBits() {
+            return 0;
+        }
+
+        @Override
+        public String getInterfaceName() {
+            return null;
+        }
     }
 }

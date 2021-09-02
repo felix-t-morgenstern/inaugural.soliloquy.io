@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.AnimationDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.AnimationPreloaderWorker;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFactory;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
@@ -50,43 +50,44 @@ class AnimationPreloaderWorkerTests {
         IMAGES.put(relativeLocation1, new FakeImage(relativeLocation1));
         IMAGES.put(relativeLocation2, new FakeImage(relativeLocation2));
 
-        AnimationDTO.AnimationFrameDTO animation1Frame1 =
-                new AnimationDTO.AnimationFrameDTO(relativeLocation1, 111,
+        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame1 =
+                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation1, 111,
                         11, 22, 33, 44, 0.1f, 0.2f);
-        AnimationDTO.AnimationFrameDTO animation1Frame2 =
-                new AnimationDTO.AnimationFrameDTO(relativeLocation1, 222,
+        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame2 =
+                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation1, 222,
                         55, 66, 77, 88, 0.3f, 0.4f);
-        AnimationDTO.AnimationFrameDTO animation2Frame1 =
-                new AnimationDTO.AnimationFrameDTO(relativeLocation2, 333,
+        AnimationDefinitionDTO.AnimationFrameDTO animation2Frame1 =
+                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation2, 333,
                         12, 34, 56, 78, 0.5f, 0.6f);
-        AnimationDTO.AnimationFrameDTO animation2Frame2 =
-                new AnimationDTO.AnimationFrameDTO(relativeLocation2, 444,
+        AnimationDefinitionDTO.AnimationFrameDTO animation2Frame2 =
+                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation2, 444,
                         87, 65, 43, 21, 0.7f, 0.8f);
 
-        Map<Integer, AnimationDTO.AnimationFrameDTO> frameDTOs = new HashMap<>();
+        Map<Integer, AnimationDefinitionDTO.AnimationFrameDTO> frameDTOs = new HashMap<>();
 
         frameDTOs.put(animation1Frame1.ms, animation1Frame1);
         frameDTOs.put(animation1Frame2.ms, animation1Frame2);
         frameDTOs.put(animation2Frame1.ms, animation2Frame1);
         frameDTOs.put(animation2Frame2.ms, animation2Frame2);
 
-        AnimationDTO animation1DTO = new AnimationDTO("animation1", 555,
-                new AnimationDTO.AnimationFrameDTO[] {
+        AnimationDefinitionDTO animation1DTO = new AnimationDefinitionDTO("animation1", 555,
+                new AnimationDefinitionDTO.AnimationFrameDTO[] {
                         animation1Frame1, animation1Frame2
                 });
-        AnimationDTO animation2DTO = new AnimationDTO("animation2", 666,
-                new AnimationDTO.AnimationFrameDTO[] {
+        AnimationDefinitionDTO animation2DTO = new AnimationDefinitionDTO("animation2", 666,
+                new AnimationDefinitionDTO.AnimationFrameDTO[] {
                         animation2Frame1, animation2Frame2
                 });
 
-        List<AnimationDTO> animationDTOs = new ArrayList<AnimationDTO>(){{
-            add(animation1DTO); add(animation2DTO);
+        List<AnimationDefinitionDTO> animationDefinitionDTOs =
+                new ArrayList<AnimationDefinitionDTO>(){{
+                    add(animation1DTO); add(animation2DTO);
         }};
 
-        _animationPreloaderWorker.run(animationDTOs);
+        _animationPreloaderWorker.run(animationDefinitionDTOs);
 
-        assertEquals(animationDTOs.size(), REGISTRY.size());
-        animationDTOs.forEach(dto -> {
+        assertEquals(animationDefinitionDTOs.size(), REGISTRY.size());
+        animationDefinitionDTOs.forEach(dto -> {
             AnimationDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
             assertEquals(AnimationDefinition.class.getCanonicalName(),
@@ -95,7 +96,7 @@ class AnimationPreloaderWorkerTests {
             createdDefinition.frameSnippetDefinitions().forEach((ms, snippetDefinition) -> {
                 assertEquals(AnimationFrameSnippet.class.getCanonicalName(),
                         snippetDefinition.getInterfaceName());
-                AnimationDTO.AnimationFrameDTO snippetDTO = frameDTOs.get(ms);
+                AnimationDefinitionDTO.AnimationFrameDTO snippetDTO = frameDTOs.get(ms);
                 assertSame(IMAGES.get(snippetDTO.imgLoc), snippetDefinition.image());
                 assertEquals(snippetDTO.leftX, snippetDefinition.leftX());
                 assertEquals(snippetDTO.topY, snippetDefinition.topY());

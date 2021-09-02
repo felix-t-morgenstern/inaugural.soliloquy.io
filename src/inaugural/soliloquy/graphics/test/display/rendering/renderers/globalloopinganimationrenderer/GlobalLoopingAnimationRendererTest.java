@@ -88,8 +88,8 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         Animation animation = ANIMATION_FACTORY.make(animationDefinition);
 
 
-        GlobalLoopingAnimation = new GlobalLoopingAnimationImpl(new FakeEntityUuid(), animation,
-                        periodModuloOffset, null);
+        GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
+                animation, periodModuloOffset);
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation, null, null,

@@ -68,4 +68,9 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public Long mostRecentTimestamp() {
         return null;
     }
+
+    @Override
+    public String id() throws IllegalStateException {
+        return null;
+    }
 }

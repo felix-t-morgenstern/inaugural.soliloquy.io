@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.SpriteDTO;
+import inaugural.soliloquy.graphics.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
 import soliloquy.specs.graphics.assets.Image;
@@ -24,9 +24,9 @@ public class SpritePreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void run(Collection<SpriteDTO> spriteDTOs) {
-        Check.ifNull(spriteDTOs, "spriteDTOs");
-        spriteDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(
+    public void run(Collection<SpriteDefinitionDTO> spriteDefinitionDTOs) {
+        Check.ifNull(spriteDefinitionDTOs, "spriteDefinitionDTOs");
+        spriteDefinitionDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(
                 new SpriteDefinition() {
                     @Override
                     public Image image() {

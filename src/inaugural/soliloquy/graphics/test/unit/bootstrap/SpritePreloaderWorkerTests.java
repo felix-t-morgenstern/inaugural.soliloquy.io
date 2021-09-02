@@ -1,10 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.SpriteDTO;
+import inaugural.soliloquy.graphics.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.SpritePreloaderWorker;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Registry;
@@ -51,18 +49,18 @@ class SpritePreloaderWorkerTests {
         IMAGES.put(relativeLocation2, new FakeImage(relativeLocation2));
         IMAGES.put(relativeLocation3, new FakeImage(relativeLocation3));
 
-        SpriteDTO spriteDTO1 = new SpriteDTO("sprite1Id", relativeLocation1, 12, 34, 56, 78);
-        SpriteDTO spriteDTO2 = new SpriteDTO("sprite2Id", relativeLocation2, 21, 43, 65, 87);
-        SpriteDTO spriteDTO3 = new SpriteDTO("sprite3Id", relativeLocation3, 11, 22, 33, 44);
+        SpriteDefinitionDTO spriteDefinitionDTO1 = new SpriteDefinitionDTO("sprite1Id", relativeLocation1, 12, 34, 56, 78);
+        SpriteDefinitionDTO spriteDefinitionDTO2 = new SpriteDefinitionDTO("sprite2Id", relativeLocation2, 21, 43, 65, 87);
+        SpriteDefinitionDTO spriteDefinitionDTO3 = new SpriteDefinitionDTO("sprite3Id", relativeLocation3, 11, 22, 33, 44);
 
-        List<SpriteDTO> spriteDTOs = new ArrayList<>(Arrays.asList(
-                spriteDTO1, spriteDTO2, spriteDTO3
+        List<SpriteDefinitionDTO> spriteDefinitionDTOS = new ArrayList<>(Arrays.asList(
+                spriteDefinitionDTO1, spriteDefinitionDTO2, spriteDefinitionDTO3
         ));
 
-        _spritePreloaderWorker.run(spriteDTOs);
+        _spritePreloaderWorker.run(spriteDefinitionDTOS);
 
-        assertEquals(spriteDTOs.size(), REGISTRY.size());
-        spriteDTOs.forEach(dto -> {
+        assertEquals(spriteDefinitionDTOS.size(), REGISTRY.size());
+        spriteDefinitionDTOS.forEach(dto -> {
             SpriteDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
             assertEquals(SpriteDefinition.class.getCanonicalName(),

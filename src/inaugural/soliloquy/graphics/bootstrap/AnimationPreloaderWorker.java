@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.AnimationDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
 import soliloquy.specs.graphics.assets.Animation;
@@ -27,14 +27,15 @@ public class AnimationPreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void run(Collection<AnimationDTO> animationDTOs) {
-        Check.ifNull(animationDTOs, "animationDTOs");
-        animationDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
+    public void run(Collection<AnimationDefinitionDTO> animationDefinitionDTOs) {
+        Check.ifNull(animationDefinitionDTOs, "animationDefinitionDTOs");
+        animationDefinitionDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
 
-    private AnimationDefinition makeDefinition(AnimationDTO animationDTO) {
+    private AnimationDefinition makeDefinition(AnimationDefinitionDTO animationDefinitionDTO) {
         Map<Integer,AnimationFrameSnippet> snippetDefinitions = new HashMap<>();
-        for(AnimationDTO.AnimationFrameDTO frameSnippetDTO : animationDTO.frames) {
+        for(AnimationDefinitionDTO.AnimationFrameDTO frameSnippetDTO :
+                animationDefinitionDTO.frames) {
             snippetDefinitions.put(frameSnippetDTO.ms, new AnimationFrameSnippet() {
                 @Override
                 public Image image() {
@@ -81,7 +82,7 @@ public class AnimationPreloaderWorker {
         return new AnimationDefinition() {
             @Override
             public int msDuration() {
-                return animationDTO.msDur;
+                return animationDefinitionDTO.msDur;
             }
 
             @Override
@@ -91,7 +92,7 @@ public class AnimationPreloaderWorker {
 
             @Override
             public String id() {
-                return animationDTO.id;
+                return animationDefinitionDTO.id;
             }
 
             @Override

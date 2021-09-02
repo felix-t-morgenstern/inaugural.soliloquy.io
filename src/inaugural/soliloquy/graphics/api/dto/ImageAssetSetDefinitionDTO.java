@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.api.dto;
 
-public class ImageAssetSetDTO {
+public class ImageAssetSetDefinitionDTO {
     public String id;
     public ImageAssetSetAssetDTO[] assets;
 
-    public ImageAssetSetDTO(String id, ImageAssetSetAssetDTO[] assets) {
+    public ImageAssetSetDefinitionDTO(String id, ImageAssetSetAssetDTO[] assets) {
         this.id = id;
         this.assets = assets;
     }

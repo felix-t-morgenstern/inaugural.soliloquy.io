@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDTO;
+import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.ImageAssetSetPreloaderWorker;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,41 +51,47 @@ class ImageAssetSetPreloaderWorkerTests {
         String assetId3 = "assetId3";
         String assetId4 = "assetId4";
 
-        ImageAssetSetDTO.ImageAssetSetAssetDTO imageAssetSet1Asset1DTO =
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO(type1, null, 1, assetId1);
-        ImageAssetSetDTO.ImageAssetSetAssetDTO imageAssetSet1Asset2DTO =
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO(null, direction1, 2, assetId2);
-        ImageAssetSetDTO.ImageAssetSetAssetDTO imageAssetSet2Asset1DTO =
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO(type2, null, 2, assetId3);
-        ImageAssetSetDTO.ImageAssetSetAssetDTO imageAssetSet2Asset2DTO =
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO(null, direction2, 1, assetId4);
+        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet1Asset1DTO =
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(type1, null, 1, assetId1);
+        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet1Asset2DTO =
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(null, direction1, 2,
+                        assetId2);
+        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet2Asset1DTO =
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(type2, null, 2, assetId3);
+        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet2Asset2DTO =
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(null, direction2, 1,
+                        assetId4);
 
-        Map<String, Map<String, ImageAssetSetDTO.ImageAssetSetAssetDTO>> assets = new HashMap<>();
+        Map<String, Map<String, ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>> assets =
+                new HashMap<>();
 
         addImageAssetSetAssetDTOToMap(assets, imageAssetSet1Asset1DTO);
         addImageAssetSetAssetDTOToMap(assets, imageAssetSet1Asset2DTO);
         addImageAssetSetAssetDTOToMap(assets, imageAssetSet2Asset1DTO);
         addImageAssetSetAssetDTOToMap(assets, imageAssetSet2Asset2DTO);
 
-        ImageAssetSetDTO imageAssetSet1DTO = new ImageAssetSetDTO("imageAssetSet1",
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO[]{
+        ImageAssetSetDefinitionDTO imageAssetSet1DTO = new ImageAssetSetDefinitionDTO(
+                "imageAssetSet1",
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
                         imageAssetSet1Asset1DTO, imageAssetSet1Asset2DTO
         });
 
-        ImageAssetSetDTO imageAssetSet2DTO = new ImageAssetSetDTO("imageAssetSet2",
-                new ImageAssetSetDTO.ImageAssetSetAssetDTO[]{
+        ImageAssetSetDefinitionDTO imageAssetSet2DTO = new ImageAssetSetDefinitionDTO(
+                "imageAssetSet2",
+                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
                         imageAssetSet2Asset1DTO, imageAssetSet2Asset2DTO
                 });
 
-        List<ImageAssetSetDTO> imageAssetSetDTOs = new ArrayList<ImageAssetSetDTO>() {{
-            add(imageAssetSet1DTO);
-            add(imageAssetSet2DTO);
+        List<ImageAssetSetDefinitionDTO> imageAssetSetDefinitionDTOs =
+                new ArrayList<ImageAssetSetDefinitionDTO>() {{
+                    add(imageAssetSet1DTO);
+                    add(imageAssetSet2DTO);
         }};
 
-        _imageAssetSetPreloaderWorker.run(imageAssetSetDTOs);
+        _imageAssetSetPreloaderWorker.run(imageAssetSetDefinitionDTOs);
 
-        assertEquals(imageAssetSetDTOs.size(), IMAGE_ASSET_SET_REGISTRY.size());
-        imageAssetSetDTOs.forEach(dto -> {
+        assertEquals(imageAssetSetDefinitionDTOs.size(), IMAGE_ASSET_SET_REGISTRY.size());
+        imageAssetSetDefinitionDTOs.forEach(dto -> {
             ImageAssetSetDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
             assertEquals(ImageAssetSetDefinition.class.getCanonicalName(),
@@ -94,7 +100,7 @@ class ImageAssetSetPreloaderWorkerTests {
             createdDefinition.assetDefinitions().forEach(assetDefinition -> {
                 assertEquals(ImageAssetSetAssetDefinition.class.getCanonicalName(),
                         assetDefinition.getInterfaceName());
-                ImageAssetSetDTO.ImageAssetSetAssetDTO assetDTO =
+                ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO assetDTO =
                         assets.get(assetDefinition.type()).get(assetDefinition.direction());
                 assertEquals(ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType),
                         assetDefinition.assetType());
@@ -108,8 +114,8 @@ class ImageAssetSetPreloaderWorkerTests {
     }
 
     private void addImageAssetSetAssetDTOToMap(Map<String,Map<String,
-            ImageAssetSetDTO.ImageAssetSetAssetDTO>> map,
-                                               ImageAssetSetDTO.ImageAssetSetAssetDTO
+            ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>> map,
+                                               ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO
                                                        imageAssetSetAssetDTO) {
         if (!map.containsKey(imageAssetSetAssetDTO.type)) {
             map.put(imageAssetSetAssetDTO.type, new HashMap<>());

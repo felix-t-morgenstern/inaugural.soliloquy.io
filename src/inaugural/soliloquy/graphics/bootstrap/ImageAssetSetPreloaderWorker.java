@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
-import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDTO;
+import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
 import soliloquy.specs.graphics.assets.ImageAsset;
@@ -25,14 +25,17 @@ public class ImageAssetSetPreloaderWorker {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void run(Collection<ImageAssetSetDTO> imageAssetSetDTOs) {
-        Check.ifNull(imageAssetSetDTOs, "imageAssetSetDTOs");
-        imageAssetSetDTOs.forEach(dto -> REGISTRY.add(FACTORY.make(makeDefinition(dto))));
+    public void run(Collection<ImageAssetSetDefinitionDTO> imageAssetSetDefinitionDTOs) {
+        Check.ifNull(imageAssetSetDefinitionDTOs, "imageAssetSetDefinitionDTOs");
+        imageAssetSetDefinitionDTOs.forEach(dto ->
+                REGISTRY.add(FACTORY.make(makeDefinition(dto))));
     }
 
-    private ImageAssetSetDefinition makeDefinition(ImageAssetSetDTO imageAssetSetDTO) {
+    private ImageAssetSetDefinition makeDefinition(ImageAssetSetDefinitionDTO
+                                                           imageAssetSetDefinitionDTO) {
         List<ImageAssetSetAssetDefinition> assetDefinitions = new ArrayList<>();
-        for(ImageAssetSetDTO.ImageAssetSetAssetDTO assetDTO : imageAssetSetDTO.assets) {
+        for(ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO assetDTO :
+                imageAssetSetDefinitionDTO.assets) {
             assetDefinitions.add(new ImageAssetSetAssetDefinition() {
                 @Override
                 public String type() {
@@ -69,7 +72,7 @@ public class ImageAssetSetPreloaderWorker {
 
             @Override
             public String id() {
-                return imageAssetSetDTO.id;
+                return imageAssetSetDefinitionDTO.id;
             }
 
             @Override

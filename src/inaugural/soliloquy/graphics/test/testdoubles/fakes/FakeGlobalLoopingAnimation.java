@@ -7,11 +7,13 @@ import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
+    public String Id;
     public Animation Animation;
     public long StartTimestamp;
     public boolean SupportsMouseEvents;
 
-    public FakeGlobalLoopingAnimation() {
+    public FakeGlobalLoopingAnimation(String id) {
+        Id = id;
     }
 
     public FakeGlobalLoopingAnimation(Animation animation, long startTimestamp) {
@@ -76,5 +78,10 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     @Override
     public Long mostRecentTimestamp() {
         return null;
+    }
+
+    @Override
+    public String id() throws IllegalStateException {
+        return Id;
     }
 }

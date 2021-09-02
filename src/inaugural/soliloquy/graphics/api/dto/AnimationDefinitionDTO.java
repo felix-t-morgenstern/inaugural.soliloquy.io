@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.api.dto;
 
-public class AnimationDTO {
+public class AnimationDefinitionDTO {
     public String id;
     public int msDur;
     public AnimationFrameDTO[] frames;
 
-    public AnimationDTO(String id, int msDur, AnimationFrameDTO[] frames) {
+    public AnimationDefinitionDTO(String id, int msDur, AnimationFrameDTO[] frames) {
         this.id = id;
         this.msDur = msDur;
         this.frames = frames;
