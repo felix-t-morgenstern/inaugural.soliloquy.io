@@ -1,9 +1,8 @@
-package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
+package inaugural.soliloquy.graphics.test.display.renderables.providers;
 
-import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.SpriteRenderer;
-import inaugural.soliloquy.graphics.test.display.DisplayTest;
+import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -13,14 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpriteRendererTest extends DisplayTest {
-    protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
-            "./res/images/items/RPG_Weapons.png";
-
-    protected static FakeSprite Sprite;
-    protected static FakeSpriteRenderable SpriteRenderable;
-    protected static Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> SpriteRenderer;
-
+public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
     /** @noinspection rawtypes*/
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
@@ -50,10 +42,5 @@ public class SpriteRendererTest extends DisplayTest {
 
     protected static void stackRendererAction(long timestamp) {
         SpriteRenderer.render(SpriteRenderable, timestamp);
-    }
-
-    protected static void graphicsPreloaderLoadAction() {
-        Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
-        FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

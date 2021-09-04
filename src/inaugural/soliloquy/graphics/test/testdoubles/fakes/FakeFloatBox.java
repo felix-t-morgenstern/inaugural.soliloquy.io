@@ -76,6 +76,18 @@ public class FakeFloatBox implements FloatBox {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FloatBox)) {
+            return false;
+        }
+        FloatBox floatBox = ((FloatBox)o);
+        return floatBox.leftX() == LeftX &&
+                floatBox.topY() == TopY &&
+                floatBox.rightX() == RightX &&
+                floatBox.bottomY() == BottomY;
+    }
+
+    @Override
     public String getInterfaceName() {
         return null;
     }
