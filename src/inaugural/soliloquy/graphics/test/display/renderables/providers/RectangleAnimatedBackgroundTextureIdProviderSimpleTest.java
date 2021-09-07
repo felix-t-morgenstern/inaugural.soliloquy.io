@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
@@ -35,7 +34,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
   3. The window will then close
  */
 public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
-    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
@@ -71,7 +69,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = false;

@@ -3,23 +3,15 @@ package inaugural.soliloquy.graphics.rendering;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.tools.Check;
 import org.lwjgl.glfw.GLFWVidMode;
-import soliloquy.specs.common.factories.CoordinateFactory;
-import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class WindowResolutionManagerImpl implements WindowResolutionManager {
-    private final CoordinateFactory COORDINATE_FACTORY;
-    private final ArrayList<Consumer<Coordinate>> RESOLUTION_CHANGE_SUBSCRIBERS =
-            new ArrayList<>();
-
     private WindowDisplayMode _windowDisplayMode;
     private WindowResolution _windowResolution;
 
@@ -29,12 +21,12 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
     private Integer _windowedFullscreenWidth;
     private Integer _windowedFullscreenHeight;
 
-    private Integer _previouslyPublishedWidth;
-    private Integer _previouslyPublishedHeight;
+    private int _width;
+    private int _height;
+    private float _windowWidthToHeightRatio;
 
     public WindowResolutionManagerImpl(WindowDisplayMode startingWindowDisplayMode,
-                                       WindowResolution startingWindowResolution,
-                                       CoordinateFactory coordinateFactory) {
+                                       WindowResolution startingWindowResolution) {
         _windowDisplayMode = Check.ifNull(startingWindowDisplayMode, "startingWindowDisplayMode");
         _windowResolution = Check.ifNull(startingWindowResolution, "startingWindowResolution");
 
@@ -47,8 +39,6 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
         _mostRecentlyRenderedWindowDisplayMode = WindowDisplayMode.UNKNOWN;
         _mostRecentlyRenderedWindowResolution = WindowResolution.RES_INVALID;
-
-        COORDINATE_FACTORY = coordinateFactory;
     }
 
     @Override
@@ -95,28 +85,24 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         }
 
         _windowResolution = WindowResolution.getFromWidthAndHeight(width, height);
+        _width = width;
+        _height = height;
+        _windowWidthToHeightRatio = _width / (float)_height;
     }
 
     @Override
     public int getWidth() throws UnsupportedOperationException {
-        if (_windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN) {
-            return _windowedFullscreenWidth;
-        }
-        return _windowResolution.WIDTH;
+        return _width;
     }
 
     @Override
     public int getHeight() throws UnsupportedOperationException {
-        if (_windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN) {
-            return _windowedFullscreenHeight;
-        }
-        return _windowResolution.HEIGHT;
+        return _height;
     }
 
     @Override
-    public void registerResolutionSubscriber(Consumer<Coordinate> subscriber)
-            throws IllegalArgumentException {
-        RESOLUTION_CHANGE_SUBSCRIBERS.add(Check.ifNull(subscriber, "subscriber"));
+    public float windowWidthToHeightRatio() {
+        return _windowWidthToHeightRatio;
     }
 
     @Override
@@ -144,16 +130,13 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
             _mostRecentlyRenderedWindowResolution = _windowResolution;
             _mostRecentlyRenderedWindowDisplayMode = _windowDisplayMode;
 
-            int width = getWidth();
-            int height = getHeight();
-            if ((Integer)width != _previouslyPublishedWidth ||
-                    (Integer)height != _previouslyPublishedHeight) {
-                Coordinate resolution = COORDINATE_FACTORY.make(width, height);
-                RESOLUTION_CHANGE_SUBSCRIBERS.forEach(subscriber -> subscriber.accept(resolution));
-
-                _previouslyPublishedWidth = width;
-                _previouslyPublishedHeight = height;
-            }
+            _width = _windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN ?
+                    _windowedFullscreenWidth :
+                    _windowResolution.WIDTH;
+            _height = _windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN ?
+                    _windowedFullscreenHeight :
+                    _windowResolution.HEIGHT;
+            _windowWidthToHeightRatio = _width / (float)_height;
         }
 
         return windowId;

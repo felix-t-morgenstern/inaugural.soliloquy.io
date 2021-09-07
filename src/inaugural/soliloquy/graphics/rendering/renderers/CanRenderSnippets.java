@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -16,6 +15,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -27,7 +27,7 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     protected final FloatBoxFactory FLOAT_BOX_FACTORY;
 
-    protected float _screenWidthToHeightRatio;
+    protected Supplier<Float> _getScreenWidthToHeightRatio;
     private Shader _shader;
     private Mesh _mesh;
 
@@ -37,8 +37,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                                 WindowResolutionManager windowResolutionManager,
                                 Long mostRecentTimestamp) {
         this(renderingBoundaries, floatBoxFactory, archetype, mostRecentTimestamp);
-        Check.ifNull(windowResolutionManager, "windowResolutionManager")
-                .registerResolutionSubscriber(this::registerResolutionChange);
+        Check.ifNull(windowResolutionManager, "windowResolutionManager");
+        _getScreenWidthToHeightRatio = windowResolutionManager::windowWidthToHeightRatio;
     }
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
@@ -47,10 +47,6 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         super(archetype, mostRecentTimestamp);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
-    }
-
-    private void registerResolutionChange(Coordinate resolution) {
-        _screenWidthToHeightRatio = (float)resolution.getX() / resolution.getY();
     }
 
     @Override

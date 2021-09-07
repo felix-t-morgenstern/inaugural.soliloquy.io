@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
@@ -22,7 +21,6 @@ import java.util.function.Function;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class DisplayTest {
-    protected final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     protected final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     protected final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
@@ -42,7 +40,7 @@ public class DisplayTest {
                                   Runnable graphicsPreloaderLoadAction,
                                   Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
         WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, RESOLUTION, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, RESOLUTION);
 
         FrameTimer = new FakeFrameTimer();
 

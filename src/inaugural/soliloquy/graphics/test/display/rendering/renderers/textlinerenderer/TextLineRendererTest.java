@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
+import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class TextLineRendererTest extends DisplayTest {
+    protected final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     protected final static String RELATIVE_LOCATION_TRAJAN = "./res/fonts/Trajan Pro Regular.ttf";
     protected final static float MAX_LOSSLESS_FONT_SIZE_TRAJAN = 100f;
     protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN = 0.5f;

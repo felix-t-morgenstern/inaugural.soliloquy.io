@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.rendering.windowresolutionmanager;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -27,13 +26,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  *
  */
 class WindowResolutionManagerImplWindowedTest {
-    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, WindowResolution.RES_1024x768);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;

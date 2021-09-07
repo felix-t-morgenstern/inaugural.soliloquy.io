@@ -101,7 +101,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
                                   Pair<Float, Float> dropShadowOffset, Color dropShadowColor) {
         if (dropShadowSize != null) {
-            float xOffset = dropShadowOffset.getItem1() / _screenWidthToHeightRatio;
+            float xOffset = dropShadowOffset.getItem1() / _getScreenWidthToHeightRatio.get();
             float yOffset = dropShadowOffset.getItem2();
             float sizeAdjustment = dropShadowSize / lineHeight;
 
@@ -125,7 +125,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         if (borderThickness != null) {
             float yThickness = borderThickness;
-            float xThickness = yThickness / _screenWidthToHeightRatio;
+            float xThickness = yThickness / _getScreenWidthToHeightRatio.get();
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {

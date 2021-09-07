@@ -35,7 +35,7 @@ public class StackRendererTest extends DisplayTest {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
 
         WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, resolution, COORDINATE_FACTORY);
+                WindowDisplayMode.WINDOWED, resolution);
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);

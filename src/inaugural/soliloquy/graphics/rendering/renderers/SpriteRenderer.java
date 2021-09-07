@@ -68,7 +68,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
             Check.throwOnGtValue(borderThickness, 1f, "spriteRenderable borderThickness");
 
             float yThickness = borderThickness;
-            float xThickness = yThickness / _screenWidthToHeightRatio;
+            float xThickness = yThickness / _getScreenWidthToHeightRatio.get();
 
             // upper-left
             super.render(renderingArea.translate(-xThickness, -yThickness),

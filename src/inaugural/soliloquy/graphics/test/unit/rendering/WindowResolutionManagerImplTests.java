@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import org.junit.jupiter.api.AfterAll;
@@ -8,20 +7,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.opengl.GL;
-import soliloquy.specs.common.valueobjects.Coordinate;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
-
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 
 class WindowResolutionManagerImplTests {
-    private final FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
-
-    private WindowResolutionManagerImpl _windowResolutionManager;
+    private WindowResolutionManager _windowResolutionManager;
 
     @BeforeAll
     static void setUpFixture() {
@@ -42,17 +36,15 @@ class WindowResolutionManagerImplTests {
     @BeforeEach
     void setUp() {
         _windowResolutionManager = new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED,
-                WindowResolution.RES_1920x1080, COORDINATE_FACTORY);
+                WindowResolution.RES_1920x1080);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new WindowResolutionManagerImpl(
-                null, WindowResolution.RES_1920x1080, COORDINATE_FACTORY));
+                null, WindowResolution.RES_1920x1080));
         assertThrows(IllegalArgumentException.class, () -> new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED, null, COORDINATE_FACTORY));
-        assertThrows(IllegalArgumentException.class, () -> new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED_FULLSCREEN, WindowResolution.RES_1920x1080, null));
+                WindowDisplayMode.WINDOWED, null));
     }
 
     @Test
@@ -89,26 +81,13 @@ class WindowResolutionManagerImplTests {
     }
 
     @Test
-    void testRegisterResolutionSubscriber() {
+    void testWindowWidthToHeightRatio() {
         int width = 3840;
         int height = 2160;
 
-        // NB: Assertions are defined prior to the test action due to limitations on how Java
-        //     allows the inside of lambda statements to manipulate objects defined outside of them
-        Consumer<Coordinate> subscriber = resolution -> {
-            assertEquals(width, resolution.getX());
-            assertEquals(height, resolution.getY());
-        };
-
-        _windowResolutionManager.registerResolutionSubscriber(subscriber);
         _windowResolutionManager.setDimensions(width, height);
-        _windowResolutionManager.updateWindowSizeAndLocation(0, "titlebar");
-    }
 
-    @Test
-    void testRegisterResolutionSubscriberWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> _windowResolutionManager.registerResolutionSubscriber(null));
+        assertEquals(width / (float)height, _windowResolutionManager.windowWidthToHeightRatio());
     }
 
     @Test
