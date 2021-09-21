@@ -16,7 +16,6 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -184,6 +183,11 @@ public class FiniteAnimationRenderer
         @Override
         public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
 
+        }
+
+        @Override
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+            return false;
         }
 
         @Override

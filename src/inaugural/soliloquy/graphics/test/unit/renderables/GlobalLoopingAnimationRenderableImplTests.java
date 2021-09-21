@@ -580,6 +580,8 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 2));
+
+        fail("Revise this test to also include capturesMouseEventAtPoint");
     }
 
     @Test
@@ -612,6 +614,16 @@ class GlobalLoopingAnimationRenderableImplTests {
         assertSame(newRenderingDimensionsProvider,
                 _globalLoopingAnimationRenderableWithoutMouseEvents
                         .getRenderingDimensionsProvider());
+    }
+
+    @Test
+    void testCapturesMouseEventAtPoint() {
+        fail("Implement this test!");
+    }
+
+    @Test
+    void testCapturesMouseEventAtPointWithInvalidParams() {
+        fail("Implement this test!");
     }
 
     @Test

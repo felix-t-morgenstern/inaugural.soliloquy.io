@@ -266,6 +266,12 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
+
+    @Override
     public Map<Integer, soliloquy.specs.common.infrastructure.List<Renderable>> representation() {
         return null;
     }

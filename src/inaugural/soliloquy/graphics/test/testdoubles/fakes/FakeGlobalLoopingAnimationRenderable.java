@@ -159,6 +159,12 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
+
+    @Override
     public void delete() {
 
     }

@@ -643,6 +643,16 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
+    void testCapturesMouseEventAtPoint() {
+        fail("Implement this test!");
+    }
+
+    @Test
+    void testCapturesMouseEventAtPointWithInvalidParams() {
+        fail("Implement this test!");
+    }
+
+    @Test
     void testDelete() {
         _imageAssetSetRenderableWithMouseEvents.delete();
         assertSame(_imageAssetSetRenderableWithMouseEvents,

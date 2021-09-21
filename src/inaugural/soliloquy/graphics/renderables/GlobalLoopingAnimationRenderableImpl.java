@@ -85,4 +85,10 @@ public class GlobalLoopingAnimationRenderableImpl
         }
         _globalLoopingAnimation = globalLoopingAnimation;
     }
+
+    @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
 }

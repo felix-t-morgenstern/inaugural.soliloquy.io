@@ -76,4 +76,10 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
     protected String className() {
         return "SpriteRenderableImpl";
     }
+
+    @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
 }

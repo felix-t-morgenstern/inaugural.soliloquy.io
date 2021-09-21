@@ -172,6 +172,12 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
+
+    @Override
     public void delete() {
         Deleted = true;
     }

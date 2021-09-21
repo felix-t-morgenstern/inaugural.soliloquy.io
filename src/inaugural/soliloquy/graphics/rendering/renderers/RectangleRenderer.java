@@ -16,7 +16,6 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.List;
 
-import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
@@ -236,6 +235,11 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         @Override
         public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
 
+        }
+
+        @Override
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+            return false;
         }
 
         @Override

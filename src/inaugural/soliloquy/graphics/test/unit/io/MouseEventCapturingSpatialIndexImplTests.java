@@ -42,18 +42,18 @@ class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     void testPutRenderableAndGetCapturingRenderableAtPoint() {
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea1, RenderingDimensions1);
 
         assertSame(RenderableWithArea1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
         assertNull(_mouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(0.09999f, 0.09999f));
+                .getCapturingRenderableAtPoint(0.09999f, 0.09999f, 0L));
         assertSame(RenderableWithArea1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.5f, .5f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.5f, .5f, 0L));
         assertNull(_mouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(0.50001f, 0.50001f));
+                .getCapturingRenderableAtPoint(0.50001f, 0.50001f, 0L));
     }
 
     @Test
@@ -81,16 +81,16 @@ class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     void testRemoveRenderable() {
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea1, RenderingDimensions1);
 
         assertSame(RenderableWithArea1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
 
         _mouseEventCapturingSpatialIndex.removeRenderable(RenderableWithArea1);
 
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
     }
 
     @Test
@@ -98,14 +98,14 @@ class MouseEventCapturingSpatialIndexImplTests {
         _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea1, RenderingDimensions1);
 
         assertSame(RenderableWithArea1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f, 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea1, RenderingDimensions2);
 
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
         assertSame(RenderableWithArea1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f, 0L));
     }
 
     @Test
@@ -116,7 +116,7 @@ class MouseEventCapturingSpatialIndexImplTests {
         _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea4, RenderingDimensions4);
 
         assertSame(RenderableWithArea4,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.45f, .45f));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.45f, .45f, 0L));
     }
 
     @Test

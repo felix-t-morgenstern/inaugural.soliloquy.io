@@ -16,8 +16,9 @@ public class MouseEventCapturingSpatialIndexImpl
         R_TREE = new RTreeFacade();
     }
 
+    // TODO: Verify and use timestamp
     @Override
-    public RenderableWithArea getCapturingRenderableAtPoint(float x, float y)
+    public RenderableWithArea getCapturingRenderableAtPoint(float x, float y, long timestamp)
             throws IllegalArgumentException {
         List<RTreeFacade.RenderableWithAreaSearchObject> roughResults = R_TREE.search(x, y);
         int highestZThusFar = Integer.MIN_VALUE;

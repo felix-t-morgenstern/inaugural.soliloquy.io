@@ -587,6 +587,16 @@ class SpriteRenderableImplTests {
     }
 
     @Test
+    void testCapturesMouseEventAtPoint() {
+        fail("Implement this test!");
+    }
+
+    @Test
+    void testCapturesMouseEventAtPointWithInvalidParams() {
+        fail("Implement this test!");
+    }
+
+    @Test
     void testDelete() {
         _spriteRenderableWithMouseEvents.delete();
         assertSame(_spriteRenderableWithMouseEvents,

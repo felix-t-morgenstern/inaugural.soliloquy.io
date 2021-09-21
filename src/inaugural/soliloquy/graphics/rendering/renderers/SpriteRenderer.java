@@ -193,6 +193,11 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+            return false;
+        }
+
+        @Override
         public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
 
         }

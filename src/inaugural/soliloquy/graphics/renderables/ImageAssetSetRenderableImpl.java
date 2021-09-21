@@ -109,4 +109,10 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     public String getInterfaceName() {
         return ImageAssetSetRenderable.class.getCanonicalName();
     }
+
+    @Override
+    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        return false;
+    }
 }
