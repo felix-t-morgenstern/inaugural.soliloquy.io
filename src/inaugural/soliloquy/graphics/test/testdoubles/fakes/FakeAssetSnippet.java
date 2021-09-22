@@ -4,43 +4,43 @@ import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.assets.Image;
 
 public class FakeAssetSnippet implements AssetSnippet {
-    public Image _image;
-    public int _leftX;
-    public int _topY;
-    public int _rightX;
-    public int _bottomY;
+    public Image Image;
+    public int LeftX;
+    public int TopY;
+    public int RightX;
+    public int BottomY;
 
     public FakeAssetSnippet(Image image, int leftX, int topY, int rightX, int bottomY) {
-        _image = image;
-        _leftX = leftX;
-        _topY = topY;
-        _rightX = rightX;
-        _bottomY = bottomY;
+        Image = image;
+        LeftX = leftX;
+        TopY = topY;
+        RightX = rightX;
+        BottomY = bottomY;
     }
 
     @Override
     public Image image() {
-        return _image;
+        return Image;
     }
 
     @Override
     public int leftX() {
-        return _leftX;
+        return LeftX;
     }
 
     @Override
     public int topY() {
-        return _topY;
+        return TopY;
     }
 
     @Override
     public int rightX() {
-        return _rightX;
+        return RightX;
     }
 
     @Override
     public int bottomY() {
-        return _bottomY;
+        return BottomY;
     }
 
     @Override

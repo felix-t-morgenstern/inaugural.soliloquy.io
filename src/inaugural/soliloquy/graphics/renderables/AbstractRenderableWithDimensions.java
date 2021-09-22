@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractRenderableWithDimensions extends AbstractRenderable
         implements RenderableWithDimensions {
-    private ProviderAtTime<FloatBox> _renderingAreaProvider;
+    protected ProviderAtTime<FloatBox> _renderingAreaProvider;
 
     public AbstractRenderableWithDimensions(ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                             int z, EntityUuid uuid,

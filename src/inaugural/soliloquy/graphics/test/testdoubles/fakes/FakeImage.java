@@ -1,6 +1,9 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.assets.Image;
+
+import java.util.ArrayList;
 
 public class FakeImage implements Image {
     public String RelativeLocation;
@@ -10,8 +13,15 @@ public class FakeImage implements Image {
 
     public boolean SupportsMouseEventCapturing;
 
+    public ArrayList<Pair<Integer, Integer>> CapturesMouseEventsAtPixelInputs = new ArrayList<>();
+
     public FakeImage(String relativeLocation) {
         RelativeLocation = relativeLocation;
+    }
+
+    public FakeImage(int width, int height) {
+        Width = width;
+        Height = height;
     }
 
     public FakeImage(String relativeLocation, int width, int height) {
@@ -57,8 +67,51 @@ public class FakeImage implements Image {
     }
 
     @Override
-    public boolean capturesMouseEventsAtPixel(int i, int i1) throws UnsupportedOperationException, IllegalArgumentException {
-        return false;
+    public boolean capturesMouseEventsAtPixel(int x, int y)
+            throws UnsupportedOperationException, IllegalArgumentException {
+        CapturesMouseEventsAtPixelInputs.add(new Pair<Integer, Integer>(){
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+
+            @Override
+            public Integer getFirstArchetype() throws IllegalStateException {
+                return null;
+            }
+
+            @Override
+            public Integer getSecondArchetype() throws IllegalStateException {
+                return null;
+            }
+
+            @Override
+            public Pair<Integer, Integer> makeClone() {
+                return null;
+            }
+
+            @Override
+            public Integer getItem1() {
+                return x;
+            }
+
+            @Override
+            public Integer getItem2() {
+                return y;
+            }
+
+            @Override
+            public void setItem1(Integer integer) throws IllegalArgumentException {
+
+            }
+
+            @Override
+            public void setItem2(Integer integer) throws IllegalArgumentException {
+
+            }
+        });
+        return true;
     }
 
     @Override

@@ -28,7 +28,8 @@ public class MouseEventCapturingSpatialIndexImpl
                     roughResult._renderingDimensions.topY() <= y &&
                     roughResult._renderingDimensions.rightX() >= x &&
                     roughResult._renderingDimensions.bottomY() >= y &&
-                    roughResult._renderableWithArea.getZ() > highestZThusFar) {
+                    roughResult._renderableWithArea.getZ() > highestZThusFar &&
+                    roughResult._renderableWithArea.capturesMouseEventAtPoint(x, y, timestamp)) {
                 highestZThusFar = roughResult._renderableWithArea.getZ();
                 renderableWithAreaWithHighestZThusFar = roughResult._renderableWithArea;
             }

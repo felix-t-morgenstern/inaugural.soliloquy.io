@@ -1,6 +1,8 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import inaugural.soliloquy.common.test.fakes.FakePair;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -8,11 +10,16 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class FakeRenderableWithArea implements RenderableWithArea {
     public boolean CapturesMouseEvents;
+    public boolean CapturesMouseEventsAtPoint = true;
+    public ArrayList<Pair<Float, Float>> CapturesMouseEventsAtPointInputLocations =
+            new ArrayList<>();
+    public ArrayList<Long> CapturesMouseEventsAtPointInputTimestamps = new ArrayList<>();
     public FakeFloatBox RenderingDimensions;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider =
             new FakeStaticProviderAtTime<>(RenderingDimensions);
@@ -138,7 +145,9 @@ public class FakeRenderableWithArea implements RenderableWithArea {
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return false;
+        CapturesMouseEventsAtPointInputLocations.add(new FakePair<>(x, y));
+        CapturesMouseEventsAtPointInputTimestamps.add(timestamp);
+        return CapturesMouseEventsAtPoint;
     }
 
     @Override

@@ -121,7 +121,32 @@ class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     void testGetCapturingRenderableAtPointIgnoresRenderablesNotCapturingAtPoint() {
-        fail("Relegate capturesMouseEventsAtPixel to assets; test and implement this after");
+        RenderableWithArea3.CapturesMouseEventsAtPoint = false;
+        RenderableWithArea4.CapturesMouseEventsAtPoint = false;
+
+        _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea1, RenderingDimensions1);
+        _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea2, RenderingDimensions2);
+        _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea3, RenderingDimensions3);
+        _mouseEventCapturingSpatialIndex.putRenderable(RenderableWithArea4, RenderingDimensions4);
+
+        assertSame(RenderableWithArea2, _mouseEventCapturingSpatialIndex
+                .getCapturingRenderableAtPoint(.454f, .456f, 789L));
+        assertEquals(1, RenderableWithArea4.CapturesMouseEventsAtPointInputLocations.size());
+        assertEquals(1, RenderableWithArea4.CapturesMouseEventsAtPointInputTimestamps.size());
+        assertEquals(0.454f, (float)RenderableWithArea4
+                .CapturesMouseEventsAtPointInputLocations.get(0).getItem1());
+        assertEquals(0.456f, (float)RenderableWithArea4
+                .CapturesMouseEventsAtPointInputLocations.get(0).getItem2());
+        assertEquals(789L, (long)RenderableWithArea4
+                .CapturesMouseEventsAtPointInputTimestamps.get(0));
+        assertEquals(1, RenderableWithArea3.CapturesMouseEventsAtPointInputLocations.size());
+        assertEquals(1, RenderableWithArea3.CapturesMouseEventsAtPointInputTimestamps.size());
+        assertEquals(0.454f, (float)RenderableWithArea3
+                .CapturesMouseEventsAtPointInputLocations.get(0).getItem1());
+        assertEquals(0.456f, (float)RenderableWithArea3
+                .CapturesMouseEventsAtPointInputLocations.get(0).getItem2());
+        assertEquals(789L, (long)RenderableWithArea3
+                .CapturesMouseEventsAtPointInputTimestamps.get(0));
     }
 
     @Test

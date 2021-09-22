@@ -80,6 +80,6 @@ public class SpriteRenderableImpl extends AbstractRenderableWithArea implements 
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return false;
+        return capturesMouseEventAtPoint(x, y, timestamp, () -> _sprite);
     }
 }

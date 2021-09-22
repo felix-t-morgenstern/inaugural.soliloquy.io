@@ -3,7 +3,10 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
+import soliloquy.specs.graphics.assets.Animation;
+import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
+import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -113,6 +116,21 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return false;
+        return capturesMouseEventAtPoint(x, y, timestamp, () -> {
+            ImageAsset imageAsset =
+                    _imageAssetSet.getImageAssetForTypeAndDirection(_type, _direction);
+            if (imageAsset instanceof Sprite) {
+                return (Sprite)imageAsset;
+            }
+            // TODO: Refactor ImageAssetSet to support GlobalLoopingAnimation
+            else if (imageAsset instanceof Animation) {
+                Animation animation = (Animation)imageAsset;
+                return animation.snippetAtFrame((int)(timestamp % animation.msDuration()));
+            }
+            else {
+                // throw exception
+                return null;
+            }
+        });
     }
 }

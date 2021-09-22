@@ -4,6 +4,9 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.EntityUuid;
+import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
+import soliloquy.specs.graphics.assets.AssetSnippet;
+import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -15,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensions
         implements RenderableWithArea {
@@ -258,5 +262,50 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                     "set borderColorProvider to null while borderThicknessProvider is non-null");
         }
         _borderColorProvider = borderColorProvider;
+    }
+
+    protected boolean capturesMouseEventAtPoint(float x, float y, long timestamp,
+                                                Supplier<AssetSnippet> snippetSupplier) {
+        throwIfNotSupportingMouseEvents("capturesMouseEventAtPoint");
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        Check.throwOnLtValue(x, 0f, "x");
+        Check.throwOnLtValue(y, 0f, "y");
+        Check.throwOnGtValue(x, 1f, "x");
+        Check.throwOnGtValue(y, 1f, "y");
+        FloatBox renderingArea = _renderingAreaProvider.provide(timestamp);
+        if (x < renderingArea.leftX()) {
+            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: x (" + x
+                    + ") is to the left of left boundary of renderable (" + renderingArea.leftX() +
+                    ")");
+        }
+        if (x > renderingArea.rightX()) {
+            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: x (" + x
+                    + ") is to the right of right boundary of renderable (" + renderingArea.rightX()
+                    + ")");
+        }
+        if (y < renderingArea.topY()) {
+            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: y (" + y
+                    + ") is above top boundary of renderable (" + renderingArea.topY() + ")");
+        }
+        if (y > renderingArea.bottomY()) {
+            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: y (" + y
+                    + ") is below bottom boundary of renderable (" + renderingArea.bottomY() +
+                    ")");
+        }
+        AssetSnippet snippet = snippetSupplier.get();
+        float offsetX = 0f;
+        float offsetY = 0f;
+        if (snippet instanceof AnimationFrameSnippet) {
+            offsetX = ((AnimationFrameSnippet)snippet).offsetX();
+            offsetY = ((AnimationFrameSnippet)snippet).offsetY();
+        }
+        Image image = snippet.image();
+        int imageX =
+                (int)((((x - offsetX) - renderingArea.leftX()) / renderingArea.width())
+                        * (snippet.rightX() - snippet.leftX())) + snippet.leftX();
+        int imageY =
+                (int)((((y - offsetY) - renderingArea.topY()) / renderingArea.height())
+                        * (snippet.bottomY() - snippet.topY())) + snippet.topY();
+        return image.capturesMouseEventsAtPixel(imageX, imageY);
     }
 }

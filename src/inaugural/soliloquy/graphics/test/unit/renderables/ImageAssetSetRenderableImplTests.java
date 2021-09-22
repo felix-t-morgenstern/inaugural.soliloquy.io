@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.graphics.assets.ImageAssetSet;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -21,9 +21,9 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ImageAssetSetRenderableImplTests {
-    private final ImageAssetSet IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS =
+    private final FakeImageAssetSet IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS =
             new FakeImageAssetSet(true);
-    private final ImageAssetSet IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS =
+    private final FakeImageAssetSet IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS =
             new FakeImageAssetSet(false);
     private final String TYPE = "type";
     private final String DIRECTION = "direction";
@@ -34,8 +34,8 @@ class ImageAssetSetRenderableImplTests {
     private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeProviderAtTime<>();
+    private final FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProviderAtTime<>(null);
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
@@ -643,13 +643,116 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    void testCapturesMouseEventAtPoint() {
-        fail("Implement this test!");
+    void testCapturesMouseEventAtPointForSprite() {
+        FakeSprite imageAsset = new FakeSprite();
+        imageAsset.LeftX = 250;
+        imageAsset.RightX = 750;
+        imageAsset.TopY = 1000;
+        imageAsset.BottomY = 2500;
+        FakeImage image = new FakeImage(1000, 3000);
+        image.Width = 1000;
+        image.Height = 3000;
+        imageAsset.Image = image;
+        IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS.ImageAsset = imageAsset;
+        RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
+
+        _imageAssetSetRenderableWithMouseEvents.setType(TYPE);
+        _imageAssetSetRenderableWithMouseEvents.setDirection(DIRECTION);
+        boolean capturesMouseEventAtPoint = _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+
+        assertTrue(capturesMouseEventAtPoint);
+        assertEquals(1, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.size());
+        assertEquals(TYPE, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.get(0).getItem1());
+        assertEquals(DIRECTION, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.get(0).getItem2());
+        ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
+                ((FakeImage)imageAsset.Image).CapturesMouseEventsAtPixelInputs;
+        assertEquals(1, capturesMouseEventsAtPixelInputs.size());
+        assertEquals(
+                (int)((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+        assertEquals(
+                (int)((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
+                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+        assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
+        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+    }
+
+    @Test
+    void testCapturesMouseEventAtPointForAnimation() {
+        FakeAnimationFrameSnippet animationFrameSnippet = new FakeAnimationFrameSnippet();
+        animationFrameSnippet.OffsetX = 0.0123f;
+        animationFrameSnippet.OffsetY = 0.0456f;
+        FakeAnimation animation = new FakeAnimation(789789);
+        IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS.ImageAsset = animation;
+        animation.AnimationFrameSnippet = animationFrameSnippet;
+        animationFrameSnippet.LeftX = 250;
+        animationFrameSnippet.RightX = 750;
+        animationFrameSnippet.TopY = 1000;
+        animationFrameSnippet.BottomY = 2500;
+        FakeImage snippetImage = (FakeImage)animationFrameSnippet.Image;
+        snippetImage.Width = 1000;
+        snippetImage.Height = 3000;
+        RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
+
+        _imageAssetSetRenderableWithMouseEvents.setType(TYPE);
+        _imageAssetSetRenderableWithMouseEvents.setDirection(DIRECTION);
+        boolean capturesMouseEventAtPoint = _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+
+        assertTrue(capturesMouseEventAtPoint);
+        assertEquals(1, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.size());
+        assertEquals(TYPE, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.get(0).getItem1());
+        assertEquals(DIRECTION, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
+                .GetImageAssetForTypeAndDirectionInputs.get(0).getItem2());
+        ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
+                snippetImage.CapturesMouseEventsAtPixelInputs;
+        assertEquals(1, capturesMouseEventsAtPixelInputs.size());
+        assertEquals(
+                (int)(((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+        assertEquals(
+                (int)(((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
+                        + 1000),
+                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+        assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
+        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test
     void testCapturesMouseEventAtPointWithInvalidParams() {
-        fail("Implement this test!");
+        float verySmallNumber = 0.0001f;
+
+        assertThrows(UnsupportedOperationException.class, () ->
+                _imageAssetSetRenderableWithoutMouseEvents
+                        .capturesMouseEventAtPoint(.5f, .5f, 0L));
+
+        RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(.5f, .5f, 1.5f, 1.5f);
+
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(.5f - verySmallNumber, .75f, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(1f + verySmallNumber, .75f, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(.75f, .5f - verySmallNumber, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(.75f, 1.5f + verySmallNumber, 0L));
+
+        RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -0.5f, 0.5f, 0.5f);
+
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0f - verySmallNumber, .25f, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.5f + verySmallNumber, .25f, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(.25f, 0f - verySmallNumber, 0L));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(.25f, 0.5f + verySmallNumber, 0L));
     }
 
     @Test

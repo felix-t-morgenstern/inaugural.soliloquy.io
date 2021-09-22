@@ -12,10 +12,15 @@ public class FakeAnimation implements Animation {
     public int MsDuration;
     public boolean SnippetAtFrameCalled = false;
     public boolean SupportsMouseEventCapturing;
+    public FakeAnimationFrameSnippet AnimationFrameSnippet;
     public ArrayList<Pair<Integer,AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
 
     public FakeAnimation(String id) {
         Id = id;
+    }
+
+    public FakeAnimation(int msDuration) {
+        MsDuration = msDuration;
     }
 
     public FakeAnimation(String id, int msDuration) {
@@ -42,7 +47,9 @@ public class FakeAnimation implements Animation {
     @Override
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
         SnippetAtFrameCalled = true;
-        AnimationFrameSnippet snippetProvided = new FakeAnimationFrameSnippet();
+        AnimationFrameSnippet snippetProvided = AnimationFrameSnippet != null ?
+                AnimationFrameSnippet :
+                new FakeAnimationFrameSnippet();
         SnippetsProvided.add(new FakePair<>(i, snippetProvided));
         return snippetProvided;
     }
