@@ -46,6 +46,7 @@ class GraphicsCoreLoopImplTests {
     private final float[] MESH_VERTICES = new float[] {0.123f};
     private final float[] MESH_UV_COORDINATES = new float[] {0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
+    private final FakeMouseCursor MOUSE_CURSOR = new FakeMouseCursor();
 
     private GraphicsCoreLoop _graphicsCoreLoop;
 
@@ -72,7 +73,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         );
     }
 
@@ -92,7 +94,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 "",
@@ -108,7 +111,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -124,7 +128,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -140,7 +145,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -156,7 +162,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -172,7 +179,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -188,7 +196,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -204,7 +213,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -220,7 +230,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -236,7 +247,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -252,7 +264,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -268,7 +281,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -284,7 +298,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -300,7 +315,8 @@ class GraphicsCoreLoopImplTests {
                 null,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -316,7 +332,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 null,
                 MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -332,7 +349,8 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 null,
-                GRAPHICS_PRELOADER
+                GRAPHICS_PRELOADER,
+                MOUSE_CURSOR
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
@@ -348,6 +366,24 @@ class GraphicsCoreLoopImplTests {
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
+                null,
+                MOUSE_CURSOR
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+                TITLEBAR,
+                MOUSE_BUTTON_CALLBACK,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                WINDOW_RESOLUTION_MANAGER,
+                FRAME_EXECUTOR,
+                SHADER_FACTORY,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                MESH_FACTORY,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
                 null
         ));
     }
@@ -407,7 +443,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalled() {
+    void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalledAndMouseCursorUpdateCalled() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
         _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
@@ -415,6 +451,7 @@ class GraphicsCoreLoopImplTests {
         assertSame(MESH, RENDERER.Mesh);
         assertSame(SHADER_FACTORY.MostRecentlyCreated, RENDERER.Shader);
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
+        assertTrue(MOUSE_CURSOR.NumberOfTimesUpdateCursorCalled > 0);
     }
 
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

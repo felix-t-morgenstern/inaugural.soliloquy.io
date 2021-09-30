@@ -9,6 +9,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -32,6 +33,7 @@ public class DisplayTest {
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
 
     protected static FakeFrameTimer FrameTimer;
+    protected static MouseCursor MouseCursor = new FakeMouseCursor();
 
     /** @noinspection rawtypes*/
     protected static void runTest(Function<WindowResolutionManager, List<Renderer>>
@@ -63,7 +65,7 @@ public class DisplayTest {
                 new FakeGLFWMouseButtonCallback(), FrameTimer, 20, windowResolutionManager,
                 frameExecutor, new ShaderFactoryImpl(), renderersWithMeshAndShader,
                 SHADER_FILENAME_PREFIX, meshFactory, renderersWithMeshAndShader, MESH_DATA,
-                MESH_DATA, graphicsPreloader);
+                MESH_DATA, graphicsPreloader, MouseCursor);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

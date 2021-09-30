@@ -93,7 +93,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTestWithPausing {
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, frameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
-                MESH_DATA, MESH_DATA, graphicsPreloader);
+                MESH_DATA, MESH_DATA, graphicsPreloader, new FakeMouseCursor());
 
         graphicsPreloader.LoadAction = () -> {
             int msDuration = 2000;

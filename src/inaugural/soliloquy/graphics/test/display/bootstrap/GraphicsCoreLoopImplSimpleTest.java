@@ -39,7 +39,7 @@ class GraphicsCoreLoopImplSimpleTest {
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, WindowManager, frameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
-                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
+                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), new FakeMouseCursor());
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {

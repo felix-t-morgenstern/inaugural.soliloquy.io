@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
+import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Shader;
@@ -38,6 +39,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final float[] MESH_VERTICES;
     private final float[] MESH_UV_COORDINATES;
     private final GraphicsPreloader GRAPHICS_PRELOADER;
+    private final MouseCursor MOUSE_CURSOR;
 
     private long _window;
 
@@ -56,7 +58,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                         renderersWithMesh,
                                 float[] meshVertices,
                                 float[] meshUvCoordinates,
-                                GraphicsPreloader graphicsPreloader) {
+                                GraphicsPreloader graphicsPreloader,
+                                MouseCursor mouseCursor) {
         TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
         MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
@@ -76,6 +79,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         MESH_VERTICES = Check.ifNull(meshVertices, "meshVertices");
         MESH_UV_COORDINATES = Check.ifNull(meshUvCoordinates, "meshUvCoordinates");
         GRAPHICS_PRELOADER = Check.ifNull(graphicsPreloader, "graphicsPreloader");
+        MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
     }
 
     @Override
@@ -117,6 +121,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         new Thread(gameThread).start();
 
         while(!glfwWindowShouldClose(_window)) {
+            MOUSE_CURSOR.updateCursor(_window);
+
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
 

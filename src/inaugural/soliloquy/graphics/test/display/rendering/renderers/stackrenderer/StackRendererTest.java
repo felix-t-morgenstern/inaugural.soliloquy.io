@@ -133,7 +133,7 @@ public class StackRendererTest extends DisplayTest {
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
                 frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
                 SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
-                graphicsPreloader);
+                graphicsPreloader, new FakeMouseCursor());
 
         graphicsPreloader.LoadAction = () -> {
             spriteAxe07.Image = new ImageFactoryImpl(0.5f).make(AXE_07_LOCATION, false);

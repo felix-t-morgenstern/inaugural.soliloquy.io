@@ -46,7 +46,7 @@ class WindowResolutionManagerImplWindowedTest {
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowManager, fakeFrameExecutor,
                 new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
-                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader());
+                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), new FakeMouseCursor());
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
     }
