@@ -31,6 +31,7 @@ public class GlobalLoopingAnimationPreloaderWorker {
                             globalLoopingAnimationDefinitionDTOs) {
         globalLoopingAnimationDefinitionDTOs.forEach(definition -> GLOBAL_LOOPING_ANIMATIONS
                 .add(GLOBAL_LOOPING_ANIMATION_FACTORY.make(definition.id,
-                        ANIMATIONS.get(definition.animationId), definition.periodModuloOffset)));
+                        ANIMATIONS.get(definition.animationId), definition.periodModuloOffset,
+                        null)));
     }
 }

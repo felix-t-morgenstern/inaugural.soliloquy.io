@@ -7,9 +7,10 @@ import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAni
 
 public class GlobalLoopingAnimationFactoryImpl implements GlobalLoopingAnimationFactory {
     @Override
-    public GlobalLoopingAnimation make(String id, Animation animation, int periodModuloOffset)
+    public GlobalLoopingAnimation make(String id, Animation animation, int periodModuloOffset,
+                                       Long pauseTimestamp)
             throws IllegalArgumentException {
-        return new GlobalLoopingAnimationImpl(id, animation, periodModuloOffset);
+        return new GlobalLoopingAnimationImpl(id, animation, periodModuloOffset, pauseTimestamp);
     }
 
     @Override

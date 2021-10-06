@@ -17,27 +17,28 @@ class GlobalLoopingAnimationImplTests {
     private final String ANIMATION_ID = "animationId";
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
     private final long MOST_RECENT_TIMESTAMP = 123L;
+    private final long PAUSE_TIMESTAMP = 111L;
 
     private GlobalLoopingAnimation _globalLoopingAnimation;
 
     @BeforeEach
     void setUp() {
         _globalLoopingAnimation = new GlobalLoopingAnimationImpl(ID, ANIMATION,
-                PERIOD_MODULO_OFFSET);
+                PERIOD_MODULO_OFFSET, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl("", ANIMATION, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl("", ANIMATION, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET));
+                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION));
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION, null));
     }
 
     @Test
@@ -73,6 +74,12 @@ class GlobalLoopingAnimationImplTests {
     @Test
     void testPeriodModuloOffset() {
         assertEquals(PERIOD_MODULO_OFFSET, _globalLoopingAnimation.periodModuloOffset());
+    }
+
+    @Test
+    void testPauseTimestamp() {
+        assertEquals(PAUSE_TIMESTAMP, (long)new GlobalLoopingAnimationImpl(ID, ANIMATION,
+                PERIOD_MODULO_OFFSET, PAUSE_TIMESTAMP).pausedTimestamp());
     }
 
     @Test

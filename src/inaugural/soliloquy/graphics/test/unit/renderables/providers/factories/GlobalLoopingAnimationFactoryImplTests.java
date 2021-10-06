@@ -26,28 +26,31 @@ class GlobalLoopingAnimationFactoryImplTests {
 
     @Test
     void testMake() {
+        long pauseTimestamp = 456456L;
         GlobalLoopingAnimation globalLoopingAnimation =
-                _globalLoopingAnimationFactory.make(ID, ANIMATION, PERIOD_MODULO_OFFSET);
+                _globalLoopingAnimationFactory.make(ID, ANIMATION, PERIOD_MODULO_OFFSET,
+                        pauseTimestamp);
 
         assertNotNull(globalLoopingAnimation);
         assertTrue(globalLoopingAnimation instanceof GlobalLoopingAnimationImpl);
         assertSame(ID, globalLoopingAnimation.id());
         assertSame(ANIMATION_ID, globalLoopingAnimation.animationId());
         assertEquals(PERIOD_MODULO_OFFSET, globalLoopingAnimation.periodModuloOffset());
+        assertEquals(pauseTimestamp, (long)globalLoopingAnimation.pausedTimestamp());
     }
 
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(null, ANIMATION, PERIOD_MODULO_OFFSET));
+                _globalLoopingAnimationFactory.make(null, ANIMATION, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make("", ANIMATION, PERIOD_MODULO_OFFSET));
+                _globalLoopingAnimationFactory.make("", ANIMATION, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(ID, null, PERIOD_MODULO_OFFSET));
+                _globalLoopingAnimationFactory.make(ID, null, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(ID, ANIMATION, -1));
+                _globalLoopingAnimationFactory.make(ID, ANIMATION, -1, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(ID, ANIMATION, MS_DURATION));
+                _globalLoopingAnimationFactory.make(ID, ANIMATION, MS_DURATION, null));
     }
 
     @Test

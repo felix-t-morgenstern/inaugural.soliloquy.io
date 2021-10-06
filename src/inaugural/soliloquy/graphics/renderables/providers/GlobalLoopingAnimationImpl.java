@@ -15,9 +15,13 @@ public class GlobalLoopingAnimationImpl
     private static final EntityUuid PLACEHOLDER_UUID = new PlaceholderUuid();
 
     /** @noinspection ConstantConditions*/
-    public GlobalLoopingAnimationImpl(String id, Animation animation,
-                                      int periodModuloOffset) {
-        super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(), periodModuloOffset, null);
+    public GlobalLoopingAnimationImpl(String id, Animation animation, int periodModuloOffset,
+                                      Long pausedTimestamp) {
+        // NB: pausedTimestamp is used for both pausedTimestamp and mostRecentTimestamp in parent
+        //     constructor since mostRecentTimestamp must be non-null if pausedTimestamp is
+        //     non-null
+        super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(),
+                periodModuloOffset, pausedTimestamp, pausedTimestamp);
         ID = Check.ifNullOrEmpty(id, "id");
         ANIMATION = animation;
     }

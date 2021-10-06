@@ -89,7 +89,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
 
         GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
-                animation, periodModuloOffset);
+                animation, periodModuloOffset, null);
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation, null, null,

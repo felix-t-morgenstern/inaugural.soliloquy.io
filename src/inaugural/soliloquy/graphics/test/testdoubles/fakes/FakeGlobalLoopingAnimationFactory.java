@@ -13,7 +13,8 @@ public class FakeGlobalLoopingAnimationFactory implements GlobalLoopingAnimation
     public ArrayList<GlobalLoopingAnimation> Outputs = new ArrayList<>();
 
     @Override
-    public GlobalLoopingAnimation make(String id, Animation animation, int periodModuloOffset)
+    public GlobalLoopingAnimation make(String id, Animation animation, int periodModuloOffset,
+                                       Long pauseTimestamp)
             throws IllegalArgumentException {
         InputIds.add(id);
         InputAnimations.add(animation);

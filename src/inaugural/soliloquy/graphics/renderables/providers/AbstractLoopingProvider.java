@@ -14,9 +14,8 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     private T _mostRecentlyProvidedValue;
 
     public AbstractLoopingProvider(EntityUuid uuid, int periodDuration, int periodModuloOffset,
-                                   Long mostRecentTimestamp) {
-        // TODO: Draft a constructor with a pausedTimestamp
-        super(periodDuration, periodModuloOffset, null, mostRecentTimestamp);
+                                   Long pauseTimestamp, Long mostRecentTimestamp) {
+        super(periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
         ID = Check.ifNull(uuid, "uuid");
     }
 
