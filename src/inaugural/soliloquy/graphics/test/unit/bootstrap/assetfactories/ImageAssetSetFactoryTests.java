@@ -4,10 +4,7 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageAssetSetFactor
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.assets.ImageAsset;
-import soliloquy.specs.graphics.assets.ImageAssetSet;
-import soliloquy.specs.graphics.assets.Sprite;
+import soliloquy.specs.graphics.assets.*;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
@@ -35,13 +32,25 @@ class ImageAssetSetFactoryTests {
     private final String ANIMATION_2_ID = "animation2Id";
     private final FakeAnimation ANIMATION_2 = new FakeAnimation(ANIMATION_2_ID, true);
 
+    private final String GLOBAL_LOOPING_ANIMATION_1_ID = "globalLoopingAnimation1Id";
+    private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_1 =
+            new FakeGlobalLoopingAnimation(GLOBAL_LOOPING_ANIMATION_1_ID);
+
+    private final String GLOBAL_LOOPING_ANIMATION_2_ID = "globalLoopingAnimation2Id";
+    private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_2 =
+            new FakeGlobalLoopingAnimation(GLOBAL_LOOPING_ANIMATION_2_ID);
+
     private final FakeRegistry<Sprite> SPRITES_REGISTRY = new FakeRegistry<Sprite>();
     private final FakeRegistry<Animation> ANIMATIONS_REGISTRY = new FakeRegistry<Animation>();
+    private final FakeRegistry<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS_REGISTRY =
+            new FakeRegistry<GlobalLoopingAnimation>();
 
     private final String TYPE1 = "type1";
     private final String TYPE2 = "type2";
+    private final String TYPE3 = "type3";
     private final String DIRECTION1 = "direction1";
     private final String DIRECTION2 = "direction2";
+    private final String DIRECTION3 = "direction3";
 
     private final FakeImageAssetSetAssetDefinition ASSET_1_DEFINITION =
             new FakeImageAssetSetAssetDefinition(TYPE1, "",
@@ -55,6 +64,14 @@ class ImageAssetSetFactoryTests {
     private final FakeImageAssetSetAssetDefinition ASSET_4_DEFINITION =
             new FakeImageAssetSetAssetDefinition("", DIRECTION2,
                     ImageAsset.ImageAssetType.ANIMATION, ANIMATION_2_ID);
+    private final FakeImageAssetSetAssetDefinition ASSET_5_DEFINITION =
+            new FakeImageAssetSetAssetDefinition(TYPE3, "",
+                    ImageAsset.ImageAssetType.GLOBAL_LOOPING_ANIMATION,
+                    GLOBAL_LOOPING_ANIMATION_1_ID);
+    private final FakeImageAssetSetAssetDefinition ASSET_6_DEFINITION =
+            new FakeImageAssetSetAssetDefinition("", DIRECTION3,
+                    ImageAsset.ImageAssetType.GLOBAL_LOOPING_ANIMATION,
+                    GLOBAL_LOOPING_ANIMATION_2_ID);
 
     private final List<ImageAssetSetAssetDefinition> IMAGE_ASSET_SET_ASSET_DEFINITIONS =
             new ArrayList<ImageAssetSetAssetDefinition>() {{
@@ -62,6 +79,8 @@ class ImageAssetSetFactoryTests {
                 add(ASSET_2_DEFINITION);
                 add(ASSET_3_DEFINITION);
                 add(ASSET_4_DEFINITION);
+                add(ASSET_5_DEFINITION);
+                add(ASSET_6_DEFINITION);
             }};
     private final FakeImageAssetSetDefinition IMAGE_ASSET_SET_DEFINITION =
             new FakeImageAssetSetDefinition(IMAGE_ASSET_SET_ASSET_DEFINITIONS, IMAGE_ASSET_SET_ID);
@@ -76,15 +95,24 @@ class ImageAssetSetFactoryTests {
         ANIMATIONS_REGISTRY.add(ANIMATION_1);
         ANIMATIONS_REGISTRY.add(ANIMATION_2);
 
-        _imageAssetSetFactory = new ImageAssetSetFactory(SPRITES_REGISTRY, ANIMATIONS_REGISTRY);
+        GLOBAL_LOOPING_ANIMATIONS_REGISTRY.add(GLOBAL_LOOPING_ANIMATION_1);
+        GLOBAL_LOOPING_ANIMATIONS_REGISTRY.add(GLOBAL_LOOPING_ANIMATION_2);
+
+        _imageAssetSetFactory = new ImageAssetSetFactory(SPRITES_REGISTRY, ANIMATIONS_REGISTRY,
+                GLOBAL_LOOPING_ANIMATIONS_REGISTRY);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetFactory(null, ANIMATIONS_REGISTRY));
+                () -> new ImageAssetSetFactory(null, ANIMATIONS_REGISTRY,
+                        GLOBAL_LOOPING_ANIMATIONS_REGISTRY));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetFactory(SPRITES_REGISTRY, null));
+                () -> new ImageAssetSetFactory(SPRITES_REGISTRY, null,
+                        GLOBAL_LOOPING_ANIMATIONS_REGISTRY));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ImageAssetSetFactory(SPRITES_REGISTRY, ANIMATIONS_REGISTRY,
+                        null));
     }
 
     @Test
@@ -173,6 +201,14 @@ class ImageAssetSetFactoryTests {
         assertSame(ANIMATION_1, imageAssetSet.getImageAssetForTypeAndDirection(TYPE2, ""));
         assertSame(ANIMATION_2, imageAssetSet.getImageAssetForTypeAndDirection(null, DIRECTION2));
         assertSame(ANIMATION_2, imageAssetSet.getImageAssetForTypeAndDirection("", DIRECTION2));
+        assertSame(GLOBAL_LOOPING_ANIMATION_1,
+                imageAssetSet.getImageAssetForTypeAndDirection(TYPE3, null));
+        assertSame(GLOBAL_LOOPING_ANIMATION_1,
+                imageAssetSet.getImageAssetForTypeAndDirection(TYPE3, ""));
+        assertSame(GLOBAL_LOOPING_ANIMATION_2,
+                imageAssetSet.getImageAssetForTypeAndDirection("", DIRECTION3));
+        assertSame(GLOBAL_LOOPING_ANIMATION_2,
+                imageAssetSet.getImageAssetForTypeAndDirection(null, DIRECTION3));
     }
 
     @Test

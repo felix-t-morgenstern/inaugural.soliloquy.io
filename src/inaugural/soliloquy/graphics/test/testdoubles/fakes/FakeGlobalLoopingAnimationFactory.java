@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import java.util.ArrayList;

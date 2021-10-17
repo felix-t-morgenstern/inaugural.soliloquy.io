@@ -2,10 +2,7 @@ package inaugural.soliloquy.graphics.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
-import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.assets.ImageAsset;
-import soliloquy.specs.graphics.assets.ImageAssetSet;
-import soliloquy.specs.graphics.assets.Sprite;
+import soliloquy.specs.graphics.assets.*;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
@@ -20,11 +17,15 @@ public class ImageAssetSetFactory
         extends AbstractAssetFactory<ImageAssetSetDefinition, ImageAssetSet> {
     private final Registry<Sprite> SPRITES_REGISTRY;
     private final Registry<Animation> ANIMATIONS_REGISTRY;
+    private final Registry<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS_REGISTRY;
 
     public ImageAssetSetFactory(Registry<Sprite> spritesRegistry,
-                                Registry<Animation> animationRegistry) {
+                                Registry<Animation> animationsRegistry,
+                                Registry<GlobalLoopingAnimation> globalLoopingAnimationsRegistry) {
         SPRITES_REGISTRY = Check.ifNull(spritesRegistry, "spritesRegistry");
-        ANIMATIONS_REGISTRY = Check.ifNull(animationRegistry, "animationRegistry");
+        ANIMATIONS_REGISTRY = Check.ifNull(animationsRegistry, "animationsRegistry");
+        GLOBAL_LOOPING_ANIMATIONS_REGISTRY = Check.ifNull(globalLoopingAnimationsRegistry,
+                "globalLoopingAnimationsRegistry");
     }
 
     @Override
@@ -77,6 +78,14 @@ public class ImageAssetSetFactory
                         supportsMouseEventCapturing =
                                 ((Animation)imageAsset).supportsMouseEventCapturing();
                     }
+                    break;
+                case GLOBAL_LOOPING_ANIMATION:
+                    if (!GLOBAL_LOOPING_ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
+                        throw new IllegalArgumentException(
+                                "ImageAssetSetFactory.make: no GlobalLoopingAnimation found " +
+                                        "with id (" + assetDefinition.assetId() + ")");
+                    }
+                    imageAsset = GLOBAL_LOOPING_ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
                     break;
                 case UNKNOWN:
                 default:

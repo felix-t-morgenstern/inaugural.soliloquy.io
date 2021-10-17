@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.renderables.providers.factories.GlobalLoopin
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import static org.junit.jupiter.api.Assertions.*;

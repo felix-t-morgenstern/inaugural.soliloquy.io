@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.spies;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import java.util.ArrayList;
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import static org.junit.jupiter.api.Assertions.*;
 

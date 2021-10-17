@@ -4,7 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 public class GlobalLoopingAnimationImpl
         extends AbstractLoopingProvider<AnimationFrameSnippet>

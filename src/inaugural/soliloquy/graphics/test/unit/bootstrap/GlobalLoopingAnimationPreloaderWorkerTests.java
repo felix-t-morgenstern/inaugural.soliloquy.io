@@ -8,7 +8,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalLoopingAnim
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

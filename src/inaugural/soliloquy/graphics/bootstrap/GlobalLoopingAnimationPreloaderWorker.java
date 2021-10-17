@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.api.dto.GlobalLoopingAnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
 import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.renderables.providers.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import java.util.Collection;
