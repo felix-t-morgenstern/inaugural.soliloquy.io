@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.ImagePreloaderWorker;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
 

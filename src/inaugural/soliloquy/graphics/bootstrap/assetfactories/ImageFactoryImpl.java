@@ -54,10 +54,10 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
                 channelsBuffer, DESIRED_CHANNELS);
         assert imageBytes != null;
 
-        int textureId = glGenTextures();
-
         int width = widthBuffer.get();
         int height = heightBuffer.get();
+
+        int textureId = glGenTextures();
 
         glBindTexture(GL_TEXTURE_2D, textureId);
 

@@ -1,17 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.io;
 
 import inaugural.soliloquy.graphics.api.Constants;
-import inaugural.soliloquy.graphics.io.MouseCursorImpl;
-import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderAtTime;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.WindowResolutionManager;
-import soliloquy.specs.graphics.rendering.renderers.Renderer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -24,24 +16,12 @@ import static org.lwjgl.glfw.GLFW.*;
  * 2. The window will then close
  *
  */
-class MouseCursorImplSimpleTest extends DisplayTest {
-    private static HashMap<String, ProviderAtTime<Long>> _mouseCursors;
-
+class MouseCursorImplSimpleTest extends MouseCursorImplTest {
     public static void main(String[] args) {
-        runTest(MouseCursorImplSimpleTest::generateRenderablesAndRenderersWithMeshAndShader,
+        runTest(MouseCursorImplTest::generateRenderablesAndRenderersWithMeshAndShader,
                 timestamp -> {},
                 MouseCursorImplSimpleTest::graphicsPreloaderLoadAction,
-                MouseCursorImplSimpleTest::resizeThenCloseAfterSomeTime);
-    }
-
-    /** @noinspection rawtypes*/
-    private static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
-            WindowResolutionManager windowResolutionManager) {
-        _mouseCursors = new HashMap<>();
-        MouseCursor = new MouseCursorImpl(_mouseCursors, new FakeGlobalClock());
-        FrameTimer.ShouldExecuteNextFrame = true;
-
-        return new ArrayList<>();
+                MouseCursorImplSimpleTest::actAndCloseAfterSomeTime);
     }
 
     protected static void graphicsPreloaderLoadAction() {
@@ -54,7 +34,7 @@ class MouseCursorImplSimpleTest extends DisplayTest {
                 new FakeStaticProviderAtTime<>(standardHandMouseCursor));
     }
 
-    private static void resizeThenCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
         MouseCursor.setMouseCursor(Constants.STANDARD_HAND_CURSOR_ID);
