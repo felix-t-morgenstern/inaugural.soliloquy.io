@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SpritePreloaderWorkerTests {
     private final java.util.Map<String, Image> IMAGES = new HashMap<>();
     private final FakeSpriteFactory FACTORY = new FakeSpriteFactory();
-    private final Registry<Sprite> REGISTRY = new FakeRegistry<>();
+    private final Registry<Sprite> REGISTRY = new FakeRegistry<Sprite>();
 
     private SpritePreloaderWorker _spritePreloaderWorker;
 

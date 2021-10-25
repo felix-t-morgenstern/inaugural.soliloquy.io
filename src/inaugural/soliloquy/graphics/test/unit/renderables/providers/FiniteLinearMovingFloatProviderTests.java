@@ -38,8 +38,20 @@ class FiniteLinearMovingFloatProviderTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingFloatProvider(null, VALUES_AT_TIMES, null, null));
+
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingFloatProvider(UUID, null, null, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteLinearMovingFloatProvider(UUID, new HashMap<>(), null, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
+                    put(null, VALUE_1);
+                }}, null, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new FiniteLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
+                    put(TIME_1, null);
+                }}, null, null));
+
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, 2L, null));
         assertThrows(IllegalArgumentException.class, () ->

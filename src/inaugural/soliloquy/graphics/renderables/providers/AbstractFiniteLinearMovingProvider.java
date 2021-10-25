@@ -14,14 +14,25 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
         implements FiniteLinearMovingProvider<T> {
     private final EntityUuid UUID;
     private final HashMap<Long, T> VALUES_AT_TIMES;
-    private final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
+    protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
     protected AbstractFiniteLinearMovingProvider(EntityUuid uuid, Map<Long, T> valuesAtTimes,
                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
         super(pausedTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
-        VALUES_AT_TIMES = new HashMap<>(Check.ifNull(valuesAtTimes, "valuesAtTimes"));
+
+        VALUES_AT_TIMES = new HashMap<>();
+        Check.ifNull(valuesAtTimes, "valuesAtTimes");
+        if (valuesAtTimes.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "AbstractFiniteLinearMovingProvider: valuesAtTimes is empty");
+        }
+        valuesAtTimes.forEach((time, value) -> {
+            VALUES_AT_TIMES.put(Check.ifNull(time, "time within valuesAtTimes"),
+                    Check.ifNull(value, "value within valuesAtTimes"));
+        });
+
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromLongs(VALUES_AT_TIMES.keySet());
         CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
@@ -48,6 +59,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
             return VALUES_AT_TIMES.get(NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue);
         }
         long time1 = NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(timestamp);
+        int transition = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1);
         long time2 = NEAREST_FLOOR_AND_CEILING_TREE
                 .OrderedValues[NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1) + 1];
         long distanceBetweenTimes = time2 - time1;
@@ -55,10 +67,16 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
         float weight1 = 1f - weight2;
         T value1 = VALUES_AT_TIMES.get(time1);
         T value2 = VALUES_AT_TIMES.get(time2);
-        return interpolate(value1, weight1, value2, weight2);
+
+        return interpolate(value1, weight1, value2, weight2, isClockwise(transition));
     }
 
-    protected abstract T interpolate(T value1, float weight1, T value2, float weight2);
+    protected abstract T interpolate(T value1, float weight1, T value2, float weight2,
+                                     boolean isClockwise);
+
+    protected boolean isClockwise(int transition) {
+        return true;
+    }
 
     @Override
     public EntityUuid uuid() {

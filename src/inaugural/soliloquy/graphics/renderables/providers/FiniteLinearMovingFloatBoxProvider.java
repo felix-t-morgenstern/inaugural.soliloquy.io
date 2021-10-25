@@ -22,7 +22,8 @@ public class FiniteLinearMovingFloatBoxProvider
 
     @Override
     protected FloatBox interpolate(FloatBox value1, float weight1,
-                                   FloatBox value2, float weight2) {
+                                   FloatBox value2, float weight2,
+                                   boolean isClockwise) {
         float value1WeightedLeftX = value1.leftX() * weight1;
         float value1WeightedTopY = value1.topY() * weight1;
         float value1WeightedRightX = value1.rightX() * weight1;
