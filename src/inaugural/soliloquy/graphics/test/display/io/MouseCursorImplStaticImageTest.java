@@ -30,7 +30,7 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
     protected static void graphicsPreloaderLoadAction() {
         new MouseCursorImagePreloaderWorker(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, 0, 0,
                 relativeLocation -> mouseCursorImage ->
-                        _mouseCursors.put(relativeLocation,
+                        _mouseCursorProviders.put(relativeLocation,
                                 new StaticProviderImpl<>(new FakeEntityUuid(), mouseCursorImage,
                                         null)))
                 .run();

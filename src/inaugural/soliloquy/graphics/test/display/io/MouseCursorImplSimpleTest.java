@@ -28,9 +28,9 @@ class MouseCursorImplSimpleTest extends MouseCursorImplTest {
         long standardArrowMouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
         long standardHandMouseCursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 
-        _mouseCursors.put(Constants.STANDARD_ARROW_MOUSE_CURSOR_ID,
+        _mouseCursorProviders.put(Constants.STANDARD_ARROW_MOUSE_CURSOR_ID,
                 new FakeStaticProviderAtTime<>(standardArrowMouseCursor));
-        _mouseCursors.put(Constants.STANDARD_HAND_CURSOR_ID,
+        _mouseCursorProviders.put(Constants.STANDARD_HAND_CURSOR_ID,
                 new FakeStaticProviderAtTime<>(standardHandMouseCursor));
     }
 

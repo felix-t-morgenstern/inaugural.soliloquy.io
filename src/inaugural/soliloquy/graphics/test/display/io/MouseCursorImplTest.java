@@ -10,13 +10,13 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class MouseCursorImplTest extends DisplayTest {
-    protected static HashMap<String, ProviderAtTime<Long>> _mouseCursors = new HashMap<>();
+public class MouseCursorImplTest extends DisplayTest {
+    protected static HashMap<String, ProviderAtTime<Long>> _mouseCursorProviders = new HashMap<>();
 
     /** @noinspection rawtypes*/
-    protected static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        MouseCursor = new MouseCursorImpl(_mouseCursors, new FakeGlobalClock());
+        MouseCursor = new MouseCursorImpl(_mouseCursorProviders, new FakeGlobalClock());
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return new ArrayList<>();
