@@ -45,6 +45,5 @@ public abstract class CanValidateFontDefinitions {
                 1f,
                 "sum of leadingAdjustment and " +
                         "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
-        // TODO: Check whether glyphwiseAdditionalHorizontalTextureSpacing is null
     }
 }
