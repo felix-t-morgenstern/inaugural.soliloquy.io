@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers;
 
 import inaugural.soliloquy.graphics.bootstrap.MouseCursorImagePreloaderWorker;
-import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProvider;
+import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.MouseCursorImplTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -59,8 +59,8 @@ class AnimatedMouseCursorProviderSimpleTest extends MouseCursorImplTest {
         long timestamp = new FakeGlobalClock().globalTimestamp();
         int periodModuloOffset = msDuration - (int)(timestamp % msDuration);
 
-        AnimatedMouseCursorProvider animatedMouseCursorProvider =
-                new AnimatedMouseCursorProvider(new FakeEntityUuid(), mouseCursorsAtMs, msDuration,
+        AnimatedMouseCursorProviderImpl animatedMouseCursorProvider =
+                new AnimatedMouseCursorProviderImpl("id", mouseCursorsAtMs, msDuration,
                         periodModuloOffset, null, null);
 
         _mouseCursorProviders.put(PROVIDER_ID, animatedMouseCursorProvider);
