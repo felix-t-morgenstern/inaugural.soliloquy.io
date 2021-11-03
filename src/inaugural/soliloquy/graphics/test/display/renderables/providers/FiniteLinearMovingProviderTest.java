@@ -14,7 +14,7 @@ import java.util.List;
 
 public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
     /** @noinspection rawtypes*/
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager)
@@ -38,9 +38,5 @@ public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
         return new ArrayList<Renderer>() {{
             add(SpriteRenderer);
         }};
-    }
-
-    protected static void stackRendererAction(long timestamp) {
-        SpriteRenderer.render(SpriteRenderable, timestamp);
     }
 }

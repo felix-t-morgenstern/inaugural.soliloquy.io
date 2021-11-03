@@ -22,7 +22,7 @@ public class SpriteRendererTest extends DisplayTest {
     protected static Renderer<soliloquy.specs.graphics.renderables.SpriteRenderable> SpriteRenderer;
 
     /** @noinspection rawtypes*/
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager)
@@ -48,7 +48,7 @@ public class SpriteRendererTest extends DisplayTest {
         }};
     }
 
-    protected static void stackRendererAction(long timestamp) {
+    public static void stackRendererAction(long timestamp) {
         SpriteRenderer.render(SpriteRenderable, timestamp);
     }
 

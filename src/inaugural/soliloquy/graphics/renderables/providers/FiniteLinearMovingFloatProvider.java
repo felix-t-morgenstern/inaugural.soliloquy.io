@@ -18,6 +18,6 @@ public class FiniteLinearMovingFloatProvider extends AbstractFiniteLinearMovingP
     @Override
     protected Float interpolate(Float value1, float weight1, Float value2, float weight2,
                                 boolean isClockwise) {
-        return (value1 * weight1) + (value2 * weight2);
+        return Interpolate.floats(value1, weight1, value2, weight2);
     }
 }

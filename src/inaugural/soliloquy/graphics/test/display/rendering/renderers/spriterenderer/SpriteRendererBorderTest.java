@@ -15,9 +15,9 @@ import java.awt.*;
  * 2. The window will then close.
  *
  */
-class SpriteRendererBorderTest extends SpriteRendererTest {
-    private static final Float BORDER_THICKNESS = 0.005f;
-    private static final Color BORDER_COLOR = Color.getHSBColor(0.75f, 1f, 1f);
+public class SpriteRendererBorderTest extends SpriteRendererTest {
+    protected static final Float BORDER_THICKNESS = 0.005f;
+    protected static final Color BORDER_COLOR = Color.getHSBColor(0.75f, 1f, 1f);
 
     public static void main(String[] args) {
         runTest(
