@@ -143,7 +143,6 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
     private void updateWindow() {
         _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
-        // TODO: Ensure via tests that 0 values throw exceptions, both at initial creation, and on updates
         if (_window == 0) {
             throw new IllegalStateException("Failed to create window");
         }

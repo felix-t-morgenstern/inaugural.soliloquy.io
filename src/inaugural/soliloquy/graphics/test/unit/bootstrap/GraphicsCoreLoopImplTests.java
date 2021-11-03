@@ -400,6 +400,15 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
+    void testUpdateWhenWindowIdIsZero() {
+        FRAME_TIMER.ShouldExecuteNextFrame = true;
+        WINDOW_RESOLUTION_MANAGER.WindowIdOutput = 0;
+
+        assertThrows(IllegalStateException.class, () ->
+                _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop)));
+    }
+
+    @Test
     void testWhenFrameTimerDoesNotPermitNewFrames() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 

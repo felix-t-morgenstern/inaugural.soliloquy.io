@@ -16,6 +16,8 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     public Callable<Long> UpdateWindowSizeAndLocationAction;
     public int NumberOfTimesUpdateWindowSizeAndLocationActionCalled;
 
+    public Integer WindowIdOutput = null;
+
     @Override
     public WindowDisplayMode getWindowDisplayMode() {
         return _windowDisplayMode;
@@ -51,7 +53,7 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     public long updateWindowSizeAndLocation(long windowId, String titlebar) {
         NumberOfTimesUpdateWindowSizeAndLocationActionCalled++;
         if (CallUpdateWindowSizeAndLocationOnlyOnce && UpdateWindowSizeAndLocationCalled) {
-            return windowId;
+            return WindowIdOutput != null ? WindowIdOutput : windowId;
         }
         UpdateWindowSizeAndLocationCalled = true;
         if (UpdateWindowSizeAndLocationAction != null) {
@@ -61,7 +63,7 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
                 throw new RuntimeException();
             }
         }
-        return windowId;
+        return WindowIdOutput != null ? WindowIdOutput : windowId;
     }
 
     @Override
