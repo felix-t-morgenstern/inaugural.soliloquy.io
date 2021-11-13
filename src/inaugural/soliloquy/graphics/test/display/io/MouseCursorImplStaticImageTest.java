@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.display.io;
 
-import inaugural.soliloquy.graphics.bootstrap.MouseCursorImagePreloaderWorker;
+import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
+import inaugural.soliloquy.graphics.bootstrap.workers.MouseCursorImagePreloaderWorker;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -28,7 +29,8 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
     }
 
     protected static void graphicsPreloaderLoadAction() {
-        new MouseCursorImagePreloaderWorker(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, 0, 0,
+        new MouseCursorImagePreloaderWorker(
+                new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, 0, 0),
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorProviders.put(relativeLocation,
                                 new StaticProviderImpl<>(new FakeEntityUuid(), mouseCursorImage,

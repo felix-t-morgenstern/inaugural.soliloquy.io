@@ -1,6 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
 
-import inaugural.soliloquy.graphics.bootstrap.ImagePreloaderWorker;
+import inaugural.soliloquy.graphics.api.dto.ImageDefinitionDTO;
+import inaugural.soliloquy.graphics.bootstrap.workers.ImagePreloaderWorker;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
@@ -19,25 +20,25 @@ class ImagePreloaderWorkerTests {
         ArrayList<Image> dummyList = new ArrayList<>();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(null, RELATIVE_LOCATION,
-                        true, dummyList::add));
+                () -> new ImagePreloaderWorker(null,
+                        new ImageDefinitionDTO(RELATIVE_LOCATION, true), dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY, null,
-                        true, dummyList::add));
+                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                        null, dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY, "",
-                        true, dummyList::add));
+                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                        new ImageDefinitionDTO("", true), dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY, RELATIVE_LOCATION,
-                        true, null));
+                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                        new ImageDefinitionDTO(RELATIVE_LOCATION, true), null));
     }
 
     @Test
     void testRun() {
         ArrayList<Image> images = new ArrayList<>();
 
-        ImagePreloaderWorker worker = new ImagePreloaderWorker(IMAGE_FACTORY, RELATIVE_LOCATION,
-                true, images::add);
+        ImagePreloaderWorker worker = new ImagePreloaderWorker(IMAGE_FACTORY,
+                new ImageDefinitionDTO(RELATIVE_LOCATION, true), images::add);
 
         worker.run();
 

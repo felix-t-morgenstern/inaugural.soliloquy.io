@@ -1,5 +1,6 @@
-package inaugural.soliloquy.graphics.bootstrap;
+package inaugural.soliloquy.graphics.bootstrap.workers;
 
+import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
 import inaugural.soliloquy.tools.Check;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -21,11 +22,15 @@ public class MouseCursorImagePreloaderWorker implements Runnable {
 
     private final static int DESIRED_CHANNELS = 4;
 
-    public MouseCursorImagePreloaderWorker(String relativeLocation, int hotspotX, int hotspotY,
+    /** @noinspection ConstantConditions*/
+    public MouseCursorImagePreloaderWorker(MouseCursorImageDTO mouseCursorImageDTO,
                                            Function<String, Consumer<Long>> consumeResult) {
-        RELATIVE_LOCATION = Check.ifNullOrEmpty(relativeLocation, "relativeLocation");
-        HOTSPOT_X = Check.ifNonNegative(hotspotX, "hotspotX");
-        HOTSPOT_Y = Check.ifNonNegative(hotspotY, "hotspotY");
+        Check.ifNull(mouseCursorImageDTO, "mouseCursorImageDTO");
+        RELATIVE_LOCATION = Check.ifNullOrEmpty(mouseCursorImageDTO.RelativeLocation, "relativeLocation");
+        HOTSPOT_X = Check.ifNonNegative(mouseCursorImageDTO.HotspotX,
+                "mouseCursorImageDTO.HotspotX");
+        HOTSPOT_Y = Check.ifNonNegative(mouseCursorImageDTO.HotspotY,
+                "mouseCursorImageDTO.HotspotY");
         CONSUME_RESULT = Check.ifNull(consumeResult, "consumeResult");
     }
 

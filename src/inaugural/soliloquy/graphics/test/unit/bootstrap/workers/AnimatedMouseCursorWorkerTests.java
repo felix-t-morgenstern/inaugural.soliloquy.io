@@ -1,6 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
 
-import inaugural.soliloquy.graphics.bootstrap.AnimatedMouseCursorWorker;
+import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDTO;
+import inaugural.soliloquy.graphics.bootstrap.workers.AnimatedMouseCursorWorker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,6 +13,7 @@ import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCur
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 /** @noinspection FieldCanBeLocal*/
@@ -40,8 +42,7 @@ class AnimatedMouseCursorWorkerTests {
         put(MOUSE_CURSOR_IMG_3, MOUSE_CURSOR_3);
     }};
 
-    private final AnimatedMouseCursorWorker.AnimatedMouseCursorDTO ANIMATED_MOUSE_CURSOR_DTO =
-            new AnimatedMouseCursorWorker.AnimatedMouseCursorDTO();
+    private final AnimatedMouseCursorDTO ANIMATED_MOUSE_CURSOR_DTO = new AnimatedMouseCursorDTO();
 
     @Mock
     private AnimatedMouseCursorProviderFactory _animatedMouseCursorProviderFactoryMock;
@@ -54,19 +55,19 @@ class AnimatedMouseCursorWorkerTests {
 
     @BeforeEach
     void setUp() {
-        AnimatedMouseCursorWorker.AnimatedMouseCursorFrameDTO frame1DTO =
-                new AnimatedMouseCursorWorker.AnimatedMouseCursorFrameDTO();
+        AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO frame1DTO =
+                new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO();
         frame1DTO.Ms = MS_1;
         frame1DTO.Img = MOUSE_CURSOR_IMG_1;
 
-        AnimatedMouseCursorWorker.AnimatedMouseCursorFrameDTO frame2DTO =
-                new AnimatedMouseCursorWorker.AnimatedMouseCursorFrameDTO();
+        AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO frame2DTO =
+                new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO();
         frame2DTO.Ms = MS_2;
         frame2DTO.Img = MOUSE_CURSOR_IMG_3;
 
         ANIMATED_MOUSE_CURSOR_DTO.Id = ANIMATED_MOUSE_CURSOR_ID;
         ANIMATED_MOUSE_CURSOR_DTO.Frames =
-                new AnimatedMouseCursorWorker.AnimatedMouseCursorFrameDTO[] {
+                new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
                         frame1DTO, frame2DTO
                 };
         ANIMATED_MOUSE_CURSOR_DTO.Duration = DURATION;
@@ -83,8 +84,13 @@ class AnimatedMouseCursorWorkerTests {
                 .thenReturn(_animatedMouseCursorProviderMock);
 
         _animatedMouseCursorWorker = new AnimatedMouseCursorWorker(ANIMATED_MOUSE_CURSOR_DTO,
-                MOUSE_CURSORS, _animatedMouseCursorProviderFactoryMock,
+                MOUSE_CURSORS::get, _animatedMouseCursorProviderFactoryMock,
                 provider -> _resultProvider = provider);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        fail("Implement this!");
     }
 
     @Test

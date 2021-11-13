@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap;
+package inaugural.soliloquy.graphics.bootstrap.workers;
 
 import inaugural.soliloquy.graphics.assets.CanValidateFontDefinitions;
 import inaugural.soliloquy.tools.Check;
