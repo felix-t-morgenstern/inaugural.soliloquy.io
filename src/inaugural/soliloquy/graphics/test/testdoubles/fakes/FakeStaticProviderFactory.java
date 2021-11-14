@@ -12,11 +12,11 @@ public class FakeStaticProviderFactory implements StaticProviderFactory {
     public ArrayList<StaticProvider> Outputs = new ArrayList<>();
 
     @Override
-    public <T> StaticProvider<T> make(EntityUuid id, T value, T archetype,
+    public <T> StaticProvider<T> make(EntityUuid uuid, T value, T archetype,
                                       Long mostRecentTimestamp)
             throws IllegalArgumentException {
         Inputs.add(value);
-        StaticProvider<T> output = new FakeStaticProviderAtTime<>(value);
+        StaticProvider<T> output = new FakeStaticProviderAtTime<>(value, uuid);
         Outputs.add(output);
         return output;
     }

@@ -8,8 +8,23 @@ public class AnimatedMouseCursorDTO {
     public Long Paused;
     public Long Timestamp;
 
+    public AnimatedMouseCursorDTO(String id, AnimatedMouseCursorFrameDTO[] frames, int duration,
+                                  int offset, Long paused, Long timestamp) {
+        Id = id;
+        Frames = frames;
+        Duration = duration;
+        Offset = offset;
+        Paused = paused;
+        Timestamp = timestamp;
+    }
+
     public static class AnimatedMouseCursorFrameDTO {
-        public long Ms;
+        public int Ms;
         public String Img;
+
+        public AnimatedMouseCursorFrameDTO(int ms, String img) {
+            Ms = ms;
+            Img = img;
+        }
     }
 }

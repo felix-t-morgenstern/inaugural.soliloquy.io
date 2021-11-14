@@ -7,10 +7,16 @@ import java.util.ArrayList;
 
 public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
     public T ProvidedValue;
+    public EntityUuid Uuid;
     public ArrayList<Long> TimestampInputs = new ArrayList<>();
 
     public FakeStaticProviderAtTime(T providedValue) {
         ProvidedValue = providedValue;
+    }
+
+    public FakeStaticProviderAtTime(T providedValue, EntityUuid uuid) {
+        ProvidedValue = providedValue;
+        Uuid = uuid;
     }
 
     // TODO: Ensure in unit tests that Renderers are providing timestamps
@@ -47,7 +53,7 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
 
     @Override
     public EntityUuid uuid() {
-        return null;
+        return Uuid;
     }
 
     @Override

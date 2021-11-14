@@ -48,13 +48,13 @@ class AnimatedMouseCursorProviderSimpleTest extends MouseCursorImplTest {
         }}.forEach(imgLoc -> new MouseCursorImagePreloaderWorker(
                 new MouseCursorImageDTO(imgLoc, 0, 0), relativeLocation -> mouseCursorImages::add)
                 .run());
-        HashMap<Long, Long> mouseCursorsAtMs = new HashMap<Long, Long>() {{
-            put(0L, mouseCursorImages.get(0));
-            put(167L, mouseCursorImages.get(1));
-            put(333L, mouseCursorImages.get(2));
-            put(500L, mouseCursorImages.get(3));
-            put(667L, mouseCursorImages.get(4));
-            put(833L, mouseCursorImages.get(5));
+        HashMap<Integer, Long> mouseCursorsAtMs = new HashMap<Integer, Long>() {{
+            put(0, mouseCursorImages.get(0));
+            put(167, mouseCursorImages.get(1));
+            put(333, mouseCursorImages.get(2));
+            put(500, mouseCursorImages.get(3));
+            put(667, mouseCursorImages.get(4));
+            put(833, mouseCursorImages.get(5));
         }};
         int msDuration = 1000;
         long timestamp = new FakeGlobalClock().globalTimestamp();

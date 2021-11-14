@@ -11,14 +11,14 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnimatedMouseCursorProviderImplTests {
-    private final long MS_1 = 0L;
+    private final int MS_1 = 0;
     private final long MOUSE_CURSOR_1 = 123L;
-    private final long MS_2 = 111L;
+    private final int MS_2 = 111;
     private final long MOUSE_CURSOR_2 = 456L;
-    private final long MS_3 = 444L;
+    private final int MS_3 = 444;
     private final long MOUSE_CURSOR_3 = 789L;
 
-    private final HashMap<Long, Long> CURSORS_AT_MS = new HashMap<>();
+    private final HashMap<Integer, Long> CURSORS_AT_MS = new HashMap<>();
 
     private final String ID = "id";
     private final int MS_DURATION = 777;
@@ -49,26 +49,26 @@ class AnimatedMouseCursorProviderImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 new HashMap<>(), MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Long, Long>() {{
+                new HashMap<Integer, Long>() {{
                     put(null, MOUSE_CURSOR_1);
                 }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Long, Long>() {{
-                    put(-1L, MOUSE_CURSOR_1);
+                new HashMap<Integer, Long>() {{
+                    put(-1, MOUSE_CURSOR_1);
                 }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Long, Long>() {{
+                new HashMap<Integer, Long>() {{
                     put(MS_1, null);
                 }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Long, Long>() {{
-                    put(1L, MOUSE_CURSOR_1);
+                new HashMap<Integer, Long>() {{
+                    put(1, MOUSE_CURSOR_1);
                 }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 CURSORS_AT_MS, 0, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, (int)MS_3, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_3, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 CURSORS_AT_MS, MS_DURATION, MS_DURATION, null, MOST_RECENT_TIMESTAMP));

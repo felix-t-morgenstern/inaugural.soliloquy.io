@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class AnimatedMouseCursorProviderFactoryImpl implements AnimatedMouseCursorProviderFactory {
     @Override
-    public AnimatedMouseCursorProvider make(String id, Map<Long, Long> cursorsAtMs, int msDuration,
-                                            int periodModuloOffset, Long pausedTimestamp,
-                                            Long mostRecentTimestamp)
+    public AnimatedMouseCursorProvider make(String id, Map<Integer, Long> cursorsAtMs,
+                                            int msDuration, int periodModuloOffset,
+                                            Long pausedTimestamp, Long mostRecentTimestamp)
             throws IllegalArgumentException {
         return new AnimatedMouseCursorProviderImpl(id, cursorsAtMs, msDuration, periodModuloOffset,
                 pausedTimestamp, mostRecentTimestamp);
