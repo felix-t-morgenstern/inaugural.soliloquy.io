@@ -9,6 +9,8 @@ import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
 import java.util.HashMap;
 import java.util.Map;
 
+// NB: This class has plenty of shared functionality with AbstractFiniteLinearMovingProvider, but
+//     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoopingProvider<T>
         implements LoopingMovingProvider<T> {
     protected final HashMap<Integer, T> VALUES_AT_TIMES;

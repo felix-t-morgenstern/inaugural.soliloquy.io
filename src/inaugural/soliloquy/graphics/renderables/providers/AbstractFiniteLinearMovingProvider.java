@@ -10,6 +10,8 @@ import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider
 import java.util.HashMap;
 import java.util.Map;
 
+// NB: This class has plenty of shared functionality with AbstractLoopingLinearMovingProvider, but
+//     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFinitePausableAtTime
         implements FiniteLinearMovingProvider<T> {
     private final EntityUuid UUID;
