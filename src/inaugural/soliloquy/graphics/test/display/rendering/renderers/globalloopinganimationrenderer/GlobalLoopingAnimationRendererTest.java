@@ -33,7 +33,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
             new AnimationFactory();
     protected final static HashMap<Integer, AnimationFrameSnippet> FRAMES = new HashMap<>();
     protected final static String TORCH_RELATIVE_LOCATION =
-            "./res/images/fixtures/animated_torch.png";
+            "./res/images/fixtures/animated_torch_numbered.png";
 
     protected static final int NUMBER_OF_FRAMES = 9;
     protected static final int FRAME_WIDTH = 32;
@@ -79,14 +79,12 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         }
         long globalLoopingAnimationStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-
-        int periodModuloOffset = (int)(globalLoopingAnimationStartTimestamp % (MS_DURATION));
-
         FakeAnimationDefinition animationDefinition = new FakeAnimationDefinition(MS_DURATION,
                 "torch", FRAMES);
 
         Animation animation = ANIMATION_FACTORY.make(animationDefinition);
 
+        int periodModuloOffset = MS_DURATION - (int)(globalLoopingAnimationStartTimestamp % (MS_DURATION));
 
         GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
                 animation, periodModuloOffset, null);
