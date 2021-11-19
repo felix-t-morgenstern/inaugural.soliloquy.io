@@ -51,6 +51,7 @@ public class FloorFrameProvider<T> {
             }
         }
         if (!frameAt0Ms) {
+            // TODO: Change the class name used here, ideally via Tools
             throw new IllegalArgumentException("AnimationImpl: No frame at 0 ms");
         }
 
