@@ -85,6 +85,19 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
         return true;
     }
 
+    public Map<Integer, T> valuesWithinPeriod() {
+        return new HashMap<>(VALUES_AT_TIMES);
+    }
+
+    public boolean movementIsLinear() {
+        return true;
+    }
+
+    @Override
+    public int periodDuration() {
+        return PERIOD_DURATION;
+    }
+
     @Override
     public String getInterfaceName() {
         return LoopingMovingProvider.class.getName() + "<" +

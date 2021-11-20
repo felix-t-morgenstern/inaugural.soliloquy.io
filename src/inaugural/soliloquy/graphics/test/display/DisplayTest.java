@@ -62,7 +62,7 @@ public class DisplayTest {
         FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, GLOBAL_CLOCK);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), FrameTimer, 20, windowResolutionManager,
+                new FakeGLFWMouseButtonCallback(), FrameTimer, 0, windowResolutionManager,
                 frameExecutor, new ShaderFactoryImpl(), renderersWithMeshAndShader,
                 SHADER_FILENAME_PREFIX, meshFactory, renderersWithMeshAndShader, MESH_DATA,
                 MESH_DATA, graphicsPreloader, MouseCursor);

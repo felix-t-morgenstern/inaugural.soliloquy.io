@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovingProvider<Float> {
@@ -20,22 +19,7 @@ public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovin
     }
 
     @Override
-    public boolean movementIsLinear() {
-        return true;
-    }
-
-    @Override
-    public Map<Integer, Float> valuesWithinPeriod() {
-        return new HashMap<>(VALUES_AT_TIMES);
-    }
-
-    @Override
     public Float getArchetype() {
         return 0f;
-    }
-
-    @Override
-    public int periodDuration() {
-        return PERIOD_DURATION;
     }
 }

@@ -135,7 +135,9 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 glfwSwapBuffers(_window);
             }
 
-            CheckedExceptionWrapper.sleep(FRAME_TIMER_POLLING_INTERVAL);
+            if (FRAME_TIMER_POLLING_INTERVAL > 0) {
+                CheckedExceptionWrapper.sleep(FRAME_TIMER_POLLING_INTERVAL);
+            }
         }
 
         glfwTerminate();
