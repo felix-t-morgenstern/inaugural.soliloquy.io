@@ -125,11 +125,6 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testMovementIsLinear() {
-        assertFalse(_rectangleAnimatedBackgroundTextureIdProvider.movementIsLinear());
-    }
-
-    @Test
     void testValuesWithinPeriod() {
         Map<Integer, Integer> valuesWithinPeriod =
                 _rectangleAnimatedBackgroundTextureIdProvider.valuesWithinPeriod();

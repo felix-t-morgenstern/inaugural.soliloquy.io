@@ -32,11 +32,6 @@ public class RectangleAnimatedBackgroundTextureIdProvider
     }
 
     @Override
-    public boolean movementIsLinear() {
-        return false;
-    }
-
-    @Override
     public Map<Integer, Integer> valuesWithinPeriod() {
         return new HashMap<>(FLOOR_FRAME_PROVIDER.FRAMES);
     }

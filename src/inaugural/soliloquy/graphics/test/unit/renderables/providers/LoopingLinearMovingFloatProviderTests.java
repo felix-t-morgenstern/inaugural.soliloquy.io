@@ -126,11 +126,6 @@ class LoopingLinearMovingFloatProviderTests {
     }
 
     @Test
-    void testMovementIsLinear() {
-        assertTrue(_loopingLinearMovingFloatProvider.movementIsLinear());
-    }
-
-    @Test
     void testGetInterfaceName() {
         assertEquals(LoopingMovingProvider.class.getCanonicalName() + "<" +
                 Float.class.getCanonicalName() + ">",
