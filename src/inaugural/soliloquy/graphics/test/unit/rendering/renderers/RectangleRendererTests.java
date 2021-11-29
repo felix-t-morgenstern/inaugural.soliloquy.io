@@ -31,7 +31,7 @@ class RectangleRendererTests {
     private final ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+            new FakeStaticProvider<>(new FakeFloatBox(0f, 0f, 1f, 1f));
     private final EntityUuid UUID = new FakeEntityUuid();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
     private final FakeMesh MESH = new FakeMesh();
@@ -161,7 +161,7 @@ class RectangleRendererTests {
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, new FakeStaticProviderAtTime<>(null), UUID),
+                        BORDER_COLOR_PROVIDER, new FakeStaticProvider<>(null), UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

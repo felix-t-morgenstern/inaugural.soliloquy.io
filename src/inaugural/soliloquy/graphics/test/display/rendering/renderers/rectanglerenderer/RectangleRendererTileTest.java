@@ -6,7 +6,7 @@ import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRectangleRenderable;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -28,20 +28,20 @@ import java.util.List;
  *
  */
 class RectangleRendererTileTest extends RectangleRendererTest {
-    private final static FakeStaticProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
+    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            new FakeStaticProvider<>(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.16667f;
-    private final static FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
+    private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
     private final static EntityUuid UUID = new FakeEntityUuid();
     private final static String TILE_LOCATION =
             "./res/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";

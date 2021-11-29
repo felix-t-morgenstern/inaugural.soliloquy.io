@@ -8,7 +8,7 @@ public class FakeBrightnessShift implements BrightnessShift {
     public boolean OverridesPriorShiftsOfSameType;
 
     public FakeBrightnessShift(Float value, boolean overridesPriorShiftsOfSameType) {
-        ShiftAmountProvider = new FakeStaticProviderAtTime<>(value);
+        ShiftAmountProvider = new FakeStaticProvider<>(value);
         OverridesPriorShiftsOfSameType = overridesPriorShiftsOfSameType;
     }
 

@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -79,11 +78,11 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.5f, 0.45f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.1f), 0f, LINE_TEXT,
-                new FakeStaticProviderAtTime<>(0.00125f),
-                new FakeStaticProviderAtTime<>(new Color(255, 25, 119)),
+                new FakeStaticProvider<>(0.1f), 0f, LINE_TEXT,
+                new FakeStaticProvider<>(0.00125f),
+                new FakeStaticProvider<>(new Color(255, 25, 119)),
                 null, null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
+                new FakeStaticProvider<>(renderingLocation),
                 new FakeEntityUuid());
         TextLineRenderable.Justification = TextJustification.CENTER;
 

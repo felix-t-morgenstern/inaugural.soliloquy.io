@@ -1,29 +1,18 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectanglerenderer;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
-import inaugural.soliloquy.graphics.api.WindowResolution;
-import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.FloatBox;
-import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
  * Test acceptance criteria:
@@ -44,20 +33,20 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
-    private final static FakeStaticProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(Color.RED);
-    private final static FakeStaticProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(Color.GREEN);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(Color.BLUE);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(Color.WHITE);
-    private final static FakeStaticProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
+    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.RED);
+    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.GREEN);
+    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.BLUE);
+    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.WHITE);
+    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            new FakeStaticProvider<>(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.16667f;
-    private final static FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
+    private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
     private final static EntityUuid UUID = new FakeEntityUuid();
     private final static String TILE_LOCATION =
             "./res/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";

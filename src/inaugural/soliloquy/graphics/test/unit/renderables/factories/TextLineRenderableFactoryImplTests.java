@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.renderables.factories.TextLineRenderableFact
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.infrastructure.Pair;
@@ -26,8 +26,8 @@ class TextLineRenderableFactoryImplTests {
     private final FakeFont FONT = new FakeFont();
     private final String LINE_TEXT = "lineText";
     private final float LINE_HEIGHT = 0.123f;
-    private final FakeStaticProviderAtTime<Float> LINE_HEIGHT_PROVIDER =
-            new FakeStaticProviderAtTime<>(LINE_HEIGHT);
+    private final FakeStaticProvider<Float> LINE_HEIGHT_PROVIDER =
+            new FakeStaticProvider<>(LINE_HEIGHT);
     private final TextJustification JUSTIFICATION = TextJustification.LEFT;
     private final float PADDING_BETWEEN_GLYPHS = 0.456f;
     private final HashMap<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = new HashMap<>();

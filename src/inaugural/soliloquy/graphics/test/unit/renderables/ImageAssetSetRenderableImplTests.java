@@ -34,8 +34,8 @@ class ImageAssetSetRenderableImplTests {
     private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
+    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProvider<>(null);
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>

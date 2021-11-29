@@ -32,8 +32,8 @@ class GlobalLoopingAnimationRenderableImplTests {
     private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
     private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
-    private final FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
+    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProvider<>(null);
     private final int Z = 123;
     private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>

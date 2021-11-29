@@ -82,8 +82,8 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null),
                 colorIndices, null, null,
                 new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
                 new FakeEntityUuid());

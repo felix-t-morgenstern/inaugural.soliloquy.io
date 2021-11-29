@@ -16,7 +16,8 @@ public class FakeStaticProviderFactory implements StaticProviderFactory {
                                       Long mostRecentTimestamp)
             throws IllegalArgumentException {
         Inputs.add(value);
-        StaticProvider<T> output = new FakeStaticProviderAtTime<>(value, uuid);
+        FakeStaticProvider<T> output = new FakeStaticProvider<>(value, uuid);
+        output.MostRecentTimestamp = mostRecentTimestamp;
         Outputs.add(output);
         return output;
     }

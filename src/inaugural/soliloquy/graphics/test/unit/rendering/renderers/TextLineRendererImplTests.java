@@ -61,10 +61,10 @@ class TextLineRendererImplTests {
     @Test
     void testRenderWithInvalidParams() {
         FakeFont font = new FakeFont();
-        FakeStaticProviderAtTime<Float> lineHeightProvider = new FakeStaticProviderAtTime<>(0.25f);
+        FakeStaticProvider<Float> lineHeightProvider = new FakeStaticProvider<>(0.25f);
         String textLine = "Text line";
         HashMap<Integer, ProviderAtTime<Color>> colorProviderIndices = new HashMap<>();
-        colorProviderIndices.put(4, new FakeStaticProviderAtTime<>(Color.RED));
+        colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
         ArrayList<Integer> italicIndices = new ArrayList<>();
         italicIndices.add(2);
         italicIndices.add(6);
@@ -72,11 +72,11 @@ class TextLineRendererImplTests {
         boldIndices.add(3);
         boldIndices.add(5);
         ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f));
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                lineHeightProvider, 0f, textLine, new FakeStaticProviderAtTime<>(1f),
-                new FakeStaticProviderAtTime<>(null), colorProviderIndices, italicIndices,
+                lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
+                new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, id);
         long timestamp = MOST_RECENT_TIMESTAMP;
 
@@ -108,10 +108,10 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        textLineRenderable.LineHeightProvider = new FakeStaticProviderAtTime<>(0f);
+        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0f);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.LineHeightProvider = new FakeStaticProviderAtTime<>(0.25f);
+        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0.25f);
         try {
             _textLineRenderer.render(textLineRenderable, timestamp++);
         }
@@ -120,7 +120,7 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        colorProviderIndices.put(null, new FakeStaticProviderAtTime<>(Color.BLUE));
+        colorProviderIndices.put(null, new FakeStaticProvider<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorProviderIndices.remove(null);
@@ -144,7 +144,7 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        colorProviderIndices.put(-1, new FakeStaticProviderAtTime<>(Color.BLUE));
+        colorProviderIndices.put(-1, new FakeStaticProvider<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
         colorProviderIndices.remove(-1);
@@ -293,7 +293,7 @@ class TextLineRendererImplTests {
         textLineRenderable.BorderColorProvider = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.BorderColorProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.BorderColorProvider = new FakeStaticProvider<>(null);
         try {
             _textLineRenderer.render(textLineRenderable, timestamp++);
         }
@@ -302,10 +302,10 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        textLineRenderable.BorderThicknessProvider = new FakeStaticProviderAtTime<>(-0.0001f);
+        textLineRenderable.BorderThicknessProvider = new FakeStaticProvider<>(-0.0001f);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.BorderThicknessProvider = new FakeStaticProviderAtTime<>(1f);
+        textLineRenderable.BorderThicknessProvider = new FakeStaticProvider<>(1f);
         try {
             _textLineRenderer.render(textLineRenderable, timestamp++);
         }
@@ -355,10 +355,10 @@ class TextLineRendererImplTests {
     @Test
     void testTextLineLengthWithInvalidParams() {
         FakeFont font = new FakeFont();
-        FakeStaticProviderAtTime<Float> lineHeightProvider = new FakeStaticProviderAtTime<>(0.25f);
+        FakeStaticProvider<Float> lineHeightProvider = new FakeStaticProvider<>(0.25f);
         String textLine = "Text line";
         HashMap<Integer, ProviderAtTime<Color>> colorProviderIndices = new HashMap<>();
-        colorProviderIndices.put(4, new FakeStaticProviderAtTime<>(Color.RED));
+        colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
         ArrayList<Integer> italicIndices = new ArrayList<>();
         italicIndices.add(2);
         italicIndices.add(6);
@@ -366,11 +366,11 @@ class TextLineRendererImplTests {
         boldIndices.add(3);
         boldIndices.add(5);
         ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f));
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f));
         FakeEntityUuid id = new FakeEntityUuid();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                lineHeightProvider, 0f, textLine, new FakeStaticProviderAtTime<>(1f),
-                new FakeStaticProviderAtTime<>(null), colorProviderIndices, italicIndices,
+                lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
+                new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, id);
 
 
@@ -402,13 +402,13 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        textLineRenderable.LineHeightProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(null);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.LineHeightProvider = new FakeStaticProviderAtTime<>(0f);
+        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0f);
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.LineHeightProvider = new FakeStaticProviderAtTime<>(0.25f);
+        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0.25f);
         try {
             _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
         }
@@ -417,7 +417,7 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        colorProviderIndices.put(null, new FakeStaticProviderAtTime<>(Color.BLUE));
+        colorProviderIndices.put(null, new FakeStaticProvider<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(null);
@@ -441,7 +441,7 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        colorProviderIndices.put(-1, new FakeStaticProviderAtTime<>(Color.BLUE));
+        colorProviderIndices.put(-1, new FakeStaticProvider<>(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(-1);
@@ -663,8 +663,8 @@ class TextLineRendererImplTests {
         boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
 
         float lineHeight = 0.5f;
-        FakeStaticProviderAtTime<Float> lineHeightProvider =
-                new FakeStaticProviderAtTime<>(lineHeight);
+        FakeStaticProvider<Float> lineHeightProvider =
+                new FakeStaticProvider<>(lineHeight);
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
         ArrayList<Integer> italicIndices = new ArrayList<Integer>(){{
             add(1);
@@ -676,9 +676,9 @@ class TextLineRendererImplTests {
         }};
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                lineHeightProvider, 0f, lineText, new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null), null, italicIndices, boldIndices,
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                lineHeightProvider, 0f, lineText, new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null), null, italicIndices, boldIndices,
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable,
@@ -736,8 +736,8 @@ class TextLineRendererImplTests {
         boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
 
         float lineHeight = 0.5f;
-        FakeStaticProviderAtTime<Float> lineHeightProvider =
-                new FakeStaticProviderAtTime<>(lineHeight);
+        FakeStaticProvider<Float> lineHeightProvider =
+                new FakeStaticProvider<>(lineHeight);
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
         ArrayList<Integer> italicIndices = new ArrayList<Integer>(){{
             add(1);
@@ -752,8 +752,8 @@ class TextLineRendererImplTests {
 
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, paddingBetweenGlyphs, lineText,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
-                italicIndices, boldIndices, new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
+                italicIndices, boldIndices, new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
@@ -776,24 +776,24 @@ class TextLineRendererImplTests {
     void testRenderWithNullDropShadowProviders() {
         FakeFont font = new FakeFont();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
                 null,
-                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f)),
-                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeStaticProvider<>(new FakePair<>(.456f, .789f)),
+                new FakeStaticProvider<>(Color.WHITE),
                 new FakeEntityUuid());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.DropShadowSizeProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.DropShadowSizeProvider = new FakeStaticProvider<>(null);
         textLineRenderable.DropShadowOffsetProvider = null;
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.DropShadowOffsetProvider = new FakeStaticProviderAtTime<>(null);
+        textLineRenderable.DropShadowOffsetProvider = new FakeStaticProvider<>(null);
         textLineRenderable.DropShadowColorProvider = null;
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -804,12 +804,12 @@ class TextLineRendererImplTests {
     void testRenderWithNegativeDropShadowSize() {
         FakeFont font = new FakeFont();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
-                new FakeStaticProviderAtTime<>(-.123f),
-                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f)),
-                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProvider<>(-.123f),
+                new FakeStaticProvider<>(new FakePair<>(.456f, .789f)),
+                new FakeStaticProvider<>(Color.WHITE),
                 new FakeEntityUuid());
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -820,32 +820,32 @@ class TextLineRendererImplTests {
     void testRenderWithPositiveDropShadowSizeAndOtherNullDropShadowValues() {
         FakeFont font = new FakeFont();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProviderAtTime<>(0.5f), 0f, "", new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
-                new FakeStaticProviderAtTime<>(.123f),
-                new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(Color.WHITE),
+                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
+                new FakeStaticProvider<>(.123f),
+                new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(Color.WHITE),
                 new FakeEntityUuid());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProviderAtTime<>(new FakePair<>(null, .789f));
+                new FakeStaticProvider<>(new FakePair<>(null, .789f));
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, null));
+                new FakeStaticProvider<>(new FakePair<>(.456f, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProviderAtTime<>(new FakePair<>(.456f, .789f));
-        textLineRenderable.DropShadowColorProvider = new FakeStaticProviderAtTime<>(null);
+                new FakeStaticProvider<>(new FakePair<>(.456f, .789f));
+        textLineRenderable.DropShadowColorProvider = new FakeStaticProvider<>(null);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -854,11 +854,11 @@ class TextLineRendererImplTests {
     @Test
     void testRenderOrGetLineLengthWithOutdatedTimestamp() {
         FakeFont font = new FakeFont();
-        FakeStaticProviderAtTime<Float> lineHeightProvider = new FakeStaticProviderAtTime<>(0.5f);
+        FakeStaticProvider<Float> lineHeightProvider = new FakeStaticProvider<>(0.5f);
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
-                lineHeightProvider, 0f, "", new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProviderAtTime<>(new FakePair<>(0f, 0f)),
+                lineHeightProvider, 0f, "", new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
+                new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
                 new FakeEntityUuid());
 
         assertThrows(IllegalArgumentException.class, () ->

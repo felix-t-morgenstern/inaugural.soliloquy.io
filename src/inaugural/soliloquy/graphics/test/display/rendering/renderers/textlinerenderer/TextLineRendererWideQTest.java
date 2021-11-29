@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -76,10 +75,10 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
+                new FakeStaticProvider<>(renderingLocation),
                 new FakeEntityUuid());
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,

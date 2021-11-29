@@ -99,20 +99,20 @@ class SpriteRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(null, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
@@ -120,27 +120,27 @@ class SpriteRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
                         null,
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         null,
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
                         null,
                         new FakeEntityUuid()),
                 0L
@@ -148,60 +148,60 @@ class SpriteRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(borderThickness),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(borderThickness),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(-0.0001f),
-                        new FakeStaticProviderAtTime<>(borderColor),
+                        new FakeStaticProvider<>(-0.0001f),
+                        new FakeStaticProvider<>(borderColor),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(1.0001f),
-                        new FakeStaticProviderAtTime<>(borderColor),
+                        new FakeStaticProvider<>(1.0001f),
+                        new FakeStaticProvider<>(borderColor),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
                 new FakeSpriteRenderable(sprite, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(null),
                         null),
                 0L
         ));
@@ -218,9 +218,9 @@ class SpriteRendererTests {
         float bottomY = 0.44f;
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite,
                 colorShiftProviders,
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProvider<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null),
                 new FakeEntityUuid());
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());
@@ -240,9 +240,9 @@ class SpriteRendererTests {
         float bottomY = 0.44f;
         FakeSpriteRenderable spriteRenderable = new FakeSpriteRenderable(sprite,
                 colorShiftProviders,
-                new FakeStaticProviderAtTime<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                new FakeStaticProviderAtTime<>(null),
-                new FakeStaticProviderAtTime<>(null),
+                new FakeStaticProvider<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                new FakeStaticProvider<>(null),
+                new FakeStaticProvider<>(null),
                 new FakeEntityUuid());
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());

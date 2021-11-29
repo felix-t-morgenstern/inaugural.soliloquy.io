@@ -8,7 +8,7 @@ public class FakeColorRotationShift implements ColorRotationShift {
     public boolean OverridesPriorShiftsOfSameType;
 
     public FakeColorRotationShift(Float value, boolean overridesPriorShiftsOfSameType) {
-        ShiftAmountProvider = new FakeStaticProviderAtTime<>(value);
+        ShiftAmountProvider = new FakeStaticProvider<>(value);
         OverridesPriorShiftsOfSameType = overridesPriorShiftsOfSameType;
     }
 

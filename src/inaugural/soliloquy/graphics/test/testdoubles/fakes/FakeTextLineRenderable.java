@@ -45,9 +45,9 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         ColorProviderIndices = colorProviderIndices;
         ItalicIndices = italicIndices == null ? new ArrayList<>() : italicIndices;
         BoldIndices = boldIndices == null ? new ArrayList<>() : boldIndices;
-        DropShadowSizeProvider = new FakeStaticProviderAtTime<>(null);
-        DropShadowOffsetProvider = new FakeStaticProviderAtTime<>(null);
-        DropShadowColorProvider = new FakeStaticProviderAtTime<>(null);
+        DropShadowSizeProvider = new FakeStaticProvider<>(null);
+        DropShadowOffsetProvider = new FakeStaticProvider<>(null);
+        DropShadowColorProvider = new FakeStaticProvider<>(null);
         Uuid = id;
     }
 

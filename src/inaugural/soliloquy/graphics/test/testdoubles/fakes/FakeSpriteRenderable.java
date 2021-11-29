@@ -42,8 +42,8 @@ public class FakeSpriteRenderable implements SpriteRenderable {
         ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
-        BorderThicknessProvider = new FakeStaticProviderAtTime<>(null);
-        BorderColorProvider = new FakeStaticProviderAtTime<>(null);
+        BorderThicknessProvider = new FakeStaticProvider<>(null);
+        BorderColorProvider = new FakeStaticProvider<>(null);
         Uuid = id;
     }
 

@@ -64,43 +64,43 @@ class RasterizedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
                         null, (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(null), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(null), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
                         null,
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(null),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(null),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
                         null,
                         1, new FakeEntityUuid()),
                 0L
@@ -108,44 +108,44 @@ class RasterizedLineSegmentRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(null),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0x0000, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0x0000, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 0,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 0,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 257,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 257,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
@@ -153,17 +153,17 @@ class RasterizedLineSegmentRendererTests {
         //noinspection RedundantCast
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>((Color)null),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>((Color)null),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
                         null,
                         1, new FakeEntityUuid()),
                 0L
@@ -171,18 +171,18 @@ class RasterizedLineSegmentRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(null),
                         1, new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _lineSegmentRenderer.render(
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, null),
                 0L
         ));
@@ -192,9 +192,9 @@ class RasterizedLineSegmentRendererTests {
     void testRenderOutdatedTimestamp() {
         FakeRasterizedLineSegmentRenderable lineSegmentRenderable =
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid());
         _lineSegmentRenderer.setMesh(MESH);
         _lineSegmentRenderer.setShader(SHADER);
@@ -207,9 +207,9 @@ class RasterizedLineSegmentRendererTests {
     void testRenderWithoutMeshOrShader() {
         FakeRasterizedLineSegmentRenderable lineSegmentRenderable =
                 new FakeRasterizedLineSegmentRenderable(
-                        new FakeStaticProviderAtTime<>(1.0f), (short)0xAAAA, (short) 1,
-                        new FakeStaticProviderAtTime<>(Color.WHITE),
-                        new FakeStaticProviderAtTime<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
+                        new FakeStaticProvider<>(1.0f), (short)0xAAAA, (short) 1,
+                        new FakeStaticProvider<>(Color.WHITE),
+                        new FakeStaticProvider<>(new FakeFloatBox(-0.5f, 0.5f, 0.5f, -0.5f)),
                         1, new FakeEntityUuid());
 
         Renderer<RasterizedLineSegmentRenderable> lineSegmentRendererWithoutMesh =

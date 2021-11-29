@@ -37,18 +37,18 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest {
     private final static float[] MESH_DATA =
             new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
-    private final static FakeStaticProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
-    private final static FakeStaticProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            new FakeStaticProviderAtTime<>(null);
+    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.1f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.075f;
-    private final static FakeStaticProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProviderAtTime<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
+    private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+            new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
     private final static EntityUuid UUID = new FakeEntityUuid();
     private final static String TILE_LOCATION_1 =
             "./res/images/backgrounds/stone_tile_1.png";

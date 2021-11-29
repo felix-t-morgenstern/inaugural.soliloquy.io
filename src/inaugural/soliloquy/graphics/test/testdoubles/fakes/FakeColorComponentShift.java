@@ -12,7 +12,7 @@ public class FakeColorComponentShift implements ColorComponentShift {
     public FakeColorComponentShift(ColorComponent colorComponent, Float value,
                                    boolean overridesPriorShiftsOfSameType) {
         ColorComponent = colorComponent;
-        ShiftAmountProvider = new FakeStaticProviderAtTime<>(value);
+        ShiftAmountProvider = new FakeStaticProvider<>(value);
         OverridesPriorShiftsOfSameType = overridesPriorShiftsOfSameType;
     }
 

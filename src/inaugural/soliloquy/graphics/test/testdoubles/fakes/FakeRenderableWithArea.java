@@ -22,7 +22,7 @@ public class FakeRenderableWithArea implements RenderableWithArea {
     public ArrayList<Long> CapturesMouseEventsAtPointInputTimestamps = new ArrayList<>();
     public FakeFloatBox RenderingDimensions;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider =
-            new FakeStaticProviderAtTime<>(RenderingDimensions);
+            new FakeStaticProvider<>(RenderingDimensions);
     public int Z;
 
     @Override

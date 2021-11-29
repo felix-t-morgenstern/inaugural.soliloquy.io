@@ -91,7 +91,7 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(null, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid()),
                 0L
@@ -99,7 +99,7 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid()),
                 0L
@@ -114,14 +114,14 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(null),
+                        new FakeStaticProvider<>(null),
                         new FakeEntityUuid()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         new FakeEntityUuid()),
                 0L
@@ -129,7 +129,7 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
                         new FakeEntityUuid()),
                 0L
@@ -137,7 +137,7 @@ class GlobalLoopingAnimationRendererTests {
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         null),
                 0L
@@ -154,7 +154,7 @@ class GlobalLoopingAnimationRendererTests {
         float bottomY = 0.44f;
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
@@ -175,7 +175,7 @@ class GlobalLoopingAnimationRendererTests {
         float bottomY = 0.44f;
         FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProviderAtTime<>(
+                        new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeEntityUuid());
         _globalLoopingAnimationRenderer.setShader(new FakeShader());

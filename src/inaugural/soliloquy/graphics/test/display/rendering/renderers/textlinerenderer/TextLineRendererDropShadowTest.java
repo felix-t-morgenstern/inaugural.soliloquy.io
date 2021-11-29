@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -73,14 +72,13 @@ class TextLineRendererDropShadowTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), 0.055f, null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), new FakePair<>(0.00125f, 0.00125f),
-                        null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), Color.RED, null),
+                new FakeStaticProvider<>(renderingLocation),
+                new FakeStaticProvider<>(0.055f),
+                new FakeStaticProvider<>(new FakePair<>(0.00125f, 0.00125f)),
+                new FakeStaticProvider<>(Color.RED),
                 new FakeEntityUuid());
 
         TextLineRenderer =

@@ -5,16 +5,17 @@ import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.ArrayList;
 
-public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
+public class FakeStaticProvider<T> implements StaticProvider<T> {
     public T ProvidedValue;
     public EntityUuid Uuid;
     public ArrayList<Long> TimestampInputs = new ArrayList<>();
+    public Long MostRecentTimestamp;
 
-    public FakeStaticProviderAtTime(T providedValue) {
+    public FakeStaticProvider(T providedValue) {
         ProvidedValue = providedValue;
     }
 
-    public FakeStaticProviderAtTime(T providedValue, EntityUuid uuid) {
+    public FakeStaticProvider(T providedValue, EntityUuid uuid) {
         ProvidedValue = providedValue;
         Uuid = uuid;
     }
@@ -48,7 +49,7 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
 
     @Override
     public T getArchetype() {
-        return null;
+        return ProvidedValue;
     }
 
     @Override
@@ -58,6 +59,6 @@ public class FakeStaticProviderAtTime<T> implements StaticProvider<T> {
 
     @Override
     public Long mostRecentTimestamp() {
-        return null;
+        return MostRecentTimestamp;
     }
 }

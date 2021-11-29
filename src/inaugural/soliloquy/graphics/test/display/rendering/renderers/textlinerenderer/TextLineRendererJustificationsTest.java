@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -85,22 +84,22 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocationRight = new FakePair<>(0.95f, 0.725f);
 
         TextLineRenderableLeft = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_LEFT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_LEFT,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationLeft, null),
+                new FakeStaticProvider<>(renderingLocationLeft),
                 new FakeEntityUuid());
         TextLineRenderableCenter = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_CENTER,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_CENTER,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationCenter, null),
+                new FakeStaticProvider<>(renderingLocationCenter),
                 new FakeEntityUuid());
         TextLineRenderableRight = new FakeTextLineRenderable(null,
-                new FakeStaticProviderAtTime<>(0.05f), 0f, LINE_TEXT_RIGHT,
-                new FakeStaticProviderAtTime<>(null), new FakeStaticProviderAtTime<>(null), null,
+                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_RIGHT,
+                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocationRight, null),
+                new FakeStaticProvider<>(renderingLocationRight),
                 new FakeEntityUuid());
 
         TextLineRenderableLeft.Justification = TextJustification.LEFT;
