@@ -184,6 +184,18 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
+    void testReset() {
+        long resetTimestamp = 123123L;
+
+        _animatedMouseCursorProvider.reset(resetTimestamp);
+
+        assertEquals(MOUSE_CURSOR_1,
+                (long)_animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
+        assertEquals(MOUSE_CURSOR_2,
+                (long)_animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
+    }
+
+    @Test
     void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
@@ -193,6 +205,10 @@ class AnimatedMouseCursorProviderImplTests {
                 _animatedMouseCursorProvider.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _animatedMouseCursorProvider.reportPause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reportUnpause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reset(timestamp - 1));
 
         _animatedMouseCursorProvider.reportPause(timestamp + 1);
 
@@ -200,6 +216,28 @@ class AnimatedMouseCursorProviderImplTests {
                 _animatedMouseCursorProvider.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _animatedMouseCursorProvider.reportUnpause(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reset(timestamp));
+
+        _animatedMouseCursorProvider.reportUnpause(timestamp + 2);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.provide(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reportPause(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reset(timestamp + 1));
+
+        _animatedMouseCursorProvider.provide(timestamp + 3);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _animatedMouseCursorProvider.reset(timestamp + 2));
     }
 
     @Test

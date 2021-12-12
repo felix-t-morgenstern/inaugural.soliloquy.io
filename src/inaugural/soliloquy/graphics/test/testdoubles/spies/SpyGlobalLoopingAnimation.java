@@ -73,4 +73,9 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public String id() throws IllegalStateException {
         return null;
     }
+
+    @Override
+    public void reset(long l) throws IllegalArgumentException {
+
+    }
 }

@@ -189,6 +189,16 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
+    void testReset() {
+        long resetTimestamp = 123123L;
+
+        _globalLoopingAnimation.reset(resetTimestamp);
+
+        assertEquals(MS_DURATION - (resetTimestamp % MS_DURATION),
+                _globalLoopingAnimation.periodModuloOffset());
+    }
+
+    @Test
     void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
@@ -198,6 +208,10 @@ class GlobalLoopingAnimationImplTests {
                 _globalLoopingAnimation.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimation.reportPause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportUnpause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reset(timestamp - 1));
 
         _globalLoopingAnimation.reportPause(timestamp + 1);
 
@@ -205,5 +219,27 @@ class GlobalLoopingAnimationImplTests {
                 _globalLoopingAnimation.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimation.reportUnpause(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reset(timestamp));
+
+        _globalLoopingAnimation.reportUnpause(timestamp + 2);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.provide(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportPause(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reset(timestamp + 1));
+
+        _globalLoopingAnimation.provide(timestamp + 3);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimation.reset(timestamp + 2));
     }
 }

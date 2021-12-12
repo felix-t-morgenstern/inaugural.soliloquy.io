@@ -83,4 +83,9 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public String id() throws IllegalStateException {
         return Id;
     }
+
+    @Override
+    public void reset(long l) throws IllegalArgumentException {
+
+    }
 }

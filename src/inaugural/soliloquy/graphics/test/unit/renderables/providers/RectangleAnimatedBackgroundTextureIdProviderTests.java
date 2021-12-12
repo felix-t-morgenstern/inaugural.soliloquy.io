@@ -148,6 +148,16 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
+    void testReset() {
+        long resetTimestamp = 123123L;
+
+        _rectangleAnimatedBackgroundTextureIdProvider.reset(resetTimestamp);
+
+        assertEquals(PERIOD_DURATION - (resetTimestamp % PERIOD_DURATION),
+                _rectangleAnimatedBackgroundTextureIdProvider.periodModuloOffset());
+    }
+
+    @Test
     void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
@@ -157,6 +167,10 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
                 _rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reset(timestamp - 1));
 
         _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp + 1);
 
@@ -164,6 +178,28 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
                 _rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reset(timestamp));
+
+        _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp + 2);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reset(timestamp + 1));
+
+        _rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp + 3);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                _rectangleAnimatedBackgroundTextureIdProvider.reset(timestamp + 2));
     }
 
     @Test

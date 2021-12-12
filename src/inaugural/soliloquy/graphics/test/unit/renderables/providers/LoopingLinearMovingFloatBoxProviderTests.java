@@ -211,34 +211,48 @@ class LoopingLinearMovingFloatBoxProviderTests {
     }
 
     @Test
-    void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
-        long timestamp = 0L;
+    void testReset() {
+        long resetTimestamp = 123123L;
 
-        _loopingLinearMovingFloatBoxProvider.provide(timestamp + 1);
+        _loopingLinearMovingFloatBoxProvider.reset(resetTimestamp);
+
+        assertEquals(BOX_1, _loopingLinearMovingFloatBoxProvider.provide(resetTimestamp));
+    }
+
+    @Test
+    void testReportPauseOrProvideWithOutdatedTimestamp() {
+        long timestamp = 123123L;
+
+        _loopingLinearMovingFloatBoxProvider.provide(timestamp);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.provide(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.reportPause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.reset(timestamp - 1));
+
+        _loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 1);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatBoxProvider.reportPause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp));
-        assertEquals(timestamp + 1,
-                (long)_loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.reset(timestamp));
 
-        _loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 2);
+        _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 2);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.provide(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 1));
-        assertEquals(timestamp + 2,
-                (long)_loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
-        assertEquals(timestamp + 2,
-                (long)_loopingLinearMovingFloatBoxProvider.pausedTimestamp());
+                _loopingLinearMovingFloatBoxProvider.reset(timestamp + 1));
 
-        _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 3);
+        _loopingLinearMovingFloatBoxProvider.provide(timestamp + 3);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.provide(timestamp + 2));
@@ -246,9 +260,8 @@ class LoopingLinearMovingFloatBoxProviderTests {
                 _loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 2));
-        assertEquals(timestamp + 3,
-                (long)_loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
-        assertNull(_loopingLinearMovingFloatBoxProvider.pausedTimestamp());
+        assertThrows(IllegalArgumentException.class, () ->
+                _loopingLinearMovingFloatBoxProvider.reset(timestamp + 2));
     }
 
     @Test

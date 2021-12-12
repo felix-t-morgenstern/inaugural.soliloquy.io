@@ -14,12 +14,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have
  *    background tile of a stone floor, moving to the right, repeating every 2000ms. Each tile will
  *    take up 5% of the screen width.
- * 3. This animation will run for 3000ms. Then, it will pause for 2000ms. Then, it will continue
- *    for another 3000ms.
+ * 3. This animation will run for 3000ms. Then, it will reset to its initial position. Then, it
+ *    will continue for another 5000ms.
  * 4. The window will then close
  **/
-public class RectangleAnimatedBackgroundTextureIdProviderTestWithPausing
-        extends RectangleAnimatedBackgroundTextureIdProviderTest{
+public class RectangleAnimatedBackgroundTextureIdProviderResetTest
+        extends RectangleAnimatedBackgroundTextureIdProviderTest {
 
     public static void main(String[] args) {
         runTest(
@@ -28,20 +28,18 @@ public class RectangleAnimatedBackgroundTextureIdProviderTestWithPausing
                 ),
                 RectangleAnimatedBackgroundTextureIdProviderTest::stackRendererAction,
                 RectangleAnimatedBackgroundTextureIdProviderTest::graphicsPreloaderLoadAction,
-                RectangleAnimatedBackgroundTextureIdProviderTestWithPausing::closeAfterSomeTime
+                RectangleAnimatedBackgroundTextureIdProviderResetTest::closeAfterSomeTime
         );
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(3000);
-
-        RectangleAnimatedBackgroundTextureIdProvider.reportPause(GLOBAL_CLOCK.globalTimestamp());
-
-        CheckedExceptionWrapper.sleep(2000);
-
-        RectangleAnimatedBackgroundTextureIdProvider.reportUnpause(GLOBAL_CLOCK.globalTimestamp());
+        RectangleAnimatedBackgroundTextureIdProvider.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(3000);
+
+        RectangleAnimatedBackgroundTextureIdProvider.reset(GLOBAL_CLOCK.globalTimestamp());
+
+        CheckedExceptionWrapper.sleep(5000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
