@@ -1,12 +1,14 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.HasOneGenericParam;
+import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
-public class StaticProviderImpl<T> extends HasOneGenericParam<T> implements StaticProvider<T> {
+public class StaticProviderImpl<T>
+        extends AbstractHasOneGenericParam<T>
+        implements StaticProvider<T> {
     private final EntityUuid ID;
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;

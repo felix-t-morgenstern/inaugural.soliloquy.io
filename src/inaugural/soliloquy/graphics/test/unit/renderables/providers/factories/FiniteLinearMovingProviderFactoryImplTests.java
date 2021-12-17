@@ -17,7 +17,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FiniteLinearMovingProviderFactoryImplTests {
-    private final String FACTORY_1_TYPE_NAME = float.class.getCanonicalName();
+    private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final FiniteLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeFiniteLinearMovingProvider<>();
     /** @noinspection rawtypes*/
@@ -117,6 +117,6 @@ class FiniteLinearMovingProviderFactoryImplTests {
         assertSame(uuid, _factory1InputUuid);
         assertSame(valuesAtTimestamps, _factory1InputValuesAtTimes);
         assertEquals(pausedTimestamp, _factory1InputPausedTimestamp);
-        assertEquals(mostRecentTimestamp, _factory2InputMostRecentTimestamp);
+        assertEquals(mostRecentTimestamp, _factory1InputMostRecentTimestamp);
     }
 }

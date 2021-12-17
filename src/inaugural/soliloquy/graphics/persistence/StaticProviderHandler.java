@@ -2,54 +2,57 @@ package inaugural.soliloquy.graphics.persistence;
 
 import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import soliloquy.specs.common.persistence.PersistentValueTypeHandler;
+import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
 
-public class PersistentStaticProviderHandler
-        implements PersistentValueTypeHandler<StaticProvider<?>> {
-    private final PersistentValueTypeHandler<EntityUuid> PERSISTENT_UUID_HANDLER;
+/** @noinspection rawtypes*/
+public class StaticProviderHandler
+        extends AbstractTypeWithOneGenericParamHandler<StaticProvider> {
+    private final TypeHandler<EntityUuid> PERSISTENT_UUID_HANDLER;
     private final PersistentValuesHandler PERSISTENT_VALUES_HANDLER;
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
     private static final Gson GSON = new Gson();
 
-    public PersistentStaticProviderHandler(PersistentValueTypeHandler<EntityUuid>
+    private final static StaticProviderArchetype ARCHETYPE = new StaticProviderArchetype();
+
+    public StaticProviderHandler(TypeHandler<EntityUuid>
                                                    persistentUuidHandler,
-                                           PersistentValuesHandler persistentValuesHandler,
-                                           StaticProviderFactory staticProviderFactory) {
+                                 PersistentValuesHandler persistentValuesHandler,
+                                 StaticProviderFactory staticProviderFactory) {
+        super(ARCHETYPE, persistentValuesHandler, QualifiedStaticProviderArchetype::new);
         PERSISTENT_UUID_HANDLER = Check.ifNull(persistentUuidHandler, "persistentUuidHandler");
         PERSISTENT_VALUES_HANDLER = Check.ifNull(persistentValuesHandler,
                 "persistentValuesHandler");
         STATIC_PROVIDER_FACTORY = Check.ifNull(staticProviderFactory, "staticProviderFactory");
     }
 
-    private final static StaticProviderArchetype ARCHETYPE = new StaticProviderArchetype();
-
     @Override
-    public StaticProvider<?> read(String writtenValue) throws IllegalArgumentException {
+    public StaticProvider read(String writtenValue) throws IllegalArgumentException {
         StaticProviderDTO staticProviderDTO = GSON.fromJson(writtenValue, StaticProviderDTO.class);
         EntityUuid uuid = PERSISTENT_UUID_HANDLER.read(staticProviderDTO.uuid);
         //noinspection rawtypes
-        PersistentValueTypeHandler persistentValueTypeHandler = PERSISTENT_VALUES_HANDLER
-                .getPersistentValueTypeHandler(staticProviderDTO.innerType);
-        StaticProvider staticProvider = STATIC_PROVIDER_FACTORY.make(uuid,
+        TypeHandler persistentValueTypeHandler = PERSISTENT_VALUES_HANDLER
+                .getTypeHandler(staticProviderDTO.innerType);
+        return STATIC_PROVIDER_FACTORY.make(uuid,
                 persistentValueTypeHandler.read(staticProviderDTO.val),
                 PERSISTENT_VALUES_HANDLER.generateArchetype(staticProviderDTO.innerType),
                 staticProviderDTO.mostRecentTimestamp);
-        return staticProvider;
     }
 
     @Override
-    public String write(StaticProvider<?> staticProvider) {
+    public String write(StaticProvider staticProvider) {
         String innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.getArchetype());
         //noinspection rawtypes
-        PersistentValueTypeHandler persistentValueTypeHandler =
-                PERSISTENT_VALUES_HANDLER.getPersistentValueTypeHandler(innerType);
+        TypeHandler persistentValueTypeHandler =
+                PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
         StaticProviderDTO staticProviderDTO = new StaticProviderDTO();
         staticProviderDTO.uuid = PERSISTENT_UUID_HANDLER.write(staticProvider.uuid());
         staticProviderDTO.innerType = innerType;
@@ -58,17 +61,6 @@ public class PersistentStaticProviderHandler
                 .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
         staticProviderDTO.mostRecentTimestamp = staticProvider.mostRecentTimestamp();
         return GSON.toJson(staticProviderDTO);
-    }
-
-    @Override
-    public StaticProvider<?> getArchetype() {
-        return ARCHETYPE;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return PersistentValueTypeHandler.class.getCanonicalName() + "<" +
-                getArchetype().getInterfaceName() + ">";
     }
 
     private static class StaticProviderDTO {
@@ -88,7 +80,7 @@ public class PersistentStaticProviderHandler
 
         @Override
         public Object getArchetype() {
-            return null;
+            return 0;
         }
 
         @Override
@@ -119,6 +111,49 @@ public class PersistentStaticProviderHandler
         @Override
         public String getInterfaceName() {
             return StaticProvider.class.getCanonicalName();
+        }
+    }
+
+    private static class QualifiedStaticProviderArchetype<T>
+            extends AbstractHasOneGenericParam<T>
+            implements StaticProvider<T> {
+        private QualifiedStaticProviderArchetype(T archetype) {
+            super(archetype);
+        }
+
+        @Override
+        protected String getUnparameterizedInterfaceName() {
+            return StaticProvider.class.getCanonicalName();
+        }
+
+        @Override
+        public T provide(long l) throws IllegalArgumentException {
+            return null;
+        }
+
+        @Override
+        public EntityUuid uuid() {
+            return null;
+        }
+
+        @Override
+        public void reportPause(long l) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public void reportUnpause(long l) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public Long pausedTimestamp() {
+            return null;
+        }
+
+        @Override
+        public Long mostRecentTimestamp() {
+            return null;
         }
     }
 }

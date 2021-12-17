@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
-import inaugural.soliloquy.tools.generic.HasOneGenericParam;
+import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 public abstract class AbstractRenderer<TRenderable extends Renderable>
-        extends HasOneGenericParam<TRenderable>
+        extends AbstractHasOneGenericParam<TRenderable>
         implements Renderer<TRenderable> {
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
