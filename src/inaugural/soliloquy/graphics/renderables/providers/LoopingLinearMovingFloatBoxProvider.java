@@ -15,7 +15,7 @@ public class LoopingLinearMovingFloatBoxProvider
 
     private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
-    public LoopingLinearMovingFloatBoxProvider(EntityUuid uuid, Map<Long, FloatBox> valuesAtTimes,
+    public LoopingLinearMovingFloatBoxProvider(EntityUuid uuid, Map<Integer, FloatBox> valuesAtTimes,
                                                int periodDuration, int periodModuloOffset,
                                                Long pausedTimestamp, Long mostRecentTimestamp,
                                                FloatBoxFactory floatBoxFactory) {
@@ -27,11 +27,7 @@ public class LoopingLinearMovingFloatBoxProvider
     @Override
     protected FloatBox interpolate(FloatBox value1, float weight1, FloatBox value2, float weight2,
                                    boolean isClockwise) {
-        return FLOAT_BOX_FACTORY.make(
-                (value1.leftX() * weight1) + (value2.leftX() * weight2),
-                (value1.topY() * weight1) + (value2.topY() * weight2),
-                (value1.rightX() * weight1) + (value2.rightX() * weight2),
-                (value1.bottomY() * weight1) + (value2.bottomY() * weight2));
+        return Interpolate.floatBoxes(value1, weight1, value2, weight2, FLOAT_BOX_FACTORY);
     }
 
     @Override

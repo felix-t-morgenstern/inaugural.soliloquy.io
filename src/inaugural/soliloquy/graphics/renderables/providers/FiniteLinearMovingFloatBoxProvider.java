@@ -24,22 +24,7 @@ public class FiniteLinearMovingFloatBoxProvider
     protected FloatBox interpolate(FloatBox value1, float weight1,
                                    FloatBox value2, float weight2,
                                    boolean isClockwise) {
-        float value1WeightedLeftX = value1.leftX() * weight1;
-        float value1WeightedTopY = value1.topY() * weight1;
-        float value1WeightedRightX = value1.rightX() * weight1;
-        float value1WeightedBottomY = value1.bottomY() * weight1;
-
-        float value2WeightedLeftX = value2.leftX() * weight2;
-        float value2WeightedTopY = value2.topY() * weight2;
-        float value2WeightedRightX = value2.rightX() * weight2;
-        float value2WeightedBottomY = value2.bottomY() * weight2;
-
-        return FLOAT_BOX_FACTORY.make(
-                value1WeightedLeftX + value2WeightedLeftX,
-                value1WeightedTopY + value2WeightedTopY,
-                value1WeightedRightX + value2WeightedRightX,
-                value1WeightedBottomY + value2WeightedBottomY
-        );
+        return Interpolate.floatBoxes(value1, weight1, value2, weight2, FLOAT_BOX_FACTORY);
     }
 
     @Override

@@ -2,25 +2,28 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMovingProvider<Color>
-        implements FiniteLinearMovingColorProvider  {
+public class LoopingMovingColorProviderImpl extends AbstractLoopingLinearMovingProvider<Color>
+        implements LoopingMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
-    /** @noinspection ConstantConditions*/
-    public FiniteLinearMovingColorProviderImpl(EntityUuid uuid, Map<Long, Color> valuesAtTimes,
-                                               List<Boolean> hueMovementIsClockwise,
-                                               Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+    @SuppressWarnings("ConstantConditions")
+    public LoopingMovingColorProviderImpl(EntityUuid uuid, Map<Integer, Color> valuesAtTimes,
+                                          List<Boolean> hueMovementIsClockwise,
+                                          int periodDuration, int periodModuloOffset,
+                                          Long pausedTimestamp, Long mostRecentTimestamp) {
+        super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
+                mostRecentTimestamp);
+
         HUE_MOVEMENT_IS_CLOCKWISE = new ArrayList<>();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");
-        if (hueMovementIsClockwise.size() != valuesAtTimes.size() - 1) {
+        if (hueMovementIsClockwise.size() != valuesAtTimes.size()) {
             throw new IllegalArgumentException("FiniteLinearMovingColorProviderImpl: " +
                     "hueMovementIsClockwise (size = " + hueMovementIsClockwise.size() + ") must " +
                     "have one fewer item than valuesAtTimes (size = " + valuesAtTimes.size() +
@@ -53,6 +56,6 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
 
     @Override
     public String getInterfaceName() {
-        return FiniteLinearMovingColorProvider.class.getCanonicalName();
+        return LoopingMovingColorProvider.class.getCanonicalName();
     }
 }

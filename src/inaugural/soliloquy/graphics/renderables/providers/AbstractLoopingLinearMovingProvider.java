@@ -17,7 +17,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
-    protected AbstractLoopingLinearMovingProvider(EntityUuid uuid, Map<Long, T> valuesAtTimes,
+    protected AbstractLoopingLinearMovingProvider(EntityUuid uuid, Map<Integer, T> valuesAtTimes,
                                                   int periodDuration, int periodModuloOffset,
                                                   Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp);
@@ -28,14 +28,13 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
             throw new IllegalArgumentException(
                     "AbstractFiniteLinearMovingProvider: valuesAtTimes is empty");
         }
-        if (!valuesAtTimes.containsKey(0L)) {
+        if (!valuesAtTimes.containsKey(0)) {
             throw new IllegalArgumentException(
                     "AbstractFiniteLinearMovingProvider: valuesAtTimes must specify value at 0ms");
         }
-        valuesAtTimes.forEach((time, value) -> {
-            VALUES_AT_TIMES.put((int)((long)(Check.ifNull(time, "time within valuesAtTimes"))),
-                    Check.ifNull(value, "value within valuesAtTimes"));
-        });
+        valuesAtTimes.forEach((time, value) ->
+                VALUES_AT_TIMES.put((int)((long)(Check.ifNull(time, "time within valuesAtTimes"))),
+                        Check.ifNull(value, "value within valuesAtTimes")));
 
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromIntegers(VALUES_AT_TIMES.keySet());
@@ -55,15 +54,20 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
         float weight1;
         float weight2;
 
+        int transition;
         if (msWithinPeriod > NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue) {
             periodStartMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue;
             periodEndMs = PERIOD_DURATION;
+
+            transition = VALUES_AT_TIMES.size() - 1;
 
             value2 = VALUES_AT_TIMES.get(0);
         }
         else {
             periodStartMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(msWithinPeriod);
             periodEndMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.getNearestCeiling(msWithinPeriod);
+
+            transition = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get((long)periodStartMs);
 
             value2 = VALUES_AT_TIMES.get(periodEndMs);
         }
@@ -75,7 +79,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
         weight2 = 1f - weight1;
 
 
-        return interpolate(value1, weight1, value2, weight2, false);
+        return interpolate(value1, weight1, value2, weight2, isClockwise(transition));
     }
 
     protected abstract T interpolate(T value1, float weight1, T value2, float weight2,
@@ -87,10 +91,6 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
     public Map<Integer, T> valuesWithinPeriod() {
         return new HashMap<>(VALUES_AT_TIMES);
-    }
-
-    public boolean movementIsLinear() {
-        return true;
     }
 
     @Override

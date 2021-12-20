@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LoopingLinearMovingFloatProviderTests {
     private final FakeEntityUuid UUID = new FakeEntityUuid();
-    private final HashMap<Long, Float> VALUES_AT_TIMES = new HashMap<>();
-    private final long TIME_1 = 0L;
+    private final HashMap<Integer, Float> VALUES_AT_TIMES = new HashMap<>();
+    private final int TIME_1 = 0;
     private final float VALUE_1 = 0.2f;
-    private final long TIME_2 = 100L;
+    private final int TIME_2 = 100;
     private final float VALUE_2 = 0.4f;
-    private final long TIME_3 = 300L;
+    private final int TIME_3 = 300;
     private final float VALUE_3 = 0.6f;
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
@@ -48,23 +48,23 @@ class LoopingLinearMovingFloatProviderTests {
                 new LoopingLinearMovingFloatProvider(UUID, new HashMap<>(), PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
+                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Integer, Float>() {{
                     put(null, VALUE_1);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
+                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Integer, Float>() {{
                     put(TIME_1, null);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
+                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Integer, Float>() {{
                     put(TIME_2, VALUE_2);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Long, Float>() {{
-                    put(PERIOD_DURATION + 1L, VALUE_1);
+                new LoopingLinearMovingFloatProvider(UUID, new HashMap<Integer, Float>() {{
+                    put(PERIOD_DURATION + 1, VALUE_1);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
 

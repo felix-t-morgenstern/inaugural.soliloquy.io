@@ -5,7 +5,7 @@ import soliloquy.specs.common.valueobjects.EntityUuid;
 import java.util.Map;
 
 public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovingProvider<Float> {
-    public LoopingLinearMovingFloatProvider(EntityUuid uuid, Map<Long, Float> valuesAtTimes,
+    public LoopingLinearMovingFloatProvider(EntityUuid uuid, Map<Integer, Float> valuesAtTimes,
                                                int periodDuration, int periodModuloOffset,
                                                Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,

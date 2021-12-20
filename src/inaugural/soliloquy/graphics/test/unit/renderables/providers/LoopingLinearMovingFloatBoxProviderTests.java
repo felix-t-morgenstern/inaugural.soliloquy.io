@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LoopingLinearMovingFloatBoxProviderTests {
     private final FakeEntityUuid UUID = new FakeEntityUuid();
-    private final HashMap<Long, FloatBox> VALUES_AT_TIMES = new HashMap<>();
+    private final HashMap<Integer, FloatBox> VALUES_AT_TIMES = new HashMap<>();
 
-    private final long TIME_1 = 0L;
+    private final int TIME_1 = 0;
     private final float BOX_1_LEFT_X = 0.1f;
     private final float BOX_1_TOP_Y = 0.11f;
     private final float BOX_1_RIGHT_X = 0.111f;
@@ -24,7 +24,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final FloatBox BOX_1 = 
             new FakeFloatBox(BOX_1_LEFT_X, BOX_1_TOP_Y, BOX_1_RIGHT_X, BOX_1_BOTTOM_Y);
 
-    private final long TIME_2 = 100L;
+    private final int TIME_2 = 100;
     private final float BOX_2_LEFT_X = 0.2f;
     private final float BOX_2_TOP_Y = 0.22f;
     private final float BOX_2_RIGHT_X = 0.222f;
@@ -32,7 +32,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final FloatBox BOX_2 =
             new FakeFloatBox(BOX_2_LEFT_X, BOX_2_TOP_Y, BOX_2_RIGHT_X, BOX_2_BOTTOM_Y);
 
-    private final long TIME_3 = 300L;
+    private final int TIME_3 = 300;
     private final float BOX_3_LEFT_X = 0.3f;
     private final float BOX_3_TOP_Y = 0.33f;
     private final float BOX_3_RIGHT_X = 0.333f;
@@ -69,23 +69,23 @@ class LoopingLinearMovingFloatBoxProviderTests {
                 new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<>(), PERIOD_DURATION,
                         MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Long, FloatBox>() {{
+                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
                     put(null, BOX_1);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Long, FloatBox>() {{
+                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
                     put(TIME_1, null);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Long, FloatBox>() {{
+                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
                     put(TIME_2, BOX_2);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Long, FloatBox>() {{
-                    put(PERIOD_DURATION + 1L, BOX_1);
+                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
+                    put(PERIOD_DURATION + 1, BOX_1);
                 }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
 
