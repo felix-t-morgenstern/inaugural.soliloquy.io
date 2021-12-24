@@ -6,6 +6,7 @@ import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -16,6 +17,7 @@ import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
+import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
@@ -127,7 +129,7 @@ public class StackRendererTest extends DisplayTest {
         renderableStack.add(spriteRenderable2);
         renderableStack.add(spriteRenderable3);
 
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, null);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(GLOBAL_CLOCK, stackRenderer, 100);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,

@@ -2,10 +2,12 @@ package inaugural.soliloquy.graphics.test.display.rendering.windowresolutionmana
 
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -52,7 +54,8 @@ class WindowResolutionManagerImplDisplayChangeTest {
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> null;
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
+        FrameExecutor frameExecutor =
+                new FrameExecutorImpl(new FakeGlobalClock(), new FakeStackRenderer(), 100);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",

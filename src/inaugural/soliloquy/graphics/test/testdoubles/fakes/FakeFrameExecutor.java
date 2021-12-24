@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.gamestate.entities.gameevents.firings.TriggeredEvent;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
@@ -22,21 +21,6 @@ public class FakeFrameExecutor implements FrameExecutor {
     }
 
     @Override
-    public void placeTriggeredEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
-
-    }
-
-    @Override
-    public void releaseTriggeredEventFiringBlock(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
-
-    }
-
-    @Override
-    public void registerTriggeredEventToFire(TriggeredEvent triggeredEvent) throws IllegalArgumentException {
-
-    }
-
-    @Override
     public void registerFrameBlockingEvent(Consumer<Long> consumer) throws IllegalArgumentException {
 
     }
@@ -47,5 +31,10 @@ public class FakeFrameExecutor implements FrameExecutor {
             StackRenderer.render(GlobalClock.globalTimestamp());
         }
         NumberOfTimesExecuteCalled++;
+    }
+
+    @Override
+    public String getInterfaceName() {
+        return null;
     }
 }

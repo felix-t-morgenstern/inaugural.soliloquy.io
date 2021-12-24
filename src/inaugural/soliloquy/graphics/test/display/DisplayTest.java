@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
@@ -10,6 +11,7 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseCursor;
+import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -59,7 +61,7 @@ public class DisplayTest {
 
         stackRenderer.RenderAction = stackRendererAction;
 
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor(stackRenderer, GLOBAL_CLOCK);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(GLOBAL_CLOCK, stackRenderer, 100);
 
         GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
                 new FakeGLFWMouseButtonCallback(), FrameTimer, 0, windowResolutionManager,

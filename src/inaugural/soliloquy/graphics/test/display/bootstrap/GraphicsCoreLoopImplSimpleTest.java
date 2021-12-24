@@ -1,9 +1,12 @@
 package inaugural.soliloquy.graphics.test.display.bootstrap;
 
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
+import inaugural.soliloquy.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -29,7 +32,8 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
-        FakeFrameExecutor frameExecutor = new FakeFrameExecutor();
+        FrameExecutor frameExecutor =
+                new FrameExecutorImpl(new GlobalClockImpl(), new FakeStackRenderer(), 100);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
