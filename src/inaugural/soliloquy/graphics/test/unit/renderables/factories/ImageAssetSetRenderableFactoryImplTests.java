@@ -99,19 +99,18 @@ class ImageAssetSetRenderableFactoryImplTests {
                 BORDER_COLOR_PROVIDER,  null, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
-        // NB: The following two constructors should _not_ throw exceptions
-        _imageAssetSetRenderableFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, null,
                 BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        );
-        _imageAssetSetRenderableFactory.make(
+        ));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
-                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
                 null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        );
+        ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, null, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
@@ -147,17 +146,16 @@ class ImageAssetSetRenderableFactoryImplTests {
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z,
                 UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
-        // NB: The following two constructors should _not_ throw exceptions
-        _imageAssetSetRenderableFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_NOT_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
                 null, BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z,
                 UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        );
-        _imageAssetSetRenderableFactory.make(
+        ));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_NOT_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                null, null, RENDERING_DIMENSIONS_PROVIDER, Z,
+                BORDER_THICKNESS_PROVIDER, null, RENDERING_DIMENSIONS_PROVIDER, Z,
                 UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        );
+        ));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableFactory.make(
                 IMAGE_ASSET_SET_NOT_SUPPORTS_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
                 BORDER_THICKNESS_PROVIDER, null, RENDERING_DIMENSIONS_PROVIDER, Z,

@@ -203,6 +203,11 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public String animationId() {
+        return Animation.id();
+    }
+
+    @Override
     public AnimationFrameSnippet getArchetype() {
         return null;
     }

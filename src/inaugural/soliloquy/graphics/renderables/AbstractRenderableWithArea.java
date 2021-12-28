@@ -23,12 +23,12 @@ import java.util.function.Supplier;
 abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensions
         implements RenderableWithArea {
     private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS;
+    private final Map<Integer, Action<Long>> ON_PRESS;
+    private final Map<Integer, Action<Long>> ON_RELEASE;
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
     protected boolean _capturesMouseEvents;
 
-    private Map<Integer, Action<Long>> _onPress;
-    private Map<Integer, Action<Long>> _onRelease;
     private Action<Long> _onMouseOver;
     private Action<Long> _onMouseLeave;
     private ProviderAtTime<Float> _borderThicknessProvider;
@@ -76,8 +76,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                        Consumer<Renderable> removeFromContainer) {
         super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
         _capturesMouseEvents = capturesMouseEvents;
-        _onPress = onPress == null ? new HashMap<>() : onPress;
-        _onRelease = onRelease == null ? new HashMap<>() : onRelease;
+        ON_PRESS = onPress == null ? new HashMap<>() : onPress;
+        ON_RELEASE = onRelease == null ? new HashMap<>() : onRelease;
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
         COLOR_SHIFT_PROVIDERS = Check.ifNull(colorShiftProviders, "colorShiftProviders");
@@ -114,7 +114,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public void press(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
-        callAction(_onPress.get(mouseButton), timestamp, "press");
+        callAction(ON_PRESS.get(mouseButton), timestamp, "press");
     }
 
     @Override
@@ -122,22 +122,22 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         throwIfNotSupportingMouseEvents("setOnPress");
         throwOnInvalidButton(mouseButton, "setOnPress");
         if (onPress == null) {
-            _onPress.remove(mouseButton);
+            ON_PRESS.remove(mouseButton);
         }
         else {
-            _onPress.put(mouseButton, onPress);
+            ON_PRESS.put(mouseButton, onPress);
         }
     }
 
     @Override
     public Map<Integer, String> pressActionIds() {
-        return getActionIds(_onPress);
+        return getActionIds(ON_PRESS);
     }
 
     @Override
     public void release(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
-        callAction(_onRelease.get(mouseButton), timestamp, "release");
+        callAction(ON_RELEASE.get(mouseButton), timestamp, "release");
     }
 
     @Override
@@ -145,16 +145,16 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
         throwIfNotSupportingMouseEvents("setOnRelease");
         throwOnInvalidButton(mouseButton, "setOnRelease");
         if (onRelease == null) {
-            _onRelease.remove(mouseButton);
+            ON_RELEASE.remove(mouseButton);
         }
         else {
-            _onRelease.put(mouseButton, onRelease);
+            ON_RELEASE.put(mouseButton, onRelease);
         }
     }
 
     @Override
     public Map<Integer, String> releaseActionIds() {
-        return getActionIds(_onRelease);
+        return getActionIds(ON_RELEASE);
     }
 
     private void throwOnInvalidButton(int button, String methodName) {
@@ -242,11 +242,8 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
             throws IllegalArgumentException {
-        if (borderThicknessProvider != null && _borderColorProvider == null) {
-            throw new IllegalArgumentException(className() + ".setBorderColorProvider: cannot " +
-                    "set borderThicknessProvider to non-null while borderColorProvider is null");
-        }
-        _borderThicknessProvider = borderThicknessProvider;
+        _borderThicknessProvider =
+                Check.ifNull(borderThicknessProvider, "borderThicknessProvider");
     }
 
     @Override
@@ -257,11 +254,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
     @Override
     public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
             throws IllegalArgumentException {
-        if (_borderThicknessProvider != null && borderColorProvider == null) {
-            throw new IllegalArgumentException(className() + ".setBorderColorProvider: cannot " +
-                    "set borderColorProvider to null while borderThicknessProvider is non-null");
-        }
-        _borderColorProvider = borderColorProvider;
+        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 
     protected boolean capturesMouseEventAtPoint(float x, float y, long timestamp,

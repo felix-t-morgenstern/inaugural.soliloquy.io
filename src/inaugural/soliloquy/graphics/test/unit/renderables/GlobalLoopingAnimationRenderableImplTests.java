@@ -106,21 +106,20 @@ class GlobalLoopingAnimationRenderableImplTests {
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
-        // NB: The following two constructors should _not_ throw exceptions
-        new GlobalLoopingAnimationRenderableImpl(
+        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
                 BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        );
-        new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
+                GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        );
+        ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
@@ -170,19 +169,18 @@ class GlobalLoopingAnimationRenderableImplTests {
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
-        // NB: The following two constructors should _not_ throw exceptions
-        new GlobalLoopingAnimationRenderableImpl(
+        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        );
-        new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
+                GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
-        );
+        ));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
@@ -282,17 +280,14 @@ class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     void testSetBorderThicknessProviderWithInvalidParams() {
-        _globalLoopingAnimationRenderableWithMouseEvents.setBorderThicknessProvider(null);
-        _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderThicknessProvider(null);
-        _globalLoopingAnimationRenderableWithMouseEvents.setBorderColorProvider(null);
-        _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderColorProvider(null);
+        assertThrows(IllegalArgumentException.class, () ->
+                _globalLoopingAnimationRenderableWithMouseEvents.setBorderThicknessProvider(null));
+    }
 
+    @Test
+    void testSetBorderColorProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationRenderableWithMouseEvents
-                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
-        assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationRenderableWithoutMouseEvents
-                        .setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
+                _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderColorProvider(null));
     }
 
     @Test
@@ -313,14 +308,6 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.getBorderColorProvider());
         assertSame(newBorderColorProvider,
                 _globalLoopingAnimationRenderableWithoutMouseEvents.getBorderColorProvider());
-    }
-
-    @Test
-    void testSetBorderColorProviderWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationRenderableWithMouseEvents.setBorderColorProvider(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationRenderableWithoutMouseEvents.setBorderColorProvider(null));
     }
 
     @Test

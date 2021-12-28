@@ -286,6 +286,11 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public String animationId() {
+            return null;
+        }
+
+        @Override
         public String getInterfaceName() {
             return FiniteAnimationRenderable.class.getCanonicalName();
         }

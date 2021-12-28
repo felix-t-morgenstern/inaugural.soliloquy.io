@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.finiteanim
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
@@ -18,6 +19,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggrega
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected final static int FRAME_HEIGHT = 96;
     protected final static int FRAME_DURATION = MS_PER_SECOND / 16;
     protected final static float ANIMATION_HEIGHT = 0.5f;
+    @SuppressWarnings("PointlessArithmeticExpression")
     protected final static float ANIMATION_WIDTH =
             (((float)FRAME_WIDTH / (float)FRAME_HEIGHT) * ANIMATION_HEIGHT)
                     / RESOLUTION.widthToHeightRatio();
@@ -43,26 +46,18 @@ class FiniteAnimationRendererTest extends DisplayTest {
             new AnimationFactory();
 
     protected static FakeAnimationDefinition AnimationDefinition;
-    protected static FakeFiniteAnimationRenderable FiniteAnimationRenderable;
+    protected static FiniteAnimationRenderable FiniteAnimationRenderable;
     protected static Renderer<FiniteAnimationRenderable> FiniteAnimationRenderer;
     protected static int TestDurationMs;
 
     /** @noinspection rawtypes*/
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
-            WindowResolutionManager windowResolutionManager,
+            @SuppressWarnings("unused") WindowResolutionManager windowResolutionManager,
             ColorShiftStackAggregator colorShiftStackAggregator) {
         TestDurationMs = FRAME_DURATION * NUMBER_OF_FRAMES + (MS_PADDING * 2);
 
         AnimationDefinition = new FakeAnimationDefinition(FRAME_DURATION * NUMBER_OF_FRAMES,
                 "explosion", FRAMES);
-
-        FiniteAnimationRenderable = new FakeFiniteAnimationRenderable(null, new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
-                        MIDPOINT - (ANIMATION_WIDTH / 2f),
-                        MIDPOINT - (ANIMATION_HEIGHT / 2f),
-                        MIDPOINT + (ANIMATION_WIDTH / 2f),
-                        MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
-                0L, new FakeEntityUuid());
 
         FiniteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
                 FLOAT_BOX_FACTORY,
@@ -84,8 +79,26 @@ class FiniteAnimationRendererTest extends DisplayTest {
             FRAMES.put(FRAME_DURATION * i, new FakeAnimationFrameSnippet(renderableImage,
                     FRAME_WIDTH * i, 0, FRAME_WIDTH * (i + 1), FRAME_HEIGHT, 0f, 0f));
         }
-        FiniteAnimationRenderable.Animation = ANIMATION_FACTORY.make(AnimationDefinition);
-        FiniteAnimationRenderable.StartTimestamp = timestamp + MS_PADDING;
+
+        FiniteAnimationRenderable = new FiniteAnimationRenderableImpl(
+                ANIMATION_FACTORY.make(AnimationDefinition),
+                new StaticProviderImpl<>(new FakeEntityUuid(), null, 0f, null),
+                new StaticProviderImpl<>(new FakeEntityUuid(), null, Color.BLACK, null),
+                new ArrayList<>(),
+                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
+                        MIDPOINT - (ANIMATION_WIDTH / 2f),
+                        MIDPOINT - (ANIMATION_HEIGHT / 2f),
+                        MIDPOINT + (ANIMATION_WIDTH / 2f),
+                        MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
+                123,
+                new FakeEntityUuid(),
+                renderable -> {},
+                renderable -> {},
+                timestamp + MS_PADDING,
+                null,
+                null
+        );
+
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 
