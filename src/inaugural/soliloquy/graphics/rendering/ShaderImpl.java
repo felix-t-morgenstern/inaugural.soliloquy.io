@@ -173,6 +173,7 @@ public class ShaderImpl implements Shader {
         }
     }
 
+    // TODO: The logic here is duplicated from Shader; consider moving to Tools
     @Override
     public void setUniform(String name, Color color) throws IllegalArgumentException {
         Check.ifNull(color, "color");

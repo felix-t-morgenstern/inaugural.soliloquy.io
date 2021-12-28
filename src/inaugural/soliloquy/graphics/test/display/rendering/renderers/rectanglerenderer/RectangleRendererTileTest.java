@@ -1,13 +1,12 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectanglerenderer;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRectangleRenderable;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -42,7 +41,6 @@ class RectangleRendererTileTest extends RectangleRendererTest {
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.16667f;
     private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
-    private final static EntityUuid UUID = new FakeEntityUuid();
     private final static String TILE_LOCATION =
             "./res/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
@@ -63,11 +61,12 @@ class RectangleRendererTileTest extends RectangleRendererTest {
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(null);
-        RectangleRenderable = new FakeRectangleRenderable(
-                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, RENDERING_AREA_PROVIDER, UUID);
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
+                RENDERING_AREA_PROVIDER, 123, new FakeEntityUuid(), renderable -> {},
+                renderable -> {});
 
         return new ArrayList<Renderer>() {{
             add(RectangleRenderer);

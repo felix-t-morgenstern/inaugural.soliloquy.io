@@ -1,7 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.stackrenderer;
 
-import inaugural.soliloquy.common.test.fakes.FakeListFactory;
-import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
@@ -44,10 +42,7 @@ public class StackRendererTest extends DisplayTest {
 
         FakeRenderer renderer = new FakeRenderer();
 
-        FakeMapFactory mapFactory = new FakeMapFactory();
-        FakeListFactory listFactory = new FakeListFactory();
-
-        RenderableStack renderableStack = new RenderableStackImpl(mapFactory, listFactory);
+        RenderableStack renderableStack = new RenderableStackImpl();
 
         soliloquy.specs.graphics.rendering.renderers.StackRenderer stackRenderer = new StackRendererImpl(renderableStack, renderer, null);
 

@@ -1,28 +1,22 @@
 package inaugural.soliloquy.graphics.rendering;
 
-import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.factories.ListFactory;
-import soliloquy.specs.common.factories.MapFactory;
-import soliloquy.specs.common.infrastructure.List;
-import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RenderableStackImpl implements RenderableStack {
-    private final HashMap<Integer, List<Renderable>> STACK;
+    private final HashMap<Integer, ArrayList<Renderable>> STACK;
     private final HashMap<Renderable, Integer> Z_INDICES_OF_INTEGERS;
-    private final MapFactory MAP_FACTORY;
-    private final ListFactory LIST_FACTORY;
     private final static RenderableArchetype RENDERABLE_ARCHETYPE = new RenderableArchetype();
 
-    public RenderableStackImpl(MapFactory mapFactory, ListFactory listFactory) {
+    public RenderableStackImpl() {
         STACK = new HashMap<>();
         Z_INDICES_OF_INTEGERS = new HashMap<>();
-        MAP_FACTORY = Check.ifNull(mapFactory, "mapFactory");
-        LIST_FACTORY = Check.ifNull(listFactory, "listFactory");
     }
 
     @Override
@@ -44,22 +38,18 @@ public class RenderableStackImpl implements RenderableStack {
         }
         Z_INDICES_OF_INTEGERS.put(renderable, renderable.getZ());
         if (!STACK.containsKey(renderable.getZ())) {
-            List<Renderable> renderables = LIST_FACTORY.make(RENDERABLE_ARCHETYPE);
-            renderables.add(renderable);
-            STACK.put(renderable.getZ(), renderables);
-            return;
+            STACK.put(renderable.getZ(), new ArrayList<Renderable>() {{
+                add(renderable);
+            }});
         }
-        STACK.get(renderable.getZ()).add(renderable);
+        else {
+            STACK.get(renderable.getZ()).add(renderable);
+        }
     }
 
     @Override
     public Map<Integer, List<Renderable>> representation() {
-        Map<Integer, List<Renderable>> representation =
-                MAP_FACTORY.make(0, LIST_FACTORY.make(RENDERABLE_ARCHETYPE));
-
-        STACK.forEach((z, renderables) -> representation.put(z, renderables.makeClone()));
-
-        return representation;
+        return new HashMap<>(STACK);
     }
 
     @Override

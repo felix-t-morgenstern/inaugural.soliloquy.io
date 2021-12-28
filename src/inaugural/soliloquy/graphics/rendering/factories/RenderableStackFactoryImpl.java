@@ -9,10 +9,9 @@ import soliloquy.specs.graphics.rendering.factories.RenderableStackFactory;
 
 public class RenderableStackFactoryImpl implements RenderableStackFactory {
     @Override
-    public RenderableStack make(MapFactory mapFactory, ListFactory listFactory)
+    public RenderableStack make()
             throws IllegalArgumentException {
-        return new RenderableStackImpl(Check.ifNull(mapFactory, "mapFactory"),
-                Check.ifNull(listFactory, "listFactory"));
+        return new RenderableStackImpl();
     }
 
     @Override

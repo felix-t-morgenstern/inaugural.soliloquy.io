@@ -2,8 +2,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.infrastructure.List;
-import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -11,6 +9,8 @@ import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class StackRendererImpl implements StackRenderer {
     private final RenderableStack RENDERABLE_STACK;
@@ -30,7 +30,7 @@ public class StackRendererImpl implements StackRenderer {
 
         Map<Integer, List<Renderable>> toRender = RENDERABLE_STACK.representation();
 
-        java.util.List<Integer> keys = new ArrayList<>(toRender.keySet());
+        List<Integer> keys = new ArrayList<>(toRender.keySet());
 
         keys.sort(Collections.reverseOrder());
 

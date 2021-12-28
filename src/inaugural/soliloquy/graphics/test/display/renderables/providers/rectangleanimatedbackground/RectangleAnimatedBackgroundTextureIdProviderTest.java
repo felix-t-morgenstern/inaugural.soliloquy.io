@@ -1,14 +1,13 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.rectangleanimatedbackground;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.RectangleAnimatedBackgroundTextureIdProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRectangleRenderable;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -33,7 +32,6 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.075f;
     private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
-    private final static EntityUuid UUID = new FakeEntityUuid();
     private final static String TILE_LOCATION_1 =
             "./res/images/backgrounds/stone_tile_1.png";
     private final static String TILE_LOCATION_2 =
@@ -103,12 +101,12 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                 new RectangleAnimatedBackgroundTextureIdProvider(new FakeEntityUuid(),
                         msDuration, (int)(currentTimestamp % msDuration), frames, null);
 
-        RectangleRenderable =
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        RectangleAnimatedBackgroundTextureIdProvider,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                        null, RENDERING_AREA_PROVIDER, UUID);
+        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                RectangleAnimatedBackgroundTextureIdProvider, BACKGROUND_TEXTURE_TILE_WIDTH,
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
+                RENDERING_AREA_PROVIDER, 123, new FakeEntityUuid(), renderable -> {},
+                renderable -> {});
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }

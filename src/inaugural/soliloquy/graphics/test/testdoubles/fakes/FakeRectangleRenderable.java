@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -11,6 +10,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Color> TopLeftColorProvider;
@@ -256,24 +256,9 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void clearContainedRenderables() {
-
-    }
-
-    @Override
-    public void add(Renderable renderable) throws IllegalArgumentException {
-
-    }
-
-    @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         return false;
-    }
-
-    @Override
-    public Map<Integer, soliloquy.specs.common.infrastructure.List<Renderable>> representation() {
-        return null;
     }
 
     @Override

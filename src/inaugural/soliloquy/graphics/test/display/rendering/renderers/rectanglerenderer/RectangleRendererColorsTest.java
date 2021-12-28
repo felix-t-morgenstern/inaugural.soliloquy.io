@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectanglerenderer;
 
+import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
@@ -51,11 +52,12 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(null);
-        RectangleRenderable = new FakeRectangleRenderable(
-                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, RENDERING_AREA_PROVIDER, UUID);
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
+                RENDERING_AREA_PROVIDER, 123, new FakeEntityUuid(), renderable -> {},
+                renderable -> {});
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return new ArrayList<Renderer>() {{

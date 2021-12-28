@@ -1,17 +1,14 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
-import inaugural.soliloquy.common.test.fakes.FakeListFactory;
-import inaugural.soliloquy.common.test.fakes.FakeMapFactory;
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.factories.ListFactory;
-import soliloquy.specs.common.factories.MapFactory;
-import soliloquy.specs.common.infrastructure.List;
-import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,18 +17,7 @@ class RenderableStackImplTests {
 
     @BeforeEach
     void setUp() {
-        MapFactory mapFactory = new FakeMapFactory();
-        ListFactory listFactory = new FakeListFactory();
-
-        _renderableStack = new RenderableStackImpl(mapFactory, listFactory);
-    }
-
-    @Test
-    void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(null, new FakeListFactory()));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(new FakeMapFactory(), null));
+        _renderableStack = new RenderableStackImpl();
     }
 
     @Test
@@ -59,24 +45,12 @@ class RenderableStackImplTests {
         assertNotSame(representation, representation2);
         assertEquals(representation.size() - 1, representation2.size());
 
-        assertNotNull(representation.getFirstArchetype());
-        assertNotNull(representation.getSecondArchetype());
-        assertEquals(List.class.getCanonicalName() + "<" +
-                Renderable.class.getCanonicalName() + ">",
-                representation.getSecondArchetype().getInterfaceName());
-
         List<Renderable> zIndex1 = representation.get(1);
-        assertNotNull(zIndex1.getArchetype());
-        assertEquals(Renderable.class.getCanonicalName(),
-                zIndex1.getArchetype().getInterfaceName());
         assertEquals(2, zIndex1.size());
         assertTrue(zIndex1.contains(renderable1));
         assertTrue(zIndex1.contains(renderable3));
 
         List<Renderable> zIndex2 = representation.get(2);
-        assertNotNull(zIndex2.getArchetype());
-        assertEquals(Renderable.class.getCanonicalName(),
-                zIndex2.getArchetype().getInterfaceName());
         assertEquals(1, zIndex2.size());
         assertTrue(zIndex2.contains(renderable2));
     }

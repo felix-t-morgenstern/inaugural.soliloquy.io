@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Map;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -15,7 +14,9 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
+import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
@@ -149,7 +150,7 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
     private void renderColor(Color color) {
         if (color != null) {
             float[] rgba = color.getColorComponents(null);
-            glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
+            glColor4f(rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
         }
         else {
             glColor4f(1f, 1f, 1f, 1f);
@@ -354,22 +355,6 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
         @Override
         public EntityUuid uuid() {
-            return null;
-        }
-
-        @Override
-        public void clearContainedRenderables() {
-
-        }
-
-        @Override
-        public void add(Renderable renderable) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Map<Integer, soliloquy.specs.common.infrastructure.List<Renderable>>
-            representation() {
             return null;
         }
 
