@@ -58,7 +58,8 @@ class FiniteAnimationRenderableImplTests {
                     renderable;
 
     private final long START_TIMESTAMP = 111L;
-    private final Long PAUSED_TIMESTAMP = 456L;
+    private final Long PAUSED_TIMESTAMP_1 = -456L;
+    private final Long PAUSED_TIMESTAMP_2 = 456L;
     private final Long MOST_RECENT_TIMESTAMP = -123L;
 
     private static Renderable _finiteAnimationRenderableWithMouseEventsRemoveFromContainerInput;
@@ -94,63 +95,63 @@ class FiniteAnimationRenderableImplTests {
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 null, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, null, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 null,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 null,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, null
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, null
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -167,7 +168,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
@@ -175,7 +176,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
@@ -183,7 +184,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -191,7 +192,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -199,7 +200,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, null, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -207,7 +208,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, null, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -215,7 +216,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -223,7 +224,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 null,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -231,7 +232,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 null,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -239,7 +240,7 @@ class FiniteAnimationRenderableImplTests {
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER,
-                START_TIMESTAMP, PAUSED_TIMESTAMP, null
+                START_TIMESTAMP, PAUSED_TIMESTAMP_1, null
         ));
         assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderableImpl(
                 ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -335,27 +336,27 @@ class FiniteAnimationRenderableImplTests {
 
     @Test
     void testReportPause() {
-        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP);
-        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP);
+        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
+        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
 
-        assertEquals(PAUSED_TIMESTAMP, _finiteAnimationRenderableWithMouseEvents.pausedTimestamp());
-        assertEquals(PAUSED_TIMESTAMP, _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
+        assertEquals(PAUSED_TIMESTAMP_2, _finiteAnimationRenderableWithMouseEvents.pausedTimestamp());
+        assertEquals(PAUSED_TIMESTAMP_2, _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
     }
 
     @Test
     void testReportUnpauseUpdatesStartAndEndTimestamps() {
         long pauseDuration = 789789L;
 
-        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP);
-        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP);
+        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
+        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
 
-        assertEquals(PAUSED_TIMESTAMP,
+        assertEquals(PAUSED_TIMESTAMP_2,
                 _finiteAnimationRenderableWithMouseEvents.pausedTimestamp());
-        assertEquals(PAUSED_TIMESTAMP,
+        assertEquals(PAUSED_TIMESTAMP_2,
                 _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
 
-        _finiteAnimationRenderableWithMouseEvents.reportUnpause(PAUSED_TIMESTAMP + pauseDuration);
-        _finiteAnimationRenderableWithoutMouseEvents.reportUnpause(PAUSED_TIMESTAMP + pauseDuration);
+        _finiteAnimationRenderableWithMouseEvents.reportUnpause(PAUSED_TIMESTAMP_2 + pauseDuration);
+        _finiteAnimationRenderableWithoutMouseEvents.reportUnpause(PAUSED_TIMESTAMP_2 + pauseDuration);
 
         assertEquals(START_TIMESTAMP + pauseDuration,
                 _finiteAnimationRenderableWithMouseEvents.startTimestamp());
@@ -371,13 +372,13 @@ class FiniteAnimationRenderableImplTests {
 
     @Test
     void testPauseWhilePaused() {
-        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP);
-        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP);
+        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
+        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP));
+                _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP));
+                _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2));
     }
 
     @Test
@@ -635,17 +636,17 @@ class FiniteAnimationRenderableImplTests {
 
     @Test
     void testProvideWhenPaused() {
-        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP);
-        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP);
+        _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
+        _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
 
         _finiteAnimationRenderableWithMouseEvents.provide(789789L);
         _finiteAnimationRenderableWithoutMouseEvents.provide(789789L);
 
         assertEquals(1, ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
-        assertEquals(PAUSED_TIMESTAMP - START_TIMESTAMP,
+        assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
                 (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
         assertEquals(1, ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
-        assertEquals(PAUSED_TIMESTAMP - START_TIMESTAMP,
+        assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
                 (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
     }
 

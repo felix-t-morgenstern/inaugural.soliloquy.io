@@ -11,7 +11,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="libs" level="project" />
-    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.257" level="project" />
+    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.258" level="project" />
     <orderEntry type="library" name="Maven: disorg.soliloquy:inaugural.soliloquy.tools:0.0.68" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apiguardian:apiguardian-api:1.0.0" level="project" />
