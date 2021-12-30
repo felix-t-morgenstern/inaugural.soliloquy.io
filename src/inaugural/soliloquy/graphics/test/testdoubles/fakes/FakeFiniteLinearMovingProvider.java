@@ -3,12 +3,33 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProvider<T> {
+    public EntityUuid Uuid;
+    public Map<Long, T> ValuesAtTimestamps;
+    public Long PausedTimestamp;
+    public Long MostRecentTimestamp;
+    public T Archetype;
+
+    public FakeFiniteLinearMovingProvider() {
+
+    }
+
+    public FakeFiniteLinearMovingProvider(EntityUuid uuid, Map<Long, T> valuesAtTimestamps,
+                                          Long pausedTimestamp, Long mostRecentTimestamp,
+                                          T archetype) {
+        Uuid = uuid;
+        ValuesAtTimestamps = valuesAtTimestamps;
+        PausedTimestamp = pausedTimestamp;
+        MostRecentTimestamp = mostRecentTimestamp;
+        Archetype = archetype;
+    }
+
     @Override
     public Map<Long, T> valuesAtTimestampsRepresentation() {
-        return null;
+        return new HashMap<>(ValuesAtTimestamps);
     }
 
     @Override
@@ -18,12 +39,12 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
 
     @Override
     public T getArchetype() {
-        return null;
+        return Archetype;
     }
 
     @Override
     public EntityUuid uuid() {
-        return null;
+        return Uuid;
     }
 
     @Override
@@ -38,12 +59,12 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
 
     @Override
     public Long pausedTimestamp() {
-        return null;
+        return PausedTimestamp;
     }
 
     @Override
     public Long mostRecentTimestamp() {
-        return null;
+        return MostRecentTimestamp;
     }
 
     @Override

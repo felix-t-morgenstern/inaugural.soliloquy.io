@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.persistence;
+package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
 import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
@@ -14,8 +14,7 @@ import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFa
 /** @noinspection rawtypes*/
 public class StaticProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<StaticProvider> {
-    private final TypeHandler<EntityUuid> PERSISTENT_UUID_HANDLER;
-    private final PersistentValuesHandler PERSISTENT_VALUES_HANDLER;
+    private final TypeHandler<EntityUuid> UUID_HANDLER;
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
@@ -23,41 +22,36 @@ public class StaticProviderHandler
 
     private final static StaticProviderArchetype ARCHETYPE = new StaticProviderArchetype();
 
-    public StaticProviderHandler(TypeHandler<EntityUuid>
-                                                   persistentUuidHandler,
+    public StaticProviderHandler(TypeHandler<EntityUuid> uuidHandler,
                                  PersistentValuesHandler persistentValuesHandler,
                                  StaticProviderFactory staticProviderFactory) {
         super(ARCHETYPE, persistentValuesHandler, QualifiedStaticProviderArchetype::new);
-        PERSISTENT_UUID_HANDLER = Check.ifNull(persistentUuidHandler, "persistentUuidHandler");
-        PERSISTENT_VALUES_HANDLER = Check.ifNull(persistentValuesHandler,
-                "persistentValuesHandler");
+        UUID_HANDLER = Check.ifNull(uuidHandler, "uuidHandler");
         STATIC_PROVIDER_FACTORY = Check.ifNull(staticProviderFactory, "staticProviderFactory");
     }
 
     @Override
     public StaticProvider read(String writtenValue) throws IllegalArgumentException {
-        StaticProviderDTO staticProviderDTO = GSON.fromJson(writtenValue, StaticProviderDTO.class);
-        EntityUuid uuid = PERSISTENT_UUID_HANDLER.read(staticProviderDTO.uuid);
+        StaticProviderDTO dto = GSON.fromJson(writtenValue, StaticProviderDTO.class);
+        EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
         //noinspection rawtypes
-        TypeHandler persistentValueTypeHandler = PERSISTENT_VALUES_HANDLER
-                .getTypeHandler(staticProviderDTO.innerType);
+        TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.innerType);
         return STATIC_PROVIDER_FACTORY.make(uuid,
-                persistentValueTypeHandler.read(staticProviderDTO.val),
-                PERSISTENT_VALUES_HANDLER.generateArchetype(staticProviderDTO.innerType),
-                staticProviderDTO.mostRecentTimestamp);
+                typeHandler.read(dto.val),
+                PERSISTENT_VALUES_HANDLER.generateArchetype(dto.innerType),
+                dto.mostRecentTimestamp);
     }
 
     @Override
     public String write(StaticProvider staticProvider) {
         String innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.getArchetype());
         //noinspection rawtypes
-        TypeHandler persistentValueTypeHandler =
-                PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
+        TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
         StaticProviderDTO staticProviderDTO = new StaticProviderDTO();
-        staticProviderDTO.uuid = PERSISTENT_UUID_HANDLER.write(staticProvider.uuid());
+        staticProviderDTO.uuid = UUID_HANDLER.write(staticProvider.uuid());
         staticProviderDTO.innerType = innerType;
         //noinspection unchecked
-        staticProviderDTO.val = persistentValueTypeHandler
+        staticProviderDTO.val = typeHandler
                 .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
         staticProviderDTO.mostRecentTimestamp = staticProvider.mostRecentTimestamp();
         return GSON.toJson(staticProviderDTO);

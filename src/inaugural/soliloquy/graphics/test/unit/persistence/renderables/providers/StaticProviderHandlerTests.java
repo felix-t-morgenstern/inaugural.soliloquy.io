@@ -1,6 +1,6 @@
-package inaugural.soliloquy.graphics.test.unit.persistence;
+package inaugural.soliloquy.graphics.test.unit.persistence.renderables.providers;
 
-import inaugural.soliloquy.graphics.persistence.StaticProviderHandler;
+import inaugural.soliloquy.graphics.persistence.renderables.providers.StaticProviderHandler;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderFactory;
@@ -84,13 +84,6 @@ class StaticProviderHandlerTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(TypeHandler.class.getCanonicalName() +"<" +
-                StaticProvider.class.getCanonicalName() + ">",
-                _staticProviderHandler.getInterfaceName());
-    }
-
-    @Test
     void testGetArchetype() {
         assertNotNull(_staticProviderHandler.getArchetype());
         assertEquals(StaticProvider.class.getCanonicalName(),
@@ -141,5 +134,12 @@ class StaticProviderHandlerTests {
                 _staticProviderHandler.generateArchetype(null));
         assertThrows(IllegalArgumentException.class, () ->
                 _staticProviderHandler.generateArchetype(""));
+    }
+
+    @Test
+    void testGetInterfaceName() {
+        assertEquals(TypeHandler.class.getCanonicalName() +"<" +
+                        StaticProvider.class.getCanonicalName() + ">",
+                _staticProviderHandler.getInterfaceName());
     }
 }
