@@ -41,6 +41,6 @@ public class FiniteLinearMovingProviderFactoryImpl implements FiniteLinearMoving
 
     @Override
     public String getInterfaceName() {
-        return null;
+        return FiniteLinearMovingProviderFactory.class.getCanonicalName();
     }
 }

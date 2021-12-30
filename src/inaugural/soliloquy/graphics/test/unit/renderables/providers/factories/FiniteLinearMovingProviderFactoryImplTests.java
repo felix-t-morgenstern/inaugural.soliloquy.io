@@ -51,10 +51,13 @@ class FiniteLinearMovingProviderFactoryImplTests {
     private Long _factory1InputPausedTimestamp;
     private Long _factory1InputMostRecentTimestamp;
 
+    @SuppressWarnings("unused")
     private EntityUuid _factory2InputUuid;
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes, unused */
     private Map _factory2InputValuesAtTimes;
+    @SuppressWarnings("unused")
     private Long _factory2InputPausedTimestamp;
+    @SuppressWarnings("unused")
     private Long _factory2InputMostRecentTimestamp;
 
     private FiniteLinearMovingProviderFactory _finiteLinearMovingProviderFactory;
@@ -118,5 +121,14 @@ class FiniteLinearMovingProviderFactoryImplTests {
         assertSame(valuesAtTimestamps, _factory1InputValuesAtTimes);
         assertEquals(pausedTimestamp, _factory1InputPausedTimestamp);
         assertEquals(mostRecentTimestamp, _factory1InputMostRecentTimestamp);
+    }
+
+    // NB: No specific test is provided for make with invalid params, since the individual
+    //     factories provided to this class should handle those edge cases.
+
+    @Test
+    void testGetInterfaceName() {
+        assertEquals(FiniteLinearMovingProviderFactory.class.getCanonicalName(),
+                _finiteLinearMovingProviderFactory.getInterfaceName());
     }
 }
