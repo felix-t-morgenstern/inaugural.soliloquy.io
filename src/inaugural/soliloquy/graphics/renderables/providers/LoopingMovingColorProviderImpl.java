@@ -14,20 +14,20 @@ public class LoopingMovingColorProviderImpl extends AbstractLoopingLinearMovingP
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
     @SuppressWarnings("ConstantConditions")
-    public LoopingMovingColorProviderImpl(EntityUuid uuid, Map<Integer, Color> valuesAtTimes,
+    public LoopingMovingColorProviderImpl(EntityUuid uuid, Map<Integer, Color> valuesWithinPeriod,
                                           List<Boolean> hueMovementIsClockwise,
                                           int periodDuration, int periodModuloOffset,
                                           Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
+        super(uuid, valuesWithinPeriod, periodDuration, periodModuloOffset, pausedTimestamp,
                 mostRecentTimestamp);
 
         HUE_MOVEMENT_IS_CLOCKWISE = new ArrayList<>();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");
-        if (hueMovementIsClockwise.size() != valuesAtTimes.size()) {
+        if (hueMovementIsClockwise.size() != valuesWithinPeriod.size()) {
             throw new IllegalArgumentException("FiniteLinearMovingColorProviderImpl: " +
                     "hueMovementIsClockwise (size = " + hueMovementIsClockwise.size() + ") must " +
-                    "have one fewer item than valuesAtTimes (size = " + valuesAtTimes.size() +
-                    ")");
+                    "have one fewer item than valuesWithinPeriod (size = " +
+                    valuesWithinPeriod.size() + ")");
         }
         hueMovementIsClockwise.forEach(isClockwise -> HUE_MOVEMENT_IS_CLOCKWISE.add(
                 Check.ifNull(isClockwise, "isClockwise in hueMovementIsClockwise")));
