@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.loopinglinearmoving.floatbox;
 
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
@@ -35,11 +34,11 @@ class LoopingLinearMovingFloatBoxProviderTestWithPausing
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(5500);
 
-        RENDERING_DIMENSIONS_PROVIDER.reportPause(new FakeGlobalClock().globalTimestamp());
+        RENDERING_DIMENSIONS_PROVIDER.reportPause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);
 
-        RENDERING_DIMENSIONS_PROVIDER.reportUnpause(new FakeGlobalClock().globalTimestamp());
+        RENDERING_DIMENSIONS_PROVIDER.reportUnpause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2500);
 

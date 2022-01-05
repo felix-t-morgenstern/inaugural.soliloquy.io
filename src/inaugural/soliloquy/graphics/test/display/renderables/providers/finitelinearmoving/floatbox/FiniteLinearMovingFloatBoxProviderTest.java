@@ -12,7 +12,7 @@ import java.util.HashMap;
 class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static void graphicsPreloaderLoadAction() {
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
-        long timestamp = new FakeGlobalClock().globalTimestamp();
+        long timestamp = GLOBAL_CLOCK.globalTimestamp();
         HashMap<Long, FloatBox> renderingDimensionsAtTimes = new HashMap<>();
 
         FloatBoxImpl startingLocation = new FloatBoxImpl(0f, 0f, 0.25f, 0.375f);

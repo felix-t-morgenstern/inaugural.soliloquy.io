@@ -14,7 +14,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
 
     protected static void graphicsPreloaderLoadAction() {
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
-        long timestamp = new FakeGlobalClock().globalTimestamp();
+        long timestamp = GLOBAL_CLOCK.globalTimestamp();
         HashMap<Long, Color> borderColorProviderValues = new HashMap<Long, Color>() {{
             put(timestamp, new Color(68, 20, 135, 0));
             put(timestamp + 1000, new Color(0, 238, 255, 127));

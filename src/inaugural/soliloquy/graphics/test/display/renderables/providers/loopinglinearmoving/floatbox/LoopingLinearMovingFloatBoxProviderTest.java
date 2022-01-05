@@ -13,7 +13,7 @@ class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
     protected static ProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER;
 
     protected static void graphicsPreloaderLoadAction() {
-        long startTimestamp = new FakeGlobalClock().globalTimestamp();
+        long startTimestamp = GLOBAL_CLOCK.globalTimestamp();
         int periodDuration = 4000;
         int periodModuloOffset = periodDuration - (int)(startTimestamp % (periodDuration));
         FakeFloatBox origin = new FakeFloatBox(0.375f, 0.3125f, 0.625f, 0.6875f);

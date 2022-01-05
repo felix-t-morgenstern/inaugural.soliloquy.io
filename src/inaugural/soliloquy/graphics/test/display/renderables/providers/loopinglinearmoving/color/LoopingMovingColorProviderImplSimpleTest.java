@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.loopinglinearmoving.color;
 
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 

@@ -14,7 +14,7 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
 
     protected static void graphicsPreloaderLoadAction() {
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
-        long timestamp = new FakeGlobalClock().globalTimestamp();
+        long timestamp = GLOBAL_CLOCK.globalTimestamp();
         HashMap<Long, Float> borderThicknessProvider = new HashMap<>();
         borderThicknessProvider.put(timestamp, 0f);
         borderThicknessProvider.put(timestamp + 3000, BORDER_THICKNESS);

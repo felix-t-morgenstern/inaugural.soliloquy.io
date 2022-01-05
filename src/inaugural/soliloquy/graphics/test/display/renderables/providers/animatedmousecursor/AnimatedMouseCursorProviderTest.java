@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
 import inaugural.soliloquy.graphics.bootstrap.workers.MouseCursorImagePreloaderWorker;
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.MouseCursorImplTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
             put(833, mouseCursorImages.get(5));
         }};
         int msDuration = 1000;
-        long timestamp = new FakeGlobalClock().globalTimestamp();
+        long timestamp = GLOBAL_CLOCK.globalTimestamp();
         int periodModuloOffset = msDuration - (int)(timestamp % msDuration);
 
         _animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(

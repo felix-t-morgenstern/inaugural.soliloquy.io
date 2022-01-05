@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.finiteli
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
@@ -38,11 +37,11 @@ class FiniteLinearMovingColorProviderImplPausingTest
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
-        SpriteRendererTest.SpriteRenderable.BorderColorProvider.reportPause(new FakeGlobalClock().globalTimestamp());
+        SpriteRendererTest.SpriteRenderable.BorderColorProvider.reportPause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);
 
-        SpriteRendererTest.SpriteRenderable.BorderColorProvider.reportUnpause(new FakeGlobalClock().globalTimestamp());
+        SpriteRendererTest.SpriteRenderable.BorderColorProvider.reportUnpause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);
 

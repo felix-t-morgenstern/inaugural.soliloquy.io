@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.finiteli
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
@@ -36,12 +35,12 @@ class FiniteLinearMovingFloatBoxProviderPausingTest
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
-        long timestamp = new FakeGlobalClock().globalTimestamp();
+        long timestamp = GLOBAL_CLOCK.globalTimestamp();
         SpriteRendererTest.SpriteRenderable.RenderingDimensionsProvider.reportPause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);
 
-        timestamp = new FakeGlobalClock().globalTimestamp();
+        timestamp = GLOBAL_CLOCK.globalTimestamp();
         SpriteRendererTest.SpriteRenderable.RenderingDimensionsProvider.reportUnpause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);

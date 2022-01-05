@@ -12,7 +12,7 @@ class LoopingLinearMovingFloatProviderTest extends SpriteRendererBorderTest {
     protected static ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER;
 
     protected static void graphicsPreloaderLoadAction() {
-        long startTimestamp = new FakeGlobalClock().globalTimestamp();
+        long startTimestamp = GLOBAL_CLOCK.globalTimestamp();
         int periodDuration = 2000;
         int periodModuloOffset = (int)(startTimestamp % periodDuration);
         float maxBorderThickness = 0.03125f;
