@@ -40,8 +40,9 @@ public class FiniteLinearMovingProviderHandler
 
     @Override
     public FiniteLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
-        FiniteLinearMovingProviderDTO dto =
-                GSON.fromJson(writtenValue, FiniteLinearMovingProviderDTO.class);
+        FiniteLinearMovingProviderDTO dto = GSON.fromJson(
+                Check.ifNullOrEmpty(writtenValue, "writtenValue"),
+                FiniteLinearMovingProviderDTO.class);
         EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
         TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.valueType);
         Map<Long, Object> valuesAtTimestamps = new HashMap<>();
@@ -54,6 +55,8 @@ public class FiniteLinearMovingProviderHandler
 
     @Override
     public String write(FiniteLinearMovingProvider finiteLinearMovingProvider) {
+        Check.ifNull(finiteLinearMovingProvider, "finiteLinearMovingProvider");
+
         FiniteLinearMovingProviderDTO dto = new FiniteLinearMovingProviderDTO();
 
         dto.uuid = UUID_HANDLER.write(finiteLinearMovingProvider.uuid());

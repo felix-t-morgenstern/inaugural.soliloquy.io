@@ -65,8 +65,6 @@ class FiniteLinearMovingProviderHandlerTests {
 
     @BeforeEach
     void setUp() {
-        _persistentValuesHandler = Mockito.mock(PersistentValuesHandler.class);
-
         //noinspection unchecked
         _entityUuidHandler = Mockito.mock(TypeHandler.class);
         when(_entityUuidHandler.read(Mockito.anyString())).thenReturn(UUID_READ_OUTPUT);
@@ -76,6 +74,8 @@ class FiniteLinearMovingProviderHandlerTests {
         _floatHandler = Mockito.mock(TypeHandler.class);
         when(_floatHandler.read(Mockito.anyString())).thenReturn(FLOAT_READ_OUTPUT);
         when(_floatHandler.write(Mockito.anyFloat())).thenReturn(FLOAT_WRITE_OUTPUT);
+
+        _persistentValuesHandler = Mockito.mock(PersistentValuesHandler.class);
 
         //noinspection unchecked,rawtypes
         when(_persistentValuesHandler
@@ -117,6 +117,12 @@ class FiniteLinearMovingProviderHandlerTests {
     }
 
     @Test
+    void testWriteWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingProviderHandler.write(null));
+    }
+
+    @Test
     void testRead() {
         //noinspection unchecked
         FiniteLinearMovingProvider<Float> finiteLinearMovingProvider =
@@ -135,6 +141,14 @@ class FiniteLinearMovingProviderHandlerTests {
         verify(_entityUuidHandler).read(UUID_WRITE_OUTPUT);
         verify(_persistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
         verify(_floatHandler, times(3)).read(FLOAT_WRITE_OUTPUT);
+    }
+
+    @Test
+    void testReadWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingProviderHandler.read(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingProviderHandler.read(""));
     }
 
     @Test

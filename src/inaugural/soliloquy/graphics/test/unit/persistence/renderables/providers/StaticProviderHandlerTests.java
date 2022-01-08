@@ -104,6 +104,11 @@ class StaticProviderHandlerTests {
     }
 
     @Test
+    void testWriteWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _staticProviderHandler.write(null));
+    }
+
+    @Test
     void testRead() {
         //noinspection unchecked
         StaticProvider<Integer> staticProvider =
@@ -115,6 +120,12 @@ class StaticProviderHandlerTests {
         assertEquals(MOST_RECENT_TIMESTAMP, (long)staticProvider.mostRecentTimestamp());
         verify(_integerHandler).read(INTEGER_WRITE_OUTPUT);
         verify(_entityUuidHandler).read(UUID_WRITE_OUTPUT);
+    }
+
+    @Test
+    void testReadWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _staticProviderHandler.read(null));
+        assertThrows(IllegalArgumentException.class, () -> _staticProviderHandler.read(""));
     }
 
     @Test

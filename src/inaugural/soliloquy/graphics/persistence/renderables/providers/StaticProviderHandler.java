@@ -32,7 +32,9 @@ public class StaticProviderHandler
 
     @Override
     public StaticProvider read(String writtenValue) throws IllegalArgumentException {
-        StaticProviderDTO dto = GSON.fromJson(writtenValue, StaticProviderDTO.class);
+        StaticProviderDTO dto = GSON.fromJson(
+                Check.ifNullOrEmpty(writtenValue, "writtenValue"),
+                StaticProviderDTO.class);
         EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
         //noinspection rawtypes
         TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.innerType);
@@ -44,7 +46,8 @@ public class StaticProviderHandler
 
     @Override
     public String write(StaticProvider staticProvider) {
-        String innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.getArchetype());
+        String innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(
+                Check.ifNull(staticProvider, "staticProvider").getArchetype());
         //noinspection rawtypes
         TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
         StaticProviderDTO staticProviderDTO = new StaticProviderDTO();

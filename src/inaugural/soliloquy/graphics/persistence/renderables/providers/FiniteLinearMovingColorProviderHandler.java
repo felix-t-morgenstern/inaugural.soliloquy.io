@@ -35,7 +35,8 @@ public class FiniteLinearMovingColorProviderHandler
 
     @Override
     public FiniteLinearMovingColorProvider read(String writtenValue) throws IllegalArgumentException {
-        FiniteLinearMovingColorProviderDTO dto = GSON.fromJson(writtenValue,
+        FiniteLinearMovingColorProviderDTO dto = GSON.fromJson(
+                Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingColorProviderDTO.class);
 
         EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
@@ -55,6 +56,8 @@ public class FiniteLinearMovingColorProviderHandler
 
     @Override
     public String write(FiniteLinearMovingColorProvider finiteLinearMovingColorProvider) {
+        Check.ifNull(finiteLinearMovingColorProvider, "finiteLinearMovingColorProvider");
+
         FiniteLinearMovingColorProviderDTO dto = new FiniteLinearMovingColorProviderDTO();
 
         dto.uuid = UUID_HANDLER.write(finiteLinearMovingColorProvider.uuid());

@@ -104,6 +104,12 @@ class FiniteLinearMovingColorProviderHandlerTests {
     }
 
     @Test
+    void testWriteWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingColorProviderHandler.write(null));
+    }
+
+    @Test
     void testRead() {
         FiniteLinearMovingColorProvider readValue =
                 _finiteLinearMovingColorProviderHandler.read(WRITTEN_VALUE);
@@ -113,5 +119,20 @@ class FiniteLinearMovingColorProviderHandlerTests {
         verify(_mockFiniteLinearMovingColorProviderFactory, times(1))
                 .make(UUID_READ_OUTPUT, COLORS_AT_TIMESTAMPS, HUE_MOVEMENT_IS_CLOCKWISE,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+    }
+
+    @Test
+    void testReadWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingColorProviderHandler.read(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                _finiteLinearMovingColorProviderHandler.read(""));
+    }
+
+    @Test
+    void testGetInterfaceName() {
+        assertEquals(TypeHandler.class.getCanonicalName() + "<" +
+                        FiniteLinearMovingColorProvider.class.getCanonicalName() + ">",
+                _finiteLinearMovingColorProviderHandler.getInterfaceName());
     }
 }
