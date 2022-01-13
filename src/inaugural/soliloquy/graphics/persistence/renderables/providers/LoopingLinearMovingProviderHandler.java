@@ -8,7 +8,7 @@ import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHand
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 /** @noinspection rawtypes*/
 public class LoopingLinearMovingProviderHandler
-        extends AbstractTypeWithOneGenericParamHandler<LoopingMovingProvider> {
+        extends AbstractTypeWithOneGenericParamHandler<LoopingLinearMovingProvider> {
     private final TypeHandler<EntityUuid> UUID_HANDLER;
     private final LoopingLinearMovingProviderFactory LOOPING_LINEAR_MOVING_PROVIDER_FACTORY;
 
@@ -38,7 +38,7 @@ public class LoopingLinearMovingProviderHandler
     }
 
     @Override
-    public LoopingMovingProvider read(String writtenValue) throws IllegalArgumentException {
+    public LoopingLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
         LoopingLinearMovingProviderDto dto = GSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 LoopingLinearMovingProviderDto.class);
@@ -56,7 +56,7 @@ public class LoopingLinearMovingProviderHandler
     }
 
     @Override
-    public String write(LoopingMovingProvider loopingLinearMovingProvider) {
+    public String write(LoopingLinearMovingProvider loopingLinearMovingProvider) {
         Check.ifNull(loopingLinearMovingProvider, "loopingLinearMovingProvider");
 
         LoopingLinearMovingProviderDto dto = new LoopingLinearMovingProviderDto();
@@ -108,7 +108,7 @@ public class LoopingLinearMovingProviderHandler
         String value;
     }
 
-    private static class LoopingLinearMovingProviderArchetype implements LoopingMovingProvider {
+    private static class LoopingLinearMovingProviderArchetype implements LoopingLinearMovingProvider {
 
         @Override
         public Map valuesWithinPeriod() {
@@ -167,13 +167,13 @@ public class LoopingLinearMovingProviderHandler
 
         @Override
         public String getInterfaceName() {
-            return LoopingMovingProvider.class.getCanonicalName();
+            return LoopingLinearMovingProvider.class.getCanonicalName();
         }
     }
 
     private static class QualifiedLinearLinearMovingProviderArchetype<T>
             extends AbstractHasOneGenericParam<T>
-            implements LoopingMovingProvider<T> {
+            implements LoopingLinearMovingProvider<T> {
         private QualifiedLinearLinearMovingProviderArchetype(T archetype) {
             super(archetype);
         }

@@ -4,7 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 // NB: This class has plenty of shared functionality with AbstractFiniteLinearMovingProvider, but
 //     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoopingProvider<T>
-        implements LoopingMovingProvider<T> {
+        implements LoopingLinearMovingProvider<T> {
     protected final HashMap<Integer, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
@@ -100,7 +100,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
     @Override
     public String getInterfaceName() {
-        return LoopingMovingProvider.class.getName() + "<" +
+        return LoopingLinearMovingProvider.class.getName() + "<" +
                 CAN_GET_INTERFACE_NAME.getProperTypeName(getArchetype()) + ">";
     }
 }

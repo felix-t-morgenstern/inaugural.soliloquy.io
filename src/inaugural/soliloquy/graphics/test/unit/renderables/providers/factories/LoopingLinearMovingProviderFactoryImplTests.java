@@ -6,7 +6,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeLoopingLinearMovi
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -18,11 +18,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
-    private final LoopingMovingProvider<Float> FACTORY_1_OUTPUT =
+    private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes*/
-    private final Function<EntityUuid, Function<Integer, Function<Integer, Function<Map, Function<Long, Function<Long,
-            Function<Object, LoopingMovingProvider>>>>>>> FACTORY_1 =
+    private final Function<EntityUuid, Function<Integer, Function<Integer, Function<Map,
+            Function<Long, Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>>
+            FACTORY_1 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
                     mostRecentTimestamp -> archetype -> {
                         _factory1InputUuid = uuid;
@@ -36,11 +37,11 @@ class LoopingLinearMovingProviderFactoryImplTests {
                     };
 
     private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
-    private final LoopingMovingProvider<FloatBox> FACTORY_2_OUTPUT =
+    private final LoopingLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes*/
     private final Function<EntityUuid, Function<Integer, Function<Integer, Function<Map, Function<Long, Function<Long,
-            Function<Object, LoopingMovingProvider>>>>>>> FACTORY_2 =
+            Function<Object, LoopingLinearMovingProvider>>>>>>> FACTORY_2 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
                     mostRecentTimestamp -> archetype -> {
                         _factory2InputUuid = uuid;
@@ -79,7 +80,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
         _loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(
                 new HashMap<String, Function<EntityUuid, Function<Integer, Function<Integer,
                         Function<Map, Function<Long, Function<Long, Function<Object,
-                                LoopingMovingProvider>>>>>>>>() {{
+                                LoopingLinearMovingProvider>>>>>>>>() {{
                     put(FACTORY_1_TYPE_NAME, FACTORY_1);
                     put(FACTORY_2_TYPE_NAME, FACTORY_2);
                 }}
@@ -95,7 +96,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
                 new LoopingLinearMovingProviderFactoryImpl(
                         new HashMap<String, Function<EntityUuid, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingMovingProvider>>>>>>>>() {{
+                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put(null, FACTORY_1);
                         }}));
         //noinspection rawtypes
@@ -103,7 +104,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
                 new LoopingLinearMovingProviderFactoryImpl(
                         new HashMap<String, Function<EntityUuid, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingMovingProvider>>>>>>>>() {{
+                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put("", FACTORY_1);
                         }}));
         //noinspection rawtypes
@@ -111,7 +112,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
                 new LoopingLinearMovingProviderFactoryImpl(
                         new HashMap<String, Function<EntityUuid, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingMovingProvider>>>>>>>>() {{
+                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put(FACTORY_1_TYPE_NAME, null);
                         }}));
     }
@@ -130,8 +131,9 @@ class LoopingLinearMovingProviderFactoryImplTests {
         Long mostRecentTimestamp = 456456L;
         float archetype = 0.123123f;
 
-        LoopingMovingProvider<Float> provider = _loopingLinearMovingProviderFactory
-                .make(uuid, periodDuration, periodModuloOffset, valuesAtTimestamps, pausedTimestamp, mostRecentTimestamp, archetype);
+        LoopingLinearMovingProvider<Float> provider = _loopingLinearMovingProviderFactory
+                .make(uuid, periodDuration, periodModuloOffset, valuesAtTimestamps,
+                        pausedTimestamp, mostRecentTimestamp, archetype);
 
         assertSame(FACTORY_1_OUTPUT, provider);
         assertSame(uuid, _factory1InputUuid);

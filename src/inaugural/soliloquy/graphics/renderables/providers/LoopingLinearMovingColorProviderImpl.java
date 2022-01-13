@@ -2,22 +2,24 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingColorProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LoopingMovingColorProviderImpl extends AbstractLoopingLinearMovingProvider<Color>
-        implements LoopingMovingColorProvider {
+public class LoopingLinearMovingColorProviderImpl
+        extends AbstractLoopingLinearMovingProvider<Color>
+        implements LoopingLinearMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
     @SuppressWarnings("ConstantConditions")
-    public LoopingMovingColorProviderImpl(EntityUuid uuid, Map<Integer, Color> valuesWithinPeriod,
-                                          List<Boolean> hueMovementIsClockwise,
-                                          int periodDuration, int periodModuloOffset,
-                                          Long pausedTimestamp, Long mostRecentTimestamp) {
+    public LoopingLinearMovingColorProviderImpl(EntityUuid uuid,
+                                                Map<Integer, Color> valuesWithinPeriod,
+                                                List<Boolean> hueMovementIsClockwise,
+                                                int periodDuration, int periodModuloOffset,
+                                                Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesWithinPeriod, periodDuration, periodModuloOffset, pausedTimestamp,
                 mostRecentTimestamp);
 
@@ -56,6 +58,6 @@ public class LoopingMovingColorProviderImpl extends AbstractLoopingLinearMovingP
 
     @Override
     public String getInterfaceName() {
-        return LoopingMovingColorProvider.class.getCanonicalName();
+        return LoopingLinearMovingColorProvider.class.getCanonicalName();
     }
 }

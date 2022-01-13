@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.graphics.renderables.providers.LoopingMovingColorProviderImpl;
+import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingColorProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ class LoopingMovingColorProviderImplTests {
     private final boolean TRANSITION_5_IS_CLOCKWISE = false;
     private ArrayList<Boolean> _hueMovementIsClockwise;
 
-    private LoopingMovingColorProvider _loopingMovingColorProvider;
+    private LoopingLinearMovingColorProvider _loopingLinearMovingColorProvider;
 
     @BeforeEach
     void setUp() {
@@ -54,49 +54,50 @@ class LoopingMovingColorProviderImplTests {
             add(TRANSITION_5_IS_CLOCKWISE);
         }};
 
-        _loopingMovingColorProvider = new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
-                _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null);
+        _loopingLinearMovingColorProvider = new LoopingLinearMovingColorProviderImpl(UUID,
+                VALUES_AT_TIMES, _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+                null, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(null, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(null, VALUES_AT_TIMES,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, null,
+                new LoopingLinearMovingColorProviderImpl(UUID, null,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, new HashMap<>(),
+                new LoopingLinearMovingColorProviderImpl(UUID, new HashMap<>(),
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
+                new LoopingLinearMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
                     put(null, Color.RED);
                 }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
+                new LoopingLinearMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
                     put(0, null);
                 }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
+                new LoopingLinearMovingColorProviderImpl(UUID, new HashMap<Integer, Color>() {{
                     put(123, Color.RED);
                 }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         null, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         new ArrayList<Boolean>() {{
                             add(TRANSITION_1_IS_CLOCKWISE);
                             add(TRANSITION_1_IS_CLOCKWISE);
@@ -105,7 +106,7 @@ class LoopingMovingColorProviderImplTests {
                             add(null);
                         }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         new ArrayList<Boolean>() {{
                             add(TRANSITION_1_IS_CLOCKWISE);
                             add(TRANSITION_1_IS_CLOCKWISE);
@@ -113,7 +114,7 @@ class LoopingMovingColorProviderImplTests {
                             add(TRANSITION_1_IS_CLOCKWISE);
                         }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         new ArrayList<Boolean>() {{
                             add(TRANSITION_1_IS_CLOCKWISE);
                             add(TRANSITION_1_IS_CLOCKWISE);
@@ -124,21 +125,21 @@ class LoopingMovingColorProviderImplTests {
                         }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_DURATION, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 12L,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 1L, 0L));
     }
 
     @Test
     void testUuid() {
-        assertSame(UUID, _loopingMovingColorProvider.uuid());
+        assertSame(UUID, _loopingLinearMovingColorProvider.uuid());
     }
 
     @Test
@@ -146,10 +147,10 @@ class LoopingMovingColorProviderImplTests {
         long pausedTimestamp = 123123L;
         long mostRecentTimestamp = 456456L;
 
-        LoopingMovingColorProvider loopingMovingColorProvider =
-                new LoopingMovingColorProviderImpl(UUID, VALUES_AT_TIMES, _hueMovementIsClockwise,
-                        PERIOD_DURATION, PERIOD_MODULO_OFFSET, pausedTimestamp,
-                        mostRecentTimestamp);
+        LoopingLinearMovingColorProvider loopingMovingColorProvider =
+                new LoopingLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
+                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+                        pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
                 (long)loopingMovingColorProvider.pausedTimestamp());
@@ -159,43 +160,43 @@ class LoopingMovingColorProviderImplTests {
 
     @Test
     void testValuesAtTimestampsRepresentation() {
-        assertNotNull(_loopingMovingColorProvider.valuesWithinPeriod());
+        assertNotNull(_loopingLinearMovingColorProvider.valuesWithinPeriod());
         assertEquals(VALUES_AT_TIMES,
-                _loopingMovingColorProvider.valuesWithinPeriod());
+                _loopingLinearMovingColorProvider.valuesWithinPeriod());
         assertNotSame(VALUES_AT_TIMES,
-                _loopingMovingColorProvider.valuesWithinPeriod());
-        assertNotSame(_loopingMovingColorProvider.valuesWithinPeriod(),
-                _loopingMovingColorProvider.valuesWithinPeriod());
+                _loopingLinearMovingColorProvider.valuesWithinPeriod());
+        assertNotSame(_loopingLinearMovingColorProvider.valuesWithinPeriod(),
+                _loopingLinearMovingColorProvider.valuesWithinPeriod());
     }
 
     @Test
     void testHueMovementIsClockwise() {
-        assertNotNull(_loopingMovingColorProvider.hueMovementIsClockwise());
+        assertNotNull(_loopingLinearMovingColorProvider.hueMovementIsClockwise());
         assertEquals(_hueMovementIsClockwise,
-                _loopingMovingColorProvider.hueMovementIsClockwise());
+                _loopingLinearMovingColorProvider.hueMovementIsClockwise());
         assertNotSame(_hueMovementIsClockwise,
-                _loopingMovingColorProvider.hueMovementIsClockwise());
-        assertNotSame(_loopingMovingColorProvider.hueMovementIsClockwise(),
-                _loopingMovingColorProvider.hueMovementIsClockwise());
+                _loopingLinearMovingColorProvider.hueMovementIsClockwise());
+        assertNotSame(_loopingLinearMovingColorProvider.hueMovementIsClockwise(),
+                _loopingLinearMovingColorProvider.hueMovementIsClockwise());
     }
 
     @Test
     void testPeriodDuration() {
-        assertEquals(PERIOD_DURATION, _loopingMovingColorProvider.periodDuration());
+        assertEquals(PERIOD_DURATION, _loopingLinearMovingColorProvider.periodDuration());
     }
 
     @Test
     void testProvideAtKey() {
         assertEquals(VALUE_1,
-                _loopingMovingColorProvider.provide(TIME_1 - PERIOD_MODULO_OFFSET));
+                _loopingLinearMovingColorProvider.provide(TIME_1 - PERIOD_MODULO_OFFSET));
         assertEquals(VALUE_2,
-                _loopingMovingColorProvider.provide(TIME_2 - PERIOD_MODULO_OFFSET));
+                _loopingLinearMovingColorProvider.provide(TIME_2 - PERIOD_MODULO_OFFSET));
         assertEquals(VALUE_3,
-                _loopingMovingColorProvider.provide(TIME_3 - PERIOD_MODULO_OFFSET));
+                _loopingLinearMovingColorProvider.provide(TIME_3 - PERIOD_MODULO_OFFSET));
         assertEquals(VALUE_4,
-                _loopingMovingColorProvider.provide(TIME_4 - PERIOD_MODULO_OFFSET));
+                _loopingLinearMovingColorProvider.provide(TIME_4 - PERIOD_MODULO_OFFSET));
         assertEquals(VALUE_5,
-                _loopingMovingColorProvider.provide(TIME_5 - PERIOD_MODULO_OFFSET));
+                _loopingLinearMovingColorProvider.provide(TIME_5 - PERIOD_MODULO_OFFSET));
     }
 
     @Test
@@ -221,7 +222,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
-        Color result = _loopingMovingColorProvider.provide(timestamp);
+        Color result = _loopingLinearMovingColorProvider.provide(timestamp);
 
         assertEquals(expected, result);
     }
@@ -249,7 +250,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
-        Color result = _loopingMovingColorProvider.provide(timestamp);
+        Color result = _loopingLinearMovingColorProvider.provide(timestamp);
 
         assertEquals(expected, result);
     }
@@ -277,7 +278,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
-        Color result = _loopingMovingColorProvider.provide(timestamp);
+        Color result = _loopingLinearMovingColorProvider.provide(timestamp);
 
         assertEquals(expected, result);
     }
@@ -309,7 +310,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
-        Color result = _loopingMovingColorProvider.provide(timestamp);
+        Color result = _loopingLinearMovingColorProvider.provide(timestamp);
 
         assertEquals(expected, result);
     }
@@ -341,7 +342,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
-        Color result = _loopingMovingColorProvider.provide(timestamp);
+        Color result = _loopingLinearMovingColorProvider.provide(timestamp);
 
         assertEquals(expected, result);
     }
@@ -350,20 +351,20 @@ class LoopingMovingColorProviderImplTests {
     void testReset() {
         long resetTimestamp = 123123L;
 
-        _loopingMovingColorProvider.reset(resetTimestamp);
+        _loopingLinearMovingColorProvider.reset(resetTimestamp);
 
-        assertEquals(VALUE_1, _loopingMovingColorProvider.provide(resetTimestamp));
+        assertEquals(VALUE_1, _loopingLinearMovingColorProvider.provide(resetTimestamp));
     }
 
     @Test
     void testGetArchetype() {
         assertThrows(UnsupportedOperationException.class,
-                _loopingMovingColorProvider::getArchetype);
+                _loopingLinearMovingColorProvider::getArchetype);
     }
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(LoopingMovingColorProvider.class.getCanonicalName(),
-                _loopingMovingColorProvider.getInterfaceName());
+        assertEquals(LoopingLinearMovingColorProvider.class.getCanonicalName(),
+                _loopingLinearMovingColorProvider.getInterfaceName());
     }
 }

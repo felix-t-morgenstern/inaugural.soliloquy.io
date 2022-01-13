@@ -2,14 +2,14 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.graphics.shared.FloorFrameProvider;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RectangleAnimatedBackgroundTextureIdProvider
         extends AbstractLoopingProvider<Integer>
-        implements LoopingMovingProvider<Integer> {
+        implements LoopingLinearMovingProvider<Integer> {
     private final FloorFrameProvider<Integer> FLOOR_FRAME_PROVIDER;
 
     public RectangleAnimatedBackgroundTextureIdProvider(EntityUuid uuid, int periodDuration,
@@ -47,7 +47,7 @@ public class RectangleAnimatedBackgroundTextureIdProvider
     //     moment
     @Override
     public String getInterfaceName() {
-        return LoopingMovingProvider.class.getCanonicalName() + "<" +
+        return LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
                 Integer.class.getCanonicalName() + ">";
     }
 }

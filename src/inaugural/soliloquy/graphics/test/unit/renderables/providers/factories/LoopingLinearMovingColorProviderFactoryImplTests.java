@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
-import inaugural.soliloquy.graphics.renderables.providers.LoopingMovingColorProviderImpl;
+import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingColorProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
@@ -62,13 +62,13 @@ class LoopingLinearMovingColorProviderFactoryImplTests {
 
     @Test
     void testMake() {
-        LoopingMovingColorProvider loopingMovingColorProvider =
+        LoopingLinearMovingColorProvider loopingMovingColorProvider =
                 _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null);
 
         assertNotNull(loopingMovingColorProvider);
-        assertTrue(loopingMovingColorProvider instanceof LoopingMovingColorProviderImpl);
+        assertTrue(loopingMovingColorProvider instanceof LoopingLinearMovingColorProviderImpl);
     }
     
     @Test

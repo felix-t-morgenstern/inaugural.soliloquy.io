@@ -1,17 +1,17 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.loopinglinearmoving.color;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.renderables.providers.LoopingMovingColorProviderImpl;
+import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererBorderTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingColorProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
-    protected static LoopingMovingColorProvider BORDER_COLOR_PROVIDER;
+    protected static LoopingLinearMovingColorProvider BORDER_COLOR_PROVIDER;
     protected static float BORDER_THICKNESS = 0.03125f;
 
     protected static void graphicsPreloaderLoadAction() {
@@ -32,7 +32,7 @@ class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
         }};
 
         SpriteRenderable.BorderColorProvider = BORDER_COLOR_PROVIDER =
-                new LoopingMovingColorProviderImpl(new FakeEntityUuid(), valuesAtTimes,
+                new LoopingLinearMovingColorProviderImpl(new FakeEntityUuid(), valuesAtTimes,
                         movementIsClockwise, periodDuration, 0, null, null);
 
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);

@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingFlo
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ class LoopingLinearMovingFloatProviderTests {
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
 
-    private LoopingMovingProvider<Float> _loopingLinearMovingFloatProvider;
+    private LoopingLinearMovingProvider<Float> _loopingLinearMovingFloatProvider;
 
     @BeforeEach
     void setUp() {
@@ -93,7 +93,7 @@ class LoopingLinearMovingFloatProviderTests {
         long pausedTimestamp = 123123L;
         long mostRecentTimestamp = 456456L;
 
-        LoopingMovingProvider<Float> loopingLinearMovingFloatProvider =
+        LoopingLinearMovingProvider<Float> loopingLinearMovingFloatProvider =
                 new LoopingLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
@@ -127,7 +127,7 @@ class LoopingLinearMovingFloatProviderTests {
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(LoopingMovingProvider.class.getCanonicalName() + "<" +
+        assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
                 Float.class.getCanonicalName() + ">",
                 _loopingLinearMovingFloatProvider.getInterfaceName());
     }

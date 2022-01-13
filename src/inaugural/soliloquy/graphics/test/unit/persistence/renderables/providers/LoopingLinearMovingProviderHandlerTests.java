@@ -10,7 +10,7 @@ import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
 import java.util.HashMap;
@@ -58,20 +58,20 @@ class LoopingLinearMovingProviderHandlerTests {
 
     /** @noinspection rawtypes*/
     @Mock
-    private LoopingMovingProvider _mockLoopingLinearMovingProvider;
+    private LoopingLinearMovingProvider _mockLoopingLinearMovingProvider;
     /** @noinspection rawtypes*/
     @Mock
-    private LoopingMovingProvider _mockLoopingLinearMovingProviderFactoryOutput;
+    private LoopingLinearMovingProvider _mockLoopingLinearMovingProviderFactoryOutput;
     @Mock
     private LoopingLinearMovingProviderFactory _mockLoopingLinearMovingProviderFactory;
 
     /** @noinspection rawtypes*/
-    private TypeWithOneGenericParamHandler<LoopingMovingProvider>
+    private TypeWithOneGenericParamHandler<LoopingLinearMovingProvider>
             _loopingLinearMovingProviderHandler;
 
     @BeforeEach
     void setUp() {
-        _mockLoopingLinearMovingProviderFactoryOutput = mock(LoopingMovingProvider.class);
+        _mockLoopingLinearMovingProviderFactoryOutput = mock(LoopingLinearMovingProvider.class);
 
         _mockLoopingLinearMovingProviderFactory = mock(LoopingLinearMovingProviderFactory.class);
         //noinspection unchecked
@@ -79,7 +79,7 @@ class LoopingLinearMovingProviderHandlerTests {
                 .make(any(), anyInt(), anyInt(), anyMap(), anyLong(), anyLong(), any()))
                 .thenReturn(_mockLoopingLinearMovingProviderFactoryOutput);
 
-        _mockLoopingLinearMovingProvider = mock(LoopingMovingProvider.class);
+        _mockLoopingLinearMovingProvider = mock(LoopingLinearMovingProvider.class);
         when(_mockLoopingLinearMovingProvider.uuid())
                 .thenReturn(LOOPING_LINEAR_MOVING_PROVIDER_INPUT_UUID);
         when(_mockLoopingLinearMovingProvider.periodDuration())
@@ -161,7 +161,7 @@ class LoopingLinearMovingProviderHandlerTests {
     @Test
     void testRead() {
         //noinspection unchecked
-        LoopingMovingProvider<Float> loopingLinearMovingProvider =
+        LoopingLinearMovingProvider<Float> loopingLinearMovingProvider =
                 _loopingLinearMovingProviderHandler.read(WRITTEN_VALUE);
 
         assertNotNull(loopingLinearMovingProvider);
@@ -188,8 +188,8 @@ class LoopingLinearMovingProviderHandlerTests {
     @Test
     void testGenerateArchetype() {
         //noinspection unchecked
-        LoopingMovingProvider<Integer> generatedArchetype =
-                (LoopingMovingProvider<Integer>) _loopingLinearMovingProviderHandler
+        LoopingLinearMovingProvider<Integer> generatedArchetype =
+                (LoopingLinearMovingProvider<Integer>) _loopingLinearMovingProviderHandler
                         .generateArchetype(Integer.class.getCanonicalName());
 
         assertNotNull(generatedArchetype);
@@ -207,7 +207,7 @@ class LoopingLinearMovingProviderHandlerTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(TypeHandler.class.getCanonicalName() + "<" +
-                        LoopingMovingProvider.class.getCanonicalName() + ">",
+                        LoopingLinearMovingProvider.class.getCanonicalName() + ">",
                 _loopingLinearMovingProviderHandler.getInterfaceName());
     }
 }

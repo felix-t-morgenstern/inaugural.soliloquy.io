@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
@@ -10,12 +10,13 @@ import java.util.Map;
 
 public class LoopingLinearMovingFloatBoxProvider
         extends AbstractLoopingLinearMovingProvider<FloatBox>
-        implements LoopingMovingProvider<FloatBox> {
+        implements LoopingLinearMovingProvider<FloatBox> {
     private final FloatBoxFactory FLOAT_BOX_FACTORY;
 
     private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
-    public LoopingLinearMovingFloatBoxProvider(EntityUuid uuid, Map<Integer, FloatBox> valuesAtTimes,
+    public LoopingLinearMovingFloatBoxProvider(EntityUuid uuid,
+                                               Map<Integer, FloatBox> valuesAtTimes,
                                                int periodDuration, int periodModuloOffset,
                                                Long pausedTimestamp, Long mostRecentTimestamp,
                                                FloatBoxFactory floatBoxFactory) {

@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.EntityUuid;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.Map;
 
-public class FakeLoopingLinearMovingProvider<T> implements LoopingMovingProvider<T> {
+public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingProvider<T> {
     @Override
     public Map<Integer, T> valuesWithinPeriod() {
         return null;

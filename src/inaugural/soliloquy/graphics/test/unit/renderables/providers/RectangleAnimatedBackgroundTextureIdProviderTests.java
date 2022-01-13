@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.providers.RectangleAnimatedBackg
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.LoopingMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     private final int MS_9_VALUE = 999;
     private final HashMap<Integer, Integer> VALUES_WITHIN_PERIOD = new HashMap<>();
 
-    private LoopingMovingProvider<Integer> _rectangleAnimatedBackgroundTextureIdProvider;
+    private LoopingLinearMovingProvider<Integer> _rectangleAnimatedBackgroundTextureIdProvider;
 
     @BeforeEach
     void setUp() {
@@ -114,7 +114,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(LoopingMovingProvider.class.getCanonicalName() + "<" +
+        assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
                 Integer.class.getCanonicalName() + ">",
                 _rectangleAnimatedBackgroundTextureIdProvider.getInterfaceName());
     }
