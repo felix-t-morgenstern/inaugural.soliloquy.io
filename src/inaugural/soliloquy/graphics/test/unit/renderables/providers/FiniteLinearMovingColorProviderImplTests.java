@@ -151,8 +151,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
     @Test
     void testGetArchetype() {
-        assertThrows(UnsupportedOperationException.class,
-                _finiteLinearMovingColorProvider::getArchetype);
+        assertNotNull(_finiteLinearMovingColorProvider.getArchetype());
     }
 
     @Test

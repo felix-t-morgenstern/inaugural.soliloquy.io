@@ -48,7 +48,7 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
 
     @Override
     public Color getArchetype() {
-        throw new UnsupportedOperationException();
+        return Color.BLACK;
     }
 
     @Override
