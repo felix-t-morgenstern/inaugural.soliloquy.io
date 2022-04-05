@@ -21,6 +21,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggrega
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +91,9 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                 animation, periodModuloOffset, null);
 
         GlobalLoopingAnimationRenderable =
-                new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation, null, null,
+                new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,
+                        new StaticProviderImpl<>(new FakeEntityUuid(), null, 0f, null),
+                        new StaticProviderImpl<>(new FakeEntityUuid(), null, Color.BLACK, null),
                         new ArrayList<>(),
                         new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),
