@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap.workers;
 
-import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
@@ -11,71 +11,82 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AnimatedMouseCursorWorker implements Runnable {
-    private final Collection<AnimatedMouseCursorDTO> ANIMATED_MOUSE_CURSOR_DTOS;
+    private final Collection<AnimatedMouseCursorDefinitionDTO> ANIMATED_MOUSE_CURSOR_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
     private final Consumer<ProviderAtTime<Long>> RESULT_CONSUMER;
 
     /** @noinspection ConstantConditions*/
     public AnimatedMouseCursorWorker(Function<String, Long> getMouseCursorsByRelativeLocation,
-                                     Collection<AnimatedMouseCursorDTO> animatedMouseCursorDTOs,
+                                     Collection<AnimatedMouseCursorDefinitionDTO>
+                                             animatedMouseCursorDefinitionDTOs,
                                      AnimatedMouseCursorProviderFactory
                                                  animatedMouseCursorProviderFactory,
                                      Consumer<ProviderAtTime<Long>> resultConsumer) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
-        Check.ifNull(animatedMouseCursorDTOs, "animatedMouseCursorDTOs");
-        if (animatedMouseCursorDTOs.isEmpty()) {
+        Check.ifNull(animatedMouseCursorDefinitionDTOs, "animatedMouseCursorDefinitionDTOs");
+        if (animatedMouseCursorDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException(
-                    "AnimatedMouseCursorWorker: animatedMouseCursorDTOs is empty");
+                    "AnimatedMouseCursorWorker: animatedMouseCursorDefinitionDTOs is empty");
         }
-        animatedMouseCursorDTOs.forEach(animatedMouseCursorDTO -> {
-            Check.ifNull(animatedMouseCursorDTO,
-                    "animatedMouseCursorDTO within animatedMouseCursorDTOs");
-            Check.ifNullOrEmpty(animatedMouseCursorDTO.Id,
-                    "animatedMouseCursorDTO.Id within animatedMouseCursorDTOs");
-            Check.ifNull(animatedMouseCursorDTO.Frames,
-                    "animatedMouseCursorDTO.Frames within animatedMouseCursorDTOs (" +
-                    animatedMouseCursorDTO.Id + ")");
-            if (animatedMouseCursorDTO.Frames.length == 0) {
+        animatedMouseCursorDefinitionDTOs.forEach(animatedMouseCursorDefinitionDTO -> {
+            Check.ifNull(animatedMouseCursorDefinitionDTO,
+                    "animatedMouseCursorDefinitionDTO within animatedMouseCursorDefinitionDTOs");
+            Check.ifNullOrEmpty(animatedMouseCursorDefinitionDTO.Id,
+                    "animatedMouseCursorDefinitionDTO.Id within " +
+                            "animatedMouseCursorDefinitionDTOs");
+            Check.ifNull(animatedMouseCursorDefinitionDTO.Frames,
+                    "animatedMouseCursorDefinitionDTO.Frames within " +
+                            "animatedMouseCursorDefinitionDTOs (" +
+                            animatedMouseCursorDefinitionDTO.Id + ")");
+            if (animatedMouseCursorDefinitionDTO.Frames.length == 0) {
                 throw new IllegalArgumentException("AnimatedMouseCursorWorker: " +
-                        "animatedMouseCursorDTO.Frames is empty within animatedMouseCursorDTOs (" +
-                        animatedMouseCursorDTO.Id + ")");
+                        "animatedMouseCursorDefinitionDTO.Frames is empty within " +
+                        "animatedMouseCursorDefinitionDTOs (" +
+                        animatedMouseCursorDefinitionDTO.Id + ")");
             }
             int maxFrameMs = 0;
             boolean frameAt0Ms = false;
-            for (AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO frameDTO :
-                    animatedMouseCursorDTO.Frames) {
+            for (AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO frameDTO :
+                    animatedMouseCursorDefinitionDTO.Frames) {
                 Check.ifNullOrEmpty(frameDTO.Img,
-                        "frame within animatedMouseCursorDTOs (" +
-                                animatedMouseCursorDTO.Id + ")");
+                        "frame within animatedMouseCursorDefinitionDTOs (" +
+                                animatedMouseCursorDefinitionDTO.Id + ")");
                 frameAt0Ms = frameAt0Ms || frameDTO.Ms == 0;
                 maxFrameMs = Math.max(maxFrameMs, frameDTO.Ms);
             }
             if (!frameAt0Ms) {
                 throw new IllegalArgumentException("AnimatedMouseCursorWorker: " +
-                        "animatedMouseCursorDTO.Frames has no frame at 0ms within " +
-                        "animatedMouseCursorDTOs (" + animatedMouseCursorDTO.Id + ")");
+                        "animatedMouseCursorDefinitionDTO.Frames has no frame at 0ms within " +
+                        "animatedMouseCursorDefinitionDTOs (" + animatedMouseCursorDefinitionDTO.Id + ")");
             }
-            Check.throwOnSecondLte(maxFrameMs, animatedMouseCursorDTO.Duration,
-                    "maximum frame ms", "animatedMouseCursorDTO.Duration within " +
-                            "animatedMouseCursorDTOs (" + animatedMouseCursorDTO.Id + ")");
-            Check.throwOnSecondLte(animatedMouseCursorDTO.Offset, animatedMouseCursorDTO.Duration,
-                    "animatedMouseCursorDTO.Offset", "animatedMouseCursorDTO.Duration within " +
-                            "animatedMouseCursorDTOs (" + animatedMouseCursorDTO.Id + ")");
-            Check.throwOnLtValue(animatedMouseCursorDTO.Offset, 0, "animatedMouseCursorDTO.Offset " +
-                    "within animatedMouseCursorDTOs (" + animatedMouseCursorDTO.Id + ")");
-            if (animatedMouseCursorDTO.Paused != null &&
-                    animatedMouseCursorDTO.Timestamp == null) {
-                throw new IllegalArgumentException("animatedMouseCursorDTO.Paused is non-null " +
-                        "while animatedMouseCursorDTO.Timestamp is null (id = " +
-                        animatedMouseCursorDTO.Id + ")");
+            Check.throwOnSecondLte(maxFrameMs, animatedMouseCursorDefinitionDTO.Duration,
+                    "maximum frame ms", "animatedMouseCursorDefinitionDTO.Duration within " +
+                            "animatedMouseCursorDefinitionDTOs (" +
+                            animatedMouseCursorDefinitionDTO.Id + ")");
+            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Offset, animatedMouseCursorDefinitionDTO.Duration,
+                    "animatedMouseCursorDefinitionDTO.Offset",
+                    "animatedMouseCursorDefinitionDTO.Duration within " +
+                            "animatedMouseCursorDefinitionDTOs (" +
+                            animatedMouseCursorDefinitionDTO.Id + ")");
+            Check.throwOnLtValue(animatedMouseCursorDefinitionDTO.Offset, 0,
+                    "animatedMouseCursorDefinitionDTO.Offset within " +
+                            "animatedMouseCursorDefinitionDTOs (" +
+                            animatedMouseCursorDefinitionDTO.Id + ")");
+            if (animatedMouseCursorDefinitionDTO.Paused != null &&
+                    animatedMouseCursorDefinitionDTO.Timestamp == null) {
+                throw new IllegalArgumentException("animatedMouseCursorDefinitionDTO.Paused is " +
+                        "non-null while animatedMouseCursorDefinitionDTO.Timestamp is null (id = "
+                        + animatedMouseCursorDefinitionDTO.Id + ")");
             }
-            Check.throwOnSecondLte(animatedMouseCursorDTO.Paused, animatedMouseCursorDTO.Timestamp,
-                    "animatedMouseCursorDTO.Paused", "animatedMouseCursorDTO.Timestamp within " +
-                            "animatedMouseCursorDTOs (" + animatedMouseCursorDTO.Id + ")");
+            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Paused, animatedMouseCursorDefinitionDTO.Timestamp,
+                    "animatedMouseCursorDefinitionDTO.Paused",
+                    "animatedMouseCursorDefinitionDTO.Timestamp within " +
+                            "animatedMouseCursorDefinitionDTOs (" +
+                            animatedMouseCursorDefinitionDTO.Id + ")");
         });
-        ANIMATED_MOUSE_CURSOR_DTOS = animatedMouseCursorDTOs;
+        ANIMATED_MOUSE_CURSOR_DTOS = animatedMouseCursorDefinitionDTOs;
         ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY = Check.ifNull(animatedMouseCursorProviderFactory,
                 "animatedMouseCursorProviderFactory");
         RESULT_CONSUMER = Check.ifNull(resultConsumer, "resultConsumer");
@@ -83,16 +94,18 @@ public class AnimatedMouseCursorWorker implements Runnable {
 
     @Override
     public void run() {
-        ANIMATED_MOUSE_CURSOR_DTOS.forEach(animatedMouseCursorDTO -> {
+        ANIMATED_MOUSE_CURSOR_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
             HashMap<Integer, Long> cursorsAtMs = new HashMap<>();
-            for(AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO frame :
-                    animatedMouseCursorDTO.Frames) {
+            for(AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO frame :
+                    animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }
             RESULT_CONSUMER.accept(ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY.make(
-                    animatedMouseCursorDTO.Id, cursorsAtMs, animatedMouseCursorDTO.Duration,
-                    animatedMouseCursorDTO.Offset, animatedMouseCursorDTO.Paused,
-                    animatedMouseCursorDTO.Timestamp
+                    animatedMouseCursorDefinitionDTO.Id, cursorsAtMs,
+                    animatedMouseCursorDefinitionDTO.Duration,
+                    animatedMouseCursorDefinitionDTO.Offset,
+                    animatedMouseCursorDefinitionDTO.Paused,
+                    animatedMouseCursorDefinitionDTO.Timestamp
             ));
         });
     }

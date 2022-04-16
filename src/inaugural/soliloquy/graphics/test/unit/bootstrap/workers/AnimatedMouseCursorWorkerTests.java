@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
 
-import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.workers.AnimatedMouseCursorWorker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,17 +43,20 @@ class AnimatedMouseCursorWorkerTests {
         put(MOUSE_CURSOR_IMG_3, MOUSE_CURSOR_3);
     }};
 
-    private final ArrayList<AnimatedMouseCursorDTO> ANIMATED_MOUSE_CURSOR_DTOS = new ArrayList<>();
+    private final ArrayList<AnimatedMouseCursorDefinitionDTO>
+            ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS = new ArrayList<>();
 
-    private final AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO FRAME_1_DTO =
-            new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO(MS_1, MOUSE_CURSOR_IMG_1);
+    private final AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO FRAME_1_DTO =
+            new AnimatedMouseCursorDefinitionDTO
+                    .AnimatedMouseCursorFrameDTO(MS_1, MOUSE_CURSOR_IMG_1);
 
-    private final AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO FRAME_2_DTO =
-            new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO(MS_2, MOUSE_CURSOR_IMG_3);
+    private final AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO FRAME_2_DTO =
+            new AnimatedMouseCursorDefinitionDTO
+                    .AnimatedMouseCursorFrameDTO(MS_2, MOUSE_CURSOR_IMG_3);
 
-    private final AnimatedMouseCursorDTO ANIMATED_MOUSE_CURSOR_DTO =
-            new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
+    private final AnimatedMouseCursorDefinitionDTO ANIMATED_MOUSE_CURSOR_DTO =
+            new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                    new AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO[] {
                             FRAME_1_DTO, FRAME_2_DTO
                     }, DURATION, OFFSET, PAUSED, TIMESTAMP);
 
@@ -68,7 +71,7 @@ class AnimatedMouseCursorWorkerTests {
 
     @BeforeEach
     void setUp() {
-        ANIMATED_MOUSE_CURSOR_DTOS.add(ANIMATED_MOUSE_CURSOR_DTO);
+        ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS.add(ANIMATED_MOUSE_CURSOR_DTO);
 
         _animatedMouseCursorProviderFactoryMock = mock(AnimatedMouseCursorProviderFactory.class);
         _animatedMouseCursorProviderMock = mock(AnimatedMouseCursorProvider.class);
@@ -79,7 +82,7 @@ class AnimatedMouseCursorWorkerTests {
                 .thenReturn(_animatedMouseCursorProviderMock);
 
         _animatedMouseCursorWorker = new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                ANIMATED_MOUSE_CURSOR_DTOS, _animatedMouseCursorProviderFactoryMock,
+                ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS, _animatedMouseCursorProviderFactoryMock,
                 provider -> _resultProvider = provider);
     }
 
@@ -87,7 +90,7 @@ class AnimatedMouseCursorWorkerTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(null,
-                        ANIMATED_MOUSE_CURSOR_DTOS,
+                        ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS,
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
 
@@ -103,53 +106,57 @@ class AnimatedMouseCursorWorkerTests {
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(null);
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(null,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(null,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO("",
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO("",
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                     null, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {},
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {},
                                     DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
                                             FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
@@ -157,10 +164,11 @@ class AnimatedMouseCursorWorkerTests {
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO(
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO[] {
+                                            new AnimatedMouseCursorDefinitionDTO
+                                                    .AnimatedMouseCursorFrameDTO(
                                                     0, null)
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
@@ -168,73 +176,81 @@ class AnimatedMouseCursorWorkerTests {
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO(
-                                                    0, "")
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                new AnimatedMouseCursorDefinitionDTO
+                                                        .AnimatedMouseCursorFrameDTO(0, "")
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, MS_2 - 1, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, DURATION, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, -1, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, null));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
-                        new ArrayList<AnimatedMouseCursorDTO>() {{
-                            add(new AnimatedMouseCursorDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorDTO.AnimatedMouseCursorFrameDTO[] {
-                                            FRAME_1_DTO, FRAME_2_DTO
+                        new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
+                            add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
+                                    new AnimatedMouseCursorDefinitionDTO
+                                            .AnimatedMouseCursorFrameDTO[] {
+                                                    FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, TIMESTAMP + 1, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
                         provider -> _resultProvider = provider));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimatedMouseCursorWorker(MOUSE_CURSORS::get, ANIMATED_MOUSE_CURSOR_DTOS,
+                new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
+                        ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS,
                         null,
                         provider -> _resultProvider = provider));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimatedMouseCursorWorker(MOUSE_CURSORS::get, ANIMATED_MOUSE_CURSOR_DTOS,
+                new AnimatedMouseCursorWorker(MOUSE_CURSORS::get,
+                        ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS,
                         _animatedMouseCursorProviderFactoryMock,
                         null));
     }
