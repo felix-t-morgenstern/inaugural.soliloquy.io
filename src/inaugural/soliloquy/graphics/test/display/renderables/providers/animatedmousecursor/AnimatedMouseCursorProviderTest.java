@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.animatedmousecursor;
 
 import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.MouseCursorImagePreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.MouseCursorImplTest;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
@@ -36,7 +36,7 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
             add(MOUSE_CURSOR_IMAGE_4_RELATIVE_LOCATION);
             add(MOUSE_CURSOR_IMAGE_5_RELATIVE_LOCATION);
             add(MOUSE_CURSOR_IMAGE_6_RELATIVE_LOCATION);
-        }}.forEach(imgLoc -> new MouseCursorImagePreloaderWorker(
+        }}.forEach(imgLoc -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(imgLoc, 0, 0), relativeLocation -> mouseCursorImages::add)
                 .run());
         HashMap<Integer, Long> mouseCursorsAtMs = new HashMap<Integer, Long>() {{

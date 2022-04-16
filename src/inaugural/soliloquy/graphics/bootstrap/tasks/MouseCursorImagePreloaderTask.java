@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
 import inaugural.soliloquy.tools.Check;
@@ -14,7 +14,7 @@ import java.util.function.Function;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
-public class MouseCursorImagePreloaderWorker implements Runnable {
+public class MouseCursorImagePreloaderTask implements Runnable {
     private final String RELATIVE_LOCATION;
     private final int HOTSPOT_X;
     private final int HOTSPOT_Y;
@@ -23,8 +23,8 @@ public class MouseCursorImagePreloaderWorker implements Runnable {
     private final static int DESIRED_CHANNELS = 4;
 
     /** @noinspection ConstantConditions*/
-    public MouseCursorImagePreloaderWorker(MouseCursorImageDTO mouseCursorImageDTO,
-                                           Function<String, Consumer<Long>> consumeResult) {
+    public MouseCursorImagePreloaderTask(MouseCursorImageDTO mouseCursorImageDTO,
+                                         Function<String, Consumer<Long>> consumeResult) {
         Check.ifNull(mouseCursorImageDTO, "mouseCursorImageDTO");
         RELATIVE_LOCATION = Check.ifNullOrEmpty(mouseCursorImageDTO.RelativeLocation, "relativeLocation");
         HOTSPOT_X = Check.ifNonNegative(mouseCursorImageDTO.HotspotX,
@@ -49,11 +49,11 @@ public class MouseCursorImagePreloaderWorker implements Runnable {
         int height = heightBuffer.get();
 
         if (HOTSPOT_X >= width) {
-            throw new IllegalStateException("MouseCursorImagePreloaderWorker.run: HOTSPOT_X (" +
+            throw new IllegalStateException("MouseCursorImagePreloaderTask.run: HOTSPOT_X (" +
                     HOTSPOT_X + ") is out of bounds, width = " + width);
         }
         if (HOTSPOT_Y >= height) {
-            throw new IllegalStateException("MouseCursorImagePreloaderWorker.run: HOTSPOT_Y (" +
+            throw new IllegalStateException("MouseCursorImagePreloaderTask.run: HOTSPOT_Y (" +
                     HOTSPOT_Y + ") is out of bounds, height = " + height);
         }
 

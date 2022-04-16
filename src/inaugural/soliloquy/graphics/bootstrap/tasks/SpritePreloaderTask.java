@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -11,23 +11,23 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SpritePreloaderWorker implements Runnable {
+public class SpritePreloaderTask implements Runnable {
     private final Function<String, Image> GET_IMAGE;
     private final AssetFactory<SpriteDefinition, Sprite> FACTORY;
     private final Collection<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS;
     private final Consumer<Sprite> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public SpritePreloaderWorker(Function<String, Image> getImage,
-                                 AssetFactory<SpriteDefinition, Sprite> factory,
-                                 Collection<SpriteDefinitionDTO> spriteDefinitionDTOs,
-                                 Consumer<Sprite> processResult) {
+    public SpritePreloaderTask(Function<String, Image> getImage,
+                               AssetFactory<SpriteDefinition, Sprite> factory,
+                               Collection<SpriteDefinitionDTO> spriteDefinitionDTOs,
+                               Consumer<Sprite> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(spriteDefinitionDTOs, "spriteDefinitionDTOs");
         if (spriteDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException(
-                    "SpritePreloaderWorker: spriteDefinitionDTOs is empty");
+                    "SpritePreloaderTask: spriteDefinitionDTOs is empty");
         }
         spriteDefinitionDTOs.forEach(spriteDefinitionDTO -> {
             Check.ifNull(spriteDefinitionDTO, "spriteDefinitionDTO within spriteDefinitionDTOs");

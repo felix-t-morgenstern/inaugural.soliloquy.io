@@ -1,6 +1,6 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
-import inaugural.soliloquy.graphics.bootstrap.workers.FontPreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.FontPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Font;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FontPreloaderWorkerTests {
+class FontPreloaderTaskTests {
     private final FakeFontFactory FONT_FACTORY = new FakeFontFactory();
     private final String ID = "FontId";
     private final String RELATIVE_LOCATION = "./res/fonts/Trajan Pro Regular.ttf";
@@ -49,7 +49,7 @@ class FontPreloaderWorkerTests {
         ArrayList<Font> fonts = new ArrayList<>();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         null,
                         new FakeFontDefinition(
                                 ID,
@@ -82,12 +82,12 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         null,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 null,
@@ -120,7 +120,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 "",
@@ -153,7 +153,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -186,7 +186,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -219,7 +219,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -252,7 +252,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -280,7 +280,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -313,7 +313,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -346,7 +346,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -379,7 +379,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -412,7 +412,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -445,7 +445,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -473,7 +473,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -506,7 +506,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -539,7 +539,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -572,7 +572,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -605,7 +605,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -638,7 +638,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -666,7 +666,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -699,7 +699,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -732,7 +732,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -765,7 +765,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -798,7 +798,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -831,7 +831,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -859,7 +859,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -892,7 +892,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -925,7 +925,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -958,7 +958,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -991,7 +991,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -1024,7 +1024,7 @@ class FontPreloaderWorkerTests {
                                 LEADING_ADJUSTMENT),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -1057,7 +1057,7 @@ class FontPreloaderWorkerTests {
                                 1f),
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderWorker(
+                () -> new FontPreloaderTask(
                         FONT_FACTORY,
                         new FakeFontDefinition(
                                 ID,
@@ -1125,10 +1125,10 @@ class FontPreloaderWorkerTests {
                 ),
                 LEADING_ADJUSTMENT);
 
-        FontPreloaderWorker fontPreloaderWorker = new FontPreloaderWorker(FONT_FACTORY,
+        FontPreloaderTask fontPreloaderTask = new FontPreloaderTask(FONT_FACTORY,
                 fontDefinition, fonts::add);
 
-        fontPreloaderWorker.run();
+        fontPreloaderTask.run();
 
         assertEquals(1, FONT_FACTORY.INPUTS.size());
         assertEquals(1, FONT_FACTORY.OUTPUTS.size());

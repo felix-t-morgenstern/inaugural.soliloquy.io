@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.ImageDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -7,16 +7,16 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
 
 import java.util.function.Consumer;
 
-public class ImagePreloaderWorker implements Runnable {
+public class ImagePreloaderTask implements Runnable {
     private final ImageFactory IMAGE_FACTORY;
     private final String RELATIVE_LOCATION;
     private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
     private final Consumer<Image> ADD_LOADED_IMAGE;
 
     /** @noinspection ConstantConditions*/
-    public ImagePreloaderWorker(ImageFactory imageFactory,
-                                ImageDefinitionDTO imageDefinitionDTO,
-                                Consumer<Image> addLoadedImage) {
+    public ImagePreloaderTask(ImageFactory imageFactory,
+                              ImageDefinitionDTO imageDefinitionDTO,
+                              Consumer<Image> addLoadedImage) {
         IMAGE_FACTORY = Check.ifNull(imageFactory, "imageFactory");
         Check.ifNull(imageDefinitionDTO, "imageDefinitionDTO");
         RELATIVE_LOCATION = Check.ifNullOrEmpty(imageDefinitionDTO.RelativeLocation,

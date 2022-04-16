@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -13,22 +13,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ImageAssetSetPreloaderWorker implements Runnable {
+public class ImageAssetSetPreloaderTask implements Runnable {
     private final AssetFactory<ImageAssetSetDefinition, ImageAssetSet> FACTORY;
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS;
     private final Consumer<ImageAssetSet> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public ImageAssetSetPreloaderWorker(AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
+    public ImageAssetSetPreloaderTask(AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
                                                 factory,
-                                        Collection<ImageAssetSetDefinitionDTO>
+                                      Collection<ImageAssetSetDefinitionDTO>
                                                 imageAssetSetDefinitionDTOs,
-                                        Consumer<ImageAssetSet> processResult) {
+                                      Consumer<ImageAssetSet> processResult) {
         FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(imageAssetSetDefinitionDTOs, "imageAssetSetDefinitionDTOs");
         if (imageAssetSetDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException(
-                    "ImageAssetSetPreloaderWorker: imageAssetSetDefinitionDTOs is empty");
+                    "ImageAssetSetPreloaderTask: imageAssetSetDefinitionDTOs is empty");
         }
         imageAssetSetDefinitionDTOs.forEach(imageAssetSetDefinitionDTO -> {
             Check.ifNull(imageAssetSetDefinitionDTO,
@@ -39,7 +39,7 @@ public class ImageAssetSetPreloaderWorker implements Runnable {
                     "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
                     imageAssetSetDefinitionDTO.id + ")");
             if (imageAssetSetDefinitionDTO.assets.length == 0) {
-                throw new IllegalArgumentException("ImageAssetSetPreloaderWorker: " +
+                throw new IllegalArgumentException("ImageAssetSetPreloaderTask: " +
                         "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
                         imageAssetSetDefinitionDTO.id + ") is empty");
             }
@@ -49,7 +49,7 @@ public class ImageAssetSetPreloaderWorker implements Runnable {
                         "imageAssetSetAssetDTO.assetId within imageAssetSetDefinitionDTOs (" +
                         imageAssetSetDefinitionDTO.id + ")");
                 if (imageAssetSetAssetDTO.assetType < 1 || imageAssetSetAssetDTO.assetType > 3) {
-                    throw new IllegalArgumentException("ImageAssetSetPreloaderWorker: " +
+                    throw new IllegalArgumentException("ImageAssetSetPreloaderTask: " +
                             "imageAssetSetDefinitionDTO.asset has illegal assetType (" +
                             imageAssetSetAssetDTO.assetType + "), (id = " +
                             imageAssetSetDefinitionDTO.id + ")");

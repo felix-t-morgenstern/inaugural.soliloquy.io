@@ -1,7 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.MouseCursorImagePreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MouseCursorImagePreloaderWorkerTests {
+class MouseCursorImagePreloaderTaskTests {
     private final String MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION =
             "./res/images/mouse_cursors/cursor_green_default.png";
     private final int HOTSPOT_X = 12;
@@ -24,27 +24,27 @@ class MouseCursorImagePreloaderWorkerTests {
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 null,
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorImages.put(relativeLocation, mouseCursorImage)));
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(null, HOTSPOT_X, HOTSPOT_Y),
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorImages.put(relativeLocation, mouseCursorImage)));
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO("", HOTSPOT_X, HOTSPOT_Y),
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorImages.put(relativeLocation, mouseCursorImage)));
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, -1, HOTSPOT_Y),
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorImages.put(relativeLocation, mouseCursorImage)));
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, HOTSPOT_X, -1),
                 relativeLocation -> mouseCursorImage ->
                         _mouseCursorImages.put(relativeLocation, mouseCursorImage)));
-        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderWorker(
+        assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, HOTSPOT_X,
                         HOTSPOT_Y),
                 null));
@@ -52,7 +52,7 @@ class MouseCursorImagePreloaderWorkerTests {
 
     @Test
     void testRun() {
-        new MouseCursorImagePreloaderWorker(
+        new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, HOTSPOT_X,
                         HOTSPOT_Y),
                 relativeLocation -> mouseCursorImage ->
@@ -66,12 +66,12 @@ class MouseCursorImagePreloaderWorkerTests {
 
     @Test
     void testRunWithHotspotsOutOfBounds() {
-        MouseCursorImagePreloaderWorker hotspotXOutOfBounds = new MouseCursorImagePreloaderWorker(
+        MouseCursorImagePreloaderTask hotspotXOutOfBounds = new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, 128, HOTSPOT_Y),
                         relativeLocation -> mouseCursorImage ->
                                 _mouseCursorImages.put(relativeLocation, mouseCursorImage));
 
-        MouseCursorImagePreloaderWorker hotspotYOutOfBounds = new MouseCursorImagePreloaderWorker(
+        MouseCursorImagePreloaderTask hotspotYOutOfBounds = new MouseCursorImagePreloaderTask(
                 new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, HOTSPOT_X, 126),
                         relativeLocation -> mouseCursorImage ->
                                 _mouseCursorImages.put(relativeLocation, mouseCursorImage));

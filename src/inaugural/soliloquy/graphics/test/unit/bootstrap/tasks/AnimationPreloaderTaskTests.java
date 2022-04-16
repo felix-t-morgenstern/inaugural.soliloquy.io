@@ -1,7 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.AnimationPreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.AnimationPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +16,13 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AnimationPreloaderWorkerTests {
+class AnimationPreloaderTaskTests {
     private final java.util.Map<String, Image> IMAGES = new HashMap<>();
     private final FakeAnimationFactory FACTORY = new FakeAnimationFactory();
     private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS = new ArrayList<>();
     private final FakeRegistry<Animation> REGISTRY = new FakeRegistry<Animation>();
 
-    private AnimationPreloaderWorker _animationPreloaderWorker;
+    private AnimationPreloaderTask _animationPreloaderTask;
 
     @BeforeEach
     void setUp() {
@@ -61,25 +61,25 @@ class AnimationPreloaderWorkerTests {
         ANIMATION_DEFINITION_DTOS.add(animation1DTO);
         ANIMATION_DEFINITION_DTOS.add(animation2DTO);
 
-        _animationPreloaderWorker = new AnimationPreloaderWorker(IMAGES::get, FACTORY, 
+        _animationPreloaderTask = new AnimationPreloaderTask(IMAGES::get, FACTORY,
                 ANIMATION_DEFINITION_DTOS, REGISTRY::add);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(null, FACTORY, ANIMATION_DEFINITION_DTOS, 
+                new AnimationPreloaderTask(null, FACTORY, ANIMATION_DEFINITION_DTOS,
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, null, ANIMATION_DEFINITION_DTOS,
+                new AnimationPreloaderTask(IMAGES::get, null, ANIMATION_DEFINITION_DTOS,
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY, null,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY, null,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY, new ArrayList<>(),
+                new AnimationPreloaderTask(IMAGES::get, FACTORY, new ArrayList<>(),
                         REGISTRY::add));
 
         String animationId = "animationId";
@@ -93,13 +93,13 @@ class AnimationPreloaderWorkerTests {
                         55, 66, 77, 88, 0.3f, 0.4f);
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(null);
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(null, 123,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -108,7 +108,7 @@ class AnimationPreloaderWorkerTests {
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO("", 123,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -117,7 +117,7 @@ class AnimationPreloaderWorkerTests {
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 0,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -126,7 +126,7 @@ class AnimationPreloaderWorkerTests {
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, animation1Frame2.ms - 1,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -136,14 +136,14 @@ class AnimationPreloaderWorkerTests {
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 123,
                                     null));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 123,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -151,7 +151,7 @@ class AnimationPreloaderWorkerTests {
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY,
+                new AnimationPreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 123,
                                     new AnimationDefinitionDTO.AnimationFrameDTO[]{
@@ -163,13 +163,13 @@ class AnimationPreloaderWorkerTests {
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderWorker(IMAGES::get, FACTORY, ANIMATION_DEFINITION_DTOS, 
+                new AnimationPreloaderTask(IMAGES::get, FACTORY, ANIMATION_DEFINITION_DTOS,
                         null));
     }
 
     @Test
     void testRun() {
-        _animationPreloaderWorker.run();
+        _animationPreloaderTask.run();
 
         assertEquals(ANIMATION_DEFINITION_DTOS.size(), REGISTRY.size());
         ANIMATION_DEFINITION_DTOS.forEach(dto -> {

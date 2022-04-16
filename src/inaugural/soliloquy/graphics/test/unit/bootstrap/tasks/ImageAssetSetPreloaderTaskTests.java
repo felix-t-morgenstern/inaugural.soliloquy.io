@@ -1,7 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.ImageAssetSetPreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.ImageAssetSetPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImageAssetSetPreloaderWorkerTests {
+class ImageAssetSetPreloaderTaskTests {
     private final FakeImageAssetSetFactory FACTORY = new FakeImageAssetSetFactory();
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS =
             new ArrayList<>();
@@ -23,7 +23,7 @@ class ImageAssetSetPreloaderWorkerTests {
     private final Map<String, Map<String, ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>>
             ASSETS = new HashMap<>();
 
-    private ImageAssetSetPreloaderWorker _imageAssetSetPreloaderWorker;
+    private ImageAssetSetPreloaderTask _imageAssetSetPreloaderTask;
 
     @BeforeEach
     void setUp() {
@@ -68,31 +68,31 @@ class ImageAssetSetPreloaderWorkerTests {
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet1DTO);
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet2DTO);
 
-        _imageAssetSetPreloaderWorker = new ImageAssetSetPreloaderWorker(
+        _imageAssetSetPreloaderTask = new ImageAssetSetPreloaderTask(
                 FACTORY, IMAGE_ASSET_SET_DEFINITION_DTOS, IMAGE_ASSET_SET_REGISTRY::add);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(null, IMAGE_ASSET_SET_DEFINITION_DTOS,
+                new ImageAssetSetPreloaderTask(null, IMAGE_ASSET_SET_DEFINITION_DTOS,
                         IMAGE_ASSET_SET_REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY, null,
+                new ImageAssetSetPreloaderTask(FACTORY, null,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<>(),
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(null);
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     null,
@@ -103,7 +103,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "",
@@ -114,7 +114,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -122,7 +122,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -131,7 +131,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -142,7 +142,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -153,7 +153,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -164,7 +164,7 @@ class ImageAssetSetPreloaderWorkerTests {
                         }},
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY,
+                new ImageAssetSetPreloaderTask(FACTORY,
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -176,13 +176,13 @@ class ImageAssetSetPreloaderWorkerTests {
                         IMAGE_ASSET_SET_REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderWorker(FACTORY, IMAGE_ASSET_SET_DEFINITION_DTOS,
+                new ImageAssetSetPreloaderTask(FACTORY, IMAGE_ASSET_SET_DEFINITION_DTOS,
                         null));
     }
 
     @Test
     void testRun() {
-        _imageAssetSetPreloaderWorker.run();
+        _imageAssetSetPreloaderTask.run();
 
         assertEquals(IMAGE_ASSET_SET_DEFINITION_DTOS.size(), IMAGE_ASSET_SET_REGISTRY.size());
         IMAGE_ASSET_SET_DEFINITION_DTOS.forEach(dto -> {

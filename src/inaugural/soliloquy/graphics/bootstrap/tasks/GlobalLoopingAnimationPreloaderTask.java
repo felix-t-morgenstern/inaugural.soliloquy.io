@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.GlobalLoopingAnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class GlobalLoopingAnimationPreloaderWorker implements Runnable {
+public class GlobalLoopingAnimationPreloaderTask implements Runnable {
     private final Function<String, Animation> GET_ANIMATION;
     private final GlobalLoopingAnimationFactory GLOBAL_LOOPING_ANIMATION_FACTORY;
     private final Collection<GlobalLoopingAnimationDefinitionDTO>
@@ -18,18 +18,18 @@ public class GlobalLoopingAnimationPreloaderWorker implements Runnable {
     private final Consumer<GlobalLoopingAnimation> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public GlobalLoopingAnimationPreloaderWorker(Function<String, Animation> getAnimation,
-                                                 GlobalLoopingAnimationFactory
+    public GlobalLoopingAnimationPreloaderTask(Function<String, Animation> getAnimation,
+                                               GlobalLoopingAnimationFactory
                                                          globalLoopingAnimationFactory,
-                                                 Collection<GlobalLoopingAnimationDefinitionDTO>
+                                               Collection<GlobalLoopingAnimationDefinitionDTO>
                                                          globalLoopingAnimationDefinitionDTOs,
-                                                 Consumer<GlobalLoopingAnimation> processResult) {
+                                               Consumer<GlobalLoopingAnimation> processResult) {
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
         GLOBAL_LOOPING_ANIMATION_FACTORY = Check.ifNull(globalLoopingAnimationFactory,
                 "globalLoopingAnimationFactory");
         Check.ifNull(globalLoopingAnimationDefinitionDTOs, "globalLoopingAnimationDefinitionDTOs");
         if (globalLoopingAnimationDefinitionDTOs.isEmpty()) {
-            throw new IllegalArgumentException("GlobalLoopingAnimationPreloaderWorker: " +
+            throw new IllegalArgumentException("GlobalLoopingAnimationPreloaderTask: " +
                     "globalLoopingAnimationDefinitionDTOs is empty");
         }
         globalLoopingAnimationDefinitionDTOs.forEach(globalLoopingAnimationDefinitionDTO -> {

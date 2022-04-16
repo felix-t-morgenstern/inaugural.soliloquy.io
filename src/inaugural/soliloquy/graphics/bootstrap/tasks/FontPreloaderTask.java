@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.assets.CanValidateFontDefinitions;
 import inaugural.soliloquy.tools.Check;
@@ -8,14 +8,14 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinit
 
 import java.util.function.Consumer;
 
-public class FontPreloaderWorker extends CanValidateFontDefinitions implements Runnable {
+public class FontPreloaderTask extends CanValidateFontDefinitions implements Runnable {
     private final AssetFactory<FontDefinition, Font> FONT_FACTORY;
     private final FontDefinition FONT_DEFINITION;
     private final Consumer<Font> ADD_LOADED_FONT;
 
-    public FontPreloaderWorker(AssetFactory<FontDefinition, Font> fontFactory,
-                               FontDefinition fontDefinition,
-                               Consumer<Font> addLoadedFont) {
+    public FontPreloaderTask(AssetFactory<FontDefinition, Font> fontFactory,
+                             FontDefinition fontDefinition,
+                             Consumer<Font> addLoadedFont) {
         FONT_FACTORY = Check.ifNull(fontFactory, "fontFactory");
         FONT_DEFINITION = Check.ifNull(fontDefinition, "fontDefinition");
         validateFontDefinition(fontDefinition);

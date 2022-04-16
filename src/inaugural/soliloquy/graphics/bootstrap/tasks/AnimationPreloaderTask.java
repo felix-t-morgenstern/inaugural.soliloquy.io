@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -14,24 +14,24 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class AnimationPreloaderWorker implements Runnable {
+public class AnimationPreloaderTask implements Runnable {
     private final Function<String, Image> GET_IMAGE;
     private final AssetFactory<AnimationDefinition, Animation> FACTORY;
     private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS;
     private final Consumer<Animation> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public AnimationPreloaderWorker(Function<String, Image> getImage,
-                                    AssetFactory<AnimationDefinition, Animation> factory,
-                                    Collection<AnimationDefinitionDTO> animationDefinitionDTOs,
-                                    Consumer<Animation> processResult) {
+    public AnimationPreloaderTask(Function<String, Image> getImage,
+                                  AssetFactory<AnimationDefinition, Animation> factory,
+                                  Collection<AnimationDefinitionDTO> animationDefinitionDTOs,
+                                  Consumer<Animation> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");
 
         Check.ifNull(animationDefinitionDTOs, "animationDefinitionDTOs");
         if (animationDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException(
-                    "AnimationPreloaderWorker: animationDefinitionDTOs is empty");
+                    "AnimationPreloaderTask: animationDefinitionDTOs is empty");
         }
         animationDefinitionDTOs.forEach(animationDefinitionDTO -> {
             Check.ifNull(animationDefinitionDTO,
@@ -56,12 +56,12 @@ public class AnimationPreloaderWorker implements Runnable {
                 frameAt0ms = frameAt0ms || frameDTO.ms == 0;
             }
             if (!frameAt0ms) {
-                throw new IllegalArgumentException("AnimationPreloaderWorker: " +
+                throw new IllegalArgumentException("AnimationPreloaderTask: " +
                         "animationDefinitionDTO within animationDefinitionDTOs (" +
                         animationDefinitionDTO.id + ") has no frame at 0ms");
             }
             if (animationDefinitionDTO.msDur < maxFrameMs) {
-                throw new IllegalArgumentException("AnimationPreloaderWorker: " +
+                throw new IllegalArgumentException("AnimationPreloaderTask: " +
                         "animationDefinitionDTO within animationDefinitionDTOs (" +
                         animationDefinitionDTO.id + ") has msDur (" +
                         animationDefinitionDTO.msDur + ") less than max ms of frame (" +

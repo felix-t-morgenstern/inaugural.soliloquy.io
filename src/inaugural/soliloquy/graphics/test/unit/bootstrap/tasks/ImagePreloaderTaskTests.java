@@ -1,7 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.ImageDefinitionDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.ImagePreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.ImagePreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImagePreloaderWorkerTests {
+class ImagePreloaderTaskTests {
     private final FakeImageFactory IMAGE_FACTORY = new FakeImageFactory();
     private final String RELATIVE_LOCATION = "relativeLocation";
 
@@ -20,16 +20,16 @@ class ImagePreloaderWorkerTests {
         ArrayList<Image> dummyList = new ArrayList<>();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(null,
+                () -> new ImagePreloaderTask(null,
                         new ImageDefinitionDTO(RELATIVE_LOCATION, true), dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                () -> new ImagePreloaderTask(IMAGE_FACTORY,
                         null, dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                () -> new ImagePreloaderTask(IMAGE_FACTORY,
                         new ImageDefinitionDTO("", true), dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderWorker(IMAGE_FACTORY,
+                () -> new ImagePreloaderTask(IMAGE_FACTORY,
                         new ImageDefinitionDTO(RELATIVE_LOCATION, true), null));
     }
 
@@ -37,7 +37,7 @@ class ImagePreloaderWorkerTests {
     void testRun() {
         ArrayList<Image> images = new ArrayList<>();
 
-        ImagePreloaderWorker worker = new ImagePreloaderWorker(IMAGE_FACTORY,
+        ImagePreloaderTask worker = new ImagePreloaderTask(IMAGE_FACTORY,
                 new ImageDefinitionDTO(RELATIVE_LOCATION, true), images::add);
 
         worker.run();

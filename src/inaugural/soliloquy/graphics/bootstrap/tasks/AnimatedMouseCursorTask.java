@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -10,25 +10,25 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class AnimatedMouseCursorWorker implements Runnable {
+public class AnimatedMouseCursorTask implements Runnable {
     private final Collection<AnimatedMouseCursorDefinitionDTO> ANIMATED_MOUSE_CURSOR_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
     private final Consumer<ProviderAtTime<Long>> RESULT_CONSUMER;
 
     /** @noinspection ConstantConditions*/
-    public AnimatedMouseCursorWorker(Function<String, Long> getMouseCursorsByRelativeLocation,
-                                     Collection<AnimatedMouseCursorDefinitionDTO>
+    public AnimatedMouseCursorTask(Function<String, Long> getMouseCursorsByRelativeLocation,
+                                   Collection<AnimatedMouseCursorDefinitionDTO>
                                              animatedMouseCursorDefinitionDTOs,
-                                     AnimatedMouseCursorProviderFactory
+                                   AnimatedMouseCursorProviderFactory
                                                  animatedMouseCursorProviderFactory,
-                                     Consumer<ProviderAtTime<Long>> resultConsumer) {
+                                   Consumer<ProviderAtTime<Long>> resultConsumer) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
         Check.ifNull(animatedMouseCursorDefinitionDTOs, "animatedMouseCursorDefinitionDTOs");
         if (animatedMouseCursorDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException(
-                    "AnimatedMouseCursorWorker: animatedMouseCursorDefinitionDTOs is empty");
+                    "AnimatedMouseCursorTask: animatedMouseCursorDefinitionDTOs is empty");
         }
         animatedMouseCursorDefinitionDTOs.forEach(animatedMouseCursorDefinitionDTO -> {
             Check.ifNull(animatedMouseCursorDefinitionDTO,
@@ -41,7 +41,7 @@ public class AnimatedMouseCursorWorker implements Runnable {
                             "animatedMouseCursorDefinitionDTOs (" +
                             animatedMouseCursorDefinitionDTO.Id + ")");
             if (animatedMouseCursorDefinitionDTO.Frames.length == 0) {
-                throw new IllegalArgumentException("AnimatedMouseCursorWorker: " +
+                throw new IllegalArgumentException("AnimatedMouseCursorTask: " +
                         "animatedMouseCursorDefinitionDTO.Frames is empty within " +
                         "animatedMouseCursorDefinitionDTOs (" +
                         animatedMouseCursorDefinitionDTO.Id + ")");
@@ -57,7 +57,7 @@ public class AnimatedMouseCursorWorker implements Runnable {
                 maxFrameMs = Math.max(maxFrameMs, frameDTO.Ms);
             }
             if (!frameAt0Ms) {
-                throw new IllegalArgumentException("AnimatedMouseCursorWorker: " +
+                throw new IllegalArgumentException("AnimatedMouseCursorTask: " +
                         "animatedMouseCursorDefinitionDTO.Frames has no frame at 0ms within " +
                         "animatedMouseCursorDefinitionDTOs (" + animatedMouseCursorDefinitionDTO.Id + ")");
             }

@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.bootstrap.workers;
+package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.StaticMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class StaticMouseCursorWorker implements Runnable {
+public class StaticMouseCursorTask implements Runnable {
     private final Function<String, Long> GET_MOUSE_IMAGE;
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
     private final Collection<StaticMouseCursorDefinitionDTO> STATIC_MOUSE_CURSOR_DTOS;
@@ -19,17 +19,17 @@ public class StaticMouseCursorWorker implements Runnable {
     private static final EntityUuid PLACEHOLDER_ENTITY_UUID = new PlaceholderEntityUuid();
 
     /** @noinspection ConstantConditions*/
-    public StaticMouseCursorWorker(Function<String, Long> getMouseImage,
-                                   StaticProviderFactory staticProviderFactory,
-                                   Collection<StaticMouseCursorDefinitionDTO> 
+    public StaticMouseCursorTask(Function<String, Long> getMouseImage,
+                                 StaticProviderFactory staticProviderFactory,
+                                 Collection<StaticMouseCursorDefinitionDTO>
                                            staticMouseCursorDefinitionDTOs,
-                                   Function<String, Consumer<StaticProvider<Long>>>
+                                 Function<String, Consumer<StaticProvider<Long>>>
                                            processResult) {
         GET_MOUSE_IMAGE = Check.ifNull(getMouseImage, "getMouseImage");
         STATIC_PROVIDER_FACTORY = Check.ifNull(staticProviderFactory, "staticProviderFactory");
         Check.ifNull(staticMouseCursorDefinitionDTOs, "staticMouseCursorDefinitionDTOs");
         if (staticMouseCursorDefinitionDTOs.isEmpty()) {
-            throw new IllegalArgumentException("StaticMouseCursorWorker: " +
+            throw new IllegalArgumentException("StaticMouseCursorTask: " +
                     "staticMouseCursorDefinitionDTOs is empty");
         }
         staticMouseCursorDefinitionDTOs.forEach(staticMouseCursorDefinitionDTO -> {

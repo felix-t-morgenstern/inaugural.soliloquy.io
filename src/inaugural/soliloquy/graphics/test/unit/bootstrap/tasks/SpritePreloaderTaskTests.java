@@ -1,7 +1,7 @@
-package inaugural.soliloquy.graphics.test.unit.bootstrap.workers;
+package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.SpriteDefinitionDTO;
-import inaugural.soliloquy.graphics.bootstrap.workers.SpritePreloaderWorker;
+import inaugural.soliloquy.graphics.bootstrap.tasks.SpritePreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,13 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SpritePreloaderWorkerTests {
+class SpritePreloaderTaskTests {
     private final java.util.Map<String, Image> IMAGES = new HashMap<>();
     private final FakeSpriteFactory FACTORY = new FakeSpriteFactory();
     private final ArrayList<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS = new ArrayList<>();
     private final FakeRegistry<Sprite> REGISTRY = new FakeRegistry<Sprite>();
 
-    private SpritePreloaderWorker _spritePreloaderWorker;
+    private SpritePreloaderTask _spritePreloaderTask;
 
     @BeforeEach
     void setUp() {
@@ -40,84 +40,84 @@ class SpritePreloaderWorkerTests {
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO2);
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO3);
 
-        _spritePreloaderWorker = new SpritePreloaderWorker(IMAGES::get, FACTORY, 
+        _spritePreloaderTask = new SpritePreloaderTask(IMAGES::get, FACTORY,
                 SPRITE_DEFINITION_DTOS, REGISTRY::add);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(null, FACTORY, SPRITE_DEFINITION_DTOS, REGISTRY::add));
+                new SpritePreloaderTask(null, FACTORY, SPRITE_DEFINITION_DTOS, REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, null, SPRITE_DEFINITION_DTOS,
+                new SpritePreloaderTask(IMAGES::get, null, SPRITE_DEFINITION_DTOS,
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         null,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<>(),
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(null);
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO(null, "relativeLocation1",
                                     12, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("", "relativeLocation1",
                                     12, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", null,
                                     12, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "",
                                     12, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     -1, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, -1, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     56, 34, 56, 78));
                         }},
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get, FACTORY,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, 78, 56, 78));
@@ -125,12 +125,12 @@ class SpritePreloaderWorkerTests {
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderWorker(IMAGES::get, FACTORY, SPRITE_DEFINITION_DTOS, null));
+                new SpritePreloaderTask(IMAGES::get, FACTORY, SPRITE_DEFINITION_DTOS, null));
     }
 
     @Test
     void testRun() {
-        _spritePreloaderWorker.run();
+        _spritePreloaderTask.run();
 
         assertEquals(SPRITE_DEFINITION_DTOS.size(), REGISTRY.size());
         SPRITE_DEFINITION_DTOS.forEach(dto -> {
