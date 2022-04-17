@@ -19,10 +19,10 @@ public class GlobalLoopingAnimationPreloaderTask implements Runnable {
 
     /** @noinspection ConstantConditions*/
     public GlobalLoopingAnimationPreloaderTask(Function<String, Animation> getAnimation,
+                                               Collection<GlobalLoopingAnimationDefinitionDTO>
+                                                       globalLoopingAnimationDefinitionDTOs,
                                                GlobalLoopingAnimationFactory
                                                          globalLoopingAnimationFactory,
-                                               Collection<GlobalLoopingAnimationDefinitionDTO>
-                                                         globalLoopingAnimationDefinitionDTOs,
                                                Consumer<GlobalLoopingAnimation> processResult) {
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
         GLOBAL_LOOPING_ANIMATION_FACTORY = Check.ifNull(globalLoopingAnimationFactory,

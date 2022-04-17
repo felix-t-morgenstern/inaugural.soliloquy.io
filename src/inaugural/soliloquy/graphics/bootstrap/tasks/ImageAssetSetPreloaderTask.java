@@ -19,10 +19,10 @@ public class ImageAssetSetPreloaderTask implements Runnable {
     private final Consumer<ImageAssetSet> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public ImageAssetSetPreloaderTask(AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
+    public ImageAssetSetPreloaderTask(Collection<ImageAssetSetDefinitionDTO>
+                                              imageAssetSetDefinitionDTOs,
+                                      AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
                                                 factory,
-                                      Collection<ImageAssetSetDefinitionDTO>
-                                                imageAssetSetDefinitionDTOs,
                                       Consumer<ImageAssetSet> processResult) {
         FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(imageAssetSetDefinitionDTOs, "imageAssetSetDefinitionDTOs");

@@ -5,29 +5,27 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class ImagePreloaderTask implements Runnable {
     private final ImageFactory IMAGE_FACTORY;
-    private final String RELATIVE_LOCATION;
-    private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
+    private final Collection<ImageDefinitionDTO> IMAGE_DEFINITION_DTOS;
     private final Consumer<Image> ADD_LOADED_IMAGE;
 
-    /** @noinspection ConstantConditions*/
-    public ImagePreloaderTask(ImageFactory imageFactory,
-                              ImageDefinitionDTO imageDefinitionDTO,
-                              Consumer<Image> addLoadedImage) {
+    public ImagePreloaderTask(Collection<ImageDefinitionDTO> imageDefinitionDTOs,
+                              ImageFactory imageFactory,
+                              Consumer<Image> processResult) {
         IMAGE_FACTORY = Check.ifNull(imageFactory, "imageFactory");
-        Check.ifNull(imageDefinitionDTO, "imageDefinitionDTO");
-        RELATIVE_LOCATION = Check.ifNullOrEmpty(imageDefinitionDTO.RelativeLocation,
-                "imageDefinitionDTO.RelativeLocation");
-        SUPPORTS_MOUSE_EVENT_CAPTURING = imageDefinitionDTO.SupportsMouseEvents;
-        ADD_LOADED_IMAGE = Check.ifNull(addLoadedImage, "addLoadedImage");
+        Check.ifNull(imageDefinitionDTOs, "imageDefinitionDTOs");
+        IMAGE_DEFINITION_DTOS = Check.ifNull(imageDefinitionDTOs, "imageDefinitionDTOs");
+        ADD_LOADED_IMAGE = Check.ifNull(processResult, "processResult");
     }
 
     @Override
     public void run() {
-        ADD_LOADED_IMAGE.accept(
-                IMAGE_FACTORY.make(RELATIVE_LOCATION, SUPPORTS_MOUSE_EVENT_CAPTURING));
+        IMAGE_DEFINITION_DTOS.forEach(dto ->
+                ADD_LOADED_IMAGE.accept(
+                        IMAGE_FACTORY.make(dto.RelativeLocation, dto.SupportsMouseEvents)));
     }
 }

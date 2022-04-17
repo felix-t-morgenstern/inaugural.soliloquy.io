@@ -22,8 +22,8 @@ public class AnimationPreloaderTask implements Runnable {
 
     /** @noinspection ConstantConditions*/
     public AnimationPreloaderTask(Function<String, Image> getImage,
-                                  AssetFactory<AnimationDefinition, Animation> factory,
                                   Collection<AnimationDefinitionDTO> animationDefinitionDTOs,
+                                  AssetFactory<AnimationDefinition, Animation> factory,
                                   Consumer<Animation> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");

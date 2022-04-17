@@ -14,7 +14,7 @@ public class AnimatedMouseCursorTask implements Runnable {
     private final Collection<AnimatedMouseCursorDefinitionDTO> ANIMATED_MOUSE_CURSOR_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
-    private final Consumer<ProviderAtTime<Long>> RESULT_CONSUMER;
+    private final Consumer<ProviderAtTime<Long>> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
     public AnimatedMouseCursorTask(Function<String, Long> getMouseCursorsByRelativeLocation,
@@ -22,7 +22,7 @@ public class AnimatedMouseCursorTask implements Runnable {
                                              animatedMouseCursorDefinitionDTOs,
                                    AnimatedMouseCursorProviderFactory
                                                  animatedMouseCursorProviderFactory,
-                                   Consumer<ProviderAtTime<Long>> resultConsumer) {
+                                   Consumer<ProviderAtTime<Long>> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
         Check.ifNull(animatedMouseCursorDefinitionDTOs, "animatedMouseCursorDefinitionDTOs");
@@ -89,7 +89,7 @@ public class AnimatedMouseCursorTask implements Runnable {
         ANIMATED_MOUSE_CURSOR_DTOS = animatedMouseCursorDefinitionDTOs;
         ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY = Check.ifNull(animatedMouseCursorProviderFactory,
                 "animatedMouseCursorProviderFactory");
-        RESULT_CONSUMER = Check.ifNull(resultConsumer, "resultConsumer");
+        PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AnimatedMouseCursorTask implements Runnable {
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }
-            RESULT_CONSUMER.accept(ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY.make(
+            PROCESS_RESULT.accept(ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY.make(
                     animatedMouseCursorDefinitionDTO.Id, cursorsAtMs,
                     animatedMouseCursorDefinitionDTO.Duration,
                     animatedMouseCursorDefinitionDTO.Offset,

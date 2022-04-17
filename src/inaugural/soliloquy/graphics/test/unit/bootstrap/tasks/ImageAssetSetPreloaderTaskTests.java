@@ -18,8 +18,7 @@ class ImageAssetSetPreloaderTaskTests {
     private final FakeImageAssetSetFactory FACTORY = new FakeImageAssetSetFactory();
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS =
             new ArrayList<>();
-    private final FakeRegistry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY =
-            new FakeRegistry<ImageAssetSet>();
+    private final FakeRegistry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY = new FakeRegistry<>();
     private final Map<String, Map<String, ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>>
             ASSETS = new HashMap<>();
 
@@ -69,30 +68,28 @@ class ImageAssetSetPreloaderTaskTests {
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet2DTO);
 
         _imageAssetSetPreloaderTask = new ImageAssetSetPreloaderTask(
-                FACTORY, IMAGE_ASSET_SET_DEFINITION_DTOS, IMAGE_ASSET_SET_REGISTRY::add);
+                IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, IMAGE_ASSET_SET_REGISTRY::add);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(null, IMAGE_ASSET_SET_DEFINITION_DTOS,
+                new ImageAssetSetPreloaderTask(IMAGE_ASSET_SET_DEFINITION_DTOS, null,
                         IMAGE_ASSET_SET_REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY, null,
+                new ImageAssetSetPreloaderTask(null, FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
-                        new ArrayList<>(),
+                new ImageAssetSetPreloaderTask(new ArrayList<>(), FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(null);
-                        }},
+                new ImageAssetSetPreloaderTask(
+                        new ArrayList<ImageAssetSetDefinitionDTO>() {{ add(null); }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     null,
@@ -101,9 +98,10 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 1, "assetId")
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "",
@@ -112,26 +110,29 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 1, "assetId")
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
                                     null));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
                                     new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -140,9 +141,10 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 0, "assetId")
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -151,9 +153,10 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 4, "assetId")
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -162,9 +165,10 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 1, null)
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY,
+                new ImageAssetSetPreloaderTask(
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
@@ -173,11 +177,11 @@ class ImageAssetSetPreloaderTaskTests {
                                                     "type", "direction", 1, "")
                                     }));
                         }},
+                        FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(FACTORY, IMAGE_ASSET_SET_DEFINITION_DTOS,
-                        null));
+                new ImageAssetSetPreloaderTask(IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test

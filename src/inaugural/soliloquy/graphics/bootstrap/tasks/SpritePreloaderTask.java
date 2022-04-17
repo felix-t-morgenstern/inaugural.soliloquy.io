@@ -19,8 +19,8 @@ public class SpritePreloaderTask implements Runnable {
 
     /** @noinspection ConstantConditions*/
     public SpritePreloaderTask(Function<String, Image> getImage,
-                               AssetFactory<SpriteDefinition, Sprite> factory,
                                Collection<SpriteDefinitionDTO> spriteDefinitionDTOs,
+                               AssetFactory<SpriteDefinition, Sprite> factory,
                                Consumer<Sprite> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");

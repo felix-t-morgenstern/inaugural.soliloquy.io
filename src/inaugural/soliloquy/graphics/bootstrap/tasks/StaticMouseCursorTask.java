@@ -20,9 +20,9 @@ public class StaticMouseCursorTask implements Runnable {
 
     /** @noinspection ConstantConditions*/
     public StaticMouseCursorTask(Function<String, Long> getMouseImage,
-                                 StaticProviderFactory staticProviderFactory,
                                  Collection<StaticMouseCursorDefinitionDTO>
-                                           staticMouseCursorDefinitionDTOs,
+                                         staticMouseCursorDefinitionDTOs,
+                                 StaticProviderFactory staticProviderFactory,
                                  Function<String, Consumer<StaticProvider<Long>>>
                                            processResult) {
         GET_MOUSE_IMAGE = Check.ifNull(getMouseImage, "getMouseImage");

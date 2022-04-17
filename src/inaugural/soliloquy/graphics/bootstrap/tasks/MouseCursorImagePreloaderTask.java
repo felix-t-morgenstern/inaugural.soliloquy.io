@@ -14,6 +14,7 @@ import java.util.function.Function;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
+// NB: This class only process one at a time, since all OpenGL tasks must take place on the main Thread
 public class MouseCursorImagePreloaderTask implements Runnable {
     private final String RELATIVE_LOCATION;
     private final int HOTSPOT_X;

@@ -20,25 +20,31 @@ class ImagePreloaderTaskTests {
         ArrayList<Image> dummyList = new ArrayList<>();
 
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderTask(null,
-                        new ImageDefinitionDTO(RELATIVE_LOCATION, true), dummyList::add));
+                () -> new ImagePreloaderTask(null, IMAGE_FACTORY, dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderTask(IMAGE_FACTORY,
-                        null, dummyList::add));
+                () -> new ImagePreloaderTask(
+                        new ArrayList<ImageDefinitionDTO>() {{
+                            add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
+                        }},
+                        null,
+                        dummyList::add));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderTask(IMAGE_FACTORY,
-                        new ImageDefinitionDTO("", true), dummyList::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ImagePreloaderTask(IMAGE_FACTORY,
-                        new ImageDefinitionDTO(RELATIVE_LOCATION, true), null));
+                () -> new ImagePreloaderTask(
+                        new ArrayList<ImageDefinitionDTO>() {{
+                            add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
+                        }},
+                        IMAGE_FACTORY, null));
     }
 
     @Test
     void testRun() {
         ArrayList<Image> images = new ArrayList<>();
 
-        ImagePreloaderTask worker = new ImagePreloaderTask(IMAGE_FACTORY,
-                new ImageDefinitionDTO(RELATIVE_LOCATION, true), images::add);
+        ImagePreloaderTask worker = new ImagePreloaderTask(
+                new ArrayList<ImageDefinitionDTO>() {{
+                    add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
+                }},
+                IMAGE_FACTORY, images::add);
 
         worker.run();
 

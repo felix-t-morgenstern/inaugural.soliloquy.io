@@ -51,69 +51,73 @@ class StaticMouseCursorTaskTests {
 
     @BeforeEach
     void setUp() {
-        _staticMouseCursorTask = new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
-                STATIC_MOUSE_CURSOR_DEFINITION_DTOS, id -> provider -> RESULTS.put(id, provider));
+        _staticMouseCursorTask = new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
+                STATIC_MOUSE_CURSOR_DEFINITION_DTOS,  FACTORY,
+                id -> provider -> RESULTS.put(id, provider));
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(null, FACTORY,
-                        STATIC_MOUSE_CURSOR_DEFINITION_DTOS,
+                new StaticMouseCursorTask(null, STATIC_MOUSE_CURSOR_DEFINITION_DTOS, FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, null,
-                        STATIC_MOUSE_CURSOR_DEFINITION_DTOS,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
+                        STATIC_MOUSE_CURSOR_DEFINITION_DTOS, null,
                         id -> provider -> RESULTS.put(id, provider)));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
-                        null,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
+                        null, FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
-                        new ArrayList<>(),
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
+                        new ArrayList<>(), FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
                         new ArrayList<StaticMouseCursorDefinitionDTO>() {{
                             add(null);
                         }},
+                        FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
                         new ArrayList<StaticMouseCursorDefinitionDTO>() {{
                             add(new StaticMouseCursorDefinitionDTO(null,
                                     STATIC_MOUSE_CURSOR_RELATIVE_LOCATION_1));
                         }},
+                        FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
                         new ArrayList<StaticMouseCursorDefinitionDTO>() {{
                             add(new StaticMouseCursorDefinitionDTO("",
                                     STATIC_MOUSE_CURSOR_RELATIVE_LOCATION_1));
                         }},
+                        FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
                         new ArrayList<StaticMouseCursorDefinitionDTO>() {{
                             add(new StaticMouseCursorDefinitionDTO(STATIC_MOUSE_CURSOR_ID_1,
                                     null));
                         }},
+                        FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
                         new ArrayList<StaticMouseCursorDefinitionDTO>() {{
                             add(new StaticMouseCursorDefinitionDTO(STATIC_MOUSE_CURSOR_ID_1,
                                     ""));
                         }},
+                        FACTORY,
                         id -> provider -> RESULTS.put(id, provider)));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get, FACTORY,
-                        STATIC_MOUSE_CURSOR_DEFINITION_DTOS,
-                        null));
+                new StaticMouseCursorTask(STATIC_MOUSE_CURSORS::get,
+                        STATIC_MOUSE_CURSOR_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test

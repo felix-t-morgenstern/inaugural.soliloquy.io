@@ -40,92 +40,97 @@ class SpritePreloaderTaskTests {
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO2);
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO3);
 
-        _spritePreloaderTask = new SpritePreloaderTask(IMAGES::get, FACTORY,
-                SPRITE_DEFINITION_DTOS, REGISTRY::add);
+        _spritePreloaderTask = new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS,
+                FACTORY, REGISTRY::add);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(null, FACTORY, SPRITE_DEFINITION_DTOS, REGISTRY::add));
+                new SpritePreloaderTask(null, SPRITE_DEFINITION_DTOS, FACTORY, REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, null, SPRITE_DEFINITION_DTOS,
+                new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS, null,
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
-                        null,
-                        REGISTRY::add));
+                new SpritePreloaderTask(IMAGES::get, null, FACTORY, REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
-                        new ArrayList<>(),
-                        REGISTRY::add));
+                new SpritePreloaderTask(IMAGES::get, new ArrayList<>(), FACTORY, REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(null);
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO(null, "relativeLocation1",
                                     12, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("", "relativeLocation1",
                                     12, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", null,
                                     12, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "",
                                     12, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     -1, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, -1, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     56, 34, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY,
+                new SpritePreloaderTask(IMAGES::get,
                         new ArrayList<SpriteDefinitionDTO>() {{
                             add(new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, 78, 56, 78));
                         }},
+                        FACTORY,
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, FACTORY, SPRITE_DEFINITION_DTOS, null));
+                new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test
