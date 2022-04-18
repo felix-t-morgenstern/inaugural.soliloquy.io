@@ -20,7 +20,7 @@ class AnimationPreloaderTaskTests {
     private final java.util.Map<String, Image> IMAGES = new HashMap<>();
     private final FakeAnimationFactory FACTORY = new FakeAnimationFactory();
     private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS = new ArrayList<>();
-    private final FakeRegistry<Animation> REGISTRY = new FakeRegistry<Animation>();
+    private final FakeRegistry<Animation> REGISTRY = new FakeRegistry<>();
 
     private AnimationPreloaderTask _animationPreloaderTask;
 

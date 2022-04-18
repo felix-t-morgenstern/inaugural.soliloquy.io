@@ -10,25 +10,25 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class FontPreloaderTask extends CanValidateFontDefinitions implements Runnable {
-    private final AssetFactory<FontDefinition, Font> FONT_FACTORY;
+    private final AssetFactory<FontDefinition, Font> FACTORY;
     private final Collection<FontDefinition> FONT_DEFINITIONS;
-    private final Consumer<Font> ADD_LOADED_FONT;
+    private final Consumer<Font> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public FontPreloaderTask(AssetFactory<FontDefinition, Font> fontFactory,
-                             Collection<FontDefinition> fontDefinitions,
-                             Consumer<Font> addLoadedFont) {
-        FONT_FACTORY = Check.ifNull(fontFactory, "fontFactory");
+    public FontPreloaderTask(Collection<FontDefinition> fontDefinitions,
+                             AssetFactory<FontDefinition, Font> factory,
+                             Consumer<Font> processResult) {
+        FACTORY = Check.ifNull(factory, "factory");
         FONT_DEFINITIONS = Check.ifNull(fontDefinitions, "fontDefinitions");
         // validateFontDefinition is protected, so lambda cannot be used
         //noinspection Convert2MethodRef
         fontDefinitions.forEach(fontDefinition -> validateFontDefinition(fontDefinition));
-        ADD_LOADED_FONT = Check.ifNull(addLoadedFont, "addLoadedFont");
+        PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
     @Override
     public void run() {
         FONT_DEFINITIONS.forEach(fontDefinition ->
-                ADD_LOADED_FONT.accept(FONT_FACTORY.make(fontDefinition)));
+                PROCESS_RESULT.accept(FACTORY.make(fontDefinition)));
     }
 }

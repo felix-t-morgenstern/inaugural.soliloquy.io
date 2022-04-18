@@ -50,7 +50,6 @@ class FontPreloaderTaskTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        null,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -80,15 +79,15 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         null,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
+                        null,
                         FONT_FACTORY,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 null,
                                 RELATIVE_LOCATION,
@@ -118,10 +117,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 "",
                                 RELATIVE_LOCATION,
@@ -151,10 +150,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 null,
@@ -184,10 +183,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 "",
@@ -217,10 +216,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -250,10 +249,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -278,10 +277,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -311,10 +310,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -344,10 +343,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -377,10 +376,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -410,10 +409,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -443,10 +442,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -471,10 +470,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -504,10 +503,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -537,10 +536,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -570,10 +569,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -603,10 +602,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -636,10 +635,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -664,10 +663,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -697,10 +696,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -730,10 +729,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -763,10 +762,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -796,10 +795,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -829,10 +828,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -857,10 +856,10 @@ class FontPreloaderTaskTests {
                                 ),
                                 null,
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -890,10 +889,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -923,10 +922,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -956,10 +955,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -989,10 +988,10 @@ class FontPreloaderTaskTests {
                                         -0.0001f
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -1022,10 +1021,10 @@ class FontPreloaderTaskTests {
                                         1f - LEADING_ADJUSTMENT
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -1055,10 +1054,10 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 1f)); }},
+                        FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        FONT_FACTORY,
                         new ArrayList<FontDefinition>() {{ add(new FakeFontDefinition(
                                 ID,
                                 RELATIVE_LOCATION,
@@ -1088,6 +1087,7 @@ class FontPreloaderTaskTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 ),
                                 LEADING_ADJUSTMENT)); }},
+                        FONT_FACTORY,
                         null));
     }
 
@@ -1125,8 +1125,11 @@ class FontPreloaderTaskTests {
                 ),
                 LEADING_ADJUSTMENT);
 
-        FontPreloaderTask fontPreloaderTask = new FontPreloaderTask(FONT_FACTORY,
-                new ArrayList<FontDefinition>() {{ add(fontDefinition); }}, fonts::add);
+        FontPreloaderTask fontPreloaderTask = new FontPreloaderTask(
+                new ArrayList<FontDefinition>() {{ add(fontDefinition); }},
+                FONT_FACTORY,
+                fonts::add
+        );
 
         fontPreloaderTask.run();
 
