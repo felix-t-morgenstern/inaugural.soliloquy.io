@@ -9,14 +9,14 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class ImagePreloaderTask implements Runnable {
-    private final ImageFactory IMAGE_FACTORY;
+    private final ImageFactory FACTORY;
     private final Collection<ImageDefinitionDTO> IMAGE_DEFINITION_DTOS;
     private final Consumer<Image> ADD_LOADED_IMAGE;
 
     public ImagePreloaderTask(Collection<ImageDefinitionDTO> imageDefinitionDTOs,
-                              ImageFactory imageFactory,
+                              ImageFactory factory,
                               Consumer<Image> processResult) {
-        IMAGE_FACTORY = Check.ifNull(imageFactory, "imageFactory");
+        FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(imageDefinitionDTOs, "imageDefinitionDTOs");
         IMAGE_DEFINITION_DTOS = Check.ifNull(imageDefinitionDTOs, "imageDefinitionDTOs");
         ADD_LOADED_IMAGE = Check.ifNull(processResult, "processResult");
@@ -26,6 +26,6 @@ public class ImagePreloaderTask implements Runnable {
     public void run() {
         IMAGE_DEFINITION_DTOS.forEach(dto ->
                 ADD_LOADED_IMAGE.accept(
-                        IMAGE_FACTORY.make(dto.RelativeLocation, dto.SupportsMouseEvents)));
+                        FACTORY.make(dto.RelativeLocation, dto.SupportsMouseEvents)));
     }
 }

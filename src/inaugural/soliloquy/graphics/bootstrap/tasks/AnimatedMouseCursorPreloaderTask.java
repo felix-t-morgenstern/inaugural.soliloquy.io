@@ -10,26 +10,23 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class AnimatedMouseCursorTask implements Runnable {
-    private final Collection<AnimatedMouseCursorDefinitionDTO> ANIMATED_MOUSE_CURSOR_DTOS;
+public class AnimatedMouseCursorPreloaderTask implements Runnable {
+    private final Collection<AnimatedMouseCursorDefinitionDTO> DEFINITION_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
-    private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
+    private final AnimatedMouseCursorProviderFactory FACTORY;
     private final Consumer<ProviderAtTime<Long>> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public AnimatedMouseCursorTask(Function<String, Long> getMouseCursorsByRelativeLocation,
-                                   Collection<AnimatedMouseCursorDefinitionDTO>
+    public AnimatedMouseCursorPreloaderTask(Function<String, Long> getMouseCursorsByRelativeLocation,
+                                            Collection<AnimatedMouseCursorDefinitionDTO>
                                              animatedMouseCursorDefinitionDTOs,
-                                   AnimatedMouseCursorProviderFactory
+                                            AnimatedMouseCursorProviderFactory
                                                  animatedMouseCursorProviderFactory,
-                                   Consumer<ProviderAtTime<Long>> processResult) {
+                                            Consumer<ProviderAtTime<Long>> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
+        // TODO: Deal with the awful clot of logic here by refactoring out validation
         Check.ifNull(animatedMouseCursorDefinitionDTOs, "animatedMouseCursorDefinitionDTOs");
-        if (animatedMouseCursorDefinitionDTOs.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "AnimatedMouseCursorTask: animatedMouseCursorDefinitionDTOs is empty");
-        }
         animatedMouseCursorDefinitionDTOs.forEach(animatedMouseCursorDefinitionDTO -> {
             Check.ifNull(animatedMouseCursorDefinitionDTO,
                     "animatedMouseCursorDefinitionDTO within animatedMouseCursorDefinitionDTOs");
@@ -41,7 +38,7 @@ public class AnimatedMouseCursorTask implements Runnable {
                             "animatedMouseCursorDefinitionDTOs (" +
                             animatedMouseCursorDefinitionDTO.Id + ")");
             if (animatedMouseCursorDefinitionDTO.Frames.length == 0) {
-                throw new IllegalArgumentException("AnimatedMouseCursorTask: " +
+                throw new IllegalArgumentException("AnimatedMouseCursorPreloaderTask: " +
                         "animatedMouseCursorDefinitionDTO.Frames is empty within " +
                         "animatedMouseCursorDefinitionDTOs (" +
                         animatedMouseCursorDefinitionDTO.Id + ")");
@@ -57,7 +54,7 @@ public class AnimatedMouseCursorTask implements Runnable {
                 maxFrameMs = Math.max(maxFrameMs, frameDTO.Ms);
             }
             if (!frameAt0Ms) {
-                throw new IllegalArgumentException("AnimatedMouseCursorTask: " +
+                throw new IllegalArgumentException("AnimatedMouseCursorPreloaderTask: " +
                         "animatedMouseCursorDefinitionDTO.Frames has no frame at 0ms within " +
                         "animatedMouseCursorDefinitionDTOs (" + animatedMouseCursorDefinitionDTO.Id + ")");
             }
@@ -86,21 +83,21 @@ public class AnimatedMouseCursorTask implements Runnable {
                             "animatedMouseCursorDefinitionDTOs (" +
                             animatedMouseCursorDefinitionDTO.Id + ")");
         });
-        ANIMATED_MOUSE_CURSOR_DTOS = animatedMouseCursorDefinitionDTOs;
-        ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY = Check.ifNull(animatedMouseCursorProviderFactory,
+        DEFINITION_DTOS = animatedMouseCursorDefinitionDTOs;
+        FACTORY = Check.ifNull(animatedMouseCursorProviderFactory,
                 "animatedMouseCursorProviderFactory");
         PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
     @Override
     public void run() {
-        ANIMATED_MOUSE_CURSOR_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
+        DEFINITION_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
             HashMap<Integer, Long> cursorsAtMs = new HashMap<>();
             for(AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO frame :
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }
-            PROCESS_RESULT.accept(ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY.make(
+            PROCESS_RESULT.accept(FACTORY.make(
                     animatedMouseCursorDefinitionDTO.Id, cursorsAtMs,
                     animatedMouseCursorDefinitionDTO.Duration,
                     animatedMouseCursorDefinitionDTO.Offset,

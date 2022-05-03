@@ -19,20 +19,20 @@ public class MouseCursorImagePreloaderTask implements Runnable {
     private final String RELATIVE_LOCATION;
     private final int HOTSPOT_X;
     private final int HOTSPOT_Y;
-    private final Function<String, Consumer<Long>> CONSUME_RESULT;
+    private final Function<String, Consumer<Long>> PROCESS_RESULT;
 
     private final static int DESIRED_CHANNELS = 4;
 
     /** @noinspection ConstantConditions*/
     public MouseCursorImagePreloaderTask(MouseCursorImageDTO mouseCursorImageDTO,
-                                         Function<String, Consumer<Long>> consumeResult) {
+                                         Function<String, Consumer<Long>> processResult) {
         Check.ifNull(mouseCursorImageDTO, "mouseCursorImageDTO");
         RELATIVE_LOCATION = Check.ifNullOrEmpty(mouseCursorImageDTO.RelativeLocation, "relativeLocation");
         HOTSPOT_X = Check.ifNonNegative(mouseCursorImageDTO.HotspotX,
                 "mouseCursorImageDTO.HotspotX");
         HOTSPOT_Y = Check.ifNonNegative(mouseCursorImageDTO.HotspotY,
                 "mouseCursorImageDTO.HotspotY");
-        CONSUME_RESULT = Check.ifNull(consumeResult, "consumeResult");
+        PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MouseCursorImagePreloaderTask implements Runnable {
 
         long mouseCursorId = GLFW.glfwCreateCursor(mouseCursorImage, HOTSPOT_X, HOTSPOT_Y);
 
-        CONSUME_RESULT.apply(RELATIVE_LOCATION).accept(mouseCursorId);
+        PROCESS_RESULT.apply(RELATIVE_LOCATION).accept(mouseCursorId);
 
         // NB: Refactor this out too
         stbi_image_free(imageBytes);

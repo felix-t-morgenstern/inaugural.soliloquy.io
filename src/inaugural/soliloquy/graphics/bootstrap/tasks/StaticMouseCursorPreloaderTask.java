@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class StaticMouseCursorTask implements Runnable {
+public class StaticMouseCursorPreloaderTask implements Runnable {
     private final Function<String, Long> GET_MOUSE_IMAGE;
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
     private final Collection<StaticMouseCursorDefinitionDTO> STATIC_MOUSE_CURSOR_DTOS;
@@ -19,17 +19,18 @@ public class StaticMouseCursorTask implements Runnable {
     private static final EntityUuid PLACEHOLDER_ENTITY_UUID = new PlaceholderEntityUuid();
 
     /** @noinspection ConstantConditions*/
-    public StaticMouseCursorTask(Function<String, Long> getMouseImage,
-                                 Collection<StaticMouseCursorDefinitionDTO>
+    public StaticMouseCursorPreloaderTask(Function<String, Long> getMouseCursorByRelativeLocation,
+                                          Collection<StaticMouseCursorDefinitionDTO>
                                          staticMouseCursorDefinitionDTOs,
-                                 StaticProviderFactory staticProviderFactory,
-                                 Function<String, Consumer<StaticProvider<Long>>>
+                                          StaticProviderFactory staticProviderFactory,
+                                          Function<String, Consumer<StaticProvider<Long>>>
                                            processResult) {
-        GET_MOUSE_IMAGE = Check.ifNull(getMouseImage, "getMouseImage");
+        GET_MOUSE_IMAGE = Check.ifNull(getMouseCursorByRelativeLocation,
+                "getMouseCursorByRelativeLocation");
         STATIC_PROVIDER_FACTORY = Check.ifNull(staticProviderFactory, "staticProviderFactory");
         Check.ifNull(staticMouseCursorDefinitionDTOs, "staticMouseCursorDefinitionDTOs");
         if (staticMouseCursorDefinitionDTOs.isEmpty()) {
-            throw new IllegalArgumentException("StaticMouseCursorTask: " +
+            throw new IllegalArgumentException("StaticMouseCursorPreloaderTask: " +
                     "staticMouseCursorDefinitionDTOs is empty");
         }
         staticMouseCursorDefinitionDTOs.forEach(staticMouseCursorDefinitionDTO -> {
