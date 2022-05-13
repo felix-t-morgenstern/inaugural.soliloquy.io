@@ -9,7 +9,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.util.HashMap;
 import java.util.Map;
 
-class TextLineRendererTest extends DisplayTest {
+public class TextLineRendererTest extends DisplayTest {
     protected final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     protected final static String RELATIVE_LOCATION_TRAJAN = "./res/fonts/Trajan Pro Regular.ttf";
     protected final static float MAX_LOSSLESS_FONT_SIZE_TRAJAN = 100f;

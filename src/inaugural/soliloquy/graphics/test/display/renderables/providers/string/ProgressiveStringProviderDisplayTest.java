@@ -1,11 +1,14 @@
-package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
+package inaugural.soliloquy.graphics.test.display.renderables.providers.string;
 
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
+import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -18,30 +21,40 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
- *    edge of the window, vertically centered, for 4000ms.
+ * 1. This test will display a string of text, "I appear over time!", white, aligned left, near the
+ *    left edge of the window, vertically centered, gradually, starting at 2000ms, and completing
+ *    at 6000ms.
  * 2. The window will then close.
  *
  */
-public class TextLineRendererSimpleTest extends TextLineRendererTest {
-    private final static String LINE_TEXT = "Quick Message!";
+public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
+    private final static String LINE_TEXT = "I appear over time!";
 
-    private static FakeTextLineRenderable TextLineRenderable;
+    protected static ProviderAtTime<String> LineTextProvider;
+    protected static FakeTextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
-        runTest(TextLineRendererSimpleTest::generateRenderablesAndRenderersWithMeshAndShader,
+        runTest(windowResolutionManager ->
+                        ProgressiveStringProviderDisplayTest
+                                .generateRenderablesAndRenderersWithMeshAndShader(
+                                        windowResolutionManager,
+                                        2000L,
+                                        4000L
+                                ),
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
                     TextLineRenderable.Font =
                             new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
-                TextLineRendererSimpleTest::closeAfterSomeTime);
+                ProgressiveStringProviderDisplayTest::closeAfterSomeTime);
     }
 
     /** @noinspection rawtypes*/
-    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
-            WindowResolutionManager windowResolutionManager) {
+    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+            WindowResolutionManager windowResolutionManager,
+            long startOffset,
+            long duration) {
         FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
@@ -69,8 +82,13 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
 
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
+        long now = new FakeGlobalClock().globalTimestamp();
+        LineTextProvider = new ProgressiveStringProvider(new FakeEntityUuid(), LINE_TEXT,
+                now + startOffset, duration, null, null);
+
         TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
+                new FakeStaticProvider<>(0.05f), 0f,
+                LineTextProvider,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocation),
@@ -86,7 +104,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(4000);
+        CheckedExceptionWrapper.sleep(8000);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

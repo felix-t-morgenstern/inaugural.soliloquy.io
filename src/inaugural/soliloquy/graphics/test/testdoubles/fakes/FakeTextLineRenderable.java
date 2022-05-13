@@ -15,7 +15,7 @@ import java.util.Map;
 public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
     public ProviderAtTime<Float> LineHeightProvider;
-    public String LineText;
+    public ProviderAtTime<String> LineTextProvider;
     public float PaddingBetweenGlyphs;
     public TextJustification Justification = TextJustification.LEFT;
     public Map<Integer, ProviderAtTime<Color>> ColorProviderIndices;
@@ -30,7 +30,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public EntityUuid Uuid;
 
     public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
-                                  float paddingBetweenGlyphs, String lineText,
+                                  float paddingBetweenGlyphs,
+                                  ProviderAtTime<String> lineTextProvider,
                                   ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
@@ -39,7 +40,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         Font = font;
         LineHeightProvider = lineHeightProvider;
         PaddingBetweenGlyphs = paddingBetweenGlyphs;
-        LineText = lineText;
+        LineTextProvider = lineTextProvider;
         BorderThicknessProvider = borderThicknessProvider;
         BorderColorProvider = borderColorProvider;
         ColorProviderIndices = colorProviderIndices;
@@ -57,10 +58,37 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
+                                  EntityUuid id) {
+        this(font, lineHeightProvider, paddingBetweenGlyphs, new FakeStaticProvider<>(lineText),
+                borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
+                boldIndices, id);
+    }
+
+    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
+                                  float paddingBetweenGlyphs, String lineText,
+                                  ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
+                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+                                  List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
                                   EntityUuid uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
+        RenderingLocationProvider = renderingLocationProvider;
+    }
+
+    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
+                                  float paddingBetweenGlyphs,
+                                  ProviderAtTime<String> lineTextProvider,
+                                  ProviderAtTime<Float> borderThicknessProvider,
+                                  ProviderAtTime<Color> borderColorProvider,
+                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+                                  List<Integer> italicIndices, List<Integer> boldIndices,
+                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  EntityUuid uuid) {
+        this(font, lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
+                borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
+                boldIndices, uuid);
         RenderingLocationProvider = renderingLocationProvider;
     }
 
@@ -125,7 +153,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
 
     @Override
     public ProviderAtTime<String> getLineTextProvider() {
-        return new FakeStaticProvider<>(LineText);
+        return LineTextProvider;
     }
 
     @Override
