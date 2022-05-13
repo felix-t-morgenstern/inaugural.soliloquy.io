@@ -8,6 +8,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
@@ -21,10 +22,10 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class TextLineRenderableFactoryImplTests {
     private final FakeFont FONT = new FakeFont();
-    private final String LINE_TEXT = "lineText";
     private final float LINE_HEIGHT = 0.123f;
     private final FakeStaticProvider<Float> LINE_HEIGHT_PROVIDER =
             new FakeStaticProvider<>(LINE_HEIGHT);
@@ -47,10 +48,15 @@ class TextLineRenderableFactoryImplTests {
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable -> {};
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable -> {};
 
+    @Mock private ProviderAtTime<String> _mockLineTextProvider;
+
     private TextLineRenderableFactory _textLineRenderableFactory;
 
     @BeforeEach
     void setUp() {
+        //noinspection unchecked
+        _mockLineTextProvider = mock(ProviderAtTime.class);
+
         _textLineRenderableFactory = new TextLineRenderableFactoryImpl();
     }
 
@@ -62,8 +68,8 @@ class TextLineRenderableFactoryImplTests {
 
     @Test
     void testMake() {
-        TextLineRenderable textLineRenderable = _textLineRenderableFactory.make(FONT, LINE_TEXT,
-                LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+        TextLineRenderable textLineRenderable = _textLineRenderableFactory.make(FONT,
+                _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
                 COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
                 DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
@@ -71,112 +77,14 @@ class TextLineRenderableFactoryImplTests {
 
         assertNotNull(textLineRenderable);
         assertTrue(textLineRenderable instanceof TextLineRenderableImpl);
+        assertSame(FONT, textLineRenderable.getFont());
+        assertSame(_mockLineTextProvider, textLineRenderable.getLineTextProvider());
+        assertSame(LINE_HEIGHT_PROVIDER, textLineRenderable.lineHeightProvider());
+        assertEquals(JUSTIFICATION, textLineRenderable.getJustification());
+        assertEquals(PADDING_BETWEEN_GLYPHS, textLineRenderable.getPaddingBetweenGlyphs());
+        assertEquals(COLOR_PROVIDER_INDICES, textLineRenderable.colorProviderIndices());
     }
 
-    @Test
-    void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                null, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, null, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, null, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, null, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, TextJustification.UNKNOWN,
-                PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, null, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, null, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                null, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        // NB: These should not throw any exceptions
-        _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, null,
-                null, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
-        _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, null,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, null, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, null,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                null, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, null, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, null,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, null));
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderableFactory.make(
-                FONT, LINE_TEXT, LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                null, REMOVE_FROM_CONTAINER));
-    }
+    // NB: Not testing make with invalid params, since it tests the same logic of
+    //     TextLineRenderableImpl::new
 }

@@ -502,18 +502,6 @@ class TextLineRendererImplTests {
         }
         catch (Exception ignored) {}
 
-        italicIndices.add(textLine.length());
-        assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        italicIndices.remove((Object)(textLine.length()));
-        try {
-            _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {}
-
         textLineRenderable.ItalicIndices = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -543,18 +531,6 @@ class TextLineRendererImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         boldIndices.remove((Object)(-1));
-        try {
-            _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {}
-
-        boldIndices.add(textLine.length());
-        assertThrows(IllegalArgumentException.class,
-                () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        boldIndices.remove((Object)(textLine.length()));
         try {
             _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
         }

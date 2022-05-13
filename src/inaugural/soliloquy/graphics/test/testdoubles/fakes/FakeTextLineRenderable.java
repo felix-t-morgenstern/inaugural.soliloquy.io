@@ -124,12 +124,12 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public String getLineText() {
-        return LineText;
+    public ProviderAtTime<String> getLineTextProvider() {
+        return new FakeStaticProvider<>(LineText);
     }
 
     @Override
-    public void setLineText(String s) throws IllegalArgumentException {
+    public void setLineTextProvider(ProviderAtTime<String> s) throws IllegalArgumentException {
 
     }
 

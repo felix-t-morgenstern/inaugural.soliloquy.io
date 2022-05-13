@@ -10,6 +10,8 @@ import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -20,7 +22,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private final List<Integer> BOLD_INDICES;
 
     private Font _font;
-    private String _lineText;
+    private ProviderAtTime<String> _lineTextProvider;
     private ProviderAtTime<Float> _lineHeightProvider;
     private TextJustification _justification;
     private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
@@ -31,7 +33,8 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private ProviderAtTime<Pair<Float, Float>> _dropShadowOffsetProvider;
     private ProviderAtTime<Color> _dropShadowColorProvider;
 
-    public TextLineRenderableImpl(Font font, String lineText,
+    /** @noinspection ConstantConditions*/
+    public TextLineRenderableImpl(Font font, ProviderAtTime<String> lineTextProvider,
                                   ProviderAtTime<Float> lineHeightProvider,
                                   TextJustification justification, float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
@@ -47,7 +50,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   Consumer<Renderable> removeFromContainer) {
         super(z, uuid, updateZIndexInContainer, removeFromContainer);
         setFont(font);
-        setLineText(lineText);
+        this.setLineTextProvider(lineTextProvider);
         setJustification(justification);
         setLineHeightProvider(lineHeightProvider);
         setRenderingLocationProvider(renderingLocationProvider);
@@ -57,9 +60,9 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         setDropShadowSizeProvider(dropShadowSizeProvider);
         setDropShadowOffsetProvider(dropShadowOffsetProvider);
         setDropShadowColorProvider(dropShadowColorProvider);
-        COLOR_PROVIDER_INDICES = colorProviderIndices;
-        ITALIC_INDICES = Check.ifNull(italicIndices, "italicIndices");
-        BOLD_INDICES = Check.ifNull(boldIndices, "boldIndices");
+        COLOR_PROVIDER_INDICES = new HashMap<>(colorProviderIndices);
+        ITALIC_INDICES = new ArrayList<>(Check.ifNull(italicIndices, "italicIndices"));
+        BOLD_INDICES = new ArrayList<>(Check.ifNull(boldIndices, "boldIndices"));
     }
 
     @Override
@@ -73,13 +76,14 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     }
 
     @Override
-    public String getLineText() {
-        return _lineText;
+    public ProviderAtTime<String> getLineTextProvider() {
+        return _lineTextProvider;
     }
 
     @Override
-    public void setLineText(String lineText) throws IllegalArgumentException {
-        _lineText = Check.ifNull(lineText, "lineText");
+    public void setLineTextProvider(ProviderAtTime<String> lineTextProvider)
+            throws IllegalArgumentException {
+        _lineTextProvider = Check.ifNull(lineTextProvider, "lineTextProvider");
     }
 
     @Override

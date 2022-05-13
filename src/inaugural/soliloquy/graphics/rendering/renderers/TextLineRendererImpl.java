@@ -307,7 +307,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         float paddingBetweenGlyphs =
                 textLineRenderable.getPaddingBetweenGlyphs() * lineHeight;
 
-        for (int i = 0; i < textLineRenderable.getLineText().length(); i++) {
+        String lineText = textLineRenderable.getLineTextProvider().provide(timestamp);
+        for (int i = 0; i < lineText.length(); i++) {
             if (renderingAction != null) {
                 if (textLineRenderable.colorProviderIndices() != null &&
                         textLineRenderable.colorProviderIndices().containsKey(i)) {
@@ -348,7 +349,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 textLineLengthThusFar += paddingBetweenGlyphs;
             }
 
-            char character = textLineRenderable.getLineText().charAt(i);
+            char character = lineText.charAt(i);
             FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
                     glyphBox.width() * (lineHeight / glyphBox.height())
@@ -388,8 +389,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
                     textLineRenderable.colorProviderIndices().entrySet();
             for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
-                validateIndex(entry.getKey(), textLineRenderable.getLineText().length(),
-                        "textLineRenderable.colorIndices()", methodName, highestIndexThusFar);
+                validateIndex(entry.getKey(), "textLineRenderable.colorIndices()", methodName,
+                        highestIndexThusFar);
                 highestIndexThusFar = entry.getKey();
                 if (entry.getValue() == null) {
                     throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": "
@@ -401,8 +402,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Check.ifNull(textLineRenderable.italicIndices(), "textLineRenderable.italicIndices()");
         Integer highestIndexThusFar = null;
         for (Integer index : textLineRenderable.italicIndices()) {
-            validateIndex(index, textLineRenderable.getLineText().length(),
-                    "textLineRenderable.italicIndices()", methodName,
+            validateIndex(index, "textLineRenderable.italicIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
         }
@@ -410,8 +410,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Check.ifNull(textLineRenderable.boldIndices(), "textLineRenderable.boldIndices()");
         highestIndexThusFar = null;
         for (Integer index : textLineRenderable.boldIndices()) {
-            validateIndex(index, textLineRenderable.getLineText().length(),
-                    "textLineRenderable.italicIndices()", methodName,
+            validateIndex(index, "textLineRenderable.boldIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
         }
@@ -440,8 +439,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         return lineHeight;
     }
 
-    private void validateIndex(Integer index, int textLineLength, String dataStructureName,
-                               String methodName, Integer highestIndexThusFar) {
+    private void validateIndex(Integer index, String dataStructureName, String methodName,
+                               Integer highestIndexThusFar) {
         if (index == null) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
                     dataStructureName + " cannot contain null key");
@@ -449,10 +448,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         if (index < 0) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
                     dataStructureName + " cannot contain negative key");
-        }
-        if (index >= textLineLength) {
-            throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
-                    dataStructureName + " cannot contain a key beyond lineText length");
         }
         if (highestIndexThusFar != null && index <= highestIndexThusFar) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
@@ -502,12 +497,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public String getLineText() {
+        public ProviderAtTime<String> getLineTextProvider() {
             return null;
         }
 
         @Override
-        public void setLineText(String s) throws IllegalArgumentException {
+        public void setLineTextProvider(ProviderAtTime<String> providerAtTime) throws IllegalArgumentException {
 
         }
 
