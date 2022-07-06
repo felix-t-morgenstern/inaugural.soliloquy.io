@@ -1,27 +1,27 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeLoopingLinearMovingProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes*/
-    private final Function<EntityUuid, Function<Integer, Function<Integer, Function<Map,
+    private final Function<UUID, Function<Integer, Function<Integer, Function<Map,
             Function<Long, Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>>
             FACTORY_1 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
@@ -40,8 +40,8 @@ class LoopingLinearMovingProviderFactoryImplTests {
     private final LoopingLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes*/
-    private final Function<EntityUuid, Function<Integer, Function<Integer, Function<Map, Function<Long, Function<Long,
-            Function<Object, LoopingLinearMovingProvider>>>>>>> FACTORY_2 =
+    private final Function<UUID, Function<Integer, Function<Integer, Function<Map, Function<Long,
+            Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>> FACTORY_2 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
                     mostRecentTimestamp -> archetype -> {
                         _factory2InputUuid = uuid;
@@ -54,7 +54,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
                         return FACTORY_2_OUTPUT;
                     };
 
-    private EntityUuid _factory1InputUuid;
+    private UUID _factory1InputUuid;
     private int _factory1InputPeriodDuration;
     private int _factory1InputPeriodModuloOffset;
     /** @noinspection rawtypes*/
@@ -63,7 +63,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
     private Long _factory1InputMostRecentTimestamp;
     private float _factory1InputArchetype;
 
-    private EntityUuid _factory2InputUuid;
+    private UUID _factory2InputUuid;
     private int _factory2InputPeriodDuration;
     private int _factory2InputPeriodModuloOffset;
     /** @noinspection rawtypes*/
@@ -78,7 +78,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
     void setUp() {
         //noinspection rawtypes
         _loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(
-                new HashMap<String, Function<EntityUuid, Function<Integer, Function<Integer,
+                new HashMap<String, Function<UUID, Function<Integer, Function<Integer,
                         Function<Map, Function<Long, Function<Long, Function<Object,
                                 LoopingLinearMovingProvider>>>>>>>>() {{
                     put(FACTORY_1_TYPE_NAME, FACTORY_1);
@@ -94,7 +94,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid, Function<Integer,
+                        new HashMap<String, Function<UUID, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
                                         Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put(null, FACTORY_1);
@@ -102,7 +102,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid, Function<Integer,
+                        new HashMap<String, Function<UUID, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
                                         Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put("", FACTORY_1);
@@ -110,7 +110,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid, Function<Integer,
+                        new HashMap<String, Function<UUID, Function<Integer,
                                 Function<Integer, Function<Map, Function<Long, Function<Long,
                                         Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
                             put(FACTORY_1_TYPE_NAME, null);
@@ -119,7 +119,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
 
     @Test
     void testMake() {
-        FakeEntityUuid uuid = new FakeEntityUuid();
+        UUID uuid = UUID.randomUUID();
         int periodDuration = 456;
         int periodModuloOffset = 123;
         HashMap<Integer, Float> valuesAtTimestamps = new HashMap<Integer, Float>() {{

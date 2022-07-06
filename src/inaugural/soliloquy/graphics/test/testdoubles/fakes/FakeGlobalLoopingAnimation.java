@@ -1,9 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
+
+import java.util.UUID;
 
 public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public String Id;
@@ -70,7 +71,7 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return null;
     }
 

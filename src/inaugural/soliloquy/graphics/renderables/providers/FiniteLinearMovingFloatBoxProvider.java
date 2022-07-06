@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class FiniteLinearMovingFloatBoxProvider
         extends AbstractFiniteLinearMovingProvider<FloatBox> {
@@ -13,7 +13,8 @@ public class FiniteLinearMovingFloatBoxProvider
 
     private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
-    public FiniteLinearMovingFloatBoxProvider(FloatBoxFactory floatBoxFactory, EntityUuid uuid,
+    @SuppressWarnings("ConstantConditions")
+    public FiniteLinearMovingFloatBoxProvider(FloatBoxFactory floatBoxFactory, UUID uuid,
                                               Map<Long, FloatBox> valuesAtTimes,
                                               Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);

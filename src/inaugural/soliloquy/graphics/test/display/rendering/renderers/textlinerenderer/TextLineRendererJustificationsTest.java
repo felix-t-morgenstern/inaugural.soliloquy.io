@@ -88,19 +88,19 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocationLeft),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
         TextLineRenderableCenter = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_CENTER,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocationCenter),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
         TextLineRenderableRight = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_RIGHT,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocationRight),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderableLeft.Justification = TextJustification.LEFT;
         TextLineRenderableCenter.Justification = TextJustification.CENTER;

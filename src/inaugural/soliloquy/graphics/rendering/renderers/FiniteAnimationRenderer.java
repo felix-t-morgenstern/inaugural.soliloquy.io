@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
@@ -18,6 +17,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
@@ -26,6 +26,7 @@ public class FiniteAnimationRenderer
         implements Renderer<FiniteAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
+    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                    FloatBoxFactory floatBoxFactory,
                                    ColorShiftStackAggregator colorShiftStackAggregator,
@@ -156,7 +157,7 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

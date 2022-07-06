@@ -1,13 +1,12 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
-
 import java.util.Map;
+import java.util.UUID;
 
 public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovingProvider<Float> {
-    public LoopingLinearMovingFloatProvider(EntityUuid uuid, Map<Integer, Float> valuesAtTimes,
-                                               int periodDuration, int periodModuloOffset,
-                                               Long pausedTimestamp, Long mostRecentTimestamp) {
+    public LoopingLinearMovingFloatProvider(UUID uuid, Map<Integer, Float> valuesAtTimes,
+                                            int periodDuration, int periodModuloOffset,
+                                            Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
                 mostRecentTimestamp);
     }

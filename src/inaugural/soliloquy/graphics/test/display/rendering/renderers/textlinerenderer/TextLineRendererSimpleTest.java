@@ -74,7 +74,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocation),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,

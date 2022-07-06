@@ -92,15 +92,15 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,
-                        new StaticProviderImpl<>(new FakeEntityUuid(), null, 0f, null),
-                        new StaticProviderImpl<>(new FakeEntityUuid(), null, Color.BLACK, null),
+                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, 0f, null),
+                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, Color.BLACK, null),
                         new ArrayList<>(),
-                        new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
+                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
                                 MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
-                        0, new FakeEntityUuid(), renderable -> {}, renderable -> {});
+                        0, java.util.UUID.randomUUID(), renderable -> {}, renderable -> {});
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 

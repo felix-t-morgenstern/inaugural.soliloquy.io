@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
@@ -14,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 // NB: This class contains a lot of redundant code with AbstractFinitePausableAtTime, since Java
@@ -26,12 +26,13 @@ public class FiniteAnimationRenderableImpl extends AbstractRenderableWithArea
     private long _startTimestamp;
     private Long _pausedTimestamp;
 
+    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                         EntityUuid uuid,
+                                         UUID uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer,
                                          long startTimestamp, Long pausedTimestamp,
@@ -47,6 +48,7 @@ public class FiniteAnimationRenderableImpl extends AbstractRenderableWithArea
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
@@ -55,7 +57,7 @@ public class FiniteAnimationRenderableImpl extends AbstractRenderableWithArea
                                          Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
-                                         int z, EntityUuid uuid,
+                                         int z, UUID uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer,
                                          long startTimestamp, Long pausedTimestamp,

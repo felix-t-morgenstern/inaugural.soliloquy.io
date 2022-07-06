@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
@@ -12,6 +11,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
     public Animation Animation;
@@ -19,12 +19,12 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public long StartTimestamp;
     public boolean Deleted;
-    public EntityUuid Uuid;
+    public UUID Uuid;
 
     public FakeFiniteAnimationRenderable(Animation animation,
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
-                                         long startTimestamp, EntityUuid uuid) {
+                                         long startTimestamp, UUID uuid) {
         Animation = animation;
         ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
@@ -183,7 +183,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 

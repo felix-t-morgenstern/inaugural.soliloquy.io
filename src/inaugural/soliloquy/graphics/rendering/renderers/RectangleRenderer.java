@@ -2,9 +2,7 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -14,7 +12,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
@@ -354,7 +352,7 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

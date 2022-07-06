@@ -83,7 +83,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(new Color(255, 25, 119)),
                 null, null, null,
                 new FakeStaticProvider<>(renderingLocation),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
         TextLineRenderable.Justification = TextJustification.CENTER;
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,

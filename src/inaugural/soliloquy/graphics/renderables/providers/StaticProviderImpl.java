@@ -3,23 +3,25 @@ package inaugural.soliloquy.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
+
+import java.util.UUID;
 
 public class StaticProviderImpl<T>
         extends AbstractHasOneGenericParam<T>
         implements StaticProvider<T> {
-    private final EntityUuid ID;
+    private final UUID UUID;
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StaticProviderImpl(EntityUuid uuid, T value, Long mostRecentTimestamp) {
+    public StaticProviderImpl(UUID uuid, T value, Long mostRecentTimestamp) {
         this(uuid, value, value, mostRecentTimestamp);
     }
 
-    public StaticProviderImpl(EntityUuid uuid, T value, T archetype, Long mostRecentTimestamp) {
+    @SuppressWarnings("ConstantConditions")
+    public StaticProviderImpl(UUID uuid, T value, T archetype, Long mostRecentTimestamp) {
         super(archetype);
-        ID = Check.ifNull(uuid, "uuid");
+        UUID = Check.ifNull(uuid, "uuid");
         VALUE = value;
         TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
     }
@@ -51,8 +53,8 @@ public class StaticProviderImpl<T>
     }
 
     @Override
-    public EntityUuid uuid() {
-        return ID;
+    public UUID uuid() {
+        return UUID;
     }
 
     @Override

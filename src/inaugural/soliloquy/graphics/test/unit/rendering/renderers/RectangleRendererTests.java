@@ -6,13 +6,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -32,7 +32,7 @@ class RectangleRendererTests {
     private final ProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(new FakeFloatBox(0f, 0f, 1f, 1f));
-    private final EntityUuid UUID = new FakeEntityUuid();
+    private final UUID UUID = java.util.UUID.randomUUID();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
     private final FakeMesh MESH = new FakeMesh();
     private final FakeShader SHADER = new FakeShader();

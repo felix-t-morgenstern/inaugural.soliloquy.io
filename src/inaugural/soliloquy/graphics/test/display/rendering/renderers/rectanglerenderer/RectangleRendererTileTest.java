@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -65,7 +64,7 @@ class RectangleRendererTileTest extends RectangleRendererTest {
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
-                RENDERING_AREA_PROVIDER, 123, new FakeEntityUuid(), renderable -> {},
+                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), renderable -> {},
                 renderable -> {});
 
         return new ArrayList<Renderer>() {{

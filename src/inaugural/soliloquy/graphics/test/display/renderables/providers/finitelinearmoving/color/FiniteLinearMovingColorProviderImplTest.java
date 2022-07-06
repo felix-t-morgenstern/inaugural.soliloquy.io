@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.finiteli
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
             add(true);
         }};
         SpriteRenderable.BorderColorProvider = new FiniteLinearMovingColorProviderImpl(
-                new FakeEntityUuid(), borderColorProviderValues, hueMovementIsClockwise,
+                java.util.UUID.randomUUID(), borderColorProviderValues, hueMovementIsClockwise,
                 null, null);
         FrameTimer.ShouldExecuteNextFrame = true;
     }

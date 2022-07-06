@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.persistence.renderables.providers;
 
 import inaugural.soliloquy.graphics.persistence.renderables.providers.LoopingLinearMovingProviderHandler;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -9,19 +8,17 @@ import org.mockito.Mockito;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class LoopingLinearMovingProviderHandlerTests {
-    private static final FakeEntityUuid LOOPING_LINEAR_MOVING_PROVIDER_INPUT_UUID =
-            new FakeEntityUuid();
     private static final int TIMESTAMP_1 = 123;
     private static final int TIMESTAMP_2 = 456;
     private static final int TIMESTAMP_3 = 789;
@@ -39,7 +36,8 @@ class LoopingLinearMovingProviderHandlerTests {
     private static final Long PAUSED_TIMESTAMP = 123L;
     private static final Long MOST_RECENT_TIMESTAMP = 456L;
 
-    private static final FakeEntityUuid UUID_READ_OUTPUT = new FakeEntityUuid();
+    private static final UUID LOOPING_LINEAR_MOVING_PROVIDER_INPUT_UUID = UUID.randomUUID();
+    private static final UUID UUID_READ_OUTPUT = UUID.randomUUID();
     private static final String UUID_WRITE_OUTPUT = "uuidWriteOutput";
     private static final float FLOAT_READ_OUTPUT = 0.1312f;
     private static final String FLOAT_WRITE_OUTPUT = "floatWriteOutput";
@@ -49,21 +47,15 @@ class LoopingLinearMovingProviderHandlerTests {
 
     private static final String WRITTEN_VALUE = "{\"id\":\"uuidWriteOutput\",\"duration\":1312,\"offset\":1234,\"valueAtTimes\":[{\"time\":789,\"value\":\"floatWriteOutput\"},{\"time\":456,\"value\":\"floatWriteOutput\"},{\"time\":123,\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123,\"mostRecentTimestamp\":456,\"type\":\"java.lang.Float\"}";
 
-    @Mock
-    private PersistentValuesHandler _persistentValuesHandler;
-    @Mock
-    private TypeHandler<EntityUuid> _uuidHandler;
-    @Mock
-    private TypeHandler<Float> _floatHandler;
+    @Mock private PersistentValuesHandler _persistentValuesHandler;
+    @Mock private TypeHandler<UUID> _uuidHandler;
+    @Mock private TypeHandler<Float> _floatHandler;
 
     /** @noinspection rawtypes*/
-    @Mock
-    private LoopingLinearMovingProvider _mockLoopingLinearMovingProvider;
+    @Mock private LoopingLinearMovingProvider _mockLoopingLinearMovingProvider;
     /** @noinspection rawtypes*/
-    @Mock
-    private LoopingLinearMovingProvider _mockLoopingLinearMovingProviderFactoryOutput;
-    @Mock
-    private LoopingLinearMovingProviderFactory _mockLoopingLinearMovingProviderFactory;
+    @Mock private LoopingLinearMovingProvider _mockLoopingLinearMovingProviderFactoryOutput;
+    @Mock private LoopingLinearMovingProviderFactory _mockLoopingLinearMovingProviderFactory;
 
     /** @noinspection rawtypes*/
     private TypeWithOneGenericParamHandler<LoopingLinearMovingProvider>
@@ -109,7 +101,7 @@ class LoopingLinearMovingProviderHandlerTests {
 
         //noinspection unchecked,rawtypes
         when(_persistentValuesHandler
-                .getTypeHandler(EntityUuid.class.getCanonicalName()))
+                .getTypeHandler(UUID.class.getCanonicalName()))
                 .thenReturn((TypeHandler) _uuidHandler);
         //noinspection unchecked,rawtypes
         when(_persistentValuesHandler

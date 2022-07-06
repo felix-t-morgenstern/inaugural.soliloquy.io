@@ -3,11 +3,11 @@ package inaugural.soliloquy.graphics.test.unit.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.factories.ImageAssetSetRenderableFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetSet;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -18,9 +18,12 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class ImageAssetSetRenderableFactoryImplTests {
     private final ImageAssetSet IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS =
@@ -37,9 +40,10 @@ class ImageAssetSetRenderableFactoryImplTests {
     private final FakeProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable -> {};
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable -> {};
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private ImageAssetSetRenderableFactory _imageAssetSetRenderableFactory;
 
@@ -56,10 +60,11 @@ class ImageAssetSetRenderableFactoryImplTests {
 
     @Test
     void testMake() {
+        // TODO: Create proper maps for press and release!
         ImageAssetSetRenderable imageAssetSetRenderableWithMouseEvents =
                 _imageAssetSetRenderableFactory.make(IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS, TYPE,
-                        DIRECTION, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
+                        DIRECTION, new HashMap<>(), new HashMap<>(), ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                         RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                         REMOVE_FROM_CONTAINER);
 

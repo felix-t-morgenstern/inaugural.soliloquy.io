@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -11,6 +10,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
@@ -19,13 +19,13 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
     public int Z;
-    public EntityUuid Uuid;
+    public UUID Uuid;
 
     public FakeSpriteRenderable(Sprite sprite,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                 ProviderAtTime<Float> borderThicknessProvider,
-                                ProviderAtTime<Color> borderColorProvider, EntityUuid uuid) {
+                                ProviderAtTime<Color> borderColorProvider, UUID uuid) {
         Sprite = sprite;
         ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
@@ -37,14 +37,14 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     public FakeSpriteRenderable(Sprite sprite,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                EntityUuid id) {
+                                UUID uuid) {
         Sprite = sprite;
         ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
         BorderThicknessProvider = new FakeStaticProvider<>(null);
         BorderColorProvider = new FakeStaticProvider<>(null);
-        Uuid = id;
+        Uuid = uuid;
     }
 
     @Override
@@ -193,7 +193,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 }

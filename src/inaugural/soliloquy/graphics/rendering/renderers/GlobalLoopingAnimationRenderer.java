@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -16,6 +15,7 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
@@ -23,6 +23,7 @@ public class GlobalLoopingAnimationRenderer
         extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
+    @SuppressWarnings("ConstantConditions")
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                           FloatBoxFactory floatBoxFactory,
                                           ColorShiftStackAggregator colorShiftStackAggregator,
@@ -87,7 +88,7 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public EntityUuid uuid() {
+                public UUID uuid() {
                     return null;
                 }
 

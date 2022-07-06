@@ -26,7 +26,7 @@ class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
         }};
 
         SpriteRenderable.RenderingDimensionsProvider = RENDERING_DIMENSIONS_PROVIDER =
-                new LoopingLinearMovingFloatBoxProvider(new FakeEntityUuid(), valuesAtTimes,
+                new LoopingLinearMovingFloatBoxProvider(java.util.UUID.randomUUID(), valuesAtTimes,
                         periodDuration, periodModuloOffset, null, null, new FakeFloatBoxFactory());
 
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);

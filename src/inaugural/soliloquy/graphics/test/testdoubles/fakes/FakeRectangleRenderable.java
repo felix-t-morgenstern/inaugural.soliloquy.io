@@ -1,16 +1,14 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Color> TopLeftColorProvider;
@@ -23,7 +21,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
-    public EntityUuid Uuid;
+    public UUID Uuid;
 
     public FakeRectangleRenderable(ProviderAtTime<Color> topLeftColorProvider,
                                    ProviderAtTime<Color> topRightColorProvider,
@@ -35,7 +33,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
                                    ProviderAtTime<Float> borderThicknessProvider,
                                    ProviderAtTime<Color> borderColorProvider,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
-                                   EntityUuid uuid) {
+                                   UUID uuid) {
         TopLeftColorProvider = topLeftColorProvider;
         TopRightColorProvider = topRightColorProvider;
         BottomRightColorProvider = bottomRightColorProvider;
@@ -251,7 +249,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 

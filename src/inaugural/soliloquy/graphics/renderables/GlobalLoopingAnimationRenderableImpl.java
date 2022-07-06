@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -13,6 +12,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GlobalLoopingAnimationRenderableImpl
@@ -26,7 +26,7 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 List<ProviderAtTime<ColorShift>>
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
-                                                int z, EntityUuid uuid,
+                                                int z, UUID uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
@@ -44,7 +44,7 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 List<ProviderAtTime<ColorShift>>
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
-                                                int z, EntityUuid uuid,
+                                                int z, UUID uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,

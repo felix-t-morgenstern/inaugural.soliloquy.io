@@ -5,7 +5,6 @@ import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.RectangleAnimatedBackgroundTextureIdProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
@@ -98,14 +97,14 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
         frames.put((msDuration * 7) / 8, frame8TextureId);
 
         RectangleAnimatedBackgroundTextureIdProvider =
-                new RectangleAnimatedBackgroundTextureIdProvider(new FakeEntityUuid(),
+                new RectangleAnimatedBackgroundTextureIdProvider(java.util.UUID.randomUUID(),
                         msDuration, (int)(currentTimestamp % msDuration), frames, null);
 
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 RectangleAnimatedBackgroundTextureIdProvider, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
-                RENDERING_AREA_PROVIDER, 123, new FakeEntityUuid(), renderable -> {},
+                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), renderable -> {},
                 renderable -> {});
 
         FrameTimer.ShouldExecuteNextFrame = true;

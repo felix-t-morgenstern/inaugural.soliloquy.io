@@ -4,7 +4,10 @@ import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontStyleDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -85,8 +88,8 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null),
                 colorIndices, null, null,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
-                new FakeEntityUuid());
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), renderingLocation, null),
+                java.util.UUID.randomUUID());
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
@@ -102,13 +105,14 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static HashMap<Integer, ProviderAtTime<Color>> rainbowGradient(String lineText) {
         HashMap<Integer, ProviderAtTime<Color>> rainbowGradient = new HashMap<>();
 
         float degreePerLetter = 360f / lineText.length();
         for (int i = 0; i < lineText.length(); i++) {
             rainbowGradient.put(i,
-                    new StaticProviderImpl<>(new FakeEntityUuid(),
+                    new StaticProviderImpl<>(java.util.UUID.randomUUID(),
                             colorAtDegree((float)i * degreePerLetter), null));
         }
         return rainbowGradient;
@@ -138,6 +142,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         absVal -= sixthOfCircle;
         float absValWithCeiling = Math.min(sixthOfCircle, absVal);
         float amountOfSixthOfCircle = sixthOfCircle - absValWithCeiling;
+        @SuppressWarnings("UnnecessaryLocalVariable")
         float colorComponent = amountOfSixthOfCircle / sixthOfCircle;
         return colorComponent;
     }

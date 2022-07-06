@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public abstract class AbstractRenderableWithDimensions extends AbstractRenderable
@@ -14,7 +14,7 @@ public abstract class AbstractRenderableWithDimensions extends AbstractRenderabl
     protected ProviderAtTime<FloatBox> _renderingAreaProvider;
 
     public AbstractRenderableWithDimensions(ProviderAtTime<FloatBox> renderingDimensionsProvider,
-                                            int z, EntityUuid uuid,
+                                            int z, UUID uuid,
                                             Consumer<Renderable> updateZIndexInContainer,
                                             Consumer<Renderable> removeFromContainer) {
         super(z, uuid, updateZIndexInContainer, removeFromContainer);

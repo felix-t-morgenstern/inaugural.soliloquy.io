@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class FakeStaticProvider<T> implements StaticProvider<T> {
     public T ProvidedValue;
-    public EntityUuid Uuid;
+    public UUID Uuid;
     public ArrayList<Long> TimestampInputs = new ArrayList<>();
     public Long MostRecentTimestamp;
 
@@ -15,7 +15,7 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
         ProvidedValue = providedValue;
     }
 
-    public FakeStaticProvider(T providedValue, EntityUuid uuid) {
+    public FakeStaticProvider(T providedValue, UUID uuid) {
         ProvidedValue = providedValue;
         Uuid = uuid;
     }
@@ -53,7 +53,7 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 

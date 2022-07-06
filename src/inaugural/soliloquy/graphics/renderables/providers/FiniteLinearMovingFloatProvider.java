@@ -1,11 +1,10 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
-
 import java.util.Map;
+import java.util.UUID;
 
 public class FiniteLinearMovingFloatProvider extends AbstractFiniteLinearMovingProvider<Float> {
-    public FiniteLinearMovingFloatProvider(EntityUuid uuid, Map<Long, Float> valuesAtTimes,
+    public FiniteLinearMovingFloatProvider(UUID uuid, Map<Long, Float> valuesAtTimes,
                                            Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
     }

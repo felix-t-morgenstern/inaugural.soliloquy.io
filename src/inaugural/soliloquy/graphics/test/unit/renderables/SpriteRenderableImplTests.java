@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -16,9 +17,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class SpriteRenderableImplTests {
     private final FakeSprite SPRITE_SUPPORTING_MOUSE_EVENTS = new FakeSprite(new FakeImage(true));
@@ -34,7 +37,6 @@ class SpriteRenderableImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
             SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER =
             renderable -> _spriteRenderableWithMouseEventsUpdateZIndexInContainerInput =
@@ -53,6 +55,8 @@ class SpriteRenderableImplTests {
     private static Renderable _spriteRenderableWithoutMouseEventsRemoveFromContainerInput;
     private static Renderable _spriteRenderableWithMouseEventsUpdateZIndexInContainerInput;
     private static Renderable _spriteRenderableWithoutMouseEventsUpdateZIndexInContainerInput;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private SpriteRenderable _spriteRenderableWithMouseEvents;
     private SpriteRenderable _spriteRenderableWithoutMouseEvents;
@@ -77,7 +81,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
@@ -92,28 +96,28 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, 
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                null, Z, UUID, 
+                null, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
@@ -127,14 +131,14 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 null,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, 
+                RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 null
         ));

@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -17,6 +16,7 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 
@@ -163,7 +163,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

@@ -1,27 +1,27 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final FiniteLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeFiniteLinearMovingProvider<>();
     /** @noinspection rawtypes*/
-    private final Function<EntityUuid,Function<Map,Function<Long, Function<Long,
+    private final Function<UUID,Function<Map,Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_1 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
                 _factory1InputUuid = uuid;
@@ -35,7 +35,7 @@ class FiniteLinearMovingProviderFactoryImplTests {
     private final FiniteLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
             new FakeFiniteLinearMovingProvider<>();
     /** @noinspection rawtypes*/
-    private final Function<EntityUuid,Function<Map,Function<Long, Function<Long,
+    private final Function<UUID,Function<Map,Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_2 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
                 _factory2InputUuid = uuid;
@@ -45,14 +45,14 @@ class FiniteLinearMovingProviderFactoryImplTests {
                 return FACTORY_2_OUTPUT;
             };
 
-    private EntityUuid _factory1InputUuid;
+    private UUID _factory1InputUuid;
     /** @noinspection rawtypes*/
     private Map _factory1InputValuesAtTimes;
     private Long _factory1InputPausedTimestamp;
     private Long _factory1InputMostRecentTimestamp;
 
     @SuppressWarnings("unused")
-    private EntityUuid _factory2InputUuid;
+    private UUID _factory2InputUuid;
     /** @noinspection rawtypes, unused */
     private Map _factory2InputValuesAtTimes;
     @SuppressWarnings("unused")
@@ -66,7 +66,7 @@ class FiniteLinearMovingProviderFactoryImplTests {
     void setUp() {
         //noinspection rawtypes
         _finiteLinearMovingProviderFactory = new FiniteLinearMovingProviderFactoryImpl(
-                new HashMap<String, Function<EntityUuid,Function<Map,Function<Long, Function<Long,
+                new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
                         FiniteLinearMovingProvider>>>>>() {{
                     put(FACTORY_1_TYPE_NAME, FACTORY_1);
                     put(FACTORY_2_TYPE_NAME, FACTORY_2);
@@ -82,29 +82,29 @@ class FiniteLinearMovingProviderFactoryImplTests {
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid,Function<Map,Function<Long, Function<Long,
+                        new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
                                 FiniteLinearMovingProvider>>>>>() {{
                             put(null, FACTORY_1);
                         }}));
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid,Function<Map,Function<Long, Function<Long,
+                        new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
                                 FiniteLinearMovingProvider>>>>>() {{
                             put("", FACTORY_1);
                         }}));
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<EntityUuid,Function<Map,Function<Long, Function<Long,
-                                FiniteLinearMovingProvider>>>>>() {{
-                            put(FACTORY_1_TYPE_NAME, null);
+                        new HashMap<String, Function<UUID,Function<Map,Function<Long,
+                                Function<Long,FiniteLinearMovingProvider>>>>>() {{
+                                    put(FACTORY_1_TYPE_NAME, null);
                         }}));
     }
 
     @Test
     void testMake() {
-        FakeEntityUuid uuid = new FakeEntityUuid();
+        UUID uuid = UUID.randomUUID();
         HashMap<Long, Float> valuesAtTimestamps = new HashMap<Long, Float>() {{
             put(0L, 123f);
             put(1L, 456f);

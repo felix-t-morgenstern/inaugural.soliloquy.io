@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatBoxProvider;
 import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
 
         SpriteRenderable.RenderingDimensionsProvider = new FiniteLinearMovingFloatBoxProvider(
                 FLOAT_BOX_FACTORY,
-                new FakeEntityUuid(),
+                java.util.UUID.randomUUID(),
                 renderingDimensionsAtTimes,
                 null,
                 null

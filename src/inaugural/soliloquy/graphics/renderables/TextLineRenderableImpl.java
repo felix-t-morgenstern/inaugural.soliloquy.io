@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
@@ -10,10 +9,8 @@ import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class TextLineRenderableImpl extends AbstractRenderable implements TextLineRenderable {
@@ -45,7 +42,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   ProviderAtTime<Float> dropShadowSizeProvider,
                                   ProviderAtTime<Pair<Float,Float>> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
-                                  int z, EntityUuid uuid,
+                                  int z, UUID uuid,
                                   Consumer<Renderable> updateZIndexInContainer,
                                   Consumer<Renderable> removeFromContainer) {
         super(z, uuid, updateZIndexInContainer, removeFromContainer);

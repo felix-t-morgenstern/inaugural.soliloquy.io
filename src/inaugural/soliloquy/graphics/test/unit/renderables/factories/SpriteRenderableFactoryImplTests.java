@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.renderables.factories.SpriteRenderableFactor
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -14,9 +15,11 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class SpriteRenderableFactoryImplTests {
     private final FakeSprite SPRITE_SUPPORTS_MOUSE_EVENTS =
@@ -31,9 +34,10 @@ class SpriteRenderableFactoryImplTests {
     private final FakeProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable -> {};
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable -> {};
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private SpriteRenderableFactory _spriteRenderableFactory;
 

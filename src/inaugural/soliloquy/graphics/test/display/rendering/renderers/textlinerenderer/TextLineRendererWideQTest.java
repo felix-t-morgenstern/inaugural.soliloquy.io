@@ -3,7 +3,10 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontStyleDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -79,7 +82,7 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocation),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 Color.WHITE, windowResolutionManager, null);

@@ -1,18 +1,19 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingFloatProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingFloatProviderTests {
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final HashMap<Integer, Float> VALUES_AT_TIMES = new HashMap<>();
     private final int TIME_1 = 0;
     private final float VALUE_1 = 0.2f;
@@ -22,6 +23,8 @@ class LoopingLinearMovingFloatProviderTests {
     private final float VALUE_3 = 0.6f;
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private LoopingLinearMovingProvider<Float> _loopingLinearMovingFloatProvider;
 

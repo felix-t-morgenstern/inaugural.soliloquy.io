@@ -2,19 +2,20 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingColorProviderFactoryImplTests {
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final HashMap<Long, Color> VALUES_AT_TIMES = new HashMap<>();
     @SuppressWarnings("FieldCanBeLocal")
     private final long TIME_1 = 100L;
@@ -36,6 +37,9 @@ class FiniteLinearMovingColorProviderFactoryImplTests {
     private final boolean TRANSITION_2_IS_CLOCKWISE = true;
     private final boolean TRANSITION_3_IS_CLOCKWISE = true;
     private final boolean TRANSITION_4_IS_CLOCKWISE = false;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
+
     private ArrayList<Boolean> _hueMovementIsClockwise;
 
     private final long MOST_RECENT_TIMESTAMP = 34L;

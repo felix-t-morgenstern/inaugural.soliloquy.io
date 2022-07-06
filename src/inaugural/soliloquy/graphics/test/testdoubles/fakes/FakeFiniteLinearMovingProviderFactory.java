@@ -1,14 +1,14 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeFiniteLinearMovingProviderFactory implements FiniteLinearMovingProviderFactory {
-    public ArrayList<EntityUuid> InputUuids = new ArrayList<>();
+    public ArrayList<UUID> InputUuids = new ArrayList<>();
     @SuppressWarnings("rawtypes")
     public ArrayList<Map> InputValuesAtTimestamps = new ArrayList<>();
     public ArrayList<Long> InputPausedTimestamps = new ArrayList<>();
@@ -17,7 +17,7 @@ public class FakeFiniteLinearMovingProviderFactory implements FiniteLinearMoving
     public ArrayList<FiniteLinearMovingProvider> Outputs = new ArrayList<>();
 
     @Override
-    public <T> FiniteLinearMovingProvider<T> make(EntityUuid uuid, Map<Long, T> valuesAtTimestamps,
+    public <T> FiniteLinearMovingProvider<T> make(UUID uuid, Map<Long, T> valuesAtTimestamps,
                                                   Long pausedTimestamp, Long mostRecentTimestamp)
             throws IllegalArgumentException {
         InputUuids.add(uuid);

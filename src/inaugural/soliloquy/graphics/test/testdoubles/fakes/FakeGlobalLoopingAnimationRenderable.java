@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
@@ -11,23 +10,24 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimationRenderable {
     public GlobalLoopingAnimation GlobalLoopingAnimation;
     public List<ProviderAtTime<ColorShift>> ColorShiftProviders;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
-    public EntityUuid Id;
+    public UUID Uuid;
 
     public FakeGlobalLoopingAnimationRenderable(GlobalLoopingAnimation globalLoopingAnimation,
                                                 List<ProviderAtTime<ColorShift>>
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox>
                                                         renderingDimensionsProvider,
-                                                EntityUuid id) {
+                                                UUID id) {
         GlobalLoopingAnimation = globalLoopingAnimation;
         ColorShiftProviders = colorShiftProviders;
         RenderingDimensionsProvider = renderingDimensionsProvider;
-        Id = id;
+        Uuid = id;
     }
 
     @Override
@@ -170,8 +170,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public EntityUuid uuid() {
-        return Id;
+    public UUID uuid() {
+        return Uuid;
     }
 
     @Override

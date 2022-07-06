@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingProvider<T> {
     @Override
@@ -37,7 +37,7 @@ public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingPr
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return null;
     }
 

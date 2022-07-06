@@ -1,9 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+
+import java.util.UUID;
 
 public class FakeRenderableWithDimensions implements RenderableWithDimensions {
     public int Z;
@@ -46,7 +47,7 @@ public class FakeRenderableWithDimensions implements RenderableWithDimensions {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return null;
     }
 }

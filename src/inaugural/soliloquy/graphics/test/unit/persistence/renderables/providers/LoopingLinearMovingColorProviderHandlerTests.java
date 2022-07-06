@@ -5,13 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -35,17 +35,10 @@ class LoopingLinearMovingColorProviderHandlerTests {
 
     private final String MOCK_UUID_HANDLER_DATA = "mockUuidHandlerData";
 
-    @Mock
-    private TypeHandler<EntityUuid> _mockUuidHandler;
-
-    @Mock
-    private EntityUuid _mockUuid;
-
-    @Mock
-    private LoopingLinearMovingColorProvider _mockLoopingLinearMovingColorProvider;
-
-    @Mock
-    private LoopingLinearMovingColorProviderFactory _mockLoopingLinearMovingColorProviderFactory;
+    @Mock private TypeHandler<UUID> UUIDHandler;
+    private static final UUID UUID = java.util.UUID.randomUUID();
+    @Mock private LoopingLinearMovingColorProvider _mockLoopingLinearMovingColorProvider;
+    @Mock private LoopingLinearMovingColorProviderFactory _mockLoopingLinearMovingColorProviderFactory;
 
     private TypeHandler<LoopingLinearMovingColorProvider> _loopingLinearMovingColorProviderHandler;
 
@@ -53,16 +46,14 @@ class LoopingLinearMovingColorProviderHandlerTests {
 
     @BeforeEach
     void setUp() {
-        _mockUuid = mock(EntityUuid.class);
-
         //noinspection unchecked
-        _mockUuidHandler = mock(TypeHandler.class);
-        when(_mockUuidHandler.read(anyString())).thenReturn(_mockUuid);
-        when(_mockUuidHandler.write(any())).thenReturn(MOCK_UUID_HANDLER_DATA);
+        UUIDHandler = mock(TypeHandler.class);
+        when(UUIDHandler.read(anyString())).thenReturn(UUID);
+        when(UUIDHandler.write(any())).thenReturn(MOCK_UUID_HANDLER_DATA);
 
         _mockLoopingLinearMovingColorProvider = mock(LoopingLinearMovingColorProvider.class);
         when(_mockLoopingLinearMovingColorProvider.uuid())
-                .thenReturn(_mockUuid);
+                .thenReturn(UUID);
         when(_mockLoopingLinearMovingColorProvider.valuesWithinPeriod())
                 .thenReturn(VALUES_WITHIN_PERIOD);
         when(_mockLoopingLinearMovingColorProvider.periodDuration())
@@ -84,14 +75,14 @@ class LoopingLinearMovingColorProviderHandlerTests {
 
         _loopingLinearMovingColorProviderHandler =
                 new LoopingLinearMovingColorProviderHandler(
-                        _mockLoopingLinearMovingColorProviderFactory, _mockUuidHandler);
+                        _mockLoopingLinearMovingColorProviderFactory, UUIDHandler);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingColorProviderHandler(
-                        null, _mockUuidHandler));
+                        null, UUIDHandler));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingColorProviderHandler(
                         _mockLoopingLinearMovingColorProviderFactory, null));
@@ -104,7 +95,7 @@ class LoopingLinearMovingColorProviderHandlerTests {
 
         assertEquals(WRITTEN_DATA, writtenOutput);
 
-        verify(_mockUuidHandler).write(_mockUuid);
+        verify(UUIDHandler).write(UUID);
     }
 
     @Test
@@ -120,9 +111,9 @@ class LoopingLinearMovingColorProviderHandlerTests {
 
         assertSame(_mockLoopingLinearMovingColorProvider, output);
         verify(_mockLoopingLinearMovingColorProviderFactory)
-                .make(_mockUuid, VALUES_WITHIN_PERIOD, HUE_MOVEMENT_IS_CLOCKWISE, PERIOD_DURATION,
+                .make(UUID, VALUES_WITHIN_PERIOD, HUE_MOVEMENT_IS_CLOCKWISE, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
-        verify(_mockUuidHandler).read(MOCK_UUID_HANDLER_DATA);
+        verify(UUIDHandler).read(MOCK_UUID_HANDLER_DATA);
     }
 
     @Test

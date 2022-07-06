@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
@@ -11,6 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
@@ -27,7 +27,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public ProviderAtTime<Float> DropShadowSizeProvider;
     public ProviderAtTime<Pair<Float, Float>> DropShadowOffsetProvider;
     public ProviderAtTime<Color> DropShadowColorProvider;
-    public EntityUuid Uuid;
+    public UUID Uuid;
 
     public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
                                   float paddingBetweenGlyphs,
@@ -36,7 +36,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  EntityUuid id) {
+                                  UUID id) {
         Font = font;
         LineHeightProvider = lineHeightProvider;
         PaddingBetweenGlyphs = paddingBetweenGlyphs;
@@ -58,7 +58,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  EntityUuid id) {
+                                  UUID id) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, new FakeStaticProvider<>(lineText),
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
                 boldIndices, id);
@@ -71,7 +71,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
-                                  EntityUuid uuid) {
+                                  UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
         RenderingLocationProvider = renderingLocationProvider;
@@ -85,7 +85,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
-                                  EntityUuid uuid) {
+                                  UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
                 boldIndices, uuid);
@@ -102,7 +102,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Float> dropShadowSizeProvider,
                                   ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
-                                  EntityUuid uuid) {
+                                  UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices,
                 renderingLocationProvider, uuid);
@@ -243,7 +243,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 

@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.assets.Image;
@@ -17,6 +16,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -38,7 +38,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                         EntityUuid uuid,
+                                         UUID uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
@@ -54,7 +54,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                         EntityUuid uuid,
+                                         UUID uuid,
                                          Consumer<Renderable> updateZIndexInContainer,
                                          Consumer<Renderable> removeFromContainer)
     {
@@ -71,7 +71,7 @@ abstract class AbstractRenderableWithArea extends AbstractRenderableWithDimensio
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                       EntityUuid uuid,
+                                       UUID uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
         super(renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);

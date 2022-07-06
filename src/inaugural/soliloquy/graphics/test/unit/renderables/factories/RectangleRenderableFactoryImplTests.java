@@ -3,11 +3,11 @@ package inaugural.soliloquy.graphics.test.unit.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.factories.RectangleRenderableFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -19,9 +19,11 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class RectangleRenderableFactoryImplTests {
     private final ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -39,11 +41,12 @@ class RectangleRenderableFactoryImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER =
             renderable -> {};
     private final Consumer<Renderable> RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER =
             renderable -> {};
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private RectangleRenderableFactory _rectangleRenderableFactory;
 

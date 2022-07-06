@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.testdoubles.spies;
 
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public ArrayList<Long> Timestamps = new ArrayList<>();
@@ -60,7 +60,7 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return null;
     }
 

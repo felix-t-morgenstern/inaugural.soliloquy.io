@@ -1,18 +1,18 @@
 package inaugural.soliloquy.graphics.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoopingLinearMovingColorProviderFactoryImpl
         implements LoopingLinearMovingColorProviderFactory {
     @Override
-    public LoopingLinearMovingColorProvider make(EntityUuid uuid,
+    public LoopingLinearMovingColorProvider make(UUID uuid,
                                                  Map<Integer, Color> valuesWithinPeriod,
                                                  List<Boolean> hueMovementIsClockwise,
                                                  int periodDuration, int periodModuloOffset,

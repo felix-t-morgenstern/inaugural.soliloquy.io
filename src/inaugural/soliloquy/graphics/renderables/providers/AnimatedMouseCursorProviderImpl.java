@@ -2,12 +2,12 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Long>
         implements AnimatedMouseCursorProvider {
@@ -15,13 +15,14 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
     private final HashMap<Integer, Long> CURSORS_AT_MS;
     private final NearestFloorAndCeilingTree MS_POSITIONS;
 
-    private final static StubEntityUuid STUB_UUID = new StubEntityUuid();
+    private final static UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
     /** @noinspection ConstantConditions*/
     public AnimatedMouseCursorProviderImpl(String id, Map<Integer, Long> cursorsAtMs,
                                            int periodDuration, int periodModuloOffset,
                                            Long pauseTimestamp, Long mostRecentTimestamp) {
-        super(STUB_UUID, periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
+        super(PLACEHOLDER_UUID, periodDuration, periodModuloOffset, pauseTimestamp,
+                mostRecentTimestamp);
         ID = Check.ifNullOrEmpty(id, "id");
         Check.ifNull(cursorsAtMs, "cursorsAtMs");
         if (cursorsAtMs.isEmpty()) {
@@ -63,25 +64,8 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
     }
 
     @Override
-    public EntityUuid uuid() throws IllegalArgumentException, UnsupportedOperationException {
+    public UUID uuid() throws IllegalArgumentException, UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 "AnimatedMouseCursorProviderImpl supports id instead of uuid");
-    }
-
-    private static class StubEntityUuid implements EntityUuid {
-        @Override
-        public long getMostSignificantBits() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public long getLeastSignificantBits() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getInterfaceName() {
-            throw new UnsupportedOperationException();
-        }
     }
 }

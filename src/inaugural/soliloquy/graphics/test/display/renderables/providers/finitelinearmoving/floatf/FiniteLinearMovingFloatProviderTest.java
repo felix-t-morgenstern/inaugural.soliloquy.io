@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.finiteli
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -19,7 +18,7 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
         borderThicknessProvider.put(timestamp, 0f);
         borderThicknessProvider.put(timestamp + 3000, BORDER_THICKNESS);
         SpriteRenderable.BorderThicknessProvider = new FiniteLinearMovingFloatProvider(
-                new FakeEntityUuid(),
+                java.util.UUID.randomUUID(),
                 borderThicknessProvider,
                 null, null
         );

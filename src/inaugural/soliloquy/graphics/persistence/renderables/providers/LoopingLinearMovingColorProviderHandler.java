@@ -3,25 +3,23 @@ package inaugural.soliloquy.graphics.persistence.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class LoopingLinearMovingColorProviderHandler
         extends AbstractTypeHandler<LoopingLinearMovingColorProvider> {
     private final LoopingLinearMovingColorProviderFactory
             LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
-    private final TypeHandler<EntityUuid> UUID_HANDLER;
+    private final TypeHandler<UUID> UUID_HANDLER;
 
+    @SuppressWarnings("ConstantConditions")
     public LoopingLinearMovingColorProviderHandler(LoopingLinearMovingColorProviderFactory
                                                            loopingLinearMovingColorProviderFactory,
-                                                   TypeHandler<EntityUuid> uuidHandler) {
+                                                   TypeHandler<UUID> uuidHandler) {
         super(new LoopingLinearMovingColorProviderArchetype());
         LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY =
                 Check.ifNull(loopingLinearMovingColorProviderFactory,
@@ -165,7 +163,7 @@ public class LoopingLinearMovingColorProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

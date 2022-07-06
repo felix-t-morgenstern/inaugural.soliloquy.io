@@ -1,21 +1,19 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 abstract class AbstractRenderable implements Renderable {
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER;
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER;
-    private final EntityUuid UUID;
+    private final UUID UUID;
 
     private int _z;
 
-    public AbstractRenderable(int z, EntityUuid uuid, Consumer<Renderable> updateZIndexInContainer,
+    public AbstractRenderable(int z, UUID uuid, Consumer<Renderable> updateZIndexInContainer,
                               Consumer<Renderable> removeFromContainer) {
         _z = z;
         UUID = Check.ifNull(uuid, "uuid");
@@ -44,7 +42,7 @@ abstract class AbstractRenderable implements Renderable {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return UUID;
     }
 }

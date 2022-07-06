@@ -4,8 +4,9 @@ import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvi
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+
+import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,15 +22,13 @@ class ProgressiveStringProviderTests {
     private final Long PAUSED_TIMESTAMP =
             randomLongInRange(MOST_RECENT_TIMESTAMP, START_TIMESTAMP);
 
-    @Mock private EntityUuid _mockUuid;
+    private static final UUID UUID = java.util.UUID.randomUUID();
 
     private ProviderAtTime<String> _progressiveStringProvider;
 
     @BeforeEach
     void setUp() {
-        _mockUuid = mock(EntityUuid.class);
-
-        _progressiveStringProvider = new ProgressiveStringProvider(_mockUuid, STRING,
+        _progressiveStringProvider = new ProgressiveStringProvider(UUID, STRING,
                 START_TIMESTAMP, TIME_TO_COMPLETE, null, null);
     }
 
@@ -39,22 +38,22 @@ class ProgressiveStringProviderTests {
                 new ProgressiveStringProvider(null, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new ProgressiveStringProvider(_mockUuid, null, START_TIMESTAMP, TIME_TO_COMPLETE,
+                new ProgressiveStringProvider(UUID, null, START_TIMESTAMP, TIME_TO_COMPLETE,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new ProgressiveStringProvider(_mockUuid, STRING, START_TIMESTAMP, 0,
+                new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, 0,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new ProgressiveStringProvider(_mockUuid, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
+                new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         PAUSED_TIMESTAMP, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new ProgressiveStringProvider(_mockUuid, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
+                new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
     void testUuid() {
-        assertSame(_mockUuid, _progressiveStringProvider.uuid());
+        assertSame(UUID, _progressiveStringProvider.uuid());
     }
 
     @Test
@@ -67,7 +66,7 @@ class ProgressiveStringProviderTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                new ProgressiveStringProvider(_mockUuid, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
+                new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         null, MOST_RECENT_TIMESTAMP)
                         .mostRecentTimestamp());
     }
@@ -104,6 +103,7 @@ class ProgressiveStringProviderTests {
                 _progressiveStringProvider.provide(START_TIMESTAMP - marginOfError).length());
     }
 
+    // TODO: Test is indeterminate!
     @Test
     void testProvideAfterEndOfRange() {
         assertEquals(STRING_LENGTH,

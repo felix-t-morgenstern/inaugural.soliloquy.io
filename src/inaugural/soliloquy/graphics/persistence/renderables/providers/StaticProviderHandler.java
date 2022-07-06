@@ -7,14 +7,15 @@ import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
+
+import java.util.UUID;
 
 /** @noinspection rawtypes*/
 public class StaticProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<StaticProvider> {
-    private final TypeHandler<EntityUuid> UUID_HANDLER;
+    private final TypeHandler<UUID> UUID_HANDLER;
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
@@ -22,7 +23,8 @@ public class StaticProviderHandler
 
     private final static StaticProviderArchetype ARCHETYPE = new StaticProviderArchetype();
 
-    public StaticProviderHandler(TypeHandler<EntityUuid> uuidHandler,
+    @SuppressWarnings("ConstantConditions")
+    public StaticProviderHandler(TypeHandler<UUID> uuidHandler,
                                  PersistentValuesHandler persistentValuesHandler,
                                  StaticProviderFactory staticProviderFactory) {
         super(ARCHETYPE, persistentValuesHandler, QualifiedStaticProviderArchetype::new);
@@ -35,7 +37,7 @@ public class StaticProviderHandler
         StaticProviderDTO dto = GSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 StaticProviderDTO.class);
-        EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
+        UUID uuid = UUID_HANDLER.read(dto.uuid);
         //noinspection rawtypes
         TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.innerType);
         return STATIC_PROVIDER_FACTORY.make(uuid,
@@ -81,7 +83,7 @@ public class StaticProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 
@@ -129,7 +131,7 @@ public class StaticProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

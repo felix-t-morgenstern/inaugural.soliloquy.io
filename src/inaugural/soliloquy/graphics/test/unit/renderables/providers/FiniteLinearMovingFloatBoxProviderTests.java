@@ -1,21 +1,22 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatBoxProvider;
-import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingFloatBoxProviderTests {
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final HashMap<Long, FloatBox> VALUES_AT_TIMES = new HashMap<>();
 
     private final long TIME_1 = 100L;
@@ -43,6 +44,8 @@ class FiniteLinearMovingFloatBoxProviderTests {
             FLOAT_BOX_3_TOP_Y, FLOAT_BOX_3_RIGHT_X, FLOAT_BOX_3_BOTTOM_Y);
 
     private final long MOST_RECENT_TIMESTAMP = 34L;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private FiniteLinearMovingProvider<FloatBox> _finiteLinearMovingFloatBoxProvider;
 
@@ -114,7 +117,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
     void testPausedTimestamp() {
         long pausedTimestamp = 12L;
         FiniteLinearMovingProvider<FloatBox> pausedFiniteLinearMovingFloatBoxProvider =
-                new FiniteLinearMovingFloatBoxProvider(FLOAT_BOX_FACTORY, UUID, VALUES_AT_TIMES, 
+                new FiniteLinearMovingFloatBoxProvider(FLOAT_BOX_FACTORY, UUID, VALUES_AT_TIMES,
                         pausedTimestamp, MOST_RECENT_TIMESTAMP);
 
         assertEquals(pausedTimestamp,

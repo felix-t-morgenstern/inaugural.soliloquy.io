@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithDimensions
@@ -22,7 +22,7 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithD
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox>
                                                        renderingDimensionsProvider,
-                                               int z, EntityUuid uuid,
+                                               int z, UUID uuid,
                                                Consumer<Renderable> updateZIndexInContainer,
                                                Consumer<Renderable> removeFromContainer) {
         super(renderingDimensionsProvider, z, uuid, updateZIndexInContainer, removeFromContainer);

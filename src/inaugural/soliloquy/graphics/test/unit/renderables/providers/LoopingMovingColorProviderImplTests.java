@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
@@ -9,11 +8,11 @@ import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorPr
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LoopingMovingColorProviderImplTests {
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final HashMap<Integer, Color> VALUES_AT_TIMES = new HashMap<>();
     private final int TIME_1 = 0;
     private final Color VALUE_1 = new Color(188, 130, 217, 255);
@@ -34,6 +33,9 @@ class LoopingMovingColorProviderImplTests {
     private final boolean TRANSITION_3_IS_CLOCKWISE = true;
     private final boolean TRANSITION_4_IS_CLOCKWISE = false;
     private final boolean TRANSITION_5_IS_CLOCKWISE = false;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
+
     private ArrayList<Boolean> _hueMovementIsClockwise;
 
     private LoopingLinearMovingColorProvider _loopingLinearMovingColorProvider;

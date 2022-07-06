@@ -5,7 +5,10 @@ import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingLocationProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFontStyleDefinition;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -52,7 +55,8 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
 
         long now = GLOBAL_CLOCK.globalTimestamp();
 
-        RenderingLocationProvider = new FiniteLinearMovingLocationProvider(new FakeEntityUuid(),
+        RenderingLocationProvider = new FiniteLinearMovingLocationProvider(
+                java.util.UUID.randomUUID(),
                 new HashMap<Long, Pair<Float, Float>>() {{
                     put(now + 1000, new FakePair<>(-0.25f, -0.25f));
                     put(now + 2000, new FakePair<>(0.75f, 0.5f));
@@ -65,7 +69,7 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 RenderingLocationProvider,
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,

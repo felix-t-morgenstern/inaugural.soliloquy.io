@@ -3,11 +3,11 @@ package inaugural.soliloquy.graphics.test.unit.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.factories.GlobalLoopingAnimationRenderableFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalLoopingAnimation;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -19,9 +19,11 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class GlobalLoopingAnimationRenderableFactoryImplTests {
     private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS =
@@ -37,7 +39,6 @@ class GlobalLoopingAnimationRenderableFactoryImplTests {
     private final FakeProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
             GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER =
             renderable -> {};
@@ -50,6 +51,8 @@ class GlobalLoopingAnimationRenderableFactoryImplTests {
     private final Consumer<Renderable>
             GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITHOUT_MOUSE_EVENTS_REMOVE_FROM_CONTAINER =
             renderable -> {};
+
+    private final UUID UUID = java.util.UUID.randomUUID();
     
     private GlobalLoopingAnimationRenderableFactory _globalLoopingAnimationRenderableFactory;
 

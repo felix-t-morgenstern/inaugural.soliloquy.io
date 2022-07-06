@@ -1,18 +1,19 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingFloatProviderTests {
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final HashMap<Long, Float> VALUES_AT_TIMES = new HashMap<>();
     private final long TIME_1 = 100L;
     private final float VALUE_1 = 0.2f;
@@ -21,6 +22,8 @@ class FiniteLinearMovingFloatProviderTests {
     private final long TIME_3 = 500L;
     private final float VALUE_3 = 0.6f;
     private final long MOST_RECENT_TIMESTAMP = 34L;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private FiniteLinearMovingProvider<Float> _finiteLinearMovingFloatProvider;
 

@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -10,6 +9,7 @@ import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
@@ -24,11 +24,13 @@ public class RasterizedLineSegmentRenderer
         super(ARCHETYPE, mostRecentTimestamp);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
         _mesh = Check.ifNull(mesh, "mesh");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void setShader(Shader shader) throws IllegalArgumentException {
         _shader = Check.ifNull(shader, "shader");
@@ -161,7 +163,7 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public EntityUuid uuid() {
+                public UUID uuid() {
                     return null;
                 }
 

@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
@@ -16,9 +17,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class ImageAssetSetRenderableImplTests {
     private final FakeImageAssetSet IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS =
@@ -37,7 +40,6 @@ class ImageAssetSetRenderableImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
             IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER =
             renderable ->
@@ -63,6 +65,8 @@ class ImageAssetSetRenderableImplTests {
             _imageAssetSetRenderableWithoutMouseEventsUpdateZIndexInConsumerInput;
     private static Renderable _imageAssetSetRenderableWithMouseEventsRemoveFromConsumerInput;
     private static Renderable _imageAssetSetRenderableWithoutMouseEventsRemoveFromConsumerInput;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private ImageAssetSetRenderable _imageAssetSetRenderableWithMouseEvents;
     private ImageAssetSetRenderable _imageAssetSetRenderableWithoutMouseEvents;

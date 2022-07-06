@@ -4,7 +4,10 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAggregator;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSprite;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -30,11 +33,11 @@ public class SpriteRendererTest extends DisplayTest {
         Sprite = new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(Sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(
-                        new FakeEntityUuid(),
+                        java.util.UUID.randomUUID(),
                         new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), borderThickness, null),
-                new StaticProviderImpl<>(new FakeEntityUuid(), borderColor, null),
-                new FakeEntityUuid());
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderThickness, null),
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderColor, null),
+                java.util.UUID.randomUUID());
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 windowResolutionManager,

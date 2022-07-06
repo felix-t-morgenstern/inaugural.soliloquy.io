@@ -12,6 +12,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -91,14 +92,14 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, null,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid()),
+                        START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _finiteAnimationRenderer.render(
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         null,
-                        START_TIMESTAMP, new FakeEntityUuid()),
+                        START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
@@ -106,7 +107,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 null),
-                        START_TIMESTAMP, new FakeEntityUuid()),
+                        START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
@@ -114,7 +115,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid()),
+                        START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
@@ -122,7 +123,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
-                        START_TIMESTAMP, new FakeEntityUuid()),
+                        START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
@@ -147,7 +148,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid());
+                        START_TIMESTAMP, UUID.randomUUID());
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
         _finiteAnimationRenderer.render(finiteAnimationRenderable,
@@ -170,7 +171,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid());
+                        START_TIMESTAMP, UUID.randomUUID());
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
 
@@ -191,7 +192,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid());
+                        START_TIMESTAMP, UUID.randomUUID());
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
         _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP);
@@ -212,7 +213,7 @@ class FiniteAnimationRendererTests {
                 new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        START_TIMESTAMP, new FakeEntityUuid());
+                        START_TIMESTAMP, UUID.randomUUID());
         _finiteAnimationRenderer.setShader(new FakeShader());
         _finiteAnimationRenderer.setMesh(new FakeMesh());
 

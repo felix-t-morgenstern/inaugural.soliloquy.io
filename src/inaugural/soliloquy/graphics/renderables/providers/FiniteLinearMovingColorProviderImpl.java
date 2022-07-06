@@ -1,20 +1,20 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMovingProvider<Color>
         implements FiniteLinearMovingColorProvider  {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
     /** @noinspection ConstantConditions*/
-    public FiniteLinearMovingColorProviderImpl(EntityUuid uuid, Map<Long, Color> valuesAtTimes,
+    public FiniteLinearMovingColorProviderImpl(UUID uuid, Map<Long, Color> valuesAtTimes,
                                                List<Boolean> hueMovementIsClockwise,
                                                Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);

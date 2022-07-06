@@ -7,17 +7,17 @@ import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /** @noinspection rawtypes*/
 public class FiniteLinearMovingProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<FiniteLinearMovingProvider> {
-    private final TypeHandler<EntityUuid> UUID_HANDLER;
+    private final TypeHandler<UUID> UUID_HANDLER;
     private final FiniteLinearMovingProviderFactory FINITE_LINEAR_MOVING_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
@@ -26,7 +26,8 @@ public class FiniteLinearMovingProviderHandler
     private final static FiniteLinearMovingProviderArchetype ARCHETYPE =
             new FiniteLinearMovingProviderArchetype();
 
-    public FiniteLinearMovingProviderHandler(TypeHandler<EntityUuid> uuidHandler,
+    @SuppressWarnings("ConstantConditions")
+    public FiniteLinearMovingProviderHandler(TypeHandler<UUID> uuidHandler,
                                              PersistentValuesHandler
                                                                persistentValuesHandler,
                                              FiniteLinearMovingProviderFactory
@@ -43,7 +44,7 @@ public class FiniteLinearMovingProviderHandler
         FiniteLinearMovingProviderDTO dto = GSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingProviderDTO.class);
-        EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
+        UUID uuid = UUID_HANDLER.read(dto.uuid);
         TypeHandler typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.valueType);
         Map<Long, Object> valuesAtTimestamps = new HashMap<>();
         for (FiniteLinearMovingProviderValueAtTimestampDTO valueDto : dto.values) {
@@ -125,7 +126,7 @@ public class FiniteLinearMovingProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 
@@ -173,7 +174,7 @@ public class FiniteLinearMovingProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

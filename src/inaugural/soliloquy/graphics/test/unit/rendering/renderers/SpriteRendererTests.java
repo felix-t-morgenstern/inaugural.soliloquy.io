@@ -14,6 +14,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -103,7 +104,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(null),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -113,7 +114,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(null),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -122,17 +123,7 @@ class SpriteRendererTests {
                         null,
                         new FakeStaticProvider<>(null),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
-                0L
-        ));
-
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
-                new FakeSpriteRenderable(sprite, colorShiftProviders,
-                        new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        null,
-                        new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -140,9 +131,19 @@ class SpriteRendererTests {
                 new FakeSpriteRenderable(sprite, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        null,
+                        new FakeStaticProvider<>(null),
+                        UUID.randomUUID()),
+                0L
+        ));
+
+        assertThrows(IllegalArgumentException.class, () -> _spriteRenderer.render(
+                new FakeSpriteRenderable(sprite, colorShiftProviders,
+                        new FakeStaticProvider<>(
+                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(null),
                         null,
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -152,7 +153,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
                         new FakeStaticProvider<>(null),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -162,7 +163,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
                         new FakeStaticProvider<>(null),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -172,7 +173,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(borderThickness),
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -182,7 +183,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(-0.0001f),
                         new FakeStaticProvider<>(borderColor),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -192,7 +193,7 @@ class SpriteRendererTests {
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
                         new FakeStaticProvider<>(1.0001f),
                         new FakeStaticProvider<>(borderColor),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -221,7 +222,7 @@ class SpriteRendererTests {
                 new FakeStaticProvider<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
                 new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null),
-                new FakeEntityUuid());
+                UUID.randomUUID());
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());
 
@@ -243,7 +244,7 @@ class SpriteRendererTests {
                 new FakeStaticProvider<>(new FakeFloatBox(leftX, topY, rightX, bottomY)),
                 new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null),
-                new FakeEntityUuid());
+                UUID.randomUUID());
         _spriteRenderer.setShader(new FakeShader());
         _spriteRenderer.setMesh(new FakeMesh());
         _spriteRenderer.render(spriteRenderable, MOST_RECENT_TIMESTAMP + 123);

@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
+import java.util.UUID;
 
 public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmentRenderable {
     public ProviderAtTime<Float> ThicknessProvider;
@@ -14,14 +14,14 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public ProviderAtTime<Color> ColorProvider;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public int Z;
-    public EntityUuid Uuid;
+    public UUID Uuid;
 
     public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern,
                                                short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                ProviderAtTime<FloatBox> renderingDimensionsProvider,
-                                               int z, EntityUuid uuid) {
+                                               int z, UUID uuid) {
         ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
@@ -106,7 +106,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 }

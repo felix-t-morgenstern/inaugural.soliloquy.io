@@ -101,8 +101,8 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 italicIndices, boldIndices,
-                new StaticProviderImpl<>(new FakeEntityUuid(), renderingLocation, null),
-                new FakeEntityUuid());
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), renderingLocation, null),
+                java.util.UUID.randomUUID());
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 Color.WHITE, windowResolutionManager, null);

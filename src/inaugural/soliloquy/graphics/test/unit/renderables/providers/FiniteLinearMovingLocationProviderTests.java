@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.factories.PairFactory;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.RANDOM;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +41,7 @@ class FiniteLinearMovingLocationProviderTests {
     private final float EXPECTED_X = (WEIGHT_TIMESTAMP_1 * X_1) + (WEIGHT_TIMESTAMP_2 * X_2);
     private final float EXPECTED_Y = (WEIGHT_TIMESTAMP_1 * Y_1) + (WEIGHT_TIMESTAMP_2 * Y_2);
 
-    @Mock private EntityUuid _mockUuid;
+    private static final UUID UUID = java.util.UUID.randomUUID();
     @Mock private PairFactory _mockPairFactory;
     @Mock private Pair<Float, Float> _mockPairFactoryOutput;
     @Mock private Pair<Float, Float> _mockPair1;
@@ -52,8 +52,6 @@ class FiniteLinearMovingLocationProviderTests {
 
     @BeforeEach
     void setUp() {
-        _mockUuid = mock(EntityUuid.class);
-
         //noinspection unchecked
         _mockPairFactoryOutput = mock(Pair.class);
 
@@ -77,7 +75,7 @@ class FiniteLinearMovingLocationProviderTests {
         _mockPairFactory = mock(PairFactory.class);
         when(_mockPairFactory.make(anyFloat(), anyFloat())).thenReturn(_mockPairFactoryOutput);
 
-        _finiteLinearMovingLocationProvider = new FiniteLinearMovingLocationProvider(_mockUuid,
+        _finiteLinearMovingLocationProvider = new FiniteLinearMovingLocationProvider(UUID,
                 VALUES_AT_TIMES, null, null, _mockPairFactory);
     }
 
@@ -87,25 +85,25 @@ class FiniteLinearMovingLocationProviderTests {
                 new FiniteLinearMovingLocationProvider(null, VALUES_AT_TIMES,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(_mockUuid, null,
+                new FiniteLinearMovingLocationProvider(UUID, null,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(_mockUuid, new HashMap<>(),
+                new FiniteLinearMovingLocationProvider(UUID, new HashMap<>(),
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(_mockUuid, VALUES_AT_TIMES,
+                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
                         PAUSED_TIMESTAMP, null, _mockPairFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(_mockUuid, VALUES_AT_TIMES,
+                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
                         MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP, _mockPairFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(_mockUuid, VALUES_AT_TIMES,
+                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, null));
     }
 
     @Test
     void testUuid() {
-        assertSame(_mockUuid, _finiteLinearMovingLocationProvider.uuid());
+        assertSame(UUID, _finiteLinearMovingLocationProvider.uuid());
     }
 
     @Test
@@ -118,7 +116,7 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                new FiniteLinearMovingLocationProvider(_mockUuid, VALUES_AT_TIMES, null,
+                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, null,
                         MOST_RECENT_TIMESTAMP, _mockPairFactory)
                         .mostRecentTimestamp());
     }

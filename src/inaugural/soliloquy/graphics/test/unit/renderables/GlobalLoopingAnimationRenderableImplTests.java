@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderable
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
@@ -16,9 +17,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class GlobalLoopingAnimationRenderableImplTests {
     private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS =
@@ -35,7 +38,6 @@ class GlobalLoopingAnimationRenderableImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
             GLOBAL_LOOPING_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER =
             renderable ->
@@ -65,6 +67,8 @@ class GlobalLoopingAnimationRenderableImplTests {
             _globalLoopingAnimationRenderableWithMouseEventsUpdateZIndexInContainerInput;
     private static Renderable
             _globalLoopingAnimationRenderableWithoutMouseEventsUpdateZIndexInContainerInput;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private GlobalLoopingAnimationRenderable _globalLoopingAnimationRenderableWithMouseEvents;
     private GlobalLoopingAnimationRenderable _globalLoopingAnimationRenderableWithoutMouseEvents;

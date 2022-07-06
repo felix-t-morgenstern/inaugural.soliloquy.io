@@ -3,11 +3,11 @@ package inaugural.soliloquy.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 // NB: This class has plenty of shared functionality with AbstractFiniteLinearMovingProvider, but
 //     since Java does not support multiple inheritance, the functionality is duplicated.
@@ -17,7 +17,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
-    protected AbstractLoopingLinearMovingProvider(EntityUuid uuid, Map<Integer, T> valuesAtTimes,
+    protected AbstractLoopingLinearMovingProvider(UUID uuid, Map<Integer, T> valuesAtTimes,
                                                   int periodDuration, int periodModuloOffset,
                                                   Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp);

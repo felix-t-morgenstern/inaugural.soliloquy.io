@@ -4,22 +4,22 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 // NB: This class has plenty of shared functionality with AbstractLoopingLinearMovingProvider, but
 //     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFinitePausableAtTime
         implements FiniteLinearMovingProvider<T> {
-    private final EntityUuid UUID;
+    private final UUID UUID;
     private final HashMap<Long, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
-    protected AbstractFiniteLinearMovingProvider(EntityUuid uuid, Map<Long, T> valuesAtTimes,
+    protected AbstractFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimes,
                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
         super(pausedTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
@@ -30,10 +30,10 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
             throw new IllegalArgumentException(
                     "AbstractFiniteLinearMovingProvider: valuesAtTimes is empty");
         }
-        valuesAtTimes.forEach((time, value) -> {
-            VALUES_AT_TIMES.put(Check.ifNull(time, "time within valuesAtTimes"),
-                    Check.ifNull(value, "value within valuesAtTimes"));
-        });
+        valuesAtTimes.forEach((time, value) -> VALUES_AT_TIMES.put(
+                Check.ifNull(time, "time within valuesAtTimes"),
+                Check.ifNull(value, "value within valuesAtTimes")
+        ));
 
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromLongs(VALUES_AT_TIMES.keySet());
@@ -81,7 +81,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return UUID;
     }
 

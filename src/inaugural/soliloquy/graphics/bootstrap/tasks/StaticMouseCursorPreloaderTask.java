@@ -2,11 +2,11 @@ package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.StaticMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -16,7 +16,7 @@ public class StaticMouseCursorPreloaderTask implements Runnable {
     private final Collection<StaticMouseCursorDefinitionDTO> STATIC_MOUSE_CURSOR_DTOS;
     private final Function<String, Consumer<StaticProvider<Long>>> PROCESS_RESULT;
 
-    private static final EntityUuid PLACEHOLDER_ENTITY_UUID = new PlaceholderEntityUuid();
+    private static final UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
     /** @noinspection ConstantConditions*/
     public StaticMouseCursorPreloaderTask(Function<String, Long> getMouseCursorByRelativeLocation,
@@ -53,26 +53,8 @@ public class StaticMouseCursorPreloaderTask implements Runnable {
             long mouseCursor =
                     GET_MOUSE_IMAGE.apply(staticMouseCursorDefinitionDTO.ImageRelativeLocation);
             PROCESS_RESULT.apply(staticMouseCursorDefinitionDTO.Id)
-                    .accept(STATIC_PROVIDER_FACTORY.make(PLACEHOLDER_ENTITY_UUID, mouseCursor,
+                    .accept(STATIC_PROVIDER_FACTORY.make(PLACEHOLDER_UUID, mouseCursor,
                             mouseCursor, null));
         });
-    }
-
-    // NB: Look for duplicates somewhere
-    private static class PlaceholderEntityUuid implements EntityUuid {
-        @Override
-        public long getMostSignificantBits() {
-            return 0;
-        }
-
-        @Override
-        public long getLeastSignificantBits() {
-            return 0;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return null;
-        }
     }
 }

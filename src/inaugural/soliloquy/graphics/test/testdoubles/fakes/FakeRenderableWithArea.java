@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import inaugural.soliloquy.common.test.fakes.FakePair;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -13,6 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeRenderableWithArea implements RenderableWithArea {
     public boolean CapturesMouseEvents;
@@ -156,7 +156,7 @@ public class FakeRenderableWithArea implements RenderableWithArea {
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return null;
     }
 

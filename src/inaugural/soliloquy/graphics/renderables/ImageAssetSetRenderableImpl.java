@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
@@ -16,6 +15,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
@@ -31,7 +31,7 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       EntityUuid uuid,
+                                       UUID uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
@@ -50,7 +50,7 @@ public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       EntityUuid uuid,
+                                       UUID uuid,
                                        Consumer<Renderable> updateZIndexInContainer,
                                        Consumer<Renderable> removeFromContainer) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,

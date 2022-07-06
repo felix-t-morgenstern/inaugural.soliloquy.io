@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProvider<T> {
-    public EntityUuid Uuid;
+    public UUID Uuid;
     public Map<Long, T> ValuesAtTimestamps;
     public Long PausedTimestamp;
     public Long MostRecentTimestamp;
@@ -17,7 +17,7 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
 
     }
 
-    public FakeFiniteLinearMovingProvider(EntityUuid uuid, Map<Long, T> valuesAtTimestamps,
+    public FakeFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimestamps,
                                           Long pausedTimestamp, Long mostRecentTimestamp,
                                           T archetype) {
         Uuid = uuid;
@@ -43,7 +43,7 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return Uuid;
     }
 

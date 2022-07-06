@@ -8,7 +8,6 @@ import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
@@ -18,6 +17,7 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -30,7 +30,7 @@ public class DisplayTest {
             new FakeRenderingBoundaries();
     protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     protected final static String SHADER_FILENAME_PREFIX = "./res/shaders/defaultShader";
-    protected final static EntityUuid UUID = new FakeEntityUuid();
+    protected final static UUID UUID = java.util.UUID.randomUUID();
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1920x1080;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
 

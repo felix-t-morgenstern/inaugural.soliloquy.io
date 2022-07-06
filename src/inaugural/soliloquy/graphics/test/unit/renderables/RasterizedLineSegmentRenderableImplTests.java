@@ -1,20 +1,21 @@
 package inaugural.soliloquy.graphics.test.unit.renderables;
 
 import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.valueobjects.EntityUuid;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -23,7 +24,6 @@ class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = 789;
-    private final EntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable ->
             _renderableRemovedFromContainer = renderable;
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable ->
@@ -32,11 +32,12 @@ class RasterizedLineSegmentRenderableImplTests {
     private static Renderable _renderableUpdatedInContainer;
     private static Renderable _renderableRemovedFromContainer;
 
+    private static final UUID UUID = java.util.UUID.randomUUID();
+
     private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
 
     @BeforeEach
-    void setUp() {
-        _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
+    void setUp() {        _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);

@@ -2,15 +2,15 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import soliloquy.specs.common.factories.PairFactory;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class FiniteLinearMovingLocationProvider
         extends AbstractFiniteLinearMovingProvider<Pair<Float, Float>> {
     private final PairFactory PAIR_FACTORY;
 
-    public FiniteLinearMovingLocationProvider(EntityUuid uuid,
+    public FiniteLinearMovingLocationProvider(UUID uuid,
                                               Map<Long, Pair<Float, Float>> valuesAtTimes,
                                               Long pausedTimestamp, Long mostRecentTimestamp,
                                               PairFactory pairFactory) {

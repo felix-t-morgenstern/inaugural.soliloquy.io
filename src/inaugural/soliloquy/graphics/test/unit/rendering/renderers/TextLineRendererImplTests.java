@@ -16,6 +16,7 @@ import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -73,11 +74,11 @@ class TextLineRendererImplTests {
         boldIndices.add(5);
         ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
                 new FakeStaticProvider<>(new FakePair<>(0f, 0f));
-        FakeEntityUuid id = new FakeEntityUuid();
+        UUID uuid = UUID.randomUUID();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
                 new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
-                boldIndices, renderingAreaProvider, id);
+                boldIndices, renderingAreaProvider, uuid);
         long timestamp = MOST_RECENT_TIMESTAMP;
 
 
@@ -317,7 +318,7 @@ class TextLineRendererImplTests {
         textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.render(textLineRenderable, 0L));
-        textLineRenderable.Uuid = id;
+        textLineRenderable.Uuid = uuid;
         try {
             _textLineRenderer.render(textLineRenderable, timestamp++);
         }
@@ -367,11 +368,11 @@ class TextLineRendererImplTests {
         boldIndices.add(5);
         ProviderAtTime<Pair<Float,Float>> renderingAreaProvider =
                 new FakeStaticProvider<>(new FakePair<>(0f, 0f));
-        FakeEntityUuid id = new FakeEntityUuid();
+        UUID uuid = UUID.randomUUID();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
                 new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
-                boldIndices, renderingAreaProvider, id);
+                boldIndices, renderingAreaProvider, uuid);
 
 
 
@@ -566,7 +567,7 @@ class TextLineRendererImplTests {
         textLineRenderable.Uuid = null;
         assertThrows(IllegalArgumentException.class,
                 () -> _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.Uuid = id;
+        textLineRenderable.Uuid = uuid;
         try {
             _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
         }
@@ -655,7 +656,7 @@ class TextLineRendererImplTests {
                 lineHeightProvider, 0f, lineText, new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, italicIndices, boldIndices,
                 new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable,
                 MOST_RECENT_TIMESTAMP);
@@ -730,7 +731,7 @@ class TextLineRendererImplTests {
                 lineHeightProvider, paddingBetweenGlyphs, lineText,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 italicIndices, boldIndices, new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
 
@@ -758,7 +759,7 @@ class TextLineRendererImplTests {
                 null,
                 new FakeStaticProvider<>(new FakePair<>(.456f, .789f)),
                 new FakeStaticProvider<>(Color.WHITE),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -786,7 +787,7 @@ class TextLineRendererImplTests {
                 new FakeStaticProvider<>(-.123f),
                 new FakeStaticProvider<>(new FakePair<>(.456f, .789f)),
                 new FakeStaticProvider<>(Color.WHITE),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -802,7 +803,7 @@ class TextLineRendererImplTests {
                 new FakeStaticProvider<>(.123f),
                 new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(Color.WHITE),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -835,7 +836,7 @@ class TextLineRendererImplTests {
                 lineHeightProvider, 0f, "", new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
                 new FakeStaticProvider<>(new FakePair<>(0f, 0f)),
-                new FakeEntityUuid());
+                UUID.randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP - 1L));

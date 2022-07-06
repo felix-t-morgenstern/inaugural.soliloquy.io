@@ -2,17 +2,19 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+
+import java.util.UUID;
 
 public class ProgressiveStringProvider
         extends AbstractFinitePausableAtTime
         implements ProviderAtTime<String> {
-    private final EntityUuid UUID;
+    private final UUID UUID;
     private final String STRING;
     private final long TIME_TO_COMPLETE;
 
-    public ProgressiveStringProvider(EntityUuid uuid, String string, long startTimestamp,
+    @SuppressWarnings("ConstantConditions")
+    public ProgressiveStringProvider(UUID uuid, String string, long startTimestamp,
                                      long timeToComplete, Long pausedTimestamp,
                                      Long mostRecentTimestamp) {
         super(startTimestamp, pausedTimestamp, mostRecentTimestamp);
@@ -49,7 +51,7 @@ public class ProgressiveStringProvider
     }
 
     @Override
-    public EntityUuid uuid() {
+    public UUID uuid() {
         return UUID;
     }
 

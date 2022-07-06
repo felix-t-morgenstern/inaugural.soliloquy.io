@@ -13,6 +13,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -93,7 +94,7 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(null, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -101,21 +102,21 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         null,
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(null),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -123,7 +124,7 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, leftX, bottomY)),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -131,7 +132,7 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, topY)),
-                        new FakeEntityUuid()),
+                        UUID.randomUUID()),
                 0L
         ));
 
@@ -156,7 +157,7 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeEntityUuid());
+                        UUID.randomUUID());
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
 
@@ -177,7 +178,7 @@ class GlobalLoopingAnimationRendererTests {
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(
                                 new FakeFloatBox(leftX, topY, rightX, bottomY)),
-                        new FakeEntityUuid());
+                        UUID.randomUUID());
         _globalLoopingAnimationRenderer.setShader(new FakeShader());
         _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
         _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,

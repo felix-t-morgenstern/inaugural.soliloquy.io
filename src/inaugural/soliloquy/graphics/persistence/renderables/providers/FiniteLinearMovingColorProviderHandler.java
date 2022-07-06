@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactory;
 
@@ -14,7 +13,7 @@ import java.util.*;
 
 public class FiniteLinearMovingColorProviderHandler
         extends AbstractTypeHandler<FiniteLinearMovingColorProvider> {
-    private final TypeHandler<EntityUuid> UUID_HANDLER;
+    private final TypeHandler<UUID> UUID_HANDLER;
     private final FiniteLinearMovingColorProviderFactory
             FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
 
@@ -22,7 +21,8 @@ public class FiniteLinearMovingColorProviderHandler
     private static final FiniteLinearMovingColorProvider ARCHETYPE =
             new FiniteLinearMovingColorProviderArchetype();
 
-    public FiniteLinearMovingColorProviderHandler(TypeHandler<EntityUuid> uuidHandler,
+    @SuppressWarnings("ConstantConditions")
+    public FiniteLinearMovingColorProviderHandler(TypeHandler<UUID> uuidHandler,
                                                   FiniteLinearMovingColorProviderFactory
                                                           finiteLinearMovingColorProviderFactory)
     {
@@ -39,7 +39,7 @@ public class FiniteLinearMovingColorProviderHandler
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingColorProviderDTO.class);
 
-        EntityUuid uuid = UUID_HANDLER.read(dto.uuid);
+        UUID uuid = UUID_HANDLER.read(dto.uuid);
 
         HashMap<Long, Color> colorsAtTimestamps = new HashMap<>();
         ArrayList<Boolean> hueMovementIsClockwise = new ArrayList<>();
@@ -138,7 +138,7 @@ public class FiniteLinearMovingColorProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

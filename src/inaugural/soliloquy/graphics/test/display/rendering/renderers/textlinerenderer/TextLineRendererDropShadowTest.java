@@ -79,7 +79,7 @@ class TextLineRendererDropShadowTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(0.055f),
                 new FakeStaticProvider<>(new FakePair<>(0.00125f, 0.00125f)),
                 new FakeStaticProvider<>(Color.RED),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,

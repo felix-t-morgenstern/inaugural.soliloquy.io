@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
@@ -13,6 +12,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
@@ -28,7 +28,7 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    ProviderAtTime<Float> dropShadowSizeProvider,
                                    ProviderAtTime<Pair<Float,Float>> dropShadowOffsetProvider,
                                    ProviderAtTime<Color> dropShadowColorProvider,
-                                   int z, EntityUuid uuid,
+                                   int z, UUID uuid,
                                    Consumer<Renderable> updateZIndexInContainer,
                                    Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {

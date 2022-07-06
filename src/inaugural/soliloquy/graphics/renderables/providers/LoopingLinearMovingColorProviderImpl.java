@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoopingLinearMovingColorProviderImpl
         extends AbstractLoopingLinearMovingProvider<Color>
@@ -15,7 +15,7 @@ public class LoopingLinearMovingColorProviderImpl
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
     @SuppressWarnings("ConstantConditions")
-    public LoopingLinearMovingColorProviderImpl(EntityUuid uuid,
+    public LoopingLinearMovingColorProviderImpl(UUID uuid,
                                                 Map<Integer, Color> valuesWithinPeriod,
                                                 List<Boolean> hueMovementIsClockwise,
                                                 int periodDuration, int periodModuloOffset,

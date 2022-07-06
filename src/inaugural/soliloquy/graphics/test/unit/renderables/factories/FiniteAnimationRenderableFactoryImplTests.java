@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.renderables.factories.FiniteAnimationRendera
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -16,9 +17,11 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class FiniteAnimationRenderableFactoryImplTests {
     private final String ANIMATION_SUPPORTING_ID = "animationSupportingId";
@@ -36,7 +39,6 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable>
             FINITE_ANIMATION_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER =
             renderable -> {};
@@ -53,6 +55,8 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private final long START_TIMESTAMP = 111L;
     private final Long PAUSED_TIMESTAMP = -456L;
     private final Long MOST_RECENT_TIMESTAMP = -123L;
+
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private FiniteAnimationRenderableFactory _finiteAnimationRenderableFactory;
 

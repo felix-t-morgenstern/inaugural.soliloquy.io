@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.persistence.renderables.providers;
 
 import inaugural.soliloquy.graphics.persistence.renderables.providers.FiniteLinearMovingProviderHandler;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProviderFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,18 +10,16 @@ import org.mockito.Mockito;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FiniteLinearMovingProviderHandlerTests {
-    private static final FakeEntityUuid FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID =
-            new FakeEntityUuid();
     private static final Long TIMESTAMP_1 = 123L;
     private static final Long TIMESTAMP_2 = 456L;
     private static final Long TIMESTAMP_3 = 789L;
@@ -36,11 +33,10 @@ class FiniteLinearMovingProviderHandlerTests {
     }};
     private static final Long PAUSED_TIMESTAMP = 123L;
     private static final Long MOST_RECENT_TIMESTAMP = 456L;
-    private static final FakeFiniteLinearMovingProvider<Float> FINITE_LINEAR_MOVING_PROVIDER =
-            new FakeFiniteLinearMovingProvider<>(FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID,
-                    VALUES_AT_TIMESTAMPS, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, -123123f);
+    private FakeFiniteLinearMovingProvider<Float> _finiteLinearMovingProvider;
 
-    private static final FakeEntityUuid UUID_READ_OUTPUT = new FakeEntityUuid();
+    private static final UUID FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID = UUID.randomUUID();
+    private static final UUID UUID_READ_OUTPUT = UUID.randomUUID();
     private static final String UUID_WRITE_OUTPUT = "uuidWriteOutput";
     private static final float FLOAT_READ_OUTPUT = 0.1312f;
     private static final String FLOAT_WRITE_OUTPUT = "floatWriteOutput";
@@ -52,12 +48,9 @@ class FiniteLinearMovingProviderHandlerTests {
 
     private static final String WRITTEN_VALUE = "{\"uuid\":\"uuidWriteOutput\",\"valueType\":\"java.lang.Float\",\"values\":[{\"timestamp\":456,\"value\":\"floatWriteOutput\"},{\"timestamp\":123,\"value\":\"floatWriteOutput\"},{\"timestamp\":789,\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123,\"mostRecentTimestamp\":456}";
 
-    @Mock
-    private PersistentValuesHandler _persistentValuesHandler;
-    @Mock
-    private TypeHandler<EntityUuid> _entityUuidHandler;
-    @Mock
-    private TypeHandler<Float> _floatHandler;
+    @Mock private PersistentValuesHandler _persistentValuesHandler;
+    @Mock private TypeHandler<UUID> _uuidHandler;
+    @Mock private TypeHandler<Float> _floatHandler;
 
     @SuppressWarnings("rawtypes")
     private TypeWithOneGenericParamHandler<FiniteLinearMovingProvider>
@@ -66,9 +59,9 @@ class FiniteLinearMovingProviderHandlerTests {
     @BeforeEach
     void setUp() {
         //noinspection unchecked
-        _entityUuidHandler = Mockito.mock(TypeHandler.class);
-        when(_entityUuidHandler.read(Mockito.anyString())).thenReturn(UUID_READ_OUTPUT);
-        when(_entityUuidHandler.write(Mockito.any())).thenReturn(UUID_WRITE_OUTPUT);
+        _uuidHandler = Mockito.mock(TypeHandler.class);
+        when(_uuidHandler.read(Mockito.anyString())).thenReturn(UUID_READ_OUTPUT);
+        when(_uuidHandler.write(Mockito.any())).thenReturn(UUID_WRITE_OUTPUT);
 
         //noinspection unchecked
         _floatHandler = Mockito.mock(TypeHandler.class);
@@ -79,8 +72,8 @@ class FiniteLinearMovingProviderHandlerTests {
 
         //noinspection unchecked,rawtypes
         when(_persistentValuesHandler
-                .getTypeHandler(EntityUuid.class.getCanonicalName()))
-                .thenReturn((TypeHandler) _entityUuidHandler);
+                .getTypeHandler(UUID.class.getCanonicalName()))
+                .thenReturn((TypeHandler) _uuidHandler);
         //noinspection unchecked,rawtypes
         when(_persistentValuesHandler
                 .getTypeHandler(Float.class.getCanonicalName()))
@@ -90,8 +83,12 @@ class FiniteLinearMovingProviderHandlerTests {
                 .generateArchetype(Integer.class.getCanonicalName()))
                 .thenReturn(INTEGER_ARCHETYPE);
 
+        _finiteLinearMovingProvider =
+                new FakeFiniteLinearMovingProvider<>(FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID,
+                        VALUES_AT_TIMESTAMPS, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, -123123f);
+
         _finiteLinearMovingProviderHandler = new FiniteLinearMovingProviderHandler(
-                _entityUuidHandler, _persistentValuesHandler, FACTORY);
+                _uuidHandler, _persistentValuesHandler, FACTORY);
     }
 
     @Test
@@ -99,18 +96,18 @@ class FiniteLinearMovingProviderHandlerTests {
         assertThrows(IllegalArgumentException.class, () -> new FiniteLinearMovingProviderHandler(
                 null, _persistentValuesHandler, FACTORY));
         assertThrows(IllegalArgumentException.class, () -> new FiniteLinearMovingProviderHandler(
-                _entityUuidHandler, null, FACTORY));
+                _uuidHandler, null, FACTORY));
         assertThrows(IllegalArgumentException.class, () -> new FiniteLinearMovingProviderHandler(
-                _entityUuidHandler, _persistentValuesHandler, null));
+                _uuidHandler, _persistentValuesHandler, null));
     }
 
     @Test
     void testWrite() {
         String writtenValue =
-                _finiteLinearMovingProviderHandler.write(FINITE_LINEAR_MOVING_PROVIDER);
+                _finiteLinearMovingProviderHandler.write(_finiteLinearMovingProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
-        verify(_entityUuidHandler).write(FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID);
+        verify(_uuidHandler).write(FINITE_LINEAR_MOVING_PROVIDER_INPUT_UUID);
         verify(_floatHandler).write(VALUE_1);
         verify(_floatHandler).write(VALUE_2);
         verify(_floatHandler).write(VALUE_3);
@@ -138,7 +135,7 @@ class FiniteLinearMovingProviderHandlerTests {
         assertOnlyContains(FACTORY.InputPausedTimestamps, PAUSED_TIMESTAMP);
         assertOnlyContains(FACTORY.InputMostRecentTimestamps, MOST_RECENT_TIMESTAMP);
         assertOnlyContains(FACTORY.Outputs, finiteLinearMovingProvider);
-        verify(_entityUuidHandler).read(UUID_WRITE_OUTPUT);
+        verify(_uuidHandler).read(UUID_WRITE_OUTPUT);
         verify(_persistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
         verify(_floatHandler, times(3)).read(FLOAT_WRITE_OUTPUT);
     }

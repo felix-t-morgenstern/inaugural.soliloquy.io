@@ -1,18 +1,13 @@
 package inaugural.soliloquy.graphics.rendering;
 
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RenderableStackImpl implements RenderableStack {
     private final HashMap<Integer, ArrayList<Renderable>> STACK;
     private final HashMap<Renderable, Integer> Z_INDICES_OF_INTEGERS;
-    private final static RenderableArchetype RENDERABLE_ARCHETYPE = new RenderableArchetype();
 
     public RenderableStackImpl() {
         STACK = new HashMap<>();
@@ -55,32 +50,5 @@ public class RenderableStackImpl implements RenderableStack {
     @Override
     public String getInterfaceName() {
         return RenderableStack.class.getCanonicalName();
-    }
-
-    private static class RenderableArchetype implements Renderable {
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
-
-        }
-
-        @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public EntityUuid uuid() {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return Renderable.class.getCanonicalName();
-        }
     }
 }

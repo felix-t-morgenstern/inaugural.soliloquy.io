@@ -7,17 +7,17 @@ import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /** @noinspection rawtypes*/
 public class LoopingLinearMovingProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<LoopingLinearMovingProvider> {
-    private final TypeHandler<EntityUuid> UUID_HANDLER;
+    private final TypeHandler<UUID> UUID_HANDLER;
     private final LoopingLinearMovingProviderFactory LOOPING_LINEAR_MOVING_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
@@ -26,7 +26,8 @@ public class LoopingLinearMovingProviderHandler
     private final static LoopingLinearMovingProviderArchetype ARCHETYPE =
             new LoopingLinearMovingProviderArchetype();
 
-    public LoopingLinearMovingProviderHandler(TypeHandler<EntityUuid> uuidHandler,
+    @SuppressWarnings("ConstantConditions")
+    public LoopingLinearMovingProviderHandler(TypeHandler<UUID> uuidHandler,
                                               PersistentValuesHandler persistentValuesHandler,
                                               LoopingLinearMovingProviderFactory
                                                       loopingLinearMovingProviderFactory) {
@@ -141,7 +142,7 @@ public class LoopingLinearMovingProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 
@@ -209,7 +210,7 @@ public class LoopingLinearMovingProviderHandler
         }
 
         @Override
-        public EntityUuid uuid() {
+        public UUID uuid() {
             return null;
         }
 

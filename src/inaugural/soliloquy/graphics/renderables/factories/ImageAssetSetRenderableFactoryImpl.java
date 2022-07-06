@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -14,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
@@ -23,7 +23,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                        EntityUuid uuid,
+                                        UUID uuid,
                                         Consumer<Renderable> updateZIndexInContainer,
                                         Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
@@ -41,7 +41,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                        EntityUuid uuid,
+                                        UUID uuid,
                                         Consumer<Renderable> updateZIndexInContainer,
                                         Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {

@@ -70,13 +70,13 @@ public class StackRendererTest extends DisplayTest {
         float spriteAxe07LeftX = 0.625f - (spriteAxe07ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable1 = new FakeSpriteRenderable(spriteAxe07,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
                 ), null),
-                1, new FakeEntityUuid());
+                1, java.util.UUID.randomUUID());
 
         float spriteAxe09ScreenWidth = (spriteAxe09Width / (float)spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
@@ -84,26 +84,26 @@ public class StackRendererTest extends DisplayTest {
         float spriteAxe09LeftX = 0.375f - (spriteAxe09ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable2 = new FakeSpriteRenderable(spriteAxe09,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
                 ), null),
-                3, new FakeEntityUuid());
+                3, java.util.UUID.randomUUID());
 
         float spriteSword06ScreenWidth = 0.3710f;
         float spriteSword06TopY = 0f;
         float spriteSword06LeftX = 0.5f - (spriteSword06ScreenWidth / 2f);
         FakeSpriteRenderable spriteRenderable3 = new FakeSpriteRenderable(spriteSword06,
                 new ArrayList<>(),
-                new StaticProviderImpl<>(new FakeEntityUuid(), new FakeFloatBox(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
                         spriteSword06LeftX,
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
                 ), null),
-                2, new FakeEntityUuid());
+                2, java.util.UUID.randomUUID());
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

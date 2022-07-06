@@ -83,7 +83,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 
         long now = new FakeGlobalClock().globalTimestamp();
-        LineTextProvider = new ProgressiveStringProvider(new FakeEntityUuid(), LINE_TEXT,
+        LineTextProvider = new ProgressiveStringProvider(java.util.UUID.randomUUID(), LINE_TEXT,
                 now + startOffset, duration, null, null);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
@@ -92,7 +92,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
                 null, null,
                 new FakeStaticProvider<>(renderingLocation),
-                new FakeEntityUuid());
+                java.util.UUID.randomUUID());
 
         TextLineRenderer =
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,

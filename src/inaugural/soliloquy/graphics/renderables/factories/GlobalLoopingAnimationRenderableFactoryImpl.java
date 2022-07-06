@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -14,6 +13,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GlobalLoopingAnimationRenderableFactoryImpl
@@ -25,7 +25,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  List<ProviderAtTime<ColorShift>>
                                                              colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
-                                                 int z, EntityUuid uuid,
+                                                 int z, UUID uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,
                                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
@@ -45,7 +45,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  List<ProviderAtTime<ColorShift>>
                                                              colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
-                                                 int z, EntityUuid uuid,
+                                                 int z, UUID uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,
                                                  Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {

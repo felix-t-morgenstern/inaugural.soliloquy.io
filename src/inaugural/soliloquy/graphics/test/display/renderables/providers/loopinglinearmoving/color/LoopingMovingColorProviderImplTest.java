@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.loopingl
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererBorderTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
@@ -32,7 +31,7 @@ class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
         }};
 
         SpriteRenderable.BorderColorProvider = BORDER_COLOR_PROVIDER =
-                new LoopingLinearMovingColorProviderImpl(new FakeEntityUuid(), valuesAtTimes,
+                new LoopingLinearMovingColorProviderImpl(java.util.UUID.randomUUID(), valuesAtTimes,
                         movementIsClockwise, periodDuration, 0, null, null);
 
         Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);

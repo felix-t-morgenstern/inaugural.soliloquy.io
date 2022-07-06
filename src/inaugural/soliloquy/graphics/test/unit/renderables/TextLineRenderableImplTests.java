@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.renderables;
 
 import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeEntityUuid;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
@@ -17,6 +16,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.testing.Assertions.assertEqualsAndNotSame;
@@ -43,7 +43,6 @@ class TextLineRenderableImplTests {
     private final FakeProviderAtTime<Color> DROP_SHADOW_COLOR_PROVIDER =
             new FakeProviderAtTime<>();
     private final int Z = 123;
-    private final FakeEntityUuid UUID = new FakeEntityUuid();
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER =
             renderable -> _removeFromContainerInput = renderable;
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER =
@@ -53,7 +52,8 @@ class TextLineRenderableImplTests {
     private static Renderable _removeFromContainerInput;
 
     @Mock private ProviderAtTime<String> _mockLineTextProvider;
-    @Mock ProviderAtTime<String> _mockLineTextProvider2;
+    @Mock private ProviderAtTime<String> _mockLineTextProvider2;
+    private final UUID UUID = java.util.UUID.randomUUID();
 
     private TextLineRenderable _textLineRenderable;
 
@@ -168,13 +168,13 @@ class TextLineRenderableImplTests {
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, null));
+                Z, UUID, null, REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, null, REMOVE_FROM_CONTAINER));
+                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, null));
     }
 
     @Test

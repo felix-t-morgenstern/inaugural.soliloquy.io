@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.EntityUuid;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -15,6 +14,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -232,7 +232,7 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     protected void validateRenderableWithAreaMembers(FloatBox renderingArea,
                                                      List<ProviderAtTime<ColorShift>>
                                                              colorShiftProviders,
-                                                     EntityUuid id,
+                                                     UUID id,
                                                      String paramName) {
         Check.ifNull(renderingArea, paramName + " provided renderingArea");
 
