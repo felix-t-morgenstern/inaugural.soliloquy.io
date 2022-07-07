@@ -32,7 +32,7 @@ public class LoopingLinearMovingColorProviderHandler
         Check.ifNullOrEmpty(data, "data");
 
         LoopingLinearMovingColorProviderDTO dto =
-                GSON.fromJson(data, LoopingLinearMovingColorProviderDTO.class);
+                JSON.fromJson(data, LoopingLinearMovingColorProviderDTO.class);
 
         HashMap<Integer, Color> valuesWithinPeriod = new HashMap<>();
         for (int i = 0; i < dto.periodValues.length; i++) {
@@ -96,7 +96,7 @@ public class LoopingLinearMovingColorProviderHandler
         dto.pausedTimestamp = loopingLinearMovingColorProvider.pausedTimestamp();
         dto.mostRecentTimestamp = loopingLinearMovingColorProvider.mostRecentTimestamp();
         
-        return GSON.toJson(dto);
+        return JSON.toJson(dto);
     }
 
     private static class LoopingLinearMovingColorProviderDTO {

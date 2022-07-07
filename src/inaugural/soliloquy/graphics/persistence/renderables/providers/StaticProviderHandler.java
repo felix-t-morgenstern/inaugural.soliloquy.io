@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
-import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
@@ -19,11 +18,9 @@ public class StaticProviderHandler
     private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-    private static final Gson GSON = new Gson();
 
     private final static StaticProviderArchetype ARCHETYPE = new StaticProviderArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public StaticProviderHandler(TypeHandler<UUID> uuidHandler,
                                  PersistentValuesHandler persistentValuesHandler,
                                  StaticProviderFactory staticProviderFactory) {
@@ -34,7 +31,7 @@ public class StaticProviderHandler
 
     @Override
     public StaticProvider read(String writtenValue) throws IllegalArgumentException {
-        StaticProviderDTO dto = GSON.fromJson(
+        StaticProviderDTO dto = JSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 StaticProviderDTO.class);
         UUID uuid = UUID_HANDLER.read(dto.uuid);
@@ -59,7 +56,7 @@ public class StaticProviderHandler
         staticProviderDTO.val = typeHandler
                 .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
         staticProviderDTO.mostRecentTimestamp = staticProvider.mostRecentTimestamp();
-        return GSON.toJson(staticProviderDTO);
+        return JSON.toJson(staticProviderDTO);
     }
 
     private static class StaticProviderDTO {

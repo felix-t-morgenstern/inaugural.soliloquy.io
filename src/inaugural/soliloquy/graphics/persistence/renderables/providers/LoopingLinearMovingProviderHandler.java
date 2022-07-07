@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
-import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
@@ -21,12 +20,10 @@ public class LoopingLinearMovingProviderHandler
     private final LoopingLinearMovingProviderFactory LOOPING_LINEAR_MOVING_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-    private static final Gson GSON = new Gson();
 
     private final static LoopingLinearMovingProviderArchetype ARCHETYPE =
             new LoopingLinearMovingProviderArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public LoopingLinearMovingProviderHandler(TypeHandler<UUID> uuidHandler,
                                               PersistentValuesHandler persistentValuesHandler,
                                               LoopingLinearMovingProviderFactory
@@ -40,7 +37,7 @@ public class LoopingLinearMovingProviderHandler
 
     @Override
     public LoopingLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
-        LoopingLinearMovingProviderDto dto = GSON.fromJson(
+        LoopingLinearMovingProviderDto dto = JSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 LoopingLinearMovingProviderDto.class);
 
@@ -91,7 +88,7 @@ public class LoopingLinearMovingProviderHandler
 
         dto.mostRecentTimestamp = loopingLinearMovingProvider.mostRecentTimestamp();
 
-        return GSON.toJson(dto);
+        return JSON.toJson(dto);
     }
 
     private static class LoopingLinearMovingProviderDto {

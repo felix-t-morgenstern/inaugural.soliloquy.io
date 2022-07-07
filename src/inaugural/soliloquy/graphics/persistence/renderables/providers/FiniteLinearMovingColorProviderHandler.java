@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
-import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
@@ -17,11 +16,9 @@ public class FiniteLinearMovingColorProviderHandler
     private final FiniteLinearMovingColorProviderFactory
             FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
 
-    private static final Gson GSON = new Gson();
     private static final FiniteLinearMovingColorProvider ARCHETYPE =
             new FiniteLinearMovingColorProviderArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteLinearMovingColorProviderHandler(TypeHandler<UUID> uuidHandler,
                                                   FiniteLinearMovingColorProviderFactory
                                                           finiteLinearMovingColorProviderFactory)
@@ -35,7 +32,7 @@ public class FiniteLinearMovingColorProviderHandler
 
     @Override
     public FiniteLinearMovingColorProvider read(String writtenValue) throws IllegalArgumentException {
-        FiniteLinearMovingColorProviderDTO dto = GSON.fromJson(
+        FiniteLinearMovingColorProviderDTO dto = JSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingColorProviderDTO.class);
 
@@ -93,7 +90,7 @@ public class FiniteLinearMovingColorProviderHandler
 
         dto.mostRecentTimestamp = finiteLinearMovingColorProvider.mostRecentTimestamp();
 
-        return GSON.toJson(dto);
+        return JSON.toJson(dto);
     }
 
     private static class FiniteLinearMovingColorProviderDTO {

@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
-import com.google.gson.Gson;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.generic.AbstractHasOneGenericParam;
 import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
@@ -21,12 +20,10 @@ public class FiniteLinearMovingProviderHandler
     private final FiniteLinearMovingProviderFactory FINITE_LINEAR_MOVING_PROVIDER_FACTORY;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-    private static final Gson GSON = new Gson();
 
     private final static FiniteLinearMovingProviderArchetype ARCHETYPE =
             new FiniteLinearMovingProviderArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteLinearMovingProviderHandler(TypeHandler<UUID> uuidHandler,
                                              PersistentValuesHandler
                                                                persistentValuesHandler,
@@ -41,7 +38,7 @@ public class FiniteLinearMovingProviderHandler
 
     @Override
     public FiniteLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
-        FiniteLinearMovingProviderDTO dto = GSON.fromJson(
+        FiniteLinearMovingProviderDTO dto = JSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingProviderDTO.class);
         UUID uuid = UUID_HANDLER.read(dto.uuid);
@@ -86,7 +83,7 @@ public class FiniteLinearMovingProviderHandler
 
         dto.mostRecentTimestamp = finiteLinearMovingProvider.mostRecentTimestamp();
 
-        return GSON.toJson(dto);
+        return JSON.toJson(dto);
     }
 
     private static class FiniteLinearMovingProviderDTO {
