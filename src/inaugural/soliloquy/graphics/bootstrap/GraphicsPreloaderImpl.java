@@ -53,4 +53,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     public String getInterfaceName() {
         return null;
     }
+
+    // NB: This is an example of the Description classes to be pulled from a JSON file in the root
+    //     image assets directory, in cases when the Definition classes cannot be stored in the
+    //     JSON directly.
+    private static class SpriteDescription {
+        String id;
+        String imageId;
+        int leftX;
+        int topY;
+        int rightX;
+        int bottomY;
+    }
 }
