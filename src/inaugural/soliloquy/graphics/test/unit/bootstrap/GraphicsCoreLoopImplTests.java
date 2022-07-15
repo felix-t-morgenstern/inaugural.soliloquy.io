@@ -466,10 +466,10 @@ class GraphicsCoreLoopImplTests {
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(100);
 
-//        while (graphicsCoreLoop.windowId() <= 0)
-//        {
-//            CheckedExceptionWrapper.Sleep(100);
-//        }
+        while (graphicsCoreLoop.windowId() <= 0)
+        {
+            CheckedExceptionWrapper.sleep(100);
+        }
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
