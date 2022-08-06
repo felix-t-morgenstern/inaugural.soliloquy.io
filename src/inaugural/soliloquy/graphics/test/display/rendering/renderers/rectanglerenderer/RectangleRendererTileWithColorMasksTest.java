@@ -6,6 +6,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -52,7 +53,8 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
                 timestamp -> RectangleRenderer.render(RectangleRenderable, timestamp),
                 () -> {
                     BACKGROUND_TEXTURE_ID_PROVIDER.ProvidedValue =
-                            new ImageFactoryImpl(0.5f).make(TILE_LOCATION, false).textureId();
+                            new ImageFactoryImpl(0.5f)
+                                    .make(new ImageDefinition(TILE_LOCATION, false)).textureId();
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 DisplayTest::closeAfterSomeTime

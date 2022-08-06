@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimationFrameDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.AnimationPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,25 +37,25 @@ class AnimationPreloaderTaskTests {
         IMAGES.put(relativeLocation3, new FakeImage(relativeLocation3));
         IMAGES.put(relativeLocation4, new FakeImage(relativeLocation4));
 
-        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame1 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation1, 0,
+        AnimationFrameDefinitionDTO animation1Frame1 =
+                new AnimationFrameDefinitionDTO(relativeLocation1, 0,
                         11, 22, 33, 44, 0.1f, 0.2f);
-        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame2 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation2, 222,
+        AnimationFrameDefinitionDTO animation1Frame2 =
+                new AnimationFrameDefinitionDTO(relativeLocation2, 222,
                         55, 66, 77, 88, 0.3f, 0.4f);
-        AnimationDefinitionDTO.AnimationFrameDTO animation2Frame1 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation3, 0,
+        AnimationFrameDefinitionDTO animation2Frame1 =
+                new AnimationFrameDefinitionDTO(relativeLocation3, 0,
                         12, 34, 56, 78, 0.5f, 0.6f);
-        AnimationDefinitionDTO.AnimationFrameDTO animation2Frame2 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation4, 444,
+        AnimationFrameDefinitionDTO animation2Frame2 =
+                new AnimationFrameDefinitionDTO(relativeLocation4, 444,
                         87, 65, 43, 21, 0.7f, 0.8f);
 
         AnimationDefinitionDTO animation1DTO = new AnimationDefinitionDTO("animation1", 555,
-                new AnimationDefinitionDTO.AnimationFrameDTO[] {
+                new AnimationFrameDefinitionDTO[] {
                         animation1Frame1, animation1Frame2
                 });
         AnimationDefinitionDTO animation2DTO = new AnimationDefinitionDTO("animation2", 666,
-                new AnimationDefinitionDTO.AnimationFrameDTO[] {
+                new AnimationFrameDefinitionDTO[] {
                         animation2Frame1, animation2Frame2
                 });
 
@@ -85,11 +86,11 @@ class AnimationPreloaderTaskTests {
         String animationId = "animationId";
         String relativeLocation1 = "relativeLocation1";
         String relativeLocation2 = "relativeLocation2";
-        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame1 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation1, 0,
+        AnimationFrameDefinitionDTO animation1Frame1 =
+                new AnimationFrameDefinitionDTO(relativeLocation1, 0,
                         11, 22, 33, 44, 0.1f, 0.2f);
-        AnimationDefinitionDTO.AnimationFrameDTO animation1Frame2 =
-                new AnimationDefinitionDTO.AnimationFrameDTO(relativeLocation2, 222,
+        AnimationFrameDefinitionDTO animation1Frame2 =
+                new AnimationFrameDefinitionDTO(relativeLocation2, 222,
                         55, 66, 77, 88, 0.3f, 0.4f);
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -103,7 +104,7 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(null, 123,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
+                                    new AnimationFrameDefinitionDTO[]{
                                             animation1Frame1
                                     }));
                         }},
@@ -113,7 +114,7 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO("", 123,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
+                                    new AnimationFrameDefinitionDTO[]{
                                             animation1Frame1
                                     }));
                         }},
@@ -123,7 +124,7 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 0,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
+                                    new AnimationFrameDefinitionDTO[]{
                                             animation1Frame1
                                     }));
                         }},
@@ -133,7 +134,7 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, animation1Frame2.ms - 1,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
+                                    new AnimationFrameDefinitionDTO[]{
                                             animation1Frame1,
                                             animation1Frame2
                                     }));
@@ -152,7 +153,7 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 123,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
+                                    new AnimationFrameDefinitionDTO[]{
                                     }));
                         }},
                         FACTORY,
@@ -161,8 +162,8 @@ class AnimationPreloaderTaskTests {
                 new AnimationPreloaderTask(IMAGES::get,
                         new ArrayList<AnimationDefinitionDTO>() {{
                             add(new AnimationDefinitionDTO(animationId, 123,
-                                    new AnimationDefinitionDTO.AnimationFrameDTO[]{
-                                            new AnimationDefinitionDTO.AnimationFrameDTO(
+                                    new AnimationFrameDefinitionDTO[]{
+                                            new AnimationFrameDefinitionDTO(
                                                     relativeLocation1, 1,
                                                     11, 22, 33, 44, 0.1f, 0.2f)
                                     }));
@@ -182,8 +183,6 @@ class AnimationPreloaderTaskTests {
         ANIMATION_DEFINITION_DTOS.forEach(dto -> {
             AnimationDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
-            assertEquals(AnimationDefinition.class.getCanonicalName(),
-                    createdDefinition.getInterfaceName());
             assertEquals(dto.frames.length, createdDefinition.frameSnippetDefinitions().size());
             ANIMATION_DEFINITION_DTOS.forEach(animationDefinitionDTO -> {
                 AnimationDefinition inputDefinition =
@@ -192,7 +191,7 @@ class AnimationPreloaderTaskTests {
                 assertEquals(animationDefinitionDTO.msDur, inputDefinition.msDuration());
                 assertEquals(animationDefinitionDTO.frames.length,
                         inputDefinition.frameSnippetDefinitions().size());
-                for(AnimationDefinitionDTO.AnimationFrameDTO frameDTO :
+                for(AnimationFrameDefinitionDTO frameDTO :
                         animationDefinitionDTO.frames) {
                     AnimationFrameSnippet createdSnippet =
                             inputDefinition.frameSnippetDefinitions().get(frameDTO.ms);

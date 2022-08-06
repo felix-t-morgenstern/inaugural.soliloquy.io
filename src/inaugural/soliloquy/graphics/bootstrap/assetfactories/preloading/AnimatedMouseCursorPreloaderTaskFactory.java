@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.Collection;
@@ -16,12 +16,13 @@ public class AnimatedMouseCursorPreloaderTaskFactory
             AnimatedMouseCursorPreloaderTask> {
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory FACTORY;
-    private final Consumer<ProviderAtTime<Long>> PROCESS_RESULT;
+    private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
 
     public AnimatedMouseCursorPreloaderTaskFactory(Function<String, Long>
                                                            getMouseCursorsByRelativeLocation,
                                                    AnimatedMouseCursorProviderFactory factory,
-                                                   Consumer<ProviderAtTime<Long>> processResult) {
+                                                   Consumer<AnimatedMouseCursorProvider>
+                                                           processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION =
                 Check.ifNull(getMouseCursorsByRelativeLocation, "getMouseCursorsByRelativeLocation");
         FACTORY = Check.ifNull(factory, "factory");

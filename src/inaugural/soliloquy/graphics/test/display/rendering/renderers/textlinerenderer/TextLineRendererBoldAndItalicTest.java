@@ -7,6 +7,8 @@ import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -61,30 +63,29 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);
 
-        FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
+        FontStyleDefinition plain = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
+        FontStyleDefinition italic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
+        FontStyleDefinition bold = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
+        FontStyleDefinition boldItalic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION_OSWALD,
-                MAX_LOSSLESS_FONT_SIZE_OSWALD,
-                plain, italic, bold, boldItalic,
-                LEADING_ADJUSTMENT);
+        FontDefinition = new FontDefinition("id", RELATIVE_LOCATION_OSWALD,
+                MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
+                plain, italic, bold, boldItalic);
 
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.0f, 0.5f - LINE_HEIGHT);
 

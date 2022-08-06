@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimationFrameDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -50,8 +51,7 @@ public class AnimationPreloaderTask implements Runnable {
             }
             int maxFrameMs = 0;
             boolean frameAt0ms = false;
-            for(AnimationDefinitionDTO.AnimationFrameDTO frameDTO
-                    : animationDefinitionDTO.frames) {
+            for(AnimationFrameDefinitionDTO frameDTO : animationDefinitionDTO.frames) {
                 maxFrameMs = Math.max(maxFrameMs, frameDTO.ms);
                 frameAt0ms = frameAt0ms || frameDTO.ms == 0;
             }
@@ -80,8 +80,7 @@ public class AnimationPreloaderTask implements Runnable {
 
     private AnimationDefinition makeDefinition(AnimationDefinitionDTO animationDefinitionDTO) {
         Map<Integer,AnimationFrameSnippet> snippetDefinitions = new HashMap<>();
-        for(AnimationDefinitionDTO.AnimationFrameDTO frameSnippetDTO :
-                animationDefinitionDTO.frames) {
+        for(AnimationFrameDefinitionDTO frameSnippetDTO : animationDefinitionDTO.frames) {
             snippetDefinitions.put(frameSnippetDTO.ms, new AnimationFrameSnippet() {
                 @Override
                 public Image image() {
@@ -125,26 +124,10 @@ public class AnimationPreloaderTask implements Runnable {
             });
         }
 
-        return new AnimationDefinition() {
-            @Override
-            public int msDuration() {
-                return animationDefinitionDTO.msDur;
-            }
-
-            @Override
-            public Map<Integer, AnimationFrameSnippet> frameSnippetDefinitions() {
-                return snippetDefinitions;
-            }
-
-            @Override
-            public String id() {
-                return animationDefinitionDTO.id;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return AnimationDefinition.class.getCanonicalName();
-            }
-        };
+        return new AnimationDefinition(
+                animationDefinitionDTO.id,
+                animationDefinitionDTO.msDur,
+                snippetDefinitions
+        );
     }
 }

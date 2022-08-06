@@ -7,6 +7,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -70,21 +71,29 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
         long currentTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
         int frame1TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_1, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_1, false)).textureId();
         int frame2TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_2, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_2, false)).textureId();
         int frame3TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_3, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_3, false)).textureId();
         int frame4TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_4, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_4, false)).textureId();
         int frame5TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_5, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_5, false)).textureId();
         int frame6TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_6, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_6, false)).textureId();
         int frame7TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_7, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_7, false)).textureId();
         int frame8TextureId =
-                new ImageFactoryImpl(0.5f).make(TILE_LOCATION_8, false).textureId();
+                new ImageFactoryImpl(0.5f)
+                        .make(new ImageDefinition(TILE_LOCATION_8, false)).textureId();
 
         HashMap<Integer, Integer> frames = new HashMap<>();
         frames.put(0, frame1TextureId);

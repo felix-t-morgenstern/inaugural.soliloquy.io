@@ -8,6 +8,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAg
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSprite;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteRenderable;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -56,7 +57,8 @@ public class SpriteRendererTest extends DisplayTest {
     }
 
     protected static void graphicsPreloaderLoadAction() {
-        Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
+        Sprite.Image = new ImageFactoryImpl(0.5f)
+                .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

@@ -6,6 +6,7 @@ import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FakeAnimation implements Animation {
     public String Id;
@@ -13,10 +14,16 @@ public class FakeAnimation implements Animation {
     public boolean SnippetAtFrameCalled = false;
     public boolean SupportsMouseEventCapturing;
     public FakeAnimationFrameSnippet AnimationFrameSnippet;
+    public Map<Integer, AnimationFrameSnippet> AnimationFrameSnippets;
     public ArrayList<Pair<Integer,AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
 
     public FakeAnimation(String id) {
         Id = id;
+    }
+
+    public FakeAnimation(String id, Map<Integer, AnimationFrameSnippet> snippets) {
+        Id = id;
+        AnimationFrameSnippets = snippets;
     }
 
     public FakeAnimation(int msDuration) {
@@ -46,6 +53,10 @@ public class FakeAnimation implements Animation {
 
     @Override
     public AnimationFrameSnippet snippetAtFrame(int i) throws IllegalArgumentException {
+        if (AnimationFrameSnippets != null) {
+            return AnimationFrameSnippets.get(i);
+        }
+
         SnippetAtFrameCalled = true;
         AnimationFrameSnippet snippetProvided = AnimationFrameSnippet != null ?
                 AnimationFrameSnippet :

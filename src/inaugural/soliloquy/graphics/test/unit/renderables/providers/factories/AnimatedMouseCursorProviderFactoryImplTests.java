@@ -4,10 +4,12 @@ import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorPro
 import inaugural.soliloquy.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,8 +43,8 @@ class AnimatedMouseCursorProviderFactoryImplTests {
     @Test
     void testMake() {
         ProviderAtTime<Long> animatedMouseCursorProvider = _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP);
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
 
         assertNotNull(animatedMouseCursorProvider);
         assertTrue(animatedMouseCursorProvider instanceof AnimatedMouseCursorProviderImpl);
@@ -51,55 +53,55 @@ class AnimatedMouseCursorProviderFactoryImplTests {
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(null, CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(null, CURSORS_AT_MS,
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make("", CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition("", CURSORS_AT_MS, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
 
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, null, MS_DURATION, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, null, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, new HashMap<>(), MS_DURATION, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, new HashMap<>(),
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, new HashMap<Integer, Long>() {{
-                    put(null, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, new
+                        HashMap<Integer, Long>() {{ put(null, MOUSE_CURSOR_1); }}, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, new HashMap<Integer, Long>() {{
-                    put(-1, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID,
+                        new HashMap<Integer, Long>() {{ put(-1, MOUSE_CURSOR_1); }}, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, new HashMap<Integer, Long>() {{
-                    put(MS_1, null);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID,
+                        new HashMap<Integer, Long>() {{ put(MS_1, null); }}, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, new HashMap<Integer, Long>() {{
-                    put(1, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID,
+                        new HashMap<Integer, Long>() {{ put(1, MOUSE_CURSOR_1); }}, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
 
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, 0, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, 0,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_3, PERIOD_MODULO_OFFSET, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_3,
+                        PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP)));
 
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_DURATION, MS_DURATION, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_DURATION,
+                        MS_DURATION, null, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_DURATION, -1, null,
-                        MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_DURATION,
+                        -1, null, MOST_RECENT_TIMESTAMP)));
 
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET,
-                        MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP)));
         assertThrows(IllegalArgumentException.class, () -> _animatedMouseCursorProviderFactory
-                .make(ID, CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET,
-                        MOST_RECENT_TIMESTAMP, null));
+                .make(new AnimatedMouseCursorProviderDefinition(ID, CURSORS_AT_MS, MS_DURATION,
+                        PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP, null)));
     }
 
     @Test
@@ -107,4 +109,5 @@ class AnimatedMouseCursorProviderFactoryImplTests {
         assertEquals(AnimatedMouseCursorProviderFactory.class.getCanonicalName(),
                 _animatedMouseCursorProviderFactory.getInterfaceName());
     }
+
 }

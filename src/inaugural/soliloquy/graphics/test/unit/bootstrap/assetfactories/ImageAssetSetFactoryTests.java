@@ -52,24 +52,24 @@ class ImageAssetSetFactoryTests {
     private final String DIRECTION2 = "direction2";
     private final String DIRECTION3 = "direction3";
 
-    private final FakeImageAssetSetAssetDefinition ASSET_1_DEFINITION =
-            new FakeImageAssetSetAssetDefinition(TYPE1, "",
+    private final ImageAssetSetAssetDefinition ASSET_1_DEFINITION =
+            new ImageAssetSetAssetDefinition(TYPE1, "",
                     ImageAsset.ImageAssetType.SPRITE, SPRITE_1_ID);
-    private final FakeImageAssetSetAssetDefinition ASSET_2_DEFINITION =
-            new FakeImageAssetSetAssetDefinition("", DIRECTION1,
+    private final ImageAssetSetAssetDefinition ASSET_2_DEFINITION =
+            new ImageAssetSetAssetDefinition("", DIRECTION1,
                     ImageAsset.ImageAssetType.SPRITE, SPRITE_2_ID);
-    private final FakeImageAssetSetAssetDefinition ASSET_3_DEFINITION =
-            new FakeImageAssetSetAssetDefinition(TYPE2, "",
+    private final ImageAssetSetAssetDefinition ASSET_3_DEFINITION =
+            new ImageAssetSetAssetDefinition(TYPE2, "",
                     ImageAsset.ImageAssetType.ANIMATION, ANIMATION_1_ID);
-    private final FakeImageAssetSetAssetDefinition ASSET_4_DEFINITION =
-            new FakeImageAssetSetAssetDefinition("", DIRECTION2,
+    private final ImageAssetSetAssetDefinition ASSET_4_DEFINITION =
+            new ImageAssetSetAssetDefinition("", DIRECTION2,
                     ImageAsset.ImageAssetType.ANIMATION, ANIMATION_2_ID);
-    private final FakeImageAssetSetAssetDefinition ASSET_5_DEFINITION =
-            new FakeImageAssetSetAssetDefinition(TYPE3, "",
+    private final ImageAssetSetAssetDefinition ASSET_5_DEFINITION =
+            new ImageAssetSetAssetDefinition(TYPE3, "",
                     ImageAsset.ImageAssetType.GLOBAL_LOOPING_ANIMATION,
                     GLOBAL_LOOPING_ANIMATION_1_ID);
-    private final FakeImageAssetSetAssetDefinition ASSET_6_DEFINITION =
-            new FakeImageAssetSetAssetDefinition("", DIRECTION3,
+    private final ImageAssetSetAssetDefinition ASSET_6_DEFINITION =
+            new ImageAssetSetAssetDefinition("", DIRECTION3,
                     ImageAsset.ImageAssetType.GLOBAL_LOOPING_ANIMATION,
                     GLOBAL_LOOPING_ANIMATION_2_ID);
 
@@ -82,8 +82,8 @@ class ImageAssetSetFactoryTests {
                 add(ASSET_5_DEFINITION);
                 add(ASSET_6_DEFINITION);
             }};
-    private final FakeImageAssetSetDefinition IMAGE_ASSET_SET_DEFINITION =
-            new FakeImageAssetSetDefinition(IMAGE_ASSET_SET_ASSET_DEFINITIONS, IMAGE_ASSET_SET_ID);
+    private final ImageAssetSetDefinition IMAGE_ASSET_SET_DEFINITION =
+            new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID, IMAGE_ASSET_SET_ASSET_DEFINITIONS);
 
     private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> _imageAssetSetFactory;
 
@@ -127,56 +127,97 @@ class ImageAssetSetFactoryTests {
     void testCreateWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(null));
 
-        IMAGE_ASSET_SET_DEFINITION.Id = null;
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(null, IMAGE_ASSET_SET_ASSET_DEFINITIONS)));
 
-        IMAGE_ASSET_SET_DEFINITION.Id = "";
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition("", IMAGE_ASSET_SET_ASSET_DEFINITIONS)));
 
-        IMAGE_ASSET_SET_DEFINITION.Id = IMAGE_ASSET_SET_ID;
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID, null)
+        ));
 
-        IMAGE_ASSET_SET_DEFINITION.ImageAssetSetAssetDefinitions = null;
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID, new ArrayList<>())
+        ));
 
-        IMAGE_ASSET_SET_DEFINITION.ImageAssetSetAssetDefinitions = new ArrayList<>();
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(new ImageAssetSetAssetDefinition(TYPE1, "",
+                                    ImageAsset.ImageAssetType.UNKNOWN, SPRITE_1_ID));
+                            add(ASSET_2_DEFINITION);
+                            add(ASSET_3_DEFINITION);
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
 
-        IMAGE_ASSET_SET_DEFINITION.ImageAssetSetAssetDefinitions = IMAGE_ASSET_SET_ASSET_DEFINITIONS;
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(new ImageAssetSetAssetDefinition(TYPE1, "",
+                                    ImageAsset.ImageAssetType.SPRITE, null));
+                            add(ASSET_2_DEFINITION);
+                            add(ASSET_3_DEFINITION);
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
 
-        ASSET_1_DEFINITION.AssetType = ImageAsset.ImageAssetType.UNKNOWN;
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(new ImageAssetSetAssetDefinition(TYPE1, "",
+                                    ImageAsset.ImageAssetType.SPRITE, ""));
+                            add(ASSET_2_DEFINITION);
+                            add(ASSET_3_DEFINITION);
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
 
-        ASSET_1_DEFINITION.AssetType = ImageAsset.ImageAssetType.SPRITE;
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(new ImageAssetSetAssetDefinition(TYPE1, "",
+                                    ImageAsset.ImageAssetType.SPRITE, "InvalidSpriteId"));
+                            add(ASSET_2_DEFINITION);
+                            add(ASSET_3_DEFINITION);
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
 
-        ASSET_1_DEFINITION.AssetId = null;
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(ASSET_1_DEFINITION);
+                            add(ASSET_2_DEFINITION);
+                            add(new ImageAssetSetAssetDefinition(TYPE2, "",
+                                    ImageAsset.ImageAssetType.ANIMATION, "InvalidAnimationId"));
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
 
-        ASSET_1_DEFINITION.AssetId = "";
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
-
-        ASSET_1_DEFINITION.AssetId = "InvalidSpriteId";
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
-
-        ASSET_1_DEFINITION.AssetId = SPRITE_1_ID;
-
-        ASSET_3_DEFINITION.AssetId = "InvalidAnimationId";
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
-
-        ASSET_3_DEFINITION.AssetId = ANIMATION_1_ID;
-
-        ASSET_3_DEFINITION.Type = TYPE1;
-        assertThrows(IllegalArgumentException.class,
-                () -> _imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION));
-        ASSET_3_DEFINITION.Type = TYPE2;
+        assertThrows(IllegalArgumentException.class, () -> _imageAssetSetFactory.make(
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
+                        new ArrayList<ImageAssetSetAssetDefinition>() {{
+                            add(ASSET_1_DEFINITION);
+                            add(ASSET_2_DEFINITION);
+                            add(new ImageAssetSetAssetDefinition(TYPE1, "",
+                                    ImageAsset.ImageAssetType.ANIMATION, ANIMATION_1_ID));
+                            add(ASSET_4_DEFINITION);
+                            add(ASSET_5_DEFINITION);
+                            add(ASSET_6_DEFINITION);
+                        }})
+        ));
     }
 
     @Test

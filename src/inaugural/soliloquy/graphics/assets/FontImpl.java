@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class FontImpl extends CanValidateFontDefinitions implements Font {
+public class FontImpl implements Font {
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
     private final static int NUMBER_EXTENDED_ASCII_CHARS = 256;
@@ -78,6 +78,49 @@ public class FontImpl extends CanValidateFontDefinitions implements Font {
 
         BOLD_ITALIC = loadFontStyle(fontFromFileBoldItalic, fontDefinition.boldItalic(),
                 fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
+    }
+
+    // NB: Extremely similar to FontPreloaderTask::validateFontDefinitionDTO; logic is duplicated, since classes are different
+    private void validateFontDefinition(FontDefinition fontDefinition) {
+        Check.ifNull(fontDefinition, "fontDefinition");
+        Check.ifNullOrEmpty(fontDefinition.id(), "fontDefinition.id()");
+        Check.ifNullOrEmpty(fontDefinition.relativeLocation(),
+                "fontDefinition.relativeLocation()");
+        Check.throwOnLteZero(fontDefinition.maxLosslessFontSize(),
+                "fontDefinition.maxLosslessFontSize()");
+        Check.throwOnLtValue(fontDefinition.leadingAdjustment(), 0f,
+                "fontDefinition.leadingAdjustment()");
+        Check.throwOnGteValue(fontDefinition.leadingAdjustment(), 1f,
+                "fontDefinition.leadingAdjustment()");
+        Check.ifNull(fontDefinition.plain(), "fontDefinition.plain()");
+        validateFontStyleDefinition(fontDefinition.plain(),
+                fontDefinition.leadingAdjustment());
+        Check.ifNull(fontDefinition.italic(), "fontDefinition.italic()");
+        validateFontStyleDefinition(fontDefinition.italic(),
+                fontDefinition.leadingAdjustment());
+        Check.ifNull(fontDefinition.bold(), "fontDefinition.bold()");
+        validateFontStyleDefinition(fontDefinition.bold(),
+                fontDefinition.leadingAdjustment());
+        Check.ifNull(fontDefinition.boldItalic(), "fontDefinition.boldItalic()");
+        validateFontStyleDefinition(fontDefinition.boldItalic(),
+                fontDefinition.leadingAdjustment());
+    }
+
+    private void validateFontStyleDefinition(FontStyleDefinition fontStyleDefinition,
+                                                    float leadingAdjustment) {
+        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(), 0f,
+                "fontStyleDefinition.additionalGlyphHorizontalTextureSpacing()");
+        Check.throwOnLtValue(fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), 0f,
+                "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
+        Check.ifNull(fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
+                "fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing()");
+        Check.ifNull(fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift(),
+                "fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift()");
+        Check.throwOnGteValue(
+                leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
+                1f,
+                "sum of leadingAdjustment and " +
+                        "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
     }
 
     private FontStyleInfoImpl loadFontStyle(java.awt.Font fontFromFile,

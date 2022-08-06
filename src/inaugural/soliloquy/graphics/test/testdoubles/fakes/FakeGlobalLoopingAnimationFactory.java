@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import java.util.ArrayList;
@@ -13,14 +14,13 @@ public class FakeGlobalLoopingAnimationFactory implements GlobalLoopingAnimation
     public ArrayList<GlobalLoopingAnimation> Outputs = new ArrayList<>();
 
     @Override
-    public GlobalLoopingAnimation make(String id, Animation animation, int periodModuloOffset,
-                                       Long pauseTimestamp)
+    public GlobalLoopingAnimation make(GlobalLoopingAnimationDefinition definition)
             throws IllegalArgumentException {
-        InputIds.add(id);
-        InputAnimations.add(animation);
-        InputPeriodModuloOffsets.add(periodModuloOffset);
+        InputIds.add(definition.id());
+        InputAnimations.add(definition.animation());
+        InputPeriodModuloOffsets.add(definition.periodModuloOffset());
 
-        FakeGlobalLoopingAnimation output = new FakeGlobalLoopingAnimation(id);
+        FakeGlobalLoopingAnimation output = new FakeGlobalLoopingAnimation(definition.id());
         Outputs.add(output);
         return output;
     }

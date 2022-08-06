@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.api.dto.GlobalLoopingAnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import java.util.Collection;
@@ -49,14 +50,18 @@ public class GlobalLoopingAnimationPreloaderTask implements Runnable {
                             globalLoopingAnimationDefinitionDTO.id + ")");
         });
         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS = globalLoopingAnimationDefinitionDTOs;
-        PROCESS_RESULT = Check.ifNull(processResult,
-                "processResult");
+        PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
     public void run() {
         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS.forEach(definition -> PROCESS_RESULT
-                .accept(GLOBAL_LOOPING_ANIMATION_FACTORY.make(definition.id,
-                        GET_ANIMATION.apply(definition.animationId), definition.periodModuloOffset,
-                        null)));
+                .accept(GLOBAL_LOOPING_ANIMATION_FACTORY.make(
+                        new GlobalLoopingAnimationDefinition(
+                                definition.id,
+                                GET_ANIMATION.apply(definition.animationId),
+                                definition.periodModuloOffset,
+                                null
+                        )
+                )));
     }
 }

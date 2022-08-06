@@ -4,13 +4,15 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatBoxProvider;
 import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.FiniteLinearMovingProviderTest;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 
 class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static void graphicsPreloaderLoadAction() {
-        Sprite.Image = new ImageFactoryImpl(0.5f).make(RPG_WEAPONS_RELATIVE_LOCATION, false);
+        Sprite.Image = new ImageFactoryImpl(0.5f)
+                .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
         HashMap<Long, FloatBox> renderingDimensionsAtTimes = new HashMap<>();
 

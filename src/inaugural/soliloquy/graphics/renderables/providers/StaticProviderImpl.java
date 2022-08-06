@@ -18,7 +18,6 @@ public class StaticProviderImpl<T>
         this(uuid, value, value, mostRecentTimestamp);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public StaticProviderImpl(UUID uuid, T value, T archetype, Long mostRecentTimestamp) {
         super(archetype);
         UUID = Check.ifNull(uuid, "uuid");

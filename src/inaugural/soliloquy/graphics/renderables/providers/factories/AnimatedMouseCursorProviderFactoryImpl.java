@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
@@ -8,12 +9,16 @@ import java.util.Map;
 
 public class AnimatedMouseCursorProviderFactoryImpl implements AnimatedMouseCursorProviderFactory {
     @Override
-    public AnimatedMouseCursorProvider make(String id, Map<Integer, Long> cursorsAtMs,
-                                            int msDuration, int periodModuloOffset,
-                                            Long pausedTimestamp, Long mostRecentTimestamp)
+    public AnimatedMouseCursorProvider make(AnimatedMouseCursorProviderDefinition definition)
             throws IllegalArgumentException {
-        return new AnimatedMouseCursorProviderImpl(id, cursorsAtMs, msDuration, periodModuloOffset,
-                pausedTimestamp, mostRecentTimestamp);
+        return new AnimatedMouseCursorProviderImpl(
+                definition.id(),
+                definition.cursorsAtMs(),
+                definition.msDuration(),
+                definition.periodModuloOffset(),
+                definition.pausedTimestamp(),
+                definition.mostRecentTimestamp()
+        );
     }
 
     @Override

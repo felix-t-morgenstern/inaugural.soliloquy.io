@@ -6,6 +6,7 @@ import inaugural.soliloquy.tools.Check;
 import org.lwjgl.BufferUtils;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -29,17 +30,17 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
     }
 
     @Override
-    public Image make(String relativeLocation, boolean supportsEventCapturing)
+    public Image make(ImageDefinition definition)
             throws IllegalArgumentException {
-        ImageData imageData = loadImageData(relativeLocation, supportsEventCapturing,
-                ALPHA_THRESHOLD);
+        ImageData imageData = loadImageData(definition.relativeLocation(),
+                definition.supportsMouseEventCapturing(), ALPHA_THRESHOLD);
         if (imageData.CapturingMask != null) {
-            return new ImageImpl(imageData.TextureId, relativeLocation, imageData.Width,
-                    imageData.Height, imageData.CapturingMask);
+            return new ImageImpl(imageData.TextureId, definition.relativeLocation(),
+                    imageData.Width, imageData.Height, imageData.CapturingMask);
         }
         else {
-            return new ImageImpl(imageData.TextureId, relativeLocation, imageData.Width,
-                    imageData.Height);
+            return new ImageImpl(imageData.TextureId, definition.relativeLocation(),
+                    imageData.Width, imageData.Height);
         }
     }
 

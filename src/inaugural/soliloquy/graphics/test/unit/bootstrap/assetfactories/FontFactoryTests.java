@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,35 +85,35 @@ class FontFactoryTests {
 
     @Test
     void testMake() {
-        FakeFontDefinition fontDefinition = new FakeFontDefinition(
+        FontDefinition fontDefinition = new FontDefinition(
                 ID,
                 RELATIVE_LOCATION,
                 MAX_LOSSLESS_FONT_SIZE,
-                new FakeFontStyleDefinition(
+                LEADING_ADJUSTMENT,
+                new FontStyleDefinition(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                 ),
-                new FakeFontStyleDefinition(
+                new FontStyleDefinition(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                 ),
-                new FakeFontStyleDefinition(
+                new FontStyleDefinition(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                 ),
-                new FakeFontStyleDefinition(
+                new FontStyleDefinition(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                ),
-                LEADING_ADJUSTMENT);
+                ));
 
         Font createdFont = _fontFactory.make(fontDefinition);
 
@@ -124,885 +125,885 @@ class FontFactoryTests {
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         null,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         "",
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         null,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         "",
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         0f,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
+                        1f,
+                        new FontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                        ),
+                        new FontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                        ),
+                        new FontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                        ),
+                        new FontStyleDefinition(
+                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                        ))));
+        assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
+                new FontDefinition(
+                        ID,
+                        RELATIVE_LOCATION,
+                        MAX_LOSSLESS_FONT_SIZE,
+                        LEADING_ADJUSTMENT,
                         null,
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 -0.0001f,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 null,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 null,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 -0.0001f
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 1f - LEADING_ADJUSTMENT
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
                         null,
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 -0.0001f,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 null,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 null,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 -0.0001f
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 1f - LEADING_ADJUSTMENT
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
                         null,
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 -0.0001f,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 null,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 null,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 -0.0001f
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 1f - LEADING_ADJUSTMENT
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        null,
-                        LEADING_ADJUSTMENT)));
+                        null)));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 -0.0001f,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 null,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 null,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 -0.0001f
-                        ),
-                        LEADING_ADJUSTMENT)));
+                        ))));
         assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
+                new FontDefinition(
                         ID,
                         RELATIVE_LOCATION,
                         MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
+                        LEADING_ADJUSTMENT,
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                         ),
-                        new FakeFontStyleDefinition(
+                        new FontStyleDefinition(
                                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                 1f - LEADING_ADJUSTMENT
-                        ),
-                        LEADING_ADJUSTMENT)));
-        assertThrows(IllegalArgumentException.class, () -> _fontFactory.make(
-                new FakeFontDefinition(
-                        ID,
-                        RELATIVE_LOCATION,
-                        MAX_LOSSLESS_FONT_SIZE,
-                        new FakeFontStyleDefinition(
-                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                        ),
-                        new FakeFontStyleDefinition(
-                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                        ),
-                        new FakeFontStyleDefinition(
-                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                        ),
-                        new FakeFontStyleDefinition(
-                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                        ),
-                        1f)));
+                        ))));
     }
 
     @Test

@@ -18,7 +18,7 @@ class SpritePreloaderTaskTests {
     private final java.util.Map<String, Image> IMAGES = new HashMap<>();
     private final FakeSpriteFactory FACTORY = new FakeSpriteFactory();
     private final ArrayList<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS = new ArrayList<>();
-    private final FakeRegistry<Sprite> REGISTRY = new FakeRegistry<Sprite>();
+    private final FakeRegistry<Sprite> REGISTRY = new FakeRegistry<>();
 
     private SpritePreloaderTask _spritePreloaderTask;
 
@@ -34,7 +34,7 @@ class SpritePreloaderTaskTests {
 
         SpriteDefinitionDTO spriteDefinitionDTO1 = new SpriteDefinitionDTO("sprite1Id", relativeLocation1, 12, 34, 56, 78);
         SpriteDefinitionDTO spriteDefinitionDTO2 = new SpriteDefinitionDTO("sprite2Id", relativeLocation2, 21, 43, 65, 87);
-        SpriteDefinitionDTO spriteDefinitionDTO3 = new SpriteDefinitionDTO("sprite3Id", relativeLocation3, 11, 22, 33, 44);
+        SpriteDefinitionDTO spriteDefinitionDTO3 = new SpriteDefinitionDTO("sprite3Id", relativeLocation3, 0, 0, 33, 44);
 
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO1);
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO2);
@@ -141,15 +141,11 @@ class SpritePreloaderTaskTests {
         SPRITE_DEFINITION_DTOS.forEach(dto -> {
             SpriteDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
-            assertEquals(SpriteDefinition.class.getCanonicalName(),
-                    createdDefinition.getInterfaceName());
             assertSame(IMAGES.get(dto.imgLoc), createdDefinition.image());
             assertEquals(dto.leftX, createdDefinition.leftX());
             assertEquals(dto.topY, createdDefinition.topY());
             assertEquals(dto.rightX, createdDefinition.rightX());
             assertEquals(dto.bottomY, createdDefinition.bottomY());
-            assertEquals(SpriteDefinition.class.getCanonicalName(),
-                    createdDefinition.getInterfaceName());
 
             Sprite sprite = REGISTRY.get(createdDefinition.id());
             assertTrue(FACTORY.OUTPUTS.contains(sprite));

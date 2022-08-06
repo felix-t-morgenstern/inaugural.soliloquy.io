@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.bootstrap.tasks;
 
+import inaugural.soliloquy.graphics.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.ImageAsset;
@@ -43,7 +44,7 @@ public class ImageAssetSetPreloaderTask implements Runnable {
                         "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
                         imageAssetSetDefinitionDTO.id + ") is empty");
             }
-            for(ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSetAssetDTO :
+            for(ImageAssetSetAssetDefinitionDTO imageAssetSetAssetDTO :
                     imageAssetSetDefinitionDTO.assets) {
                 Check.ifNullOrEmpty(imageAssetSetAssetDTO.assetId,
                         "imageAssetSetAssetDTO.assetId within imageAssetSetDefinitionDTOs (" +
@@ -68,51 +69,19 @@ public class ImageAssetSetPreloaderTask implements Runnable {
     private ImageAssetSetDefinition makeDefinition(ImageAssetSetDefinitionDTO
                                                            imageAssetSetDefinitionDTO) {
         List<ImageAssetSetAssetDefinition> assetDefinitions = new ArrayList<>();
-        for(ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO assetDTO :
+        for(ImageAssetSetAssetDefinitionDTO assetDTO :
                 imageAssetSetDefinitionDTO.assets) {
-            assetDefinitions.add(new ImageAssetSetAssetDefinition() {
-                @Override
-                public String type() {
-                    return assetDTO.type;
-                }
-
-                @Override
-                public String direction() {
-                    return assetDTO.direction;
-                }
-
-                @Override
-                public ImageAsset.ImageAssetType assetType() {
-                    return ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType);
-                }
-
-                @Override
-                public String assetId() {
-                    return assetDTO.assetId;
-                }
-
-                @Override
-                public String getInterfaceName() {
-                    return ImageAssetSetAssetDefinition.class.getCanonicalName();
-                }
-            });
+            assetDefinitions.add(new ImageAssetSetAssetDefinition(
+                    assetDTO.type,
+                    assetDTO.direction,
+                    ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType),
+                    assetDTO.assetId
+            ));
         }
 
-        return new ImageAssetSetDefinition() {
-            @Override
-            public List<ImageAssetSetAssetDefinition> assetDefinitions() {
-                return assetDefinitions;
-            }
-
-            @Override
-            public String id() {
-                return imageAssetSetDefinitionDTO.id;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return ImageAssetSetDefinition.class.getCanonicalName();
-            }
-        };
+        return new ImageAssetSetDefinition(
+                imageAssetSetDefinitionDTO.id,
+                assetDefinitions
+        );
     }
 }

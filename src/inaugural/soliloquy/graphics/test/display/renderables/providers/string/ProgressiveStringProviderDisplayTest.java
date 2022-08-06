@@ -8,6 +8,8 @@ import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlineren
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -55,30 +57,29 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
             WindowResolutionManager windowResolutionManager,
             long startOffset,
             long duration) {
-        FakeFontStyleDefinition plain = new FakeFontStyleDefinition(
+        FontStyleDefinition plain = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_TRAJAN);
-        FakeFontStyleDefinition italic = new FakeFontStyleDefinition(
+        FontStyleDefinition italic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_TRAJAN);
-        FakeFontStyleDefinition bold = new FakeFontStyleDefinition(
+        FontStyleDefinition bold = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_TRAJAN);
-        FakeFontStyleDefinition boldItalic = new FakeFontStyleDefinition(
+        FontStyleDefinition boldItalic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_TRAJAN);
-        FontDefinition = new FakeFontDefinition("id", RELATIVE_LOCATION_TRAJAN,
-                MAX_LOSSLESS_FONT_SIZE_TRAJAN,
-                plain, italic, bold, boldItalic,
-                LEADING_ADJUSTMENT);
+        FontDefinition = new FontDefinition("id", RELATIVE_LOCATION_TRAJAN,
+                MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
+                plain, italic, bold, boldItalic);
 
         FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
 

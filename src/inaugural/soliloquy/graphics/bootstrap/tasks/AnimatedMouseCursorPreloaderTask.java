@@ -1,8 +1,10 @@
 package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorDefinitionDTO;
+import inaugural.soliloquy.graphics.api.dto.AnimatedMouseCursorFrameDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.Collection;
@@ -14,15 +16,16 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
     private final Collection<AnimatedMouseCursorDefinitionDTO> DEFINITION_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory FACTORY;
-    private final Consumer<ProviderAtTime<Long>> PROCESS_RESULT;
+    private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
-    public AnimatedMouseCursorPreloaderTask(Function<String, Long> getMouseCursorsByRelativeLocation,
+    public AnimatedMouseCursorPreloaderTask(Function<String, Long>
+                                                    getMouseCursorsByRelativeLocation,
                                             Collection<AnimatedMouseCursorDefinitionDTO>
                                              animatedMouseCursorDefinitionDTOs,
                                             AnimatedMouseCursorProviderFactory
                                                  animatedMouseCursorProviderFactory,
-                                            Consumer<ProviderAtTime<Long>> processResult) {
+                                            Consumer<AnimatedMouseCursorProvider> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
         // TODO: Deal with the awful clot of logic here by refactoring out validation
@@ -45,7 +48,7 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
             }
             int maxFrameMs = 0;
             boolean frameAt0Ms = false;
-            for (AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO frameDTO :
+            for (AnimatedMouseCursorFrameDefinitionDTO frameDTO :
                     animatedMouseCursorDefinitionDTO.Frames) {
                 Check.ifNullOrEmpty(frameDTO.Img,
                         "frame within animatedMouseCursorDefinitionDTOs (" +
@@ -93,16 +96,19 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
     public void run() {
         DEFINITION_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
             HashMap<Integer, Long> cursorsAtMs = new HashMap<>();
-            for(AnimatedMouseCursorDefinitionDTO.AnimatedMouseCursorFrameDTO frame :
+            for(AnimatedMouseCursorFrameDefinitionDTO frame :
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }
             PROCESS_RESULT.accept(FACTORY.make(
-                    animatedMouseCursorDefinitionDTO.Id, cursorsAtMs,
-                    animatedMouseCursorDefinitionDTO.Duration,
-                    animatedMouseCursorDefinitionDTO.Offset,
-                    animatedMouseCursorDefinitionDTO.Paused,
-                    animatedMouseCursorDefinitionDTO.Timestamp
+                    new AnimatedMouseCursorProviderDefinition(
+                            animatedMouseCursorDefinitionDTO.Id,
+                            cursorsAtMs,
+                            animatedMouseCursorDefinitionDTO.Duration,
+                            animatedMouseCursorDefinitionDTO.Offset,
+                            animatedMouseCursorDefinitionDTO.Paused,
+                            animatedMouseCursorDefinitionDTO.Timestamp
+                    )
             ));
         });
     }

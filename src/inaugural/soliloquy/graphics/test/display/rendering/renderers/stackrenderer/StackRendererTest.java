@@ -14,6 +14,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
@@ -133,9 +134,12 @@ public class StackRendererTest extends DisplayTest {
                 graphicsPreloader, new FakeMouseCursor());
 
         graphicsPreloader.LoadAction = () -> {
-            spriteAxe07.Image = new ImageFactoryImpl(0.5f).make(AXE_07_LOCATION, false);
-            spriteAxe09.Image = new ImageFactoryImpl(0.5f).make(AXE_09_LOCATION, false);
-            spriteSword06.Image = new ImageFactoryImpl(0.5f).make(SWORD_06_LOCATION, false);
+            spriteAxe07.Image = new ImageFactoryImpl(0.5f)
+                    .make(new ImageDefinition(AXE_07_LOCATION, false));
+            spriteAxe09.Image = new ImageFactoryImpl(0.5f)
+                    .make(new ImageDefinition(AXE_09_LOCATION, false));
+            spriteSword06.Image = new ImageFactoryImpl(0.5f)
+                    .make(new ImageDefinition(SWORD_06_LOCATION, false));
             frameTimer.ShouldExecuteNextFrame = true;
         };
 

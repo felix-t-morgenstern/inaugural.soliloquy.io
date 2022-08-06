@@ -1,11 +1,15 @@
 package inaugural.soliloquy.graphics.test.display.io;
 
-import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
+import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDefinitionDTO;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
+import java.util.ArrayList;
+
+import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
@@ -29,11 +33,22 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
 
     protected static void graphicsPreloaderLoadAction() {
         new MouseCursorImagePreloaderTask(
-                new MouseCursorImageDTO(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION, 0, 0),
-                relativeLocation -> mouseCursorImage ->
-                        _mouseCursorProviders.put(relativeLocation,
-                                new StaticProviderImpl<>(java.util.UUID.randomUUID(),
-                                        mouseCursorImage, null)))
+                new ArrayList<MouseCursorImageDefinitionDTO>() {{
+                    add(new MouseCursorImageDefinitionDTO(
+                            MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION,
+                            0, 0
+                    ));
+                }},
+                new MouseCursorImageFactoryImpl(),
+                output -> _mouseCursorProviders.put(
+                        output.relativeLocation(),
+                        new StaticProviderImpl<>(
+                                randomUUID(),
+                                output.id(),
+                                output.id(),
+                                null
+                        )
+                ))
                 .run();
     }
 

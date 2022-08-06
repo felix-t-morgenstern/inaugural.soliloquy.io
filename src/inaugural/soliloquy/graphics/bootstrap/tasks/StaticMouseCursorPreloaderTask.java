@@ -2,32 +2,31 @@ package inaugural.soliloquy.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.StaticMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.graphics.renderables.providers.StaticMouseCursorProvider;
+import soliloquy.specs.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class StaticMouseCursorPreloaderTask implements Runnable {
     private final Function<String, Long> GET_MOUSE_IMAGE;
-    private final StaticProviderFactory STATIC_PROVIDER_FACTORY;
+    private final StaticMouseCursorProviderFactory STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
     private final Collection<StaticMouseCursorDefinitionDTO> STATIC_MOUSE_CURSOR_DTOS;
-    private final Function<String, Consumer<StaticProvider<Long>>> PROCESS_RESULT;
-
-    private static final UUID PLACEHOLDER_UUID = new UUID(0, 0);
+    private final Consumer<StaticMouseCursorProvider> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions*/
     public StaticMouseCursorPreloaderTask(Function<String, Long> getMouseCursorByRelativeLocation,
                                           Collection<StaticMouseCursorDefinitionDTO>
-                                         staticMouseCursorDefinitionDTOs,
-                                          StaticProviderFactory staticProviderFactory,
-                                          Function<String, Consumer<StaticProvider<Long>>>
-                                           processResult) {
+                                                  staticMouseCursorDefinitionDTOs,
+                                          StaticMouseCursorProviderFactory
+                                                  staticMouseCursorProviderFactory,
+                                          Consumer<StaticMouseCursorProvider> processResult) {
         GET_MOUSE_IMAGE = Check.ifNull(getMouseCursorByRelativeLocation,
                 "getMouseCursorByRelativeLocation");
-        STATIC_PROVIDER_FACTORY = Check.ifNull(staticProviderFactory, "staticProviderFactory");
+        STATIC_MOUSE_CURSOR_PROVIDER_FACTORY =
+                Check.ifNull(staticMouseCursorProviderFactory, "staticMouseCursorProviderFactory");
         Check.ifNull(staticMouseCursorDefinitionDTOs, "staticMouseCursorDefinitionDTOs");
         if (staticMouseCursorDefinitionDTOs.isEmpty()) {
             throw new IllegalArgumentException("StaticMouseCursorPreloaderTask: " +
@@ -49,12 +48,12 @@ public class StaticMouseCursorPreloaderTask implements Runnable {
 
     @Override
     public void run() {
-        STATIC_MOUSE_CURSOR_DTOS.forEach(staticMouseCursorDefinitionDTO -> {
-            long mouseCursor =
-                    GET_MOUSE_IMAGE.apply(staticMouseCursorDefinitionDTO.ImageRelativeLocation);
-            PROCESS_RESULT.apply(staticMouseCursorDefinitionDTO.Id)
-                    .accept(STATIC_PROVIDER_FACTORY.make(PLACEHOLDER_UUID, mouseCursor,
-                            mouseCursor, null));
-        });
+        STATIC_MOUSE_CURSOR_DTOS.forEach(staticMouseCursorDefinitionDTO -> PROCESS_RESULT.accept(
+                STATIC_MOUSE_CURSOR_PROVIDER_FACTORY.make(
+                        new StaticMouseCursorProviderDefinition(
+                                staticMouseCursorDefinitionDTO.Id,
+                                GET_MOUSE_IMAGE.apply(
+                                        staticMouseCursorDefinitionDTO.ImageRelativeLocation)
+                        ))));
     }
 }

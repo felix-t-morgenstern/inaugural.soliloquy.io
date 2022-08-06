@@ -4,12 +4,17 @@ import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
 
 public class FakeFont implements Font {
+    public String Id;
     public FakeFontStyleInfo Plain;
     public FakeFontStyleInfo Italic;
     public FakeFontStyleInfo Bold;
     public FakeFontStyleInfo BoldItalic;
 
     public FakeFont() {
+    }
+
+    public FakeFont(String id) {
+        Id = id;
     }
 
     public FakeFont(FakeFontStyleInfo plain, FakeFontStyleInfo italic, FakeFontStyleInfo bold,
@@ -22,7 +27,7 @@ public class FakeFont implements Font {
 
     @Override
     public String id() throws IllegalStateException {
-        return null;
+        return Id;
     }
 
     @Override

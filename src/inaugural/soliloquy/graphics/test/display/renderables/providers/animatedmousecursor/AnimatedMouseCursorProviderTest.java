@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.animatedmousecursor;
 
-import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDTO;
+import inaugural.soliloquy.graphics.api.dto.MouseCursorImageDefinitionDTO;
+import inaugural.soliloquy.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.MouseCursorImplTest;
@@ -28,6 +29,8 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
     protected static AnimatedMouseCursorProvider _animatedMouseCursorProvider;
 
     public static void graphicsPreloaderLoadAction() {
+        ArrayList<MouseCursorImageDefinitionDTO> mouseCursorImageDefinitionDTOs =
+                new ArrayList<>();
         ArrayList<Long> mouseCursorImages = new ArrayList<>();
         new ArrayList<String>() {{
             add(MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION);
@@ -36,9 +39,14 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
             add(MOUSE_CURSOR_IMAGE_4_RELATIVE_LOCATION);
             add(MOUSE_CURSOR_IMAGE_5_RELATIVE_LOCATION);
             add(MOUSE_CURSOR_IMAGE_6_RELATIVE_LOCATION);
-        }}.forEach(imgLoc -> new MouseCursorImagePreloaderTask(
-                new MouseCursorImageDTO(imgLoc, 0, 0), relativeLocation -> mouseCursorImages::add)
-                .run());
+        }}.forEach(imgLoc -> mouseCursorImageDefinitionDTOs.add(new MouseCursorImageDefinitionDTO(
+                imgLoc, 0, 0
+        )));
+        new MouseCursorImagePreloaderTask(
+                mouseCursorImageDefinitionDTOs,
+                new MouseCursorImageFactoryImpl(),
+                output -> mouseCursorImages.add(output.id()))
+                .run();
         HashMap<Integer, Long> mouseCursorsAtMs = new HashMap<Integer, Long>() {{
             put(0, mouseCursorImages.get(0));
             put(167, mouseCursorImages.get(1));

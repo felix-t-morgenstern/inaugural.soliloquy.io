@@ -16,6 +16,7 @@ import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -53,7 +54,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
     protected static GlobalLoopingAnimationRenderable GlobalLoopingAnimationRenderable;
     protected static Renderer<GlobalLoopingAnimationRenderable> GlobalLoopingAnimationRenderer;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes, unused */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             ColorShiftStackAggregator colorShiftStackAggregator) {
@@ -73,15 +74,15 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
     protected static void graphicsPreloaderLoadAction() {
         Image renderableImage = new ImageFactoryImpl(0.5f)
-                .make(TORCH_RELATIVE_LOCATION, false);
+                .make(new ImageDefinition(TORCH_RELATIVE_LOCATION, false));
         for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
             FRAMES.put(FRAME_DURATION * i, new FakeAnimationFrameSnippet(renderableImage,
                     FRAME_WIDTH * i, 0, FRAME_WIDTH * (i + 1), FRAME_HEIGHT, 0f, 0f));
         }
         long globalLoopingAnimationStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-        FakeAnimationDefinition animationDefinition = new FakeAnimationDefinition(MS_DURATION,
-                "torch", FRAMES);
+        AnimationDefinition animationDefinition =
+                new AnimationDefinition("torch", MS_DURATION, FRAMES);
 
         Animation animation = ANIMATION_FACTORY.make(animationDefinition);
 

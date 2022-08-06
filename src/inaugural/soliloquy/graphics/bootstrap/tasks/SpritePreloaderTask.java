@@ -35,11 +35,11 @@ public class SpritePreloaderTask implements Runnable {
                     "spriteDefinitionDTO.id within spriteDefinitionDTOs");
             Check.ifNullOrEmpty(spriteDefinitionDTO.imgLoc,
                     "spriteDefinitionDTO.imgLoc within spriteDefinitionDTOs (" +
-                    spriteDefinitionDTO.id + ")");
-            Check.throwOnLteZero(spriteDefinitionDTO.leftX,
+                            spriteDefinitionDTO.id + ")");
+            Check.ifNonNegative(spriteDefinitionDTO.leftX,
                     "spriteDefinitionDTO.leftX within spriteDefinitionDTOs (" +
                             spriteDefinitionDTO.id + ")");
-            Check.throwOnLteZero(spriteDefinitionDTO.topY,
+            Check.ifNonNegative(spriteDefinitionDTO.topY,
                     "spriteDefinitionDTO.topY within spriteDefinitionDTOs (" +
                             spriteDefinitionDTO.id + ")");
             Check.throwOnSecondLte(spriteDefinitionDTO.leftX, spriteDefinitionDTO.rightX,
@@ -57,42 +57,14 @@ public class SpritePreloaderTask implements Runnable {
 
     public void run() {
         SPRITE_DEFINITION_DTOS.forEach(dto -> PROCESS_RESULT.accept(FACTORY.make(
-                new SpriteDefinition() {
-                    @Override
-                    public Image image() {
-                        return GET_IMAGE.apply(dto.imgLoc);
-                    }
-
-                    @Override
-                    public int leftX() {
-                        return dto.leftX;
-                    }
-
-                    @Override
-                    public int topY() {
-                        return dto.topY;
-                    }
-
-                    @Override
-                    public int rightX() {
-                        return dto.rightX;
-                    }
-
-                    @Override
-                    public int bottomY() {
-                        return dto.bottomY;
-                    }
-
-                    @Override
-                    public String id() {
-                        return dto.id;
-                    }
-
-                    @Override
-                    public String getInterfaceName() {
-                        return SpriteDefinition.class.getCanonicalName();
-                    }
-                })
+                new SpriteDefinition(
+                        dto.id,
+                        GET_IMAGE.apply(dto.imgLoc),
+                        dto.leftX,
+                        dto.topY,
+                        dto.rightX,
+                        dto.bottomY
+                ))
         ));
     }
 }

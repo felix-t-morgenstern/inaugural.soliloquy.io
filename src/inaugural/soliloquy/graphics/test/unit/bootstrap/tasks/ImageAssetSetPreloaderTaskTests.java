@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
+import inaugural.soliloquy.graphics.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.ImageAssetSetPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.*;
@@ -19,7 +19,7 @@ class ImageAssetSetPreloaderTaskTests {
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS =
             new ArrayList<>();
     private final FakeRegistry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY = new FakeRegistry<>();
-    private final Map<String, Map<String, ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>>
+    private final Map<String, Map<String, ImageAssetSetAssetDefinitionDTO>>
             ASSETS = new HashMap<>();
 
     private ImageAssetSetPreloaderTask _imageAssetSetPreloaderTask;
@@ -36,15 +36,15 @@ class ImageAssetSetPreloaderTaskTests {
         String assetId3 = "assetId3";
         String assetId4 = "assetId4";
 
-        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet1Asset1DTO =
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(type1, null, 1, assetId1);
-        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet1Asset2DTO =
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(null, direction1, 2,
+        ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset1DTO =
+                new ImageAssetSetAssetDefinitionDTO(type1, null, 1, assetId1);
+        ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset2DTO =
+                new ImageAssetSetAssetDefinitionDTO(null, direction1, 2,
                         assetId2);
-        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet2Asset1DTO =
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(type2, null, 2, assetId3);
-        ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO imageAssetSet2Asset2DTO =
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(null, direction2, 1,
+        ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset1DTO =
+                new ImageAssetSetAssetDefinitionDTO(type2, null, 2, assetId3);
+        ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset2DTO =
+                new ImageAssetSetAssetDefinitionDTO(null, direction2, 1,
                         assetId4);
 
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet1Asset1DTO);
@@ -54,13 +54,13 @@ class ImageAssetSetPreloaderTaskTests {
 
         ImageAssetSetDefinitionDTO imageAssetSet1DTO = new ImageAssetSetDefinitionDTO(
                 "imageAssetSet1",
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
+                new ImageAssetSetAssetDefinitionDTO[]{
                         imageAssetSet1Asset1DTO, imageAssetSet1Asset2DTO
                 });
 
         ImageAssetSetDefinitionDTO imageAssetSet2DTO = new ImageAssetSetDefinitionDTO(
                 "imageAssetSet2",
-                new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
+                new ImageAssetSetAssetDefinitionDTO[]{
                         imageAssetSet2Asset1DTO, imageAssetSet2Asset2DTO
                 });
 
@@ -93,8 +93,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     null,
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 1, "assetId")
                                     }));
                         }},
@@ -105,8 +105,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 1, "assetId")
                                     }));
                         }},
@@ -126,7 +126,7 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
+                                    new ImageAssetSetAssetDefinitionDTO[]{
                                     }));
                         }},
                         FACTORY,
@@ -136,8 +136,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 0, "assetId")
                                     }));
                         }},
@@ -148,8 +148,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 4, "assetId")
                                     }));
                         }},
@@ -160,8 +160,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 1, null)
                                     }));
                         }},
@@ -172,8 +172,8 @@ class ImageAssetSetPreloaderTaskTests {
                         new ArrayList<ImageAssetSetDefinitionDTO>() {{
                             add(new ImageAssetSetDefinitionDTO(
                                     "imageAssetSet1",
-                                    new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO[]{
-                                            new ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO(
+                                    new ImageAssetSetAssetDefinitionDTO[]{
+                                            new ImageAssetSetAssetDefinitionDTO(
                                                     "type", "direction", 1, "")
                                     }));
                         }},
@@ -192,13 +192,9 @@ class ImageAssetSetPreloaderTaskTests {
         IMAGE_ASSET_SET_DEFINITION_DTOS.forEach(dto -> {
             ImageAssetSetDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
-            assertEquals(ImageAssetSetDefinition.class.getCanonicalName(),
-                    createdDefinition.getInterfaceName());
             assertEquals(dto.assets.length, createdDefinition.assetDefinitions().size());
             createdDefinition.assetDefinitions().forEach(assetDefinition -> {
-                assertEquals(ImageAssetSetAssetDefinition.class.getCanonicalName(),
-                        assetDefinition.getInterfaceName());
-                ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO assetDTO =
+                ImageAssetSetAssetDefinitionDTO assetDTO =
                         ASSETS.get(assetDefinition.type()).get(assetDefinition.direction());
                 assertEquals(ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType),
                         assetDefinition.assetType());
@@ -211,14 +207,14 @@ class ImageAssetSetPreloaderTaskTests {
         });
     }
 
-    private void addImageAssetSetAssetDTOToMap(Map<String,Map<String,
-            ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO>> map,
-                                               ImageAssetSetDefinitionDTO.ImageAssetSetAssetDTO
-                                                       imageAssetSetAssetDTO) {
-        if (!map.containsKey(imageAssetSetAssetDTO.type)) {
-            map.put(imageAssetSetAssetDTO.type, new HashMap<>());
+    private void addImageAssetSetAssetDTOToMap(Map<String,Map<String, 
+            ImageAssetSetAssetDefinitionDTO>> map, 
+                                               ImageAssetSetAssetDefinitionDTO 
+                                                       imageAssetSetAssetDefinitionDTO) {
+        if (!map.containsKey(imageAssetSetAssetDefinitionDTO.type)) {
+            map.put(imageAssetSetAssetDefinitionDTO.type, new HashMap<>());
         }
-        map.get(imageAssetSetAssetDTO.type)
-                .put(imageAssetSetAssetDTO.direction, imageAssetSetAssetDTO);
+        map.get(imageAssetSetAssetDefinitionDTO.type)
+                .put(imageAssetSetAssetDefinitionDTO.direction, imageAssetSetAssetDefinitionDTO);
     }
 }

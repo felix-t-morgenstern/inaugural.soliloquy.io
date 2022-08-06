@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -50,7 +51,8 @@ public class ImageFactoryImplTests {
 
     @Test
     void testLoadNonCapturingImage() {
-        Image image = _imageFactory.make(SIMPLE_GRADIENT_RELATIVE_LOCATION, false);
+        Image image = _imageFactory.make(
+                new ImageDefinition(SIMPLE_GRADIENT_RELATIVE_LOCATION, false));
 
         assertNotNull(image);
         assertTrue(image.textureId() > 0);
@@ -66,7 +68,8 @@ public class ImageFactoryImplTests {
 
     @Test
     void testLoadCapturingImage() {
-        Image image = _imageFactory.make(SIMPLE_GRADIENT_RELATIVE_LOCATION, true);
+        Image image = _imageFactory.make(
+                new ImageDefinition(SIMPLE_GRADIENT_RELATIVE_LOCATION, true));
 
         assertNotNull(image);
         assertTrue(image.textureId() > 0);

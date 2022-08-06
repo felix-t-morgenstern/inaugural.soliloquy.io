@@ -14,6 +14,7 @@ import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -33,7 +34,6 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected final static int FRAME_HEIGHT = 96;
     protected final static int FRAME_DURATION = MS_PER_SECOND / 16;
     protected final static float ANIMATION_HEIGHT = 0.5f;
-    @SuppressWarnings("PointlessArithmeticExpression")
     protected final static float ANIMATION_WIDTH =
             (((float)FRAME_WIDTH / (float)FRAME_HEIGHT) * ANIMATION_HEIGHT)
                     / RESOLUTION.widthToHeightRatio();
@@ -45,7 +45,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected final static AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY =
             new AnimationFactory();
 
-    protected static FakeAnimationDefinition AnimationDefinition;
+    protected static AnimationDefinition AnimationDefinition;
     protected static FiniteAnimationRenderable FiniteAnimationRenderable;
     protected static Renderer<FiniteAnimationRenderable> FiniteAnimationRenderer;
     protected static int TestDurationMs;
@@ -56,8 +56,8 @@ class FiniteAnimationRendererTest extends DisplayTest {
             ColorShiftStackAggregator colorShiftStackAggregator) {
         TestDurationMs = FRAME_DURATION * NUMBER_OF_FRAMES + (MS_PADDING * 2);
 
-        AnimationDefinition = new FakeAnimationDefinition(FRAME_DURATION * NUMBER_OF_FRAMES,
-                "explosion", FRAMES);
+        AnimationDefinition = new AnimationDefinition("explosion",
+                FRAME_DURATION * NUMBER_OF_FRAMES, FRAMES);
 
         FiniteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
                 FLOAT_BOX_FACTORY,
@@ -74,7 +74,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected static void graphicsPreloaderLoadAction() {
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
         Image renderableImage = new ImageFactoryImpl(0.5f)
-                .make(EXPLOSION_RELATIVE_LOCATION, false);
+                .make(new ImageDefinition(EXPLOSION_RELATIVE_LOCATION, false));
         for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
             FRAMES.put(FRAME_DURATION * i, new FakeAnimationFrameSnippet(renderableImage,
                     FRAME_WIDTH * i, 0, FRAME_WIDTH * (i + 1), FRAME_HEIGHT, 0f, 0f));

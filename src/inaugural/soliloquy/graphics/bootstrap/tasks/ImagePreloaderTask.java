@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.api.dto.ImageDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -26,6 +27,9 @@ public class ImagePreloaderTask implements Runnable {
     public void run() {
         IMAGE_DEFINITION_DTOS.forEach(dto ->
                 ADD_LOADED_IMAGE.accept(
-                        FACTORY.make(dto.RelativeLocation, dto.SupportsMouseEvents)));
+                        FACTORY.make(new ImageDefinition(
+                                dto.RelativeLocation,
+                                dto.SupportsMouseEvents
+                        ))));
     }
 }
