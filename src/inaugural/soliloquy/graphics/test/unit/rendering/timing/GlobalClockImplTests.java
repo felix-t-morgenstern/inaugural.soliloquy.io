@@ -27,7 +27,6 @@ class GlobalClockImplTests {
         assertEquals(GlobalClock.class.getCanonicalName(), _globalClock.getInterfaceName());
     }
 
-    // TODO: This test is breaking!
     // NB: Indeterminate tests are generally a testing antipattern, but it is unavoidable in this
     //     instance, so the test is run enough times to ensure that it is highly reliable and
     //     fairly accurate.
