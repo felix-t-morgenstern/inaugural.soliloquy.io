@@ -103,10 +103,8 @@ class ProgressiveStringProviderTests {
                 _progressiveStringProvider.provide(START_TIMESTAMP - marginOfError).length());
     }
 
-    // TODO: Test is indeterminate!
     @Test
     void testProvideAfterEndOfRange() {
-        fail("This test is indeterminate; fix this asap!");
         assertEquals(STRING_LENGTH,
                 _progressiveStringProvider.provide(Long.MAX_VALUE / 2).length());
     }
