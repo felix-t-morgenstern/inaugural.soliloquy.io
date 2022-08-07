@@ -3,39 +3,39 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 
 public class FakeNetColorShifts implements NetColorShifts {
-    public float NetBrightnessShift;
-    public float NetRedShift;
-    public float NetGreenShift;
-    public float NetBlueShift;
-    public float NetColorRotationShift;
+    public float BrightnessShift;
+    public float RedIntensityShift;
+    public float GreenIntensityShift;
+    public float BlueIntensityShift;
+    public float ColorRotationShift;
 
     public FakeNetColorShifts() {
 
     }
 
     @Override
-    public float netBrightnessShift() {
-        return NetBrightnessShift;
+    public float brightnessShift() {
+        return BrightnessShift;
     }
 
     @Override
-    public float netRedShift() {
-        return NetRedShift;
+    public float redIntensityShift() {
+        return RedIntensityShift;
     }
 
     @Override
-    public float netGreenShift() {
-        return NetGreenShift;
+    public float greenIntensityShift() {
+        return GreenIntensityShift;
     }
 
     @Override
-    public float netBlueShift() {
-        return NetBlueShift;
+    public float blueIntensityShift() {
+        return BlueIntensityShift;
     }
 
     @Override
-    public float netColorRotationShift() {
-        return NetColorRotationShift;
+    public float colorRotationShift() {
+        return ColorRotationShift;
     }
 
     @Override

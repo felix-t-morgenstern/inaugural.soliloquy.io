@@ -72,7 +72,8 @@ public class FiniteAnimationRenderer
                 renderingArea,
                 snippet,
                 INTACT_COLOR,
-                netColorShifts.netColorRotationShift());
+                netColorShifts
+        );
     }
 
     private static final FiniteAnimationRenderable ARCHETYPE = new FiniteAnimationRenderable() {

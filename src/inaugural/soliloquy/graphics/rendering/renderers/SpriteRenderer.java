@@ -115,10 +115,12 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         NetColorShifts netColorShifts = netColorShifts(spriteRenderable.colorShiftProviders(),
                 COLOR_SHIFT_STACK_AGGREGATOR, timestamp);
 
-        super.render(renderingArea,
+        super.render(
+                renderingArea,
                 spriteRenderable.getSprite(),
                 INTACT_COLOR,
-                netColorShifts.netColorRotationShift());
+                netColorShifts
+        );
     }
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {

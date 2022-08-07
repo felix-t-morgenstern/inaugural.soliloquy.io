@@ -1,16 +1,16 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.colorshifting.ColorComponent;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorComponentShift;
+import soliloquy.specs.graphics.renderables.colorshifting.ColorComponentIntensityShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-public class FakeColorComponentShift implements ColorComponentShift {
+public class FakeColorComponentIntensityShift implements ColorComponentIntensityShift {
     public ColorComponent ColorComponent;
     public ProviderAtTime<Float> ShiftAmountProvider;
     public boolean OverridesPriorShiftsOfSameType;
 
-    public FakeColorComponentShift(ColorComponent colorComponent, Float value,
-                                   boolean overridesPriorShiftsOfSameType) {
+    public FakeColorComponentIntensityShift(ColorComponent colorComponent, Float value,
+                                            boolean overridesPriorShiftsOfSameType) {
         ColorComponent = colorComponent;
         ShiftAmountProvider = new FakeStaticProvider<>(value);
         OverridesPriorShiftsOfSameType = overridesPriorShiftsOfSameType;

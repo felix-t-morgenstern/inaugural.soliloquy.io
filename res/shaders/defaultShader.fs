@@ -3,6 +3,7 @@
 uniform sampler2D sampler;
 uniform vec4 overrideColor;
 uniform float colorRotationShift;
+uniform float brightnessShift;
 
 in vec4 color;
 in vec2 uvCoords;
@@ -87,7 +88,22 @@ void main()
                 b = x;
             }
 
-            toFragColor = vec4(r+m, g+m, b+m, fromTexture.w);
+            float red = r+m;
+            float green = g+m;
+            float blue = b+m;
+
+            if (brightnessShift > 0) {
+                red = red + (brightnessShift * (1.0 - red));
+                green = green + (brightnessShift * (1.0 - green));
+                blue = blue + (brightnessShift * (1.0 - blue));
+            }
+            else if (brightnessShift < 0) {
+                red = red - (brightnessShift * red);
+                green = green - (brightnessShift * green);
+                blue = blue - (brightnessShift * blue);
+            }
+
+            toFragColor = vec4(red, green, blue, fromTexture.w);
         }
         else {
             toFragColor = fromTexture;

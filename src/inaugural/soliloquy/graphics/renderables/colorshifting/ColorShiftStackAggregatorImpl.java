@@ -33,10 +33,12 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
                 }
                 netBrightnessSealed = netBrightnessSealed || overrides;
             }
-            if (colorShift instanceof ColorComponentShift) {
-                ColorComponentShift colorComponentShift = (ColorComponentShift)colorShift;
-                ColorComponent colorComponent = colorComponentShift.colorComponent();
-                Check.ifNull(colorComponent, "ColorComponent provided by ColorComponentShift");
+            if (colorShift instanceof ColorComponentIntensityShift) {
+                ColorComponentIntensityShift ColorComponentIntensityShift =
+                        (ColorComponentIntensityShift)colorShift;
+                ColorComponent colorComponent = ColorComponentIntensityShift.colorComponent();
+                Check.ifNull(colorComponent,
+                        "ColorComponent provided by ColorComponentIntensityShift");
                 switch(colorComponent) {
                     case RED:
                         if (!netRedSealed) {
@@ -73,36 +75,36 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
 
         // NB: These variables exist to facilitate use of final or effectively final values for
         //     the NetColorShift values
-        float finalNetBrightnessShift = netBrightnessShift;
-        float finalNetRedShift = netRedShift;
-        float finalNetGreenShift = netGreenShift;
-        float finalNetBlueShift = netBlueShift;
-        float finalNetColorRotationShift = netColorRotationShift;
+        float finalBrightnessShift = netBrightnessShift;
+        float finalRedShift = netRedShift;
+        float finalGreenShift = netGreenShift;
+        float finalBlueShift = netBlueShift;
+        float finalColorRotationShift = netColorRotationShift;
 
         return new NetColorShifts() {
             @Override
-            public float netBrightnessShift() {
-                return finalNetBrightnessShift;
+            public float brightnessShift() {
+                return finalBrightnessShift;
             }
 
             @Override
-            public float netRedShift() {
-                return finalNetRedShift;
+            public float redIntensityShift() {
+                return finalRedShift;
             }
 
             @Override
-            public float netGreenShift() {
-                return finalNetGreenShift;
+            public float greenIntensityShift() {
+                return finalGreenShift;
             }
 
             @Override
-            public float netBlueShift() {
-                return finalNetBlueShift;
+            public float blueIntensityShift() {
+                return finalBlueShift;
             }
 
             @Override
-            public float netColorRotationShift() {
-                return finalNetColorRotationShift;
+            public float colorRotationShift() {
+                return finalColorRotationShift;
             }
 
             @Override

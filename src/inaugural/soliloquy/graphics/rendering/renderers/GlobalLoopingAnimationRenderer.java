@@ -62,7 +62,8 @@ public class GlobalLoopingAnimationRenderer
                 renderingArea,
                 globalLoopingAnimationRenderable.getGlobalLoopingAnimation().provide(timestamp),
                 INTACT_COLOR,
-                netColorShifts.netColorRotationShift());
+                netColorShifts
+        );
     }
 
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
