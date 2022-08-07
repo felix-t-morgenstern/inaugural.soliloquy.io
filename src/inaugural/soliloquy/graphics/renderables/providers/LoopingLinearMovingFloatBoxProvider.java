@@ -15,7 +15,6 @@ public class LoopingLinearMovingFloatBoxProvider
 
     private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public LoopingLinearMovingFloatBoxProvider(UUID uuid,
                                                Map<Integer, FloatBox> valuesAtTimes,
                                                int periodDuration, int periodModuloOffset,

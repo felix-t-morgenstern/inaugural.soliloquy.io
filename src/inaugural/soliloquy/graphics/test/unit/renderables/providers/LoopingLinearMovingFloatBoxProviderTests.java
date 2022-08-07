@@ -16,8 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingFloatBoxProviderTests {
-    private final HashMap<Integer, FloatBox> VALUES_AT_TIMES = new HashMap<>();
-
     private final int TIME_1 = 0;
     private final float BOX_1_LEFT_X = 0.1f;
     private final float BOX_1_TOP_Y = 0.11f;
@@ -46,16 +44,18 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final int MODULO_OFFSET = 123;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
 
+    private final HashMap<Integer, FloatBox> VALUES_AT_TIMES = new HashMap<Integer, FloatBox>() {{
+        put(TIME_1, BOX_1);
+        put(TIME_2, BOX_2);
+        put(TIME_3, BOX_3);
+    }};
+
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private LoopingLinearMovingProvider<FloatBox> _loopingLinearMovingFloatBoxProvider;
     
     @BeforeEach
     void setUp() {
-        VALUES_AT_TIMES.put(TIME_1, BOX_1);
-        VALUES_AT_TIMES.put(TIME_2, BOX_2);
-        VALUES_AT_TIMES.put(TIME_3, BOX_3);
-        
         _loopingLinearMovingFloatBoxProvider = new LoopingLinearMovingFloatBoxProvider(UUID,
                 VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY);
     }
@@ -153,13 +153,6 @@ class LoopingLinearMovingFloatBoxProviderTests {
     @Test
     void testPeriodDuration() {
         assertEquals(PERIOD_DURATION, _loopingLinearMovingFloatBoxProvider.periodDuration());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
-                        FloatBox.class.getCanonicalName() + ">",
-                _loopingLinearMovingFloatBoxProvider.getInterfaceName());
     }
 
     @Test
