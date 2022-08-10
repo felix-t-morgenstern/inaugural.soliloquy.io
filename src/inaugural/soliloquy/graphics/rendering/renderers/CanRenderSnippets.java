@@ -186,6 +186,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
         float colorRotationShift = 0f;
         float brightnessShift = 0f;
+        float redIntensityShift = 0f;
+        float greenIntensityShift = 0f;
+        float blueIntensityShift = 0f;
 
         if (netColorShifts != null) {
             colorRotationShift = netColorShifts.colorRotationShift();
@@ -196,6 +199,10 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
             }
 
             brightnessShift = netColorShifts.brightnessShift();
+
+            redIntensityShift = netColorShifts.redIntensityShift();
+            greenIntensityShift = netColorShifts.greenIntensityShift();
+            blueIntensityShift = netColorShifts.blueIntensityShift();
         }
 
         glBindTexture(GL_TEXTURE_2D, textureId);
@@ -227,6 +234,15 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         // colorRotationShift:
         //     The degree to which the colors are made brighter or darker, ranging from [-1,1]
         _shader.setUniform("brightnessShift", brightnessShift);
+        // redIntensityShift:
+        //     The degree to which the reds are made brighter or darker, ranging from [-1,1]
+        _shader.setUniform("redIntensityShift", redIntensityShift);
+        // greenIntensityShift:
+        //     The degree to which the greens are made brighter or darker, ranging from [-1,1]
+        _shader.setUniform("greenIntensityShift", greenIntensityShift);
+        // blueIntensityShift:
+        //     The degree to which the blues are made brighter or darker, ranging from [-1,1]
+        _shader.setUniform("blueIntensityShift", blueIntensityShift);
         // overrideColor:
         //     This color entirely overrides the color of the actual object being rendered. This is
         //     intended for use in borders, shadows, etc. If the x value is less than 0, the shader

@@ -4,17 +4,42 @@ uniform sampler2D sampler;
 uniform vec4 overrideColor;
 uniform float colorRotationShift;
 uniform float brightnessShift;
+uniform float redIntensityShift;
+uniform float greenIntensityShift;
+uniform float blueIntensityShift;
 
 in vec4 color;
 in vec2 uvCoords;
+
+float getNetColorIntensityShift(float brightnessShift, float colorIntensityShift)
+{
+    return min(1.0, max(-1.0, brightnessShift + colorIntensityShift));
+}
+
+float getColorIntensity(float base, float adjustment)
+{
+        if (adjustment == 0) {
+            return base;
+        }
+        if (adjustment > 0) {
+            return base + (adjustment * (1.0 - base));
+        }
+        else {
+            return base + (adjustment * base);
+        }
+}
 
 void main()
 {
     if (overrideColor.x < 0) {
         vec4 toFragColor;
         vec4 fromTexture = texture2D(sampler, uvCoords);
-        if (colorRotationShift == colorRotationShift) {
-        //if (colorRotationShift != 0.0 && fromTexture.w > 0.0) {
+
+        float red = fromTexture.x;
+        float green = fromTexture.y;
+        float blue = fromTexture.z;
+
+        if (colorRotationShift != 0.0) {
             float h;
             float s;
             float v;
@@ -88,27 +113,24 @@ void main()
                 b = x;
             }
 
-            float red = r+m;
-            float green = g+m;
-            float blue = b+m;
-
-            if (brightnessShift > 0) {
-                red = red + (brightnessShift * (1.0 - red));
-                green = green + (brightnessShift * (1.0 - green));
-                blue = blue + (brightnessShift * (1.0 - blue));
-            }
-            else if (brightnessShift < 0) {
-                red = red - (brightnessShift * red);
-                green = green - (brightnessShift * green);
-                blue = blue - (brightnessShift * blue);
-            }
-
-            toFragColor = vec4(red, green, blue, fromTexture.w);
+            red = r+m;
+            green = g+m;
+            blue = b+m;
         }
-        else {
-            toFragColor = fromTexture;
+        if (brightnessShift != 0.0 || redIntensityShift != 0.0 || greenIntensityShift != 0.0 || blueIntensityShift != 0.0) {
+            float netRedIntensityShift =
+                getNetColorIntensityShift(brightnessShift, redIntensityShift);
+            float netGreenIntensityShift =
+                getNetColorIntensityShift(brightnessShift, greenIntensityShift);
+            float netBlueIntensityShift =
+                getNetColorIntensityShift(brightnessShift, blueIntensityShift);
+
+            red = getColorIntensity(red, netRedIntensityShift);
+            green = getColorIntensity(green, netGreenIntensityShift);
+            blue = getColorIntensity(blue, netBlueIntensityShift);
         }
 
+        toFragColor = vec4(red, green, blue, fromTexture.w);
         gl_FragColor = color * toFragColor;
     }
     else {
