@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.string;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -81,7 +81,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
+        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         long now = new FakeGlobalClock().globalTimestamp();
         LineTextProvider = new ProgressiveStringProvider(java.util.UUID.randomUUID(), LINE_TEXT,

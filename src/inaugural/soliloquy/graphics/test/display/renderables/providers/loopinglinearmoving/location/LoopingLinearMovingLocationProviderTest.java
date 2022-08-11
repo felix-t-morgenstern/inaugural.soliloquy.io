@@ -1,17 +1,13 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.loopinglinearmoving.location;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingLocationProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
-import soliloquy.specs.common.factories.PairFactory;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.renderables.providers.ResettableProvider;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -23,7 +19,6 @@ import java.util.List;
 
 public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Wheee!";
-    private final static PairFactory PAIR_FACTORY = new FakePairFactory();
 
     protected static FakeTextLineRenderable TextLineRenderable;
 
@@ -61,10 +56,10 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
         int periodModuloOffset = periodDuration - (int)(startTimestamp % (periodDuration));
         HashMap<Integer, Pair<Float, Float>> valuesAtTimes =
                 new HashMap<Integer, Pair<Float, Float>>() {{
-                    put(0, new FakePair<>(0.125f, 0.125f));
-                    put(1000, new FakePair<>(0.75f, 0.125f));
-                    put(2000, new FakePair<>(0.75f, 0.75f));
-                    put(3000, new FakePair<>(0.125f, 0.75f));
+                    put(0, new Pair<>(0.125f, 0.125f));
+                    put(1000, new Pair<>(0.75f, 0.125f));
+                    put(2000, new Pair<>(0.75f, 0.75f));
+                    put(3000, new Pair<>(0.125f, 0.75f));
                 }};
 
         LoopingLinearMovingLocationProvider = new LoopingLinearMovingLocationProvider(
@@ -73,8 +68,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
                 periodDuration,
                 periodModuloOffset,
                 null,
-                null,
-                PAIR_FACTORY
+                null
         );
 
         TextLineRenderable = new FakeTextLineRenderable(null,

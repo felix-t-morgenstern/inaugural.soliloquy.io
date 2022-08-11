@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -80,9 +80,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        FakePair<Float,Float> renderingLocationLeft = new FakePair<>(0.05f, 0.225f);
-        FakePair<Float,Float> renderingLocationCenter = new FakePair<>(0.5f, 0.475f);
-        FakePair<Float,Float> renderingLocationRight = new FakePair<>(0.95f, 0.725f);
+        Pair<Float,Float> renderingLocationLeft = new Pair<>(0.05f, 0.225f);
+        Pair<Float,Float> renderingLocationCenter = new Pair<>(0.5f, 0.475f);
+        Pair<Float,Float> renderingLocationRight = new Pair<>(0.95f, 0.725f);
 
         TextLineRenderableLeft = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_LEFT,

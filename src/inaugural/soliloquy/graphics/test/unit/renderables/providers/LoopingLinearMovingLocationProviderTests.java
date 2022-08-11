@@ -1,7 +1,5 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingLocationProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,21 +16,20 @@ public class LoopingLinearMovingLocationProviderTests {
     private final int TIME_1 = 0;
     private final float LOCATION_1_X = 0.1f;
     private final float LOCATION_1_Y = 0.11f;
-    private final Pair<Float, Float> LOCATION_1 = new FakePair<>(LOCATION_1_X, LOCATION_1_Y);
+    private final Pair<Float, Float> LOCATION_1 = new Pair<>(LOCATION_1_X, LOCATION_1_Y);
 
     private final int TIME_2 = 100;
     private final float LOCATION_2_X = 0.2f;
     private final float LOCATION_2_Y = 0.22f;
-    private final Pair<Float, Float> LOCATION_2 = new FakePair<>(LOCATION_2_X, LOCATION_2_Y);
+    private final Pair<Float, Float> LOCATION_2 = new Pair<>(LOCATION_2_X, LOCATION_2_Y);
 
     private final int TIME_3 = 300;
     private final float LOCATION_3_X = 0.3f;
     private final float LOCATION_3_Y = 0.33f;
-    private final Pair<Float, Float> LOCATION_3 = new FakePair<>(LOCATION_3_X, LOCATION_3_Y);
+    private final Pair<Float, Float> LOCATION_3 = new Pair<>(LOCATION_3_X, LOCATION_3_Y);
 
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
-    private final FakePairFactory PAIR_FACTORY = new FakePairFactory();
 
     private final HashMap<Integer, Pair<Float, Float>> VALUES_AT_TIMES =
             new HashMap<Integer, Pair<Float, Float>>() {{
@@ -48,58 +45,54 @@ public class LoopingLinearMovingLocationProviderTests {
     @BeforeEach
     void setUp() {
         _loopingLinearMovingLocationProvider = new LoopingLinearMovingLocationProvider(UUID,
-                VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null, PAIR_FACTORY);
+                VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, null, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, new HashMap<>(), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
                         new HashMap<Integer, Pair<Float, Float>>() {{ put(null, LOCATION_1); }},
-                        PERIOD_DURATION, MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, new HashMap<Integer, Pair<Float, Float>>() {{
                     put(TIME_1, null);
                 }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
                         new HashMap<Integer, Pair<Float, Float>>() {{ put(TIME_2, LOCATION_2); }},
-                        PERIOD_DURATION, MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
                         new HashMap<Integer, Pair<Float, Float>>() {{
                             put(PERIOD_DURATION + 1, LOCATION_1);
                 }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, PAIR_FACTORY));
+                        MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        -1, null, null, PAIR_FACTORY));
+                        -1, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        PERIOD_DURATION, null, null, PAIR_FACTORY));
+                        PERIOD_DURATION, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 123123L, null, PAIR_FACTORY));
+                        MODULO_OFFSET, 123123L, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 1L, 0L, PAIR_FACTORY));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, null));
+                        MODULO_OFFSET, 1L, 0L));
     }
 
     @Test
@@ -114,7 +107,7 @@ public class LoopingLinearMovingLocationProviderTests {
 
         LoopingLinearMovingProvider<Pair<Float, Float>> loopingLinearMovingLocationProvider =
                 new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp, PAIR_FACTORY);
+                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
                 (long)loopingLinearMovingLocationProvider.pausedTimestamp());
@@ -168,7 +161,7 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
         float expectedY = (LOCATION_1_Y * value1Weight) + (LOCATION_2_Y * value2Weight);
 
-        FakePair<Float, Float> expected = new FakePair<>(expectedX, expectedY);
+        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
 
         Pair<Float, Float> provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
@@ -187,7 +180,7 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_3_X * value3Weight) + (LOCATION_1_X * value1Weight);
         float expectedY = (LOCATION_3_Y * value3Weight) + (LOCATION_1_Y * value1Weight);
 
-        FakePair<Float, Float> expected = new FakePair<>(expectedX, expectedY);
+        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
 
         Pair<Float, Float> provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
@@ -280,7 +273,7 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
         float expectedY = (LOCATION_1_Y * value1Weight) + (LOCATION_2_Y * value2Weight);
 
-        FakePair<Float, Float> expected = new FakePair<>(expectedX, expectedY);
+        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
 
         _loopingLinearMovingLocationProvider.reportPause(0L);
         _loopingLinearMovingLocationProvider.reportUnpause(pauseDuration);

@@ -1,7 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finitelinearmoving.location;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
-import inaugural.soliloquy.common.test.fakes.FakePairFactory;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingLocationProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
@@ -57,11 +55,11 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
         RenderingLocationProvider = new FiniteLinearMovingLocationProvider(
                 java.util.UUID.randomUUID(),
                 new HashMap<Long, Pair<Float, Float>>() {{
-                    put(now + 1000, new FakePair<>(-0.25f, -0.25f));
-                    put(now + 2000, new FakePair<>(0.75f, 0.5f));
-                    put(now + 3000, new FakePair<>(-0.25f, 1.25f));
+                    put(now + 1000, new Pair<>(-0.25f, -0.25f));
+                    put(now + 2000, new Pair<>(0.75f, 0.5f));
+                    put(now + 3000, new Pair<>(-0.25f, 1.25f));
                 }},
-                null, null, new FakePairFactory());
+                null, null);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,

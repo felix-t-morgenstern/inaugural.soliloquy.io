@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -61,7 +60,7 @@ public class FakeAnimation implements Animation {
         AnimationFrameSnippet snippetProvided = AnimationFrameSnippet != null ?
                 AnimationFrameSnippet :
                 new FakeAnimationFrameSnippet();
-        SnippetsProvided.add(new FakePair<>(i, snippetProvided));
+        SnippetsProvided.add(new Pair<>(i, snippetProvided));
         return snippetProvided;
     }
 

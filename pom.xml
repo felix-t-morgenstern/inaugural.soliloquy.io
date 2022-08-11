@@ -37,7 +37,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.316</version>
+            <version>0.0.319</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.common</artifactId>
-            <version>0.0.14</version>
+            <version>0.0.15</version>
         </dependency>
 
         <!-- r-tree library dependencies -->

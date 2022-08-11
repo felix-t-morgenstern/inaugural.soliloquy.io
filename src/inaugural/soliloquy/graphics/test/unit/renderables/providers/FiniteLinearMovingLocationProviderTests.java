@@ -3,8 +3,6 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingLocationProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import soliloquy.specs.common.factories.PairFactory;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
@@ -13,8 +11,6 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.RANDOM;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyFloat;
-import static org.mockito.Mockito.*;
 
 class FiniteLinearMovingLocationProviderTests {
     private final long TIMESTAMP_1 = 100L;
@@ -29,7 +25,12 @@ class FiniteLinearMovingLocationProviderTests {
     private final float Y_2 = RANDOM.nextFloat();
     private final float Y_3 = RANDOM.nextFloat();
 
-    private final HashMap<Long, Pair<Float, Float>> VALUES_AT_TIMES = new HashMap<>();
+    private final HashMap<Long, Pair<Float, Float>> VALUES_AT_TIMES =
+            new HashMap<Long, Pair<Float, Float>>() {{
+                put(TIMESTAMP_1, new Pair<>(X_1, Y_1));
+                put(TIMESTAMP_2, new Pair<>(X_2, Y_2));
+                put(TIMESTAMP_3, new Pair<>(X_3, Y_3));
+            }};
 
     private final Long PAUSED_TIMESTAMP = 175L;
     private final Long MOST_RECENT_TIMESTAMP = 50L;
@@ -40,65 +41,35 @@ class FiniteLinearMovingLocationProviderTests {
             TIMESTAMP_1 + ((long) (WEIGHT_TIMESTAMP_2 * (TIMESTAMP_2 - TIMESTAMP_1)));
     private final float EXPECTED_X = (WEIGHT_TIMESTAMP_1 * X_1) + (WEIGHT_TIMESTAMP_2 * X_2);
     private final float EXPECTED_Y = (WEIGHT_TIMESTAMP_1 * Y_1) + (WEIGHT_TIMESTAMP_2 * Y_2);
+    private final Pair<Float, Float> EXPECTED = new Pair<>(EXPECTED_X, EXPECTED_Y);
 
     private static final UUID UUID = java.util.UUID.randomUUID();
-    @Mock private PairFactory _mockPairFactory;
-    @Mock private Pair<Float, Float> _mockPairFactoryOutput;
-    @Mock private Pair<Float, Float> _mockPair1;
-    @Mock private Pair<Float, Float> _mockPair2;
-    @Mock private Pair<Float, Float> _mockPair3;
 
     private FiniteLinearMovingProvider<Pair<Float, Float>> _finiteLinearMovingLocationProvider;
 
     @BeforeEach
     void setUp() {
-        //noinspection unchecked
-        _mockPairFactoryOutput = mock(Pair.class);
-
-        //noinspection unchecked
-        _mockPair1 = mock(Pair.class);
-        when(_mockPair1.getItem1()).thenReturn(X_1);
-        when(_mockPair1.getItem2()).thenReturn(Y_1);
-        //noinspection unchecked
-        _mockPair2 = mock(Pair.class);
-        when(_mockPair2.getItem1()).thenReturn(X_2);
-        when(_mockPair2.getItem2()).thenReturn(Y_2);
-        //noinspection unchecked
-        _mockPair3 = mock(Pair.class);
-        when(_mockPair3.getItem1()).thenReturn(X_3);
-        when(_mockPair3.getItem2()).thenReturn(Y_3);
-
-        VALUES_AT_TIMES.put(TIMESTAMP_1, _mockPair1);
-        VALUES_AT_TIMES.put(TIMESTAMP_2, _mockPair2);
-        VALUES_AT_TIMES.put(TIMESTAMP_3, _mockPair3);
-
-        _mockPairFactory = mock(PairFactory.class);
-        when(_mockPairFactory.make(anyFloat(), anyFloat())).thenReturn(_mockPairFactoryOutput);
-
         _finiteLinearMovingLocationProvider = new FiniteLinearMovingLocationProvider(UUID,
-                VALUES_AT_TIMES, null, null, _mockPairFactory);
+                VALUES_AT_TIMES, null, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingLocationProvider(null, VALUES_AT_TIMES,
-                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingLocationProvider(UUID, null,
-                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingLocationProvider(UUID, new HashMap<>(),
-                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, _mockPairFactory));
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
-                        PAUSED_TIMESTAMP, null, _mockPairFactory));
+                        PAUSED_TIMESTAMP, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
-                        MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP, _mockPairFactory));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
-                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, null));
+                        MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -117,7 +88,7 @@ class FiniteLinearMovingLocationProviderTests {
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
                 new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, null,
-                        MOST_RECENT_TIMESTAMP, _mockPairFactory)
+                        MOST_RECENT_TIMESTAMP)
                         .mostRecentTimestamp());
     }
 
@@ -125,8 +96,7 @@ class FiniteLinearMovingLocationProviderTests {
     void testProvide() {
         Pair<Float, Float> providedValue = _finiteLinearMovingLocationProvider.provide(TIMESTAMP);
 
-        assertSame(_mockPairFactoryOutput, providedValue);
-        verify(_mockPairFactory).make(EXPECTED_X, EXPECTED_Y);
+        assertEquals(EXPECTED, providedValue);
     }
 
 
@@ -135,8 +105,7 @@ class FiniteLinearMovingLocationProviderTests {
         Pair<Float, Float> providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MIN_VALUE);
 
-        assertSame(_mockPair1, providedValue);
-        verify(_mockPairFactory, never()).make(anyFloat(), anyFloat());
+        assertEquals(VALUES_AT_TIMES.get(TIMESTAMP_1), providedValue);
     }
 
     @Test
@@ -144,8 +113,7 @@ class FiniteLinearMovingLocationProviderTests {
         Pair<Float, Float> providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MAX_VALUE);
 
-        assertSame(_mockPair3, providedValue);
-        verify(_mockPairFactory, never()).make(anyFloat(), anyFloat());
+        assertEquals(VALUES_AT_TIMES.get(TIMESTAMP_3), providedValue);
     }
 
     @Test
@@ -154,8 +122,7 @@ class FiniteLinearMovingLocationProviderTests {
         Pair<Float, Float> providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MAX_VALUE);
 
-        assertSame(_mockPairFactoryOutput, providedValue);
-        verify(_mockPairFactory).make(EXPECTED_X, EXPECTED_Y);
+        assertEquals(EXPECTED, providedValue);
     }
 
 
@@ -168,8 +135,7 @@ class FiniteLinearMovingLocationProviderTests {
         Pair<Float, Float> providedValue =
                 _finiteLinearMovingLocationProvider.provide(TIMESTAMP + pauseDuration);
 
-        assertSame(_mockPairFactoryOutput, providedValue);
-        verify(_mockPairFactory).make(EXPECTED_X, EXPECTED_Y);
+        assertEquals(EXPECTED, providedValue);
     }
 
     @Test
@@ -212,8 +178,7 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
-                Pair.class.getCanonicalName() + "<" + Float.class.getCanonicalName() + "," +
-                Float.class.getCanonicalName() + ">>",
+                Pair.class.getCanonicalName() + ">",
                 _finiteLinearMovingLocationProvider.getInterfaceName());
     }
 }

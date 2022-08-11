@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -74,7 +74,7 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        FakePair<Float,Float> renderingLocation = new FakePair<>(0.1f, 0.475f);
+        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,

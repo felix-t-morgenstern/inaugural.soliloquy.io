@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import inaugural.soliloquy.common.test.fakes.FakePair;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RenderableWithArea;
@@ -145,7 +144,7 @@ public class FakeRenderableWithArea implements RenderableWithArea {
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        CapturesMouseEventsAtPointInputLocations.add(new FakePair<>(x, y));
+        CapturesMouseEventsAtPointInputLocations.add(new Pair<>(x, y));
         CapturesMouseEventsAtPointInputTimestamps.add(timestamp);
         return CapturesMouseEventsAtPoint;
     }

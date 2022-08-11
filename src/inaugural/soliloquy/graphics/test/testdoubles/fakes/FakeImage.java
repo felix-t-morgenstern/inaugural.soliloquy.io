@@ -69,48 +69,7 @@ public class FakeImage implements Image {
     @Override
     public boolean capturesMouseEventsAtPixel(int x, int y)
             throws UnsupportedOperationException, IllegalArgumentException {
-        CapturesMouseEventsAtPixelInputs.add(new Pair<Integer, Integer>(){
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-
-            @Override
-            public Integer getFirstArchetype() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public Integer getSecondArchetype() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public Pair<Integer, Integer> makeClone() {
-                return null;
-            }
-
-            @Override
-            public Integer getItem1() {
-                return x;
-            }
-
-            @Override
-            public Integer getItem2() {
-                return y;
-            }
-
-            @Override
-            public void setItem1(Integer integer) throws IllegalArgumentException {
-
-            }
-
-            @Override
-            public void setItem2(Integer integer) throws IllegalArgumentException {
-
-            }
-        });
+        CapturesMouseEventsAtPixelInputs.add(new Pair<>(x, y));
         return true;
     }
 

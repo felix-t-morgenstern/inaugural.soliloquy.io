@@ -32,47 +32,7 @@ public class FakeImageAssetSet implements ImageAssetSet {
     @Override
     public ImageAsset getImageAssetForTypeAndDirection(String type, String direction)
             throws IllegalArgumentException {
-        GetImageAssetForTypeAndDirectionInputs.add(new Pair<String, String>() {
-            @Override
-            public String getItem1() {
-                return type;
-            }
-
-            @Override
-            public String getItem2() {
-                return direction;
-            }
-
-            @Override
-            public void setItem1(String s) throws IllegalArgumentException {
-
-            }
-
-            @Override
-            public void setItem2(String s) throws IllegalArgumentException {
-
-            }
-
-            @Override
-            public Pair<String, String> makeClone() {
-                return null;
-            }
-
-            @Override
-            public String getFirstArchetype() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public String getSecondArchetype() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-        });
+        GetImageAssetForTypeAndDirectionInputs.add(new Pair<>(type, direction));
         return ImageAsset;
     }
 
