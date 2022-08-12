@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
-import soliloquy.specs.graphics.renderables.RenderableWithArea;
+import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.*;
 class MouseEventHandlerImplTests {
     @Mock private MouseEventCapturingSpatialIndex _mockMouseEventCapturingSpatialIndex;
     @Mock private GlobalClock _mockGlobalClock;
-    @Mock private RenderableWithArea _mockRenderableWithArea;
-    @Mock private RenderableWithArea _mockRenderableWithArea2;
+    @Mock private ImageAssetRenderable _mockImageAssetRenderable;
+    @Mock private ImageAssetRenderable _mockImageAssetRenderable2;
 
     private ArrayList<Long> _mockGlobalClockOutputs;
 
@@ -31,13 +31,13 @@ class MouseEventHandlerImplTests {
 
     @BeforeEach
     void setUp() {
-        _mockRenderableWithArea = mock(RenderableWithArea.class);
-        _mockRenderableWithArea2 = mock(RenderableWithArea.class);
+        _mockImageAssetRenderable = mock(ImageAssetRenderable.class);
+        _mockImageAssetRenderable2 = mock(ImageAssetRenderable.class);
 
         _mockMouseEventCapturingSpatialIndex = mock(MouseEventCapturingSpatialIndex.class);
         when(_mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(anyFloat(), anyFloat(), anyLong()))
-                .thenReturn(_mockRenderableWithArea);
+                .thenReturn(_mockImageAssetRenderable);
 
         _mockGlobalClock = mock(GlobalClock.class);
         _mockGlobalClockOutputs = new ArrayList<>();
@@ -69,7 +69,7 @@ class MouseEventHandlerImplTests {
 
         verify(_mockMouseEventCapturingSpatialIndex)
                 .getCapturingRenderableAtPoint(x, y, _mockGlobalClockOutputs.get(0));
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseOver(_mockGlobalClockOutputs.get(0));
     }
 
@@ -85,9 +85,9 @@ class MouseEventHandlerImplTests {
                 .getCapturingRenderableAtPoint(x, y, _mockGlobalClockOutputs.get(0));
         verify(_mockMouseEventCapturingSpatialIndex)
                 .getCapturingRenderableAtPoint(x, y, _mockGlobalClockOutputs.get(1));
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseOver(_mockGlobalClockOutputs.get(0));
-        verify(_mockRenderableWithArea, never())
+        verify(_mockImageAssetRenderable, never())
                 .mouseOver(_mockGlobalClockOutputs.get(1));
     }
 
@@ -95,7 +95,7 @@ class MouseEventHandlerImplTests {
     void testMouseLeave() {
         when(_mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(anyFloat(), anyFloat(), anyLong()))
-                .thenReturn(_mockRenderableWithArea)
+                .thenReturn(_mockImageAssetRenderable)
                 .thenReturn(null);
 
         float x = randomFloatInRange(0, 1);
@@ -104,9 +104,9 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, null, null);
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, null, null);
 
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseOver(_mockGlobalClockOutputs.get(0));
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseLeave(_mockGlobalClockOutputs.get(1));
     }
 
@@ -114,8 +114,8 @@ class MouseEventHandlerImplTests {
     void testMouseLeaveAndMouseOverNewRenderable() {
         when(_mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(anyFloat(), anyFloat(), anyLong()))
-                .thenReturn(_mockRenderableWithArea)
-                .thenReturn(_mockRenderableWithArea2);
+                .thenReturn(_mockImageAssetRenderable)
+                .thenReturn(_mockImageAssetRenderable2);
 
         float x = randomFloatInRange(0, 1);
         float y = randomFloatInRange(0, 1);
@@ -123,11 +123,11 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, null, null);
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, null, null);
 
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseOver(_mockGlobalClockOutputs.get(0));
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .mouseLeave(_mockGlobalClockOutputs.get(1));
-        verify(_mockRenderableWithArea2)
+        verify(_mockImageAssetRenderable2)
                 .mouseOver(_mockGlobalClockOutputs.get(1));
     }
 
@@ -139,7 +139,7 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, GLFW_MOUSE_BUTTON_1,
                 MouseEventHandler.EventType.PRESS);
 
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .press(GLFW_MOUSE_BUTTON_1, _mockGlobalClockOutputs.get(0));
     }
 
@@ -147,7 +147,7 @@ class MouseEventHandlerImplTests {
     void testPressButtonAfterMouseLeaveToNoRenderable() {
         when(_mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(anyFloat(), anyFloat(), anyLong()))
-                .thenReturn(_mockRenderableWithArea)
+                .thenReturn(_mockImageAssetRenderable)
                 .thenReturn(null);
 
         float x = randomFloatInRange(0, 1);
@@ -157,7 +157,7 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, GLFW_MOUSE_BUTTON_1,
                 MouseEventHandler.EventType.PRESS);
 
-        verify(_mockRenderableWithArea, never())
+        verify(_mockImageAssetRenderable, never())
                 .press(anyInt(), anyLong());
     }
 
@@ -169,7 +169,7 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, GLFW_MOUSE_BUTTON_1,
                 MouseEventHandler.EventType.RELEASE);
 
-        verify(_mockRenderableWithArea)
+        verify(_mockImageAssetRenderable)
                 .release(GLFW_MOUSE_BUTTON_1, _mockGlobalClockOutputs.get(0));
     }
 
@@ -177,7 +177,7 @@ class MouseEventHandlerImplTests {
     void testReleaseButtonAfterMouseLeaveToNoRenderable() {
         when(_mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(anyFloat(), anyFloat(), anyLong()))
-                .thenReturn(_mockRenderableWithArea)
+                .thenReturn(_mockImageAssetRenderable)
                 .thenReturn(null);
 
         float x = randomFloatInRange(0, 1);
@@ -187,7 +187,7 @@ class MouseEventHandlerImplTests {
         _mouseEventHandler.actOnMouseLocationAndEvents(x, y, GLFW_MOUSE_BUTTON_1,
                 MouseEventHandler.EventType.RELEASE);
 
-        verify(_mockRenderableWithArea, never())
+        verify(_mockImageAssetRenderable, never())
                 .release(anyInt(), anyLong());
     }
 

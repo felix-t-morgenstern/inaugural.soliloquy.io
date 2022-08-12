@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
-public class ImageAssetSetRenderableImpl extends AbstractRenderableWithArea
+public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
     private ImageAssetSet _imageAssetSet;
     private String _type;

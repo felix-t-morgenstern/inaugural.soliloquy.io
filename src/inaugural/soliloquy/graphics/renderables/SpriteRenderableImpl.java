@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class SpriteRenderableImpl extends AbstractRenderableWithArea implements SpriteRenderable {
+public class SpriteRenderableImpl extends AbstractImageAssetRenderable implements SpriteRenderable {
     private Sprite _sprite;
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,

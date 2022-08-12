@@ -44,7 +44,7 @@ public class GlobalLoopingAnimationRenderer
                         "globalLoopingAnimationRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);
 
-        validateRenderableWithAreaMembers(renderingArea,
+        validateRenderableWithDimensionsMembers(renderingArea,
                 globalLoopingAnimationRenderable.colorShiftProviders(),
                 globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
 

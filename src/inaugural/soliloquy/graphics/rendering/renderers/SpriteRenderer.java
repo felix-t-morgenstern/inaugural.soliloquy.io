@@ -54,7 +54,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 "spriteRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
-        validateRenderableWithAreaMembers(renderingArea, spriteRenderable.colorShiftProviders(),
+        validateRenderableWithDimensionsMembers(renderingArea, spriteRenderable.colorShiftProviders(),
                 spriteRenderable.uuid(), "spriteRenderable");
 
         if (borderThickness != null) {

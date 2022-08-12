@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 
 // NB: This class contains a lot of redundant code with AbstractFinitePausableAtTime, since Java
 //     does not support multiple inheritance, and it is less hasslesome to reproduce the logic of
-//     that class, rather than the logic of AbstractRenderableWithArea.
-public class FiniteAnimationRenderableImpl extends AbstractRenderableWithArea
+//     that class, rather than the logic of AbstractImageAssetRenderable.
+public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
         implements FiniteAnimationRenderable {
     private final Animation ANIMATION;
 

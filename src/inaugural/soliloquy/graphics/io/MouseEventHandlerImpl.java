@@ -3,14 +3,14 @@ package inaugural.soliloquy.graphics.io;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
-import soliloquy.specs.graphics.renderables.RenderableWithArea;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 public class MouseEventHandlerImpl implements MouseEventHandler {
     private final MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
     private final GlobalClock GLOBAL_CLOCK;
 
-    private RenderableWithArea _registeredMouseOverRenderable;
+    private RenderableWithMouseEvents _registeredMouseOverRenderable;
 
     public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex,
                                  GlobalClock globalClock)
@@ -43,15 +43,15 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
 
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
 
-        RenderableWithArea renderableWithArea = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX
+        RenderableWithMouseEvents renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX
                 .getCapturingRenderableAtPoint(x, y, timestamp);
 
-        if (renderableWithArea != _registeredMouseOverRenderable) {
+        if (renderable != _registeredMouseOverRenderable) {
             if (_registeredMouseOverRenderable != null) {
                 _registeredMouseOverRenderable.mouseLeave(timestamp);
             }
 
-            _registeredMouseOverRenderable = renderableWithArea;
+            _registeredMouseOverRenderable = renderable;
 
             if (_registeredMouseOverRenderable != null) {
                 _registeredMouseOverRenderable.mouseOver(timestamp);
@@ -68,6 +68,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
         }
     }
 
+    // TODO: Test and implement this
     @Override
     public String getInterfaceName() {
         return null;

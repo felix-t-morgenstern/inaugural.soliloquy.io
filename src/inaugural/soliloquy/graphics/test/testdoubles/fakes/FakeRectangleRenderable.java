@@ -2,12 +2,10 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
-import java.util.List;
 import java.util.UUID;
 
 public class FakeRectangleRenderable implements RectangleRenderable {
@@ -18,8 +16,6 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Integer> BackgroundTextureIdProvider;
     public float BackgroundTextureTileWidth;
     public float BackgroundTextureTileHeight;
-    public ProviderAtTime<Float> BorderThicknessProvider;
-    public ProviderAtTime<Color> BorderColorProvider;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public UUID Uuid;
 
@@ -30,8 +26,6 @@ public class FakeRectangleRenderable implements RectangleRenderable {
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    float backgroundTextureTileWidth,
                                    float backgroundTextureTileHeight,
-                                   ProviderAtTime<Float> borderThicknessProvider,
-                                   ProviderAtTime<Color> borderColorProvider,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    UUID uuid) {
         TopLeftColorProvider = topLeftColorProvider;
@@ -41,8 +35,6 @@ public class FakeRectangleRenderable implements RectangleRenderable {
         BackgroundTextureIdProvider = backgroundTextureIdProvider;
         BackgroundTextureTileWidth = backgroundTextureTileWidth;
         BackgroundTextureTileHeight = backgroundTextureTileHeight;
-        BorderThicknessProvider = borderThicknessProvider;
-        BorderColorProvider = borderColorProvider;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Uuid = uuid;
     }
@@ -185,11 +177,6 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-        return null;
-    }
-
-    @Override
     public void setOnMouseOver(Action action) {
 
     }
@@ -200,35 +187,13 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Float> getBorderThicknessProvider() {
-        return BorderThicknessProvider;
-    }
-
-    @Override
-    public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
-            throws IllegalArgumentException {
-        BorderThicknessProvider = borderThicknessProvider;
-    }
-
-    @Override
-    public ProviderAtTime<Color> getBorderColorProvider() {
-        return BorderColorProvider;
-    }
-
-    @Override
-    public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
-            throws IllegalArgumentException {
-        BorderColorProvider = borderColorProvider;
-    }
-
-    @Override
     public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
         return RenderingDimensionsProvider;
     }
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
-                                                           renderingDimensionsProvider)
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
         RenderingDimensionsProvider = renderingDimensionsProvider;
     }

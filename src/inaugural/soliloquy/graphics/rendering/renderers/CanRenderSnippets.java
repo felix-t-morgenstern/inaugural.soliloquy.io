@@ -257,20 +257,20 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         _mesh.render();
     }
 
-    protected void validateRenderableWithAreaMembers(FloatBox renderingArea,
-                                                     List<ProviderAtTime<ColorShift>>
-                                                             colorShiftProviders,
-                                                     UUID id,
-                                                     String paramName) {
-        Check.ifNull(renderingArea, paramName + " provided renderingArea");
+    protected void validateRenderableWithDimensionsMembers(FloatBox renderingDimensions,
+                                                           List<ProviderAtTime<ColorShift>>
+                                                                   colorShiftProviders,
+                                                           UUID id,
+                                                           String paramName) {
+        Check.ifNull(renderingDimensions, paramName + " provided renderingDimensions");
 
         Check.ifNull(colorShiftProviders, paramName + ".colorShiftProviders()");
 
-        Check.throwOnLteZero(renderingArea.width(),
-                paramName + " provided renderingArea.width()");
+        Check.throwOnLteZero(renderingDimensions.width(),
+                paramName + " provided renderingDimensions.width()");
 
-        Check.throwOnLteZero(renderingArea.height(),
-                paramName + " provided renderingArea.height()");
+        Check.throwOnLteZero(renderingDimensions.height(),
+                paramName + " provided renderingDimensions.height()");
 
         Check.ifNull(id, paramName + " provided id()");
     }

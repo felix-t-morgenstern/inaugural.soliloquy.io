@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GlobalLoopingAnimationRenderableImpl
-        extends AbstractRenderableWithArea
+        extends AbstractImageAssetRenderable
         implements GlobalLoopingAnimationRenderable {
     private GlobalLoopingAnimation _globalLoopingAnimation;
 

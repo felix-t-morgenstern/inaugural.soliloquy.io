@@ -1,26 +1,25 @@
 package inaugural.soliloquy.graphics.test.unit.renderables;
 
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class RectangleRenderableImplTests {
     private final ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -35,7 +34,6 @@ class RectangleRenderableImplTests {
     private final FakeAction<Long> ON_PRESS_ACTION = new FakeAction<>();
     private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
-    private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = 123;
@@ -61,15 +59,16 @@ class RectangleRenderableImplTests {
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                ON_MOUSE_LEAVE, RENDERING_AREA_PROVIDER, Z, UUID,
                 RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                 RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER);
+        _rectangleRenderable.setCapturesMouseEvents(true);
         
         _rectangleRenderableNotSupportingMouseEvents = new RectangleRenderableImpl(
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, 
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER, 
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS, 
-                null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, 
+                null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                 RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER);
@@ -84,7 +83,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -93,7 +92,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -102,7 +101,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -111,7 +110,7 @@ class RectangleRenderableImplTests {
                         null, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -120,7 +119,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -129,7 +128,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -138,7 +137,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -147,7 +146,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        null, RENDERING_AREA_PROVIDER, Z, UUID,
+                        null, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -156,7 +155,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, null, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, null,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -165,16 +164,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
-                        RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                        RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () ->
-                new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
-                        TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
-                        ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         null,
                         RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER));
         assertThrows(IllegalArgumentException.class, () ->
@@ -183,7 +173,7 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        RENDERING_AREA_PROVIDER, Z, UUID,
                         RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                         null));
     }
@@ -291,16 +281,6 @@ class RectangleRenderableImplTests {
                 _rectangleRenderable.setBackgroundTextureTileWidth(0f));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.setBackgroundTextureTileHeight(0f));
-        assertThrows(UnsupportedOperationException.class, () ->
-                _rectangleRenderable.setBorderThicknessProvider(new FakeProviderAtTime<>()));
-        assertThrows(UnsupportedOperationException.class, () ->
-                _rectangleRenderable.setBorderColorProvider(new FakeProviderAtTime<>()));
-    }
-
-    @Test
-    void testBorderThicknessAndColorProviders() {
-        assertNull(_rectangleRenderable.getBorderThicknessProvider().provide(123123L));
-        assertNull(_rectangleRenderable.getBorderColorProvider().provide(123123L));
     }
 
     @Test
@@ -564,12 +544,6 @@ class RectangleRenderableImplTests {
                 _rectangleRenderable.mouseLeave(timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
-    }
-
-    @Test
-    void testColorShiftProviders() {
-        assertSame(COLOR_SHIFT_PROVIDERS,
-                _rectangleRenderable.colorShiftProviders());
     }
 
     @Test

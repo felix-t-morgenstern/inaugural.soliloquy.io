@@ -28,8 +28,6 @@ class RectangleRendererTests {
             new FakeProviderAtTime<>();
     private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
     private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
-    private final ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(new FakeFloatBox(0f, 0f, 1f, 1f));
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -82,93 +80,61 @@ class RectangleRendererTests {
                 new FakeRectangleRenderable(null, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, null,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         null, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         null,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  -0.0001f,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        -0.0001f, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
+                        -0.0001f, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        null, RENDERING_AREA_PROVIDER, UUID),
-                MOST_RECENT_TIMESTAMP));
-        // NB: This case should _not_ throw an exception
-        _rectangleRenderable.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                        null, RENDERING_AREA_PROVIDER, UUID),
-                MOST_RECENT_TIMESTAMP);
-        _rectangleRenderable.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, UUID),
-                MOST_RECENT_TIMESTAMP);
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, null, UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, new FakeStaticProvider<>(null), UUID),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, new FakeStaticProvider<>(null), UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, null),
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, null),
                 MOST_RECENT_TIMESTAMP));
     }
 
@@ -181,8 +147,8 @@ class RectangleRendererTests {
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                        null, RENDERING_AREA_PROVIDER, UUID), MOST_RECENT_TIMESTAMP - 1L));
+                        BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
+                MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
@@ -191,8 +157,7 @@ class RectangleRendererTests {
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                 BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,  BACKGROUND_TEXTURE_TILE_WIDTH,
-                BACKGROUND_TEXTURE_TILE_HEIGHT, null,
-                null, RENDERING_AREA_PROVIDER, UUID);
+                BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID);
 
         Renderer<RectangleRenderable> rectangleRendererWithoutMesh =
                 new RectangleRenderer(MOST_RECENT_TIMESTAMP);

@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
-import soliloquy.specs.graphics.renderables.RenderableWithArea;
+import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FakeRenderableWithArea implements RenderableWithArea {
+public class FakeImageAssetRenderable implements ImageAssetRenderable {
     public boolean CapturesMouseEvents;
     public boolean CapturesMouseEventsAtPoint = true;
     public ArrayList<Pair<Float, Float>> CapturesMouseEventsAtPointInputLocations =

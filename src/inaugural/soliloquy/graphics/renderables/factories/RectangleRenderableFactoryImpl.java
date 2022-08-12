@@ -4,13 +4,11 @@ import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -28,7 +26,6 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                                     Map<Integer, Action<Long>> onRelease,
                                     Action<Long> onMouseOver,
                                     Action<Long> onMouseLeave,
-                                    List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                     ProviderAtTime<FloatBox> renderingAreaProvider,
                                     int z,
                                     UUID uuid,
@@ -38,7 +35,7 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
         return new RectangleRenderableImpl(topLeftColorProvider, topRightColorProvider,
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
                 backgroundTextureTileWidth, backgroundTextureTileHeight, onPress, onRelease,
-                onMouseOver, onMouseLeave, colorShiftProviders, renderingAreaProvider, z, uuid,
+                onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid,
                 updateZIndexInContainer, removeFromContainer);
     }
 

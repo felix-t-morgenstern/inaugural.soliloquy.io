@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.io;
 import com.conversantmedia.util.collection.spatial.RTreeFacade;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
-import soliloquy.specs.graphics.renderables.RenderableWithArea;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.List;
@@ -18,42 +18,43 @@ public class MouseEventCapturingSpatialIndexImpl
 
     // TODO: Verify and use timestamp
     @Override
-    public RenderableWithArea getCapturingRenderableAtPoint(float x, float y, long timestamp)
+    public RenderableWithMouseEvents getCapturingRenderableAtPoint(float x, float y, long timestamp)
             throws IllegalArgumentException {
-        List<RTreeFacade.RenderableWithAreaSearchObject> roughResults = R_TREE.search(x, y);
+        List<RTreeFacade.RenderableWithMouseEventsSearchObject> roughResults = R_TREE.search(x, y);
         int highestZThusFar = Integer.MIN_VALUE;
-        RenderableWithArea renderableWithAreaWithHighestZThusFar = null;
-        for(RTreeFacade.RenderableWithAreaSearchObject roughResult : roughResults) {
+        RenderableWithMouseEvents renderableWithHighestZThusFar = null;
+        for(RTreeFacade.RenderableWithMouseEventsSearchObject roughResult : roughResults) {
             if(roughResult._renderingDimensions.leftX() <= x &&
                     roughResult._renderingDimensions.topY() <= y &&
                     roughResult._renderingDimensions.rightX() >= x &&
                     roughResult._renderingDimensions.bottomY() >= y &&
-                    roughResult._renderableWithArea.getZ() > highestZThusFar &&
-                    roughResult._renderableWithArea.capturesMouseEventAtPoint(x, y, timestamp)) {
-                highestZThusFar = roughResult._renderableWithArea.getZ();
-                renderableWithAreaWithHighestZThusFar = roughResult._renderableWithArea;
+                    roughResult._renderableWithMouseEvents.getZ() > highestZThusFar &&
+                    roughResult._renderableWithMouseEvents.capturesMouseEventAtPoint(x, y, timestamp)) {
+                highestZThusFar = roughResult._renderableWithMouseEvents.getZ();
+                renderableWithHighestZThusFar = roughResult._renderableWithMouseEvents;
             }
         }
-        return renderableWithAreaWithHighestZThusFar;
+        return renderableWithHighestZThusFar;
     }
 
     @Override
-    public void putRenderable(RenderableWithArea renderableWithArea, FloatBox renderingDimensions)
+    public void putRenderable(RenderableWithMouseEvents renderableWithMouseEvents,
+                              FloatBox renderingDimensions)
             throws IllegalArgumentException {
-        Check.ifNull(renderableWithArea, "renderableWithArea");
+        Check.ifNull(renderableWithMouseEvents, "renderableWithMouseEvents");
         Check.ifNull(renderingDimensions, "renderingDimensions");
-        if (!renderableWithArea.getCapturesMouseEvents()) {
+        if (!renderableWithMouseEvents.getCapturesMouseEvents()) {
             throw new IllegalArgumentException(
                     "MouseEventCapturingSpatialIndexImpl.putRenderable: renderable must capture " +
                             "mouse events");
         }
-        R_TREE.put(renderableWithArea, renderingDimensions);
+        R_TREE.put(renderableWithMouseEvents, renderingDimensions);
     }
 
     @Override
-    public void removeRenderable(RenderableWithArea renderableWithArea)
+    public void removeRenderable(RenderableWithMouseEvents renderableWithMouseEvents)
             throws IllegalArgumentException {
-        R_TREE.remove(Check.ifNull(renderableWithArea, "renderableWithArea"));
+        R_TREE.remove(Check.ifNull(renderableWithMouseEvents, "renderableWithMouseEvents"));
     }
 
     @Override

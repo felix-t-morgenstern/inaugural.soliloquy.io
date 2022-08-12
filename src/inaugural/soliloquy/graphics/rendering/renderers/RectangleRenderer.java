@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.Mesh;
@@ -11,7 +10,6 @@ import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
 import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
@@ -57,13 +55,6 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
                 "rectangleRenderable.getBackgroundTextureTileWidth()");
         Check.throwOnLtValue(rectangleRenderable.getBackgroundTextureTileHeight(), 0f,
                 "rectangleRenderable.getBackgroundTextureTileHeight()");
-
-        if (rectangleRenderable.getBorderThicknessProvider() != null &&
-                rectangleRenderable.getBorderColorProvider() == null) {
-            throw new IllegalArgumentException(
-                    "RectangleRenderer.render: rectangleRenderer with non-null " +
-                            "borderThicknessProvider must have non-null borderColorProvider");
-        }
 
         Check.ifNull(rectangleRenderable.getRenderingDimensionsProvider(),
                 "rectangleRenderable.getRenderingDimensionsProvider()");
@@ -292,37 +283,12 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-            return null;
-        }
-
-        @Override
         public void setOnMouseOver(Action action) {
 
         }
 
         @Override
         public void setOnMouseLeave(Action action) {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getBorderThicknessProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getBorderColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
 
         }
 

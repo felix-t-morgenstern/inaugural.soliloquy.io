@@ -46,7 +46,7 @@ public class FiniteAnimationRenderer
                 "finiteAnimationRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
-        validateRenderableWithAreaMembers(renderingArea,
+        validateRenderableWithDimensionsMembers(renderingArea,
                 finiteAnimationRenderable.colorShiftProviders(),
                 finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
 

@@ -13,8 +13,8 @@ abstract class AbstractRenderable implements Renderable {
 
     private int _z;
 
-    public AbstractRenderable(int z, UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                              Consumer<Renderable> removeFromContainer) {
+    protected AbstractRenderable(int z, UUID uuid, Consumer<Renderable> updateZIndexInContainer,
+                                 Consumer<Renderable> removeFromContainer) {
         _z = z;
         UUID = Check.ifNull(uuid, "uuid");
         UPDATE_Z_INDEX_IN_CONTAINER = Check.ifNull(updateZIndexInContainer,

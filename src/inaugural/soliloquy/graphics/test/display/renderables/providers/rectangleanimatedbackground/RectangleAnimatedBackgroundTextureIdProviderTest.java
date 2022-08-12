@@ -112,7 +112,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 RectangleAnimatedBackgroundTextureIdProvider, BACKGROUND_TEXTURE_TILE_WIDTH,
-                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, new ArrayList<>(),
+                BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), renderable -> {},
                 renderable -> {});
 
