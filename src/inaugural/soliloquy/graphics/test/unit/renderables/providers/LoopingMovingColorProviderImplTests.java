@@ -155,9 +155,9 @@ class LoopingMovingColorProviderImplTests {
                         pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
-                (long)loopingMovingColorProvider.pausedTimestamp());
+                (long) loopingMovingColorProvider.pausedTimestamp());
         assertEquals(mostRecentTimestamp,
-                (long)loopingMovingColorProvider.mostRecentTimestamp());
+                (long) loopingMovingColorProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -206,7 +206,7 @@ class LoopingMovingColorProviderImplTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1 - PERIOD_MODULO_OFFSET;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
 
         float[] value1Hsb =
@@ -220,7 +220,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
+        int alpha = (int) ((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -234,7 +234,7 @@ class LoopingMovingColorProviderImplTests {
         long timeAfterTime2 = 50;
         long timestamp = TIME_2 + timeAfterTime2 - PERIOD_MODULO_OFFSET;
         long distanceBetweenTimes = TIME_3 - TIME_2;
-        float time3Weight = timeAfterTime2 / (float)distanceBetweenTimes;
+        float time3Weight = timeAfterTime2 / (float) distanceBetweenTimes;
         float time2Weight = 1f - time3Weight;
 
         float[] value2Hsb =
@@ -248,7 +248,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time2Weight * VALUE_2.getAlpha()) + (time3Weight * VALUE_3.getAlpha()));
+        int alpha = (int) ((time2Weight * VALUE_2.getAlpha()) + (time3Weight * VALUE_3.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -262,7 +262,7 @@ class LoopingMovingColorProviderImplTests {
         long timeAfterTime3 = 250;
         long timestamp = TIME_3 + timeAfterTime3 - PERIOD_MODULO_OFFSET;
         long distanceBetweenTimes = TIME_4 - TIME_3;
-        float time4Weight = timeAfterTime3 / (float)distanceBetweenTimes;
+        float time4Weight = timeAfterTime3 / (float) distanceBetweenTimes;
         float time3Weight = 1f - time4Weight;
 
         float[] value3Hsb =
@@ -276,7 +276,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time3Weight * VALUE_3.getAlpha()) + (time4Weight * VALUE_4.getAlpha()));
+        int alpha = (int) ((time3Weight * VALUE_3.getAlpha()) + (time4Weight * VALUE_4.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -290,7 +290,7 @@ class LoopingMovingColorProviderImplTests {
         long timeAfterTime4 = 350;
         long timestamp = TIME_4 + timeAfterTime4 - PERIOD_MODULO_OFFSET;
         long distanceBetweenTimes = TIME_5 - TIME_4;
-        float time5Weight = timeAfterTime4 / (float)distanceBetweenTimes;
+        float time5Weight = timeAfterTime4 / (float) distanceBetweenTimes;
         float time4Weight = 1f - time5Weight;
 
         float[] value4Hsb =
@@ -308,7 +308,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time4Weight * VALUE_4.getAlpha()) + (time5Weight * VALUE_5.getAlpha()));
+        int alpha = (int) ((time4Weight * VALUE_4.getAlpha()) + (time5Weight * VALUE_5.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -322,7 +322,7 @@ class LoopingMovingColorProviderImplTests {
         long timeAfterTime5 = 450;
         long timestamp = TIME_5 + timeAfterTime5 - PERIOD_MODULO_OFFSET;
         long distanceBetweenTimes = PERIOD_DURATION - TIME_5;
-        float time1Weight = timeAfterTime5 / (float)distanceBetweenTimes;
+        float time1Weight = timeAfterTime5 / (float) distanceBetweenTimes;
         float time5Weight = 1f - time1Weight;
 
         float[] value5Hsb =
@@ -340,7 +340,7 @@ class LoopingMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time5Weight * VALUE_5.getAlpha()) + (time1Weight * VALUE_1.getAlpha()));
+        int alpha = (int) ((time5Weight * VALUE_5.getAlpha()) + (time1Weight * VALUE_1.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 

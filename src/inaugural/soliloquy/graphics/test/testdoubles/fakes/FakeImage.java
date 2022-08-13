@@ -30,7 +30,8 @@ public class FakeImage implements Image {
         Height = height;
     }
 
-    public FakeImage(String relativeLocation, int width, int height, boolean supportsMouseEventCapturing) {
+    public FakeImage(String relativeLocation, int width, int height,
+                     boolean supportsMouseEventCapturing) {
         RelativeLocation = relativeLocation;
         Width = width;
         Height = height;

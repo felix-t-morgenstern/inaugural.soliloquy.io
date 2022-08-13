@@ -118,8 +118,8 @@ class ImageAssetSetFactoryTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(AssetFactory.class.getCanonicalName() + "<" +
-                ImageAssetSetDefinition.class.getCanonicalName() + "," +
-                ImageAssetSet.class.getCanonicalName() + ">",
+                        ImageAssetSetDefinition.class.getCanonicalName() + "," +
+                        ImageAssetSet.class.getCanonicalName() + ">",
                 _imageAssetSetFactory.getInterfaceName());
     }
 

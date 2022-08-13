@@ -75,7 +75,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             Check.ifNull(dropShadowColor, "dropShadowColor provided by textLineRenderable");
         }
 
-        Pair<Float,Float> renderingLocation =
+        Pair<Float, Float> renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
         float startX;
         float startY = renderingLocation.getItem2();
@@ -291,7 +291,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         return iterateOverTextLine(textLineRenderable, timestamp, lineHeight, null);
     }
 
-    // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't elegant, but this is not front-facing code.
+    // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't
+    // elegant, but this is not front-facing code.
     private float iterateOverTextLine(TextLineRenderable textLineRenderable, Long timestamp,
                                       float lineHeight,
                                       Function<Float, Function<Float, Function<Integer,
@@ -353,7 +354,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
             float glyphLength =
                     glyphBox.width() * (lineHeight / glyphBox.height())
-                    * fontStyleInfo.textureWidthToHeightRatio();
+                            * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
                 renderingAction.apply(textLineLengthThusFar).apply(glyphLength)
@@ -462,7 +463,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -472,7 +474,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -502,7 +505,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setLineTextProvider(ProviderAtTime<String> providerAtTime) throws IllegalArgumentException {
+        public void setLineTextProvider(ProviderAtTime<String> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -512,7 +516,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime) throws IllegalArgumentException {
+        public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -522,7 +527,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setLineHeightProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+        public void setLineHeightProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -552,7 +558,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setJustification(TextJustification textJustification) throws IllegalArgumentException {
+        public void setJustification(TextJustification textJustification)
+                throws IllegalArgumentException {
 
         }
 
@@ -577,7 +584,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setDropShadowSizeProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+        public void setDropShadowSizeProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -587,7 +595,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime) throws IllegalArgumentException {
+        public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -597,7 +606,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public void setDropShadowColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setDropShadowColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FakeRegistry<T extends HasId> implements Registry<T> {
-    private final HashMap<String,T> REGISTRY = new HashMap<>();
+    private final HashMap<String, T> REGISTRY = new HashMap<>();
 
     @Override
     public boolean contains(String s) {
@@ -36,7 +36,7 @@ public class FakeRegistry<T extends HasId> implements Registry<T> {
 
     @Override
     public void addAll(T[] ts) throws UnsupportedOperationException {
-        for(T t : ts) {
+        for (T t : ts) {
             add(t);
         }
     }

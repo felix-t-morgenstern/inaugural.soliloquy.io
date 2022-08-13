@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingCol
 import inaugural.soliloquy.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingColorProviderFactoryImplTests {
     private final HashMap<Integer, Color> VALUES_AT_TIMES = new HashMap<>();
@@ -74,7 +72,7 @@ class LoopingLinearMovingColorProviderFactoryImplTests {
         assertNotNull(loopingMovingColorProvider);
         assertTrue(loopingMovingColorProvider instanceof LoopingLinearMovingColorProviderImpl);
     }
-    
+
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
@@ -92,20 +90,20 @@ class LoopingLinearMovingColorProviderFactoryImplTests {
                         null));
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                    put(null, Color.RED);
-                }},
+                            put(null, Color.RED);
+                        }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                    put(0, null);
-                }},
+                            put(0, null);
+                        }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
                 _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                    put(123, Color.RED);
-                }},
+                            put(123, Color.RED);
+                        }},
                         _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
 

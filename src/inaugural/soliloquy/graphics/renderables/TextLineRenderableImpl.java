@@ -9,8 +9,8 @@ import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class TextLineRenderableImpl extends AbstractRenderable implements TextLineRenderable {
@@ -22,7 +22,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private ProviderAtTime<String> _lineTextProvider;
     private ProviderAtTime<Float> _lineHeightProvider;
     private TextJustification _justification;
-    private ProviderAtTime<Pair<Float,Float>> _renderingLocationProvider;
+    private ProviderAtTime<Pair<Float, Float>> _renderingLocationProvider;
     private float _paddingBetweenGlyphs;
     private ProviderAtTime<Float> _borderThicknessProvider;
     private ProviderAtTime<Color> _borderColorProvider;
@@ -30,7 +30,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private ProviderAtTime<Pair<Float, Float>> _dropShadowOffsetProvider;
     private ProviderAtTime<Color> _dropShadowColorProvider;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public TextLineRenderableImpl(Font font, ProviderAtTime<String> lineTextProvider,
                                   ProviderAtTime<Float> lineHeightProvider,
                                   TextJustification justification, float paddingBetweenGlyphs,
@@ -38,9 +38,9 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,
-                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
                                   ProviderAtTime<Float> dropShadowSizeProvider,
-                                  ProviderAtTime<Pair<Float,Float>> dropShadowOffsetProvider,
+                                  ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
                                   int z, UUID uuid,
                                   Consumer<Renderable> updateZIndexInContainer,
@@ -84,13 +84,13 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     }
 
     @Override
-    public ProviderAtTime<Pair<Float,Float>> getRenderingLocationProvider() {
+    public ProviderAtTime<Pair<Float, Float>> getRenderingLocationProvider() {
         return _renderingLocationProvider;
     }
 
     @Override
-    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float,Float>>
-                                                         renderingLocationProvider)
+    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>>
+                                                     renderingLocationProvider)
             throws IllegalArgumentException {
         _renderingLocationProvider = Check.ifNull(renderingLocationProvider,
                 "renderingLocationProvider");
@@ -165,7 +165,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
 
     @Override
     public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>>
-                                                        dropShadowOffsetProvider)
+                                                    dropShadowOffsetProvider)
             throws IllegalArgumentException {
         _dropShadowOffsetProvider = Check.ifNull(dropShadowOffsetProvider,
                 "dropShadowOffsetProvider");

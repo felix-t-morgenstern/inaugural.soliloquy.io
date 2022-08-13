@@ -10,11 +10,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Wheee!", white, aligned left, near the top-left of
- *    the window.
+ * the window.
  * 2. The text will move clockwise from corner to corner. After 2500ms, the movement will reset to
- *    the top-left corner; then, it will continue for another 4000ms (i.e. one loop).
+ * the top-left corner; then, it will continue for another 4000ms (i.e. one loop).
  * 3. The window will then close.
- *
  */
 public class LoopingLinearMovingLocationProviderResetTest
         extends LoopingLinearMovingLocationProviderTest {

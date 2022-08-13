@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FakeSpriteFactory implements AssetFactory<SpriteDefinition, Sprite> {
-    public final Map<String,SpriteDefinition> INPUTS = new HashMap<>();
+    public final Map<String, SpriteDefinition> INPUTS = new HashMap<>();
     public final List<Sprite> OUTPUTS = new ArrayList<>();
 
     @Override

@@ -3,7 +3,8 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectangler
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -16,12 +17,11 @@ import java.util.List;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
- *    Window"
+ * Window"
  * 2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have a
- *    top-left color of red, a top-right color of green, a bottom-right color of blue, and a
- *    bottom-left color of white
+ * top-left color of red, a top-right color of green, a bottom-right color of blue, and a
+ * bottom-left color of white
  * 3. The window will then close
- *
  */
 class RectangleRendererColorsTest extends RectangleRendererTest {
     private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
@@ -48,7 +48,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
         );
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(null);

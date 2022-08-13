@@ -54,9 +54,9 @@ class MouseEventHandlerImplTests {
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () ->new MouseEventHandlerImpl(
+        assertThrows(IllegalArgumentException.class, () -> new MouseEventHandlerImpl(
                 null, _mockGlobalClock));
-        assertThrows(IllegalArgumentException.class, () ->new MouseEventHandlerImpl(
+        assertThrows(IllegalArgumentException.class, () -> new MouseEventHandlerImpl(
                 _mockMouseEventCapturingSpatialIndex, null));
     }
 

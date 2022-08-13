@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingFloatProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingFloatProviderTests {
     private final HashMap<Integer, Float> VALUES_AT_TIMES = new HashMap<>();
@@ -101,9 +99,9 @@ class LoopingLinearMovingFloatProviderTests {
                         MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
-                (long)loopingLinearMovingFloatProvider.pausedTimestamp());
+                (long) loopingLinearMovingFloatProvider.pausedTimestamp());
         assertEquals(mostRecentTimestamp,
-                (long)loopingLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) loopingLinearMovingFloatProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -120,7 +118,7 @@ class LoopingLinearMovingFloatProviderTests {
         assertNotSame(_loopingLinearMovingFloatProvider.valuesWithinPeriod(), valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
-                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int)(long)key)));
+                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int) (long) key)));
     }
 
     @Test
@@ -131,18 +129,18 @@ class LoopingLinearMovingFloatProviderTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
-                Float.class.getCanonicalName() + ">",
+                        Float.class.getCanonicalName() + ">",
                 _loopingLinearMovingFloatProvider.getInterfaceName());
     }
 
     @Test
     void testProvideAtKey() {
         assertEquals(VALUE_1,
-                (float)_loopingLinearMovingFloatProvider.provide(TIME_1 - MODULO_OFFSET));
+                (float) _loopingLinearMovingFloatProvider.provide(TIME_1 - MODULO_OFFSET));
         assertEquals(VALUE_2,
-                (float)_loopingLinearMovingFloatProvider.provide(TIME_2 - MODULO_OFFSET));
+                (float) _loopingLinearMovingFloatProvider.provide(TIME_2 - MODULO_OFFSET));
         assertEquals(VALUE_3,
-                (float)_loopingLinearMovingFloatProvider.provide(TIME_3 - MODULO_OFFSET));
+                (float) _loopingLinearMovingFloatProvider.provide(TIME_3 - MODULO_OFFSET));
     }
 
     @Test
@@ -150,12 +148,12 @@ class LoopingLinearMovingFloatProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expected = (VALUE_1 * value1Weight) + (VALUE_2 * value2Weight);
 
-        assertEquals(expected, (float)_loopingLinearMovingFloatProvider.provide(timestamp));
+        assertEquals(expected, (float) _loopingLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
@@ -163,19 +161,19 @@ class LoopingLinearMovingFloatProviderTests {
         long timeAfterValue3 = 50L;
         long timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
         long timeInterval = PERIOD_DURATION - TIME_3;
-        float value3Weight = (timeInterval - timeAfterValue3) / (float)timeInterval;
+        float value3Weight = (timeInterval - timeAfterValue3) / (float) timeInterval;
         float value1Weight = 1f - value3Weight;
 
         float expected = (VALUE_3 * value3Weight) + (VALUE_1 * value1Weight);
 
-        assertEquals(expected, (float)_loopingLinearMovingFloatProvider.provide(timestamp));
+        assertEquals(expected, (float) _loopingLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
     void testProvideWhenPaused() {
         _loopingLinearMovingFloatProvider.reportPause(TIME_1 - MODULO_OFFSET);
 
-        assertEquals(VALUE_1, (float)_loopingLinearMovingFloatProvider.provide(123123123L));
+        assertEquals(VALUE_1, (float) _loopingLinearMovingFloatProvider.provide(123123123L));
     }
 
     @Test
@@ -184,7 +182,7 @@ class LoopingLinearMovingFloatProviderTests {
 
         _loopingLinearMovingFloatProvider.reset(resetTimestamp);
 
-        assertEquals(VALUE_1, (float)_loopingLinearMovingFloatProvider.provide(resetTimestamp));
+        assertEquals(VALUE_1, (float) _loopingLinearMovingFloatProvider.provide(resetTimestamp));
     }
 
     @Test
@@ -250,7 +248,7 @@ class LoopingLinearMovingFloatProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + PERIOD_DURATION + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expected = (VALUE_1 * value1Weight) + (VALUE_2 * value2Weight);
@@ -259,6 +257,6 @@ class LoopingLinearMovingFloatProviderTests {
         _loopingLinearMovingFloatProvider.reportUnpause(pauseDuration);
 
         assertEquals(expected,
-                (float)_loopingLinearMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) _loopingLinearMovingFloatProvider.provide(timestamp + pauseDuration));
     }
 }

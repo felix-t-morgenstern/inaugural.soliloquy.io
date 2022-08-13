@@ -45,7 +45,8 @@ public class StackRendererTest extends DisplayTest {
 
         RenderableStack renderableStack = new RenderableStackImpl();
 
-        soliloquy.specs.graphics.rendering.renderers.StackRenderer stackRenderer = new StackRendererImpl(renderableStack, renderer, null);
+        soliloquy.specs.graphics.rendering.renderers.StackRenderer stackRenderer =
+                new StackRendererImpl(renderableStack, renderer, null);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -65,7 +66,7 @@ public class StackRendererTest extends DisplayTest {
         float axeScreenHeight = 0.5f;
         float swordScreenHeight = 1.0f;
 
-        float spriteAxe07ScreenWidth = (spriteAxe07Width / (float)spriteAxe07Height) *
+        float spriteAxe07ScreenWidth = (spriteAxe07Width / (float) spriteAxe07Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
         float spriteAxe07TopY = 0.125f;
         float spriteAxe07LeftX = 0.625f - (spriteAxe07ScreenWidth / 2f);
@@ -79,7 +80,7 @@ public class StackRendererTest extends DisplayTest {
                 ), null),
                 1, java.util.UUID.randomUUID());
 
-        float spriteAxe09ScreenWidth = (spriteAxe09Width / (float)spriteAxe09Height) *
+        float spriteAxe09ScreenWidth = (spriteAxe09Width / (float) spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
         float spriteAxe09TopY = 0.375f;
         float spriteAxe09LeftX = 0.375f - (spriteAxe09ScreenWidth / 2f);

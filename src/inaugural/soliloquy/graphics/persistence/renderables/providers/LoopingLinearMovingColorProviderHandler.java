@@ -7,8 +7,8 @@ import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorPr
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class LoopingLinearMovingColorProviderHandler
         extends AbstractTypeHandler<LoopingLinearMovingColorProvider> {
@@ -95,7 +95,7 @@ public class LoopingLinearMovingColorProviderHandler
         dto.periodModuloOffset = loopingLinearMovingColorProvider.periodModuloOffset();
         dto.pausedTimestamp = loopingLinearMovingColorProvider.pausedTimestamp();
         dto.mostRecentTimestamp = loopingLinearMovingColorProvider.mostRecentTimestamp();
-        
+
         return JSON.toJson(dto);
     }
 
@@ -109,7 +109,7 @@ public class LoopingLinearMovingColorProviderHandler
         Long pausedTimestamp;
         long mostRecentTimestamp;
     }
-    
+
     private static class ColorDTO {
         ColorDTO(int r, int g, int b, int a) {
             this.r = r;

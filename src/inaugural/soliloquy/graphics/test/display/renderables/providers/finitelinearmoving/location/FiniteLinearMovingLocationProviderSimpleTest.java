@@ -10,11 +10,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Whee!!!", white, moving from the top-left of the
- *    screen, starting at 1000ms, towards the middle-right of the screen over 1000ms, and then to
- *    the lower-left of the screen over the next 1000ms.
+ * screen, starting at 1000ms, towards the middle-right of the screen over 1000ms, and then to
+ * the lower-left of the screen over the next 1000ms.
  * 2. The window will remain open for another 1000ms.
  * 3. The window will then close.
- *
  */
 class FiniteLinearMovingLocationProviderSimpleTest
         extends FiniteLinearMovingLocationProviderDisplayTest {

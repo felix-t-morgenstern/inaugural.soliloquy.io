@@ -14,7 +14,7 @@ public class FakeAnimation implements Animation {
     public boolean SupportsMouseEventCapturing;
     public FakeAnimationFrameSnippet AnimationFrameSnippet;
     public Map<Integer, AnimationFrameSnippet> AnimationFrameSnippets;
-    public ArrayList<Pair<Integer,AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
+    public ArrayList<Pair<Integer, AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
 
     public FakeAnimation(String id) {
         Id = id;

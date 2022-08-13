@@ -13,8 +13,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
     private RenderableWithMouseEvents _registeredMouseOverRenderable;
 
     public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex,
-                                 GlobalClock globalClock)
-    {
+                                 GlobalClock globalClock) {
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX =
                 Check.ifNull(mouseEventCapturingSpatialIndex, "mouseEventCapturingSpatialIndex");
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");

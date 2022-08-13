@@ -49,8 +49,8 @@ public class RasterizedLineSegmentRenderer
                         .provide(timestamp);
         float thickness = Check.ifNull(
                 Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
-                "rasterizedLineSegmentRenderable.getThicknessProvider()")
-                .provide(timestamp),
+                        "rasterizedLineSegmentRenderable.getThicknessProvider()")
+                        .provide(timestamp),
                 "value provided by " +
                         "rasterizedLineSegmentRenderable.getThicknessProvider()");
         Color color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
@@ -60,18 +60,20 @@ public class RasterizedLineSegmentRenderer
         Check.throwOnLteZero(thickness,
                 "rasterizedLineSegmentRenderable provided thickness");
 
-        Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.getStipplePattern(), (short)0x0000,
+        Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.getStipplePattern(),
+                (short) 0x0000,
                 "rasterizedLineSegmentRenderable.getStipplePattern()");
 
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short)1,
+        Check.throwOnLtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short) 1,
                 "rasterizedLineSegmentRenderable.getStippleFactor()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short)256,
+        Check.throwOnGtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short) 256,
                 "rasterizedLineSegmentRenderable.getStippleFactor()");
 
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
         Check.ifNull(renderingDimensions,
                 "rasterizedLineSegmentRenderable provided rendering dimensions");
-        Check.ifNull(rasterizedLineSegmentRenderable.uuid(), "rasterizedLineSegmentRenderable.id()");
+        Check.ifNull(rasterizedLineSegmentRenderable.uuid(),
+                "rasterizedLineSegmentRenderable.id()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
@@ -98,9 +100,11 @@ public class RasterizedLineSegmentRenderer
 
         glBegin(GL_LINES);
 
-        glVertex2f((renderingDimensions.leftX() * 2f) - 1f, -((renderingDimensions.topY() * 2f) - 1f));
+        glVertex2f((renderingDimensions.leftX() * 2f) - 1f,
+                -((renderingDimensions.topY() * 2f) - 1f));
 
-        glVertex2f((renderingDimensions.rightX() * 2f) - 1f, -((renderingDimensions.bottomY() * 2f) - 1f));
+        glVertex2f((renderingDimensions.rightX() * 2f) - 1f,
+                -((renderingDimensions.bottomY() * 2f) - 1f));
 
         glEnd();
     }
@@ -118,7 +122,8 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -128,7 +133,8 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public void setThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+                public void setThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -158,7 +164,8 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public void setColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+                public void setColorProvider(ProviderAtTime<Color> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -186,5 +193,5 @@ public class RasterizedLineSegmentRenderer
                 public String getInterfaceName() {
                     return RasterizedLineSegmentRenderable.class.getCanonicalName();
                 }
-    };
+            };
 }

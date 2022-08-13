@@ -14,13 +14,12 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map,
             Function<Long, Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>>
             FACTORY_1 =
@@ -39,7 +38,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
     private final LoopingLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map, Function<Long,
             Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>> FACTORY_2 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
@@ -57,7 +56,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
     private UUID _factory1InputUuid;
     private int _factory1InputPeriodDuration;
     private int _factory1InputPeriodModuloOffset;
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private Map _factory1InputValuesAtTimes;
     private Long _factory1InputPausedTimestamp;
     private Long _factory1InputMostRecentTimestamp;
@@ -66,7 +65,7 @@ class LoopingLinearMovingProviderFactoryImplTests {
     private UUID _factory2InputUuid;
     private int _factory2InputPeriodDuration;
     private int _factory2InputPeriodModuloOffset;
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private Map _factory2InputValuesAtTimes;
     private Long _factory2InputPausedTimestamp;
     private Long _factory2InputMostRecentTimestamp;

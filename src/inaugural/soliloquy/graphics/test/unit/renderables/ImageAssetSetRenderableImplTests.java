@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
@@ -21,7 +20,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class ImageAssetSetRenderableImplTests {
     private final FakeImageAssetSet IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS =
@@ -93,14 +91,16 @@ class ImageAssetSetRenderableImplTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 null, TYPE, DIRECTION, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
+                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS,
-                null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
+                null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
+                BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONSUMER,
                 IMAGE_ASSET_SET_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONSUMER
@@ -287,8 +287,10 @@ class ImageAssetSetRenderableImplTests {
 
         FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
 
-        _imageAssetSetRenderableWithMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
-        _imageAssetSetRenderableWithoutMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
+        _imageAssetSetRenderableWithMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
+        _imageAssetSetRenderableWithoutMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
 
         assertSame(newBorderThicknessProvider,
                 _imageAssetSetRenderableWithMouseEvents.getBorderThicknessProvider());
@@ -351,7 +353,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _imageAssetSetRenderableWithMouseEvents.setOnPress(2, newOnPress);
@@ -360,13 +362,13 @@ class ImageAssetSetRenderableImplTests {
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
 
         _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -380,7 +382,8 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
         _imageAssetSetRenderableWithMouseEvents.setOnPress(2, null);
 
-        Map<Integer, String> pressActionIds = _imageAssetSetRenderableWithMouseEvents.pressActionIds();
+        Map<Integer, String> pressActionIds =
+                _imageAssetSetRenderableWithMouseEvents.pressActionIds();
 
         assertNotNull(pressActionIds);
         assertEquals(2, pressActionIds.size());
@@ -404,7 +407,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.release(2, timestamp + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -461,7 +464,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
@@ -469,7 +472,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -485,7 +488,8 @@ class ImageAssetSetRenderableImplTests {
 
         _imageAssetSetRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
 
-        assertEquals(mouseOverActionId, _imageAssetSetRenderableWithMouseEvents.mouseOverActionId());
+        assertEquals(mouseOverActionId,
+                _imageAssetSetRenderableWithMouseEvents.mouseOverActionId());
     }
 
     @Test
@@ -499,7 +503,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _imageAssetSetRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
@@ -507,7 +511,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -655,16 +659,16 @@ class ImageAssetSetRenderableImplTests {
         assertEquals(DIRECTION, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
                 .GetImageAssetForTypeAndDirectionInputs.get(0).getItem2());
         ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
-                ((FakeImage)imageAsset.Image).CapturesMouseEventsAtPixelInputs;
+                ((FakeImage) imageAsset.Image).CapturesMouseEventsAtPixelInputs;
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
-                (int)((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) ((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
         assertEquals(
-                (int)((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) ((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+        assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test
@@ -679,7 +683,7 @@ class ImageAssetSetRenderableImplTests {
         animationFrameSnippet.RightX = 750;
         animationFrameSnippet.TopY = 1000;
         animationFrameSnippet.BottomY = 2500;
-        FakeImage snippetImage = (FakeImage)animationFrameSnippet.Image;
+        FakeImage snippetImage = (FakeImage) animationFrameSnippet.Image;
         snippetImage.Width = 1000;
         snippetImage.Height = 3000;
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
@@ -700,14 +704,14 @@ class ImageAssetSetRenderableImplTests {
                 snippetImage.CapturesMouseEventsAtPixelInputs;
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
-                (int)(((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) (((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
         assertEquals(
-                (int)(((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
+                (int) (((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
                         + 1000),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+        assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test

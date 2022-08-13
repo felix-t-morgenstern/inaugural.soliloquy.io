@@ -64,7 +64,8 @@ class ColorShiftStackAggregatorImplTests {
         ));
         assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
                 new ArrayList<ColorShift>() {{
-                    add(new FakeColorComponentIntensityShift(ColorComponent.RED, belowNegativeOne, true));
+                    add(new FakeColorComponentIntensityShift(ColorComponent.RED, belowNegativeOne,
+                            true));
                 }}, 0L
         ));
         assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
@@ -167,7 +168,7 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0.789f, colorRotationShiftNetColorShifts.colorRotationShift());
     }
 
-    /** @noinspection RedundantCast*/
+    /** @noinspection RedundantCast */
     @Test
     void testAggregateMultipleValuesOfEachType() {
         FakeBrightnessShift brightnessShift1 = new FakeBrightnessShift(0.123f, false);
@@ -206,11 +207,11 @@ class ColorShiftStackAggregatorImplTests {
         assertNotNull(netColorShifts);
         assertEquals(NetColorShifts.class.getCanonicalName(),
                 netColorShifts.getInterfaceName());
-        assertEquals((float)getExpectedValue.apply(0.123f), netColorShifts.brightnessShift());
-        assertEquals(-(float)getExpectedValue.apply(0.444f), netColorShifts.redIntensityShift());
-        assertEquals((float)getExpectedValue.apply(0.555f), netColorShifts.greenIntensityShift());
-        assertEquals(-(float)getExpectedValue.apply(0.666f), netColorShifts.blueIntensityShift());
-        assertEquals((float)getExpectedValue.apply(0.789f), netColorShifts.colorRotationShift());
+        assertEquals((float) getExpectedValue.apply(0.123f), netColorShifts.brightnessShift());
+        assertEquals(-(float) getExpectedValue.apply(0.444f), netColorShifts.redIntensityShift());
+        assertEquals((float) getExpectedValue.apply(0.555f), netColorShifts.greenIntensityShift());
+        assertEquals(-(float) getExpectedValue.apply(0.666f), netColorShifts.blueIntensityShift());
+        assertEquals((float) getExpectedValue.apply(0.789f), netColorShifts.colorRotationShift());
     }
 
     @Test

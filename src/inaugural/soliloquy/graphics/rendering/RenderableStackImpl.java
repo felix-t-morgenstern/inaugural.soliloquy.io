@@ -3,7 +3,10 @@ package inaugural.soliloquy.graphics.rendering;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RenderableStackImpl implements RenderableStack {
     private final HashMap<Integer, ArrayList<Renderable>> STACK;

@@ -16,7 +16,7 @@ public class FakeSettingsRepo implements SettingsRepo {
     @SuppressWarnings("unchecked")
     @Override
     public <V> Setting<V> getSetting(String s) throws IllegalArgumentException {
-        return (Setting<V>)SETTINGS.get(s);
+        return (Setting<V>) SETTINGS.get(s);
     }
 
     @Override

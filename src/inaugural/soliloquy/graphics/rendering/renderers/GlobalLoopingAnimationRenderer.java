@@ -74,7 +74,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation) throws IllegalArgumentException {
+                public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -84,7 +85,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -119,12 +121,14 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+                public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+                        throws UnsupportedOperationException, IllegalArgumentException {
                     return false;
                 }
 
                 @Override
-                public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+                public void press(int i, long l)
+                        throws UnsupportedOperationException, IllegalArgumentException {
 
                 }
 
@@ -139,12 +143,14 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+                public void release(int i, long l)
+                        throws UnsupportedOperationException, IllegalArgumentException {
 
                 }
 
                 @Override
-                public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+                public void setOnRelease(int i, Action<Long> action)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -154,7 +160,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void mouseOver(long l) throws UnsupportedOperationException, IllegalArgumentException {
+                public void mouseOver(long l)
+                        throws UnsupportedOperationException, IllegalArgumentException {
 
                 }
 
@@ -164,7 +171,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void mouseLeave(long l) throws UnsupportedOperationException, IllegalArgumentException {
+                public void mouseLeave(long l)
+                        throws UnsupportedOperationException, IllegalArgumentException {
 
                 }
 
@@ -194,7 +202,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+                public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -204,7 +213,8 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
-                public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+                public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 

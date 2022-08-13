@@ -43,8 +43,8 @@ class GraphicsCoreLoopImplTests {
     private final Collection<Renderer> RENDERERS_WITH_MESH = new ArrayList<Renderer>() {{
         add(RENDERER);
     }};
-    private final float[] MESH_VERTICES = new float[] {0.123f};
-    private final float[] MESH_UV_COORDINATES = new float[] {0.456f};
+    private final float[] MESH_VERTICES = new float[]{0.123f};
+    private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
     private final FakeMouseCursor MOUSE_CURSOR = new FakeMouseCursor();
 
@@ -415,7 +415,8 @@ class GraphicsCoreLoopImplTests {
         _graphicsCoreLoop.startup(() -> closeAfterSomeTime(_graphicsCoreLoop));
 
         // Should be 1, since it is called to create the initial window
-        assertEquals(1, WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
+        assertEquals(1,
+                WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled);
         assertEquals(0, FRAME_EXECUTOR.NumberOfTimesExecuteCalled);
     }
 
@@ -434,7 +435,8 @@ class GraphicsCoreLoopImplTests {
         //     polling interval as an actual interval, rather than merely a delay; however, since
         //     the interval should be very small in practice (e.g. 2-5ms), this slight
         //     indeterminacy should not radically affect performance.
-        assertTrue(WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
+        assertTrue(
+                WINDOW_RESOLUTION_MANAGER.NumberOfTimesUpdateWindowSizeAndLocationActionCalled > 1);
         assertTrue(FRAME_EXECUTOR.NumberOfTimesExecuteCalled > 1);
     }
 
@@ -466,8 +468,7 @@ class GraphicsCoreLoopImplTests {
     private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(100);
 
-        while (graphicsCoreLoop.windowId() <= 0)
-        {
+        while (graphicsCoreLoop.windowId() <= 0) {
             CheckedExceptionWrapper.sleep(100);
         }
 

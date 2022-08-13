@@ -10,7 +10,8 @@ class Interpolate {
         return (value1 * weight1) + (value2 * weight2);
     }
 
-    protected static FloatBox floatBoxes(FloatBox value1, float weight1, FloatBox value2, float weight2,
+    protected static FloatBox floatBoxes(FloatBox value1, float weight1, FloatBox value2,
+                                         float weight2,
                                          FloatBoxFactory floatBoxFactory) {
         float value1WeightedLeftX = value1.leftX() * weight1;
         float value1WeightedTopY = value1.topY() * weight1;
@@ -47,7 +48,8 @@ class Interpolate {
                 distance += 1f;
             }
             hue = startHue + (distance * weight2);
-        } else {
+        }
+        else {
             distance = startHue - endHue;
             if (distance < 0) {
                 distance += 1;
@@ -56,7 +58,8 @@ class Interpolate {
         }
         if (hue < 0f) {
             hue += 1f;
-        } else if (hue > 1f) {
+        }
+        else if (hue > 1f) {
             hue -= 1f;
         }
 

@@ -35,7 +35,7 @@ class TextLineRenderableImplTests {
     private final ArrayList<Integer> BOLD_INDICES = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Pair<Float,Float>> RENDERING_LOCATION_PROVIDER =
+    private final FakeProviderAtTime<Pair<Float, Float>> RENDERING_LOCATION_PROVIDER =
             new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> DROP_SHADOW_SIZE_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Pair<Float, Float>> DROP_SHADOW_OFFSET_PROVIDER =
@@ -61,10 +61,10 @@ class TextLineRenderableImplTests {
     void setUp() {
         //noinspection unchecked
         _mockLineTextProvider = mock(ProviderAtTime.class);
-        
-        _textLineRenderable = new TextLineRenderableImpl(FONT, _mockLineTextProvider, 
-                LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS, 
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER, 
+
+        _textLineRenderable = new TextLineRenderableImpl(FONT, _mockLineTextProvider,
+                LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
                 DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
@@ -313,7 +313,8 @@ class TextLineRenderableImplTests {
     void testSetBorderColorProviderWithInvalidParams() {
         _textLineRenderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
 
-        assertThrows(IllegalArgumentException.class, () -> _textLineRenderable.setBorderColorProvider(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> _textLineRenderable.setBorderColorProvider(null));
     }
 
     @Test
@@ -321,7 +322,7 @@ class TextLineRenderableImplTests {
         assertSame(RENDERING_LOCATION_PROVIDER,
                 _textLineRenderable.getRenderingLocationProvider());
 
-        FakeProviderAtTime<Pair<Float,Float>> newRenderingLocationProvider =
+        FakeProviderAtTime<Pair<Float, Float>> newRenderingLocationProvider =
                 new FakeProviderAtTime<>();
 
         _textLineRenderable.setRenderingLocationProvider(newRenderingLocationProvider);

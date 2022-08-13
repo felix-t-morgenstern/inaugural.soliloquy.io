@@ -22,10 +22,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The glyphs will have an
- *    additional padding between each other equal to 10% of the line height.
+ * near the left edge of the window, vertically centered, for 8000ms. The glyphs will have an
+ * additional padding between each other equal to 10% of the line height.
  * 2. The window will then close.
- *
  */
 public class TextLineRendererPaddingTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
@@ -45,7 +44,7 @@ public class TextLineRendererPaddingTest extends TextLineRendererTest {
         );
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
@@ -75,7 +74,7 @@ public class TextLineRendererPaddingTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0.1f, LINE_TEXT,

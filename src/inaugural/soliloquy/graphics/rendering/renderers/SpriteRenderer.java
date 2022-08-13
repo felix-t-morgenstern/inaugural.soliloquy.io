@@ -41,9 +41,9 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         Check.ifNull(spriteRenderable.getSprite(), "spriteRenderable.getSprite()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-        
+
         // TODO: Throw if rendering area or border thickness or color providers are null
-        
+
         Float borderThickness = Check.ifNull(spriteRenderable.getBorderThicknessProvider(),
                 "spriteRenderable.getBorderThicknessProvider()")
                 .provide(timestamp);
@@ -54,7 +54,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 "spriteRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
-        validateRenderableWithDimensionsMembers(renderingArea, spriteRenderable.colorShiftProviders(),
+        validateRenderableWithDimensionsMembers(renderingArea,
+                spriteRenderable.colorShiftProviders(),
                 spriteRenderable.uuid(), "spriteRenderable");
 
         if (borderThickness != null) {
@@ -130,7 +131,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -150,7 +152,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -160,7 +163,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -195,12 +199,14 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
             return false;
         }
 
         @Override
-        public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void press(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -215,7 +221,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void release(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -230,7 +237,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void mouseOver(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseOver(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -240,7 +248,8 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void mouseLeave(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseLeave(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 

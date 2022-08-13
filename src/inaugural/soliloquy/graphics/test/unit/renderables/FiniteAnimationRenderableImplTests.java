@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
@@ -21,8 +20,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.mock;
 
 class FiniteAnimationRenderableImplTests {
     int ANIMATION_DURATION = 555;
@@ -67,7 +64,8 @@ class FiniteAnimationRenderableImplTests {
     private static Renderable _finiteAnimationRenderableWithMouseEventsRemoveFromContainerInput;
     private static Renderable _finiteAnimationRenderableWithoutMouseEventsRemoveFromContainerInput;
     private static Renderable _finiteAnimationRenderableWithMouseEventsUpdateZIndexInContainerInput;
-    private static Renderable _finiteAnimationRenderableWithoutMouseEventsUpdateZIndexInContainerInput;
+    private static Renderable
+            _finiteAnimationRenderableWithoutMouseEventsUpdateZIndexInContainerInput;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
@@ -271,8 +269,10 @@ class FiniteAnimationRenderableImplTests {
 
         FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
 
-        _finiteAnimationRenderableWithMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
-        _finiteAnimationRenderableWithoutMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
+        _finiteAnimationRenderableWithMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
+        _finiteAnimationRenderableWithoutMouseEvents
+                .setBorderThicknessProvider(newBorderThicknessProvider);
 
         assertSame(newBorderThicknessProvider,
                 _finiteAnimationRenderableWithMouseEvents.getBorderThicknessProvider());
@@ -335,8 +335,10 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
         _finiteAnimationRenderableWithoutMouseEvents.reportPause(PAUSED_TIMESTAMP_2);
 
-        assertEquals(PAUSED_TIMESTAMP_2, _finiteAnimationRenderableWithMouseEvents.pausedTimestamp());
-        assertEquals(PAUSED_TIMESTAMP_2, _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
+        assertEquals(PAUSED_TIMESTAMP_2,
+                _finiteAnimationRenderableWithMouseEvents.pausedTimestamp());
+        assertEquals(PAUSED_TIMESTAMP_2,
+                _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
     }
 
     @Test
@@ -352,7 +354,8 @@ class FiniteAnimationRenderableImplTests {
                 _finiteAnimationRenderableWithoutMouseEvents.pausedTimestamp());
 
         _finiteAnimationRenderableWithMouseEvents.reportUnpause(PAUSED_TIMESTAMP_2 + pauseDuration);
-        _finiteAnimationRenderableWithoutMouseEvents.reportUnpause(PAUSED_TIMESTAMP_2 + pauseDuration);
+        _finiteAnimationRenderableWithoutMouseEvents
+                .reportUnpause(PAUSED_TIMESTAMP_2 + pauseDuration);
 
         assertEquals(START_TIMESTAMP + pauseDuration,
                 _finiteAnimationRenderableWithMouseEvents.startTimestamp());
@@ -410,7 +413,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _finiteAnimationRenderableWithMouseEvents.setOnPress(2, newOnPress);
@@ -419,13 +422,13 @@ class FiniteAnimationRenderableImplTests {
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
 
         _finiteAnimationRenderableWithMouseEvents.press(0, timestamp + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -439,7 +442,8 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
         _finiteAnimationRenderableWithMouseEvents.setOnPress(2, null);
 
-        Map<Integer, String> pressActionIds = _finiteAnimationRenderableWithMouseEvents.pressActionIds();
+        Map<Integer, String> pressActionIds =
+                _finiteAnimationRenderableWithMouseEvents.pressActionIds();
 
         assertNotNull(pressActionIds);
         assertEquals(2, pressActionIds.size());
@@ -463,7 +467,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.release(2, timestamp + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -520,7 +524,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _finiteAnimationRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
@@ -528,7 +532,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -542,9 +546,11 @@ class FiniteAnimationRenderableImplTests {
 
         assertNull(_finiteAnimationRenderableWithMouseEvents.mouseOverActionId());
 
-        _finiteAnimationRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+        _finiteAnimationRenderableWithMouseEvents
+                .setOnMouseOver(new FakeAction<>(mouseOverActionId));
 
-        assertEquals(mouseOverActionId, _finiteAnimationRenderableWithMouseEvents.mouseOverActionId());
+        assertEquals(mouseOverActionId,
+                _finiteAnimationRenderableWithMouseEvents.mouseOverActionId());
     }
 
     @Test
@@ -558,7 +564,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _finiteAnimationRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
@@ -566,7 +572,7 @@ class FiniteAnimationRenderableImplTests {
         _finiteAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -580,9 +586,11 @@ class FiniteAnimationRenderableImplTests {
 
         assertNull(_finiteAnimationRenderableWithMouseEvents.mouseLeaveActionId());
 
-        _finiteAnimationRenderableWithMouseEvents.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+        _finiteAnimationRenderableWithMouseEvents
+                .setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
 
-        assertEquals(mouseLeaveActionId, _finiteAnimationRenderableWithMouseEvents.mouseLeaveActionId());
+        assertEquals(mouseLeaveActionId,
+                _finiteAnimationRenderableWithMouseEvents.mouseLeaveActionId());
     }
 
     @Test
@@ -607,27 +615,27 @@ class FiniteAnimationRenderableImplTests {
 
         assertEquals(5, ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(0,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
         assertEquals(0,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
         assertEquals(msAfterStartTimestampForMidpointFrame,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
         assertEquals(ANIMATION_DURATION,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
         assertEquals(ANIMATION_DURATION,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
 
         assertEquals(5, ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(0,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
         assertEquals(0,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
         assertEquals(msAfterStartTimestampForMidpointFrame,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
         assertEquals(ANIMATION_DURATION,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
         assertEquals(ANIMATION_DURATION,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
     }
 
     @Test
@@ -640,10 +648,10 @@ class FiniteAnimationRenderableImplTests {
 
         assertEquals(1, ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
-                (int)ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
         assertEquals(1, ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
-                (int)ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
     }
 
     @Test
@@ -690,7 +698,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp - 1));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp - 1));
 
         _finiteAnimationRenderableWithMouseEvents.release(0, timestamp + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -708,7 +717,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp));
 
         _finiteAnimationRenderableWithMouseEvents.mouseOver(timestamp + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -726,7 +736,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 1));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 1));
 
         _finiteAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -744,7 +755,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 2));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 2));
 
         _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 4);
         assertThrows(IllegalArgumentException.class, () ->
@@ -762,7 +774,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
 
         _finiteAnimationRenderableWithMouseEvents.reportPause(timestamp + 5);
         assertThrows(IllegalArgumentException.class, () ->
@@ -780,7 +793,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 4));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 4));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 4));
 
         _finiteAnimationRenderableWithMouseEvents.reportUnpause(timestamp + 6);
         assertThrows(IllegalArgumentException.class, () ->
@@ -798,7 +812,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 5));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 5));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 5));
 
         _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 7);
         assertThrows(IllegalArgumentException.class, () ->
@@ -816,7 +831,8 @@ class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteAnimationRenderableWithMouseEvents.provide(timestamp + 6));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, timestamp + 6));
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 6));
     }
 
     @Test
@@ -878,7 +894,8 @@ class FiniteAnimationRenderableImplTests {
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
 
         boolean capturesMouseEventAtPoint =
-                _finiteAnimationRenderableWithMouseEvents.capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+                _finiteAnimationRenderableWithMouseEvents
+                        .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
 
         assertTrue(capturesMouseEventAtPoint);
         ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
@@ -886,13 +903,13 @@ class FiniteAnimationRenderableImplTests {
                         .CapturesMouseEventsAtPixelInputs;
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
-                (int)((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) ((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
         assertEquals(
-                (int)((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) ((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+        assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test
@@ -900,7 +917,8 @@ class FiniteAnimationRenderableImplTests {
         float verySmallNumber = 0.0001f;
 
         assertThrows(UnsupportedOperationException.class, () ->
-                _finiteAnimationRenderableWithoutMouseEvents.capturesMouseEventAtPoint(.5f, .5f, 0L));
+                _finiteAnimationRenderableWithoutMouseEvents
+                        .capturesMouseEventAtPoint(.5f, .5f, 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(.5f, .5f, 1.5f, 1.5f);
 

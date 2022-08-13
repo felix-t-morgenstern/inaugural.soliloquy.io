@@ -34,7 +34,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
 
     @Override
     public AnimationFrameSnippet provide(long timestamp) throws IllegalArgumentException {
-        int frameMs = (int)(timestamp - StartTimestamp);
+        int frameMs = (int) (timestamp - StartTimestamp);
         return Animation.snippetAtFrame(frameMs);
     }
 
@@ -65,7 +65,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void press(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
@@ -80,7 +81,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void release(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
@@ -135,7 +137,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 
@@ -145,7 +148,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 
@@ -156,7 +160,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
-                                                           renderingDimensionsProvider)
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

@@ -3,7 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.FontFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -1009,8 +1009,8 @@ class FontFactoryTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(AssetFactory.class.getCanonicalName() + "<" +
-                FontDefinition.class.getCanonicalName() + "," + Font.class.getCanonicalName() +
-                ">",
+                        FontDefinition.class.getCanonicalName() + "," + Font.class.getCanonicalName() +
+                        ">",
                 _fontFactory.getInterfaceName());
     }
 }

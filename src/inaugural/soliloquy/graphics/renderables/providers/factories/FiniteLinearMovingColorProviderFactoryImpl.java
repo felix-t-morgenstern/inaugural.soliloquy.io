@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FiniteLinearMovingColorProviderFactoryImpl implements FiniteLinearMovingColorProviderFactory {
+public class FiniteLinearMovingColorProviderFactoryImpl
+        implements FiniteLinearMovingColorProviderFactory {
     @Override
     public FiniteLinearMovingColorProvider make(UUID uuid,
                                                 Map<Long, Color> valuesAtTimestamps,

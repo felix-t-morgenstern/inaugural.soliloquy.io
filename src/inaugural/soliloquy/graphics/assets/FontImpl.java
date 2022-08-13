@@ -80,7 +80,8 @@ public class FontImpl implements Font {
                 fontDefinition.leadingAdjustment(), floatBoxFactory, coordinateFactory);
     }
 
-    // NB: Extremely similar to FontPreloaderTask::validateFontDefinitionDTO; logic is duplicated, since classes are different
+    // NB: Extremely similar to FontPreloaderTask::validateFontDefinitionDTO; logic is
+    // duplicated, since classes are different
     private void validateFontDefinition(FontDefinition fontDefinition) {
         Check.ifNull(fontDefinition, "fontDefinition");
         Check.ifNullOrEmpty(fontDefinition.id(), "fontDefinition.id()");
@@ -107,7 +108,7 @@ public class FontImpl implements Font {
     }
 
     private void validateFontStyleDefinition(FontStyleDefinition fontStyleDefinition,
-                                                    float leadingAdjustment) {
+                                             float leadingAdjustment) {
         Check.throwOnLtValue(fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(), 0f,
                 "fontStyleDefinition.additionalGlyphHorizontalTextureSpacing()");
         Check.throwOnLtValue(fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), 0f,
@@ -144,7 +145,7 @@ public class FontImpl implements Font {
         return new FontStyleInfoImpl(
                 glyphs,
                 textureInfo.ImageDimensions,
-                textureInfo.ImageDimensions.getX() / (float)textureInfo.ImageDimensions.getY(),
+                textureInfo.ImageDimensions.getX() / (float) textureInfo.ImageDimensions.getY(),
                 fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(),
                 fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
                 textureInfo.TextureId
@@ -156,7 +157,8 @@ public class FontImpl implements Font {
         try {
             return java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
                     new File(relativeLocation)).deriveFont(maxLosslessFontSize);
-        } catch (FontFormatException | IOException e) {
+        }
+        catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -238,8 +240,8 @@ public class FontImpl implements Font {
                 continue;
             }
 
-            char character = (char)i;
-            char nextCharacter = (char)(i + 1);
+            char character = (char) i;
+            char nextCharacter = (char) (i + 1);
 
             charLeftShift = nextCharLeftShift;
             if (glyphwiseAdditionalLeftBoundaryShift.containsKey(nextCharacter) &&
@@ -305,7 +307,7 @@ public class FontImpl implements Font {
                                             Map<Character, FloatBox> glyphs,
                                             FloatBoxFactory floatBoxFactory,
                                             CoordinateFactory coordinateFactory) {
-        Graphics2D graphics2d = (Graphics2D)bufferedImage.getGraphics();
+        Graphics2D graphics2d = (Graphics2D) bufferedImage.getGraphics();
         graphics2d.setFont(font);
         graphics2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -332,8 +334,8 @@ public class FontImpl implements Font {
                                        Map<Character, FloatBox> glyphs,
                                        FloatBoxFactory floatBoxFactory,
                                        CoordinateFactory coordinateFactory) {
-        float imageWidthFloat = (float)imageWidth;
-        float imageHeightFloat = (float)imageHeight;
+        float imageWidthFloat = (float) imageWidth;
+        float imageHeightFloat = (float) imageHeight;
         float rowHeightInclTextureSpacing =
                 (glyphHeight * (1f + additionalGlyphVerticalTextureSpacing));
         float rowTextureSpacing = (additionalGlyphVerticalTextureSpacing * glyphHeight);
@@ -343,19 +345,21 @@ public class FontImpl implements Font {
                 additionalGlyphVerticalTextureSpacing, leadingAdjustment,
                 character -> widthThusFar -> rowNumber -> glyphWidth -> charLeftShift ->
                         nextCharLeftShift -> {
-                    float leftX = (widthThusFar / imageWidthFloat)
-                            - (charLeftShift * glyphHeightInImage);
-                    float topY = (rowHeightInclTextureSpacing * rowNumber) / imageHeightFloat;
-                    float rightX = (glyphWidth / imageWidthFloat)
-                            - (nextCharLeftShift * glyphHeightInImage) + leftX;
-                    float bottomY = topY + glyphHeightInImage;
-                    glyphs.put(character, floatBoxFactory.make(leftX, topY, rightX, bottomY));
+                            float leftX = (widthThusFar / imageWidthFloat)
+                                    - (charLeftShift * glyphHeightInImage);
+                            float topY =
+                                    (rowHeightInclTextureSpacing * rowNumber) / imageHeightFloat;
+                            float rightX = (glyphWidth / imageWidthFloat)
+                                    - (nextCharLeftShift * glyphHeightInImage) + leftX;
+                            float bottomY = topY + glyphHeightInImage;
+                            glyphs.put(character,
+                                    floatBoxFactory.make(leftX, topY, rightX, bottomY));
 
-                    float glyphDrawTopY = (rowHeightInclTextureSpacing * (rowNumber + 1))
-                            - glyphDescent - rowTextureSpacing;
-                    graphics2d.drawString(String.valueOf(character), widthThusFar,
-                            glyphDrawTopY);
-                }, coordinateFactory);
+                            float glyphDrawTopY = (rowHeightInclTextureSpacing * (rowNumber + 1))
+                                    - glyphDescent - rowTextureSpacing;
+                            graphics2d.drawString(String.valueOf(character), widthThusFar,
+                                    glyphDrawTopY);
+                        }, coordinateFactory);
     }
 
     private static class FontImageInfo {

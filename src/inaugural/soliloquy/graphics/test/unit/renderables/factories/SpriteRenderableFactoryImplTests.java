@@ -2,10 +2,12 @@ package inaugural.soliloquy.graphics.test.unit.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.factories.SpriteRenderableFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSprite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -19,7 +21,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class SpriteRenderableFactoryImplTests {
     private final FakeSprite SPRITE_SUPPORTS_MOUSE_EVENTS =
@@ -66,7 +67,8 @@ class SpriteRenderableFactoryImplTests {
 
         SpriteRenderable spriteRenderableWithoutMouseEvents = _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
 
         assertNotNull(spriteRenderableWithoutMouseEvents);
@@ -139,22 +141,26 @@ class SpriteRenderableFactoryImplTests {
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
@@ -169,7 +175,8 @@ class SpriteRenderableFactoryImplTests {
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, null, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, null,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
@@ -179,7 +186,8 @@ class SpriteRenderableFactoryImplTests {
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
+                COLOR_SHIFT_PROVIDERS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                UPDATE_Z_INDEX_IN_CONTAINER,
                 null
         ));
     }

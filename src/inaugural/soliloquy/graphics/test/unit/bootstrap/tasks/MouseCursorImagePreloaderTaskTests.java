@@ -11,9 +11,11 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.MouseCursor
 import java.util.ArrayList;
 
 import static inaugural.soliloquy.tools.random.Random.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MouseCursorImagePreloaderTaskTests {
     private final String MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION = randomString();
@@ -30,7 +32,7 @@ class MouseCursorImagePreloaderTaskTests {
 
     @BeforeEach
     void setUp() {
-        _mouseCursorImageDefinitionDTOs = new ArrayList<MouseCursorImageDefinitionDTO>(){{
+        _mouseCursorImageDefinitionDTOs = new ArrayList<MouseCursorImageDefinitionDTO>() {{
             add(new MouseCursorImageDefinitionDTO(
                     MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION,
                     HOTSPOT_X,

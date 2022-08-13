@@ -4,7 +4,10 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 
@@ -30,7 +33,7 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                                  Collection<FrameRateReporterAggregateOutput> aggregateOutputs) {
         PERIODS_PER_AGGREGATE = Check.throwOnLteZero(periodsPerAggregate, "periodsPerAggregate");
         AGGREGATE_OUTPUTS = aggregateOutputs;
-        AGGREGATE_OUTPUTS_ACTIVATION_STATUSES= new HashMap<>();
+        AGGREGATE_OUTPUTS_ACTIVATION_STATUSES = new HashMap<>();
         Check.ifNull(aggregateOutputs, "aggregateOutputs").forEach(aggregateOutput -> {
             Check.ifNull(aggregateOutput, "aggregateOutput");
             Check.ifNullOrEmpty(aggregateOutput.id(), "aggregateOutput.id()");
@@ -106,7 +109,8 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                                             percentageOfPeriodPausedAdj);
                             if (aggregateTargetFps == null) {
                                 aggregateTargetFps = toAddToAggregateTargetFps;
-                            } else {
+                            }
+                            else {
                                 aggregateTargetFps += toAddToAggregateTargetFps;
                             }
                         }
@@ -136,7 +140,8 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                 _msPausedWithinCurrentAggregate = 0;
                 _periodWithinCurrentAggregate = 0;
                 _aggregateTargetFpsDivisor = 0f;
-            } else {
+            }
+            else {
                 _periodWithinCurrentAggregate++;
             }
 

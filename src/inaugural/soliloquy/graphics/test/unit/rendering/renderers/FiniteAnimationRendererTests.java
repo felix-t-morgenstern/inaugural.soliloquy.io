@@ -197,7 +197,7 @@ class FiniteAnimationRendererTests {
         _finiteAnimationRenderer.setMesh(new FakeMesh());
         _finiteAnimationRenderer.render(finiteAnimationRenderable, START_TIMESTAMP);
 
-        assertEquals(START_TIMESTAMP, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(START_TIMESTAMP, (long) COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test
@@ -230,7 +230,7 @@ class FiniteAnimationRendererTests {
 
     @Test
     void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_finiteAnimationRenderer.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _finiteAnimationRenderer.mostRecentTimestamp());
     }
 
     @Test

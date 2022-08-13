@@ -31,7 +31,8 @@ public class FakeShader implements Shader {
     }
 
     @Override
-    public void setUniform(String s, float v, float v1, float v2, float v3) throws IllegalArgumentException {
+    public void setUniform(String s, float v, float v1, float v2, float v3)
+            throws IllegalArgumentException {
 
     }
 

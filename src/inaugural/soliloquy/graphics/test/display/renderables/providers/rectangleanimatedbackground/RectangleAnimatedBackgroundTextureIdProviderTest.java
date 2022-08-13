@@ -59,8 +59,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
-            WindowResolutionManager windowResolutionManager)
-    {
+            WindowResolutionManager windowResolutionManager) {
         //noinspection rawtypes
         return new ArrayList<Renderer>() {{
             add(RectangleRenderer = new RectangleRenderer(null));
@@ -108,7 +107,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
 
         RectangleAnimatedBackgroundTextureIdProvider =
                 new RectangleAnimatedBackgroundTextureIdProvider(java.util.UUID.randomUUID(),
-                        msDuration, (int)(currentTimestamp % msDuration), frames, null, null);
+                        msDuration, (int) (currentTimestamp % msDuration), frames, null, null);
 
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,

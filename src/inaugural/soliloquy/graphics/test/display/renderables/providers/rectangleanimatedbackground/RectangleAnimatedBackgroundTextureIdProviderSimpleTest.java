@@ -11,10 +11,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1024x768 pixels for 8000ms with a titlebar reading "New
- *    Window"
+ * Window"
  * 2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have
- *    background tile of a stone floor, moving to the right, repeating every 2000ms. Each tile will
- *    take up 5% of the screen width.
+ * background tile of a stone floor, moving to the right, repeating every 2000ms. Each tile will
+ * take up 5% of the screen width.
  * 3. The window will then close
  **/
 public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest

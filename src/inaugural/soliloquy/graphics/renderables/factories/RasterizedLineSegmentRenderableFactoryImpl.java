@@ -18,7 +18,7 @@ public class RasterizedLineSegmentRenderableFactoryImpl
                                                 short stipplePattern, short stippleFactor,
                                                 ProviderAtTime<Color> colorProvider,
                                                 ProviderAtTime<FloatBox>
-                                                            renderingDimensionsProvider,
+                                                        renderingDimensionsProvider,
                                                 int z, UUID uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer)

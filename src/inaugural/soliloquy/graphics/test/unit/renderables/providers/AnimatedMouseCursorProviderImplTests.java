@@ -95,7 +95,7 @@ class AnimatedMouseCursorProviderImplTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long)_animatedMouseCursorProvider.mostRecentTimestamp());
+                (long) _animatedMouseCursorProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -106,22 +106,22 @@ class AnimatedMouseCursorProviderImplTests {
                 new AnimatedMouseCursorProviderImpl(ID, CURSORS_AT_MS, MS_DURATION,
                         PERIOD_MODULO_OFFSET, pausedTimestamp, MOST_RECENT_TIMESTAMP);
 
-        assertEquals(pausedTimestamp, (long)animatedMouseCursorProvider.pausedTimestamp());
+        assertEquals(pausedTimestamp, (long) animatedMouseCursorProvider.pausedTimestamp());
     }
 
     @Test
     void testProvide() {
-        assertEquals(MOUSE_CURSOR_3, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_3, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET - 1));
-        assertEquals(MOUSE_CURSOR_1, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET));
-        assertEquals(MOUSE_CURSOR_1, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 - 1));
-        assertEquals(MOUSE_CURSOR_2, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2));
-        assertEquals(MOUSE_CURSOR_2, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3 - 1));
-        assertEquals(MOUSE_CURSOR_3, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_3, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3));
     }
 
@@ -166,7 +166,7 @@ class AnimatedMouseCursorProviderImplTests {
     void testProvideWhenPaused() {
         _animatedMouseCursorProvider.reportPause(MS_2);
 
-        assertEquals(MOUSE_CURSOR_2, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3));
     }
 
@@ -177,9 +177,9 @@ class AnimatedMouseCursorProviderImplTests {
         _animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
         _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
 
-        assertEquals(MOUSE_CURSOR_1, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 - 1 + pauseDuration));
-        assertEquals(MOUSE_CURSOR_2, (long)_animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 + pauseDuration));
     }
 
@@ -190,9 +190,9 @@ class AnimatedMouseCursorProviderImplTests {
         _animatedMouseCursorProvider.reset(resetTimestamp);
 
         assertEquals(MOUSE_CURSOR_1,
-                (long)_animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
+                (long) _animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
         assertEquals(MOUSE_CURSOR_2,
-                (long)_animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
+                (long) _animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
     }
 
     @Test
@@ -248,7 +248,7 @@ class AnimatedMouseCursorProviderImplTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
-                long.class.getCanonicalName() + ">",
+                        long.class.getCanonicalName() + ">",
                 _animatedMouseCursorProvider.getInterfaceName());
     }
 }

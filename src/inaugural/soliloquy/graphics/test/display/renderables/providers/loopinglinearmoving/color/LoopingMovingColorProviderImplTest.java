@@ -17,7 +17,7 @@ class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
     protected static void graphicsPreloaderLoadAction() {
         int periodDuration = 4000;
 
-        HashMap<Integer, Color> valuesAtTimes = new HashMap<Integer, Color>(){{
+        HashMap<Integer, Color> valuesAtTimes = new HashMap<Integer, Color>() {{
             put(0, Color.RED);
             put(periodDuration / 4, Color.BLUE);
             put((periodDuration / 4) * 2, Color.GREEN);

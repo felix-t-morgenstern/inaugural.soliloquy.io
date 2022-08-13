@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableStack;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,9 +59,9 @@ class StackRendererImplTests {
                 _renderer.Rendered.get(1) == renderable3);
         assertSame(renderable1, _renderer.Rendered.get(2));
         assertEquals(3, _renderer.Timestamps.size());
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(0));
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(1));
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_renderer.Timestamps.get(2));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(0));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(1));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(2));
     }
 
     @Test

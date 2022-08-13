@@ -19,7 +19,7 @@ public class FontPreloaderTask implements Runnable {
     private final Collection<FontDefinition> FONT_DEFINITIONS;
     private final Consumer<Font> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public FontPreloaderTask(Collection<FontDefinitionDTO> fontDefinitionDTOs,
                              AssetFactory<FontDefinition, Font> factory,
                              Consumer<Font> processResult) {
@@ -34,7 +34,8 @@ public class FontPreloaderTask implements Runnable {
         PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }
 
-    // NB: Extremely similar to FontImpl::validateFontDefinition; logic is duplicated, since classes are different
+    // NB: Extremely similar to FontImpl::validateFontDefinition; logic is duplicated, since
+    // classes are different
     private void validateFontDefinitionDTO(FontDefinitionDTO fontDefinitionDTO) {
         Check.ifNull(fontDefinitionDTO, "fontDefinitionDTO");
         Check.ifNullOrEmpty(fontDefinitionDTO.id, "fontDefinitionDTO.id()");

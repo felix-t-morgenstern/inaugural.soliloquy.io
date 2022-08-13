@@ -11,15 +11,15 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class FiniteLinearMovingProviderFactoryImpl implements FiniteLinearMovingProviderFactory {
-    /** @noinspection rawtypes*/
-    private final Map<String, Function<UUID,Function<Map,
-            Function<Long,Function<Long,FiniteLinearMovingProvider>>>>> FACTORIES;
+    /** @noinspection rawtypes */
+    private final Map<String, Function<UUID, Function<Map,
+            Function<Long, Function<Long, FiniteLinearMovingProvider>>>>> FACTORIES;
 
     private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
 
     /** @noinspection rawtypes, ConstantConditions */
-    public FiniteLinearMovingProviderFactoryImpl(Map<String, Function<UUID,Function<Map,
-            Function<Long,Function<Long,FiniteLinearMovingProvider>>>>> factories) {
+    public FiniteLinearMovingProviderFactoryImpl(Map<String, Function<UUID, Function<Map,
+            Function<Long, Function<Long, FiniteLinearMovingProvider>>>>> factories) {
         Check.ifMapIsNonEmptyWithRealKeysAndValues(factories, "factories");
 
         FACTORIES = new HashMap<>(factories);
@@ -32,10 +32,10 @@ public class FiniteLinearMovingProviderFactoryImpl implements FiniteLinearMoving
         String type = CAN_GET_INTERFACE_NAME
                 .getProperTypeName(valuesAtTimestamps.values().iterator().next());
         //noinspection rawtypes
-        Function<UUID,Function<Map,Function<Long,Function<Long,FiniteLinearMovingProvider>>>>
+        Function<UUID, Function<Map, Function<Long, Function<Long, FiniteLinearMovingProvider>>>>
                 factory = FACTORIES.get(type);
         //noinspection unchecked
-        return (FiniteLinearMovingProvider<T>)factory.apply(id).apply(valuesAtTimestamps)
+        return (FiniteLinearMovingProvider<T>) factory.apply(id).apply(valuesAtTimestamps)
                 .apply(pausedTimestamp).apply(mostRecentTimestamp);
     }
 

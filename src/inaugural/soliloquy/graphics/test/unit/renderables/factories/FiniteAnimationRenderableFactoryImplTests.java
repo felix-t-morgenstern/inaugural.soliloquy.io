@@ -2,10 +2,12 @@ package inaugural.soliloquy.graphics.test.unit.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.factories.FiniteAnimationRenderableFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -21,7 +23,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 public class FiniteAnimationRenderableFactoryImplTests {
     private final String ANIMATION_SUPPORTING_ID = "animationSupportingId";

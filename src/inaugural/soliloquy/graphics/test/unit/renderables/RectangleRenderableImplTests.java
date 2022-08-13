@@ -63,11 +63,11 @@ class RectangleRenderableImplTests {
                 RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
                 RECTANGLE_RENDERABLE_REMOVE_FROM_CONTAINER);
         _rectangleRenderable.setCapturesMouseEvents(true);
-        
+
         _rectangleRenderableNotSupportingMouseEvents = new RectangleRenderableImpl(
-                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, 
-                BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER, 
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS, 
+                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
+                BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
+                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS,
                 null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 RECTANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
@@ -305,7 +305,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _rectangleRenderable.setOnPress(2, newOnPress);
@@ -314,13 +314,13 @@ class RectangleRenderableImplTests {
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
 
         _rectangleRenderable.press(0, timestamp + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -358,7 +358,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.release(2, timestamp + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -415,7 +415,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _rectangleRenderable.setOnMouseOver(newOnMouseOver);
@@ -423,7 +423,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -453,7 +453,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _rectangleRenderable.setOnMouseLeave(newOnMouseLeave);
@@ -461,7 +461,7 @@ class RectangleRenderableImplTests {
         _rectangleRenderable.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test

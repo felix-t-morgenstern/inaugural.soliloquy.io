@@ -33,8 +33,7 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            int z,
                                            UUID uuid,
                                            Consumer<Renderable> updateZIndexInContainer,
-                                           Consumer<Renderable> removeFromContainer)
-    {
+                                           Consumer<Renderable> removeFromContainer) {
         this(false, null, null, null, null, colorShiftProviders, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
                 removeFromContainer);
@@ -51,8 +50,7 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            int z,
                                            UUID uuid,
                                            Consumer<Renderable> updateZIndexInContainer,
-                                           Consumer<Renderable> removeFromContainer)
-    {
+                                           Consumer<Renderable> removeFromContainer) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave,
                 colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
@@ -152,15 +150,15 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         float offsetX = 0f;
         float offsetY = 0f;
         if (snippet instanceof AnimationFrameSnippet) {
-            offsetX = ((AnimationFrameSnippet)snippet).offsetX();
-            offsetY = ((AnimationFrameSnippet)snippet).offsetY();
+            offsetX = ((AnimationFrameSnippet) snippet).offsetX();
+            offsetY = ((AnimationFrameSnippet) snippet).offsetY();
         }
         Image image = snippet.image();
         int imageX =
-                (int)((((x - offsetX) - renderingArea.leftX()) / renderingArea.width())
+                (int) ((((x - offsetX) - renderingArea.leftX()) / renderingArea.width())
                         * (snippet.rightX() - snippet.leftX())) + snippet.leftX();
         int imageY =
-                (int)((((y - offsetY) - renderingArea.topY()) / renderingArea.height())
+                (int) ((((y - offsetY) - renderingArea.topY()) / renderingArea.height())
                         * (snippet.bottomY() - snippet.topY())) + snippet.topY();
         return image.capturesMouseEventsAtPixel(imageX, imageY);
     }

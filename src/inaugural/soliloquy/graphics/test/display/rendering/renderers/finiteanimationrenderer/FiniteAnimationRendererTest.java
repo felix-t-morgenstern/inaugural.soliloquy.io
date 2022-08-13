@@ -6,7 +6,9 @@ import inaugural.soliloquy.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAggregator;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -35,7 +37,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected final static int FRAME_DURATION = MS_PER_SECOND / 16;
     protected final static float ANIMATION_HEIGHT = 0.5f;
     protected final static float ANIMATION_WIDTH =
-            (((float)FRAME_WIDTH / (float)FRAME_HEIGHT) * ANIMATION_HEIGHT)
+            (((float) FRAME_WIDTH / (float) FRAME_HEIGHT) * ANIMATION_HEIGHT)
                     / RESOLUTION.widthToHeightRatio();
     protected final static float MIDPOINT = 0.5f;
     protected final static int MS_PADDING = 500;
@@ -50,7 +52,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected static Renderer<FiniteAnimationRenderable> FiniteAnimationRenderer;
     protected static int TestDurationMs;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             @SuppressWarnings("unused") WindowResolutionManager windowResolutionManager,
             ColorShiftStackAggregator colorShiftStackAggregator) {

@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL30.GL_VERTEX_ARRAY_BINDING;
 
 class MeshImplTests {
     private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
+            new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     private Mesh _mesh;
 

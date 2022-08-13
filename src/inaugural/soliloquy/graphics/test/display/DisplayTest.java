@@ -25,7 +25,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class DisplayTest {
     protected final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
+            new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     protected final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
     protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -37,7 +37,7 @@ public class DisplayTest {
     protected static FakeFrameTimer FrameTimer;
     protected static MouseCursor MouseCursor = new FakeMouseCursor();
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     protected static void runTest(Function<WindowResolutionManager, List<Renderer>>
                                           generateRenderablesAndRenderersWithMeshAndShader,
                                   Consumer<Long> stackRendererAction,

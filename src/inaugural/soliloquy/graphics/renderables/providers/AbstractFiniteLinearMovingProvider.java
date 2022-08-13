@@ -65,7 +65,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
         long time2 = NEAREST_FLOOR_AND_CEILING_TREE
                 .OrderedValues[NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1) + 1];
         long distanceBetweenTimes = time2 - time1;
-        float weight2 = (timestamp - time1) / (float)distanceBetweenTimes;
+        float weight2 = (timestamp - time1) / (float) distanceBetweenTimes;
         float weight1 = 1f - weight2;
         T value1 = VALUES_AT_TIMES.get(time1);
         T value2 = VALUES_AT_TIMES.get(time2);

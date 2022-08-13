@@ -11,7 +11,7 @@ import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFa
 
 import java.util.UUID;
 
-/** @noinspection rawtypes*/
+/** @noinspection rawtypes */
 public class StaticProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<StaticProvider> {
     private final TypeHandler<UUID> UUID_HANDLER;
@@ -66,7 +66,7 @@ public class StaticProviderHandler
         Long mostRecentTimestamp;
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static class StaticProviderArchetype implements StaticProvider {
 
         @Override

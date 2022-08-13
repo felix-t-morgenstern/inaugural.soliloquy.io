@@ -53,7 +53,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                 @SuppressWarnings("rawtypes") Collection<Renderer>
                                         renderersWithShader,
                                 String shaderFilenamePrefix,
-                                Function<float[], Function<float[],Mesh>> meshFactory,
+                                Function<float[], Function<float[], Mesh>> meshFactory,
                                 @SuppressWarnings("rawtypes") Collection<Renderer>
                                         renderersWithMesh,
                                 float[] meshVertices,
@@ -115,12 +115,13 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         mesh.bind();
 
-        // TODO: Consider test for whether GraphicsPreloader.load was called _before_ the first invocation of FrameTimer.shouldExecuteNextFrame
+        // TODO: Consider test for whether GraphicsPreloader.load was called _before_ the first
+        //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
 
         new Thread(gameThread).start();
 
-        while(!glfwWindowShouldClose(_window)) {
+        while (!glfwWindowShouldClose(_window)) {
             MOUSE_CURSOR.updateCursor(_window);
 
             if (FRAME_TIMER.shouldExecuteNextFrame()) {

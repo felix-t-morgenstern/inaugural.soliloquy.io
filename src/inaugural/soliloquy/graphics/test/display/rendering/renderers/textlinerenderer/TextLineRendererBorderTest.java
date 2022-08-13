@@ -2,7 +2,8 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -47,7 +48,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
                 TextLineRendererBorderTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT.put('j', 0.000625f);
@@ -76,7 +77,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.5f, 0.45f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.5f, 0.45f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.1f), 0f, LINE_TEXT,

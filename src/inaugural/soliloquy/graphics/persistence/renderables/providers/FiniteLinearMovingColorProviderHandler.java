@@ -21,8 +21,7 @@ public class FiniteLinearMovingColorProviderHandler
 
     public FiniteLinearMovingColorProviderHandler(TypeHandler<UUID> uuidHandler,
                                                   FiniteLinearMovingColorProviderFactory
-                                                          finiteLinearMovingColorProviderFactory)
-    {
+                                                          finiteLinearMovingColorProviderFactory) {
         super(ARCHETYPE);
         UUID_HANDLER = Check.ifNull(uuidHandler, "uuidHandler");
         FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY =
@@ -31,7 +30,8 @@ public class FiniteLinearMovingColorProviderHandler
     }
 
     @Override
-    public FiniteLinearMovingColorProvider read(String writtenValue) throws IllegalArgumentException {
+    public FiniteLinearMovingColorProvider read(String writtenValue)
+            throws IllegalArgumentException {
         FiniteLinearMovingColorProviderDTO dto = JSON.fromJson(
                 Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingColorProviderDTO.class);

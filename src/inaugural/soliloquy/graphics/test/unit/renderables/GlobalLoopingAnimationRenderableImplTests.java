@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderable
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
@@ -21,7 +20,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class GlobalLoopingAnimationRenderableImplTests {
     private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS =
@@ -76,7 +74,7 @@ class GlobalLoopingAnimationRenderableImplTests {
     @BeforeEach
     void setUp() {
         ON_PRESS_ACTIONS.put(2, ON_PRESS_ACTION);
-        
+
         _globalLoopingAnimationRenderableWithMouseEvents =
                 new GlobalLoopingAnimationRenderableImpl(
                         GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS,
@@ -340,7 +338,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _globalLoopingAnimationRenderableWithMouseEvents.setOnPress(2, newOnPress);
@@ -349,13 +347,13 @@ class GlobalLoopingAnimationRenderableImplTests {
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
 
         _globalLoopingAnimationRenderableWithMouseEvents.press(0, timestamp + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -395,7 +393,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.release(2, timestamp + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -456,7 +454,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _globalLoopingAnimationRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
@@ -464,7 +462,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -497,7 +495,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _globalLoopingAnimationRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
@@ -505,7 +503,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -644,7 +642,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         animationFrameSnippet.RightX = 750;
         animationFrameSnippet.TopY = 1000;
         animationFrameSnippet.BottomY = 2500;
-        FakeImage snippetImage = (FakeImage)animationFrameSnippet.Image;
+        FakeImage snippetImage = (FakeImage) animationFrameSnippet.Image;
         snippetImage.Width = 1000;
         snippetImage.Height = 3000;
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
@@ -657,14 +655,14 @@ class GlobalLoopingAnimationRenderableImplTests {
                 snippetImage.CapturesMouseEventsAtPixelInputs;
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
-                (int)(((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) (((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
         assertEquals(
-                (int)(((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
+                (int) (((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
                         + 1000),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+        assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test

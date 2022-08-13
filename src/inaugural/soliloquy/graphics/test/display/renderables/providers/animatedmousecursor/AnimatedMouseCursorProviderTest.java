@@ -57,7 +57,7 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
         }};
         int msDuration = 1000;
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
-        int periodModuloOffset = msDuration - (int)(timestamp % msDuration);
+        int periodModuloOffset = msDuration - (int) (timestamp % msDuration);
 
         _animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(
                 "id", mouseCursorsAtMs, msDuration, periodModuloOffset, null, null);

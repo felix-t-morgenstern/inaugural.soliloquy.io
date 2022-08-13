@@ -28,7 +28,7 @@ public abstract class AbstractRenderableWithDimensions extends AbstractRenderabl
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
-                                                           renderingDimensionsProvider)
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
         _renderingAreaProvider = Check.ifNull(renderingDimensionsProvider,
                 "renderingDimensionsProvider");

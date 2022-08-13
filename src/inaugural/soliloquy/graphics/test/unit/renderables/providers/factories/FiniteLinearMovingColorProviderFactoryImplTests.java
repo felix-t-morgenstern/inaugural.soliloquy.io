@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingColo
 import inaugural.soliloquy.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingColorProviderFactoryImplTests {
     private final HashMap<Long, Color> VALUES_AT_TIMES = new HashMap<>();
@@ -74,7 +72,7 @@ class FiniteLinearMovingColorProviderFactoryImplTests {
         assertNotNull(finiteLinearMovingColorProvider);
         assertTrue(finiteLinearMovingColorProvider instanceof FiniteLinearMovingColorProviderImpl);
     }
-    
+
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
@@ -89,13 +87,13 @@ class FiniteLinearMovingColorProviderFactoryImplTests {
                         _hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingColorProviderFactory.make(UUID, new HashMap<Long, Color>() {{
-                    put(null, Color.RED);
-                }},
+                            put(null, Color.RED);
+                        }},
                         _hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingColorProviderFactory.make(UUID, new HashMap<Long, Color>() {{
-                    put(123L, null);
-                }},
+                            put(123L, null);
+                        }},
                         _hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->

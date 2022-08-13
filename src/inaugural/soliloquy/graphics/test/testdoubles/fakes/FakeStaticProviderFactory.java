@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class FakeStaticProviderFactory implements StaticProviderFactory {
     public ArrayList<Object> Inputs = new ArrayList<>();
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     public ArrayList<StaticProvider> Outputs = new ArrayList<>();
 
     @Override

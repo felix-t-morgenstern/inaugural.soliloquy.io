@@ -16,7 +16,8 @@ public class TextLineRendererTest extends DisplayTest {
     protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN = 0.5f;
     protected final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_TRAJAN = 0.2f;
     protected final static float LEADING_ADJUSTMENT = 0f;
-    protected final static String RELATIVE_LOCATION_OSWALD = "./res/fonts/Oswald-VariableFont_wght.ttf";
+    protected final static String RELATIVE_LOCATION_OSWALD =
+            "./res/fonts/Oswald-VariableFont_wght.ttf";
     protected final static float MAX_LOSSLESS_FONT_SIZE_OSWALD = 200f;
     protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD = 0.25f;
     protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC_OSWALD = 0.5f;

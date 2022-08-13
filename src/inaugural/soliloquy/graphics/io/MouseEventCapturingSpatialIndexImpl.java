@@ -23,13 +23,14 @@ public class MouseEventCapturingSpatialIndexImpl
         List<RTreeFacade.RenderableWithMouseEventsSearchObject> roughResults = R_TREE.search(x, y);
         int highestZThusFar = Integer.MIN_VALUE;
         RenderableWithMouseEvents renderableWithHighestZThusFar = null;
-        for(RTreeFacade.RenderableWithMouseEventsSearchObject roughResult : roughResults) {
-            if(roughResult._renderingDimensions.leftX() <= x &&
+        for (RTreeFacade.RenderableWithMouseEventsSearchObject roughResult : roughResults) {
+            if (roughResult._renderingDimensions.leftX() <= x &&
                     roughResult._renderingDimensions.topY() <= y &&
                     roughResult._renderingDimensions.rightX() >= x &&
                     roughResult._renderingDimensions.bottomY() >= y &&
                     roughResult._renderableWithMouseEvents.getZ() > highestZThusFar &&
-                    roughResult._renderableWithMouseEvents.capturesMouseEventAtPoint(x, y, timestamp)) {
+                    roughResult._renderableWithMouseEvents
+                            .capturesMouseEventAtPoint(x, y, timestamp)) {
                 highestZThusFar = roughResult._renderableWithMouseEvents.getZ();
                 renderableWithHighestZThusFar = roughResult._renderableWithMouseEvents;
             }

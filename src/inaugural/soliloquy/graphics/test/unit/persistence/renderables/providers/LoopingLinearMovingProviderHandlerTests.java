@@ -30,7 +30,7 @@ class LoopingLinearMovingProviderHandlerTests {
                 put(TIMESTAMP_1, VALUE_1);
                 put(TIMESTAMP_2, VALUE_2);
                 put(TIMESTAMP_3, VALUE_3);
-    }};
+            }};
     private static final int PERIOD_DURATION = 1312;
     private static final int PERIOD_MODULO_OFFSET = 1234;
     private static final Long PAUSED_TIMESTAMP = 123L;
@@ -45,19 +45,24 @@ class LoopingLinearMovingProviderHandlerTests {
     private static final int INTEGER_ARCHETYPE = 1312;
     private static final float FLOAT_ARCHETYPE = 0.2624f;
 
-    private static final String WRITTEN_VALUE = "{\"id\":\"uuidWriteOutput\",\"duration\":1312,\"offset\":1234,\"valueAtTimes\":[{\"time\":789,\"value\":\"floatWriteOutput\"},{\"time\":456,\"value\":\"floatWriteOutput\"},{\"time\":123,\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123,\"mostRecentTimestamp\":456,\"type\":\"java.lang.Float\"}";
+    private static final String WRITTEN_VALUE =
+            "{\"id\":\"uuidWriteOutput\",\"duration\":1312,\"offset\":1234," +
+                    "\"valueAtTimes\":[{\"time\":789,\"value\":\"floatWriteOutput\"}," +
+                    "{\"time\":456,\"value\":\"floatWriteOutput\"},{\"time\":123," +
+                    "\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123," +
+                    "\"mostRecentTimestamp\":456,\"type\":\"java.lang.Float\"}";
 
     @Mock private PersistentValuesHandler _persistentValuesHandler;
     @Mock private TypeHandler<UUID> _uuidHandler;
     @Mock private TypeHandler<Float> _floatHandler;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     @Mock private LoopingLinearMovingProvider _mockLoopingLinearMovingProvider;
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     @Mock private LoopingLinearMovingProvider _mockLoopingLinearMovingProviderFactoryOutput;
     @Mock private LoopingLinearMovingProviderFactory _mockLoopingLinearMovingProviderFactory;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private TypeWithOneGenericParamHandler<LoopingLinearMovingProvider>
             _loopingLinearMovingProviderHandler;
 

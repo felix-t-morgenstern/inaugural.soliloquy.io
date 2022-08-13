@@ -24,12 +24,14 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     }
 
     @Override
-    public void setWindowDisplayMode(WindowDisplayMode windowDisplayMode) throws IllegalArgumentException {
+    public void setWindowDisplayMode(WindowDisplayMode windowDisplayMode)
+            throws IllegalArgumentException {
         _windowDisplayMode = windowDisplayMode;
     }
 
     @Override
-    public void setDimensions(int i, int i1) throws IllegalArgumentException, UnsupportedOperationException {
+    public void setDimensions(int i, int i1)
+            throws IllegalArgumentException, UnsupportedOperationException {
         _width = i;
         _height = i1;
     }
@@ -59,7 +61,8 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
         if (UpdateWindowSizeAndLocationAction != null) {
             try {
                 return UpdateWindowSizeAndLocationAction.call();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new RuntimeException();
             }
         }

@@ -14,7 +14,7 @@ public class FakeStackRenderer implements StackRenderer {
     public void render(long timestamp) {
         NumberOfTimesRenderCalled++;
         Timestamps.add(timestamp);
-        
+
         if (RenderAction != null) {
             RenderAction.accept(timestamp);
         }

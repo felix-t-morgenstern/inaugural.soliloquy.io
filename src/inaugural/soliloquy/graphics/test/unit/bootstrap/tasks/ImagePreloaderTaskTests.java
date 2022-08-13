@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.ImageDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.ImagePreloaderTask;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageFactory;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
 

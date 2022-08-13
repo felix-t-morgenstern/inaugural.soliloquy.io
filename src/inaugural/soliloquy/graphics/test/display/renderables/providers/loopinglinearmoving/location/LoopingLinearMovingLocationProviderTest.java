@@ -24,7 +24,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
 
     protected static ResettableProvider<Pair<Float, Float>> LoopingLinearMovingLocationProvider;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         FontStyleDefinition plain = new FontStyleDefinition(
@@ -53,7 +53,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
 
         long startTimestamp = GLOBAL_CLOCK.globalTimestamp();
         int periodDuration = 4000;
-        int periodModuloOffset = periodDuration - (int)(startTimestamp % (periodDuration));
+        int periodModuloOffset = periodDuration - (int) (startTimestamp % (periodDuration));
         HashMap<Integer, Pair<Float, Float>> valuesAtTimes =
                 new HashMap<Integer, Pair<Float, Float>>() {{
                     put(0, new Pair<>(0.125f, 0.125f));

@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatBoxProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingFloatBoxProviderTests {
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -91,7 +90,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
 
         float weightedFloatBox1LeftX = FLOAT_BOX_1_LEFT_X * time1Weight;
@@ -121,7 +120,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
                         pausedTimestamp, MOST_RECENT_TIMESTAMP);
 
         assertEquals(pausedTimestamp,
-                (long)pausedFiniteLinearMovingFloatBoxProvider.pausedTimestamp());
+                (long) pausedFiniteLinearMovingFloatBoxProvider.pausedTimestamp());
     }
 
     @Test
@@ -149,7 +148,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatBoxProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long)_finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
 
         _finiteLinearMovingFloatBoxProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
 
@@ -160,9 +159,9 @@ class FiniteLinearMovingFloatBoxProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatBoxProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingFloatBoxProvider.pausedTimestamp());
+                (long) _finiteLinearMovingFloatBoxProvider.pausedTimestamp());
 
         _finiteLinearMovingFloatBoxProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
 
@@ -173,7 +172,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatBoxProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
         assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long)_finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatBoxProvider.mostRecentTimestamp());
         assertNull(_finiteLinearMovingFloatBoxProvider.pausedTimestamp());
     }
 
@@ -194,7 +193,7 @@ class FiniteLinearMovingFloatBoxProviderTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
 
         float weightedFloatBox1LeftX = FLOAT_BOX_1_LEFT_X * time1Weight;

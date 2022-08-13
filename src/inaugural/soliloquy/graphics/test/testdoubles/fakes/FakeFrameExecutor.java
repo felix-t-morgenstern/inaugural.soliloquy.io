@@ -21,7 +21,8 @@ public class FakeFrameExecutor implements FrameExecutor {
     }
 
     @Override
-    public void registerFrameBlockingEvent(Consumer<Long> consumer) throws IllegalArgumentException {
+    public void registerFrameBlockingEvent(Consumer<Long> consumer)
+            throws IllegalArgumentException {
 
     }
 

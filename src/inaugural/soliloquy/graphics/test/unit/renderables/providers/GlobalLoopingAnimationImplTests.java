@@ -78,22 +78,22 @@ class GlobalLoopingAnimationImplTests {
 
     @Test
     void testPauseTimestamp() {
-        assertEquals(PAUSE_TIMESTAMP, (long)new GlobalLoopingAnimationImpl(ID, ANIMATION,
+        assertEquals(PAUSE_TIMESTAMP, (long) new GlobalLoopingAnimationImpl(ID, ANIMATION,
                 PERIOD_MODULO_OFFSET, PAUSE_TIMESTAMP).pausedTimestamp());
     }
 
     @Test
     void testProvideAndMostRecentTimestamp() {
         long timestamp = 789789L;
-        int expectedFrame = (int)((timestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
+        int expectedFrame = (int) ((timestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
 
         AnimationFrameSnippet providedSnippet = _globalLoopingAnimation.provide(timestamp);
 
-        assertEquals(timestamp, (long)_globalLoopingAnimation.mostRecentTimestamp());
+        assertEquals(timestamp, (long) _globalLoopingAnimation.mostRecentTimestamp());
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetWithFrame =
                 ANIMATION.SnippetsProvided.get(0);
-        assertEquals(expectedFrame, (int)providedSnippetWithFrame.getItem1());
+        assertEquals(expectedFrame, (int) providedSnippetWithFrame.getItem1());
         assertSame(providedSnippetWithFrame.getItem2(), providedSnippet);
     }
 
@@ -107,7 +107,7 @@ class GlobalLoopingAnimationImplTests {
         long pauseTimestamp = 10000L;
         long unpauseTimestamp = 10001L;
         int expectedPeriodModuloOffset =
-                (PERIOD_MODULO_OFFSET - (int)(unpauseTimestamp - pauseTimestamp) + MS_DURATION)
+                (PERIOD_MODULO_OFFSET - (int) (unpauseTimestamp - pauseTimestamp) + MS_DURATION)
                         % MS_DURATION;
 
         assertNull(_globalLoopingAnimation.pausedTimestamp());
@@ -147,14 +147,14 @@ class GlobalLoopingAnimationImplTests {
     void testTimestampSentToProviderWhenPausedAndUnpaused() {
         long pauseTimestamp = 10000L;
         int expectedMsSentToProviderWhilePaused =
-                (int)((pauseTimestamp  + PERIOD_MODULO_OFFSET) % MS_DURATION);
+                (int) ((pauseTimestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
         long unpauseTimestamp = 10500L;
         int periodModuloOffsetAfterUnpaused =
-                (PERIOD_MODULO_OFFSET - (int)(unpauseTimestamp - pauseTimestamp) + MS_DURATION)
+                (PERIOD_MODULO_OFFSET - (int) (unpauseTimestamp - pauseTimestamp) + MS_DURATION)
                         % MS_DURATION;
         long providedTimestampAfterUnpaused = 10525L;
         int expectedMsSentToProviderAfterUnpaused =
-                (int)((providedTimestampAfterUnpaused + periodModuloOffsetAfterUnpaused)
+                (int) ((providedTimestampAfterUnpaused + periodModuloOffsetAfterUnpaused)
                         % MS_DURATION);
 
         _globalLoopingAnimation.reportPause(pauseTimestamp);
@@ -168,7 +168,7 @@ class GlobalLoopingAnimationImplTests {
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionWhilePaused =
                 ANIMATION.SnippetsProvided.get(0);
         assertEquals(expectedMsSentToProviderWhilePaused,
-                (int)providedSnippetAndMsPositionWhilePaused.getItem1());
+                (int) providedSnippetAndMsPositionWhilePaused.getItem1());
         assertSame(providedSnippetWhilePaused, providedSnippetAndMsPositionWhilePaused.getItem2());
 
         _globalLoopingAnimation.reportUnpause(unpauseTimestamp);
@@ -183,7 +183,7 @@ class GlobalLoopingAnimationImplTests {
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionAfterUnpaused =
                 ANIMATION.SnippetsProvided.get(1);
         assertEquals(expectedMsSentToProviderAfterUnpaused,
-                (int)providedSnippetAndMsPositionAfterUnpaused.getItem1());
+                (int) providedSnippetAndMsPositionAfterUnpaused.getItem1());
         assertSame(providedSnippetAfterUnpaused,
                 providedSnippetAndMsPositionAfterUnpaused.getItem2());
     }

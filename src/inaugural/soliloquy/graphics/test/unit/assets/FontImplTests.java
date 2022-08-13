@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.test.unit.assets;
 
 import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -1445,41 +1445,41 @@ class FontImplTests {
     @Test
     void testGetUvCoordinatesForGlyphWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> Font.plain().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.plain().getUvCoordinatesForGlyph((char) (ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.plain().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
+                () -> Font.plain().getUvCoordinatesForGlyph((char) ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.plain().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.plain().getUvCoordinatesForGlyph((char) NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphItalicWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> Font.italic().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.italic().getUvCoordinatesForGlyph((char) (ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.italic().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
+                () -> Font.italic().getUvCoordinatesForGlyph((char) ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.italic().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.italic().getUvCoordinatesForGlyph((char) NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBoldWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) (ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test
     void testGetUvCoordinatesForGlyphBoldItalicWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)(ASCII_CHAR_SPACE - 1)));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) (ASCII_CHAR_SPACE - 1)));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)ASCII_CHAR_DELETE));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) ASCII_CHAR_DELETE));
         assertThrows(IllegalArgumentException.class,
-                () -> Font.bold().getUvCoordinatesForGlyph((char)NUMBER_EXTENDED_ASCII_CHARS));
+                () -> Font.bold().getUvCoordinatesForGlyph((char) NUMBER_EXTENDED_ASCII_CHARS));
     }
 
     @Test

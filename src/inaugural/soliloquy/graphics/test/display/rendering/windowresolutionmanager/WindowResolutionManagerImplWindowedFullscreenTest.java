@@ -22,14 +22,13 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window in windowed fullscreen mode, setting the window to take up
- *    the entirety of the screen, without changing the screen's resolution. The window will stay up
- *    for 3000ms.
+ * the entirety of the screen, without changing the screen's resolution. The window will stay up
+ * for 3000ms.
  * 2. The window will then close
- *
  */
 class WindowResolutionManagerImplWindowedFullscreenTest {
     private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
+            new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(

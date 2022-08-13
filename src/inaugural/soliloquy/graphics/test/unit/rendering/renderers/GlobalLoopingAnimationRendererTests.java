@@ -184,13 +184,13 @@ class GlobalLoopingAnimationRendererTests {
         _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
                 MOST_RECENT_TIMESTAMP + 123);
 
-        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long) COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long)_globalLoopingAnimationRenderer.mostRecentTimestamp());
+                (long) _globalLoopingAnimationRenderer.mostRecentTimestamp());
     }
 
     @Test

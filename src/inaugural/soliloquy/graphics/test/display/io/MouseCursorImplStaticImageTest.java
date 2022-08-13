@@ -16,9 +16,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 800x600 pixels for 4000ms with a titlebar reading "New
- *    Window". The mouse cursor will be a 90s-looking teal and light blue cursor.
+ * Window". The mouse cursor will be a 90s-looking teal and light blue cursor.
  * 2. The window will then close
- *
  */
 class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
     private static final String MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION =

@@ -16,12 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
-            WindowResolutionManager windowResolutionManager)
-    {
+            WindowResolutionManager windowResolutionManager) {
         Sprite = new FakeSprite(null, 266, 271, 313, 343);
         SpriteRenderable = new FakeSpriteRenderable(Sprite, new ArrayList<>(),
                 new StaticProviderImpl<>(

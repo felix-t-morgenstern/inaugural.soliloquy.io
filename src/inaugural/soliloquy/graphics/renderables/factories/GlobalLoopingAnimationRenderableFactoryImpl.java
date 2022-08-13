@@ -23,7 +23,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  ProviderAtTime<Float> borderThicknessProvider,
                                                  ProviderAtTime<Color> borderColorProvider,
                                                  List<ProviderAtTime<ColorShift>>
-                                                             colorShiftProviders,
+                                                         colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,
@@ -43,7 +43,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  Action<Long> onMouseOver,
                                                  Action<Long> onMouseLeave,
                                                  List<ProviderAtTime<ColorShift>>
-                                                             colorShiftProviders,
+                                                         colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
                                                  Consumer<Renderable> updateZIndexInContainer,

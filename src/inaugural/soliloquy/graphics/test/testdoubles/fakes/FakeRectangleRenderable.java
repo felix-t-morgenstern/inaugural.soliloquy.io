@@ -127,7 +127,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void press(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
@@ -142,7 +143,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void release(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 

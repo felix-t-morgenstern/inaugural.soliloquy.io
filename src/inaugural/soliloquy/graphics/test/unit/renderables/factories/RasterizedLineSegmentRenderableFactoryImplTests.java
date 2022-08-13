@@ -5,7 +5,6 @@ import inaugural.soliloquy.graphics.renderables.factories.RasterizedLineSegmentR
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
@@ -17,7 +16,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class RasterizedLineSegmentRenderableFactoryImplTests {
     private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -43,64 +41,64 @@ class RasterizedLineSegmentRenderableFactoryImplTests {
         assertEquals(RasterizedLineSegmentRenderableFactory.class.getCanonicalName(),
                 _rasterizedLineSegmentRenderableFactory.getInterfaceName());
     }
-    
+
     @Test
     void testMake() {
-        RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable = 
-                _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN, 
+        RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable =
+                _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
 
         assertNotNull(rasterizedLineSegmentRenderable);
         assertTrue(rasterizedLineSegmentRenderable instanceof RasterizedLineSegmentRenderableImpl);
     }
-    
+
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(null, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, (short) 0,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         (short) 0, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         (short) 257, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, null, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, null, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null,
                         UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         null, REMOVE_FROM_CONTAINER
-        ));
+                ));
         assertThrows(IllegalArgumentException.class, () ->
                 _rasterizedLineSegmentRenderableFactory.make(THICKNESS_PROVIDER, STIPPLE_PATTERN,
                         STIPPLE_FACTOR, COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
                         UPDATE_Z_INDEX_IN_CONTAINER, null
-        ));
+                ));
     }
 }

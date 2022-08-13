@@ -3,7 +3,9 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 import inaugural.soliloquy.graphics.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.AnimationFrameDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.AnimationPreloaderTask;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Animation;
@@ -51,11 +53,11 @@ class AnimationPreloaderTaskTests {
                         87, 65, 43, 21, 0.7f, 0.8f);
 
         AnimationDefinitionDTO animation1DTO = new AnimationDefinitionDTO("animation1", 555,
-                new AnimationFrameDefinitionDTO[] {
+                new AnimationFrameDefinitionDTO[]{
                         animation1Frame1, animation1Frame2
                 });
         AnimationDefinitionDTO animation2DTO = new AnimationDefinitionDTO("animation2", 666,
-                new AnimationFrameDefinitionDTO[] {
+                new AnimationFrameDefinitionDTO[]{
                         animation2Frame1, animation2Frame2
                 });
 
@@ -172,7 +174,7 @@ class AnimationPreloaderTaskTests {
                         REGISTRY::add));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderTask(IMAGES::get, ANIMATION_DEFINITION_DTOS, FACTORY,null));
+                new AnimationPreloaderTask(IMAGES::get, ANIMATION_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test
@@ -191,7 +193,7 @@ class AnimationPreloaderTaskTests {
                 assertEquals(animationDefinitionDTO.msDur, inputDefinition.msDuration());
                 assertEquals(animationDefinitionDTO.frames.length,
                         inputDefinition.frameSnippetDefinitions().size());
-                for(AnimationFrameDefinitionDTO frameDTO :
+                for (AnimationFrameDefinitionDTO frameDTO :
                         animationDefinitionDTO.frames) {
                     AnimationFrameSnippet createdSnippet =
                             inputDefinition.frameSnippetDefinitions().get(frameDTO.ms);

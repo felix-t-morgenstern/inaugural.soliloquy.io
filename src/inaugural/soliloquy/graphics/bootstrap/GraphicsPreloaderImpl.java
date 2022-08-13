@@ -20,7 +20,10 @@ import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAni
 import soliloquy.specs.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -72,7 +75,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
 
     private Throwable _innerThrowable;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public GraphicsPreloaderImpl(AssetDefinitionsDTO assetDefinitionsDTO,
                                  int threadPoolSize,
                                  Map<AssetType, Integer> assetTypeBatchSizes,
@@ -234,13 +237,13 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
 
         if (_innerThrowable != null) {
             if (_innerThrowable instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException)_innerThrowable;
+                throw (IllegalArgumentException) _innerThrowable;
             }
             if (_innerThrowable instanceof IllegalStateException) {
-                throw (IllegalStateException)_innerThrowable;
+                throw (IllegalStateException) _innerThrowable;
             }
             if (_innerThrowable instanceof UnsupportedOperationException) {
-                throw (UnsupportedOperationException)_innerThrowable;
+                throw (UnsupportedOperationException) _innerThrowable;
             }
             throw new RuntimeException(_innerThrowable.getMessage());
         }
@@ -297,13 +300,13 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     }
 
     private <TDefinitionDTO> void loadAllSerially(TDefinitionDTO[] definitionDTOs,
-                                                  Function<List<TDefinitionDTO>,Runnable>
+                                                  Function<List<TDefinitionDTO>, Runnable>
                                                           taskFactory) {
         int assetsLoaded = 0;
         int totalAssets = definitionDTOs.length;
         int batchSize = ASSET_TYPE_BATCH_SIZES.get(AssetType.IMAGE);
 
-        while(assetsLoaded < totalAssets) {
+        while (assetsLoaded < totalAssets) {
             int numberToTake = Math.min(batchSize + assetsLoaded, totalAssets);
 
             ArrayList<TDefinitionDTO> batch = new ArrayList<>(
@@ -319,7 +322,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private <TDefinitionDTO> CompletableFuture<Void> loadBatchesParallellyTask(
             LinkedBlockingQueue<TDefinitionDTO> definitionDTOs,
             int batchSize,
-            Function<List<TDefinitionDTO>,Runnable> taskFactory,
+            Function<List<TDefinitionDTO>, Runnable> taskFactory,
             Object lockObject,
             Runnable increaseCompletedBatchesCount) {
         // NB: This magic works, since int division always rounds down

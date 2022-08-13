@@ -11,10 +11,9 @@ import static org.lwjgl.glfw.GLFW.*;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
- *    Window"
+ * Window"
  * 2. The mouse cursor will then change to a hand icon for 2000ms
  * 2. The window will then close
- *
  */
 class MouseCursorImplSimpleTest extends MouseCursorImplTest {
     public static void main(String[] args) {

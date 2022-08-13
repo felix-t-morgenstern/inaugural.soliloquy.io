@@ -5,8 +5,6 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimatedMou
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
-import java.util.Map;
-
 public class AnimatedMouseCursorProviderFactoryImpl implements AnimatedMouseCursorProviderFactory {
     @Override
     public AnimatedMouseCursorProvider make(AnimatedMouseCursorProviderDefinition definition)

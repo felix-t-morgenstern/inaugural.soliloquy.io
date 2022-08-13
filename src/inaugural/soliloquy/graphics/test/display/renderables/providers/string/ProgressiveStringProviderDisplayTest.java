@@ -4,7 +4,9 @@ import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -24,10 +26,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "I appear over time!", white, aligned left, near the
- *    left edge of the window, vertically centered, gradually, starting at 2000ms, and completing
- *    at 6000ms.
+ * left edge of the window, vertically centered, gradually, starting at 2000ms, and completing
+ * at 6000ms.
  * 2. The window will then close.
- *
  */
 public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "I appear over time!";
@@ -52,7 +53,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 ProgressiveStringProviderDisplayTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             long startOffset,
@@ -81,7 +82,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         long now = new FakeGlobalClock().globalTimestamp();
         LineTextProvider = new ProgressiveStringProvider(java.util.UUID.randomUUID(), LINE_TEXT,

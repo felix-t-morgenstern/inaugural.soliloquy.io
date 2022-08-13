@@ -3,14 +3,12 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class ProgressiveStringProviderTests {
     private final String STRING = randomString();

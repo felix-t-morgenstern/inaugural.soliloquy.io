@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** @noinspection rawtypes*/
+/** @noinspection rawtypes */
 public class LoopingLinearMovingProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<LoopingLinearMovingProvider> {
     private final TypeHandler<UUID> UUID_HANDLER;
@@ -42,7 +42,7 @@ public class LoopingLinearMovingProviderHandler
                 LoopingLinearMovingProviderDto.class);
 
         TypeHandler innerTypeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.type);
-        HashMap<Integer,Object> valuesWithinPeriod = new HashMap<>();
+        HashMap<Integer, Object> valuesWithinPeriod = new HashMap<>();
         for (LoopingLinearMovingProviderValueAtTimeDto valueWithinPeriodDto : dto.valueAtTimes) {
             valuesWithinPeriod.put(valueWithinPeriodDto.time,
                     innerTypeHandler.read(valueWithinPeriodDto.value));
@@ -106,7 +106,8 @@ public class LoopingLinearMovingProviderHandler
         String value;
     }
 
-    private static class LoopingLinearMovingProviderArchetype implements LoopingLinearMovingProvider {
+    private static class LoopingLinearMovingProviderArchetype
+            implements LoopingLinearMovingProvider {
 
         @Override
         public Map valuesWithinPeriod() {

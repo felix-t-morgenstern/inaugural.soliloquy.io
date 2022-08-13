@@ -7,9 +7,8 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeNetColorShifts;
  * Test acceptance criteria:
  *
  * 1. An 800x600 window will open. An explosion will be displayed in the center of the window over
- *    roughly 1250ms. The explosion will be shifted to be green.
+ * roughly 1250ms. The explosion will be shifted to be green.
  * 2. The window will close.
- *
  */
 public class FiniteAnimationRendererColorRotationShiftTest extends FiniteAnimationRendererTest {
     public static void main(String[] args) {

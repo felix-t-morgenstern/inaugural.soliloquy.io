@@ -23,7 +23,7 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
         boolean netBlueSealed = false;
         boolean netColorRotationSealed = false;
 
-        for(ColorShift colorShift : colorShifts) {
+        for (ColorShift colorShift : colorShifts) {
             Check.ifNull(colorShift, "colorShift in colorShifts");
             float value = verifyProvidedValue(colorShift.shiftAmountProvider().provide(timestamp));
             boolean overrides = colorShift.overridesPriorShiftsOfSameType();
@@ -35,11 +35,11 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
             }
             if (colorShift instanceof ColorComponentIntensityShift) {
                 ColorComponentIntensityShift ColorComponentIntensityShift =
-                        (ColorComponentIntensityShift)colorShift;
+                        (ColorComponentIntensityShift) colorShift;
                 ColorComponent colorComponent = ColorComponentIntensityShift.colorComponent();
                 Check.ifNull(colorComponent,
                         "ColorComponent provided by ColorComponentIntensityShift");
-                switch(colorComponent) {
+                switch (colorComponent) {
                     case RED:
                         if (!netRedSealed) {
                             netRedShift = getNewValue(netRedShift, value);

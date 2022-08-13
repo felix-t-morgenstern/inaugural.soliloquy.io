@@ -16,7 +16,7 @@ public class StaticMouseCursorPreloaderTask implements Runnable {
     private final Collection<StaticMouseCursorDefinitionDTO> STATIC_MOUSE_CURSOR_DTOS;
     private final Consumer<StaticMouseCursorProvider> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public StaticMouseCursorPreloaderTask(Function<String, Long> getMouseCursorByRelativeLocation,
                                           Collection<StaticMouseCursorDefinitionDTO>
                                                   staticMouseCursorDefinitionDTOs,

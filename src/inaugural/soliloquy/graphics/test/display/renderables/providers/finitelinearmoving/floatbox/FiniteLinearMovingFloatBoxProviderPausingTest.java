@@ -13,13 +13,12 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 6000ms
- *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
- *    located in the upper-left corner, at 50% size.
+ * with a titlebar reading "My title bar". The window will contain a picture of a shield,
+ * located in the upper-left corner, at 50% size.
  * 2. The shield will move to the center of the window, while growing towards 100%, for the first
- *    2000ms. It will pause for 2000ms. It will then resume over the next 1000ms. The window will
- *    remain open for an additional 1000ms.
+ * 2000ms. It will pause for 2000ms. It will then resume over the next 1000ms. The window will
+ * remain open for an additional 1000ms.
  * 3. The window will then close.
- *
  */
 class FiniteLinearMovingFloatBoxProviderPausingTest
         extends FiniteLinearMovingFloatBoxProviderTest {

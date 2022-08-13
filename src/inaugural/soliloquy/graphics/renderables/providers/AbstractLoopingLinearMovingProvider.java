@@ -33,8 +33,9 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
                     "AbstractFiniteLinearMovingProvider: valuesAtTimes must specify value at 0ms");
         }
         valuesAtTimes.forEach((time, value) ->
-                VALUES_AT_TIMES.put((int)((long)(Check.ifNull(time, "time within valuesAtTimes"))),
-                        Check.ifNull(value, "value within valuesAtTimes")));
+                VALUES_AT_TIMES
+                        .put((int) ((long) (Check.ifNull(time, "time within valuesAtTimes"))),
+                                Check.ifNull(value, "value within valuesAtTimes")));
 
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromIntegers(VALUES_AT_TIMES.keySet());
@@ -56,7 +57,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
         int transition;
         if (msWithinPeriod > NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue) {
-            periodStartMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue;
+            periodStartMs = (int) NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue;
             periodEndMs = PERIOD_DURATION;
 
             transition = VALUES_AT_TIMES.size() - 1;
@@ -64,10 +65,10 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
             value2 = VALUES_AT_TIMES.get(0);
         }
         else {
-            periodStartMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(msWithinPeriod);
-            periodEndMs = (int)NEAREST_FLOOR_AND_CEILING_TREE.getNearestCeiling(msWithinPeriod);
+            periodStartMs = (int) NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(msWithinPeriod);
+            periodEndMs = (int) NEAREST_FLOOR_AND_CEILING_TREE.getNearestCeiling(msWithinPeriod);
 
-            transition = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get((long)periodStartMs);
+            transition = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get((long) periodStartMs);
 
             value2 = VALUES_AT_TIMES.get(periodEndMs);
         }
@@ -75,7 +76,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
         long interval = periodEndMs - periodStartMs;
 
-        weight1 = (periodEndMs - msWithinPeriod) / (float)interval;
+        weight1 = (periodEndMs - msWithinPeriod) / (float) interval;
         weight2 = 1f - weight1;
 
 

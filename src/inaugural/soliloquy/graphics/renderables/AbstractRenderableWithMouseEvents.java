@@ -62,7 +62,7 @@ public abstract class AbstractRenderableWithMouseEvents
         _capturesMouseEvents = capturesMouseEvents;
     }
 
-    /** @noinspection BooleanMethodIsAlwaysInverted*/
+    /** @noinspection BooleanMethodIsAlwaysInverted */
     protected abstract boolean underlyingAssetSupportsMouseEvents();
 
     @Override

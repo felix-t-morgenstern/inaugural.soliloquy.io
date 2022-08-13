@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingFloatProviderTests {
     private final HashMap<Long, Float> VALUES_AT_TIMES = new HashMap<>();
@@ -69,7 +67,7 @@ class FiniteLinearMovingFloatProviderTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long)_finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -89,16 +87,16 @@ class FiniteLinearMovingFloatProviderTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
-                Float.class.getCanonicalName() + ">",
+                        Float.class.getCanonicalName() + ">",
                 _finiteLinearMovingFloatProvider.getInterfaceName());
     }
 
     @Test
     void testProvideAtExtremes() {
-        assertEquals(VALUE_1, (float)_finiteLinearMovingFloatProvider.provide(TIME_1 - 1));
-        assertEquals(VALUE_1, (float)_finiteLinearMovingFloatProvider.provide(TIME_1));
-        assertEquals(VALUE_3, (float)_finiteLinearMovingFloatProvider.provide(TIME_3));
-        assertEquals(VALUE_3, (float)_finiteLinearMovingFloatProvider.provide(TIME_3 + 1));
+        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(TIME_1 - 1));
+        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(TIME_1));
+        assertEquals(VALUE_3, (float) _finiteLinearMovingFloatProvider.provide(TIME_3));
+        assertEquals(VALUE_3, (float) _finiteLinearMovingFloatProvider.provide(TIME_3 + 1));
     }
 
     @Test
@@ -106,13 +104,13 @@ class FiniteLinearMovingFloatProviderTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
         float weightedValue1 = VALUE_1 * time1Weight;
         float weightedValue2 = VALUE_2 * time2Weight;
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float)_finiteLinearMovingFloatProvider.provide(timestamp));
+                (float) _finiteLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
@@ -123,14 +121,14 @@ class FiniteLinearMovingFloatProviderTests {
                         MOST_RECENT_TIMESTAMP);
 
         assertEquals(pausedTimestamp,
-                (long)pausedFiniteLinearMovingFloatProvider.pausedTimestamp());
+                (long) pausedFiniteLinearMovingFloatProvider.pausedTimestamp());
     }
 
     @Test
     void testProvideWhenPaused() {
         _finiteLinearMovingFloatProvider.reportPause(TIME_1);
 
-        assertEquals(VALUE_1, (float)_finiteLinearMovingFloatProvider.provide(123123123L));
+        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(123123123L));
     }
 
     @Test
@@ -151,7 +149,7 @@ class FiniteLinearMovingFloatProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long)_finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
 
         _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
 
@@ -162,9 +160,9 @@ class FiniteLinearMovingFloatProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingFloatProvider.pausedTimestamp());
+                (long) _finiteLinearMovingFloatProvider.pausedTimestamp());
 
         _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
 
@@ -175,7 +173,7 @@ class FiniteLinearMovingFloatProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
         assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long)_finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
         assertNull(_finiteLinearMovingFloatProvider.pausedTimestamp());
     }
 
@@ -196,7 +194,7 @@ class FiniteLinearMovingFloatProviderTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
         float weightedValue1 = VALUE_1 * time1Weight;
         float weightedValue2 = VALUE_2 * time2Weight;
@@ -207,11 +205,11 @@ class FiniteLinearMovingFloatProviderTests {
         Map<Long, Float> valuesAtTimestampsRepresentation =
                 _finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation();
 
-        assertEquals(VALUE_1, (float)valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
-        assertEquals(VALUE_2, (float)valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
-        assertEquals(VALUE_3, (float)valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
+        assertEquals(VALUE_1, (float) valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
+        assertEquals(VALUE_2, (float) valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
+        assertEquals(VALUE_3, (float) valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float)_finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) _finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
     }
 }

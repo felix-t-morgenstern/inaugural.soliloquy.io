@@ -1,13 +1,13 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.timing;
 
 import inaugural.soliloquy.graphics.rendering.FrameTimerImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFrameRateReporter;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
-import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FrameTimerImplTests {
@@ -146,7 +146,7 @@ class FrameTimerImplTests {
         _frameTimer.stop();
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
-        assertEquals(targetFps, (float)FRAME_RATE_REPORTER.ActualFps.get(0));
+        assertEquals(targetFps, (float) FRAME_RATE_REPORTER.ActualFps.get(0));
     }
 
     @Test
@@ -164,7 +164,7 @@ class FrameTimerImplTests {
         _frameTimer.stop();
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
-        assertEquals(numberOfFramesToExecute, (float)FRAME_RATE_REPORTER.ActualFps.get(0));
+        assertEquals(numberOfFramesToExecute, (float) FRAME_RATE_REPORTER.ActualFps.get(0));
     }
 
     @Test

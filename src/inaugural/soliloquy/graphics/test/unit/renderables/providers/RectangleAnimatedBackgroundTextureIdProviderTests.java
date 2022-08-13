@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** @noinspection FieldCanBeLocal*/
+/** @noinspection FieldCanBeLocal */
 public class RectangleAnimatedBackgroundTextureIdProviderTests {
     private final int PERIOD_DURATION = 4000;
     private final int PERIOD_MODULO_OFFSET = 123;
@@ -89,9 +89,10 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
 
         // NB: Constructors being invoked here are simply to test whether no exception is thrown
         //     when no exception is expected
-        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION,
+                PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD, PAUSED_TIMESTAMP,
-                        MOST_RECENT_TIMESTAMP);
+                MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.remove(MS_1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -100,7 +101,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
                         MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.put(MS_1, MS_1_VALUE);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION,
+                PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.put(PERIOD_DURATION, 123);
@@ -110,7 +112,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
                         MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.remove(PERIOD_DURATION);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION,
+                PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
         VALUES_WITHIN_PERIOD.put(-1, 123);
@@ -120,7 +123,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
                         MOST_RECENT_TIMESTAMP));
         VALUES_WITHIN_PERIOD.remove(-1);
 
-        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET,
+        new RectangleAnimatedBackgroundTextureIdProvider(UUID, PERIOD_DURATION,
+                PERIOD_MODULO_OFFSET,
                 VALUES_WITHIN_PERIOD, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -136,7 +140,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
-                Integer.class.getCanonicalName() + ">",
+                        Integer.class.getCanonicalName() + ">",
                 _rectangleAnimatedBackgroundTextureIdProvider.getInterfaceName());
     }
 
@@ -153,7 +157,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
         assertNotNull(valuesWithinPeriod);
         assertNotSame(VALUES_WITHIN_PERIOD, valuesWithinPeriod);
         assertEquals(VALUES_WITHIN_PERIOD.size(), valuesWithinPeriod.size());
-        VALUES_WITHIN_PERIOD.forEach((k,v) -> assertEquals(v, valuesWithinPeriod.get(k)));
+        VALUES_WITHIN_PERIOD.forEach((k, v) -> assertEquals(v, valuesWithinPeriod.get(k)));
     }
 
     @Test
@@ -294,7 +298,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long)_rectangleAnimatedBackgroundTextureIdProvider.mostRecentTimestamp());
+                (long) _rectangleAnimatedBackgroundTextureIdProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -302,12 +306,12 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
         _rectangleAnimatedBackgroundTextureIdProvider.reportPause(MOST_RECENT_TIMESTAMP + 1);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long)_rectangleAnimatedBackgroundTextureIdProvider.pausedTimestamp());
+                (long) _rectangleAnimatedBackgroundTextureIdProvider.pausedTimestamp());
     }
 
     @Test
     void testGetArchetype() {
         assertEquals(0,
-                (int)_rectangleAnimatedBackgroundTextureIdProvider.getArchetype());
+                (int) _rectangleAnimatedBackgroundTextureIdProvider.getArchetype());
     }
 }

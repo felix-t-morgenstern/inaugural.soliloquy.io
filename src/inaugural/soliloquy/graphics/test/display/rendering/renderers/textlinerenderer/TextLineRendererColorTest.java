@@ -26,11 +26,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Rainbow", aligned left, near the left edge
- *    of the window, and in the vertical center of the window, for 4000ms. The message, "This
- *    message is in the colors of the rainbow!", will be displayed, with each color having a
- *    different color in order of the rainbow.
+ * of the window, and in the vertical center of the window, for 4000ms. The message, "This
+ * message is in the colors of the rainbow!", will be displayed, with each color having a
+ * different color in order of the rainbow.
  * 2. The window will then close.
- *
  */
 class TextLineRendererColorTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Wow, this message is in the colors of the rainbow!";
@@ -50,7 +49,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         );
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT.put('j', 0.000625f);
@@ -79,7 +78,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 
@@ -112,7 +111,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         for (int i = 0; i < lineText.length(); i++) {
             rainbowGradient.put(i,
                     new StaticProviderImpl<>(java.util.UUID.randomUUID(),
-                            colorAtDegree((float)i * degreePerLetter), null));
+                            colorAtDegree((float) i * degreePerLetter), null));
         }
         return rainbowGradient;
     }

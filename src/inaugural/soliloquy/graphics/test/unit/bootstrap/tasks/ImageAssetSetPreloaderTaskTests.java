@@ -3,14 +3,18 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.ImageAssetSetPreloaderTask;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetSetFactory;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,7 +89,9 @@ class ImageAssetSetPreloaderTaskTests {
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{ add(null); }},
+                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
+                            add(null);
+                        }},
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
@@ -207,9 +213,9 @@ class ImageAssetSetPreloaderTaskTests {
         });
     }
 
-    private void addImageAssetSetAssetDTOToMap(Map<String,Map<String, 
-            ImageAssetSetAssetDefinitionDTO>> map, 
-                                               ImageAssetSetAssetDefinitionDTO 
+    private void addImageAssetSetAssetDTOToMap(Map<String, Map<String,
+            ImageAssetSetAssetDefinitionDTO>> map,
+                                               ImageAssetSetAssetDefinitionDTO
                                                        imageAssetSetAssetDefinitionDTO) {
         if (!map.containsKey(imageAssetSetAssetDefinitionDTO.type)) {
             map.put(imageAssetSetAssetDefinitionDTO.type, new HashMap<>());

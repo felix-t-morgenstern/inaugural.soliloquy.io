@@ -12,7 +12,7 @@ import java.util.List;
 public class RTreeFacade {
     private final RTree<RenderableWithMouseEventsSearchObject> R_TREE;
     private final HashMap<RenderableWithMouseEvents, RenderableWithMouseEventsSearchObject> ITEMS;
-    /** @noinspection FieldCanBeLocal*/
+    /** @noinspection FieldCanBeLocal */
     private final float TOLERANCE = 0.001f;
 
     public RTreeFacade() {
@@ -65,7 +65,7 @@ public class RTreeFacade {
 
         @Override
         public Rect2d getBBox(RenderableWithMouseEventsSearchObject
-                                              renderableWithMouseEventsSearchObject) {
+                                      renderableWithMouseEventsSearchObject) {
             return new Rect2d(
                     renderableWithMouseEventsSearchObject._renderingDimensions.leftX(),
                     renderableWithMouseEventsSearchObject._renderingDimensions.topY(),
@@ -76,8 +76,8 @@ public class RTreeFacade {
 
         @Override
         public Rect2d getMbr(HyperPoint p1, HyperPoint p2) {
-            final Point2d point1 = (Point2d)p1;
-            final Point2d point2 = (Point2d)p2;
+            final Point2d point1 = (Point2d) p1;
+            final Point2d point2 = (Point2d) p2;
             return new Rect2d(point1, point2);
         }
     }

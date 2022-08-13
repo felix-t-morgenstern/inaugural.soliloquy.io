@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.io;
 
 import inaugural.soliloquy.graphics.io.MouseCursorImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.io.MouseCursor;

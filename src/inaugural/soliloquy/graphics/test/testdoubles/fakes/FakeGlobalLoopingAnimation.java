@@ -27,7 +27,7 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
 
     @Override
     public AnimationFrameSnippet provide(long l) throws IllegalArgumentException {
-        return Animation.snippetAtFrame((int)(l - StartTimestamp) % Animation.msDuration());
+        return Animation.snippetAtFrame((int) (l - StartTimestamp) % Animation.msDuration());
     }
 
     @Override

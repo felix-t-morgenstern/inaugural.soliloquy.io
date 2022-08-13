@@ -37,7 +37,7 @@ class GlobalLoopingAnimationFactoryImplTests {
         assertSame(ID, globalLoopingAnimation.id());
         assertSame(ANIMATION_ID, globalLoopingAnimation.animationId());
         assertEquals(PERIOD_MODULO_OFFSET, globalLoopingAnimation.periodModuloOffset());
-        assertEquals(pauseTimestamp, (long)globalLoopingAnimation.pausedTimestamp());
+        assertEquals(pauseTimestamp, (long) globalLoopingAnimation.pausedTimestamp());
     }
 
     @Test

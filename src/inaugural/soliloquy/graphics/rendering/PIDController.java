@@ -25,7 +25,8 @@ public class PIDController implements OutputController {
             throw new IllegalArgumentException("PIDController: setting not found: " + settingId);
         }
         try {
-            @SuppressWarnings("unchecked") Setting<Double> doubleSetting = (Setting<Double>)setting;
+            @SuppressWarnings("unchecked") Setting<Double> doubleSetting =
+                    (Setting<Double>) setting;
             if (doubleSetting.getValue() == null) {
                 throw new IllegalArgumentException("PIDController: setting is null: " + settingId);
             }

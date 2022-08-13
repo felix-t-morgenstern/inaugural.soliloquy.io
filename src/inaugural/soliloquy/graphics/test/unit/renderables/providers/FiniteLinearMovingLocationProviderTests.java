@@ -178,7 +178,7 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
-                Pair.class.getCanonicalName() + ">",
+                        Pair.class.getCanonicalName() + ">",
                 _finiteLinearMovingLocationProvider.getInterfaceName());
     }
 }

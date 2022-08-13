@@ -38,11 +38,18 @@ class LoopingLinearMovingColorProviderHandlerTests {
     @Mock private TypeHandler<UUID> UUIDHandler;
     private static final UUID UUID = java.util.UUID.randomUUID();
     @Mock private LoopingLinearMovingColorProvider _mockLoopingLinearMovingColorProvider;
-    @Mock private LoopingLinearMovingColorProviderFactory _mockLoopingLinearMovingColorProviderFactory;
+    @Mock private LoopingLinearMovingColorProviderFactory
+            _mockLoopingLinearMovingColorProviderFactory;
 
     private TypeHandler<LoopingLinearMovingColorProvider> _loopingLinearMovingColorProviderHandler;
 
-    private final String WRITTEN_DATA = "{\"uuid\":\"mockUuidHandlerData\",\"periodTimestamps\":[333,222,111],\"periodValues\":[{\"r\":0,\"g\":0,\"b\":255,\"a\":255},{\"r\":0,\"g\":255,\"b\":0,\"a\":255},{\"r\":255,\"g\":0,\"b\":0,\"a\":255}],\"hueMovementIsClockwise\":[true,false,false],\"periodDuration\":444,\"periodModuloOffset\":555,\"pausedTimestamp\":666,\"mostRecentTimestamp\":777}";
+    private final String WRITTEN_DATA =
+            "{\"uuid\":\"mockUuidHandlerData\",\"periodTimestamps\":[333,222,111]," +
+                    "\"periodValues\":[{\"r\":0,\"g\":0,\"b\":255,\"a\":255},{\"r\":0,\"g\":255," +
+                    "\"b\":0,\"a\":255},{\"r\":255,\"g\":0,\"b\":0,\"a\":255}]," +
+                    "\"hueMovementIsClockwise\":[true,false,false],\"periodDuration\":444," +
+                    "\"periodModuloOffset\":555,\"pausedTimestamp\":666," +
+                    "\"mostRecentTimestamp\":777}";
 
     @BeforeEach
     void setUp() {
@@ -134,7 +141,7 @@ class LoopingLinearMovingColorProviderHandlerTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(TypeHandler.class.getCanonicalName() + "<" +
-                LoopingLinearMovingColorProvider.class.getCanonicalName() + ">",
+                        LoopingLinearMovingColorProvider.class.getCanonicalName() + ">",
                 _loopingLinearMovingColorProviderHandler.getInterfaceName());
     }
 }

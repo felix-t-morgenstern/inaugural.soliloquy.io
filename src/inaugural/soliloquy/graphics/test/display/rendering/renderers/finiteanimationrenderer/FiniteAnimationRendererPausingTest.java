@@ -12,7 +12,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 2. After 500ms, the explosion will pause, for 500ms.
  * 3. After the pause, the explosion will continue.
  * 4. The window will close.
- *
  */
 class FiniteAnimationRendererPausingTest extends FiniteAnimationRendererTest {
     public static void main(String[] args) {

@@ -15,7 +15,7 @@ public class GlobalLoopingAnimationImpl
 
     private static final UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public GlobalLoopingAnimationImpl(String id, Animation animation, int periodModuloOffset,
                                       Long pausedTimestamp) {
         // NB: pausedTimestamp is used for both pausedTimestamp and mostRecentTimestamp in parent

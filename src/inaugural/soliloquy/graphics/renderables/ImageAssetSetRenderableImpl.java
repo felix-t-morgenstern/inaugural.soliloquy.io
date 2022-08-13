@@ -120,12 +120,12 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
             ImageAsset imageAsset =
                     _imageAssetSet.getImageAssetForTypeAndDirection(_type, _direction);
             if (imageAsset instanceof Sprite) {
-                return (Sprite)imageAsset;
+                return (Sprite) imageAsset;
             }
             // TODO: Refactor ImageAssetSet to support GlobalLoopingAnimation
             else if (imageAsset instanceof Animation) {
-                Animation animation = (Animation)imageAsset;
-                return animation.snippetAtFrame((int)(timestamp % animation.msDuration()));
+                Animation animation = (Animation) imageAsset;
+                return animation.snippetAtFrame((int) (timestamp % animation.msDuration()));
             }
             else {
                 // throw exception

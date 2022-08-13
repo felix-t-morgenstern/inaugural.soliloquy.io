@@ -36,14 +36,15 @@ public class FrameExecutorImpl implements FrameExecutor {
     public void execute() {
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
 
-        for(Consumer<Long> frameBlockingEvent : FRAME_BLOCKING_EVENTS) {
+        for (Consumer<Long> frameBlockingEvent : FRAME_BLOCKING_EVENTS) {
             try {
                 SEMAPHORE.acquire();
                 new Thread(() -> {
                     frameBlockingEvent.accept(timestamp);
                     SEMAPHORE.release();
                 }).start();
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

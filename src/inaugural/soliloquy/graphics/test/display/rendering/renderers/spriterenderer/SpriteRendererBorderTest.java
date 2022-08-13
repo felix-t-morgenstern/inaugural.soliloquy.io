@@ -8,12 +8,11 @@ import java.awt.*;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 3000ms
- *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
- *    centered in the window, taking up half of the width and three-fourths of the height of the
- *    window. This sprite will have a purple border with a thickness of 1% of the height of the
- *    screen.
+ * with a titlebar reading "My title bar". The window will contain a picture of a shield,
+ * centered in the window, taking up half of the width and three-fourths of the height of the
+ * window. This sprite will have a purple border with a thickness of 1% of the height of the
+ * screen.
  * 2. The window will then close.
- *
  */
 public class SpriteRendererBorderTest extends SpriteRendererTest {
     protected static final Float BORDER_THICKNESS = 0.005f;

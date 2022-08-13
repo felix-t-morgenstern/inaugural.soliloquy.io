@@ -15,7 +15,8 @@ import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class StaticProviderHandlerTests {
     private static final int STATIC_PROVIDER_INPUT_VALUE = 123123;
@@ -30,13 +31,15 @@ class StaticProviderHandlerTests {
     private static final UUID STATIC_PROVIDER_INPUT_UUID = UUID.randomUUID();
     private static final UUID UUID_READ_OUTPUT = UUID.randomUUID();
 
-    private static final String WRITTEN_VALUE = "{\"uuid\":\"uuidWriteOutput\",\"innerType\":\"java.lang.Integer\",\"val\":\"integerWriteOutput\",\"mostRecentTimestamp\":789789}";
+    private static final String WRITTEN_VALUE =
+            "{\"uuid\":\"uuidWriteOutput\",\"innerType\":\"java.lang.Integer\"," +
+                    "\"val\":\"integerWriteOutput\",\"mostRecentTimestamp\":789789}";
 
     @Mock private PersistentValuesHandler _persistentValuesHandler;
     @Mock private TypeHandler<Integer> _integerHandler;
     @Mock private TypeHandler<UUID> _uuidHandler;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private TypeWithOneGenericParamHandler<StaticProvider> _staticProviderHandler;
 
     @BeforeEach
@@ -114,8 +117,8 @@ class StaticProviderHandlerTests {
 
         assertNotNull(staticProvider);
         assertSame(UUID_READ_OUTPUT, staticProvider.uuid());
-        assertEquals(INTEGER_READ_OUTPUT, (int)staticProvider.provide(123123L));
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)staticProvider.mostRecentTimestamp());
+        assertEquals(INTEGER_READ_OUTPUT, (int) staticProvider.provide(123123L));
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) staticProvider.mostRecentTimestamp());
         verify(_integerHandler).read(INTEGER_WRITE_OUTPUT);
         verify(_uuidHandler).read(UUID_WRITE_OUTPUT);
     }
@@ -147,7 +150,7 @@ class StaticProviderHandlerTests {
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(TypeHandler.class.getCanonicalName() +"<" +
+        assertEquals(TypeHandler.class.getCanonicalName() + "<" +
                         StaticProvider.class.getCanonicalName() + ">",
                 _staticProviderHandler.getInterfaceName());
     }

@@ -17,7 +17,7 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
 
     private final static UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public AnimatedMouseCursorProviderImpl(String id, Map<Integer, Long> cursorsAtMs,
                                            int periodDuration, int periodModuloOffset,
                                            Long pauseTimestamp, Long mostRecentTimestamp) {
@@ -45,7 +45,7 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
 
     @Override
     protected Long provideValueAtMsWithinPeriod(int msWithinPeriod) {
-        return CURSORS_AT_MS.get((int)MS_POSITIONS.getNearestFloor(msWithinPeriod));
+        return CURSORS_AT_MS.get((int) MS_POSITIONS.getNearestFloor(msWithinPeriod));
     }
 
     @Override

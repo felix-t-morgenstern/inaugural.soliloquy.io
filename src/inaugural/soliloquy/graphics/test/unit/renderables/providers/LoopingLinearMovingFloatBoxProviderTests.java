@@ -1,10 +1,10 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingFloatBoxProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class LoopingLinearMovingFloatBoxProviderTests {
     private final int TIME_1 = 0;
@@ -21,7 +20,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final float BOX_1_TOP_Y = 0.11f;
     private final float BOX_1_RIGHT_X = 0.111f;
     private final float BOX_1_BOTTOM_Y = 0.1111f;
-    private final FloatBox BOX_1 = 
+    private final FloatBox BOX_1 =
             new FakeFloatBox(BOX_1_LEFT_X, BOX_1_TOP_Y, BOX_1_RIGHT_X, BOX_1_BOTTOM_Y);
 
     private final int TIME_2 = 100;
@@ -39,7 +38,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final float BOX_3_BOTTOM_Y = 0.3333f;
     private final FloatBox BOX_3 =
             new FakeFloatBox(BOX_3_LEFT_X, BOX_3_TOP_Y, BOX_3_RIGHT_X, BOX_3_BOTTOM_Y);
-    
+
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
     private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
@@ -53,13 +52,13 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private LoopingLinearMovingProvider<FloatBox> _loopingLinearMovingFloatBoxProvider;
-    
+
     @BeforeEach
     void setUp() {
         _loopingLinearMovingFloatBoxProvider = new LoopingLinearMovingFloatBoxProvider(UUID,
                 VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY);
     }
-    
+
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
@@ -127,9 +126,9 @@ class LoopingLinearMovingFloatBoxProviderTests {
                         MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp, FLOAT_BOX_FACTORY);
 
         assertEquals(pausedTimestamp,
-                (long)loopingLinearMovingFloatBoxProvider.pausedTimestamp());
+                (long) loopingLinearMovingFloatBoxProvider.pausedTimestamp());
         assertEquals(mostRecentTimestamp,
-                (long)loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
+                (long) loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -147,7 +146,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
                 valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
-                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int)(long)key)));
+                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int) (long) key)));
     }
 
     @Test
@@ -167,7 +166,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expectedLeftX = (BOX_1_LEFT_X * value1Weight) + (BOX_2_LEFT_X * value2Weight);
@@ -186,7 +185,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
         long timeAfterValue3 = 50L;
         long timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
         long timeInterval = PERIOD_DURATION - TIME_3;
-        float value3Weight = (timeInterval - timeAfterValue3) / (float)timeInterval;
+        float value3Weight = (timeInterval - timeAfterValue3) / (float) timeInterval;
         float value1Weight = 1f - value3Weight;
 
         float expectedLeftX = (BOX_3_LEFT_X * value3Weight) + (BOX_1_LEFT_X * value1Weight);
@@ -279,7 +278,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + PERIOD_DURATION + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expectedLeftX = (BOX_1_LEFT_X * value1Weight) + (BOX_2_LEFT_X * value2Weight);

@@ -23,7 +23,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public List<Integer> BoldIndices;
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
-    public ProviderAtTime<Pair<Float,Float>> RenderingLocationProvider;
+    public ProviderAtTime<Pair<Float, Float>> RenderingLocationProvider;
     public ProviderAtTime<Float> DropShadowSizeProvider;
     public ProviderAtTime<Pair<Float, Float>> DropShadowOffsetProvider;
     public ProviderAtTime<Color> DropShadowColorProvider;
@@ -70,7 +70,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
                                   UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
@@ -84,7 +84,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
                                   UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
@@ -98,7 +98,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float,Float>> renderingLocationProvider,
+                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
                                   ProviderAtTime<Float> dropShadowSizeProvider,
                                   ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
@@ -194,7 +194,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
 
     @Override
     public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>>
-                                                        dropShadowOffsetProvider)
+                                                    dropShadowOffsetProvider)
             throws IllegalArgumentException {
         DropShadowOffsetProvider = dropShadowOffsetProvider;
     }
@@ -211,13 +211,13 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float,Float>> getRenderingLocationProvider() {
+    public ProviderAtTime<Pair<Float, Float>> getRenderingLocationProvider() {
         return RenderingLocationProvider;
     }
 
     @Override
-    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float,Float>>
-                                                         renderingLocationProvider)
+    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>>
+                                                     renderingLocationProvider)
             throws IllegalArgumentException {
 
     }
@@ -253,7 +253,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 
@@ -263,7 +264,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 }

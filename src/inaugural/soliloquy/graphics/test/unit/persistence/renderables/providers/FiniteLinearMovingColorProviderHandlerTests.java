@@ -40,7 +40,8 @@ class FiniteLinearMovingColorProviderHandlerTests {
     private static final String UUID_WRITE_OUTPUT = "uuidWriteOutput";
 
     @Mock private FiniteLinearMovingColorProvider _mockFiniteLinearMovingColorProvider;
-    @Mock private FiniteLinearMovingColorProviderFactory _mockFiniteLinearMovingColorProviderFactory;
+    @Mock private FiniteLinearMovingColorProviderFactory
+            _mockFiniteLinearMovingColorProviderFactory;
     @Mock private FiniteLinearMovingColorProvider _mockFiniteLinearMovingColorProviderFactoryOutput;
     @Mock private static UUID _finiteLinearMovingColorProviderInputUuid;
     @Mock private static UUID _uuidReadOutput;
@@ -48,7 +49,12 @@ class FiniteLinearMovingColorProviderHandlerTests {
 
     private TypeHandler<FiniteLinearMovingColorProvider> _finiteLinearMovingColorProviderHandler;
 
-    private static final String WRITTEN_VALUE = "{\"uuid\":\"uuidWriteOutput\",\"colors\":[{\"timestamp\":123,\"r\":255,\"g\":0,\"b\":255,\"a\":255},{\"timestamp\":456,\"r\":255,\"g\":0,\"b\":0,\"a\":255},{\"timestamp\":789,\"r\":0,\"g\":0,\"b\":0,\"a\":255}],\"movementIsClockwise\":[true,false,false],\"pausedTimestamp\":123,\"mostRecentTimestamp\":456}";
+    private static final String WRITTEN_VALUE =
+            "{\"uuid\":\"uuidWriteOutput\",\"colors\":[{\"timestamp\":123,\"r\":255,\"g\":0," +
+                    "\"b\":255,\"a\":255},{\"timestamp\":456,\"r\":255,\"g\":0,\"b\":0," +
+                    "\"a\":255},{\"timestamp\":789,\"r\":0,\"g\":0,\"b\":0,\"a\":255}]," +
+                    "\"movementIsClockwise\":[true,false,false],\"pausedTimestamp\":123," +
+                    "\"mostRecentTimestamp\":456}";
 
     @BeforeEach
     void setUp() {

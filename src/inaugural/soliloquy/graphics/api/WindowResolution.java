@@ -77,6 +77,6 @@ public enum WindowResolution {
                     "Cannot obtain width to height ratio of RES_WINDOWED_FULLSCREEN");
         }
 
-        return (float)WIDTH / (float)HEIGHT;
+        return (float) WIDTH / (float) HEIGHT;
     }
 }

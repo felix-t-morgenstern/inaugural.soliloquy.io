@@ -22,14 +22,13 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window in windowed mode, with a resolution of 1024x768 pixels, for
- *    3000ms. This window will appear in the center of the screen, and will have a titlebar reading
- *    "My title bar".
+ * 3000ms. This window will appear in the center of the screen, and will have a titlebar reading
+ * "My title bar".
  * 2. The window will then close
- *
  */
 class WindowResolutionManagerImplWindowedTest {
     private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
+            new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowManager = new WindowResolutionManagerImpl(
@@ -37,7 +36,7 @@ class WindowResolutionManagerImplWindowedTest {
 
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        Function<float[], Function<float[],Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
+        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         //noinspection rawtypes
         Collection<Renderer> renderersWithMesh = new ArrayList<>();
 

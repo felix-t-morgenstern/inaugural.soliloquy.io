@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 public class AnimatedMouseCursorPreloaderTaskFactory
         implements AssetPreloaderTaskFactory<AnimatedMouseCursorDefinitionDTO,
-            AnimatedMouseCursorPreloaderTask> {
+        AnimatedMouseCursorPreloaderTask> {
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
     private final AnimatedMouseCursorProviderFactory FACTORY;
     private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
@@ -24,7 +24,8 @@ public class AnimatedMouseCursorPreloaderTaskFactory
                                                    Consumer<AnimatedMouseCursorProvider>
                                                            processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION =
-                Check.ifNull(getMouseCursorsByRelativeLocation, "getMouseCursorsByRelativeLocation");
+                Check.ifNull(getMouseCursorsByRelativeLocation,
+                        "getMouseCursorsByRelativeLocation");
         FACTORY = Check.ifNull(factory, "factory");
         PROCESS_RESULT = Check.ifNull(processResult, "processResult");
     }

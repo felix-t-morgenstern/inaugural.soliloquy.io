@@ -10,10 +10,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 4000ms
- *    with a titlebar reading "My title bar". While the mouse cursor is in the window, it will be
- *    of a custom icon that changes color.
+ * with a titlebar reading "My title bar". While the mouse cursor is in the window, it will be
+ * of a custom icon that changes color.
  * 2. The window will then close.
- *
  */
 class AnimatedMouseCursorProviderSimpleTest extends AnimatedMouseCursorProviderTest {
     public static void main(String[] args) {

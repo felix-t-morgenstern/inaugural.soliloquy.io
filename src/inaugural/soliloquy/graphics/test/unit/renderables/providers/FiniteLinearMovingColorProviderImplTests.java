@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingColorProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
@@ -13,7 +12,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingColorProviderImplTests {
     private final HashMap<Long, Color> VALUES_AT_TIMES = new HashMap<>();
@@ -128,7 +126,7 @@ class FiniteLinearMovingColorProviderImplTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long)_finiteLinearMovingColorProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingColorProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -171,7 +169,7 @@ class FiniteLinearMovingColorProviderImplTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
 
         float[] value1Hsb =
@@ -185,7 +183,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
+        int alpha = (int) ((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -199,7 +197,7 @@ class FiniteLinearMovingColorProviderImplTests {
         long timeAfterTime2 = 50;
         long timestamp = TIME_2 + timeAfterTime2;
         long distanceBetweenTimes = TIME_3 - TIME_2;
-        float time3Weight = timeAfterTime2 / (float)distanceBetweenTimes;
+        float time3Weight = timeAfterTime2 / (float) distanceBetweenTimes;
         float time2Weight = 1f - time3Weight;
 
         float[] value2Hsb =
@@ -213,7 +211,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time2Weight * VALUE_2.getAlpha()) + (time3Weight * VALUE_3.getAlpha()));
+        int alpha = (int) ((time2Weight * VALUE_2.getAlpha()) + (time3Weight * VALUE_3.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -227,7 +225,7 @@ class FiniteLinearMovingColorProviderImplTests {
         long timeAfterTime3 = 250;
         long timestamp = TIME_3 + timeAfterTime3;
         long distanceBetweenTimes = TIME_4 - TIME_3;
-        float time4Weight = timeAfterTime3 / (float)distanceBetweenTimes;
+        float time4Weight = timeAfterTime3 / (float) distanceBetweenTimes;
         float time3Weight = 1f - time4Weight;
 
         float[] value3Hsb =
@@ -241,7 +239,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time3Weight * VALUE_3.getAlpha()) + (time4Weight * VALUE_4.getAlpha()));
+        int alpha = (int) ((time3Weight * VALUE_3.getAlpha()) + (time4Weight * VALUE_4.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -255,7 +253,7 @@ class FiniteLinearMovingColorProviderImplTests {
         long timeAfterTime4 = 350;
         long timestamp = TIME_4 + timeAfterTime4;
         long distanceBetweenTimes = TIME_5 - TIME_4;
-        float time5Weight = timeAfterTime4 / (float)distanceBetweenTimes;
+        float time5Weight = timeAfterTime4 / (float) distanceBetweenTimes;
         float time4Weight = 1f - time5Weight;
 
         float[] value4Hsb =
@@ -273,7 +271,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time4Weight * VALUE_4.getAlpha()) + (time5Weight * VALUE_5.getAlpha()));
+        int alpha = (int) ((time4Weight * VALUE_4.getAlpha()) + (time5Weight * VALUE_5.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 
@@ -290,7 +288,7 @@ class FiniteLinearMovingColorProviderImplTests {
                         _hueMovementIsClockwise, pausedTimestamp, MOST_RECENT_TIMESTAMP);
 
         assertEquals(pausedTimestamp,
-                (long)finiteLinearMovingColorProvider.pausedTimestamp());
+                (long) finiteLinearMovingColorProvider.pausedTimestamp());
     }
 
     @Test
@@ -318,7 +316,7 @@ class FiniteLinearMovingColorProviderImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingColorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long)_finiteLinearMovingColorProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingColorProvider.mostRecentTimestamp());
 
         _finiteLinearMovingColorProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
 
@@ -329,9 +327,9 @@ class FiniteLinearMovingColorProviderImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingColorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingColorProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingColorProvider.mostRecentTimestamp());
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long)_finiteLinearMovingColorProvider.pausedTimestamp());
+                (long) _finiteLinearMovingColorProvider.pausedTimestamp());
 
         _finiteLinearMovingColorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
 
@@ -342,7 +340,7 @@ class FiniteLinearMovingColorProviderImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _finiteLinearMovingColorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
         assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long)_finiteLinearMovingColorProvider.mostRecentTimestamp());
+                (long) _finiteLinearMovingColorProvider.mostRecentTimestamp());
         assertNull(_finiteLinearMovingColorProvider.pausedTimestamp());
     }
 
@@ -369,7 +367,7 @@ class FiniteLinearMovingColorProviderImplTests {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float)distanceBetweenTimes;
+        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
         float time1Weight = 1f - time2Weight;
 
         float[] value1Hsb =
@@ -383,7 +381,7 @@ class FiniteLinearMovingColorProviderImplTests {
 
         Color rgb = Color.getHSBColor(hue, saturation, brightness);
 
-        int alpha = (int)((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
+        int alpha = (int) ((time1Weight * VALUE_1.getAlpha()) + (time2Weight * VALUE_2.getAlpha()));
 
         Color expected = new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), alpha);
 

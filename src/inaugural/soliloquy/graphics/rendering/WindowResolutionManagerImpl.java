@@ -80,14 +80,15 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
                 WindowResolution.getFromWidthAndHeight(width, height);
 
         if (windowResolutionFromInputs == WindowResolution.RES_INVALID) {
-            throw new IllegalArgumentException("WindowResolutionManagerImpl.setDimensions: inputs " +
-                    "(" + width + "," + height + ") do not correspond to valid resolution");
+            throw new IllegalArgumentException(
+                    "WindowResolutionManagerImpl.setDimensions: inputs " +
+                            "(" + width + "," + height + ") do not correspond to valid resolution");
         }
 
         _windowResolution = WindowResolution.getFromWidthAndHeight(width, height);
         _width = width;
         _height = height;
-        _windowWidthToHeightRatio = _width / (float)_height;
+        _windowWidthToHeightRatio = _width / (float) _height;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
         if (_windowResolution != _mostRecentlyRenderedWindowResolution ||
                 _windowDisplayMode != _mostRecentlyRenderedWindowDisplayMode) {
-            switch(_windowDisplayMode) {
+            switch (_windowDisplayMode) {
                 case WINDOWED:
                     windowId = renderWindowed(windowId, titlebar);
                     break;
@@ -136,7 +137,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
             _height = _windowResolution == WindowResolution.RES_WINDOWED_FULLSCREEN ?
                     _windowedFullscreenHeight :
                     _windowResolution.HEIGHT;
-            _windowWidthToHeightRatio = _width / (float)_height;
+            _windowWidthToHeightRatio = _width / (float) _height;
         }
 
         return windowId;
@@ -171,7 +172,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
                     _windowedFullscreenWidth = _windowedFullscreenHeight = null;
 
                     return glfwCreateWindow(_windowResolution.WIDTH,
-                        _windowResolution.HEIGHT, titlebar, monitor, 0);
+                            _windowResolution.HEIGHT, titlebar, monitor, 0);
                 });
     }
 

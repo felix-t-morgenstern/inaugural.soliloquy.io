@@ -23,7 +23,7 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
     protected static ProviderAtTime<Pair<Float, Float>> RenderingLocationProvider;
     protected static FakeTextLineRenderable TextLineRenderable;
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         FontStyleDefinition plain = new FontStyleDefinition(

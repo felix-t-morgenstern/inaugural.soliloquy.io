@@ -10,12 +10,11 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "I appear over time!", white, aligned left, near the
- *    left edge of the window, vertically centered, gradually, starting at 2000ms.
+ * left edge of the window, vertically centered, gradually, starting at 2000ms.
  * 2. The text will pause after 2500ms; this pause will last for 2000ms, then the text will
- *    complete displaying at roughly 6000ms. The text will remain on-screen for an additional
- *    2000ms.
+ * complete displaying at roughly 6000ms. The text will remain on-screen for an additional
+ * 2000ms.
  * 3. The window will then close.
- *
  */
 class ProgressiveStringProviderDisplayTestWithPausing
         extends ProgressiveStringProviderDisplayTest {

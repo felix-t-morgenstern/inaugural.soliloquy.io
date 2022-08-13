@@ -3,7 +3,8 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -24,10 +25,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Regular, italic, bold, bold-italic", white, aligned
- *    left, near the left edge of the window, vertically centered, with each of the words rendered
- *    with the corresponding style.
+ * left, near the left edge of the window, vertically centered, with each of the words rendered
+ * with the corresponding style.
  * 2. The window will then close.
- *
  */
 class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
@@ -57,7 +57,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         );
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
@@ -87,7 +87,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.0f, 0.5f - LINE_HEIGHT);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.0f, 0.5f - LINE_HEIGHT);
 
         ArrayList<Integer> italicIndices = new ArrayList<Integer>() {{
             add(9);

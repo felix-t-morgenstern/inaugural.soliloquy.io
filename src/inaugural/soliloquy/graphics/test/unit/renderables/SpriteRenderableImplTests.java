@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.Renderable;
@@ -21,7 +20,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class SpriteRenderableImplTests {
     private final FakeSprite SPRITE_SUPPORTING_MOUSE_EVENTS = new FakeSprite(new FakeImage(true));
@@ -65,7 +63,7 @@ class SpriteRenderableImplTests {
     void setUp() {
         _spriteRenderableWithMouseEvents = new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, 
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER);
@@ -109,7 +107,7 @@ class SpriteRenderableImplTests {
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, 
+                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null,
                 RENDERING_AREA_PROVIDER, Z, UUID,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
@@ -124,7 +122,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, null, 
+                RENDERING_AREA_PROVIDER, Z, null,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_UPDATE_Z_INDEX_IN_CONTAINER,
                 SPRITE_RENDERABLE_WITH_MOUSE_EVENTS_REMOVE_FROM_CONTAINER
         ));
@@ -202,7 +200,8 @@ class SpriteRenderableImplTests {
     @Test
     void testGetAndSetSprite() {
         assertSame(SPRITE_SUPPORTING_MOUSE_EVENTS, _spriteRenderableWithMouseEvents.getSprite());
-        assertSame(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, _spriteRenderableWithoutMouseEvents.getSprite());
+        assertSame(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
+                _spriteRenderableWithoutMouseEvents.getSprite());
 
         FakeSprite newSprite = new FakeSprite(new FakeImage(true));
 
@@ -296,7 +295,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.press(2, timestamp);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long)ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _spriteRenderableWithMouseEvents.setOnPress(2, newOnPress);
@@ -305,13 +304,13 @@ class SpriteRenderableImplTests {
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
 
         _spriteRenderableWithMouseEvents.press(0, timestamp + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnPress.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -349,7 +348,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.release(2, timestamp + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnRelease.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -406,7 +405,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.mouseOver(timestamp);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _spriteRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
@@ -414,7 +413,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.mouseOver(timestamp + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseOver.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -444,7 +443,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.mouseLeave(timestamp);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long)ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _spriteRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
@@ -452,7 +451,7 @@ class SpriteRenderableImplTests {
         _spriteRenderableWithMouseEvents.mouseLeave(timestamp + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long)newOnMouseLeave.Inputs.get(0));
+        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -590,8 +589,8 @@ class SpriteRenderableImplTests {
         SPRITE_SUPPORTING_MOUSE_EVENTS.RightX = 750;
         SPRITE_SUPPORTING_MOUSE_EVENTS.TopY = 1000;
         SPRITE_SUPPORTING_MOUSE_EVENTS.BottomY = 2500;
-        ((FakeImage)SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Width = 1000;
-        ((FakeImage)SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Height = 3000;
+        ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Width = 1000;
+        ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Height = 3000;
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
 
         boolean capturesMouseEventAtPoint =
@@ -599,16 +598,16 @@ class SpriteRenderableImplTests {
 
         assertTrue(capturesMouseEventAtPoint);
         ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
-                ((FakeImage)SPRITE_SUPPORTING_MOUSE_EVENTS.Image).CapturesMouseEventsAtPixelInputs;
+                ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).CapturesMouseEventsAtPixelInputs;
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
-                (int)((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) ((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
         assertEquals(
-                (int)((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
-                (int)capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) ((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
+                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(789L, (long)RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+        assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
 
     @Test

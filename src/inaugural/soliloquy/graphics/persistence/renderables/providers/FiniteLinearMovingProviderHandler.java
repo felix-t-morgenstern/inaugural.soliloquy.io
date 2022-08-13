@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** @noinspection rawtypes*/
+/** @noinspection rawtypes */
 public class FiniteLinearMovingProviderHandler
         extends AbstractTypeWithOneGenericParamHandler<FiniteLinearMovingProvider> {
     private final TypeHandler<UUID> UUID_HANDLER;
@@ -26,9 +26,9 @@ public class FiniteLinearMovingProviderHandler
 
     public FiniteLinearMovingProviderHandler(TypeHandler<UUID> uuidHandler,
                                              PersistentValuesHandler
-                                                               persistentValuesHandler,
+                                                     persistentValuesHandler,
                                              FiniteLinearMovingProviderFactory
-                                                               finiteLinearMovingProviderFactory) {
+                                                     finiteLinearMovingProviderFactory) {
         super(ARCHETYPE, persistentValuesHandler,
                 QualifiedFiniteLinearMovingProviderArchetype::new);
         UUID_HANDLER = Check.ifNull(uuidHandler, "uuidHandler");
@@ -69,7 +69,7 @@ public class FiniteLinearMovingProviderHandler
         int valuesSize = valuesAtTimestamps.size();
         dto.values = new FiniteLinearMovingProviderValueAtTimestampDTO[valuesSize];
         int index = 0;
-        for(Map.Entry<Long, Object> valueAtTimestamp : valuesAtTimestamps.entrySet()) {
+        for (Map.Entry<Long, Object> valueAtTimestamp : valuesAtTimestamps.entrySet()) {
             FiniteLinearMovingProviderValueAtTimestampDTO valueDto =
                     new FiniteLinearMovingProviderValueAtTimestampDTO();
 
@@ -99,7 +99,7 @@ public class FiniteLinearMovingProviderHandler
         String value;
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static class FiniteLinearMovingProviderArchetype implements FiniteLinearMovingProvider {
 
         @Override

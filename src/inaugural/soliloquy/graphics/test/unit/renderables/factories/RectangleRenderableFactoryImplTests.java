@@ -49,7 +49,7 @@ class RectangleRenderableFactoryImplTests {
     void setUp() {
         _rectangleRenderableFactory = new RectangleRenderableFactoryImpl();
     }
-    
+
     @Test
     void testMake() {
         RectangleRenderable rectangleRenderable = _rectangleRenderableFactory.make(
@@ -64,7 +64,7 @@ class RectangleRenderableFactoryImplTests {
         assertNotNull(rectangleRenderable);
         assertTrue(rectangleRenderable instanceof RectangleRenderableImpl);
     }
-    
+
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->

@@ -4,14 +4,12 @@ import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.renderables.providers.factories.StaticProviderFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class StaticProviderFactoryImplTests {
     private final Object VALUE = new Object();
@@ -36,7 +34,7 @@ class StaticProviderFactoryImplTests {
         assertSame(UUID, staticProvider.uuid());
         assertSame(VALUE, staticProvider.provide(MOST_RECENT_TIMESTAMP));
         assertSame(ARCHETYPE, staticProvider.getArchetype());
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)staticProvider.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) staticProvider.mostRecentTimestamp());
         assertTrue(staticProvider instanceof StaticProviderImpl);
     }
 

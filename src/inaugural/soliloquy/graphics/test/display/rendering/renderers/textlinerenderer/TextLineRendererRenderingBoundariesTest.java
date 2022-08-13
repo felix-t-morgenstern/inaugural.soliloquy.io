@@ -2,7 +2,9 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -20,21 +22,20 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 /**
  * Test acceptance criteria:
  *
- * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left, 
- *    near the left edge of the window, vertically centered, for 2000ms. The 'Q' glyphs will have 
- *    trails which extend to the right, underneath the subsequent glyphs, without pushing those 
- *    glyphs to the right.
+ * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
+ * near the left edge of the window, vertically centered, for 2000ms. The 'Q' glyphs will have
+ * trails which extend to the right, underneath the subsequent glyphs, without pushing those
+ * glyphs to the right.
  * 2. The text displayed will be clipped so that only the portions of the text within the left-most
- *    and top-most 62.5% of the window are displayed. This will last for 2000ms.
+ * and top-most 62.5% of the window are displayed. This will last for 2000ms.
  * 3. The text displayed will be clipped so that only the portions of the text within the
- *    right-most and top-most 62.5% of the window are displayed. This will last for 2000ms.
+ * right-most and top-most 62.5% of the window are displayed. This will last for 2000ms.
  * 4. The text displayed will be clipped so that only the portions of the text within the
- *    right-most and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
+ * right-most and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
  * 5. The text displayed will be clipped so that only the portions of the text within the left-most
- *    and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
+ * and bottom-most 62.5% of the window are displayed. This will last for 2000ms.
  * 6. The entirety of the text will be displayed again for 2000ms.
  * 7. The window will then close.
- *
  */
 class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
@@ -54,7 +55,7 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
                 TextLineRendererRenderingBoundariesTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
@@ -83,7 +84,7 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,

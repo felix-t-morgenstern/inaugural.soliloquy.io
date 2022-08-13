@@ -18,13 +18,13 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
     private final AnimatedMouseCursorProviderFactory FACTORY;
     private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public AnimatedMouseCursorPreloaderTask(Function<String, Long>
                                                     getMouseCursorsByRelativeLocation,
                                             Collection<AnimatedMouseCursorDefinitionDTO>
-                                             animatedMouseCursorDefinitionDTOs,
+                                                    animatedMouseCursorDefinitionDTOs,
                                             AnimatedMouseCursorProviderFactory
-                                                 animatedMouseCursorProviderFactory,
+                                                    animatedMouseCursorProviderFactory,
                                             Consumer<AnimatedMouseCursorProvider> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
@@ -59,13 +59,15 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
             if (!frameAt0Ms) {
                 throw new IllegalArgumentException("AnimatedMouseCursorPreloaderTask: " +
                         "animatedMouseCursorDefinitionDTO.Frames has no frame at 0ms within " +
-                        "animatedMouseCursorDefinitionDTOs (" + animatedMouseCursorDefinitionDTO.Id + ")");
+                        "animatedMouseCursorDefinitionDTOs (" +
+                        animatedMouseCursorDefinitionDTO.Id + ")");
             }
             Check.throwOnSecondLte(maxFrameMs, animatedMouseCursorDefinitionDTO.Duration,
                     "maximum frame ms", "animatedMouseCursorDefinitionDTO.Duration within " +
                             "animatedMouseCursorDefinitionDTOs (" +
                             animatedMouseCursorDefinitionDTO.Id + ")");
-            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Offset, animatedMouseCursorDefinitionDTO.Duration,
+            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Offset,
+                    animatedMouseCursorDefinitionDTO.Duration,
                     "animatedMouseCursorDefinitionDTO.Offset",
                     "animatedMouseCursorDefinitionDTO.Duration within " +
                             "animatedMouseCursorDefinitionDTOs (" +
@@ -80,7 +82,8 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
                         "non-null while animatedMouseCursorDefinitionDTO.Timestamp is null (id = "
                         + animatedMouseCursorDefinitionDTO.Id + ")");
             }
-            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Paused, animatedMouseCursorDefinitionDTO.Timestamp,
+            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Paused,
+                    animatedMouseCursorDefinitionDTO.Timestamp,
                     "animatedMouseCursorDefinitionDTO.Paused",
                     "animatedMouseCursorDefinitionDTO.Timestamp within " +
                             "animatedMouseCursorDefinitionDTOs (" +
@@ -96,7 +99,7 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
     public void run() {
         DEFINITION_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
             HashMap<Integer, Long> cursorsAtMs = new HashMap<>();
-            for(AnimatedMouseCursorFrameDefinitionDTO frame :
+            for (AnimatedMouseCursorFrameDefinitionDTO frame :
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }

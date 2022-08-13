@@ -87,7 +87,7 @@ class WindowResolutionManagerImplTests {
 
         _windowResolutionManager.setDimensions(width, height);
 
-        assertEquals(width / (float)height, _windowResolutionManager.windowWidthToHeightRatio());
+        assertEquals(width / (float) height, _windowResolutionManager.windowWidthToHeightRatio());
     }
 
     @Test

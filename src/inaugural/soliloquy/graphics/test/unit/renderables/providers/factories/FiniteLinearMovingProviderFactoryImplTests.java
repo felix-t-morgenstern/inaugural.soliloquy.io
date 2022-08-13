@@ -14,14 +14,13 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class FiniteLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final FiniteLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeFiniteLinearMovingProvider<>();
-    /** @noinspection rawtypes*/
-    private final Function<UUID,Function<Map,Function<Long, Function<Long,
+    /** @noinspection rawtypes */
+    private final Function<UUID, Function<Map, Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_1 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
                 _factory1InputUuid = uuid;
@@ -34,8 +33,8 @@ class FiniteLinearMovingProviderFactoryImplTests {
     private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
     private final FiniteLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
             new FakeFiniteLinearMovingProvider<>();
-    /** @noinspection rawtypes*/
-    private final Function<UUID,Function<Map,Function<Long, Function<Long,
+    /** @noinspection rawtypes */
+    private final Function<UUID, Function<Map, Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_2 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
                 _factory2InputUuid = uuid;
@@ -46,7 +45,7 @@ class FiniteLinearMovingProviderFactoryImplTests {
             };
 
     private UUID _factory1InputUuid;
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private Map _factory1InputValuesAtTimes;
     private Long _factory1InputPausedTimestamp;
     private Long _factory1InputMostRecentTimestamp;
@@ -66,7 +65,7 @@ class FiniteLinearMovingProviderFactoryImplTests {
     void setUp() {
         //noinspection rawtypes
         _finiteLinearMovingProviderFactory = new FiniteLinearMovingProviderFactoryImpl(
-                new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
+                new HashMap<String, Function<UUID, Function<Map, Function<Long, Function<Long,
                         FiniteLinearMovingProvider>>>>>() {{
                     put(FACTORY_1_TYPE_NAME, FACTORY_1);
                     put(FACTORY_2_TYPE_NAME, FACTORY_2);
@@ -82,23 +81,25 @@ class FiniteLinearMovingProviderFactoryImplTests {
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
+                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
+                                Function<Long,
                                 FiniteLinearMovingProvider>>>>>() {{
                             put(null, FACTORY_1);
                         }}));
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID,Function<Map,Function<Long, Function<Long,
+                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
+                                Function<Long,
                                 FiniteLinearMovingProvider>>>>>() {{
                             put("", FACTORY_1);
                         }}));
         //noinspection rawtypes
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID,Function<Map,Function<Long,
-                                Function<Long,FiniteLinearMovingProvider>>>>>() {{
-                                    put(FACTORY_1_TYPE_NAME, null);
+                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
+                                Function<Long, FiniteLinearMovingProvider>>>>>() {{
+                            put(FACTORY_1_TYPE_NAME, null);
                         }}));
     }
 

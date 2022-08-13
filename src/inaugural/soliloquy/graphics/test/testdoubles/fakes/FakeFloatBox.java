@@ -80,7 +80,7 @@ public class FakeFloatBox implements FloatBox {
         if (!(o instanceof FloatBox)) {
             return false;
         }
-        FloatBox floatBox = ((FloatBox)o);
+        FloatBox floatBox = ((FloatBox) o);
         return floatBox.leftX() == LeftX &&
                 floatBox.topY() == TopY &&
                 floatBox.rightX() == RightX &&

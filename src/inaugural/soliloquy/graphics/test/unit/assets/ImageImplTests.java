@@ -94,10 +94,10 @@ class ImageImplTests {
     @Test
     void testCapturesMouseEventsAtPixel() {
         assertThrows(UnsupportedOperationException.class,
-                () -> _image.capturesMouseEventsAtPixel(0,0));
+                () -> _image.capturesMouseEventsAtPixel(0, 0));
 
-        assertTrue(_imageWithMask.capturesMouseEventsAtPixel(0,0));
-        assertFalse(_imageWithMask.capturesMouseEventsAtPixel(1,0));
+        assertTrue(_imageWithMask.capturesMouseEventsAtPixel(0, 0));
+        assertFalse(_imageWithMask.capturesMouseEventsAtPixel(1, 0));
     }
 
     @Test

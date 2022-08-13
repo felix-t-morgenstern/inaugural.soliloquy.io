@@ -2,7 +2,9 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
 import inaugural.soliloquy.graphics.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.SpritePreloaderTask;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSpriteFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
@@ -32,9 +34,12 @@ class SpritePreloaderTaskTests {
         IMAGES.put(relativeLocation2, new FakeImage(relativeLocation2));
         IMAGES.put(relativeLocation3, new FakeImage(relativeLocation3));
 
-        SpriteDefinitionDTO spriteDefinitionDTO1 = new SpriteDefinitionDTO("sprite1Id", relativeLocation1, 12, 34, 56, 78);
-        SpriteDefinitionDTO spriteDefinitionDTO2 = new SpriteDefinitionDTO("sprite2Id", relativeLocation2, 21, 43, 65, 87);
-        SpriteDefinitionDTO spriteDefinitionDTO3 = new SpriteDefinitionDTO("sprite3Id", relativeLocation3, 0, 0, 33, 44);
+        SpriteDefinitionDTO spriteDefinitionDTO1 =
+                new SpriteDefinitionDTO("sprite1Id", relativeLocation1, 12, 34, 56, 78);
+        SpriteDefinitionDTO spriteDefinitionDTO2 =
+                new SpriteDefinitionDTO("sprite2Id", relativeLocation2, 21, 43, 65, 87);
+        SpriteDefinitionDTO spriteDefinitionDTO3 =
+                new SpriteDefinitionDTO("sprite3Id", relativeLocation3, 0, 0, 33, 44);
 
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO1);
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO2);

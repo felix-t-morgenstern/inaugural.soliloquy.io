@@ -9,14 +9,13 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 3000ms
- *    with a titlebar reading "My title bar". The window will contain a looping animation of a
- *    torch, centered in the screen, which will change its frames every 250ms.
+ * with a titlebar reading "My title bar". The window will contain a looping animation of a
+ * torch, centered in the screen, which will change its frames every 250ms.
  * 2. The animation will persist for 1125ms.
  * 3. The animation will pause for 1000ms.
  * 4. The animation will resume for 1125ms. (A rainbow version of the torch is used to verify
- *    whether animation resumes where it left off.)
+ * whether animation resumes where it left off.)
  * 5. The window will then close.
- *
  */
 public class GlobalLoopingAnimationRendererWithPausingTest
         extends GlobalLoopingAnimationRendererTest {

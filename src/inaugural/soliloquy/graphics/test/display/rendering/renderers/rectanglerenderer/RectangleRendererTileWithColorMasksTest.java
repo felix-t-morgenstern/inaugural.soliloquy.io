@@ -19,15 +19,14 @@ import java.util.List;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
- *    Window"
+ * Window"
  * 2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have
- *    background tile of some flowers; this tile will repeat twice horizontally, and three times
- *    vertically. There will also be color "masks" on each corner, permitting only certain amounts
- *    of each channel through. The top-left corner will only permit the red channel; the top-right
- *    will only permit the green; the bottom-right will only permit the blue; and the bottom-left
- *    will permit all channels.
+ * background tile of some flowers; this tile will repeat twice horizontally, and three times
+ * vertically. There will also be color "masks" on each corner, permitting only certain amounts
+ * of each channel through. The top-left corner will only permit the red channel; the top-right
+ * will only permit the green; the bottom-right will only permit the blue; and the bottom-left
+ * will permit all channels.
  * 3. The window will then close
- *
  */
 class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
     private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
@@ -61,7 +60,7 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
         );
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(null);

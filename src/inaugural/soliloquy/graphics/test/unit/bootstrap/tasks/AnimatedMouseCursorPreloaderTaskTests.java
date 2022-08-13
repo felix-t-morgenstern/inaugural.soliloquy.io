@@ -17,7 +17,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/** @noinspection FieldCanBeLocal*/
+/** @noinspection FieldCanBeLocal */
 class AnimatedMouseCursorPreloaderTaskTests {
     private final String MOUSE_CURSOR_IMG_1 = "mouseCursorImg1";
     private final String MOUSE_CURSOR_IMG_2 = "mouseCursorImg2";
@@ -54,7 +54,7 @@ class AnimatedMouseCursorPreloaderTaskTests {
 
     private final AnimatedMouseCursorDefinitionDTO ANIMATED_MOUSE_CURSOR_DTO =
             new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                    new AnimatedMouseCursorFrameDefinitionDTO[] {
+                    new AnimatedMouseCursorFrameDefinitionDTO[]{
                             FRAME_1_DTO, FRAME_2_DTO
                     }, DURATION, OFFSET, PAUSED, TIMESTAMP);
 
@@ -111,8 +111,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(null,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -121,8 +121,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO("",
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -139,7 +139,7 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {},
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{},
                                     DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -148,7 +148,7 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] { FRAME_2_DTO },
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{FRAME_2_DTO},
                                     DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -157,7 +157,7 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
                                             new AnimatedMouseCursorFrameDefinitionDTO(0, null)
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
@@ -167,7 +167,7 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
                                             new AnimatedMouseCursorFrameDefinitionDTO(0, "")
                                     }, DURATION, OFFSET, PAUSED, TIMESTAMP));
                         }},
@@ -177,8 +177,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, MS_2 - 1, OFFSET, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -187,8 +187,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, DURATION, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -197,8 +197,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, -1, PAUSED, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -207,8 +207,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, PAUSED, null));
                         }},
                         _animatedMouseCursorProviderFactoryMock,
@@ -217,8 +217,8 @@ class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         new ArrayList<AnimatedMouseCursorDefinitionDTO>() {{
                             add(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                    new AnimatedMouseCursorFrameDefinitionDTO[] {
-                                                FRAME_1_DTO, FRAME_2_DTO
+                                    new AnimatedMouseCursorFrameDefinitionDTO[]{
+                                            FRAME_1_DTO, FRAME_2_DTO
                                     }, DURATION, OFFSET, TIMESTAMP + 1, TIMESTAMP));
                         }},
                         _animatedMouseCursorProviderFactoryMock,

@@ -27,23 +27,22 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * 1. This test will start by displaying a window in windowed fullscreen mode for 4000ms.
  * 2. The window will switch to windowed mode, with a resolution of 800x600px, for 4000ms.
  * 3. The window will switch to fullscreen mode, changing the screen to have a resolution of
- *    1920x1080px, for 4000ms.
+ * 1920x1080px, for 4000ms.
  * 4. The window will switch to fullscreen mode, changing the screen to have a resolution of
- *    3840x2160px, for 4000ms.
+ * 3840x2160px, for 4000ms.
  * 5. The window will switch to windowed mode, with a resolution of 800x600px, for 4000ms.
  * 6. The window will switch to fullscreen mode, changing the screen to have a resolution of
- *    3840x2160px, for 4000ms.
+ * 3840x2160px, for 4000ms.
  * 7. The window will switch to windowed fullscreen for 4000ms.
  * 8. The window will switch to fullscreen mode, changing the screen to have a resolution of
- *    3840x2160px, for 4000ms.
+ * 3840x2160px, for 4000ms.
  * 9. The window will switch to windowed mode, with a resolution of 800x600px, for 4000ms.
  * 10. The window will switch to windowed fullscreen for 4000ms.
  * 11. The window will close.
- *
  */
 class WindowResolutionManagerImplDisplayChangeTest {
     private final static float[] MESH_DATA =
-            new float[] {0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
+            new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
         WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(

@@ -4,9 +4,8 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.finiteanim
  * Test acceptance criteria:
  *
  * 1. An 800x600 window will open. An explosion will be displayed in the center of the window over
- *    roughly 1250ms.
+ * roughly 1250ms.
  * 2. The window will close.
- *
  */
 class FiniteAnimationRendererSimpleTest extends FiniteAnimationRendererTest {
     public static void main(String[] args) {

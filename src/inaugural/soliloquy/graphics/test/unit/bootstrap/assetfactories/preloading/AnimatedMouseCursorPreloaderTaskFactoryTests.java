@@ -57,8 +57,8 @@ class AnimatedMouseCursorPreloaderTaskFactoryTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(AssetPreloaderTaskFactory.class.getCanonicalName() + "<" +
-                AnimatedMouseCursorDefinitionDTO.class.getCanonicalName() + "," +
-                AnimatedMouseCursorPreloaderTask.class.getCanonicalName() + ">",
+                        AnimatedMouseCursorDefinitionDTO.class.getCanonicalName() + "," +
+                        AnimatedMouseCursorPreloaderTask.class.getCanonicalName() + ">",
                 _animatedMouseCursorPreloaderTaskFactory.getInterfaceName());
     }
 }

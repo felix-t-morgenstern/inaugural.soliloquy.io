@@ -57,6 +57,6 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     public void reset(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        _periodModuloOffset = PERIOD_DURATION - (int)(timestamp % PERIOD_DURATION);
+        _periodModuloOffset = PERIOD_DURATION - (int) (timestamp % PERIOD_DURATION);
     }
 }

@@ -94,10 +94,10 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 Color matColor,
                 Color overrideColor,
                 NetColorShifts netColorShifts) {
-        float snippetLeftX = (float)snippet.leftX() / snippet.image().width();
-        float snippetTopY = (float)snippet.topY() / snippet.image().height();
-        float snippetRightX = (float)snippet.rightX() / snippet.image().width();
-        float snippetBottomY = (float)snippet.bottomY() / snippet.image().height();
+        float snippetLeftX = (float) snippet.leftX() / snippet.image().width();
+        float snippetTopY = (float) snippet.topY() / snippet.image().height();
+        float snippetRightX = (float) snippet.rightX() / snippet.image().width();
+        float snippetBottomY = (float) snippet.bottomY() / snippet.image().height();
         int textureId = snippet.image().textureId();
         render(renderingArea,
                 snippetLeftX, snippetTopY, snippetRightX, snippetBottomY,

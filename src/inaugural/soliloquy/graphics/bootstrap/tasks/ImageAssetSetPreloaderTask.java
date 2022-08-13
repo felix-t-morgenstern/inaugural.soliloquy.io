@@ -19,11 +19,11 @@ public class ImageAssetSetPreloaderTask implements Runnable {
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS;
     private final Consumer<ImageAssetSet> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public ImageAssetSetPreloaderTask(Collection<ImageAssetSetDefinitionDTO>
                                               imageAssetSetDefinitionDTOs,
                                       AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
-                                                factory,
+                                              factory,
                                       Consumer<ImageAssetSet> processResult) {
         FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(imageAssetSetDefinitionDTOs, "imageAssetSetDefinitionDTOs");
@@ -38,17 +38,17 @@ public class ImageAssetSetPreloaderTask implements Runnable {
                     "imageAssetSetDefinitionDTO.id within imageAssetSetDefinitionDTOs");
             Check.ifNull(imageAssetSetDefinitionDTO.assets,
                     "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
-                    imageAssetSetDefinitionDTO.id + ")");
+                            imageAssetSetDefinitionDTO.id + ")");
             if (imageAssetSetDefinitionDTO.assets.length == 0) {
                 throw new IllegalArgumentException("ImageAssetSetPreloaderTask: " +
                         "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
                         imageAssetSetDefinitionDTO.id + ") is empty");
             }
-            for(ImageAssetSetAssetDefinitionDTO imageAssetSetAssetDTO :
+            for (ImageAssetSetAssetDefinitionDTO imageAssetSetAssetDTO :
                     imageAssetSetDefinitionDTO.assets) {
                 Check.ifNullOrEmpty(imageAssetSetAssetDTO.assetId,
                         "imageAssetSetAssetDTO.assetId within imageAssetSetDefinitionDTOs (" +
-                        imageAssetSetDefinitionDTO.id + ")");
+                                imageAssetSetDefinitionDTO.id + ")");
                 if (imageAssetSetAssetDTO.assetType < 1 || imageAssetSetAssetDTO.assetType > 3) {
                     throw new IllegalArgumentException("ImageAssetSetPreloaderTask: " +
                             "imageAssetSetDefinitionDTO.asset has illegal assetType (" +
@@ -69,7 +69,7 @@ public class ImageAssetSetPreloaderTask implements Runnable {
     private ImageAssetSetDefinition makeDefinition(ImageAssetSetDefinitionDTO
                                                            imageAssetSetDefinitionDTO) {
         List<ImageAssetSetAssetDefinition> assetDefinitions = new ArrayList<>();
-        for(ImageAssetSetAssetDefinitionDTO assetDTO :
+        for (ImageAssetSetAssetDefinitionDTO assetDTO :
                 imageAssetSetDefinitionDTO.assets) {
             assetDefinitions.add(new ImageAssetSetAssetDefinition(
                     assetDTO.type,

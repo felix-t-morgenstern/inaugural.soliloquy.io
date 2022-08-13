@@ -16,9 +16,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL.createCapabilities;
 
 class SpriteRendererTests {
@@ -249,18 +249,18 @@ class SpriteRendererTests {
         _spriteRenderer.setMesh(new FakeMesh());
         _spriteRenderer.render(spriteRenderable, MOST_RECENT_TIMESTAMP + 123);
 
-        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long)COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(MOST_RECENT_TIMESTAMP + 123, (long) COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test
     void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_spriteRenderer.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _spriteRenderer.mostRecentTimestamp());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(Renderer.class.getCanonicalName() + "<" +
-                SpriteRenderable.class.getCanonicalName() + ">",
+                        SpriteRenderable.class.getCanonicalName() + ">",
                 _spriteRenderer.getInterfaceName());
     }
 }

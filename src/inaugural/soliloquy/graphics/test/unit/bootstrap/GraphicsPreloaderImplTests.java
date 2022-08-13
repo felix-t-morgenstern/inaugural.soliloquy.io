@@ -39,7 +39,7 @@ import static org.mockito.Mockito.*;
 
 class GraphicsPreloaderImplTests {
     private final int THREAD_POOL_SIZE = 12;
-    
+
     private HashMap<AssetType, Integer> _assetTypeBatchSizes;
 
     @Mock private ImageFactory _mockImageFactory;
@@ -96,16 +96,16 @@ class GraphicsPreloaderImplTests {
     private int _firstStaticMouseCursorIndex = -1;
 
     private static final int BATCH_SIZE = 10;
-    private static final int NUMBER_OF_IMAGES = Random.randomIntInRange(1000,2000);
+    private static final int NUMBER_OF_IMAGES = Random.randomIntInRange(1000, 2000);
     // NB: I am making sprites and animations _equal_ to mouse cursor images to test whether the
     //     images are correctly stored and then passed onto subsequent preloading tasks
     private static final int NUMBER_OF_SPRITES = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_ANIMATIONS = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_IMAGE_ASSET_SETS = 1;//Random.randomIntInRange(1000,2000);
-    private static final int NUMBER_OF_FONTS = Random.randomIntInRange(1000,2000);
+    private static final int NUMBER_OF_FONTS = Random.randomIntInRange(1000, 2000);
     private static final int NUMBER_OF_MOUSE_CURSOR_IMAGES = Random.randomIntInRange(1000, 2000);
-    private static final int NUMBER_OF_ANIMATED_MOUSE_CURSORS = Random.randomIntInRange(1000,2000);
+    private static final int NUMBER_OF_ANIMATED_MOUSE_CURSORS = Random.randomIntInRange(1000, 2000);
     // NB: I am making static mouse cursors _equal_ to mouse cursor images to test whether the
     //     mouse cursor images are correctly stored and then passed onto subsequent preloading
     //     tasks
@@ -797,7 +797,7 @@ class GraphicsPreloaderImplTests {
                     List<Image> matchingOutput =
                             _imageFactoryOutputs.stream().filter(image ->
                                     image == (animation.snippetAtFrame(0).image()))
-                            .collect(Collectors.toList());
+                                    .collect(Collectors.toList());
                     assertEquals(1, matchingOutput.size());
                 }
         );
@@ -850,7 +850,7 @@ class GraphicsPreloaderImplTests {
                     List<MouseCursorImageFactory.Output> matchingOutput =
                             _mouseCursorImageFactoryOutputs.stream().filter(output ->
                                     output.id() == staticMouseCursorProvider.provide(0L))
-                            .collect(Collectors.toList());
+                                    .collect(Collectors.toList());
                     assertEquals(1, matchingOutput.size());
                 }
         );
@@ -1023,14 +1023,14 @@ class GraphicsPreloaderImplTests {
 
     private ImageAssetSetDefinitionDTO randomImageAssetSetDefinitionDTO() {
         return new ImageAssetSetDefinitionDTO(randomString(),
-                new ImageAssetSetAssetDefinitionDTO[]{ randomImageAssetSetAssetDefinitionDTO() });
+                new ImageAssetSetAssetDefinitionDTO[]{randomImageAssetSetAssetDefinitionDTO()});
     }
 
     private ImageAssetSetAssetDefinitionDTO randomImageAssetSetAssetDefinitionDTO() {
         return new ImageAssetSetAssetDefinitionDTO(randomString(), randomString(),
                 randomIntInRange(1, 3), randomString());
     }
-    
+
     private MouseCursorImageDefinitionDTO randomMouseCursorImageDefinitionDTO() {
         return new MouseCursorImageDefinitionDTO(randomString(), randomIntWithInclusiveFloor(0),
                 randomIntWithInclusiveFloor(0));

@@ -3,13 +3,11 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class StaticProviderImplTests {
     private final Object PROVIDED_VALUE = new Object();
@@ -88,13 +86,13 @@ class StaticProviderImplTests {
 
     @Test
     void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long)_staticProvider.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) _staticProvider.mostRecentTimestamp());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(StaticProvider.class.getCanonicalName() + "<" +
-                Object.class.getCanonicalName() + ">",
+                        Object.class.getCanonicalName() + ">",
                 _staticProvider.getInterfaceName());
     }
 }

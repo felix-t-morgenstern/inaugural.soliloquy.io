@@ -63,7 +63,7 @@ public class ImageFactoryImplTests {
 
         assertFalse(image.supportsMouseEventCapturing());
         assertThrows(UnsupportedOperationException.class,
-                () -> image.capturesMouseEventsAtPixel(0,0));
+                () -> image.capturesMouseEventsAtPixel(0, 0));
     }
 
     @Test

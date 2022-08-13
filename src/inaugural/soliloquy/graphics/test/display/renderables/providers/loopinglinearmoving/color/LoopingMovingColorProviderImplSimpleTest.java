@@ -11,14 +11,13 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a window of 1920x1080 pixels in the middle of the screen for 8000ms
- *    with a titlebar reading "My title bar". The window will contain a picture of a shield,
- *    in the top-left corner of the window, taking up one eighth of the width and three-sixteenths
- *    of the height of the window. There will be a colored border around the shield.
+ * with a titlebar reading "My title bar". The window will contain a picture of a shield,
+ * in the top-left corner of the window, taking up one eighth of the width and three-sixteenths
+ * of the height of the window. There will be a colored border around the shield.
  * 2. Each 4000ms, the color of the shield will transition from red to blue, blue to green, green
- *    to fuchsia, and from fuchsia back to red again.
+ * to fuchsia, and from fuchsia back to red again.
  * 3. The border color animation will proceed for 8000ms.
  * 4. The window will then close.
- *
  */
 class LoopingMovingColorProviderImplSimpleTest extends LoopingMovingColorProviderImplTest {
     public static void main(String[] args) {

@@ -28,9 +28,9 @@ public class ShaderImpl implements Shader {
     private final int ATTRIBUTE_LOCATION_VERTICES = 0;
     private final int ATTRIBUTE_LOCATION_UV_COORDS = 1;
 
-    private final HashMap<String,Object> UNIFORM_VALUES = new HashMap<>();
+    private final HashMap<String, Object> UNIFORM_VALUES = new HashMap<>();
 
-    private final Map<String,Integer> UNIFORM_LOCATIONS = new HashMap<>();
+    private final Map<String, Integer> UNIFORM_LOCATIONS = new HashMap<>();
 
     public ShaderImpl(String filename) {
         Check.ifNullOrEmpty(filename, "filename");
@@ -63,8 +63,7 @@ public class ShaderImpl implements Shader {
         }
 
         glValidateProgram(_program);
-        if (glGetProgrami(_program, GL_VALIDATE_STATUS) != STATUS_OK)
-        {
+        if (glGetProgrami(_program, GL_VALIDATE_STATUS) != STATUS_OK) {
             throw new RuntimeException(glGetProgramInfoLog(_program));
         }
     }
@@ -75,13 +74,13 @@ public class ShaderImpl implements Shader {
         try {
             bufferedReader = new BufferedReader(new FileReader(new File(filename)));
             String line;
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
                 stringBuilder.append("\n");
             }
             bufferedReader.close();
         }
-        catch(IOException e) {
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
         return stringBuilder.toString();

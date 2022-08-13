@@ -8,7 +8,9 @@ public class AnimatedMouseCursorDefinitionDTO {
     public Long Paused;
     public Long Timestamp;
 
-    public AnimatedMouseCursorDefinitionDTO(String id, AnimatedMouseCursorFrameDefinitionDTO[] frames, int duration,
+    public AnimatedMouseCursorDefinitionDTO(String id,
+                                            AnimatedMouseCursorFrameDefinitionDTO[] frames,
+                                            int duration,
                                             int offset, Long paused, Long timestamp) {
         Id = id;
         Frames = frames;

@@ -4,7 +4,6 @@ import soliloquy.specs.graphics.assets.Asset;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AssetDefinition;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 import static inaugural.soliloquy.tools.Check.*;
 

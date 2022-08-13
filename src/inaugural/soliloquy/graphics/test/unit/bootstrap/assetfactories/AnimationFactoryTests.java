@@ -1,7 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Animation;
@@ -82,8 +83,8 @@ class AnimationFactoryTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(AssetFactory.class.getCanonicalName() + "<" +
-                AnimationDefinition.class.getCanonicalName() + "," +
-                Animation.class.getCanonicalName() + ">",
+                        AnimationDefinition.class.getCanonicalName() + "," +
+                        Animation.class.getCanonicalName() + ">",
                 _animationFactory.getInterfaceName());
     }
 

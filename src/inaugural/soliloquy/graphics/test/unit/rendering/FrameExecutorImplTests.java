@@ -51,7 +51,7 @@ class FrameExecutorImplTests {
 
         _mockStackRenderer = mock(StackRenderer.class);
 
-        _frameExecutor = new FrameExecutorImpl(_mockGlobalClock, _mockStackRenderer,100);
+        _frameExecutor = new FrameExecutorImpl(_mockGlobalClock, _mockStackRenderer, 100);
     }
 
     @Test
@@ -77,8 +77,8 @@ class FrameExecutorImplTests {
                 EVENTS_FIRED.get(1).equals(FRAME_BLOCKING_EVENT_1_NAME));
         assertTrue(EVENTS_FIRED.get(0).equals(FRAME_BLOCKING_EVENT_2_NAME) ||
                 EVENTS_FIRED.get(1).equals(FRAME_BLOCKING_EVENT_2_NAME));
-        assertEquals(GLOBAL_TIMESTAMP, (long)_frameBlockingEvent1FiringTime);
-        assertEquals(GLOBAL_TIMESTAMP, (long)_frameBlockingEvent2FiringTime);
+        assertEquals(GLOBAL_TIMESTAMP, (long) _frameBlockingEvent1FiringTime);
+        assertEquals(GLOBAL_TIMESTAMP, (long) _frameBlockingEvent2FiringTime);
         verify(_mockStackRenderer).render(GLOBAL_TIMESTAMP);
     }
 

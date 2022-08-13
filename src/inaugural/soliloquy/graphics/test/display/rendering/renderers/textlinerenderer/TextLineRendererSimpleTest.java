@@ -2,7 +2,8 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -21,9 +22,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Quick Message!", white, aligned left, near the left
- *    edge of the window, vertically centered, for 4000ms.
+ * edge of the window, vertically centered, for 4000ms.
  * 2. The window will then close.
- *
  */
 public class TextLineRendererSimpleTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Quick Message!";
@@ -41,7 +41,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
                 TextLineRendererSimpleTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         FontStyleDefinition plain = new FontStyleDefinition(
@@ -68,7 +68,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,

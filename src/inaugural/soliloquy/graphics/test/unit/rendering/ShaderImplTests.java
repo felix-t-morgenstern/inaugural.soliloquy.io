@@ -191,7 +191,7 @@ class ShaderImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> Shader.setUniform("", Color.RED));
         assertThrows(IllegalArgumentException.class,
-                () -> Shader.setUniform(uniformName, (Color)null));
+                () -> Shader.setUniform(uniformName, (Color) null));
     }
 
     @Test

@@ -127,7 +127,8 @@ public class TriangleRenderableImpl
     }
 
     /*
-     * Taken from https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/ on 2022/08/11
+     * Taken from https://www.geeksforgeeks
+     * .org/check-whether-a-given-point-lies-inside-a-triangle-or-not/ on 2022/08/11
      */
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)

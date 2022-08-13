@@ -7,7 +7,9 @@ import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimation
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAggregator;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -86,7 +88,8 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
         Animation animation = ANIMATION_FACTORY.make(animationDefinition);
 
-        int periodModuloOffset = MS_DURATION - (int)(globalLoopingAnimationStartTimestamp % (MS_DURATION));
+        int periodModuloOffset =
+                MS_DURATION - (int) (globalLoopingAnimationStartTimestamp % (MS_DURATION));
 
         GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
                 animation, periodModuloOffset, null);
@@ -94,7 +97,8 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,
                         new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, 0f, null),
-                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, Color.BLACK, null),
+                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, Color.BLACK,
+                                null),
                         new ArrayList<>(),
                         new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),

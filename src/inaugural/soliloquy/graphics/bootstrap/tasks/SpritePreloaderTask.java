@@ -17,7 +17,7 @@ public class SpritePreloaderTask implements Runnable {
     private final Collection<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS;
     private final Consumer<Sprite> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public SpritePreloaderTask(Function<String, Image> getImage,
                                Collection<SpriteDefinitionDTO> spriteDefinitionDTOs,
                                AssetFactory<SpriteDefinition, Sprite> factory,

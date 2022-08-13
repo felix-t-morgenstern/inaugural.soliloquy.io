@@ -54,17 +54,17 @@ public class ImageAssetSetFactory
             String direction = nullIfEmpty(assetDefinition.direction());
 
             ImageAsset imageAsset;
-            switch(assetDefinition.assetType()) {
+            switch (assetDefinition.assetType()) {
                 case SPRITE:
                     if (!SPRITES_REGISTRY.contains(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Sprite found with id (" +
-                                assetDefinition.assetId() + ")");
+                                        assetDefinition.assetId() + ")");
                     }
                     imageAsset = SPRITES_REGISTRY.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
-                                ((Sprite)imageAsset).image().supportsMouseEventCapturing();
+                                ((Sprite) imageAsset).image().supportsMouseEventCapturing();
                     }
                     break;
                 case ANIMATION:
@@ -76,7 +76,7 @@ public class ImageAssetSetFactory
                     imageAsset = ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
-                                ((Animation)imageAsset).supportsMouseEventCapturing();
+                                ((Animation) imageAsset).supportsMouseEventCapturing();
                     }
                     break;
                 case GLOBAL_LOOPING_ANIMATION:
@@ -91,7 +91,7 @@ public class ImageAssetSetFactory
                 default:
                     throw new IllegalArgumentException(
                             "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
-                            assetDefinition.assetType().toString() + ")");
+                                    assetDefinition.assetType().toString() + ")");
             }
 
             Map<String, ImageAsset> assetsByDirection;
@@ -103,8 +103,9 @@ public class ImageAssetSetFactory
             }
             if (assetsByDirection.containsKey(direction)) {
                 throw new IllegalArgumentException(
-                        "ImageAssetSetFactory: duplicate pair of type and direction (" + type + "," +
-                        direction + ")");
+                        "ImageAssetSetFactory: duplicate pair of type and direction (" + type +
+                                "," +
+                                direction + ")");
             }
             assetsByDirection.put(direction, imageAsset);
         }

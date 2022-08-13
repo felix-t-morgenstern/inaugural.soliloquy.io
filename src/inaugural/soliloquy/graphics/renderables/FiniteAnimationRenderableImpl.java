@@ -157,7 +157,7 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
             timestamp = _pausedTimestamp;
         }
         return ANIMATION.snippetAtFrame(
-                (int)(Math.min(_startTimestamp + ANIMATION.msDuration(),
+                (int) (Math.min(_startTimestamp + ANIMATION.msDuration(),
                         Math.max(_startTimestamp, timestamp))
                         - _startTimestamp));
     }

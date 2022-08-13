@@ -22,11 +22,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * Test acceptance criteria:
  *
  * 1. This test will display a string of text, "Quickly Quizzing Quokkas", white, aligned left,
- *    near the left edge of the window, vertically centered, for 8000ms. The 'Q' glyphs will have
- *    trails which extend to the right, underneath the subsequent glyphs, without pushing those
- *    glyphs to the right.
+ * near the left edge of the window, vertically centered, for 8000ms. The 'Q' glyphs will have
+ * trails which extend to the right, underneath the subsequent glyphs, without pushing those
+ * glyphs to the right.
  * 2. The window will then close.
- *
  */
 class TextLineRendererWideQTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Quickly Quizzing Quokkas";
@@ -44,7 +43,7 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
                 TextLineRendererWideQTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
@@ -74,7 +73,7 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
 
         TextLineRenderable = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,

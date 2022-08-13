@@ -62,22 +62,27 @@ public class LoopingLinearMovingLocationProviderTests {
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{ put(null, LOCATION_1); }},
+                        new HashMap<Integer, Pair<Float, Float>>() {{
+                            put(null, LOCATION_1);
+                        }},
                         PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, new HashMap<Integer, Pair<Float, Float>>() {{
-                    put(TIME_1, null);
-                }}, PERIOD_DURATION,
+                new LoopingLinearMovingLocationProvider(UUID,
+                        new HashMap<Integer, Pair<Float, Float>>() {{
+                            put(TIME_1, null);
+                        }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{ put(TIME_2, LOCATION_2); }},
+                        new HashMap<Integer, Pair<Float, Float>>() {{
+                            put(TIME_2, LOCATION_2);
+                        }},
                         PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingLocationProvider(UUID,
                         new HashMap<Integer, Pair<Float, Float>>() {{
                             put(PERIOD_DURATION + 1, LOCATION_1);
-                }}, PERIOD_DURATION,
+                        }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -110,9 +115,9 @@ public class LoopingLinearMovingLocationProviderTests {
                         MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
-                (long)loopingLinearMovingLocationProvider.pausedTimestamp());
+                (long) loopingLinearMovingLocationProvider.pausedTimestamp());
         assertEquals(mostRecentTimestamp,
-                (long)loopingLinearMovingLocationProvider.mostRecentTimestamp());
+                (long) loopingLinearMovingLocationProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -132,7 +137,7 @@ public class LoopingLinearMovingLocationProviderTests {
                 valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
-                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int)(long)key)));
+                assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int) (long) key)));
     }
 
     @Test
@@ -155,7 +160,7 @@ public class LoopingLinearMovingLocationProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
@@ -174,7 +179,7 @@ public class LoopingLinearMovingLocationProviderTests {
         long timeAfterValue3 = 50L;
         long timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
         long timeInterval = PERIOD_DURATION - TIME_3;
-        float value3Weight = (timeInterval - timeAfterValue3) / (float)timeInterval;
+        float value3Weight = (timeInterval - timeAfterValue3) / (float) timeInterval;
         float value1Weight = 1f - value3Weight;
 
         float expectedX = (LOCATION_3_X * value3Weight) + (LOCATION_1_X * value1Weight);
@@ -267,7 +272,7 @@ public class LoopingLinearMovingLocationProviderTests {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + PERIOD_DURATION + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
-        float value1Weight = (timeInterval - timeAfterValue1) / (float)timeInterval;
+        float value1Weight = (timeInterval - timeAfterValue1) / (float) timeInterval;
         float value2Weight = 1f - value1Weight;
 
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);

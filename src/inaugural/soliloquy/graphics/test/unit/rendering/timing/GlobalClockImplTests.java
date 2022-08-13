@@ -9,7 +9,8 @@ import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GlobalClockImplTests {
     @SuppressWarnings("FieldCanBeLocal")

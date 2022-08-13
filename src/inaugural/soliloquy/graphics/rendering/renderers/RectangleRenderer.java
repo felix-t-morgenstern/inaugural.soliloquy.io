@@ -153,7 +153,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setTopLeftColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setTopLeftColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -163,7 +164,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setTopRightColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setTopRightColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -173,7 +175,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setBottomRightColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setBottomRightColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -183,7 +186,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setBottomLeftColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setBottomLeftColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -193,7 +197,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime) throws IllegalArgumentException {
+        public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -228,12 +233,14 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
             return false;
         }
 
         @Override
-        public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void press(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -248,7 +255,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void release(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -263,7 +271,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void mouseOver(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseOver(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -273,7 +282,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void mouseLeave(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseLeave(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -298,7 +308,8 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
         }
 
         @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 

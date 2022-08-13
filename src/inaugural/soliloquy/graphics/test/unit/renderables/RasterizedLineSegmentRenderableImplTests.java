@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableI
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -15,7 +14,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -37,7 +35,8 @@ class RasterizedLineSegmentRenderableImplTests {
     private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
 
     @BeforeEach
-    void setUp() {        _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
+    void setUp() {
+        _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 THICKNESS_PROVIDER, STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
                 RENDERING_AREA_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);

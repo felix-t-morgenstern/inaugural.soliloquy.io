@@ -3,20 +3,18 @@ package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 import inaugural.soliloquy.graphics.api.dto.StaticMouseCursorDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.StaticMouseCursorPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticMouseCursorProviderFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProviderFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.StaticMouseCursorProvider;
-import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StaticMouseCursorPreloaderTaskTests {
     private final String STATIC_MOUSE_CURSOR_ID_1 = "staticMouseCursorId1";
@@ -132,7 +130,7 @@ class StaticMouseCursorPreloaderTaskTests {
 
         assertEquals(2, FACTORY.Inputs.size());
         int index = 0;
-        for(StaticMouseCursorDefinitionDTO staticMouseCursorDefinitionDTO :
+        for (StaticMouseCursorDefinitionDTO staticMouseCursorDefinitionDTO :
                 STATIC_MOUSE_CURSOR_DEFINITION_DTOS) {
             List<StaticMouseCursorProvider> matchingProviders = RESULTS.stream()
                     .filter(provider -> provider.id().equals(staticMouseCursorDefinitionDTO.Id))

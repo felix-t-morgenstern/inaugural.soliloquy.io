@@ -8,9 +8,7 @@ import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.*;
 
 public class MeshImpl implements Mesh {
@@ -38,7 +36,7 @@ public class MeshImpl implements Mesh {
         _verticesId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, _verticesId);
         glBufferData(GL_ARRAY_BUFFER, createBuffer(vertices), GL_STATIC_DRAW);
-        glVertexAttribPointer(0, vertices.length/3, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(0, vertices.length / 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         _uvId = glGenBuffers();

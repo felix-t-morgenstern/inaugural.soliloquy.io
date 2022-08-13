@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
-import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -52,7 +52,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void press(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
@@ -67,7 +68,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+    public void release(int i, long l)
+            throws UnsupportedOperationException, IllegalArgumentException {
 
     }
 
@@ -122,7 +124,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+    public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 
@@ -132,7 +135,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+    public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+            throws IllegalArgumentException {
 
     }
 
@@ -143,7 +147,7 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
-                                                           renderingDimensionsProvider)
+                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

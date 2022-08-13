@@ -66,7 +66,7 @@ public class FiniteAnimationRenderer
                 COLOR_SHIFT_STACK_AGGREGATOR,
                 timestamp);
 
-        AnimationFrameSnippet snippet =  finiteAnimationRenderable.provide(timestamp);
+        AnimationFrameSnippet snippet = finiteAnimationRenderable.provide(timestamp);
 
         super.render(
                 renderingArea,
@@ -88,7 +88,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime) throws IllegalArgumentException {
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -188,12 +189,14 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
             return false;
         }
 
         @Override
-        public void press(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void press(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -208,7 +211,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void release(int i, long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void release(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -223,7 +227,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void mouseOver(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseOver(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -233,7 +238,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void mouseLeave(long l) throws UnsupportedOperationException, IllegalArgumentException {
+        public void mouseLeave(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
 
         }
 
@@ -263,7 +269,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime) throws IllegalArgumentException {
+        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -273,7 +280,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime) throws IllegalArgumentException {
+        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 

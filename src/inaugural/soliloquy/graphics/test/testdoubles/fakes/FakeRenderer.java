@@ -34,7 +34,7 @@ public class FakeRenderer implements Renderer<Renderable> {
 
         if (renderable instanceof SpriteRenderable) {
             if (SpriteRenderer != null) {
-                SpriteRenderer.render((SpriteRenderable)renderable, timestamp);
+                SpriteRenderer.render((SpriteRenderable) renderable, timestamp);
             }
         }
     }

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.assetfactories;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.SpriteFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
@@ -32,14 +32,14 @@ class SpriteFactoryTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(AssetFactory.class.getCanonicalName() + "<" +
-                SpriteDefinition.class.getCanonicalName() + "," + Sprite.class.getCanonicalName() +
-                ">",
+                        SpriteDefinition.class.getCanonicalName() + "," + Sprite.class.getCanonicalName() +
+                        ">",
                 _spriteFactory.getInterfaceName());
     }
 
     @Test
     void testCreate() {
-        SpriteDefinition spriteDefinition = new SpriteDefinition(_id, _image, _leftX, _topY, 
+        SpriteDefinition spriteDefinition = new SpriteDefinition(_id, _image, _leftX, _topY,
                 _rightX, _bottomY);
 
         Sprite createdSprite = _spriteFactory.make(spriteDefinition);
@@ -80,7 +80,7 @@ class SpriteFactoryTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(
-                new SpriteDefinition(_id, new FakeImage(_relativeLocation, 0, _imageHeight), 
+                new SpriteDefinition(_id, new FakeImage(_relativeLocation, 0, _imageHeight),
                         _leftX, _topY, _rightX, _bottomY)
         ));
         assertThrows(IllegalArgumentException.class, () -> _spriteFactory.make(

@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class LoopingLinearMovingProviderFactoryImpl implements LoopingLinearMovingProviderFactory {
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private final Map<String, Function<UUID, Function<Integer, Function<Integer,
             Function<Map, Function<Long, Function<Long, Function<Object,
                     LoopingLinearMovingProvider>>>>>>>> FACTORIES;
@@ -41,7 +41,7 @@ public class LoopingLinearMovingProviderFactoryImpl implements LoopingLinearMovi
                 Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>> factory =
                 FACTORIES.get(type);
         //noinspection unchecked
-        return (LoopingLinearMovingProvider<T>)factory
+        return (LoopingLinearMovingProvider<T>) factory
                 .apply(uuid)
                 .apply(periodDuration)
                 .apply(periodModuloOffset)

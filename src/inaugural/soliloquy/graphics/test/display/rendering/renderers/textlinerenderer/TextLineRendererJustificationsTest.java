@@ -2,7 +2,9 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -39,16 +41,17 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 },
                 () -> {
                     TextLineRenderableLeft.Font =
-                    TextLineRenderableCenter.Font =
-                    TextLineRenderableRight.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                            TextLineRenderableCenter.Font =
+                                    TextLineRenderableRight.Font =
+                                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY,
+                                                    COORDINATE_FACTORY);
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererJustificationsTest::closeAfterSomeTime);
     }
 
-    /** @noinspection rawtypes*/
+    /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
@@ -80,9 +83,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float,Float> renderingLocationLeft = new Pair<>(0.05f, 0.225f);
-        Pair<Float,Float> renderingLocationCenter = new Pair<>(0.5f, 0.475f);
-        Pair<Float,Float> renderingLocationRight = new Pair<>(0.95f, 0.725f);
+        Pair<Float, Float> renderingLocationLeft = new Pair<>(0.05f, 0.225f);
+        Pair<Float, Float> renderingLocationCenter = new Pair<>(0.5f, 0.475f);
+        Pair<Float, Float> renderingLocationRight = new Pair<>(0.95f, 0.725f);
 
         TextLineRenderableLeft = new FakeTextLineRenderable(null,
                 new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_LEFT,

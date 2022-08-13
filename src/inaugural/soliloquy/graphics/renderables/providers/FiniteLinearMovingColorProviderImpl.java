@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMovingProvider<Color>
-        implements FiniteLinearMovingColorProvider  {
+        implements FiniteLinearMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
-    /** @noinspection ConstantConditions*/
+    /** @noinspection ConstantConditions */
     public FiniteLinearMovingColorProviderImpl(UUID uuid, Map<Long, Color> valuesAtTimes,
                                                List<Boolean> hueMovementIsClockwise,
                                                Long pausedTimestamp, Long mostRecentTimestamp) {
