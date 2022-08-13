@@ -15,8 +15,9 @@ public class RectangleAnimatedBackgroundTextureIdProvider
     public RectangleAnimatedBackgroundTextureIdProvider(UUID uuid, int periodDuration,
                                                         int periodModuloOffset,
                                                         Map<Integer, Integer> valuesWithinPeriod,
+                                                        Long pauseTimestamp,
                                                         Long mostRecentTimestamp) {
-        super(uuid, periodDuration, periodModuloOffset, null, mostRecentTimestamp);
+        super(uuid, periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
         FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null,
                 null);
     }
