@@ -28,8 +28,6 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     protected final FloatBoxFactory FLOAT_BOX_FACTORY;
 
     protected Supplier<Float> _getScreenWidthToHeightRatio;
-    private Shader _shader;
-    private Mesh _mesh;
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
                                 FloatBoxFactory floatBoxFactory,
@@ -47,16 +45,6 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         super(archetype, mostRecentTimestamp);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
-    }
-
-    @Override
-    public void setShader(Shader shader) throws IllegalArgumentException {
-        _shader = Check.ifNull(shader, "shader");
-    }
-
-    @Override
-    public void setMesh(Mesh mesh) throws IllegalArgumentException {
-        _mesh = Check.ifNull(mesh, "mesh");
     }
 
     protected NetColorShifts netColorShifts(List<ProviderAtTime<ColorShift>> colorShiftProviders,

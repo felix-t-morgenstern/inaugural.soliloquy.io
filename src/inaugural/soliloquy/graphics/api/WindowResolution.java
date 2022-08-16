@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum WindowResolution {
+    RES_TEST_SQUARE(1800, 1800),
+
     RES_INVALID(-1, -1),
 
     RES_WINDOWED_FULLSCREEN(0, 0),

@@ -23,7 +23,6 @@ public class GlobalLoopingAnimationRenderer
         extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
-    @SuppressWarnings("ConstantConditions")
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                           FloatBoxFactory floatBoxFactory,
                                           ColorShiftStackAggregator colorShiftStackAggregator,

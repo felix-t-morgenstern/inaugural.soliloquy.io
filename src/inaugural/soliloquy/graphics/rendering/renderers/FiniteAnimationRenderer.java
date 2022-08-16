@@ -26,7 +26,6 @@ public class FiniteAnimationRenderer
         implements Renderer<FiniteAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                    FloatBoxFactory floatBoxFactory,
                                    ColorShiftStackAggregator colorShiftStackAggregator,

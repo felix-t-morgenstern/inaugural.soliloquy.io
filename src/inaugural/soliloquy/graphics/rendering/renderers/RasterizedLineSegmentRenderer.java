@@ -4,8 +4,6 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
-import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -17,23 +15,9 @@ import static org.lwjgl.opengl.GL11.*;
 public class RasterizedLineSegmentRenderer
         extends AbstractRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
-    private Mesh _mesh;
-    private Shader _shader;
 
     public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
         super(ARCHETYPE, mostRecentTimestamp);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public void setMesh(Mesh mesh) throws IllegalArgumentException {
-        _mesh = Check.ifNull(mesh, "mesh");
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public void setShader(Shader shader) throws IllegalArgumentException {
-        _shader = Check.ifNull(shader, "shader");
     }
 
     @SuppressWarnings("ConstantConditions")
