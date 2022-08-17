@@ -12,12 +12,11 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL11.*;
 
 public class AntialiasedLineSegmentRenderer
-        extends AbstractRenderer<AntialiasedLineSegmentRenderable> {
+        extends AbstractPointDrawingRenderer<AntialiasedLineSegmentRenderable> {
     private final Supplier<Float> WINDOW_WIDTH_TO_HEIGHT_RATIO;
 
     private static final HashMap<Float, HashMap<Float, Pair<Float, Float>>>
@@ -85,15 +84,7 @@ public class AntialiasedLineSegmentRenderer
         Check.ifNull(vertex2.getItem1(), "provided vertex2 x");
         Check.ifNull(vertex2.getItem2(), "provided vertex2 y");
 
-        if (_mesh == null) {
-            throw new IllegalStateException("RectangleRenderer.render: mesh cannot be null");
-        }
-        if (_shader == null) {
-            throw new IllegalStateException("RectangleRenderer.render: shader cannot be null");
-        }
-
-        _mesh.unbind();
-        _shader.unbind();
+        unbindMeshAndShader();
 
         float x1 = vertex1.getItem1();
         float y1 = vertex1.getItem2();
@@ -376,22 +367,9 @@ public class AntialiasedLineSegmentRenderer
         return result;
     }
 
-    private void setDrawColor(Color color) {
-        if (color != null) {
-            float[] rgba = color.getColorComponents(null);
-            glColor4f(rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
-        }
-        else {
-            glColor4f(1f, 1f, 1f, 1f);
-        }
-    }
-
-    private Color transparent(Color color) {
-        return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0);
-    }
-
-    private void drawPoint(Pair<Float, Float> point) {
-        glVertex2f((point.getItem1() * 2f) - 1f, 1f - (point.getItem2() * 2f));
+    @Override
+    protected String className() {
+        return "AntialiasedLineSegmentRenderer";
     }
 
     private static class AntialiasedLineSegmentRenderableArchetype

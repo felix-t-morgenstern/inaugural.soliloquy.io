@@ -10,10 +10,9 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.UUID;
 
-import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
 
-public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
+public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
     public RectangleRenderer(Long mostRecentTimestamp) {
         super(ARCHETYPE, mostRecentTimestamp);
@@ -54,20 +53,7 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        if (_mesh == null) {
-            throw new IllegalStateException("RectangleRenderer.render: mesh cannot be null");
-        }
-        if (_shader == null) {
-            throw new IllegalStateException("RectangleRenderer.render: shader cannot be null");
-        }
-
-        _mesh.unbind();
-        _shader.unbind();
-
-        float leftX = (renderingDimensions.leftX() * 2f) - 1f;
-        float topY = -((renderingDimensions.topY() * 2f) - 1f);
-        float rightX = (renderingDimensions.rightX() * 2f) - 1f;
-        float bottomY = -((renderingDimensions.bottomY() * 2f) - 1f);
+        unbindMeshAndShader();
 
         float tilesPerWidth =
                 renderingDimensions.width() / rectangleRenderable.getBackgroundTextureTileWidth();
@@ -94,42 +80,31 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
 
         glBegin(GL_QUADS);
 
-        renderColor(topLeftColor);
+        setDrawColor(topLeftColor);
         if (hasTexture) {
             glTexCoord2f(0f, 0f);
         }
-        glVertex2f(leftX, topY);
+        drawPoint(renderingDimensions.leftX(), renderingDimensions.topY());
 
-        renderColor(topRightColor);
+        setDrawColor(topRightColor);
         if (hasTexture) {
             glTexCoord2f(tilesPerWidth, 0f);
         }
-        glVertex2f(rightX, topY);
+        drawPoint(renderingDimensions.rightX(), renderingDimensions.topY());
 
-        renderColor(bottomRightColor);
+        setDrawColor(bottomRightColor);
         if (hasTexture) {
             glTexCoord2f(tilesPerWidth, tilesPerHeight);
         }
-        glVertex2f(rightX, bottomY);
+        drawPoint(renderingDimensions.rightX(), renderingDimensions.bottomY());
 
-        renderColor(bottomLeftColor);
+        setDrawColor(bottomLeftColor);
         if (hasTexture) {
             glTexCoord2f(0f, tilesPerHeight);
         }
-        glVertex2f(leftX, bottomY);
+        drawPoint(renderingDimensions.leftX(), renderingDimensions.bottomY());
 
         glEnd();
-    }
-
-    // TODO: Duplicate within AntialiasedLineSegmentRenderer
-    private void renderColor(Color color) {
-        if (color != null) {
-            float[] rgba = color.getColorComponents(null);
-            glColor4f(rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
-        }
-        else {
-            glColor4f(1f, 1f, 1f, 1f);
-        }
     }
 
     private static final RectangleRenderable ARCHETYPE = new RectangleRenderable() {
@@ -324,4 +299,9 @@ public class RectangleRenderer extends AbstractRenderer<RectangleRenderable>
             return RectangleRenderable.class.getCanonicalName();
         }
     };
+
+    @Override
+    protected String className() {
+        return "RectangleRenderer";
+    }
 }
