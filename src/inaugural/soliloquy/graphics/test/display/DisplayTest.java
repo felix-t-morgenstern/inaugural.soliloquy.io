@@ -75,7 +75,11 @@ public class DisplayTest {
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        CheckedExceptionWrapper.sleep(3000);
+        closeAfterSomeTime(graphicsCoreLoop, 3000);
+    }
+
+    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop, int totalMs) {
+        CheckedExceptionWrapper.sleep(totalMs);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

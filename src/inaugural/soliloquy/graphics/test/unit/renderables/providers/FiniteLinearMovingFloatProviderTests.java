@@ -12,13 +12,18 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FiniteLinearMovingFloatProviderTests {
-    private final HashMap<Long, Float> VALUES_AT_TIMES = new HashMap<>();
     private final long TIME_1 = 100L;
     private final float VALUE_1 = 0.2f;
     private final long TIME_2 = 300L;
     private final float VALUE_2 = 0.4f;
     private final long TIME_3 = 500L;
     private final float VALUE_3 = 0.6f;
+    private final HashMap<Long, Float> VALUES_AT_TIMES = new HashMap<Long, Float>() {{
+        put(TIME_1, VALUE_1);
+        put(TIME_2, VALUE_2);
+        put(TIME_3, VALUE_3);
+    }};
+
     private final long MOST_RECENT_TIMESTAMP = 34L;
 
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -27,10 +32,6 @@ class FiniteLinearMovingFloatProviderTests {
 
     @BeforeEach
     void setUp() {
-        VALUES_AT_TIMES.put(TIME_1, VALUE_1);
-        VALUES_AT_TIMES.put(TIME_2, VALUE_2);
-        VALUES_AT_TIMES.put(TIME_3, VALUE_3);
-
         _finiteLinearMovingFloatProvider = new FiniteLinearMovingFloatProvider(UUID,
                 VALUES_AT_TIMES, null, MOST_RECENT_TIMESTAMP);
     }

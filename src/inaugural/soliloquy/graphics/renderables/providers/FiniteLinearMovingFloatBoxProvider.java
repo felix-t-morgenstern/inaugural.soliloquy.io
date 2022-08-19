@@ -13,7 +13,6 @@ public class FiniteLinearMovingFloatBoxProvider
 
     private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteLinearMovingFloatBoxProvider(FloatBoxFactory floatBoxFactory, UUID uuid,
                                               Map<Long, FloatBox> valuesAtTimes,
                                               Long pausedTimestamp, Long mostRecentTimestamp) {
@@ -24,7 +23,7 @@ public class FiniteLinearMovingFloatBoxProvider
     @Override
     protected FloatBox interpolate(FloatBox value1, float weight1,
                                    FloatBox value2, float weight2,
-                                   boolean isClockwise) {
+                                   int transitionNumber) {
         return Interpolate.floatBoxes(value1, weight1, value2, weight2, FLOAT_BOX_FACTORY);
     }
 

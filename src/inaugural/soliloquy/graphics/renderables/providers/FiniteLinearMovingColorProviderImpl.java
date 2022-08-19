@@ -32,13 +32,9 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
 
     @Override
     protected Color interpolate(Color value1, float weight1, Color value2, float weight2,
-                                boolean isClockwise) {
-        return Interpolate.colors(value1, weight1, value2, weight2, isClockwise);
-    }
-
-    @Override
-    protected boolean isClockwise(int transition) {
-        return HUE_MOVEMENT_IS_CLOCKWISE.get(transition);
+                                int transitionNumber) {
+        return Interpolate.colors(value1, weight1, value2, weight2,
+                HUE_MOVEMENT_IS_CLOCKWISE.get(transitionNumber));
     }
 
     @Override

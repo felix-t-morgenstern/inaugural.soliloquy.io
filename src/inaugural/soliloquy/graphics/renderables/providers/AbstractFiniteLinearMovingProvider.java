@@ -17,7 +17,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     private final UUID UUID;
     private final HashMap<Long, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
-    private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
+    protected final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
     protected AbstractFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimes,
                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
@@ -61,7 +61,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
             return VALUES_AT_TIMES.get(NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue);
         }
         long time1 = NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(timestamp);
-        int transition = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1);
+        int transitionNumber = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1);
         long time2 = NEAREST_FLOOR_AND_CEILING_TREE
                 .OrderedValues[NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1) + 1];
         long distanceBetweenTimes = time2 - time1;
@@ -70,15 +70,11 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
         T value1 = VALUES_AT_TIMES.get(time1);
         T value2 = VALUES_AT_TIMES.get(time2);
 
-        return interpolate(value1, weight1, value2, weight2, isClockwise(transition));
+        return interpolate(value1, weight1, value2, weight2, transitionNumber);
     }
 
     protected abstract T interpolate(T value1, float weight1, T value2, float weight2,
-                                     boolean isClockwise);
-
-    protected boolean isClockwise(int transition) {
-        return true;
-    }
+                                     int transitionNumber);
 
     @Override
     public UUID uuid() {

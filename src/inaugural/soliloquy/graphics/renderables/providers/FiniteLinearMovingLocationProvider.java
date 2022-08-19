@@ -18,7 +18,7 @@ public class FiniteLinearMovingLocationProvider
     @Override
     protected Pair<Float, Float> interpolate(Pair<Float, Float> value1, float weight1,
                                              Pair<Float, Float> value2, float weight2,
-                                             boolean isClockwise) {
+                                             int transitionNumber) {
         return new Pair<>(
                 Interpolate.floats(value1.getItem1(), weight1, value2.getItem1(), weight2),
                 Interpolate.floats(value1.getItem2(), weight1, value2.getItem2(), weight2)
