@@ -1,10 +1,8 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteSinusoidMovingFloatProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ public class FiniteSinusoidMovingFloatProviderTests {
         put(TIME_3, VALUE_3);
     }};
 
+    /** @noinspection FieldCanBeLocal */
     private final float SHARPNESS_1 = 1f;
     private final float SHARPNESS_2 = 0.5f;
 
@@ -167,12 +166,12 @@ public class FiniteSinusoidMovingFloatProviderTests {
     @Test
     void testPausedTimestamp() {
         long pausedTimestamp = 12L;
-        FiniteLinearMovingProvider<Float> pausedFiniteLinearMovingFloatProvider =
-                new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, pausedTimestamp,
-                        MOST_RECENT_TIMESTAMP);
+        FiniteSinusoidMovingProvider<Float> pausedFiniteSinusoidMovingFloatProvider =
+                new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES, TRANSITION_SHARPNESSES,
+                        pausedTimestamp, MOST_RECENT_TIMESTAMP);
 
         assertEquals(pausedTimestamp,
-                (long) pausedFiniteLinearMovingFloatProvider.pausedTimestamp());
+                (long) pausedFiniteSinusoidMovingFloatProvider.pausedTimestamp());
     }
 
     @Test

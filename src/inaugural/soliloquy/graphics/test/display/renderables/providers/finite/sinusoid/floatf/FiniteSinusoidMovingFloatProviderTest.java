@@ -22,7 +22,6 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
         HashMap<Long, Float> borderThicknessValues = new HashMap<>();
         borderThicknessValues.put(timestamp, 0f);
         borderThicknessValues.put(timestamp + 4000, BORDER_THICKNESS);
-        borderThicknessValues.put(timestamp, 0f);
         borderThicknessValues.put(timestamp + 8000, 0f);
         SpriteRenderable.BorderThicknessProvider =
                 FiniteSinusoidMovingFloatProvider = new FiniteSinusoidMovingFloatProvider(
