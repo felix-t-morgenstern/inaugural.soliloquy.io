@@ -1,8 +1,8 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.antialiasedlinesegmentrenderer;
 
+import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAntialiasedLineSegmentRenderable;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
@@ -12,6 +12,8 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static inaugural.soliloquy.tools.random.Random.randomInt;
 
 /**
  * Test acceptance criteria:
@@ -24,8 +26,8 @@ import java.util.List;
  * 3. The window will then close
  */
 class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
-    private static FakeAntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable1;
-    private static FakeAntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable2;
+    private static AntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable1;
+    private static AntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable2;
     private static Renderer<AntialiasedLineSegmentRenderable> AntialiasedLineSegmentRenderer;
 
     public static void main(String[] args) {
@@ -44,22 +46,30 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
         AntialiasedLineSegmentRenderer =
                 new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
-        AntialiasedLineSegmentRenderable1 = new FakeAntialiasedLineSegmentRenderable(
-                new FakeStaticProvider<>(0.1f),
-                new FakeStaticProvider<>(0.01f),
+        AntialiasedLineSegmentRenderable1 = new AntialiasedLineSegmentRenderableImpl(
+                new FakeStaticProvider<>(new Pair<>(0.75f, 0.75f)),
+                new FakeStaticProvider<>(new Pair<>(0.25f, 0.25f)),
                 new FakeStaticProvider<>(0.000625f),
                 new FakeStaticProvider<>(Color.RED),
-                new FakeStaticProvider<>(new Pair<>(0.75f, 0.75f)),
-                new FakeStaticProvider<>(new Pair<>(0.25f, 0.25f))
+                new FakeStaticProvider<>(0.1f),
+                new FakeStaticProvider<>(0.01f),
+                randomInt(),
+                java.util.UUID.randomUUID(),
+                r -> {},
+                r -> {}
         );
 
-        AntialiasedLineSegmentRenderable2 = new FakeAntialiasedLineSegmentRenderable(
-                new FakeStaticProvider<>(0.1f),
-                new FakeStaticProvider<>(0.05f),
-                new FakeStaticProvider<>(0.05f),
-                new FakeStaticProvider<>(new Color(40, 0, 255)),
+        AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
                 new FakeStaticProvider<>(new Pair<>(0.5f, 0.75f)),
-                new FakeStaticProvider<>(new Pair<>(0.5f, 0.25f))
+                new FakeStaticProvider<>(new Pair<>(0.5f, 0.25f)),
+                new FakeStaticProvider<>(0.1f),
+                new FakeStaticProvider<>(new Color(40, 0, 255)),
+                new FakeStaticProvider<>(0.05f),
+                new FakeStaticProvider<>(0.05f),
+                randomInt(),
+                java.util.UUID.randomUUID(),
+                r -> {},
+                r -> {}
         );
 
         FrameTimer.ShouldExecuteNextFrame = true;

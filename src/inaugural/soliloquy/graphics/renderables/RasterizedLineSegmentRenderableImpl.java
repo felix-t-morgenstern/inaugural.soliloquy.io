@@ -1,46 +1,34 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithDimensions
+public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRenderable
         implements RasterizedLineSegmentRenderable {
-    private ProviderAtTime<Float> _thicknessProvider;
     private short _stipplePattern;
     private short _stippleFactor;
-    private ProviderAtTime<Color> _colorProvider;
 
-    public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Float> thicknessProvider,
+    public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Pair<Float, Float>>
+                                                       vertex1LocationProvider,
+                                               ProviderAtTime<Pair<Float, Float>>
+                                                       vertex2LocationProvider,
+                                               ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
-                                               ProviderAtTime<FloatBox>
-                                                       renderingDimensionsProvider,
                                                int z, UUID uuid,
                                                Consumer<Renderable> updateZIndexInContainer,
                                                Consumer<Renderable> removeFromContainer) {
-        super(renderingDimensionsProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
-        setThicknessProvider(thicknessProvider);
+        super(vertex1LocationProvider, vertex2LocationProvider, thicknessProvider, colorProvider, z,
+                uuid, updateZIndexInContainer, removeFromContainer);
         setStipplePattern(stipplePattern);
         setStippleFactor(stippleFactor);
-        setColorProvider(colorProvider);
-    }
-
-    @Override
-    public ProviderAtTime<Float> getThicknessProvider() {
-        return _thicknessProvider;
-    }
-
-    @Override
-    public void setThicknessProvider(ProviderAtTime<Float> thicknessProvider)
-            throws IllegalArgumentException {
-        _thicknessProvider = Check.ifNull(thicknessProvider, "thicknessProvider");
     }
 
     @Override
@@ -64,17 +52,6 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractRenderableWithD
                 Check.throwOnGtValue(stippleFactor, (short) 256, "stippleFactor"),
                 (short) 1, "stippleFactor"
         );
-    }
-
-    @Override
-    public ProviderAtTime<Color> getColorProvider() {
-        return _colorProvider;
-    }
-
-    @Override
-    public void setColorProvider(ProviderAtTime<Color> colorProvider)
-            throws IllegalArgumentException {
-        _colorProvider = Check.ifNull(colorProvider, "colorProvider");
     }
 
     @Override

@@ -5,12 +5,14 @@ import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRen
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Test acceptance criteria:
@@ -39,14 +41,13 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
     private static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RasterizedLineSegmentRenderable = new FakeRasterizedLineSegmentRenderable(
+                // NB: The coordinates are in this order to ensure that RasterizedLineSegmentRenderable does not care about order
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Pair<Float, Float>(0.75f, 0.5f), null),
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Pair<Float, Float>(0.25f, 0.25f), null),
                 new StaticProviderImpl<>(java.util.UUID.randomUUID(), 6f, null), (short) 0xAAAA,
                 (short) 16,
                 new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Color(18, 201, 159),
                         null),
-                // NB: The parameters are in this order to ensure that
-                //     RasterizedLineSegmentRenderable does not care about order
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(),
-                        new FakeFloatBox(0.75f, 0.5f, 0.25f, 0.25f), null),
                 1, java.util.UUID.randomUUID());
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
         FrameTimer.ShouldExecuteNextFrame = true;

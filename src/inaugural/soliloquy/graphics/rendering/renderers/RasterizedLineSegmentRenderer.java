@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -27,9 +27,13 @@ public class RasterizedLineSegmentRenderer
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
-        FloatBox renderingDimensions =
-                Check.ifNull(rasterizedLineSegmentRenderable.getRenderingDimensionsProvider(),
-                        "rasterizedLineSegmentRenderable.getRenderingDimensionsProvider()")
+        Pair<Float, Float> vertex1 =
+                Check.ifNull(rasterizedLineSegmentRenderable.getVertex1LocationProvider(),
+                        "rasterizedLineSegmentRenderable.getVertex1LocationProvider()")
+                        .provide(timestamp);
+        Pair<Float, Float> vertex2 =
+                Check.ifNull(rasterizedLineSegmentRenderable.getVertex2LocationProvider(),
+                        "rasterizedLineSegmentRenderable.getVertex2LocationProvider()")
                         .provide(timestamp);
         float thickness = Check.ifNull(
                 Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
@@ -54,8 +58,8 @@ public class RasterizedLineSegmentRenderer
                 "rasterizedLineSegmentRenderable.getStippleFactor()");
 
         Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
-        Check.ifNull(renderingDimensions,
-                "rasterizedLineSegmentRenderable provided rendering dimensions");
+        Check.ifNull(vertex1, "rasterizedLineSegmentRenderable provided vertex 1");
+        Check.ifNull(vertex2, "rasterizedLineSegmentRenderable provided vertex 2");
         Check.ifNull(rasterizedLineSegmentRenderable.uuid(),
                 "rasterizedLineSegmentRenderable.id()");
 
@@ -84,11 +88,9 @@ public class RasterizedLineSegmentRenderer
 
         glBegin(GL_LINES);
 
-        glVertex2f((renderingDimensions.leftX() * 2f) - 1f,
-                -((renderingDimensions.topY() * 2f) - 1f));
+        glVertex2f((vertex1.getItem1() * 2f) - 1f, -((vertex1.getItem2() * 2f) - 1f));
 
-        glVertex2f((renderingDimensions.rightX() * 2f) - 1f,
-                -((renderingDimensions.bottomY() * 2f) - 1f));
+        glVertex2f((vertex2.getItem1() * 2f) - 1f, -((vertex2.getItem2() * 2f) - 1f));
 
         glEnd();
     }
@@ -100,13 +102,47 @@ public class RasterizedLineSegmentRenderer
 
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
+
                 @Override
-                public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+                public UUID uuid() {
                     return null;
                 }
 
                 @Override
-                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                public int getZ() {
+                    return 0;
+                }
+
+                @Override
+                public void setZ(int i) {
+
+                }
+
+                @Override
+                public void delete() {
+
+                }
+
+                @Override
+                public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setVertex1LocationProvider(
+                        ProviderAtTime<Pair<Float, Float>> providerAtTime)
+                        throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setVertex2LocationProvider(
+                        ProviderAtTime<Pair<Float, Float>> providerAtTime)
                         throws IllegalArgumentException {
 
                 }
@@ -118,6 +154,17 @@ public class RasterizedLineSegmentRenderer
 
                 @Override
                 public void setThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                        throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public ProviderAtTime<Color> getColorProvider() {
+                    return null;
+                }
+
+                @Override
+                public void setColorProvider(ProviderAtTime<Color> providerAtTime)
                         throws IllegalArgumentException {
 
                 }
@@ -139,37 +186,6 @@ public class RasterizedLineSegmentRenderer
 
                 @Override
                 public void setStippleFactor(short i) throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public ProviderAtTime<Color> getColorProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setColorProvider(ProviderAtTime<Color> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public UUID uuid() {
-                    return null;
-                }
-
-                @Override
-                public int getZ() {
-                    return 0;
-                }
-
-                @Override
-                public void setZ(int i) {
-
-                }
-
-                @Override
-                public void delete() {
 
                 }
 

@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -12,23 +13,48 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public short StipplePattern;
     public short StippleFactor;
     public ProviderAtTime<Color> ColorProvider;
-    public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
+    public ProviderAtTime<Pair<Float, Float>> Vertex1LocationProvider;
+    public ProviderAtTime<Pair<Float, Float>> Vertex2LocationProvider;
     public int Z;
     public UUID Uuid;
 
-    public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Float> thicknessProvider,
+    public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
+                                               ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+                                               ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern,
                                                short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
-                                               ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                                int z, UUID uuid) {
+        Vertex1LocationProvider = vertex1LocationProvider;
+        Vertex2LocationProvider = vertex2LocationProvider;
         ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
         ColorProvider = colorProvider;
-        RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
         Uuid = uuid;
+    }
+
+    @Override
+    public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
+        return Vertex1LocationProvider;
+    }
+
+    @Override
+    public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+            throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
+        return Vertex2LocationProvider;
+    }
+
+    @Override
+    public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+            throws IllegalArgumentException {
+
     }
 
     @Override
@@ -69,18 +95,6 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
 
     @Override
     public void setColorProvider(ProviderAtTime<Color> providerAtTime)
-            throws IllegalArgumentException {
-
-    }
-
-    @Override
-    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-        return RenderingDimensionsProvider;
-    }
-
-    @Override
-    public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
-                                                       renderingDimensionsProvider)
             throws IllegalArgumentException {
 
     }

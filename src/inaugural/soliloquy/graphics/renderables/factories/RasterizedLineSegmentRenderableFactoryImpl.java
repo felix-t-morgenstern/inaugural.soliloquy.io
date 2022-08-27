@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableImpl;
+import soliloquy.specs.common.infrastructure.Pair;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.UUID;
@@ -14,18 +14,22 @@ import java.util.function.Consumer;
 public class RasterizedLineSegmentRenderableFactoryImpl
         implements RasterizedLineSegmentRenderableFactory {
     @Override
-    public RasterizedLineSegmentRenderable make(ProviderAtTime<Float> thicknessProvider,
-                                                short stipplePattern, short stippleFactor,
+    public RasterizedLineSegmentRenderable make(ProviderAtTime<Pair<Float, Float>>
+                                                        vertex1LocationProvider,
+                                                ProviderAtTime<Pair<Float, Float>>
+                                                        vertex2LocationProvider,
+                                                ProviderAtTime<Float> thicknessProvider,
+                                                short stipplePattern,
+                                                short stippleFactor,
                                                 ProviderAtTime<Color> colorProvider,
-                                                ProviderAtTime<FloatBox>
-                                                        renderingDimensionsProvider,
-                                                int z, UUID uuid,
+                                                int z,
+                                                UUID uuid,
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new RasterizedLineSegmentRenderableImpl(thicknessProvider, stipplePattern,
-                stippleFactor, colorProvider, renderingDimensionsProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+        return new RasterizedLineSegmentRenderableImpl(vertex1LocationProvider,
+                vertex2LocationProvider, thicknessProvider, stipplePattern, stippleFactor,
+                colorProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
     }
 
     @Override
