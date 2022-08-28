@@ -13,9 +13,9 @@ import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.testing.Assertions.assertOnlyContains;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -177,19 +177,5 @@ class FiniteLinearMovingProviderHandlerTests {
         assertEquals(TypeHandler.class.getCanonicalName() + "<" +
                         FiniteLinearMovingProvider.class.getCanonicalName() + ">",
                 _finiteLinearMovingProviderHandler.getInterfaceName());
-    }
-
-    // TODO: Consider extracting this to Tools, and looking for good places to use it!
-    private static <T> void assertOnlyContains(List<T> list, T item) {
-        assertEquals(1, list.size());
-        if (item instanceof Integer ||
-                item instanceof Long ||
-                item instanceof Float ||
-                item instanceof Double) {
-            assertEquals(item, list.get(0));
-        }
-        else {
-            assertSame(item, list.get(0));
-        }
     }
 }
