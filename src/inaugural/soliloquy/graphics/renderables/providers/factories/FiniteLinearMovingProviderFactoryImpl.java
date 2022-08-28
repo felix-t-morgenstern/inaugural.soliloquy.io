@@ -26,7 +26,7 @@ public class FiniteLinearMovingProviderFactoryImpl implements FiniteLinearMoving
     }
 
     @Override
-    public <T> FiniteLinearMovingProvider<T> make(UUID id, Map<Long, T> valuesAtTimestamps,
+    public <T> FiniteLinearMovingProvider<T> make(UUID uuid, Map<Long, T> valuesAtTimestamps,
                                                   Long pausedTimestamp, Long mostRecentTimestamp)
             throws IllegalArgumentException {
         String type = CAN_GET_INTERFACE_NAME
@@ -35,7 +35,7 @@ public class FiniteLinearMovingProviderFactoryImpl implements FiniteLinearMoving
         Function<UUID, Function<Map, Function<Long, Function<Long, FiniteLinearMovingProvider>>>>
                 factory = FACTORIES.get(type);
         //noinspection unchecked
-        return (FiniteLinearMovingProvider<T>) factory.apply(id).apply(valuesAtTimestamps)
+        return (FiniteLinearMovingProvider<T>) factory.apply(uuid).apply(valuesAtTimestamps)
                 .apply(pausedTimestamp).apply(mostRecentTimestamp);
     }
 

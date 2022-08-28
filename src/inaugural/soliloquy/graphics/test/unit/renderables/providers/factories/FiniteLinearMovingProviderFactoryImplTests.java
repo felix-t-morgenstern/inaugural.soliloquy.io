@@ -8,11 +8,14 @@ import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.random.Random.randomFloat;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FiniteLinearMovingProviderFactoryImplTests {
@@ -107,12 +110,12 @@ class FiniteLinearMovingProviderFactoryImplTests {
     void testMake() {
         UUID uuid = UUID.randomUUID();
         HashMap<Long, Float> valuesAtTimestamps = new HashMap<Long, Float>() {{
-            put(0L, 123f);
-            put(1L, 456f);
-            put(2L, 789f);
+            put(0L, randomFloat());
+            put(1L, randomFloat());
+            put(2L, randomFloat());
         }};
-        Long pausedTimestamp = 123123L;
-        Long mostRecentTimestamp = 456456L;
+        Long pausedTimestamp = randomLong();
+        Long mostRecentTimestamp = pausedTimestamp + 1;
 
         FiniteLinearMovingProvider<Float> provider = _finiteLinearMovingProviderFactory
                 .make(uuid, valuesAtTimestamps, pausedTimestamp, mostRecentTimestamp);
