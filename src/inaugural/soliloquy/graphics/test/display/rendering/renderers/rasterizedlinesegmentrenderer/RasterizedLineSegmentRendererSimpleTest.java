@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRen
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -42,8 +42,8 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
             WindowResolutionManager windowResolutionManager) {
         RasterizedLineSegmentRenderable = new FakeRasterizedLineSegmentRenderable(
                 // NB: The coordinates are in this order to ensure that RasterizedLineSegmentRenderable does not care about order
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Pair<Float, Float>(0.75f, 0.5f), null),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Pair<Float, Float>(0.25f, 0.25f), null),
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), Vertex.of(0.75f, 0.5f), null),
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), Vertex.of(0.25f, 0.25f), null),
                 new StaticProviderImpl<>(java.util.UUID.randomUUID(), 6f, null), (short) 0xAAAA,
                 (short) 16,
                 new StaticProviderImpl<>(java.util.UUID.randomUUID(), new Color(18, 201, 159),

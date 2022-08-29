@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -28,32 +28,32 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         Check.ifNull(renderable, "renderable");
 
-        Check.ifNull(renderable.getVertex1LocationProvider(),
-                "renderable.getVertex1LocationProvider");
-        Pair<Float, Float> vertex1 = renderable.getVertex1LocationProvider().provide(timestamp);
+        Check.ifNull(renderable.getVertex1Provider(),
+                "renderable.getVertex1Provider");
+        Vertex vertex1 = renderable.getVertex1Provider().provide(timestamp);
         Check.ifNull(vertex1, "provided vertex 1");
-        Check.ifNull(vertex1.getItem1(), "x value of vertex 1");
-        Check.ifNull(vertex1.getItem2(), "y value of vertex 1");
+        Check.ifNull(vertex1.x, "x value of vertex 1");
+        Check.ifNull(vertex1.y, "y value of vertex 1");
 
         Check.ifNull(renderable.getVertex1ColorProvider(), "renderable.getVertex1ColorProvider");
         Color color1 = renderable.getVertex1ColorProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getVertex2LocationProvider(),
-                "renderable.getVertex2LocationProvider");
-        Pair<Float, Float> vertex2 = renderable.getVertex2LocationProvider().provide(timestamp);
+        Check.ifNull(renderable.getVertex2Provider(),
+                "renderable.getVertex2Provider");
+        Vertex vertex2 = renderable.getVertex2Provider().provide(timestamp);
         Check.ifNull(vertex2, "provided vertex 2");
-        Check.ifNull(vertex2.getItem1(), "x value of vertex 2");
-        Check.ifNull(vertex2.getItem2(), "y value of vertex 2");
+        Check.ifNull(vertex2.x, "x value of vertex 2");
+        Check.ifNull(vertex2.y, "y value of vertex 2");
 
         Check.ifNull(renderable.getVertex2ColorProvider(), "renderable.getVertex2ColorProvider");
         Color color2 = renderable.getVertex2ColorProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getVertex3LocationProvider(),
-                "renderable.getVertex3LocationProvider");
-        Pair<Float, Float> vertex3 = renderable.getVertex3LocationProvider().provide(timestamp);
+        Check.ifNull(renderable.getVertex3Provider(),
+                "renderable.getVertex3Provider");
+        Vertex vertex3 = renderable.getVertex3Provider().provide(timestamp);
         Check.ifNull(vertex3, "provided vertex 3");
-        Check.ifNull(vertex3.getItem1(), "x value of vertex 3");
-        Check.ifNull(vertex3.getItem2(), "y value of vertex 3");
+        Check.ifNull(vertex3.x, "x value of vertex 3");
+        Check.ifNull(vertex3.y, "y value of vertex 3");
 
         Check.ifNull(renderable.getVertex3ColorProvider(), "renderable.getVertex3ColorProvider");
         Color color3 = renderable.getVertex3ColorProvider().provide(timestamp);
@@ -78,17 +78,17 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.getItem1();
-        float y1 = vertex1.getItem2();
-        float x2 = vertex2.getItem1();
-        float y2 = vertex2.getItem2();
-        float x3 = vertex3.getItem1();
-        float y3 = vertex3.getItem2();
+        float x1 = vertex1.x;
+        float y1 = vertex1.y;
+        float x2 = vertex2.x;
+        float y2 = vertex2.y;
+        float x3 = vertex3.x;
+        float y3 = vertex3.y;
 
         float minX = 0f;
-        float maxX = 0f;
+        float maxX;
         float minY = 0f;
-        float maxY = 0f;
+        float maxY;
         float height = 0f;
         float width = 0f;
         float tilesPerWidth = 0f;
@@ -139,12 +139,12 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
     private static class TriangleRenderableArchetype implements TriangleRenderable {
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
+        public ProviderAtTime<Vertex> getVertex1Provider() {
             return null;
         }
 
         @Override
-        public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }
@@ -161,12 +161,12 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
+        public ProviderAtTime<Vertex> getVertex2Provider() {
             return null;
         }
 
         @Override
-        public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }
@@ -183,12 +183,12 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getVertex3LocationProvider() {
+        public ProviderAtTime<Vertex> getVertex3Provider() {
             return null;
         }
 
         @Override
-        public void setVertex3LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setVertex3Provider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }

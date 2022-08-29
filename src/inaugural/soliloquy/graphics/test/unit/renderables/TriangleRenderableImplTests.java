@@ -7,7 +7,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -33,12 +33,9 @@ class TriangleRenderableImplTests {
     private final FakeAction<Long> ON_PRESS_ACTION = new FakeAction<>();
     private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
-    private final FakeStaticProvider<Pair<Float, Float>> VERTEX_1_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final FakeStaticProvider<Pair<Float, Float>> VERTEX_2_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final FakeStaticProvider<Pair<Float, Float>> VERTEX_3_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_3_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = 123;
     private final Consumer<Renderable>
             TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER =
@@ -59,9 +56,9 @@ class TriangleRenderableImplTests {
     @BeforeEach
     void setUp() {
         _triangleRenderable = new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -72,9 +69,9 @@ class TriangleRenderableImplTests {
         _triangleRenderable.setCapturesMouseEvents(true);
 
         _triangleRenderableNotSupportingMouseEvents = new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -89,8 +86,8 @@ class TriangleRenderableImplTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 null, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -99,9 +96,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, null,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, null,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -110,9 +107,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                 null, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -121,9 +118,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, null,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, null,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -132,8 +129,8 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 null, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
@@ -143,9 +140,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, null,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, null,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -154,9 +151,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 null,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -165,9 +162,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -176,9 +173,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -187,9 +184,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -198,9 +195,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -209,9 +206,9 @@ class TriangleRenderableImplTests {
                 TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
@@ -222,21 +219,21 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexLocationProviders() {
-        FakeStaticProvider<Pair<Float, Float>> provider1 =
-                new FakeStaticProvider<>(new Pair<>(0f, 0f));
-        FakeStaticProvider<Pair<Float, Float>> provider2 =
-                new FakeStaticProvider<>(new Pair<>(0f, 0f));
-        FakeStaticProvider<Pair<Float, Float>> provider3 =
-                new FakeStaticProvider<>(new Pair<>(0f, 0f));
+    void testSetAndGetVertexProviders() {
+        FakeStaticProvider<Vertex> provider1 =
+                new FakeStaticProvider<>(Vertex.of(0f, 0f));
+        FakeStaticProvider<Vertex> provider2 =
+                new FakeStaticProvider<>(Vertex.of(0f, 0f));
+        FakeStaticProvider<Vertex> provider3 =
+                new FakeStaticProvider<>(Vertex.of(0f, 0f));
 
-        _triangleRenderable.setVertex1LocationProvider(provider1);
-        _triangleRenderable.setVertex2LocationProvider(provider2);
-        _triangleRenderable.setVertex3LocationProvider(provider3);
+        _triangleRenderable.setVertex1Provider(provider1);
+        _triangleRenderable.setVertex2Provider(provider2);
+        _triangleRenderable.setVertex3Provider(provider3);
 
-        assertSame(provider1, _triangleRenderable.getVertex1LocationProvider());
-        assertSame(provider2, _triangleRenderable.getVertex2LocationProvider());
-        assertSame(provider3, _triangleRenderable.getVertex3LocationProvider());
+        assertSame(provider1, _triangleRenderable.getVertex1Provider());
+        assertSame(provider2, _triangleRenderable.getVertex2Provider());
+        assertSame(provider3, _triangleRenderable.getVertex3Provider());
     }
 
     @Test
@@ -293,11 +290,11 @@ class TriangleRenderableImplTests {
     @Test
     void testSetVertexProvidersWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.setVertex1LocationProvider(null));
+                _triangleRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.setVertex2LocationProvider(null));
+                _triangleRenderable.setVertex2Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.setVertex3LocationProvider(null));
+                _triangleRenderable.setVertex3Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.setVertex1ColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
@@ -506,17 +503,17 @@ class TriangleRenderableImplTests {
     @Test
     void testMouseEventCallsToOutdatedTimestamps() {
         long timestamp = 456456L;
-        _triangleRenderable.setVertex1LocationProvider(
+        _triangleRenderable.setVertex1Provider(
                 new FakeStaticProvider<>(
-                        new Pair<>(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
-        _triangleRenderable.setVertex2LocationProvider(
+        _triangleRenderable.setVertex2Provider(
                 new FakeStaticProvider<>(
-                        new Pair<>(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
-        _triangleRenderable.setVertex3LocationProvider(
+        _triangleRenderable.setVertex3Provider(
                 new FakeStaticProvider<>(
-                        new Pair<>(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
 
         _triangleRenderable.press(0, timestamp);
@@ -604,14 +601,14 @@ class TriangleRenderableImplTests {
     void testCapturesMouseEventsAtPoint() {
         long timestamp = randomLong();
 
-        _triangleRenderable.setVertex1LocationProvider(
-                new FakeStaticProvider<>(new Pair<>(0.5f, 0f))
+        _triangleRenderable.setVertex1Provider(
+                new FakeStaticProvider<>(Vertex.of(0.5f, 0f))
         );
-        _triangleRenderable.setVertex2LocationProvider(
-                new FakeStaticProvider<>(new Pair<>(0f, .5f))
+        _triangleRenderable.setVertex2Provider(
+                new FakeStaticProvider<>(Vertex.of(0f, .5f))
         );
-        _triangleRenderable.setVertex3LocationProvider(
-                new FakeStaticProvider<>(new Pair<>(1f, .5f))
+        _triangleRenderable.setVertex3Provider(
+                new FakeStaticProvider<>(Vertex.of(1f, .5f))
         );
 
         assertFalse(_triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp));

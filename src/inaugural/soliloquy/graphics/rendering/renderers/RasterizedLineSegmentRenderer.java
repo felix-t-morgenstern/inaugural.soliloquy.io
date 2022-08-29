@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -13,7 +13,7 @@ import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RasterizedLineSegmentRenderer
-        extends AbstractRenderer<RasterizedLineSegmentRenderable>
+        extends AbstractPointDrawingRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
 
     public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
@@ -27,13 +27,13 @@ public class RasterizedLineSegmentRenderer
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
-        Pair<Float, Float> vertex1 =
-                Check.ifNull(rasterizedLineSegmentRenderable.getVertex1LocationProvider(),
-                        "rasterizedLineSegmentRenderable.getVertex1LocationProvider()")
+        Vertex vertex1 =
+                Check.ifNull(rasterizedLineSegmentRenderable.getVertex1Provider(),
+                        "rasterizedLineSegmentRenderable.getVertex1Provider()")
                         .provide(timestamp);
-        Pair<Float, Float> vertex2 =
-                Check.ifNull(rasterizedLineSegmentRenderable.getVertex2LocationProvider(),
-                        "rasterizedLineSegmentRenderable.getVertex2LocationProvider()")
+        Vertex vertex2 =
+                Check.ifNull(rasterizedLineSegmentRenderable.getVertex2Provider(),
+                        "rasterizedLineSegmentRenderable.getVertex2Provider()")
                         .provide(timestamp);
         float thickness = Check.ifNull(
                 Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
@@ -88,9 +88,8 @@ public class RasterizedLineSegmentRenderer
 
         glBegin(GL_LINES);
 
-        glVertex2f((vertex1.getItem1() * 2f) - 1f, -((vertex1.getItem2() * 2f) - 1f));
-
-        glVertex2f((vertex2.getItem1() * 2f) - 1f, -((vertex2.getItem2() * 2f) - 1f));
+        drawPoint(vertex1);
+        drawPoint(vertex2);
 
         glEnd();
     }
@@ -124,25 +123,25 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
+                public ProviderAtTime<Vertex> getVertex1Provider() {
                     return null;
                 }
 
                 @Override
-                public void setVertex1LocationProvider(
-                        ProviderAtTime<Pair<Float, Float>> providerAtTime)
+                public void setVertex1Provider(
+                        ProviderAtTime<Vertex> providerAtTime)
                         throws IllegalArgumentException {
 
                 }
 
                 @Override
-                public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
+                public ProviderAtTime<Vertex> getVertex2Provider() {
                     return null;
                 }
 
                 @Override
-                public void setVertex2LocationProvider(
-                        ProviderAtTime<Pair<Float, Float>> providerAtTime)
+                public void setVertex2Provider(
+                        ProviderAtTime<Vertex> providerAtTime)
                         throws IllegalArgumentException {
 
                 }
@@ -194,4 +193,9 @@ public class RasterizedLineSegmentRenderer
                     return RasterizedLineSegmentRenderable.class.getCanonicalName();
                 }
             };
+
+    @Override
+    protected String className() {
+        return RasterizedLineSegmentRenderer.class.getSimpleName();
+    }
 }

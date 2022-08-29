@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
@@ -12,26 +12,22 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     public ProviderAtTime<Float> LengthGradientPercentProvider;
     public ProviderAtTime<Float> ThicknessProvider;
     public ProviderAtTime<Color> ColorProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex1LocationProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex2LocationProvider;
-
-    public FakeAntialiasedLineSegmentRenderable() {
-
-    }
+    public ProviderAtTime<Vertex> Vertex1Provider;
+    public ProviderAtTime<Vertex> Vertex2Provider;
 
     public FakeAntialiasedLineSegmentRenderable(
             ProviderAtTime<Float> thicknessGradientPercentProvider,
             ProviderAtTime<Float> lengthGradientPercentProvider,
             ProviderAtTime<Float> thicknessProvider,
             ProviderAtTime<Color> colorProvider,
-            ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
-            ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider) {
+            ProviderAtTime<Vertex> vertex1Provider,
+            ProviderAtTime<Vertex> vertex2Provider) {
         ThicknessGradientPercentProvider = thicknessGradientPercentProvider;
         LengthGradientPercentProvider = lengthGradientPercentProvider;
         ThicknessProvider = thicknessProvider;
         ColorProvider = colorProvider;
-        Vertex1LocationProvider = vertex1LocationProvider;
-        Vertex2LocationProvider = vertex2LocationProvider;
+        Vertex1Provider = vertex1Provider;
+        Vertex2Provider = vertex2Provider;
     }
 
     @Override
@@ -57,23 +53,23 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
-        return Vertex1LocationProvider;
+    public ProviderAtTime<Vertex> getVertex1Provider() {
+        return Vertex1Provider;
     }
 
     @Override
-    public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
-        return Vertex2LocationProvider;
+    public ProviderAtTime<Vertex> getVertex2Provider() {
+        return Vertex2Provider;
     }
 
     @Override
-    public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }

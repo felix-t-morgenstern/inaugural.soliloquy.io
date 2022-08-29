@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.location;
 
-import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingLocationProvider;
+import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingVertexProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -20,7 +20,7 @@ import java.util.List;
 class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest {
     private static final String LINE_TEXT = "Whee!!!";
 
-    protected static ProviderAtTime<Pair<Float, Float>> RenderingLocationProvider;
+    protected static ProviderAtTime<Vertex> RenderingLocationProvider;
     protected static FakeTextLineRenderable TextLineRenderable;
 
     /** @noinspection rawtypes */
@@ -52,12 +52,12 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
 
         long now = GLOBAL_CLOCK.globalTimestamp();
 
-        RenderingLocationProvider = new FiniteLinearMovingLocationProvider(
+        RenderingLocationProvider = new FiniteLinearMovingVertexProvider(
                 java.util.UUID.randomUUID(),
-                new HashMap<Long, Pair<Float, Float>>() {{
-                    put(now + 1000, new Pair<>(-0.25f, -0.25f));
-                    put(now + 2000, new Pair<>(0.75f, 0.5f));
-                    put(now + 3000, new Pair<>(-0.25f, 1.25f));
+                new HashMap<Long, Vertex>() {{
+                    put(now + 1000, Vertex.of(-0.25f, -0.25f));
+                    put(now + 2000, Vertex.of(0.75f, 0.5f));
+                    put(now + 3000, Vertex.of(-0.25f, 1.25f));
                 }},
                 null, null);
 

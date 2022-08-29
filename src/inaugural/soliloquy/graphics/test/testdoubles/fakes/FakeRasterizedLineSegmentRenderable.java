@@ -1,9 +1,8 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.UUID;
@@ -13,20 +12,20 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     public short StipplePattern;
     public short StippleFactor;
     public ProviderAtTime<Color> ColorProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex1LocationProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex2LocationProvider;
+    public ProviderAtTime<Vertex> Vertex1Provider;
+    public ProviderAtTime<Vertex> Vertex2Provider;
     public int Z;
     public UUID Uuid;
 
-    public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
-                                               ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+    public FakeRasterizedLineSegmentRenderable(ProviderAtTime<Vertex> vertex1Provider,
+                                               ProviderAtTime<Vertex> vertex2Provider,
                                                ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern,
                                                short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                int z, UUID uuid) {
-        Vertex1LocationProvider = vertex1LocationProvider;
-        Vertex2LocationProvider = vertex2LocationProvider;
+        Vertex1Provider = vertex1Provider;
+        Vertex2Provider = vertex2Provider;
         ThicknessProvider = thicknessProvider;
         StipplePattern = stipplePattern;
         StippleFactor = stippleFactor;
@@ -36,23 +35,23 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
-        return Vertex1LocationProvider;
+    public ProviderAtTime<Vertex> getVertex1Provider() {
+        return Vertex1Provider;
     }
 
     @Override
-    public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
-        return Vertex2LocationProvider;
+    public ProviderAtTime<Vertex> getVertex2Provider() {
+        return Vertex2Provider;
     }
 
     @Override
-    public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }

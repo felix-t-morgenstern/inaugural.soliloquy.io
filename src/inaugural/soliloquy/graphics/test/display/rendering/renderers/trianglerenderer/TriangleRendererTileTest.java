@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TriangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -27,16 +27,16 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
  * 3. The window will then close
  */
 class TriangleRendererTileTest extends TriangleRendererTest {
-    private final static FakeStaticProvider<Pair<Float, Float>> VERTEX_1_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(new Pair<>(0.2f, 0.2f));
+    private final static FakeStaticProvider<Vertex> VERTEX_1_PROVIDER =
+            new FakeStaticProvider<>(Vertex.of(0.2f, 0.2f));
     private final static FakeStaticProvider<Color> VERTEX_1_COLOR_PROVIDER =
             new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Pair<Float, Float>> VERTEX_2_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(new Pair<>(0.8f, 0.4f));
+    private final static FakeStaticProvider<Vertex> VERTEX_2_PROVIDER =
+            new FakeStaticProvider<>(Vertex.of(0.8f, 0.4f));
     private final static FakeStaticProvider<Color> VERTEX_2_COLOR_PROVIDER =
             new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Pair<Float, Float>> VERTEX_3_LOCATION_PROVIDER =
-            new FakeStaticProvider<>(new Pair<>(0.5f, 0.8f));
+    private final static FakeStaticProvider<Vertex> VERTEX_3_PROVIDER =
+            new FakeStaticProvider<>(Vertex.of(0.5f, 0.8f));
     private final static FakeStaticProvider<Color> VERTEX_3_COLOR_PROVIDER =
             new FakeStaticProvider<>(null);
     private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
@@ -66,9 +66,9 @@ class TriangleRendererTileTest extends TriangleRendererTest {
         TriangleRenderer = new TriangleRenderer(null);
 
         TriangleRenderable =
-                new TriangleRenderableImpl(VERTEX_1_LOCATION_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_LOCATION_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_LOCATION_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                new TriangleRenderableImpl(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, randomInt(),
                         java.util.UUID.randomUUID(), r -> {}, r -> {});

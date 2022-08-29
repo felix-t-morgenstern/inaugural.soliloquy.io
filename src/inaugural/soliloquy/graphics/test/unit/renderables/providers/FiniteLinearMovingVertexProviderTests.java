@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingLocationProvider;
+import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingVertexProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.RANDOM;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FiniteLinearMovingLocationProviderTests {
+class FiniteLinearMovingVertexProviderTests {
     private final long TIMESTAMP_1 = 100L;
     private final long TIMESTAMP_2 = 200L;
     private final long TIMESTAMP_3 = 300L;
@@ -25,11 +25,11 @@ class FiniteLinearMovingLocationProviderTests {
     private final float Y_2 = RANDOM.nextFloat();
     private final float Y_3 = RANDOM.nextFloat();
 
-    private final HashMap<Long, Pair<Float, Float>> VALUES_AT_TIMES =
-            new HashMap<Long, Pair<Float, Float>>() {{
-                put(TIMESTAMP_1, new Pair<>(X_1, Y_1));
-                put(TIMESTAMP_2, new Pair<>(X_2, Y_2));
-                put(TIMESTAMP_3, new Pair<>(X_3, Y_3));
+    private final HashMap<Long, Vertex> VALUES_AT_TIMES =
+            new HashMap<Long, Vertex>() {{
+                put(TIMESTAMP_1, Vertex.of(X_1, Y_1));
+                put(TIMESTAMP_2, Vertex.of(X_2, Y_2));
+                put(TIMESTAMP_3, Vertex.of(X_3, Y_3));
             }};
 
     private final Long PAUSED_TIMESTAMP = 175L;
@@ -41,34 +41,34 @@ class FiniteLinearMovingLocationProviderTests {
             TIMESTAMP_1 + ((long) (WEIGHT_TIMESTAMP_2 * (TIMESTAMP_2 - TIMESTAMP_1)));
     private final float EXPECTED_X = (WEIGHT_TIMESTAMP_1 * X_1) + (WEIGHT_TIMESTAMP_2 * X_2);
     private final float EXPECTED_Y = (WEIGHT_TIMESTAMP_1 * Y_1) + (WEIGHT_TIMESTAMP_2 * Y_2);
-    private final Pair<Float, Float> EXPECTED = new Pair<>(EXPECTED_X, EXPECTED_Y);
+    private final Vertex EXPECTED = Vertex.of(EXPECTED_X, EXPECTED_Y);
 
     private static final UUID UUID = java.util.UUID.randomUUID();
 
-    private FiniteLinearMovingProvider<Pair<Float, Float>> _finiteLinearMovingLocationProvider;
+    private FiniteLinearMovingProvider<Vertex> _finiteLinearMovingLocationProvider;
 
     @BeforeEach
     void setUp() {
-        _finiteLinearMovingLocationProvider = new FiniteLinearMovingLocationProvider(UUID,
+        _finiteLinearMovingLocationProvider = new FiniteLinearMovingVertexProvider(UUID,
                 VALUES_AT_TIMES, null, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(null, VALUES_AT_TIMES,
+                new FiniteLinearMovingVertexProvider(null, VALUES_AT_TIMES,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(UUID, null,
+                new FiniteLinearMovingVertexProvider(UUID, null,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(UUID, new HashMap<>(),
+                new FiniteLinearMovingVertexProvider(UUID, new HashMap<>(),
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
+                new FiniteLinearMovingVertexProvider(UUID, VALUES_AT_TIMES,
                         PAUSED_TIMESTAMP, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES,
+                new FiniteLinearMovingVertexProvider(UUID, VALUES_AT_TIMES,
                         MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP));
     }
 
@@ -87,14 +87,14 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                new FiniteLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, null,
+                new FiniteLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, null,
                         MOST_RECENT_TIMESTAMP)
                         .mostRecentTimestamp());
     }
 
     @Test
     void testProvide() {
-        Pair<Float, Float> providedValue = _finiteLinearMovingLocationProvider.provide(TIMESTAMP);
+        Vertex providedValue = _finiteLinearMovingLocationProvider.provide(TIMESTAMP);
 
         assertEquals(EXPECTED, providedValue);
     }
@@ -102,7 +102,7 @@ class FiniteLinearMovingLocationProviderTests {
 
     @Test
     void testProvideBeforeStartOfRange() {
-        Pair<Float, Float> providedValue =
+        Vertex providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MIN_VALUE);
 
         assertEquals(VALUES_AT_TIMES.get(TIMESTAMP_1), providedValue);
@@ -110,7 +110,7 @@ class FiniteLinearMovingLocationProviderTests {
 
     @Test
     void testProvideAfterEndOfRange() {
-        Pair<Float, Float> providedValue =
+        Vertex providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MAX_VALUE);
 
         assertEquals(VALUES_AT_TIMES.get(TIMESTAMP_3), providedValue);
@@ -119,7 +119,7 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testProvideWhilePaused() {
         _finiteLinearMovingLocationProvider.reportPause(TIMESTAMP);
-        Pair<Float, Float> providedValue =
+        Vertex providedValue =
                 _finiteLinearMovingLocationProvider.provide(Long.MAX_VALUE);
 
         assertEquals(EXPECTED, providedValue);
@@ -132,7 +132,7 @@ class FiniteLinearMovingLocationProviderTests {
 
         _finiteLinearMovingLocationProvider.reportPause(PAUSED_TIMESTAMP);
         _finiteLinearMovingLocationProvider.reportUnpause(PAUSED_TIMESTAMP + pauseDuration);
-        Pair<Float, Float> providedValue =
+        Vertex providedValue =
                 _finiteLinearMovingLocationProvider.provide(TIMESTAMP + pauseDuration);
 
         assertEquals(EXPECTED, providedValue);
@@ -171,14 +171,12 @@ class FiniteLinearMovingLocationProviderTests {
     @Test
     void testGetArchetype() {
         assertNotNull(_finiteLinearMovingLocationProvider.getArchetype());
-        assertNotNull(_finiteLinearMovingLocationProvider.getArchetype().getFirstArchetype());
-        assertNotNull(_finiteLinearMovingLocationProvider.getArchetype().getSecondArchetype());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
-                        Pair.class.getCanonicalName() + ">",
+                        Vertex.class.getCanonicalName() + ">",
                 _finiteLinearMovingLocationProvider.getInterfaceName());
     }
 }

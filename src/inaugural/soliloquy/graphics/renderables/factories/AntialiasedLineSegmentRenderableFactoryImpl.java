@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
@@ -11,7 +11,8 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class AntialiasedLineSegmentRenderableFactoryImpl implements AntialiasedLineSegmentRenderableFactory {
+public class AntialiasedLineSegmentRenderableFactoryImpl
+        implements AntialiasedLineSegmentRenderableFactory {
     private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER;
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER;
 
@@ -24,10 +25,8 @@ public class AntialiasedLineSegmentRenderableFactoryImpl implements AntialiasedL
     }
 
     @Override
-    public AntialiasedLineSegmentRenderable make(ProviderAtTime<Pair<Float, Float>>
-                                                         vertex1LocationProvider,
-                                                 ProviderAtTime<Pair<Float, Float>>
-                                                         vertex2LocationProvider,
+    public AntialiasedLineSegmentRenderable make(ProviderAtTime<Vertex> vertex1Provider,
+                                                 ProviderAtTime<Vertex> vertex2Provider,
                                                  ProviderAtTime<Float> thicknessProvider,
                                                  ProviderAtTime<Color> colorProvider,
                                                  ProviderAtTime<Float>
@@ -37,10 +36,10 @@ public class AntialiasedLineSegmentRenderableFactoryImpl implements AntialiasedL
                                                  int z,
                                                  java.util.UUID uuid)
             throws IllegalArgumentException {
-        return new AntialiasedLineSegmentRenderableImpl(vertex1LocationProvider,
-                vertex2LocationProvider, thicknessProvider, colorProvider,
-                thicknessGradientPercentProvider, lengthGradientPercentProvider, z, uuid,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
+        return new AntialiasedLineSegmentRenderableImpl(vertex1Provider, vertex2Provider,
+                thicknessProvider, colorProvider, thicknessGradientPercentProvider,
+                lengthGradientPercentProvider, z, uuid, UPDATE_Z_INDEX_IN_CONTAINER,
+                REMOVE_FROM_CONTAINER);
     }
 
     @Override

@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableI
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -20,10 +20,8 @@ class RasterizedLineSegmentRenderableImplTests {
     private final short STIPPLE_PATTERN = 456;
     private final short STIPPLE_FACTOR = 123;
     private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Pair<Float, Float>> VERTEX_1_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final ProviderAtTime<Pair<Float, Float>> VERTEX_2_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
+    private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
+    private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = 789;
     private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable ->
             _renderableRemovedFromContainer = renderable;
@@ -40,7 +38,7 @@ class RasterizedLineSegmentRenderableImplTests {
     @BeforeEach
     void setUp() {
         _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
                 Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER);
@@ -49,52 +47,52 @@ class RasterizedLineSegmentRenderableImplTests {
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                null, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
+                null, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
                 STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
+                VERTEX_1_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
                 STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, null, STIPPLE_PATTERN,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, null, STIPPLE_PATTERN,
                 STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, null,
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER, THICKNESS_PROVIDER,
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, null
         ));
@@ -174,31 +172,27 @@ class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexLocationProviders() {
-        assertSame(VERTEX_1_LOCATION_PROVIDER,
-                _rasterizedLineSegmentRenderable.getVertex1LocationProvider());
-        assertSame(VERTEX_2_LOCATION_PROVIDER,
-                _rasterizedLineSegmentRenderable.getVertex2LocationProvider());
+    void testSetAndGetVertexProviders() {
+        assertSame(VERTEX_1_PROVIDER, _rasterizedLineSegmentRenderable.getVertex1Provider());
+        assertSame(VERTEX_2_PROVIDER, _rasterizedLineSegmentRenderable.getVertex2Provider());
 
-        FakeProviderAtTime<Pair<Float, Float>> newVertex1LocationProvider =
+        FakeProviderAtTime<Vertex> newVertex1Provider =
                 new FakeProviderAtTime<>();
-        FakeProviderAtTime<Pair<Float, Float>> newVertex2LocationProvider =
+        FakeProviderAtTime<Vertex> newVertex2Provider =
                 new FakeProviderAtTime<>();
-        _rasterizedLineSegmentRenderable.setVertex1LocationProvider(newVertex1LocationProvider);
-        _rasterizedLineSegmentRenderable.setVertex2LocationProvider(newVertex2LocationProvider);
+        _rasterizedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
+        _rasterizedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
 
-        assertSame(newVertex1LocationProvider,
-                _rasterizedLineSegmentRenderable.getVertex1LocationProvider());
-        assertSame(newVertex2LocationProvider,
-                _rasterizedLineSegmentRenderable.getVertex2LocationProvider());
+        assertSame(newVertex1Provider, _rasterizedLineSegmentRenderable.getVertex1Provider());
+        assertSame(newVertex2Provider, _rasterizedLineSegmentRenderable.getVertex2Provider());
     }
 
     @Test
-    void testSetVertexLocationProvidersWithInvalidParams() {
+    void testSetVertexProvidersWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setVertex1LocationProvider(null));
+                _rasterizedLineSegmentRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setVertex2LocationProvider(null));
+                _rasterizedLineSegmentRenderable.setVertex2Provider(null));
     }
 
     @Test

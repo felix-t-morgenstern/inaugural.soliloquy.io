@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
@@ -24,9 +24,9 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    List<Integer> italicIndices, List<Integer> boldIndices,
                                    ProviderAtTime<Float> borderThicknessProvider,
                                    ProviderAtTime<Color> borderColorProvider,
-                                   ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
+                                   ProviderAtTime<Vertex> renderingLocationProvider,
                                    ProviderAtTime<Float> dropShadowSizeProvider,
-                                   ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
+                                   ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                    ProviderAtTime<Color> dropShadowColorProvider,
                                    int z, UUID uuid,
                                    Consumer<Renderable> updateZIndexInContainer,

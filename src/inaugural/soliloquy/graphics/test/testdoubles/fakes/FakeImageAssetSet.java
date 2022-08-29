@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 
@@ -13,19 +13,11 @@ public class FakeImageAssetSet implements ImageAssetSet {
     public ArrayList<Pair<String, String>> GetImageAssetForTypeAndDirectionInputs =
             new ArrayList<>();
 
-    public FakeImageAssetSet() {
-    }
-
     public FakeImageAssetSet(String id) {
         Id = id;
     }
 
     public FakeImageAssetSet(boolean capturesMouseEvents) {
-        CapturesMouseEvents = capturesMouseEvents;
-    }
-
-    public FakeImageAssetSet(String id, boolean capturesMouseEvents) {
-        Id = id;
         CapturesMouseEvents = capturesMouseEvents;
     }
 

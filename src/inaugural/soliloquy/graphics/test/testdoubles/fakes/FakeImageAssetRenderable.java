@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -16,12 +16,10 @@ import java.util.UUID;
 public class FakeImageAssetRenderable implements ImageAssetRenderable {
     public boolean CapturesMouseEvents;
     public boolean CapturesMouseEventsAtPoint = true;
-    public ArrayList<Pair<Float, Float>> CapturesMouseEventsAtPointInputLocations =
-            new ArrayList<>();
+    public ArrayList<Vertex> CapturesMouseEventsAtPointInputLocations = new ArrayList<>();
     public ArrayList<Long> CapturesMouseEventsAtPointInputTimestamps = new ArrayList<>();
     public FakeFloatBox RenderingDimensions;
-    public ProviderAtTime<FloatBox> RenderingDimensionsProvider =
-            new FakeStaticProvider<>(RenderingDimensions);
+    public ProviderAtTime<FloatBox> RenderingDimensionsProvider = new FakeProviderAtTime<>();
     public int Z;
 
     @Override
@@ -148,7 +146,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     @Override
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        CapturesMouseEventsAtPointInputLocations.add(new Pair<>(x, y));
+        CapturesMouseEventsAtPointInputLocations.add(Vertex.of(x, y));
         CapturesMouseEventsAtPointInputTimestamps.add(timestamp);
         return CapturesMouseEventsAtPoint;
     }

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableImpl;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
@@ -14,10 +14,8 @@ import java.util.function.Consumer;
 public class RasterizedLineSegmentRenderableFactoryImpl
         implements RasterizedLineSegmentRenderableFactory {
     @Override
-    public RasterizedLineSegmentRenderable make(ProviderAtTime<Pair<Float, Float>>
-                                                        vertex1LocationProvider,
-                                                ProviderAtTime<Pair<Float, Float>>
-                                                        vertex2LocationProvider,
+    public RasterizedLineSegmentRenderable make(ProviderAtTime<Vertex> vertex1Provider,
+                                                ProviderAtTime<Vertex> vertex2Provider,
                                                 ProviderAtTime<Float> thicknessProvider,
                                                 short stipplePattern,
                                                 short stippleFactor,
@@ -27,9 +25,9 @@ public class RasterizedLineSegmentRenderableFactoryImpl
                                                 Consumer<Renderable> updateZIndexInContainer,
                                                 Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new RasterizedLineSegmentRenderableImpl(vertex1LocationProvider,
-                vertex2LocationProvider, thicknessProvider, stipplePattern, stippleFactor,
-                colorProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+        return new RasterizedLineSegmentRenderableImpl(vertex1Provider, vertex2Provider,
+                thicknessProvider, stipplePattern, stippleFactor, colorProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
@@ -19,7 +19,7 @@ public class AntialiasedLineSegmentRenderer
         extends AbstractPointDrawingRenderer<AntialiasedLineSegmentRenderable> {
     private final Supplier<Float> WINDOW_WIDTH_TO_HEIGHT_RATIO;
 
-    private static final HashMap<Float, HashMap<Float, Pair<Float, Float>>>
+    private static final HashMap<Float, HashMap<Float, Vertex>>
             GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION =
             new HashMap<>();
     private static final HashMap<Float, Float> HALVING_MEMOIZATION = new HashMap<>();
@@ -51,10 +51,8 @@ public class AntialiasedLineSegmentRenderer
                 "renderable.getLengthGradientPercentProvider()");
         Check.ifNull(renderable.getThicknessProvider(), "renderable.getThicknessProvider()");
         Check.ifNull(renderable.getColorProvider(), "renderable.getColorProvider()");
-        Check.ifNull(renderable.getVertex1LocationProvider(),
-                "renderable.getVertex1LocationProvider()");
-        Check.ifNull(renderable.getVertex2LocationProvider(),
-                "renderable.getVertex2LocationProvider()");
+        Check.ifNull(renderable.getVertex1Provider(), "renderable.getVertex1Provider()");
+        Check.ifNull(renderable.getVertex2Provider(), "renderable.getVertex2Provider()");
 
         Float thicknessGradientPercent =
                 renderable.getThicknessGradientPercentProvider().provide(timestamp);
@@ -73,46 +71,40 @@ public class AntialiasedLineSegmentRenderer
         Color color = renderable.getColorProvider().provide(timestamp);
         Check.ifNull(color, "color");
 
-        Pair<Float, Float> vertex1 =
-                renderable.getVertex1LocationProvider().provide(timestamp);
+        Vertex vertex1 = renderable.getVertex1Provider().provide(timestamp);
         Check.ifNull(vertex1, "provided vertex1");
-        Check.ifNull(vertex1.getItem1(), "provided vertex1 x");
-        Check.ifNull(vertex1.getItem2(), "provided vertex1 y");
-        Pair<Float, Float> vertex2 =
-                renderable.getVertex2LocationProvider().provide(timestamp);
+        Vertex vertex2 = renderable.getVertex2Provider().provide(timestamp);
         Check.ifNull(vertex2, "provided vertex2");
-        Check.ifNull(vertex2.getItem1(), "provided vertex2 x");
-        Check.ifNull(vertex2.getItem2(), "provided vertex2 y");
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.getItem1();
-        float y1 = vertex1.getItem2();
-        float x2 = vertex2.getItem1();
-        float y2 = vertex2.getItem2();
+        float x1 = vertex1.x;
+        float y1 = vertex1.y;
+        float x2 = vertex2.x;
+        float y2 = vertex2.y;
 
-        Pair<Float, Float> v1OuterCcw;
-        Pair<Float, Float> v1ProximalCcw;
-        Pair<Float, Float> v1DistalCcw;
-        Pair<Float, Float> v1InnerCcw;
-        Pair<Float, Float> v1OuterCw;
-        Pair<Float, Float> v1ProximalCw;
-        Pair<Float, Float> v1DistalCw;
-        Pair<Float, Float> v1InnerCw;
-        Pair<Float, Float> v2OuterCcw;
-        Pair<Float, Float> v2ProximalCcw;
-        Pair<Float, Float> v2DistalCcw;
-        Pair<Float, Float> v2InnerCcw;
-        Pair<Float, Float> v2OuterCw;
-        Pair<Float, Float> v2ProximalCw;
-        Pair<Float, Float> v2DistalCw;
-        Pair<Float, Float> v2InnerCw;
+        Vertex v1OuterCcw;
+        Vertex v1ProximalCcw;
+        Vertex v1DistalCcw;
+        Vertex v1InnerCcw;
+        Vertex v1OuterCw;
+        Vertex v1ProximalCw;
+        Vertex v1DistalCw;
+        Vertex v1InnerCw;
+        Vertex v2OuterCcw;
+        Vertex v2ProximalCcw;
+        Vertex v2DistalCcw;
+        Vertex v2InnerCcw;
+        Vertex v2OuterCw;
+        Vertex v2ProximalCw;
+        Vertex v2DistalCw;
+        Vertex v2InnerCw;
 
         if (x2 < x1) {
-            x1 = vertex2.getItem1();
-            y1 = vertex2.getItem2();
-            x2 = vertex1.getItem1();
-            y2 = vertex1.getItem2();
+            x1 = vertex2.x;
+            y1 = vertex2.y;
+            x2 = vertex1.x;
+            y2 = vertex1.y;
         }
 
         float rise = (y2 - y1);
@@ -138,22 +130,22 @@ public class AntialiasedLineSegmentRenderer
             float vertexToProximal = halve(thickness) * (1f - thicknessGradientPercent);
             float outerToDistal = halve(y2 - y1) * lengthGradientPercent;
 
-            v1OuterCcw = new Pair<>(x1 + vertexToOuter, y1);
-            v1ProximalCcw = new Pair<>(x1 + vertexToProximal, y1);
-            v1DistalCcw = new Pair<>(x1 + vertexToOuter, y1 + outerToDistal);
-            v1InnerCcw = new Pair<>(x1 + vertexToProximal, y1 + outerToDistal);
-            v1OuterCw = new Pair<>(x1 - vertexToOuter, y1);
-            v1ProximalCw = new Pair<>(x1 - vertexToProximal, y1);
-            v1DistalCw = new Pair<>(x1 - vertexToOuter, y1 + outerToDistal);
-            v1InnerCw = new Pair<>(x1 - vertexToProximal, y1 + outerToDistal);
-            v2OuterCcw = new Pair<>(x1 + vertexToOuter, y2);
-            v2ProximalCcw = new Pair<>(x1 + vertexToProximal, y2);
-            v2DistalCcw = new Pair<>(x1 + vertexToOuter, y2 - outerToDistal);
-            v2InnerCcw = new Pair<>(x1 + vertexToProximal, y2 - outerToDistal);
-            v2OuterCw = new Pair<>(x1 - vertexToOuter, y2);
-            v2ProximalCw = new Pair<>(x1 - vertexToProximal, y2);
-            v2DistalCw = new Pair<>(x1 - vertexToOuter, y2 - outerToDistal);
-            v2InnerCw = new Pair<>(x1 - vertexToProximal, y2 - outerToDistal);
+            v1OuterCcw = Vertex.of(x1 + vertexToOuter, y1);
+            v1ProximalCcw = Vertex.of(x1 + vertexToProximal, y1);
+            v1DistalCcw = Vertex.of(x1 + vertexToOuter, y1 + outerToDistal);
+            v1InnerCcw = Vertex.of(x1 + vertexToProximal, y1 + outerToDistal);
+            v1OuterCw = Vertex.of(x1 - vertexToOuter, y1);
+            v1ProximalCw = Vertex.of(x1 - vertexToProximal, y1);
+            v1DistalCw = Vertex.of(x1 - vertexToOuter, y1 + outerToDistal);
+            v1InnerCw = Vertex.of(x1 - vertexToProximal, y1 + outerToDistal);
+            v2OuterCcw = Vertex.of(x1 + vertexToOuter, y2);
+            v2ProximalCcw = Vertex.of(x1 + vertexToProximal, y2);
+            v2DistalCcw = Vertex.of(x1 + vertexToOuter, y2 - outerToDistal);
+            v2InnerCcw = Vertex.of(x1 + vertexToProximal, y2 - outerToDistal);
+            v2OuterCw = Vertex.of(x1 - vertexToOuter, y2);
+            v2ProximalCw = Vertex.of(x1 - vertexToProximal, y2);
+            v2DistalCw = Vertex.of(x1 - vertexToOuter, y2 - outerToDistal);
+            v2InnerCw = Vertex.of(x1 - vertexToProximal, y2 - outerToDistal);
         }
         else {
             // NB: Slopes are reversed, since y values go from 0.0 at the top to 1.0 at the bottom
@@ -186,46 +178,46 @@ public class AntialiasedLineSegmentRenderer
 
             float halfThickness = halve(thickness);
 
-            Pair<Float, Float> outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
-            float outerCcwXAdjustment = outerCcwAdjustments.getItem1();
-            float outerCcwYAdjustment = outerCcwAdjustments.getItem2();
+            Vertex outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
+            float outerCcwXAdjustment = outerCcwAdjustments.x;
+            float outerCcwYAdjustment = outerCcwAdjustments.y;
 
             float proximalCcwXAdjustment = outerCcwXAdjustment * (1f - thicknessGradientPercent);
             float proximalCcwYAdjustment = proximalCcwXAdjustment * reciprocalSlope;
 
-            Pair<Float, Float> lengthGradientAdjustments =
+            Vertex lengthGradientAdjustments =
                     getAdjustments(halve(length) * lengthGradientPercent, providedSlope);
 
-            float lengthGradientXAdjust = lengthGradientAdjustments.getItem1();
-            float lengthGradientYAdjust = lengthGradientAdjustments.getItem2();
+            float lengthGradientXAdjust = lengthGradientAdjustments.x;
+            float lengthGradientYAdjust = lengthGradientAdjustments.y;
 
-            v1OuterCcw = new Pair<>(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
-            v1ProximalCcw = new Pair<>(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
-            v1DistalCcw = new Pair<>(v1OuterCcw.getItem1() + lengthGradientXAdjust,
-                    v1OuterCcw.getItem2() + lengthGradientYAdjust);
-            v1InnerCcw = new Pair<>(v1ProximalCcw.getItem1() + lengthGradientXAdjust,
-                    v1ProximalCcw.getItem2() + lengthGradientYAdjust);
+            v1OuterCcw = Vertex.of(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
+            v1ProximalCcw = Vertex.of(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
+            v1DistalCcw = Vertex.of(v1OuterCcw.x + lengthGradientXAdjust,
+                    v1OuterCcw.y + lengthGradientYAdjust);
+            v1InnerCcw = Vertex.of(v1ProximalCcw.x + lengthGradientXAdjust,
+                    v1ProximalCcw.y + lengthGradientYAdjust);
 
-            v1OuterCw = new Pair<>(x1 - outerCcwXAdjustment, y1 - outerCcwYAdjustment);
-            v1ProximalCw = new Pair<>(x1 - proximalCcwXAdjustment, y1 - proximalCcwYAdjustment);
-            v1DistalCw = new Pair<>(v1OuterCw.getItem1() + lengthGradientXAdjust,
-                    v1OuterCw.getItem2() + lengthGradientYAdjust);
-            v1InnerCw = new Pair<>(v1ProximalCw.getItem1() + lengthGradientXAdjust,
-                    v1ProximalCw.getItem2() + lengthGradientYAdjust);
+            v1OuterCw = Vertex.of(x1 - outerCcwXAdjustment, y1 - outerCcwYAdjustment);
+            v1ProximalCw = Vertex.of(x1 - proximalCcwXAdjustment, y1 - proximalCcwYAdjustment);
+            v1DistalCw = Vertex.of(v1OuterCw.x + lengthGradientXAdjust,
+                    v1OuterCw.y + lengthGradientYAdjust);
+            v1InnerCw = Vertex.of(v1ProximalCw.x + lengthGradientXAdjust,
+                    v1ProximalCw.y + lengthGradientYAdjust);
 
-            v2OuterCcw = new Pair<>(x2 + outerCcwXAdjustment, y2 + outerCcwYAdjustment);
-            v2ProximalCcw = new Pair<>(x2 + proximalCcwXAdjustment, y2 + proximalCcwYAdjustment);
-            v2DistalCcw = new Pair<>(v2OuterCcw.getItem1() - lengthGradientXAdjust,
-                    v2OuterCcw.getItem2() - lengthGradientYAdjust);
-            v2InnerCcw = new Pair<>(v2ProximalCcw.getItem1() - lengthGradientXAdjust,
-                    v2ProximalCcw.getItem2() - lengthGradientYAdjust);
+            v2OuterCcw = Vertex.of(x2 + outerCcwXAdjustment, y2 + outerCcwYAdjustment);
+            v2ProximalCcw = Vertex.of(x2 + proximalCcwXAdjustment, y2 + proximalCcwYAdjustment);
+            v2DistalCcw = Vertex.of(v2OuterCcw.x - lengthGradientXAdjust,
+                    v2OuterCcw.y - lengthGradientYAdjust);
+            v2InnerCcw = Vertex.of(v2ProximalCcw.x - lengthGradientXAdjust,
+                    v2ProximalCcw.y - lengthGradientYAdjust);
 
-            v2OuterCw = new Pair<>(x2 - outerCcwXAdjustment, y2 - outerCcwYAdjustment);
-            v2ProximalCw = new Pair<>(x2 - proximalCcwXAdjustment, y2 - proximalCcwYAdjustment);
-            v2DistalCw = new Pair<>(v2OuterCw.getItem1() - lengthGradientXAdjust,
-                    v2OuterCw.getItem2() - lengthGradientYAdjust);
-            v2InnerCw = new Pair<>(v2ProximalCw.getItem1() - lengthGradientXAdjust,
-                    v2ProximalCw.getItem2() - lengthGradientYAdjust);
+            v2OuterCw = Vertex.of(x2 - outerCcwXAdjustment, y2 - outerCcwYAdjustment);
+            v2ProximalCw = Vertex.of(x2 - proximalCcwXAdjustment, y2 - proximalCcwYAdjustment);
+            v2DistalCw = Vertex.of(v2OuterCw.x - lengthGradientXAdjust,
+                    v2OuterCw.y - lengthGradientYAdjust);
+            v2InnerCw = Vertex.of(v2ProximalCw.x - lengthGradientXAdjust,
+                    v2ProximalCw.y - lengthGradientYAdjust);
         }
 
         glBegin(GL_TRIANGLES);
@@ -323,12 +315,12 @@ public class AntialiasedLineSegmentRenderer
         glEnd();
     }
 
-    private static Pair<Float, Float> getAdjustments(float lineSegment,
+    private static Vertex getAdjustments(float lineSegment,
                                                      float slope) {
         if (!GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.containsKey(lineSegment)) {
             GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.put(lineSegment, new HashMap<>());
         }
-        HashMap<Float, Pair<Float, Float>> memosForSegmentLength =
+        HashMap<Float, Vertex> memosForSegmentLength =
                 GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.get(lineSegment);
         if (memosForSegmentLength.containsKey(slope)) {
             return memosForSegmentLength.get(slope);
@@ -337,7 +329,7 @@ public class AntialiasedLineSegmentRenderer
             float result1 =
                     sqRoot(square(lineSegment) / (1 + square(slope)));
             float result2 = result1 * slope;
-            Pair<Float, Float> result = new Pair<>(result1, result2);
+            Vertex result = Vertex.of(result1, result2);
             memosForSegmentLength.put(slope, result);
             return result;
         }
@@ -424,23 +416,23 @@ public class AntialiasedLineSegmentRenderer
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
+        public ProviderAtTime<Vertex> getVertex1Provider() {
             return null;
         }
 
         @Override
-        public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
+        public ProviderAtTime<Vertex> getVertex2Provider() {
             return null;
         }
 
         @Override
-        public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }

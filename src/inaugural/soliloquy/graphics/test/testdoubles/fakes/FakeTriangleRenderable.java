@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
@@ -10,30 +10,30 @@ import java.util.Map;
 import java.util.UUID;
 
 public class FakeTriangleRenderable implements TriangleRenderable {
-    public ProviderAtTime<Pair<Float, Float>> Vertex1LocationProvider;
+    public ProviderAtTime<Vertex> Vertex1Provider;
     public ProviderAtTime<Color> Vertex1ColorProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex2LocationProvider;
+    public ProviderAtTime<Vertex> Vertex2Provider;
     public ProviderAtTime<Color> Vertex2ColorProvider;
-    public ProviderAtTime<Pair<Float, Float>> Vertex3LocationProvider;
+    public ProviderAtTime<Vertex> Vertex3Provider;
     public ProviderAtTime<Color> Vertex3ColorProvider;
     public ProviderAtTime<Integer> BackgroundTextureIdProvider;
     public float BackgroundTextureTileWidth;
     public float BackgroundTextureTileHeight;
 
-    public FakeTriangleRenderable(ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
+    public FakeTriangleRenderable(ProviderAtTime<Vertex> vertex1Provider,
                                   ProviderAtTime<Color> vertex1ColorProvider,
-                                  ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+                                  ProviderAtTime<Vertex> vertex2Provider,
                                   ProviderAtTime<Color> vertex2ColorProvider,
-                                  ProviderAtTime<Pair<Float, Float>> vertex3LocationProvider,
+                                  ProviderAtTime<Vertex> vertex3Provider,
                                   ProviderAtTime<Color> vertex3ColorProvider,
                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
                                   float backgroundTextureTileWidth,
                                   float backgroundTextureTileHeight) {
-        Vertex1LocationProvider = vertex1LocationProvider;
+        Vertex1Provider = vertex1Provider;
         Vertex1ColorProvider = vertex1ColorProvider;
-        Vertex2LocationProvider = vertex2LocationProvider;
+        Vertex2Provider = vertex2Provider;
         Vertex2ColorProvider = vertex2ColorProvider;
-        Vertex3LocationProvider = vertex3LocationProvider;
+        Vertex3Provider = vertex3Provider;
         Vertex3ColorProvider = vertex3ColorProvider;
         BackgroundTextureIdProvider = backgroundTextureIdProvider;
         BackgroundTextureTileWidth = backgroundTextureTileWidth;
@@ -41,12 +41,12 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
-        return Vertex1LocationProvider;
+    public ProviderAtTime<Vertex> getVertex1Provider() {
+        return Vertex1Provider;
     }
 
     @Override
-    public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }
@@ -63,12 +63,12 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
-        return Vertex2LocationProvider;
+    public ProviderAtTime<Vertex> getVertex2Provider() {
+        return Vertex2Provider;
     }
 
     @Override
-    public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }
@@ -85,12 +85,12 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex3LocationProvider() {
-        return Vertex3LocationProvider;
+    public ProviderAtTime<Vertex> getVertex3Provider() {
+        return Vertex3Provider;
     }
 
     @Override
-    public void setVertex3LocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+    public void setVertex3Provider(ProviderAtTime<Vertex> providerAtTime)
             throws IllegalArgumentException {
 
     }

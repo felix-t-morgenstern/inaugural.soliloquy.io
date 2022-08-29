@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -14,18 +14,18 @@ import java.util.function.Consumer;
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
         implements TriangleRenderable {
-    private ProviderAtTime<Pair<Float, Float>> _vertex1LocationProvider;
+    private ProviderAtTime<Vertex> _vertex1Provider;
     private ProviderAtTime<Color> _vertex1ColorProvider;
-    private ProviderAtTime<Pair<Float, Float>> _vertex2LocationProvider;
+    private ProviderAtTime<Vertex> _vertex2Provider;
     private ProviderAtTime<Color> _vertex2ColorProvider;
-    private ProviderAtTime<Pair<Float, Float>> _vertex3LocationProvider;
+    private ProviderAtTime<Vertex> _vertex3Provider;
     private ProviderAtTime<Color> _vertex3ColorProvider;
 
-    public TriangleRenderableImpl(ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
+    public TriangleRenderableImpl(ProviderAtTime<Vertex> vertex1Provider,
                                   ProviderAtTime<Color> vertex1ColorProvider,
-                                  ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+                                  ProviderAtTime<Vertex> vertex2Provider,
                                   ProviderAtTime<Color> vertex2ColorProvider,
-                                  ProviderAtTime<Pair<Float, Float>> vertex3LocationProvider,
+                                  ProviderAtTime<Vertex> vertex3Provider,
                                   ProviderAtTime<Color> vertex3ColorProvider,
                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
                                   float backgroundTextureTileWidth,
@@ -42,11 +42,11 @@ public class TriangleRenderableImpl
                 onPress, onRelease, onMouseOver, onMouseLeave,
                 z, uuid,
                 updateZIndexInContainer, removeFromContainer);
-        setVertex1LocationProvider(vertex1LocationProvider);
+        setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
-        setVertex2LocationProvider(vertex2LocationProvider);
+        setVertex2Provider(vertex2Provider);
         setVertex2ColorProvider(vertex2ColorProvider);
-        setVertex3LocationProvider(vertex3LocationProvider);
+        setVertex3Provider(vertex3Provider);
         setVertex3ColorProvider(vertex3ColorProvider);
     }
 
@@ -61,14 +61,14 @@ public class TriangleRenderableImpl
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex1LocationProvider() {
-        return _vertex1LocationProvider;
+    public ProviderAtTime<Vertex> getVertex1Provider() {
+        return _vertex1Provider;
     }
 
     @Override
-    public void setVertex1LocationProvider(ProviderAtTime<Pair<Float, Float>> provider)
+    public void setVertex1Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex1LocationProvider = Check.ifNull(provider, "provider");
+        _vertex1Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
@@ -83,14 +83,14 @@ public class TriangleRenderableImpl
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex2LocationProvider() {
-        return _vertex2LocationProvider;
+    public ProviderAtTime<Vertex> getVertex2Provider() {
+        return _vertex2Provider;
     }
 
     @Override
-    public void setVertex2LocationProvider(ProviderAtTime<Pair<Float, Float>> provider)
+    public void setVertex2Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex2LocationProvider = Check.ifNull(provider, "provider");
+        _vertex2Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
@@ -105,14 +105,14 @@ public class TriangleRenderableImpl
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getVertex3LocationProvider() {
-        return _vertex3LocationProvider;
+    public ProviderAtTime<Vertex> getVertex3Provider() {
+        return _vertex3Provider;
     }
 
     @Override
-    public void setVertex3LocationProvider(ProviderAtTime<Pair<Float, Float>> provider)
+    public void setVertex3Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex3LocationProvider = Check.ifNull(provider, "provider");
+        _vertex3Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
@@ -135,10 +135,10 @@ public class TriangleRenderableImpl
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Pair<Float, Float> point = new Pair<>(x, y);
-        Pair<Float, Float> v1 = _vertex1LocationProvider.provide(timestamp);
-        Pair<Float, Float> v2 = _vertex2LocationProvider.provide(timestamp);
-        Pair<Float, Float> v3 = _vertex3LocationProvider.provide(timestamp);
+        Vertex point = Vertex.of(x, y);
+        Vertex v1 = _vertex1Provider.provide(timestamp);
+        Vertex v2 = _vertex2Provider.provide(timestamp);
+        Vertex v3 = _vertex3Provider.provide(timestamp);
 
         float renderableArea = area(v1, v2, v3);
 
@@ -149,11 +149,9 @@ public class TriangleRenderableImpl
         return renderableArea == (area1 + area2 + area3);
     }
 
-    private float area(Pair<Float, Float> v1, Pair<Float, Float> v2, Pair<Float, Float> v3) {
-        return Math.abs(((v1.getItem1() * (v2.getItem2() - v3.getItem2())) +
-                (v2.getItem1() * (v3.getItem2() - v1.getItem2())) +
-                (v3.getItem1() * (v1.getItem2() - v2.getItem2())))
-                / 2.0f);
+    private float area(Vertex v1, Vertex v2, Vertex v3) {
+        return Math.abs(((v1.x * (v2.y - v3.y)) + (v2.x * (v3.y - v1.y)) + (v3.x * (v1.y - v2.y))) /
+                2.0f);
     }
 
     @Override

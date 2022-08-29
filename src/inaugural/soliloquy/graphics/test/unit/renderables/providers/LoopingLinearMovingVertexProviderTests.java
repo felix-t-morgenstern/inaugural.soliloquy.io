@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
-import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingLocationProvider;
+import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingVertexProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.HashMap;
@@ -12,27 +12,27 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LoopingLinearMovingLocationProviderTests {
+public class LoopingLinearMovingVertexProviderTests {
     private final int TIME_1 = 0;
     private final float LOCATION_1_X = 0.1f;
     private final float LOCATION_1_Y = 0.11f;
-    private final Pair<Float, Float> LOCATION_1 = new Pair<>(LOCATION_1_X, LOCATION_1_Y);
+    private final Vertex LOCATION_1 = Vertex.of(LOCATION_1_X, LOCATION_1_Y);
 
     private final int TIME_2 = 100;
     private final float LOCATION_2_X = 0.2f;
     private final float LOCATION_2_Y = 0.22f;
-    private final Pair<Float, Float> LOCATION_2 = new Pair<>(LOCATION_2_X, LOCATION_2_Y);
+    private final Vertex LOCATION_2 = Vertex.of(LOCATION_2_X, LOCATION_2_Y);
 
     private final int TIME_3 = 300;
     private final float LOCATION_3_X = 0.3f;
     private final float LOCATION_3_Y = 0.33f;
-    private final Pair<Float, Float> LOCATION_3 = new Pair<>(LOCATION_3_X, LOCATION_3_Y);
+    private final Vertex LOCATION_3 = Vertex.of(LOCATION_3_X, LOCATION_3_Y);
 
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
 
-    private final HashMap<Integer, Pair<Float, Float>> VALUES_AT_TIMES =
-            new HashMap<Integer, Pair<Float, Float>>() {{
+    private final HashMap<Integer, Vertex> VALUES_AT_TIMES =
+            new HashMap<Integer, Vertex>() {{
                 put(TIME_1, LOCATION_1);
                 put(TIME_2, LOCATION_2);
                 put(TIME_3, LOCATION_3);
@@ -40,63 +40,63 @@ public class LoopingLinearMovingLocationProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private LoopingLinearMovingProvider<Pair<Float, Float>> _loopingLinearMovingLocationProvider;
+    private LoopingLinearMovingProvider<Vertex> _loopingLinearMovingLocationProvider;
 
     @BeforeEach
     void setUp() {
-        _loopingLinearMovingLocationProvider = new LoopingLinearMovingLocationProvider(UUID,
+        _loopingLinearMovingLocationProvider = new LoopingLinearMovingVertexProvider(UUID,
                 VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, null, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, null, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, new HashMap<>(), PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, new HashMap<>(), PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{
+                new LoopingLinearMovingVertexProvider(UUID,
+                        new HashMap<Integer, Vertex>() {{
                             put(null, LOCATION_1);
                         }},
                         PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{
+                new LoopingLinearMovingVertexProvider(UUID,
+                        new HashMap<Integer, Vertex>() {{
                             put(TIME_1, null);
                         }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{
+                new LoopingLinearMovingVertexProvider(UUID,
+                        new HashMap<Integer, Vertex>() {{
                             put(TIME_2, LOCATION_2);
                         }},
                         PERIOD_DURATION, MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID,
-                        new HashMap<Integer, Pair<Float, Float>>() {{
+                new LoopingLinearMovingVertexProvider(UUID,
+                        new HashMap<Integer, Vertex>() {{
                             put(PERIOD_DURATION + 1, LOCATION_1);
                         }}, PERIOD_DURATION,
                         MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         -1, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         PERIOD_DURATION, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         MODULO_OFFSET, 123123L, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         MODULO_OFFSET, 1L, 0L));
     }
 
@@ -110,8 +110,8 @@ public class LoopingLinearMovingLocationProviderTests {
         long pausedTimestamp = 123123L;
         long mostRecentTimestamp = 456456L;
 
-        LoopingLinearMovingProvider<Pair<Float, Float>> loopingLinearMovingLocationProvider =
-                new LoopingLinearMovingLocationProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+        LoopingLinearMovingProvider<Vertex> loopingLinearMovingLocationProvider =
+                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
@@ -123,13 +123,11 @@ public class LoopingLinearMovingLocationProviderTests {
     @Test
     void testGetArchetype() {
         assertNotNull(_loopingLinearMovingLocationProvider.getArchetype());
-        assertNotNull(_loopingLinearMovingLocationProvider.getArchetype().getFirstArchetype());
-        assertNotNull(_loopingLinearMovingLocationProvider.getArchetype().getSecondArchetype());
     }
 
     @Test
     void testValuesWithinPeriod() {
-        Map<Integer, Pair<Float, Float>> valuesWithinPeriod =
+        Map<Integer, Vertex> valuesWithinPeriod =
                 _loopingLinearMovingLocationProvider.valuesWithinPeriod();
 
         assertNotNull(valuesWithinPeriod);
@@ -166,12 +164,12 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
         float expectedY = (LOCATION_1_Y * value1Weight) + (LOCATION_2_Y * value2Weight);
 
-        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
+        Vertex expected = Vertex.of(expectedX, expectedY);
 
-        Pair<Float, Float> provided = _loopingLinearMovingLocationProvider.provide(timestamp);
+        Vertex provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
-        assertEquals(expected.getItem1(), provided.getItem1());
-        assertEquals(expected.getItem2(), provided.getItem2());
+        assertEquals(expected.x, provided.x);
+        assertEquals(expected.y, provided.y);
     }
 
     @Test
@@ -185,12 +183,12 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_3_X * value3Weight) + (LOCATION_1_X * value1Weight);
         float expectedY = (LOCATION_3_Y * value3Weight) + (LOCATION_1_Y * value1Weight);
 
-        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
+        Vertex expected = Vertex.of(expectedX, expectedY);
 
-        Pair<Float, Float> provided = _loopingLinearMovingLocationProvider.provide(timestamp);
+        Vertex provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
-        assertEquals(expected.getItem1(), provided.getItem1());
-        assertEquals(expected.getItem2(), provided.getItem2());
+        assertEquals(expected.x, provided.x);
+        assertEquals(expected.y, provided.y);
     }
 
     @Test
@@ -278,15 +276,15 @@ public class LoopingLinearMovingLocationProviderTests {
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
         float expectedY = (LOCATION_1_Y * value1Weight) + (LOCATION_2_Y * value2Weight);
 
-        Pair<Float, Float> expected = new Pair<>(expectedX, expectedY);
+        Vertex expected = Vertex.of(expectedX, expectedY);
 
         _loopingLinearMovingLocationProvider.reportPause(0L);
         _loopingLinearMovingLocationProvider.reportUnpause(pauseDuration);
 
-        Pair<Float, Float> provided =
+        Vertex provided =
                 _loopingLinearMovingLocationProvider.provide(timestamp + pauseDuration);
 
-        assertEquals(expected.getItem1(), provided.getItem1());
-        assertEquals(expected.getItem2(), provided.getItem2());
+        assertEquals(expected.x, provided.x);
+        assertEquals(expected.y, provided.y);
     }
 }

@@ -6,7 +6,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -78,7 +78,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Pair<Float, Float> renderingLocation = new Pair<>(0.1f, 0.475f);
+        Vertex renderingLocation = Vertex.of(0.1f, 0.475f);
 
         HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
 

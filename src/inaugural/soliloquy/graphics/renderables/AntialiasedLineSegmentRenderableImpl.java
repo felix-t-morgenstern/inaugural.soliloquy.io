@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -16,8 +16,8 @@ public class AntialiasedLineSegmentRenderableImpl
     private ProviderAtTime<Float> _lengthGradientPercentProvider;
 
     public AntialiasedLineSegmentRenderableImpl(
-            ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
-            ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+            ProviderAtTime<Vertex> vertex1Provider,
+            ProviderAtTime<Vertex> vertex2Provider,
             ProviderAtTime<Float> thicknessProvider,
             ProviderAtTime<Color> colorProvider,
             ProviderAtTime<Float> thicknessGradientPercentProvider,
@@ -26,7 +26,7 @@ public class AntialiasedLineSegmentRenderableImpl
             java.util.UUID uuid,
             Consumer<Renderable> updateZIndexInContainer,
             Consumer<Renderable> removeFromContainer) {
-        super(vertex1LocationProvider, vertex2LocationProvider, thicknessProvider, colorProvider, z,
+        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z,
                 uuid, updateZIndexInContainer, removeFromContainer);
         setThicknessGradientPercentProvider(thicknessGradientPercentProvider);
         setLengthGradientPercentProvider(lengthGradientPercentProvider);

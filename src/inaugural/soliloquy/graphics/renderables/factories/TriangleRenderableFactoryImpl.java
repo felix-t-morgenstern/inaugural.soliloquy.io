@@ -2,7 +2,7 @@ package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.TriangleRenderableFactory;
@@ -15,11 +15,11 @@ import java.util.function.Consumer;
 
 public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
     @Override
-    public TriangleRenderable make(ProviderAtTime<Pair<Float, Float>> vertex1LocationProvider,
+    public TriangleRenderable make(ProviderAtTime<Vertex> vertex1Provider,
                                    ProviderAtTime<Color> vertex1ColorProvider,
-                                   ProviderAtTime<Pair<Float, Float>> vertex2LocationProvider,
+                                   ProviderAtTime<Vertex> vertex2Provider,
                                    ProviderAtTime<Color> vertex2ColorProvider,
-                                   ProviderAtTime<Pair<Float, Float>> vertex3LocationProvider,
+                                   ProviderAtTime<Vertex> vertex3Provider,
                                    ProviderAtTime<Color> vertex3ColorProvider,
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    float backgroundTextureTileWidth,
@@ -33,8 +33,8 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    Consumer<Renderable> updateZIndexInContainer,
                                    Consumer<Renderable> removeFromContainer)
             throws IllegalArgumentException {
-        return new TriangleRenderableImpl(vertex1LocationProvider, vertex1ColorProvider,
-                vertex2LocationProvider, vertex2ColorProvider, vertex3LocationProvider,
+        return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider,
+                vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, backgroundTextureTileWidth,
                 backgroundTextureTileHeight, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
                 updateZIndexInContainer, removeFromContainer);

@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderable
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -17,10 +17,8 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AntialiasedLineSegmentRenderableImplTests {
-    private final FakeProviderAtTime<Pair<Float, Float>> VERTEX_1_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Pair<Float, Float>> VERTEX_2_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_GRADIENT_PERCENT_PROVIDER =
@@ -42,8 +40,8 @@ class AntialiasedLineSegmentRenderableImplTests {
     @BeforeEach
     void setUp() {
         _antialiasedLineSegmentRenderable = new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -59,7 +57,7 @@ class AntialiasedLineSegmentRenderableImplTests {
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 null,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -70,7 +68,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
                 null,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
@@ -82,8 +80,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 null,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -94,8 +92,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 null,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -106,8 +104,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 null,
@@ -118,8 +116,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -130,8 +128,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -142,8 +140,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -154,8 +152,8 @@ class AntialiasedLineSegmentRenderableImplTests {
                 REMOVE_FROM_CONTAINER
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_LOCATION_PROVIDER,
-                VERTEX_2_LOCATION_PROVIDER,
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -168,24 +166,18 @@ class AntialiasedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexLocationProviders() {
-        assertSame(VERTEX_1_LOCATION_PROVIDER,
-                _antialiasedLineSegmentRenderable.getVertex1LocationProvider());
-        assertSame(VERTEX_2_LOCATION_PROVIDER,
-                _antialiasedLineSegmentRenderable.getVertex2LocationProvider());
+    void testSetAndGetVertexProviders() {
+        assertSame(VERTEX_1_PROVIDER, _antialiasedLineSegmentRenderable.getVertex1Provider());
+        assertSame(VERTEX_2_PROVIDER, _antialiasedLineSegmentRenderable.getVertex2Provider());
 
-        FakeProviderAtTime<Pair<Float, Float>> newVertex1LocationProvider =
-                new FakeProviderAtTime<>();
-        FakeProviderAtTime<Pair<Float, Float>> newVertex2LocationProvider =
-                new FakeProviderAtTime<>();
+        FakeProviderAtTime<Vertex> newVertex1Provider = new FakeProviderAtTime<>();
+        FakeProviderAtTime<Vertex> newVertex2Provider = new FakeProviderAtTime<>();
 
-        _antialiasedLineSegmentRenderable.setVertex1LocationProvider(newVertex1LocationProvider);
-        _antialiasedLineSegmentRenderable.setVertex2LocationProvider(newVertex2LocationProvider);
+        _antialiasedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
+        _antialiasedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
 
-        assertSame(newVertex1LocationProvider,
-                _antialiasedLineSegmentRenderable.getVertex1LocationProvider());
-        assertSame(newVertex2LocationProvider,
-                _antialiasedLineSegmentRenderable.getVertex2LocationProvider());
+        assertSame(newVertex1Provider, _antialiasedLineSegmentRenderable.getVertex1Provider());
+        assertSame(newVertex2Provider, _antialiasedLineSegmentRenderable.getVertex2Provider());
     }
 
     @Test
@@ -250,11 +242,11 @@ class AntialiasedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testSetVertexLocationProvidersWithInvalidParams() {
+    void testSetVertexProvidersWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setVertex1LocationProvider(null));
+                _antialiasedLineSegmentRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setVertex2LocationProvider(null));
+                _antialiasedLineSegmentRenderable.setVertex2Provider(null));
     }
 
     @Test

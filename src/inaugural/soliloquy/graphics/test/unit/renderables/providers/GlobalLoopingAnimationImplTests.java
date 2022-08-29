@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimation
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
@@ -17,7 +17,6 @@ class GlobalLoopingAnimationImplTests {
     private final String ANIMATION_ID = "animationId";
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
     private final long MOST_RECENT_TIMESTAMP = 123L;
-    private final long PAUSE_TIMESTAMP = 111L;
 
     private GlobalLoopingAnimation _globalLoopingAnimation;
 
@@ -78,8 +77,9 @@ class GlobalLoopingAnimationImplTests {
 
     @Test
     void testPauseTimestamp() {
-        assertEquals(PAUSE_TIMESTAMP, (long) new GlobalLoopingAnimationImpl(ID, ANIMATION,
-                PERIOD_MODULO_OFFSET, PAUSE_TIMESTAMP).pausedTimestamp());
+        long pauseTimestamp = 111L;
+        assertEquals(pauseTimestamp, (long) new GlobalLoopingAnimationImpl(ID, ANIMATION,
+                PERIOD_MODULO_OFFSET, pauseTimestamp).pausedTimestamp());
     }
 
     @Test

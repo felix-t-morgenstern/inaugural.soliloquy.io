@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -15,18 +15,16 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRend
     private short _stipplePattern;
     private short _stippleFactor;
 
-    public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Pair<Float, Float>>
-                                                       vertex1LocationProvider,
-                                               ProviderAtTime<Pair<Float, Float>>
-                                                       vertex2LocationProvider,
+    public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Vertex> vertex1Provider,
+                                               ProviderAtTime<Vertex> vertex2Provider,
                                                ProviderAtTime<Float> thicknessProvider,
                                                short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                int z, UUID uuid,
                                                Consumer<Renderable> updateZIndexInContainer,
                                                Consumer<Renderable> removeFromContainer) {
-        super(vertex1LocationProvider, vertex2LocationProvider, thicknessProvider, colorProvider, z,
-                uuid, updateZIndexInContainer, removeFromContainer);
+        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z, uuid,
+                updateZIndexInContainer, removeFromContainer);
         setStipplePattern(stipplePattern);
         setStippleFactor(stippleFactor);
     }

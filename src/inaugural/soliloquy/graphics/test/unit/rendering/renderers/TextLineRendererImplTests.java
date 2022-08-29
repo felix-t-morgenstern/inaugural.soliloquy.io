@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -71,8 +71,7 @@ class TextLineRendererImplTests {
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
-        ProviderAtTime<Pair<Float, Float>> renderingAreaProvider =
-                new FakeStaticProvider<>(new Pair<>(0f, 0f));
+        ProviderAtTime<Vertex> renderingAreaProvider = new FakeStaticProvider<>(Vertex.of(0f, 0f));
         UUID uuid = UUID.randomUUID();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
@@ -387,8 +386,8 @@ class TextLineRendererImplTests {
         ArrayList<Integer> boldIndices = new ArrayList<>();
         boldIndices.add(3);
         boldIndices.add(5);
-        ProviderAtTime<Pair<Float, Float>> renderingAreaProvider =
-                new FakeStaticProvider<>(new Pair<>(0f, 0f));
+        ProviderAtTime<Vertex> renderingAreaProvider =
+                new FakeStaticProvider<>(Vertex.of(0f, 0f));
         UUID uuid = UUID.randomUUID();
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
@@ -694,7 +693,7 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, lineText, new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, italicIndices, boldIndices,
-                new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 UUID.randomUUID());
 
         float textLineLength = _textLineRenderer.textLineLength(textLineRenderable,
@@ -769,7 +768,7 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, paddingBetweenGlyphs, lineText,
                 new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                italicIndices, boldIndices, new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                italicIndices, boldIndices, new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 UUID.randomUUID());
 
         float textLineLength =
@@ -795,9 +794,9 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 null,
-                new FakeStaticProvider<>(new Pair<>(.456f, .789f)),
+                new FakeStaticProvider<>(Vertex.of(.456f, .789f)),
                 new FakeStaticProvider<>(Color.WHITE),
                 UUID.randomUUID());
 
@@ -823,9 +822,9 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 new FakeStaticProvider<>(-.123f),
-                new FakeStaticProvider<>(new Pair<>(.456f, .789f)),
+                new FakeStaticProvider<>(Vertex.of(.456f, .789f)),
                 new FakeStaticProvider<>(Color.WHITE),
                 UUID.randomUUID());
 
@@ -839,7 +838,7 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 new FakeStaticProvider<>(.123f),
                 new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(Color.WHITE),
@@ -849,19 +848,7 @@ class TextLineRendererImplTests {
                 _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProvider<>(new Pair<>(null, .789f, 0f, 0f));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
-
-        textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProvider<>(new Pair<>(.456f, null, 0f, 0f));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                _textLineRenderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
-
-        textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProvider<>(new Pair<>(.456f, .789f));
+                new FakeStaticProvider<>(Vertex.of(.456f, .789f));
         textLineRenderable.DropShadowColorProvider = new FakeStaticProvider<>(null);
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -875,7 +862,7 @@ class TextLineRendererImplTests {
         FakeTextLineRenderable textLineRenderable = new FakeTextLineRenderable(font,
                 lineHeightProvider, 0f, "", new FakeStaticProvider<>(null),
                 new FakeStaticProvider<>(null), null, new ArrayList<>(), new ArrayList<>(),
-                new FakeStaticProvider<>(new Pair<>(0f, 0f)),
+                new FakeStaticProvider<>(Vertex.of(0f, 0f)),
                 UUID.randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->

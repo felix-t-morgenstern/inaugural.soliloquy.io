@@ -1,11 +1,11 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.looping.linear.location;
 
-import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingLocationProvider;
+import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingVertexProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.renderables.providers.ResettableProvider;
@@ -22,7 +22,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
 
     protected static FakeTextLineRenderable TextLineRenderable;
 
-    protected static ResettableProvider<Pair<Float, Float>> LoopingLinearMovingLocationProvider;
+    protected static ResettableProvider<Vertex> LoopingLinearMovingLocationProvider;
 
     /** @noinspection rawtypes */
     protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
@@ -54,15 +54,15 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
         long startTimestamp = GLOBAL_CLOCK.globalTimestamp();
         int periodDuration = 4000;
         int periodModuloOffset = periodDuration - (int) (startTimestamp % (periodDuration));
-        HashMap<Integer, Pair<Float, Float>> valuesAtTimes =
-                new HashMap<Integer, Pair<Float, Float>>() {{
-                    put(0, new Pair<>(0.125f, 0.125f));
-                    put(1000, new Pair<>(0.75f, 0.125f));
-                    put(2000, new Pair<>(0.75f, 0.75f));
-                    put(3000, new Pair<>(0.125f, 0.75f));
+        HashMap<Integer, Vertex> valuesAtTimes =
+                new HashMap<Integer, Vertex>() {{
+                    put(0, Vertex.of(0.125f, 0.125f));
+                    put(1000, Vertex.of(0.75f, 0.125f));
+                    put(2000, Vertex.of(0.75f, 0.75f));
+                    put(3000, Vertex.of(0.125f, 0.75f));
                 }};
 
-        LoopingLinearMovingLocationProvider = new LoopingLinearMovingLocationProvider(
+        LoopingLinearMovingLocationProvider = new LoopingLinearMovingVertexProvider(
                 UUID,
                 valuesAtTimes,
                 periodDuration,

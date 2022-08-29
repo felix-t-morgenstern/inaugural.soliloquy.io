@@ -133,20 +133,20 @@ class MouseEventCapturingSpatialIndexImplTests {
                 .getCapturingRenderableAtPoint(.454f, .456f, 789L));
         assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.size());
         assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.size());
-        assertEquals(0.454f, (float) ImageAssetRenderable4
-                .CapturesMouseEventsAtPointInputLocations.get(0).getItem1());
-        assertEquals(0.456f, (float) ImageAssetRenderable4
-                .CapturesMouseEventsAtPointInputLocations.get(0).getItem2());
-        assertEquals(789L, (long) ImageAssetRenderable4
-                .CapturesMouseEventsAtPointInputTimestamps.get(0));
+        assertEquals(0.454f,
+                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).x);
+        assertEquals(0.456f,
+                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).y);
+        assertEquals(789L,
+                (long) ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.get(0));
         assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.size());
         assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.size());
-        assertEquals(0.454f, (float) ImageAssetRenderable3
-                .CapturesMouseEventsAtPointInputLocations.get(0).getItem1());
-        assertEquals(0.456f, (float) ImageAssetRenderable3
-                .CapturesMouseEventsAtPointInputLocations.get(0).getItem2());
-        assertEquals(789L, (long) ImageAssetRenderable3
-                .CapturesMouseEventsAtPointInputTimestamps.get(0));
+        assertEquals(0.454f,
+                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).x);
+        assertEquals(0.456f,
+                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).y);
+        assertEquals(789L,
+                (long) ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.get(0));
     }
 
     @Test

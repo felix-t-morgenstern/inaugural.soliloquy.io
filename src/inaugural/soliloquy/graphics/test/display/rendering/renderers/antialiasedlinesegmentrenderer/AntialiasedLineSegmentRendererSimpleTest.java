@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderable
 import inaugural.soliloquy.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -47,8 +47,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
         AntialiasedLineSegmentRenderable1 = new AntialiasedLineSegmentRenderableImpl(
-                new FakeStaticProvider<>(new Pair<>(0.75f, 0.75f)),
-                new FakeStaticProvider<>(new Pair<>(0.25f, 0.25f)),
+                new FakeStaticProvider<>(Vertex.of(0.75f, 0.75f)),
+                new FakeStaticProvider<>(Vertex.of(0.25f, 0.25f)),
                 new FakeStaticProvider<>(0.000625f),
                 new FakeStaticProvider<>(Color.RED),
                 new FakeStaticProvider<>(0.1f),
@@ -60,8 +60,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
         );
 
         AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
-                new FakeStaticProvider<>(new Pair<>(0.5f, 0.75f)),
-                new FakeStaticProvider<>(new Pair<>(0.5f, 0.25f)),
+                new FakeStaticProvider<>(Vertex.of(0.5f, 0.75f)),
+                new FakeStaticProvider<>(Vertex.of(0.5f, 0.25f)),
                 new FakeStaticProvider<>(0.1f),
                 new FakeStaticProvider<>(new Color(40, 0, 255)),
                 new FakeStaticProvider<>(0.05f),

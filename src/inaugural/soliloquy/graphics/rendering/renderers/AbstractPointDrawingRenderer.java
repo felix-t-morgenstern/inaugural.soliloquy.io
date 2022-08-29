@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.Renderable;
 
 import java.awt.*;
@@ -29,8 +29,8 @@ abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0);
     }
 
-    protected void drawPoint(Pair<Float, Float> point) {
-        drawPoint(point.getItem1(), point.getItem2());
+    protected void drawPoint(Vertex point) {
+        drawPoint(point.x, point.y);
     }
 
     protected void drawPoint(float x, float y) {

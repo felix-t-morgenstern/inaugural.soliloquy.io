@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
@@ -23,9 +23,9 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     public List<Integer> BoldIndices;
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
-    public ProviderAtTime<Pair<Float, Float>> RenderingLocationProvider;
+    public ProviderAtTime<Vertex> RenderingLocationProvider;
     public ProviderAtTime<Float> DropShadowSizeProvider;
-    public ProviderAtTime<Pair<Float, Float>> DropShadowOffsetProvider;
+    public ProviderAtTime<Vertex> DropShadowOffsetProvider;
     public ProviderAtTime<Color> DropShadowColorProvider;
     public UUID Uuid;
 
@@ -70,7 +70,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
+                                  ProviderAtTime<Vertex> renderingLocationProvider,
                                   UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
                 borderColorProvider, colorProviderIndices, italicIndices, boldIndices, uuid);
@@ -84,7 +84,7 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
+                                  ProviderAtTime<Vertex> renderingLocationProvider,
                                   UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
@@ -98,9 +98,9 @@ public class FakeTextLineRenderable implements TextLineRenderable {
                                   ProviderAtTime<Color> borderColorProvider,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Pair<Float, Float>> renderingLocationProvider,
+                                  ProviderAtTime<Vertex> renderingLocationProvider,
                                   ProviderAtTime<Float> dropShadowSizeProvider,
-                                  ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider,
+                                  ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
                                   UUID uuid) {
         this(font, lineHeightProvider, paddingBetweenGlyphs, lineText, borderThicknessProvider,
@@ -188,12 +188,12 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider() {
+    public ProviderAtTime<Vertex> dropShadowOffsetProvider() {
         return DropShadowOffsetProvider;
     }
 
     @Override
-    public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>>
+    public void setDropShadowOffsetProvider(ProviderAtTime<Vertex>
                                                     dropShadowOffsetProvider)
             throws IllegalArgumentException {
         DropShadowOffsetProvider = dropShadowOffsetProvider;
@@ -211,12 +211,12 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public ProviderAtTime<Pair<Float, Float>> getRenderingLocationProvider() {
+    public ProviderAtTime<Vertex> getRenderingLocationProvider() {
         return RenderingLocationProvider;
     }
 
     @Override
-    public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>>
+    public void setRenderingLocationProvider(ProviderAtTime<Vertex>
                                                      renderingLocationProvider)
             throws IllegalArgumentException {
 

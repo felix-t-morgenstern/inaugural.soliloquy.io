@@ -5,7 +5,7 @@ import inaugural.soliloquy.graphics.renderables.factories.AntialiasedLineSegment
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
@@ -17,10 +17,8 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AntialiasedLineSegmentFactoryImplTests {
-    private final FakeProviderAtTime<Pair<Float, Float>> VERTEX_1_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Pair<Float, Float>> VERTEX_2_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_GRADIENT_PERCENT_PROVIDER =
@@ -59,7 +57,7 @@ class AntialiasedLineSegmentFactoryImplTests {
     void testMake() {
         AntialiasedLineSegmentRenderable antialiasedLineSegmentRenderable =
                 _antialiasedLineSegmentRenderableFactory
-                        .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                        .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                                 THICKNESS_PROVIDER, COLOR_PROVIDER,
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID);
@@ -82,37 +80,37 @@ class AntialiasedLineSegmentFactoryImplTests {
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(null, VERTEX_2_LOCATION_PROVIDER,
+                .make(null, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, null,
+                .make(VERTEX_1_PROVIDER, null,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         null, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, null,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         null,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         null, Z, UUID));
         assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
-                .make(VERTEX_1_LOCATION_PROVIDER, VERTEX_2_LOCATION_PROVIDER,
+                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, null));

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.renderables.TextJustification;
@@ -56,7 +56,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         Float dropShadowSize;
-        Pair<Float, Float> dropShadowOffset = null;
+        Vertex dropShadowOffset = null;
         Color dropShadowColor = null;
 
         dropShadowSize = textLineRenderable.dropShadowSizeProvider().provide(timestamp);
@@ -67,29 +67,29 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
             dropShadowOffset = textLineRenderable.dropShadowOffsetProvider().provide(timestamp);
             Check.ifNull(dropShadowOffset, "dropShadowOffset provided by textLineRenderable");
-            Check.ifNull(dropShadowOffset.getItem1(),
+            Check.ifNull(dropShadowOffset.x,
                     "dropShadowOffset's x offset provided by textLineRenderable");
-            Check.ifNull(dropShadowOffset.getItem2(),
+            Check.ifNull(dropShadowOffset.y,
                     "dropShadowOffset's y offset provided by textLineRenderable");
             dropShadowColor = textLineRenderable.dropShadowColorProvider().provide(timestamp);
             Check.ifNull(dropShadowColor, "dropShadowColor provided by textLineRenderable");
         }
 
-        Pair<Float, Float> renderingLocation =
+        Vertex renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
         float startX;
-        float startY = renderingLocation.getItem2();
+        float startY = renderingLocation.y;
 
         if (textLineRenderable.getJustification() == TextJustification.LEFT) {
-            startX = renderingLocation.getItem1();
+            startX = renderingLocation.x;
         }
         else {
             float lineLength = textLineLength(textLineRenderable, timestamp);
             if (textLineRenderable.getJustification() == TextJustification.CENTER) {
-                startX = renderingLocation.getItem1() - (lineLength / 2f);
+                startX = renderingLocation.x - (lineLength / 2f);
             }
             else {
-                startX = renderingLocation.getItem1() - lineLength;
+                startX = renderingLocation.x - lineLength;
             }
         }
         renderAtLocation(textLineRenderable, timestamp, lineHeight, startX, startY,
@@ -99,10 +99,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
     private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
                                   float lineHeight, float startX, float startY,
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
-                                  Pair<Float, Float> dropShadowOffset, Color dropShadowColor) {
+                                  Vertex dropShadowOffset, Color dropShadowColor) {
         if (dropShadowSize != null) {
-            float xOffset = dropShadowOffset.getItem1() / _getScreenWidthToHeightRatio.get();
-            float yOffset = dropShadowOffset.getItem2();
+            float xOffset = dropShadowOffset.x / _getScreenWidthToHeightRatio.get();
+            float yOffset = dropShadowOffset.y;
             float sizeAdjustment = dropShadowSize / lineHeight;
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
@@ -511,12 +511,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> getRenderingLocationProvider() {
+        public ProviderAtTime<Vertex> getRenderingLocationProvider() {
             return null;
         }
 
         @Override
-        public void setRenderingLocationProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setRenderingLocationProvider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }
@@ -590,12 +590,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         }
 
         @Override
-        public ProviderAtTime<Pair<Float, Float>> dropShadowOffsetProvider() {
+        public ProviderAtTime<Vertex> dropShadowOffsetProvider() {
             return null;
         }
 
         @Override
-        public void setDropShadowOffsetProvider(ProviderAtTime<Pair<Float, Float>> providerAtTime)
+        public void setDropShadowOffsetProvider(ProviderAtTime<Vertex> providerAtTime)
                 throws IllegalArgumentException {
 
         }

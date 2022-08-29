@@ -8,7 +8,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import soliloquy.specs.common.infrastructure.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
@@ -35,10 +35,9 @@ class TextLineRenderableFactoryImplTests {
     private final ArrayList<Integer> BOLD_INDICES = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Pair<Float, Float>> RENDERING_LOCATION_PROVIDER =
-            new FakeProviderAtTime<>();
+    private final FakeProviderAtTime<Vertex> RENDERING_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> DROP_SHADOW_SIZE_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Pair<Float, Float>> DROP_SHADOW_OFFSET_PROVIDER =
+    private final FakeProviderAtTime<Vertex> DROP_SHADOW_OFFSET_PROVIDER =
             new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> DROP_SHADOW_COLOR_PROVIDER =
             new FakeProviderAtTime<>();
@@ -71,7 +70,7 @@ class TextLineRenderableFactoryImplTests {
         TextLineRenderable textLineRenderable = _textLineRenderableFactory.make(FONT,
                 _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION, paddingBetweenGlyphs,
                 COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_LOCATION_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
                 DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, z, UUID,
                 UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
 
