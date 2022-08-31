@@ -4,17 +4,16 @@ import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
     @Override
@@ -24,12 +23,11 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                         UUID uuid,
-                                        Consumer<Renderable> updateZIndexInContainer,
-                                        Consumer<Renderable> removeFromContainer)
+                                        RenderableStack containingStack)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
     }
 
     @Override
@@ -41,14 +39,11 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider, int z,
-                                        UUID uuid,
-                                        Consumer<Renderable> updateZIndexInContainer,
-                                        Consumer<Renderable> removeFromContainer)
+                                        UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onPress, onRelease,
                 onMouseOver, onMouseLeave, colorShiftProviders, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                borderColorProvider, renderingAreaProvider, z, uuid, containingStack);
     }
 
     @Override

@@ -2,12 +2,11 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public abstract class AbstractRenderableWithMouseEvents
         extends AbstractRenderable
@@ -29,9 +28,8 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 Action<Long> onMouseLeave,
                                                 int z,
                                                 java.util.UUID uuid,
-                                                Consumer<Renderable> updateZIndexInContainer,
-                                                Consumer<Renderable> removeFromContainer) {
-        super(z, uuid, updateZIndexInContainer, removeFromContainer);
+                                                RenderableStack containingStack) {
+        super(z, uuid, containingStack);
         _capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? new HashMap<>() : onPress;
         ON_RELEASE = onRelease == null ? new HashMap<>() : onRelease;

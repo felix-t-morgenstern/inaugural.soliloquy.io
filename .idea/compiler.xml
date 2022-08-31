@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="inaugural.soliloquy.graphics" target="8" />
+      <module name="inaugural.soliloquy.graphics" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

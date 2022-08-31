@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggrega
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -82,14 +83,23 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        public void reportPause(long l) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public void reportUnpause(long l) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public Long pausedTimestamp() {
             return null;
         }
 
         @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
-                throws IllegalArgumentException {
-
+        public UUID uuid() {
+            return null;
         }
 
         @Override
@@ -132,33 +142,13 @@ public class FiniteAnimationRenderer
 
                 @Override
                 public String getInterfaceName() {
-                    return AnimationFrameSnippet.class.getCanonicalName();
+                    return null;
                 }
             };
         }
 
         @Override
         public AnimationFrameSnippet provide(long l) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public void reportPause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public void reportUnpause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Long pausedTimestamp() {
-            return null;
-        }
-
-        @Override
-        public UUID uuid() {
             return null;
         }
 
@@ -170,6 +160,11 @@ public class FiniteAnimationRenderer
         @Override
         public void setZ(int i) {
 
+        }
+
+        @Override
+        public RenderableStack containingStack() {
+            return null;
         }
 
         @Override
@@ -232,6 +227,11 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public void setOnMouseOver(Action<Long> action) {
+
+        }
+
+        @Override
         public String mouseOverActionId() {
             return null;
         }
@@ -243,22 +243,23 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public void setOnMouseLeave(Action<Long> action) {
+
+        }
+
+        @Override
         public String mouseLeaveActionId() {
             return null;
         }
 
         @Override
-        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
             return null;
         }
 
         @Override
-        public void setOnMouseOver(Action action) {
-
-        }
-
-        @Override
-        public void setOnMouseLeave(Action action) {
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
 
         }
 
@@ -282,6 +283,11 @@ public class FiniteAnimationRenderer
         public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
                 throws IllegalArgumentException {
 
+        }
+
+        @Override
+        public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+            return null;
         }
 
         @Override

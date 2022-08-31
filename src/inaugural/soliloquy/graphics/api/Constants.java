@@ -1,5 +1,8 @@
 package inaugural.soliloquy.graphics.api;
 
+import inaugural.soliloquy.graphics.rendering.factories.FloatBoxFactoryImpl;
+import soliloquy.specs.graphics.rendering.FloatBox;
+
 import java.awt.*;
 
 public class Constants {
@@ -28,4 +31,6 @@ public class Constants {
     public final static String STANDARD_HAND_CURSOR_ID = "standardHandCursor";
     public final static String STANDARD_H_RESIZE_CURSOR_ID = "standardHResizeCursor";
     public final static String STANDARD_V_RESIZE_CURSOR_ID = "standardVResizeCursor";
+
+    public final static FloatBox WHOLE_SCREEN = new FloatBoxFactoryImpl().make(0f, 0f, 1f, 1f);
 }

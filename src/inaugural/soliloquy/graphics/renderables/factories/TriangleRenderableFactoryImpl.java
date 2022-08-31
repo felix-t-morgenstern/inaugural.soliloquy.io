@@ -3,15 +3,14 @@ package inaugural.soliloquy.graphics.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
     @Override
@@ -30,14 +29,13 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    Action<Long> onMouseLeave,
                                    int z,
                                    UUID uuid,
-                                   Consumer<Renderable> updateZIndexInContainer,
-                                   Consumer<Renderable> removeFromContainer)
+                                   RenderableStack containingStack)
             throws IllegalArgumentException {
         return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider,
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, backgroundTextureTileWidth,
                 backgroundTextureTileHeight, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
     }
 
     @Override

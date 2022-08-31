@@ -71,7 +71,7 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, randomInt(),
-                        java.util.UUID.randomUUID(), r -> {}, r -> {});
+                        java.util.UUID.randomUUID(), RENDERING_STACK);
 
         FrameTimer.ShouldExecuteNextFrame = true;
 

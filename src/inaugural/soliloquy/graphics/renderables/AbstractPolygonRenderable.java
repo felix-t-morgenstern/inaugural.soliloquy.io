@@ -3,11 +3,10 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.PolygonRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
@@ -26,11 +25,9 @@ public abstract class AbstractPolygonRenderable
             Action<Long> onMouseLeave,
             int z,
             java.util.UUID uuid,
-            Consumer<Renderable> updateZIndexInContainer,
-            Consumer<Renderable> removeFromContainer
+            RenderableStack containingStack
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
         setBackgroundTextureIdProvider(backgroundTextureIdProvider);
         setBackgroundTextureTileWidth(backgroundTextureTileWidth);
         setBackgroundTextureTileHeight(backgroundTextureTileHeight);

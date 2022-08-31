@@ -6,6 +6,7 @@ import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
@@ -160,6 +161,11 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     @Override
     public void setZ(int i) {
 
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

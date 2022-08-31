@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.GlobalLoopingAnimationRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
@@ -26,12 +27,11 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                          colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
-                                                 Consumer<Renderable> updateZIndexInContainer,
-                                                 Consumer<Renderable> removeFromContainer)
+                                                 RenderableStack containingStack)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, colorShiftProviders,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+                renderingAreaProvider, z, uuid, containingStack);
     }
 
     @Override
@@ -46,13 +46,12 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                          colorShiftProviders,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
-                                                 Consumer<Renderable> updateZIndexInContainer,
-                                                 Consumer<Renderable> removeFromContainer)
+                                                 RenderableStack containingStack)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
                 onMouseLeave, colorShiftProviders, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
     }
 
     @Override

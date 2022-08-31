@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
 import java.awt.*;
@@ -372,6 +373,28 @@ public class AntialiasedLineSegmentRenderer
         }
 
         @Override
+        public ProviderAtTime<Vertex> getVertex1Provider() {
+            return null;
+        }
+
+        @Override
+        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Vertex> getVertex2Provider() {
+            return null;
+        }
+
+        @Override
+        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
         public ProviderAtTime<Float> getThicknessProvider() {
             return null;
         }
@@ -416,28 +439,6 @@ public class AntialiasedLineSegmentRenderer
         }
 
         @Override
-        public ProviderAtTime<Vertex> getVertex1Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getVertex2Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
         public int getZ() {
             return 0;
         }
@@ -445,6 +446,11 @@ public class AntialiasedLineSegmentRenderer
         @Override
         public void setZ(int i) {
 
+        }
+
+        @Override
+        public RenderableStack containingStack() {
+            return null;
         }
 
         @Override

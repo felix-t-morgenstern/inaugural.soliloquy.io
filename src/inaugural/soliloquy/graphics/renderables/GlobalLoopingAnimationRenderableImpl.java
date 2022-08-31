@@ -4,16 +4,15 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class GlobalLoopingAnimationRenderableImpl
         extends AbstractImageAssetRenderable
@@ -27,10 +26,9 @@ public class GlobalLoopingAnimationRenderableImpl
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                Consumer<Renderable> updateZIndexInContainer,
-                                                Consumer<Renderable> removeFromContainer) {
+                                                RenderableStack containingStack) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+                renderingAreaProvider, z, uuid, containingStack);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -45,11 +43,10 @@ public class GlobalLoopingAnimationRenderableImpl
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                Consumer<Renderable> updateZIndexInContainer,
-                                                Consumer<Renderable> removeFromContainer) {
+                                                RenderableStack containingStack) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 

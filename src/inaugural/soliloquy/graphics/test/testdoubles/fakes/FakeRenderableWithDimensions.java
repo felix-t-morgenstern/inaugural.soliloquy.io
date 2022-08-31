@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.UUID;
 
@@ -34,6 +35,11 @@ public class FakeRenderableWithDimensions implements RenderableWithDimensions {
     @Override
     public void setZ(int i) {
 
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

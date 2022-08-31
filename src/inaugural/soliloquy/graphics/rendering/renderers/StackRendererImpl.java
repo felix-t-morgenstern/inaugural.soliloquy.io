@@ -28,7 +28,8 @@ public class StackRendererImpl implements StackRenderer {
     public void render(long timestamp) {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Map<Integer, List<Renderable>> toRender = RENDERABLE_STACK.representation();
+        Map<Integer, List<Renderable>> toRender =
+                RENDERABLE_STACK.renderablesByZIndexRepresentation();
 
         List<Integer> keys = new ArrayList<>(toRender.keySet());
 

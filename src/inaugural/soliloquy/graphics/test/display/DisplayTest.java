@@ -33,6 +33,7 @@ public class DisplayTest {
     protected final static UUID UUID = java.util.UUID.randomUUID();
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1920x1080;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
+    protected final static FakeRenderableStack RENDERING_STACK = new FakeRenderableStack();
 
     protected static FakeFrameTimer FrameTimer;
     protected static MouseCursor MouseCursor = new FakeMouseCursor();

@@ -7,16 +7,15 @@ import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
@@ -31,12 +30,9 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid,
-                                       Consumer<Renderable> updateZIndexInContainer,
-                                       Consumer<Renderable> removeFromContainer) {
+                                       UUID uuid, RenderableStack containingStack) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                renderingDimensionsProvider, z, uuid, containingStack);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);
@@ -50,12 +46,10 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid,
-                                       Consumer<Renderable> updateZIndexInContainer,
-                                       Consumer<Renderable> removeFromContainer) {
+                                       UUID uuid, RenderableStack containingStack) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);

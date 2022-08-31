@@ -3,15 +3,14 @@ package inaugural.soliloquy.graphics.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class RectangleRenderableFactoryImpl implements RectangleRenderableFactory {
     @Override
@@ -29,14 +28,13 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                                     ProviderAtTime<FloatBox> renderingAreaProvider,
                                     int z,
                                     UUID uuid,
-                                    Consumer<Renderable> updateZIndexInContainer,
-                                    Consumer<Renderable> removeFromContainer)
+                                    RenderableStack containingStack)
             throws IllegalArgumentException {
         return new RectangleRenderableImpl(topLeftColorProvider, topRightColorProvider,
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
                 backgroundTextureTileWidth, backgroundTextureTileHeight, onPress, onRelease,
                 onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
     }
 
     @Override

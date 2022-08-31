@@ -94,8 +94,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                         MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
                 123,
                 java.util.UUID.randomUUID(),
-                renderable -> {},
-                renderable -> {},
+                RENDERING_STACK,
                 timestamp + MS_PADDING,
                 null,
                 null

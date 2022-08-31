@@ -4,6 +4,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.Map;
@@ -223,6 +224,11 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     @Override
     public void setZ(int i) {
 
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

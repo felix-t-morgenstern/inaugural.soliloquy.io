@@ -3,17 +3,16 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.Sprite;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class SpriteRenderableImpl extends AbstractImageAssetRenderable implements SpriteRenderable {
     private Sprite _sprite;
@@ -22,11 +21,9 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<Color> borderColorProvider,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                                Consumer<Renderable> removeFromContainer) {
+                                UUID uuid, RenderableStack containingStack) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                renderingDimensionsProvider, z, uuid, containingStack);
         setSprite(sprite);
     }
 
@@ -37,11 +34,10 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                                Consumer<Renderable> removeFromContainer) {
+                                UUID uuid, RenderableStack containingStack) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

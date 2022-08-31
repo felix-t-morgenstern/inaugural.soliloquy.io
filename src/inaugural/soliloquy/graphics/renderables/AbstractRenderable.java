@@ -2,24 +2,20 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 abstract class AbstractRenderable implements Renderable {
-    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER;
-    private final Consumer<Renderable> REMOVE_FROM_CONTAINER;
+    private RenderableStack _containingStack;
     private final UUID UUID;
 
     private int _z;
 
-    protected AbstractRenderable(int z, UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                                 Consumer<Renderable> removeFromContainer) {
+    protected AbstractRenderable(int z, UUID uuid, RenderableStack containingStack) {
         _z = z;
         UUID = Check.ifNull(uuid, "uuid");
-        UPDATE_Z_INDEX_IN_CONTAINER = Check.ifNull(updateZIndexInContainer,
-                "updateZIndexInContainer");
-        REMOVE_FROM_CONTAINER = Check.ifNull(removeFromContainer, "removeFromContainer");
+        _containingStack = Check.ifNull(containingStack, "containingStack");
     }
 
     @Override
@@ -30,7 +26,12 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void setZ(int z) {
         _z = z;
-        UPDATE_Z_INDEX_IN_CONTAINER.accept(this);
+        _containingStack.add(this);
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return _containingStack;
     }
 
     // NB: deleted SpriteRenderables should _NOT_ make other calls unsupported, unlike
@@ -38,7 +39,9 @@ abstract class AbstractRenderable implements Renderable {
     //     contains it, causing a breaking race condition.
     @Override
     public void delete() {
-        REMOVE_FROM_CONTAINER.accept(this);
+        RenderableStack stack = _containingStack;
+        _containingStack = null;
+        stack.remove(this);
     }
 
     @Override

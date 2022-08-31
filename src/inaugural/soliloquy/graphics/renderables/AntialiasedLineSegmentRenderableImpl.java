@@ -3,11 +3,10 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
-import java.util.function.Consumer;
 
 public class AntialiasedLineSegmentRenderableImpl
         extends AbstractLineSegmentRenderable
@@ -24,10 +23,9 @@ public class AntialiasedLineSegmentRenderableImpl
             ProviderAtTime<Float> lengthGradientPercentProvider,
             int z,
             java.util.UUID uuid,
-            Consumer<Renderable> updateZIndexInContainer,
-            Consumer<Renderable> removeFromContainer) {
+            RenderableStack containingStack) {
         super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z,
-                uuid, updateZIndexInContainer, removeFromContainer);
+                uuid, containingStack);
         setThicknessGradientPercentProvider(thicknessGradientPercentProvider);
         setLengthGradientPercentProvider(lengthGradientPercentProvider);
     }

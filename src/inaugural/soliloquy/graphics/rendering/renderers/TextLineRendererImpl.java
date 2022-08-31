@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -458,6 +459,31 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
         @Override
+        public UUID uuid() {
+            return null;
+        }
+
+        @Override
+        public int getZ() {
+            return 0;
+        }
+
+        @Override
+        public void setZ(int i) {
+
+        }
+
+        @Override
+        public RenderableStack containingStack() {
+            return null;
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
         public ProviderAtTime<Float> getBorderThicknessProvider() {
             return null;
         }
@@ -476,16 +502,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         @Override
         public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
                 throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
-        }
-
-        @Override
-        public void delete() {
 
         }
 
@@ -529,16 +545,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         @Override
         public void setLineHeightProvider(ProviderAtTime<Float> providerAtTime)
                 throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
 
         }
 

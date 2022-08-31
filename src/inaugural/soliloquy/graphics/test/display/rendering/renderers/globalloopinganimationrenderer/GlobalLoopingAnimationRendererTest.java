@@ -105,7 +105,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
                                 MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
-                        0, java.util.UUID.randomUUID(), renderable -> {}, renderable -> {});
+                        0, java.util.UUID.randomUUID(), RENDERING_STACK);
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 

@@ -4,16 +4,18 @@ import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableI
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -22,79 +24,60 @@ class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
-    private final int Z = 789;
-    private final Consumer<Renderable> REMOVE_FROM_CONTAINER = renderable ->
-            _renderableRemovedFromContainer = renderable;
-    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER = renderable ->
-            _renderableUpdatedInContainer = renderable;
-
-    private static Renderable _renderableUpdatedInContainer;
-    private static Renderable _renderableRemovedFromContainer;
+    private final int Z = randomInt();
 
     private static final UUID UUID = java.util.UUID.randomUUID();
+
+    @Mock private RenderableStack _mockContainingStack;
 
     private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
 
     @BeforeEach
     void setUp() {
+        _mockContainingStack = mock(RenderableStack.class);
+
         _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER);
+                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 null, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, null, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER,
-                REMOVE_FROM_CONTAINER
+                STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER
+                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, null,
-                REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, null
+                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, null
         ));
     }
 
@@ -203,14 +186,14 @@ class RasterizedLineSegmentRenderableImplTests {
         _rasterizedLineSegmentRenderable.setZ(newZ);
 
         assertEquals(newZ, _rasterizedLineSegmentRenderable.getZ());
-        assertSame(_rasterizedLineSegmentRenderable, _renderableUpdatedInContainer);
+        verify(_mockContainingStack, times(1)).add(_rasterizedLineSegmentRenderable);
     }
 
     @Test
     void testDelete() {
         _rasterizedLineSegmentRenderable.delete();
 
-        assertSame(_rasterizedLineSegmentRenderable, _renderableRemovedFromContainer);
+        verify(_mockContainingStack, times(1)).remove(_rasterizedLineSegmentRenderable);
     }
 
     @Test

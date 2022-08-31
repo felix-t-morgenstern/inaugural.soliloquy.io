@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
@@ -22,12 +23,10 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  ProviderAtTime<Color> borderColorProvider,
                                  List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                 UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                                 Consumer<Renderable> removeFromContainer)
+                                 UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                colorShiftProviders, renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                colorShiftProviders, renderingDimensionsProvider, z, uuid, containingStack);
     }
 
     @Override
@@ -38,13 +37,11 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                  List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                 UUID uuid, Consumer<Renderable> updateZIndexInContainer,
-                                 Consumer<Renderable> removeFromContainer)
+                                 UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
-                renderingDimensionsProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                renderingDimensionsProvider, z, uuid, containingStack);
     }
 
     @Override

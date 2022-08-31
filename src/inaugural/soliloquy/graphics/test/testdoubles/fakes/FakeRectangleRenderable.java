@@ -4,6 +4,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.UUID;
@@ -208,6 +209,11 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     @Override
     public void setZ(int i) {
 
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

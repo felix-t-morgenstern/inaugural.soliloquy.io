@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggrega
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
@@ -68,28 +69,6 @@ public class GlobalLoopingAnimationRenderer
     private final static GlobalLoopingAnimationRenderable ARCHETYPE =
             new GlobalLoopingAnimationRenderable() {
                 @Override
-                public GlobalLoopingAnimation getGlobalLoopingAnimation() {
-                    return null;
-                }
-
-                @Override
-                public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
                 public UUID uuid() {
                     return null;
                 }
@@ -102,6 +81,11 @@ public class GlobalLoopingAnimationRenderer
                 @Override
                 public void setZ(int i) {
 
+                }
+
+                @Override
+                public RenderableStack containingStack() {
+                    return null;
                 }
 
                 @Override
@@ -165,6 +149,11 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
+                public void setOnMouseOver(Action<Long> action) {
+
+                }
+
+                @Override
                 public String mouseOverActionId() {
                     return null;
                 }
@@ -176,22 +165,23 @@ public class GlobalLoopingAnimationRenderer
                 }
 
                 @Override
+                public void setOnMouseLeave(Action<Long> action) {
+
+                }
+
+                @Override
                 public String mouseLeaveActionId() {
                     return null;
                 }
 
                 @Override
-                public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+                public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
                     return null;
                 }
 
                 @Override
-                public void setOnMouseOver(Action action) {
-
-                }
-
-                @Override
-                public void setOnMouseLeave(Action action) {
+                public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                        throws IllegalArgumentException {
 
                 }
 
@@ -213,6 +203,22 @@ public class GlobalLoopingAnimationRenderer
 
                 @Override
                 public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                        throws IllegalArgumentException {
+
+                }
+
+                @Override
+                public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+                    return null;
+                }
+
+                @Override
+                public GlobalLoopingAnimation getGlobalLoopingAnimation() {
+                    return null;
+                }
+
+                @Override
+                public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation)
                         throws IllegalArgumentException {
 
                 }

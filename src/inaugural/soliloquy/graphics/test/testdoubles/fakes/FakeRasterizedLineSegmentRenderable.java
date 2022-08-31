@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.UUID;
@@ -106,6 +107,11 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     @Override
     public void setZ(int i) {
 
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

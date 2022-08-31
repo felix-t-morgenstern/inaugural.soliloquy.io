@@ -5,16 +5,15 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 // NB: This class contains a lot of redundant code with AbstractFinitePausableAtTime, since Java
 //     does not support multiple inheritance, and it is less hasslesome to reproduce the logic of
@@ -33,12 +32,11 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          UUID uuid,
-                                         Consumer<Renderable> updateZIndexInContainer,
-                                         Consumer<Renderable> removeFromContainer,
+                                         RenderableStack containingStack,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+                renderingAreaProvider, z, uuid, containingStack);
         ANIMATION = Check.ifNull(animation, "animation");
         _startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
@@ -58,13 +56,12 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
-                                         Consumer<Renderable> updateZIndexInContainer,
-                                         Consumer<Renderable> removeFromContainer,
+                                         RenderableStack containingStack,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
         ANIMATION = Check.ifNull(animation, "animation");
         _startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);

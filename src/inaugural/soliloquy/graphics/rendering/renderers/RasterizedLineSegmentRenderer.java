@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -101,7 +102,6 @@ public class RasterizedLineSegmentRenderer
 
     private static final RasterizedLineSegmentRenderable ARCHETYPE =
             new RasterizedLineSegmentRenderable() {
-
                 @Override
                 public UUID uuid() {
                     return null;
@@ -118,6 +118,11 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
+                public RenderableStack containingStack() {
+                    return null;
+                }
+
+                @Override
                 public void delete() {
 
                 }
@@ -128,8 +133,7 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public void setVertex1Provider(
-                        ProviderAtTime<Vertex> providerAtTime)
+                public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
                         throws IllegalArgumentException {
 
                 }
@@ -140,8 +144,7 @@ public class RasterizedLineSegmentRenderer
                 }
 
                 @Override
-                public void setVertex2Provider(
-                        ProviderAtTime<Vertex> providerAtTime)
+                public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
                         throws IllegalArgumentException {
 
                 }

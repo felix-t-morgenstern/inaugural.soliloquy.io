@@ -5,9 +5,11 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -109,6 +111,153 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
     private static final RectangleRenderable ARCHETYPE = new RectangleRenderable() {
         @Override
+        public UUID uuid() {
+            return null;
+        }
+
+        @Override
+        public int getZ() {
+            return 0;
+        }
+
+        @Override
+        public void setZ(int i) {
+
+        }
+
+        @Override
+        public RenderableStack containingStack() {
+            return null;
+        }
+
+        @Override
+        public void delete() {
+
+        }
+
+        @Override
+        public boolean getCapturesMouseEvents() {
+            return false;
+        }
+
+        @Override
+        public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
+            return false;
+        }
+
+        @Override
+        public void press(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
+
+        }
+
+        @Override
+        public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public Map<Integer, String> pressActionIds() {
+            return null;
+        }
+
+        @Override
+        public void release(int i, long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
+
+        }
+
+        @Override
+        public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public Map<Integer, String> releaseActionIds() {
+            return null;
+        }
+
+        @Override
+        public void mouseOver(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
+
+        }
+
+        @Override
+        public void setOnMouseOver(Action<Long> action) {
+
+        }
+
+        @Override
+        public String mouseOverActionId() {
+            return null;
+        }
+
+        @Override
+        public void mouseLeave(long l)
+                throws UnsupportedOperationException, IllegalArgumentException {
+
+        }
+
+        @Override
+        public void setOnMouseLeave(Action<Long> action) {
+
+        }
+
+        @Override
+        public String mouseLeaveActionId() {
+            return null;
+        }
+
+        @Override
+        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+            return null;
+        }
+
+        @Override
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
+            return null;
+        }
+
+        @Override
+        public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public float getBackgroundTextureTileWidth() {
+            return 0;
+        }
+
+        @Override
+        public void setBackgroundTextureTileWidth(float v) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public float getBackgroundTextureTileHeight() {
+            return 0;
+        }
+
+        @Override
+        public void setBackgroundTextureTileHeight(float v) throws IllegalArgumentException {
+
+        }
+
+        @Override
         public ProviderAtTime<Color> getTopLeftColorProvider() {
             return null;
         }
@@ -150,148 +299,6 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         public void setBottomLeftColorProvider(ProviderAtTime<Color> providerAtTime)
                 throws IllegalArgumentException {
 
-        }
-
-        @Override
-        public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public float getBackgroundTextureTileWidth() {
-            return 0;
-        }
-
-        @Override
-        public void setBackgroundTextureTileWidth(float v) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public float getBackgroundTextureTileHeight() {
-            return 0;
-        }
-
-        @Override
-        public void setBackgroundTextureTileHeight(float v) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public boolean getCapturesMouseEvents() {
-            return false;
-        }
-
-        @Override
-        public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-            return false;
-        }
-
-        @Override
-        public void press(int i, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public java.util.Map<Integer, String> pressActionIds() {
-            return null;
-        }
-
-        @Override
-        public void release(int i, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public java.util.Map<Integer, String> releaseActionIds() {
-            return null;
-        }
-
-        @Override
-        public void mouseOver(long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public String mouseOverActionId() {
-            return null;
-        }
-
-        @Override
-        public void mouseLeave(long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public String mouseLeaveActionId() {
-            return null;
-        }
-
-        @Override
-        public void setOnMouseOver(Action action) {
-
-        }
-
-        @Override
-        public void setOnMouseLeave(Action action) {
-
-        }
-
-        @Override
-        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-            return null;
-        }
-
-        @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
-
-        }
-
-        @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
         }
 
         @Override

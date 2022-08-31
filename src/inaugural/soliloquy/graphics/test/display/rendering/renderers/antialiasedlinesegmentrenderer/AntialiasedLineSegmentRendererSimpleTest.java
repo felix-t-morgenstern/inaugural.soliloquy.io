@@ -55,8 +55,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new FakeStaticProvider<>(0.01f),
                 randomInt(),
                 java.util.UUID.randomUUID(),
-                r -> {},
-                r -> {}
+                RENDERING_STACK
         );
 
         AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
@@ -68,8 +67,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new FakeStaticProvider<>(0.05f),
                 randomInt(),
                 java.util.UUID.randomUUID(),
-                r -> {},
-                r -> {}
+                RENDERING_STACK
         );
 
         FrameTimer.ShouldExecuteNextFrame = true;

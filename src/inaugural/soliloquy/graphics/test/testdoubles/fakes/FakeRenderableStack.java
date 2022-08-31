@@ -1,12 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FakeRenderableStack implements RenderableStack {
     public Map<Integer, List<Renderable>> RENDERABLES = new HashMap<>();
@@ -29,12 +27,47 @@ public class FakeRenderableStack implements RenderableStack {
     }
 
     @Override
-    public Map<Integer, List<Renderable>> representation() {
+    public void remove(Renderable renderable) throws IllegalArgumentException {
+
+    }
+
+    @Override
+    public FloatBox renderingDimensions() {
+        return null;
+    }
+
+    @Override
+    public Map<Integer, List<Renderable>> renderablesByZIndexRepresentation() {
         return new HashMap<>(RENDERABLES);
     }
 
     @Override
     public String getInterfaceName() {
+        return null;
+    }
+
+    @Override
+    public int getZ() {
+        return 0;
+    }
+
+    @Override
+    public void setZ(int i) {
+
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
+    }
+
+    @Override
+    public void delete() {
+
+    }
+
+    @Override
+    public UUID uuid() {
         return null;
     }
 }

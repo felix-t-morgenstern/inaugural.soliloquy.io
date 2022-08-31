@@ -5,6 +5,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -138,6 +139,11 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
     }
 
     private static class TriangleRenderableArchetype implements TriangleRenderable {
+        @Override
+        public String getInterfaceName() {
+            return TriangleRenderable.class.getCanonicalName();
+        }
+
         @Override
         public ProviderAtTime<Vertex> getVertex1Provider() {
             return null;
@@ -326,6 +332,11 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         }
 
         @Override
+        public RenderableStack containingStack() {
+            return null;
+        }
+
+        @Override
         public void delete() {
 
         }
@@ -333,11 +344,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         @Override
         public UUID uuid() {
             return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return TriangleRenderable.class.getCanonicalName();
         }
     }
 }

@@ -6,6 +6,7 @@ import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -141,6 +142,11 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     @Override
     public void setZ(int z) {
         Z = z;
+    }
+
+    @Override
+    public RenderableStack containingStack() {
+        return null;
     }
 
     @Override

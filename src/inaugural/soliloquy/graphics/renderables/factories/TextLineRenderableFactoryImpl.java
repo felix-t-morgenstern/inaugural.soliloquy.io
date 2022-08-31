@@ -3,17 +3,16 @@ package inaugural.soliloquy.graphics.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
     @Override
@@ -29,14 +28,13 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                    ProviderAtTime<Color> dropShadowColorProvider,
                                    int z, UUID uuid,
-                                   Consumer<Renderable> updateZIndexInContainer,
-                                   Consumer<Renderable> removeFromContainer)
+                                   RenderableStack containingStack)
             throws IllegalArgumentException {
         return new TextLineRenderableImpl(font, lineTextProvider, lineHeightProvider,
                 justification, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
                 boldIndices, borderThicknessProvider, borderColorProvider,
                 renderingLocationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
-                dropShadowColorProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+                dropShadowColorProvider, z, uuid, containingStack);
     }
 
     @Override

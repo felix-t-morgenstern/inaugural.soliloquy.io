@@ -6,16 +6,15 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseEvents
@@ -32,11 +31,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           Consumer<Renderable> updateZIndexInContainer,
-                                           Consumer<Renderable> removeFromContainer) {
+                                           RenderableStack containingStack) {
         this(false, null, null, null, null, colorShiftProviders, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, updateZIndexInContainer,
-                removeFromContainer);
+                borderColorProvider, renderingAreaProvider, z, uuid, containingStack);
     }
 
     protected AbstractImageAssetRenderable(Map<Integer, Action<Long>> onPress,
@@ -49,11 +46,10 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           Consumer<Renderable> updateZIndexInContainer,
-                                           Consumer<Renderable> removeFromContainer) {
+                                           RenderableStack containingStack) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave,
                 colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, updateZIndexInContainer, removeFromContainer);
+                renderingAreaProvider, z, uuid, containingStack);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
@@ -67,10 +63,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          int z,
                                          UUID uuid,
-                                         Consumer<Renderable> updateZIndexInContainer,
-                                         Consumer<Renderable> removeFromContainer) {
+                                         RenderableStack containingStack) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                containingStack);
         COLOR_SHIFT_PROVIDERS = Check.ifNull(colorShiftProviders, "colorShiftProviders");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);

@@ -3,15 +3,14 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class TextLineRenderableImpl extends AbstractRenderable implements TextLineRenderable {
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES;
@@ -43,9 +42,8 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
                                   int z, UUID uuid,
-                                  Consumer<Renderable> updateZIndexInContainer,
-                                  Consumer<Renderable> removeFromContainer) {
-        super(z, uuid, updateZIndexInContainer, removeFromContainer);
+                                  RenderableStack containingStack) {
+        super(z, uuid, containingStack);
         setFont(font);
         this.setLineTextProvider(lineTextProvider);
         setJustification(justification);

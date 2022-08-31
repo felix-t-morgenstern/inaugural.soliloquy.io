@@ -6,20 +6,20 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
-import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class TriangleRenderableImplTests {
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -36,25 +36,18 @@ class TriangleRenderableImplTests {
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_3_PROVIDER = new FakeProviderAtTime<>();
-    private final int Z = 123;
-    private final Consumer<Renderable>
-            TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER =
-            renderable -> _triangleRenderableUpdateZIndexInContainerInput =
-                    renderable;
-    private final Consumer<Renderable>
-            TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER =
-            renderable -> _triangleRenderableRemoveFromContainerInput = renderable;
-
-    private static Renderable _triangleRenderableRemoveFromContainerInput;
-    private static Renderable _triangleRenderableUpdateZIndexInContainerInput;
+    private final int Z = randomInt();
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
+    @Mock private RenderableStack _mockContainingStack;
 
     private TriangleRenderable _triangleRenderable;
     private TriangleRenderable _triangleRenderableNotSupportingMouseEvents;
 
     @BeforeEach
     void setUp() {
+        _mockContainingStack = mock(RenderableStack.class);
+
         _triangleRenderable = new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
@@ -62,9 +55,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         );
         _triangleRenderable.setCapturesMouseEvents(true);
 
@@ -75,9 +66,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         );
         _triangleRenderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
     }
@@ -91,9 +80,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, null,
@@ -102,9 +89,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -113,9 +98,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -124,9 +107,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -135,9 +116,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -146,9 +125,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -157,9 +134,7 @@ class TriangleRenderableImplTests {
                 null,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -168,9 +143,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -179,9 +152,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, UUID, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -190,9 +161,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, null,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
+                Z, null, _mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -201,20 +170,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                null,
-                TRIANGLE_RENDERABLE_REMOVE_FROM_CONTAINER
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID,
-                TRIANGLE_RENDERABLE_UPDATE_Z_INDEX_IN_CONTAINER,
-                null
+                Z, UUID, null
         ));
     }
 
@@ -579,16 +535,14 @@ class TriangleRenderableImplTests {
 
     @Test
     void testGetAndSetZ() {
-        assertSame(Z, _triangleRenderable.getZ());
+        assertEquals(Z, _triangleRenderable.getZ());
 
         int newZ = 456;
 
         _triangleRenderable.setZ(newZ);
 
         assertEquals(newZ, _triangleRenderable.getZ());
-
-        assertSame(_triangleRenderable,
-                _triangleRenderableUpdateZIndexInContainerInput);
+        verify(_mockContainingStack, times(1)).add(_triangleRenderable);
     }
 
     @Test
@@ -624,8 +578,7 @@ class TriangleRenderableImplTests {
     @Test
     void testDelete() {
         _triangleRenderable.delete();
-        assertSame(_triangleRenderable,
-                _triangleRenderableRemoveFromContainerInput);
+        verify(_mockContainingStack, times(1)).remove(_triangleRenderable);
     }
 
     @Test

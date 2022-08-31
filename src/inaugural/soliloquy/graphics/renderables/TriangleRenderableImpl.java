@@ -3,13 +3,12 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -36,12 +35,9 @@ public class TriangleRenderableImpl
                                   Action<Long> onMouseLeave,
                                   int z,
                                   java.util.UUID uuid,
-                                  Consumer<Renderable> updateZIndexInContainer,
-                                  Consumer<Renderable> removeFromContainer) {
+                                  RenderableStack containingStack) {
         super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
-                onPress, onRelease, onMouseOver, onMouseLeave,
-                z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
         setVertex2Provider(vertex2Provider);

@@ -3,14 +3,13 @@ package inaugural.soliloquy.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class RectangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -35,12 +34,9 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    int z,
                                    UUID uuid,
-                                   Consumer<Renderable> updateZIndexInContainer,
-                                   Consumer<Renderable> removeFromContainer) {
+                                   RenderableStack containingStack) {
         super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
-                onPress, onRelease, onMouseOver, onMouseLeave,
-                z, uuid,
-                updateZIndexInContainer, removeFromContainer);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);

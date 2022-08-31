@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggrega
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
@@ -126,49 +127,6 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
 
     private final static SpriteRenderable ARCHETYPE = new SpriteRenderable() {
         @Override
-        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-            return null;
-        }
-
-        @Override
-        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Sprite getSprite() {
-            return null;
-        }
-
-        @Override
-        public void setSprite(Sprite sprite) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getBorderThicknessProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getBorderColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
         public UUID uuid() {
             return null;
         }
@@ -181,6 +139,11 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         @Override
         public void setZ(int i) {
 
+        }
+
+        @Override
+        public RenderableStack containingStack() {
+            return null;
         }
 
         @Override
@@ -243,6 +206,11 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
+        public void setOnMouseOver(Action<Long> action) {
+
+        }
+
+        @Override
         public String mouseOverActionId() {
             return null;
         }
@@ -254,8 +222,46 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
+        public void setOnMouseLeave(Action<Long> action) {
+
+        }
+
+        @Override
         public String mouseLeaveActionId() {
             return null;
+        }
+
+        @Override
+        public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+            return null;
+        }
+
+        @Override
+        public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Float> getBorderThicknessProvider() {
+            return null;
+        }
+
+        @Override
+        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
+                throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public ProviderAtTime<Color> getBorderColorProvider() {
+            return null;
+        }
+
+        @Override
+        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
+                throws IllegalArgumentException {
+
         }
 
         @Override
@@ -264,12 +270,12 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
         }
 
         @Override
-        public void setOnMouseOver(Action action) {
-
+        public Sprite getSprite() {
+            return null;
         }
 
         @Override
-        public void setOnMouseLeave(Action action) {
+        public void setSprite(Sprite sprite) throws IllegalArgumentException {
 
         }
 

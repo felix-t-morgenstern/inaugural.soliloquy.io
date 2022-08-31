@@ -12,6 +12,7 @@ import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.assertEqualsAndNotSame;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class TextLineRenderableImplTests {
     private final FakeFont FONT = new FakeFont();
@@ -41,17 +43,11 @@ class TextLineRenderableImplTests {
             new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> DROP_SHADOW_COLOR_PROVIDER =
             new FakeProviderAtTime<>();
-    private final int Z = 123;
-    private final Consumer<Renderable> REMOVE_FROM_CONTAINER =
-            renderable -> _removeFromContainerInput = renderable;
-    private final Consumer<Renderable> UPDATE_Z_INDEX_IN_CONTAINER =
-            renderable -> _updateZIndexInContainerInput = renderable;
-
-    private static Renderable _updateZIndexInContainerInput;
-    private static Renderable _removeFromContainerInput;
+    private final int Z = randomInt();
 
     @Mock private ProviderAtTime<String> _mockLineTextProvider;
     @Mock private ProviderAtTime<String> _mockLineTextProvider2;
+    @Mock private RenderableStack _mockContainingStack;
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private TextLineRenderable _textLineRenderable;
@@ -60,13 +56,14 @@ class TextLineRenderableImplTests {
     void setUp() {
         //noinspection unchecked
         _mockLineTextProvider = mock(ProviderAtTime.class);
+        _mockContainingStack = mock(RenderableStack.class);
 
         _textLineRenderable = new TextLineRenderableImpl(FONT, _mockLineTextProvider,
                 LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
                 COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
                 DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
-                UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
+                _mockContainingStack);
     }
 
     @Test
@@ -76,104 +73,98 @@ class TextLineRenderableImplTests {
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, null, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, null, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, null,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, TextJustification.UNKNOWN,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, null, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, null,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, null, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         // NB: These should not throw any exceptions
         new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 null, null, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
+                Z, UUID, _mockContainingStack);
         new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 null, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER);
+                Z, UUID, _mockContainingStack);
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 null, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, null, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, null,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, UUID, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, null, UPDATE_Z_INDEX_IN_CONTAINER, REMOVE_FROM_CONTAINER));
+                Z, null, _mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, null, REMOVE_FROM_CONTAINER));
-        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, _mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
-                PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, UPDATE_Z_INDEX_IN_CONTAINER, null));
+                Z, UUID, null));
     }
 
     @Test
@@ -379,7 +370,7 @@ class TextLineRenderableImplTests {
         _textLineRenderable.setZ(newZ);
 
         assertEquals(newZ, _textLineRenderable.getZ());
-        assertSame(_textLineRenderable, _updateZIndexInContainerInput);
+        verify(_mockContainingStack, times(1)).add(_textLineRenderable);
     }
 
     @Test
@@ -391,6 +382,6 @@ class TextLineRenderableImplTests {
     void testDelete() {
         _textLineRenderable.delete();
 
-        assertSame(_textLineRenderable, _removeFromContainerInput);
+        verify(_mockContainingStack, times(1)).remove(_textLineRenderable);
     }
 }
