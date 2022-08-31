@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 import static org.mockito.ArgumentMatchers.anyFloat;
@@ -206,5 +207,11 @@ class MouseEventHandlerImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _mouseEventHandler.actOnMouseLocationAndEvents(0, 0, null,
                         MouseEventHandler.EventType.PRESS));
+    }
+
+    @Test
+    void testGetInterfaceName() {
+        assertEquals(MouseEventHandler.class.getCanonicalName(),
+                _mouseEventHandler.getInterfaceName());
     }
 }

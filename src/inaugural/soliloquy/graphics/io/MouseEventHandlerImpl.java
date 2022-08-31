@@ -70,6 +70,6 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
     // TODO: Test and implement this
     @Override
     public String getInterfaceName() {
-        return null;
+        return MouseEventHandler.class.getCanonicalName();
     }
 }
