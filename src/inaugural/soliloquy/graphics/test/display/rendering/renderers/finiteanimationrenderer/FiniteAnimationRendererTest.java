@@ -95,6 +95,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 123,
                 java.util.UUID.randomUUID(),
                 RENDERING_STACK,
+                RENDERING_BOUNDARIES,
                 timestamp + MS_PADDING,
                 null,
                 null

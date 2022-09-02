@@ -7,6 +7,8 @@ import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static inaugural.soliloquy.tools.random.Random.randomIntWithInclusiveFloor;
+
 public class FakeAnimation implements Animation {
     public String Id;
     public int MsDuration;
@@ -43,6 +45,11 @@ public class FakeAnimation implements Animation {
     public FakeAnimation(String id, boolean supportsMouseEventCapturing) {
         Id = id;
         SupportsMouseEventCapturing = supportsMouseEventCapturing;
+    }
+
+    public FakeAnimation(FakeAnimationFrameSnippet animationFrameSnippet) {
+        MsDuration = randomIntWithInclusiveFloor(1);
+        AnimationFrameSnippet = animationFrameSnippet;
     }
 
     @Override

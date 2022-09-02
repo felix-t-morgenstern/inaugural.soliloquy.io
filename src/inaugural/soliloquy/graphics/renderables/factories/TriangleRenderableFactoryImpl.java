@@ -1,18 +1,27 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
+import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
 
 public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
+    private final RenderingBoundaries RENDERING_BOUNDARIES;
+
+    @SuppressWarnings("ConstantConditions")
+    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+        RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+    }
+
     @Override
     public TriangleRenderable make(ProviderAtTime<Vertex> vertex1Provider,
                                    ProviderAtTime<Color> vertex1ColorProvider,
@@ -35,7 +44,7 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, backgroundTextureTileWidth,
                 backgroundTextureTileHeight, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                containingStack);
+                containingStack, RENDERING_BOUNDARIES);
     }
 
     @Override

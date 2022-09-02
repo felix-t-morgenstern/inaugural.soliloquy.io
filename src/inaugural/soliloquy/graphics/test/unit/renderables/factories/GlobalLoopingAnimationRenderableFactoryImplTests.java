@@ -15,6 +15,7 @@ import soliloquy.specs.graphics.renderables.factories.GlobalLoopingAnimationRend
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,15 +44,23 @@ class GlobalLoopingAnimationRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private GlobalLoopingAnimationRenderableFactory _globalLoopingAnimationRenderableFactory;
 
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
         _globalLoopingAnimationRenderableFactory =
-                new GlobalLoopingAnimationRenderableFactoryImpl();
+                new GlobalLoopingAnimationRenderableFactoryImpl(_mockRenderingBoundaries);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null));
     }
 
     @Test

@@ -15,15 +15,18 @@ import soliloquy.specs.graphics.renderables.factories.ImageAssetSetRenderableFac
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ImageAssetSetRenderableFactoryImplTests {
     private final ImageAssetSet IMAGE_ASSET_SET_SUPPORTS_MOUSE_EVENTS =
@@ -44,14 +47,24 @@ class ImageAssetSetRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private ImageAssetSetRenderableFactory _imageAssetSetRenderableFactory;
 
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        _imageAssetSetRenderableFactory = new ImageAssetSetRenderableFactoryImpl();
+        _imageAssetSetRenderableFactory =
+                new ImageAssetSetRenderableFactoryImpl(_mockRenderingBoundaries);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ImageAssetSetRenderableFactoryImpl(null));
     }
 
     @Test

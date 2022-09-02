@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class DisplayTest {
@@ -53,7 +54,7 @@ public class DisplayTest {
 
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 

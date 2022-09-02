@@ -6,6 +6,7 @@ import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.Map;
@@ -34,9 +35,11 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    int z,
                                    UUID uuid,
-                                   RenderableStack containingStack) {
+                                   RenderableStack containingStack,
+                                   RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
+                renderingBoundaries);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);
@@ -104,7 +107,32 @@ public class RectangleRenderableImpl
     public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        return _capturesMouseEvents;
+
+        if (x < 0f || x > 1f || y < 0f || y > 1f) {
+            throw new IllegalArgumentException(
+                    "RectangleRenderableImpl.capturesMouseEventAtPoint: cannot check for mouse " +
+                            "event capture at point beyond screen (" +
+                            x + "," + y + ")");
+        }
+
+        if (!_capturesMouseEvents) {
+            return false;
+        }
+
+        FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
+        if (x < renderingBoundaries.leftX() || x > renderingBoundaries.rightX() ||
+                y < renderingBoundaries.topY() || y > renderingBoundaries.bottomY()) {
+            return false;
+        }
+
+        FloatBox renderingDimensions = _renderingDimensionsProvider.provide(timestamp);
+        //noinspection RedundantIfStatement
+        if (x < renderingDimensions.leftX() || x > renderingDimensions.rightX() ||
+                y < renderingDimensions.topY() || y > renderingDimensions.bottomY()) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

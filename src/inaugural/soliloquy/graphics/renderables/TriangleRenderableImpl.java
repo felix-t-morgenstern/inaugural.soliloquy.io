@@ -6,6 +6,7 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.Map;
@@ -35,9 +36,11 @@ public class TriangleRenderableImpl
                                   Action<Long> onMouseLeave,
                                   int z,
                                   java.util.UUID uuid,
-                                  RenderableStack containingStack) {
+                                  RenderableStack containingStack,
+                                  RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
+                renderingBoundaries);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
         setVertex2Provider(vertex2Provider);

@@ -12,11 +12,13 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,6 +42,7 @@ class TriangleRenderableImplTests {
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private TriangleRenderable _triangleRenderable;
     private TriangleRenderable _triangleRenderableNotSupportingMouseEvents;
@@ -47,6 +50,8 @@ class TriangleRenderableImplTests {
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         _triangleRenderable = new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -55,7 +60,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         );
         _triangleRenderable.setCapturesMouseEvents(true);
 
@@ -66,7 +71,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         );
         _triangleRenderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
     }
@@ -80,7 +85,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, null,
@@ -89,7 +94,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -98,7 +103,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -107,7 +112,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -116,7 +121,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -125,7 +130,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -134,7 +139,7 @@ class TriangleRenderableImplTests {
                 null,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -143,7 +148,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -152,7 +157,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, _mockContainingStack
+                Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -161,7 +166,7 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, null, _mockContainingStack
+                Z, null, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -170,7 +175,16 @@ class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                Z, UUID, null
+                Z, UUID, null, _mockRenderingBoundaries
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
+                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
+                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
+                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER,
+                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                Z, UUID, _mockContainingStack, null
         ));
     }
 

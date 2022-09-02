@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.List;
@@ -31,9 +32,11 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           RenderableStack containingStack) {
+                                           RenderableStack containingStack,
+                                           RenderingBoundaries renderingBoundaries) {
         this(false, null, null, null, null, colorShiftProviders, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, containingStack);
+                borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
+                renderingBoundaries);
     }
 
     protected AbstractImageAssetRenderable(Map<Integer, Action<Long>> onPress,
@@ -46,10 +49,11 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           RenderableStack containingStack) {
+                                           RenderableStack containingStack,
+                                           RenderingBoundaries renderingBoundaries) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave,
                 colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack);
+                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
@@ -63,9 +67,10 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          int z,
                                          UUID uuid,
-                                         RenderableStack containingStack) {
+                                         RenderableStack containingStack,
+                                         RenderingBoundaries renderingBoundaries) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                containingStack);
+                containingStack, renderingBoundaries);
         COLOR_SHIFT_PROVIDERS = Check.ifNull(colorShiftProviders, "colorShiftProviders");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);
@@ -121,6 +126,13 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         Check.throwOnLtValue(y, 0f, "y");
         Check.throwOnGtValue(x, 1f, "x");
         Check.throwOnGtValue(y, 1f, "y");
+
+        FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
+        if (x < renderingBoundaries.leftX() || x > renderingBoundaries.rightX() ||
+                y < renderingBoundaries.topY() || y > renderingBoundaries.bottomY()) {
+            return false;
+        }
+
         FloatBox renderingArea = _renderingAreaProvider.provide(timestamp);
         if (x < renderingArea.leftX()) {
             throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: x (" + x

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 class TextLineRendererJustificationsTest extends TextLineRendererTest {
@@ -54,7 +55,7 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
     /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);

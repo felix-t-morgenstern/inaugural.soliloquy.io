@@ -1,9 +1,11 @@
 package inaugural.soliloquy.graphics.renderables;
 
+import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
 public abstract class AbstractRenderableWithMouseEvents
         extends AbstractRenderable
         implements RenderableWithMouseEvents {
+    protected final RenderingBoundaries RENDERING_BOUNDARIES;
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
     private final Map<Integer, Action<Long>> ON_PRESS;
@@ -28,13 +31,15 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 Action<Long> onMouseLeave,
                                                 int z,
                                                 java.util.UUID uuid,
-                                                RenderableStack containingStack) {
+                                                RenderableStack containingStack,
+                                                RenderingBoundaries renderingBoundaries) {
         super(z, uuid, containingStack);
         _capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? new HashMap<>() : onPress;
         ON_RELEASE = onRelease == null ? new HashMap<>() : onRelease;
         _onMouseOver = onMouseOver;
         _onMouseLeave = onMouseLeave;
+        RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         TIMESTAMP_VALIDATOR = new TimestampValidator(null);
     }
 

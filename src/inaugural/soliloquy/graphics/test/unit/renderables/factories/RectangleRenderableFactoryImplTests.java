@@ -14,6 +14,7 @@ import soliloquy.specs.graphics.renderables.factories.RectangleRenderableFactory
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -42,14 +43,21 @@ class RectangleRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private RectangleRenderableFactory _rectangleRenderableFactory;
 
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        _rectangleRenderableFactory = new RectangleRenderableFactoryImpl();
+        _rectangleRenderableFactory = new RectangleRenderableFactoryImpl(_mockRenderingBoundaries);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderableFactoryImpl(null));
     }
 
     @Test

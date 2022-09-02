@@ -1,18 +1,27 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
+import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
 
 public class RectangleRenderableFactoryImpl implements RectangleRenderableFactory {
+    private final RenderingBoundaries RENDERING_BOUNDARIES;
+
+    @SuppressWarnings("ConstantConditions")
+    public RectangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+        RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+    }
+
     @Override
     public RectangleRenderable make(ProviderAtTime<Color> topLeftColorProvider,
                                     ProviderAtTime<Color> topRightColorProvider,
@@ -34,7 +43,7 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
                 backgroundTextureTileWidth, backgroundTextureTileHeight, onPress, onRelease,
                 onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid,
-                containingStack);
+                containingStack, RENDERING_BOUNDARIES);
     }
 
     @Override

@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.List;
@@ -33,10 +34,11 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          UUID uuid,
                                          RenderableStack containingStack,
+                                         RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack);
+                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         _startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
@@ -57,11 +59,12 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
                                          RenderableStack containingStack,
+                                         RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                containingStack);
+                containingStack, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         _startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);

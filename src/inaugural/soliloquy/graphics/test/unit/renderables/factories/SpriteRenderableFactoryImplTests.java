@@ -16,6 +16,7 @@ import soliloquy.specs.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,14 +44,21 @@ class SpriteRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private SpriteRenderableFactory _spriteRenderableFactory;
 
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        _spriteRenderableFactory = new SpriteRenderableFactoryImpl();
+        _spriteRenderableFactory = new SpriteRenderableFactoryImpl(_mockRenderingBoundaries);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableFactoryImpl(null));
     }
 
     @Test

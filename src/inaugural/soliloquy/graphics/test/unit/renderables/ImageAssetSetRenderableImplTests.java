@@ -12,6 +12,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,10 +43,12 @@ class ImageAssetSetRenderableImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = randomInt();
+    private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private ImageAssetSetRenderable _imageAssetSetRenderableWithMouseEvents;
     private ImageAssetSetRenderable _imageAssetSetRenderableWithoutMouseEvents;
@@ -51,18 +56,20 @@ class ImageAssetSetRenderableImplTests {
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         ON_PRESS_ACTIONS.put(2, ON_PRESS_ACTION);
 
         _imageAssetSetRenderableWithMouseEvents = new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack);
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries);
 
         _imageAssetSetRenderableWithoutMouseEvents = new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
-                _mockContainingStack);
+                _mockContainingStack, _mockRenderingBoundaries);
     }
 
     @Test
@@ -70,81 +77,90 @@ class ImageAssetSetRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 null, TYPE, DIRECTION, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
                 ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS,
                 null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID,
-                _mockContainingStack
+                _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, null, BORDER_COLOR_PROVIDER,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, null, Z, UUID, _mockContainingStack
+                BORDER_COLOR_PROVIDER, null, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
                 ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, null
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, null, _mockRenderingBoundaries
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, ON_PRESS_ACTIONS, null,
+                ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, BORDER_THICKNESS_PROVIDER,
+                BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, null
         ));
 
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 null, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, null,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                null, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                null, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, Z, UUID, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack, _mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
                 IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, null
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, null
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new ImageAssetSetRenderableImpl(
+                IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS, TYPE, DIRECTION, COLOR_SHIFT_PROVIDERS,
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_AREA_PROVIDER, Z, UUID, null, _mockRenderingBoundaries
         ));
     }
 
@@ -464,47 +480,45 @@ class ImageAssetSetRenderableImplTests {
 
     @Test
     void testMouseEventCallsToOutdatedTimestamps() {
-        long timestamp = 456456L;
+        _imageAssetSetRenderableWithMouseEvents.press(0, TIMESTAMP);
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.press(0, TIMESTAMP - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.release(0, TIMESTAMP - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(TIMESTAMP - 1));
+        assertThrows(IllegalArgumentException.class, () ->
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(TIMESTAMP - 1));
 
-        _imageAssetSetRenderableWithMouseEvents.press(0, timestamp);
+        _imageAssetSetRenderableWithMouseEvents.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp - 1));
+                _imageAssetSetRenderableWithMouseEvents.press(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp - 1));
+                _imageAssetSetRenderableWithMouseEvents.release(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp - 1));
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp - 1));
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(TIMESTAMP));
 
-        _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 1);
+        _imageAssetSetRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp));
+                _imageAssetSetRenderableWithMouseEvents.press(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp));
+                _imageAssetSetRenderableWithMouseEvents.release(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp));
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp));
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1));
 
-        _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 2);
+        _imageAssetSetRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 1));
+                _imageAssetSetRenderableWithMouseEvents.press(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 1));
+                _imageAssetSetRenderableWithMouseEvents.release(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 1));
+                _imageAssetSetRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 1));
-
-        _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 3);
-        assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.press(0, timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.release(0, timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseOver(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                _imageAssetSetRenderableWithMouseEvents.mouseLeave(timestamp + 2));
+                _imageAssetSetRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 2));
     }
 
     @Test
@@ -600,6 +614,65 @@ class ImageAssetSetRenderableImplTests {
     }
 
     @Test
+    void testCapturesMouseEventAtPointForSpriteDoesNotExceedRenderingBoundaries() {
+        FakeSprite imageAsset = new FakeSprite();
+        imageAsset.Image = new FakeImage(true);
+        IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS.ImageAsset = imageAsset;
+        RENDERING_AREA_PROVIDER.ProvidedValue = WHOLE_SCREEN;
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
+            @Override
+            public float leftX() {
+                return 0f;
+            }
+
+            @Override
+            public float topY() {
+                return 0f;
+            }
+
+            @Override
+            public float rightX() {
+                return 0.5f;
+            }
+
+            @Override
+            public float bottomY() {
+                return 1f;
+            }
+
+            @Override
+            public float width() {
+                return 0;
+            }
+
+            @Override
+            public float height() {
+                return 0;
+            }
+
+            @Override
+            public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+                return null;
+            }
+
+            @Override
+            public FloatBox translate(float v, float v1) {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        });
+
+        assertTrue(_imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.499f, 0f, TIMESTAMP));
+        assertFalse(_imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.501f, 0f, TIMESTAMP));
+    }
+
+    @Test
     void testCapturesMouseEventAtPointForAnimation() {
         FakeAnimationFrameSnippet animationFrameSnippet = new FakeAnimationFrameSnippet();
         animationFrameSnippet.OffsetX = 0.0123f;
@@ -640,6 +713,65 @@ class ImageAssetSetRenderableImplTests {
                 (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
         assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
+    }
+
+    @Test
+    void testCapturesMouseEventAtPointForAnimationDoesNotExceedRenderingBoundaries() {
+        FakeAnimationFrameSnippet animationFrameSnippet = new FakeAnimationFrameSnippet();
+        animationFrameSnippet.Image = new FakeImage(true);
+        IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS.ImageAsset = new FakeAnimation(animationFrameSnippet);
+        RENDERING_AREA_PROVIDER.ProvidedValue = WHOLE_SCREEN;
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
+            @Override
+            public float leftX() {
+                return 0f;
+            }
+
+            @Override
+            public float topY() {
+                return 0f;
+            }
+
+            @Override
+            public float rightX() {
+                return 0.5f;
+            }
+
+            @Override
+            public float bottomY() {
+                return 1f;
+            }
+
+            @Override
+            public float width() {
+                return 0;
+            }
+
+            @Override
+            public float height() {
+                return 0;
+            }
+
+            @Override
+            public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+                return null;
+            }
+
+            @Override
+            public FloatBox translate(float v, float v1) {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        });
+
+        assertTrue(_imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.499f, 0f, TIMESTAMP));
+        assertFalse(_imageAssetSetRenderableWithMouseEvents
+                .capturesMouseEventAtPoint(0.501f, 0f, TIMESTAMP));
     }
 
     @Test

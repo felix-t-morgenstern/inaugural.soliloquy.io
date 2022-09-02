@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+
 public class StackRendererTest extends DisplayTest {
     private final static String AXE_07_LOCATION = "./res/images/items/Axe_512x512_NoBG_07.png";
     private final static String AXE_09_LOCATION = "./res/images/items/Axe_512x512_NoBG_09.png";
@@ -48,7 +50,7 @@ public class StackRendererTest extends DisplayTest {
         soliloquy.specs.graphics.rendering.renderers.StackRenderer stackRenderer =
                 new StackRendererImpl(renderableStack, renderer, null);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
         int spriteAxe07Width = 512;
         int spriteAxe07Height = 512;

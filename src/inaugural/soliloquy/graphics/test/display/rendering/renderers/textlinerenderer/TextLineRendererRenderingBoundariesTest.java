@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
@@ -122,7 +123,7 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

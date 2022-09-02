@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 /**
@@ -49,7 +50,7 @@ class StackRendererRenderingBoundariesTest extends StackRendererTest {
 
         CheckedExceptionWrapper.sleep(1000);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 1.0f, 1.0f);
+        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
         CheckedExceptionWrapper.sleep(1000);
 

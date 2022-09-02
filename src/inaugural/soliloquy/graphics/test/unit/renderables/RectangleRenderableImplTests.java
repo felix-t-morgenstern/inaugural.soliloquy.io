@@ -13,12 +13,14 @@ import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,10 +41,12 @@ class RectangleRenderableImplTests {
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = randomInt();
+    private final long TIMESTAMP = 456456L;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private RectangleRenderable _rectangleRenderable;
     private RectangleRenderable _rectangleRenderableNotSupportingMouseEvents;
@@ -50,12 +54,15 @@ class RectangleRenderableImplTests {
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         _rectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack);
+                ON_MOUSE_LEAVE, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                _mockRenderingBoundaries);
         _rectangleRenderable.setCapturesMouseEvents(true);
 
         _rectangleRenderableNotSupportingMouseEvents = new RectangleRenderableImpl(
@@ -63,7 +70,7 @@ class RectangleRenderableImplTests {
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS,
                 null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, RENDERING_AREA_PROVIDER, Z, UUID,
-                _mockContainingStack);
+                _mockContainingStack, _mockRenderingBoundaries);
         _rectangleRenderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
     }
 
@@ -75,70 +82,85 @@ class RectangleRenderableImplTests {
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         null, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, null,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         null, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        null, Z, UUID, _mockContainingStack));
+                        null, Z, UUID, _mockContainingStack, _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack,
+                        _mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null));
+                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+                        TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
+                        BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
+                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        RENDERING_AREA_PROVIDER, Z, UUID, null, _mockRenderingBoundaries));
     }
 
     @Test
@@ -264,26 +286,25 @@ class RectangleRenderableImplTests {
 
         _rectangleRenderable.setOnPress(2, ON_PRESS_ACTION);
 
-        long timestamp = 456456L;
-        _rectangleRenderable.press(2, timestamp);
+        _rectangleRenderable.press(2, TIMESTAMP);
         assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
         assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(timestamp, (long) ON_PRESS_ACTION.Inputs.get(0));
+        assertEquals(TIMESTAMP, (long) ON_PRESS_ACTION.Inputs.get(0));
 
         FakeAction<Long> newOnPress = new FakeAction<>();
         _rectangleRenderable.setOnPress(2, newOnPress);
 
-        _rectangleRenderable.press(2, timestamp + 1);
+        _rectangleRenderable.press(2, TIMESTAMP + 1);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
+        assertEquals(TIMESTAMP + 1, (long) newOnPress.Inputs.get(0));
 
-        _rectangleRenderable.press(0, timestamp + 2);
+        _rectangleRenderable.press(0, TIMESTAMP + 2);
 
         assertEquals(1, newOnPress.NumberOfTimesCalled);
         assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(timestamp + 1, (long) newOnPress.Inputs.get(0));
+        assertEquals(TIMESTAMP + 1, (long) newOnPress.Inputs.get(0));
     }
 
     @Test
@@ -312,16 +333,15 @@ class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 _rectangleRenderableNotSupportingMouseEvents.setOnRelease(2, new FakeAction<>()));
 
-        long timestamp = 456456L;
-        _rectangleRenderable.release(2, timestamp);
+        _rectangleRenderable.release(2, TIMESTAMP);
 
         FakeAction<Long> newOnRelease = new FakeAction<>();
         _rectangleRenderable.setOnRelease(2, newOnRelease);
 
-        _rectangleRenderable.release(2, timestamp + 1);
+        _rectangleRenderable.release(2, TIMESTAMP + 1);
         assertEquals(1, newOnRelease.NumberOfTimesCalled);
         assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(timestamp + 1, (long) newOnRelease.Inputs.get(0));
+        assertEquals(TIMESTAMP + 1, (long) newOnRelease.Inputs.get(0));
     }
 
     @Test
@@ -346,25 +366,23 @@ class RectangleRenderableImplTests {
 
     @Test
     void testPressOrReleaseMethodsWithInvalidButtons() {
-        long timestamp = 456456L;
-
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.setOnPress(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.setOnRelease(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(-1, timestamp));
+                _rectangleRenderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(-1, timestamp + 1));
+                _rectangleRenderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.setOnPress(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.setOnRelease(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(8, timestamp + 2));
+                _rectangleRenderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(8, timestamp + 3));
+                _rectangleRenderable.press(8, TIMESTAMP + 3));
     }
 
     @Test
@@ -374,19 +392,18 @@ class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 _rectangleRenderableNotSupportingMouseEvents.setOnMouseOver(ON_MOUSE_OVER));
 
-        long timestamp = 456456L;
-        _rectangleRenderable.mouseOver(timestamp);
+        _rectangleRenderable.mouseOver(TIMESTAMP);
         assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(timestamp, (long) ON_MOUSE_OVER.Inputs.get(0));
+        assertEquals(TIMESTAMP, (long) ON_MOUSE_OVER.Inputs.get(0));
 
         FakeAction<Long> newOnMouseOver = new FakeAction<>();
         _rectangleRenderable.setOnMouseOver(newOnMouseOver);
 
-        _rectangleRenderable.mouseOver(timestamp + 1);
+        _rectangleRenderable.mouseOver(TIMESTAMP + 1);
         assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
         assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(timestamp + 1, (long) newOnMouseOver.Inputs.get(0));
+        assertEquals(TIMESTAMP + 1, (long) newOnMouseOver.Inputs.get(0));
     }
 
     @Test
@@ -412,19 +429,18 @@ class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 _rectangleRenderableNotSupportingMouseEvents.setOnMouseLeave(ON_MOUSE_LEAVE));
 
-        long timestamp = 456456L;
-        _rectangleRenderable.mouseLeave(timestamp);
+        _rectangleRenderable.mouseLeave(TIMESTAMP);
         assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
         assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(timestamp, (long) ON_MOUSE_LEAVE.Inputs.get(0));
+        assertEquals(TIMESTAMP, (long) ON_MOUSE_LEAVE.Inputs.get(0));
 
         FakeAction<Long> newOnMouseLeave = new FakeAction<>();
         _rectangleRenderable.setOnMouseLeave(newOnMouseLeave);
 
-        _rectangleRenderable.mouseLeave(timestamp + 1);
+        _rectangleRenderable.mouseLeave(TIMESTAMP + 1);
         assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
         assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(timestamp + 1, (long) newOnMouseLeave.Inputs.get(0));
+        assertEquals(TIMESTAMP + 1, (long) newOnMouseLeave.Inputs.get(0));
     }
 
     @Test
@@ -445,68 +461,67 @@ class RectangleRenderableImplTests {
 
     @Test
     void testMouseEventCallsToOutdatedTimestamps() {
-        long timestamp = 456456L;
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(0f, 0f, 1f, 1f);
 
-        _rectangleRenderable.press(0, timestamp);
+        _rectangleRenderable.press(0, TIMESTAMP);
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(0, timestamp - 1));
+                _rectangleRenderable.press(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.release(0, timestamp - 1));
+                _rectangleRenderable.release(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseOver(timestamp - 1));
+                _rectangleRenderable.mouseOver(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseLeave(timestamp - 1));
+                _rectangleRenderable.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp - 1));
+                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP - 1));
 
-        _rectangleRenderable.release(0, timestamp + 1);
+        _rectangleRenderable.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(0, timestamp));
+                _rectangleRenderable.press(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.release(0, timestamp));
+                _rectangleRenderable.release(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseOver(timestamp));
+                _rectangleRenderable.mouseOver(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseLeave(timestamp));
+                _rectangleRenderable.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp));
+                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP));
 
-        _rectangleRenderable.mouseOver(timestamp + 2);
+        _rectangleRenderable.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(0, timestamp + 1));
+                _rectangleRenderable.press(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.release(0, timestamp + 1));
+                _rectangleRenderable.release(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseOver(timestamp + 1));
+                _rectangleRenderable.mouseOver(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseLeave(timestamp + 1));
+                _rectangleRenderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 1));
+                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 1));
 
-        _rectangleRenderable.mouseLeave(timestamp + 3);
+        _rectangleRenderable.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(0, timestamp + 2));
+                _rectangleRenderable.press(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.release(0, timestamp + 2));
+                _rectangleRenderable.release(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseOver(timestamp + 2));
+                _rectangleRenderable.mouseOver(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseLeave(timestamp + 2));
+                _rectangleRenderable.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 2));
+                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 2));
 
-        _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 4);
+        _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.press(0, timestamp + 3));
+                _rectangleRenderable.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.release(0, timestamp + 3));
+                _rectangleRenderable.release(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseOver(timestamp + 3));
+                _rectangleRenderable.mouseOver(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.mouseLeave(timestamp + 3));
+                _rectangleRenderable.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
+                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 3));
     }
 
     @Test
@@ -538,13 +553,176 @@ class RectangleRenderableImplTests {
 
     @Test
     void testCapturesMouseEventsAtPoint() {
+        FloatBox renderingDimensions = new FloatBox() {
+            @Override
+            public float leftX() {
+                return 0.25f;
+            }
+
+            @Override
+            public float topY() {
+                return 0.25f;
+            }
+
+            @Override
+            public float rightX() {
+                return 0.75f;
+            }
+
+            @Override
+            public float bottomY() {
+                return 0.75f;
+            }
+
+            @Override
+            public float width() {
+                return 0;
+            }
+
+            @Override
+            public float height() {
+                return 0;
+            }
+
+            @Override
+            public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+                return null;
+            }
+
+            @Override
+            public FloatBox translate(float v, float v1) {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        };
+        _rectangleRenderable.setRenderingDimensionsProvider(new FakeStaticProvider<>(renderingDimensions));
+
         assertTrue(_rectangleRenderable
-                .capturesMouseEventAtPoint(-345634563456f, 789789789789f, 123123123123L));
+                .capturesMouseEventAtPoint(0.251f, 0.5f, TIMESTAMP));
+        assertFalse(_rectangleRenderable
+                .capturesMouseEventAtPoint(0.249f, 0.5f, TIMESTAMP));
 
         _rectangleRenderable.setCapturesMouseEvents(false);
 
         assertFalse(_rectangleRenderable
-                .capturesMouseEventAtPoint(-345634563456f, 789789789789f, 123123123123L));
+                .capturesMouseEventAtPoint(0.251f, 0.5f, TIMESTAMP));
+        assertFalse(_rectangleRenderable
+                .capturesMouseEventAtPoint(0.249f, 0.5f, TIMESTAMP));
+    }
+
+    @Test
+    void testCapturesMouseEventsAtPointDoesNotExceedRenderingBoundaries() {
+        FloatBox renderingDimensions = new FloatBox() {
+            @Override
+            public float leftX() {
+                return 0.25f;
+            }
+
+            @Override
+            public float topY() {
+                return 0.25f;
+            }
+
+            @Override
+            public float rightX() {
+                return 0.75f;
+            }
+
+            @Override
+            public float bottomY() {
+                return 0.75f;
+            }
+
+            @Override
+            public float width() {
+                return 0;
+            }
+
+            @Override
+            public float height() {
+                return 0;
+            }
+
+            @Override
+            public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+                return null;
+            }
+
+            @Override
+            public FloatBox translate(float v, float v1) {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        };
+        _rectangleRenderable.setRenderingDimensionsProvider(new FakeStaticProvider<>(renderingDimensions));
+
+        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
+            @Override
+            public float leftX() {
+                return 0f;
+            }
+
+            @Override
+            public float topY() {
+                return 0f;
+            }
+
+            @Override
+            public float rightX() {
+                return 0.5f;
+            }
+
+            @Override
+            public float bottomY() {
+                return 1f;
+            }
+
+            @Override
+            public float width() {
+                return 0;
+            }
+
+            @Override
+            public float height() {
+                return 0;
+            }
+
+            @Override
+            public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
+                return null;
+            }
+
+            @Override
+            public FloatBox translate(float v, float v1) {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        });
+
+        assertTrue(_rectangleRenderable
+                .capturesMouseEventAtPoint(0.499f, 0.5f, TIMESTAMP));
+        assertFalse(_rectangleRenderable
+                .capturesMouseEventAtPoint(0.501f, 0.5f, TIMESTAMP));
+    }
+
+    @Test
+    void testCapturesMouseEventsAtPointWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(-0.001f, 0f, TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(1.001f, 0f, TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(0f, -0.001f, TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(0f, 1.001f, TIMESTAMP));
     }
 
     @Test

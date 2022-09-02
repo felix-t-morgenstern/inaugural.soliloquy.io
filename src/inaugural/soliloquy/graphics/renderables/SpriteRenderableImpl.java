@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.List;
@@ -21,9 +22,10 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<Color> borderColorProvider,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, RenderableStack containingStack) {
+                                UUID uuid, RenderableStack containingStack,
+                                RenderingBoundaries renderingBoundaries) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack);
+                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setSprite(sprite);
     }
 
@@ -34,10 +36,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 Action<Long> onMouseOver, Action<Long> onMouseLeave,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, RenderableStack containingStack) {
+                                UUID uuid, RenderableStack containingStack,
+                                RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                containingStack);
+                containingStack, renderingBoundaries);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

@@ -18,7 +18,6 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 
 /**
  * Test acceptance criteria:
- *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
  * Window"
  * 2. During the 3000ms, an oblong triangle taking up half of the screen, centered in the middle,
@@ -73,7 +72,7 @@ public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, randomInt(),
-                        java.util.UUID.randomUUID(), RENDERING_STACK);
+                        java.util.UUID.randomUUID(), RENDERING_STACK, RENDERING_BOUNDARIES);
 
         FrameTimer.ShouldExecuteNextFrame = true;
 

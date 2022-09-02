@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * Test acceptance criteria:
- *
  * 1. This test will display a window of 800x600 pixels for 2000ms with a titlebar reading "New
  * Window"
  * 2. During the 3000ms, a window taking up half of the screen, centered in the middle, will have
@@ -68,7 +67,8 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null,
-                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), RENDERING_STACK);
+                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), RENDERING_STACK,
+                RENDERING_BOUNDARIES);
 
         return new ArrayList<Renderer>() {{
             add(RectangleRenderer);

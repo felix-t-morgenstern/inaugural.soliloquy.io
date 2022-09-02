@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.List;
@@ -26,9 +27,10 @@ public class GlobalLoopingAnimationRenderableImpl
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                RenderableStack containingStack) {
+                                                RenderableStack containingStack,
+                                                RenderingBoundaries renderingBoundaries) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack);
+                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -43,10 +45,11 @@ public class GlobalLoopingAnimationRenderableImpl
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                RenderableStack containingStack) {
+                                                RenderableStack containingStack,
+                                                RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                containingStack);
+                containingStack, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 

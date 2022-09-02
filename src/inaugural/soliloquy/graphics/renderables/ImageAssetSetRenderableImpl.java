@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.List;
@@ -30,9 +31,10 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid, RenderableStack containingStack) {
+                                       UUID uuid, RenderableStack containingStack,
+                                       RenderingBoundaries renderingBoundaries) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack);
+                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);
@@ -46,10 +48,11 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid, RenderableStack containingStack) {
+                                       UUID uuid, RenderableStack containingStack,
+                                       RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                containingStack);
+                containingStack, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         setType(type);
         setDirection(direction);

@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 import java.util.UUID;
@@ -34,14 +35,21 @@ class TriangleRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderingBoundaries _mockRenderingBoundaries;
 
     private TriangleRenderableFactory _triangleRenderableFactory;
 
     @BeforeEach
     void setUp() {
         _mockContainingStack = mock(RenderableStack.class);
+        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        _triangleRenderableFactory = new TriangleRenderableFactoryImpl();
+        _triangleRenderableFactory = new TriangleRenderableFactoryImpl(_mockRenderingBoundaries);
+    }
+
+    @Test
+    void testConstructorWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null));
     }
 
     @Test

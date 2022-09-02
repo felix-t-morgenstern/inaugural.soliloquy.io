@@ -5,6 +5,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.PolygonRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.util.Map;
 
@@ -25,9 +26,10 @@ public abstract class AbstractPolygonRenderable
             Action<Long> onMouseLeave,
             int z,
             java.util.UUID uuid,
-            RenderableStack containingStack
+            RenderableStack containingStack,
+            RenderingBoundaries renderingBoundaries
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack);
+        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack, renderingBoundaries);
         setBackgroundTextureIdProvider(backgroundTextureIdProvider);
         setBackgroundTextureTileWidth(backgroundTextureTileWidth);
         setBackgroundTextureTileHeight(backgroundTextureTileHeight);
