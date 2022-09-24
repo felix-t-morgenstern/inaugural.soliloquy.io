@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
@@ -32,8 +33,14 @@ public class FakeRenderableStack implements RenderableStack {
     }
 
     @Override
-    public FloatBox renderingDimensions() {
+    public ProviderAtTime<FloatBox> getRenderingBoundariesProvider() {
         return null;
+    }
+
+    @Override
+    public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException, UnsupportedOperationException {
+
     }
 
     @Override

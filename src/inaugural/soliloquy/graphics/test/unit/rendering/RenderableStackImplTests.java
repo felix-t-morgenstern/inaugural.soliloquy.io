@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 class RenderableStackImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
-    @Mock private FloatBox _mockRenderingDimensions;
+    @Mock private ProviderAtTime<FloatBox> _mockRenderingBoundariesProvider;
     @Mock private RenderableStack _mockContainingStack;
 
     private RenderableStack _topLevelRenderableStack;
@@ -29,23 +30,25 @@ class RenderableStackImplTests {
 
     @BeforeEach
     void setUp() {
-        _mockRenderingDimensions = mock(FloatBox.class);
+        //noinspection unchecked
+        _mockRenderingBoundariesProvider = mock(ProviderAtTime.class);
         _mockContainingStack = mock(RenderableStack.class);
 
         _topLevelRenderableStack = new RenderableStackImpl();
         _containedRenderableStack =
-                new RenderableStackImpl(UUID, Z, _mockRenderingDimensions, _mockContainingStack);
+                new RenderableStackImpl(UUID, Z, _mockRenderingBoundariesProvider,
+                        _mockContainingStack);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(null, Z, _mockRenderingDimensions,
+                () -> new RenderableStackImpl(null, Z, _mockRenderingBoundariesProvider,
                         _mockContainingStack));
         assertThrows(IllegalArgumentException.class,
                 () -> new RenderableStackImpl(UUID, Z, null, _mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(UUID, Z, _mockRenderingDimensions, null));
+                () -> new RenderableStackImpl(UUID, Z, _mockRenderingBoundariesProvider, null));
     }
 
     @Test
@@ -119,9 +122,36 @@ class RenderableStackImplTests {
     }
 
     @Test
-    void testRenderingDimensions() {
-        assertSame(WHOLE_SCREEN, _topLevelRenderableStack.renderingDimensions());
-        assertSame(_mockRenderingDimensions, _containedRenderableStack.renderingDimensions());
+    void testGetRenderingBoundariesProvider() {
+        assertSame(WHOLE_SCREEN_PROVIDER,
+                _topLevelRenderableStack.getRenderingBoundariesProvider());
+        assertSame(_mockRenderingBoundariesProvider,
+                _containedRenderableStack.getRenderingBoundariesProvider());
+    }
+
+    @Test
+    void testSetRenderingBoundariesProvider() {
+        //noinspection unchecked
+        ProviderAtTime<FloatBox> newProvider = mock(ProviderAtTime.class);
+
+        _containedRenderableStack.setRenderingBoundariesProvider(newProvider);
+
+        assertSame(newProvider, _containedRenderableStack.getRenderingBoundariesProvider());
+    }
+
+    @Test
+    void testSetRenderingBoundariesProviderForTopLevelStack() {
+        //noinspection unchecked
+        ProviderAtTime<FloatBox> newProvider = mock(ProviderAtTime.class);
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> _topLevelRenderableStack.setRenderingBoundariesProvider(newProvider));
+    }
+
+    @Test
+    void testSetRenderingBoundariesProviderWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class,
+                () -> _containedRenderableStack.setRenderingBoundariesProvider(null));
     }
 
     @Test
@@ -152,7 +182,8 @@ class RenderableStackImplTests {
         int newZ = randomInt();
 
         _containedRenderableStack.setZ(newZ);
-        assertThrows(UnsupportedOperationException.class, () -> _topLevelRenderableStack.setZ(randomInt()));
+        assertThrows(UnsupportedOperationException.class,
+                () -> _topLevelRenderableStack.setZ(randomInt()));
 
         assertEquals(newZ, _containedRenderableStack.getZ());
 

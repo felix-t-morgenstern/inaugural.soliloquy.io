@@ -37,7 +37,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.353</version>
+            <version>0.0.358</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>

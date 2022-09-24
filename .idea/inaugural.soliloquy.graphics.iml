@@ -23,7 +23,7 @@
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.353" level="project" />
+    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.358" level="project" />
     <orderEntry type="library" name="Maven: disorg.soliloquy:inaugural.soliloquy.tools:0.0.92" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apiguardian:apiguardian-api:1.0.0" level="project" />

@@ -2,37 +2,40 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.*;
 
-import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
 
 public class RenderableStackImpl implements RenderableStack {
     private final UUID UUID;
-    private final FloatBox RENDERING_DIMENSIONS;
     private final RenderableStack CONTAINING_STACK;
     private final HashMap<Integer, ArrayList<Renderable>> STACK;
     private final HashMap<Renderable, Integer> Z_INDICES_OF_INTEGERS;
 
     private int _z;
+    private ProviderAtTime<FloatBox> _renderingBoundariesProvider;
 
     public RenderableStackImpl() {
         UUID = null;
         _z = 0;
-        RENDERING_DIMENSIONS = WHOLE_SCREEN;
+        _renderingBoundariesProvider = WHOLE_SCREEN_PROVIDER;
         CONTAINING_STACK = null;
         STACK = new HashMap<>();
         Z_INDICES_OF_INTEGERS = new HashMap<>();
     }
 
     @SuppressWarnings("ConstantConditions")
-    public RenderableStackImpl(UUID uuid, int z, FloatBox renderingDimensions,
+    public RenderableStackImpl(UUID uuid, int z,
+                               ProviderAtTime<FloatBox> renderingBoundariesProvider,
                                RenderableStack containingStack) {
         UUID = Check.ifNull(uuid, "uuid");
         _z = z;
-        RENDERING_DIMENSIONS = Check.ifNull(renderingDimensions, "renderingDimensions");
+        _renderingBoundariesProvider =
+                Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         CONTAINING_STACK = Check.ifNull(containingStack, "containingStack");
         STACK = new HashMap<>();
         Z_INDICES_OF_INTEGERS = new HashMap<>();
@@ -76,8 +79,19 @@ public class RenderableStackImpl implements RenderableStack {
     }
 
     @Override
-    public FloatBox renderingDimensions() {
-        return RENDERING_DIMENSIONS;
+    public ProviderAtTime<FloatBox> getRenderingBoundariesProvider() {
+        return _renderingBoundariesProvider;
+    }
+
+    @Override
+    public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> providerAtTime)
+            throws IllegalArgumentException, UnsupportedOperationException {
+        if (_renderingBoundariesProvider == WHOLE_SCREEN_PROVIDER) {
+            throw new UnsupportedOperationException(
+                    "RenderableStackImpl.setRenderingBoundariesProvider: cannot assign new " +
+                            "rendering boundaries for top-level stack");
+        }
+        _renderingBoundariesProvider = Check.ifNull(providerAtTime, "providerAtTime");
     }
 
     @Override
