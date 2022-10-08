@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
@@ -13,7 +14,6 @@ public class ProgressiveStringProvider
     private final String STRING;
     private final long TIME_TO_COMPLETE;
 
-    @SuppressWarnings("ConstantConditions")
     public ProgressiveStringProvider(UUID uuid, String string, long startTimestamp,
                                      long timeToComplete, Long pausedTimestamp,
                                      Long mostRecentTimestamp) {
@@ -43,6 +43,11 @@ public class ProgressiveStringProvider
         double percentOfPeriod = timeWithinPeriod / (double) TIME_TO_COMPLETE;
         int numberOfCharactersToProvide = (int) (STRING.length() * percentOfPeriod);
         return STRING.substring(0, numberOfCharactersToProvide);
+    }
+
+    @Override
+    public Object representation() {
+        return new Pair<>(STRING, TIME_TO_COMPLETE);
     }
 
     @Override

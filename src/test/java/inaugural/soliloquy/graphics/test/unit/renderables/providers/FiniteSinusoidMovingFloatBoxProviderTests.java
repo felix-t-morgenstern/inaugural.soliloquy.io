@@ -343,6 +343,12 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _finiteSinusoidMovingFloatBoxProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _finiteSinusoidMovingFloatBoxProvider.representation());
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(FiniteSinusoidMovingProvider.class.getCanonicalName() + "<" +
                         FloatBox.class.getCanonicalName() + ">",

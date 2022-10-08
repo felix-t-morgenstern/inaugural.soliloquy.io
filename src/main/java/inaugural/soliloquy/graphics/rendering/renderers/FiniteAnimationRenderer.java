@@ -153,6 +153,11 @@ public class FiniteAnimationRenderer
         }
 
         @Override
+        public Object representation() {
+            return null;
+        }
+
+        @Override
         public int getZ() {
             return 0;
         }

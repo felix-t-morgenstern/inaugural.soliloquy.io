@@ -1084,6 +1084,11 @@ class GraphicsPreloaderImplTests {
         }
 
         @Override
+        public Object representation() {
+            return null;
+        }
+
+        @Override
         public Long getArchetype() {
             return null;
         }

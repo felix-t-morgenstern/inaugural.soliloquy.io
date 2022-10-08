@@ -9,15 +9,17 @@ import java.util.UUID;
 public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausableAtTime
         implements LoopingProvider<T> {
     private final UUID UUID;
+    private final T ARCHETYPE;
 
     private long _timestampSentToProviderMostRecently;
     private int _periodModuloOffsetAtMostRecentProvision;
     private T _mostRecentlyProvidedValue;
 
     protected AbstractLoopingProvider(UUID uuid, int periodDuration, int periodModuloOffset,
-                                      Long pauseTimestamp, Long mostRecentTimestamp) {
+                                      Long pauseTimestamp, Long mostRecentTimestamp, T archetype) {
         super(periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
+        ARCHETYPE = Check.ifNull(archetype, "archetype");
     }
 
     @Override
@@ -58,5 +60,10 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
         _periodModuloOffset = PERIOD_DURATION - (int) (timestamp % PERIOD_DURATION);
+    }
+
+    @Override
+    public T getArchetype() {
+        return ARCHETYPE;
     }
 }

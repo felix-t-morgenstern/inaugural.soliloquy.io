@@ -17,7 +17,7 @@ public class RectangleAnimatedBackgroundTextureIdProvider
                                                         Map<Integer, Integer> valuesWithinPeriod,
                                                         Long pauseTimestamp,
                                                         Long mostRecentTimestamp) {
-        super(uuid, periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
+        super(uuid, periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp, 0);
         FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null,
                 null);
     }
@@ -37,11 +37,6 @@ public class RectangleAnimatedBackgroundTextureIdProvider
         return new HashMap<>(FLOOR_FRAME_PROVIDER.FRAMES);
     }
 
-    @Override
-    public Integer getArchetype() {
-        return 0;
-    }
-
     // NB: Handling this manually rather than via HasOneGenericParam from Tools, since Java classes
     //     cannot extend multiple classes, and accessing LoopingPausableAtTime shared functionality
     //     via inheritance rather than composition seems more parsimonious and elegant at the
@@ -50,5 +45,10 @@ public class RectangleAnimatedBackgroundTextureIdProvider
     public String getInterfaceName() {
         return LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
                 Integer.class.getCanonicalName() + ">";
+    }
+
+    @Override
+    public Object representation() {
+        return FLOOR_FRAME_PROVIDER.representation();
     }
 }

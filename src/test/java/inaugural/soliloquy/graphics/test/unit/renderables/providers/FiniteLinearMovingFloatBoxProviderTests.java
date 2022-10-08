@@ -227,6 +227,12 @@ class FiniteLinearMovingFloatBoxProviderTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _finiteLinearMovingFloatBoxProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _finiteLinearMovingFloatBoxProvider.representation());
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
                         FloatBox.class.getCanonicalName() + ">",

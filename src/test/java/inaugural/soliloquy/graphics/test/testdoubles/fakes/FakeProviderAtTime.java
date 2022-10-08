@@ -15,6 +15,11 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public T getArchetype() {
         return null;
     }

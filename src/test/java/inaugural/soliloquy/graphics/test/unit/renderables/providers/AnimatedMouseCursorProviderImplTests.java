@@ -246,6 +246,12 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(CURSORS_AT_MS, _animatedMouseCursorProvider.representation());
+        assertNotSame(CURSORS_AT_MS, _animatedMouseCursorProvider.representation());
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
                         long.class.getCanonicalName() + ">",

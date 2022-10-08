@@ -8,12 +8,12 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.util.List;
 import java.util.Map;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+
 public class FiniteSinusoidMovingFloatBoxProvider
         extends AbstractFiniteSinusoidMovingProvider<FloatBox>
         implements FiniteSinusoidMovingProvider<FloatBox> {
     private final FloatBoxFactory FLOAT_BOX_FACTORY;
-
-    private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
 
     public FiniteSinusoidMovingFloatBoxProvider(java.util.UUID uuid,
                                                 Map<Long, FloatBox> valuesAtTimes,
@@ -21,7 +21,8 @@ public class FiniteSinusoidMovingFloatBoxProvider
                                                 Long pausedTimestamp,
                                                 Long mostRecentTimestamp,
                                                 FloatBoxFactory floatBoxFactory) {
-        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp);
+        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp,
+                generateSimpleArchetype(FloatBox.class));
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
     }
 
@@ -39,57 +40,5 @@ public class FiniteSinusoidMovingFloatBoxProvider
     @Override
     protected String className() {
         return "FiniteSinusoidMovingFloatBoxProvider";
-    }
-
-    @Override
-    public FloatBox getArchetype() {
-        return ARCHETYPE;
-    }
-
-    private static class FloatBoxArchetype implements FloatBox {
-        @Override
-        public float leftX() {
-            return 0;
-        }
-
-        @Override
-        public float topY() {
-            return 0;
-        }
-
-        @Override
-        public float rightX() {
-            return 0;
-        }
-
-        @Override
-        public float bottomY() {
-            return 0;
-        }
-
-        @Override
-        public float width() {
-            return 0;
-        }
-
-        @Override
-        public float height() {
-            return 0;
-        }
-
-        @Override
-        public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public FloatBox translate(float v, float v1) {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return FloatBox.class.getCanonicalName();
-        }
     }
 }

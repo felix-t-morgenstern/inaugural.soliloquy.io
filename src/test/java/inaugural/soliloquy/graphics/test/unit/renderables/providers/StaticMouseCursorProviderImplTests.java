@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.StaticMouseCursorProvider;
 
 import static inaugural.soliloquy.tools.random.Random.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StaticMouseCursorProviderImplTests {
     private final String ID = randomString();
@@ -90,5 +89,10 @@ class StaticMouseCursorProviderImplTests {
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP, _staticMouseCursorProvider.mostRecentTimestamp());
+    }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(PROVIDED_VALUE, _staticMouseCursorProvider.representation());
     }
 }

@@ -15,14 +15,17 @@ import java.util.UUID;
 public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFinitePausableAtTime
         implements FiniteLinearMovingProvider<T> {
     private final UUID UUID;
+    private final T ARCHETYPE;
     private final HashMap<Long, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
     protected final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
     protected AbstractFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimes,
-                                                 Long pausedTimestamp, Long mostRecentTimestamp) {
+                                                 Long pausedTimestamp, Long mostRecentTimestamp,
+                                                 T archetype) {
         super(pausedTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
+        ARCHETYPE = Check.ifNull(archetype, "archetype");
 
         VALUES_AT_TIMES = new HashMap<>();
         Check.ifNull(valuesAtTimes, "valuesAtTimes");
@@ -102,5 +105,15 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
                     value);
         }
         NEAREST_FLOOR_AND_CEILING_TREE.incrementAllValues(pauseDuration);
+    }
+
+    @Override
+    public Object representation() {
+        return new HashMap<>(VALUES_AT_TIMES);
+    }
+
+    @Override
+    public T getArchetype() {
+        return ARCHETYPE;
     }
 }

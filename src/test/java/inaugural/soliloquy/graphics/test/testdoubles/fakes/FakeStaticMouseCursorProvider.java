@@ -33,6 +33,11 @@ public class FakeStaticMouseCursorProvider implements StaticMouseCursorProvider 
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public Long getArchetype() {
         return ValueToProvide;
     }

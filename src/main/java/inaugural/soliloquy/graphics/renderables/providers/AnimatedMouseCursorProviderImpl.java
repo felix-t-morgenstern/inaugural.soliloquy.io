@@ -17,12 +17,11 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
 
     private final static UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
-    /** @noinspection ConstantConditions */
     public AnimatedMouseCursorProviderImpl(String id, Map<Integer, Long> cursorsAtMs,
                                            int periodDuration, int periodModuloOffset,
                                            Long pauseTimestamp, Long mostRecentTimestamp) {
         super(PLACEHOLDER_UUID, periodDuration, periodModuloOffset, pauseTimestamp,
-                mostRecentTimestamp);
+                mostRecentTimestamp, 0L);
         ID = Check.ifNullOrEmpty(id, "id");
         Check.ifNull(cursorsAtMs, "cursorsAtMs");
         if (cursorsAtMs.isEmpty()) {
@@ -49,11 +48,6 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
     }
 
     @Override
-    public Long getArchetype() {
-        return 0L;
-    }
-
-    @Override
     public String getInterfaceName() {
         return ProviderAtTime.class.getCanonicalName() + "<" + long.class.getCanonicalName() + ">";
     }
@@ -67,5 +61,10 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
     public UUID uuid() throws IllegalArgumentException, UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 "AnimatedMouseCursorProviderImpl supports id instead of uuid");
+    }
+
+    @Override
+    public Object representation() {
+        return new HashMap<>(CURSORS_AT_MS);
     }
 }

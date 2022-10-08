@@ -12,7 +12,7 @@ public class FiniteSinusoidMovingFloatProvider extends AbstractFiniteSinusoidMov
                                              List<Float> transitionSharpnesses,
                                              Long pausedTimestamp,
                                              Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp);
+        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp, 0f);
     }
 
     @Override
@@ -25,10 +25,5 @@ public class FiniteSinusoidMovingFloatProvider extends AbstractFiniteSinusoidMov
     @Override
     protected String className() {
         return "FiniteSinusoidMovingFloatProvider";
-    }
-
-    @Override
-    public Float getArchetype() {
-        return 0f;
     }
 }

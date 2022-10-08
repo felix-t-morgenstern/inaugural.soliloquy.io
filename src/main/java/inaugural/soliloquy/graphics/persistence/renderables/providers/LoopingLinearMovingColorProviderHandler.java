@@ -16,7 +16,6 @@ public class LoopingLinearMovingColorProviderHandler
             LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
     private final TypeHandler<UUID> UUID_HANDLER;
 
-    @SuppressWarnings("ConstantConditions")
     public LoopingLinearMovingColorProviderHandler(LoopingLinearMovingColorProviderFactory
                                                            loopingLinearMovingColorProviderFactory,
                                                    TypeHandler<UUID> uuidHandler) {
@@ -154,6 +153,11 @@ public class LoopingLinearMovingColorProviderHandler
 
         @Override
         public Color provide(long l) throws IllegalArgumentException {
+            return null;
+        }
+
+        @Override
+        public Object representation() {
             return null;
         }
 

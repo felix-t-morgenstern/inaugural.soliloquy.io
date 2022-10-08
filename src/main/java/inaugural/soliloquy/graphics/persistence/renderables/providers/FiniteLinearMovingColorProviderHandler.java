@@ -127,6 +127,11 @@ public class FiniteLinearMovingColorProviderHandler
             return null;
         }
 
+        @Override
+        public Object representation() {
+            return null;
+        }
+
         // NB: An archetype is needed to pass validation checks for parent classes, but it is not
         //     in fact used to generate the interface name
         @Override

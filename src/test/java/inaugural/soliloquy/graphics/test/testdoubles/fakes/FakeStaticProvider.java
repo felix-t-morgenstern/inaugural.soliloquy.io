@@ -28,6 +28,11 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public void reportPause(long l) throws IllegalArgumentException {
 
     }

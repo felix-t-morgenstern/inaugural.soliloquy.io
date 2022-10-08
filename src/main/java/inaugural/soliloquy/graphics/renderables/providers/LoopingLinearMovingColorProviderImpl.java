@@ -14,14 +14,13 @@ public class LoopingLinearMovingColorProviderImpl
         implements LoopingLinearMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
-    @SuppressWarnings("ConstantConditions")
     public LoopingLinearMovingColorProviderImpl(UUID uuid,
                                                 Map<Integer, Color> valuesWithinPeriod,
                                                 List<Boolean> hueMovementIsClockwise,
                                                 int periodDuration, int periodModuloOffset,
                                                 Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesWithinPeriod, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp);
+                mostRecentTimestamp, Color.BLACK);
 
         HUE_MOVEMENT_IS_CLOCKWISE = new ArrayList<>();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");

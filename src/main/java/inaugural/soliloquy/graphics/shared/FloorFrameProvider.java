@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.shared;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -62,5 +63,9 @@ public class FloorFrameProvider<T> {
         Check.ifNonNegative(ms, "ms");
         Check.throwOnSecondGt(MS_DURATION, ms, "MS_DURATION", "ms");
         return FRAMES.get((int) FRAMES_MS_NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(ms));
+    }
+
+    public Map<Integer, T> representation() {
+        return new HashMap<>(FRAMES);
     }
 }

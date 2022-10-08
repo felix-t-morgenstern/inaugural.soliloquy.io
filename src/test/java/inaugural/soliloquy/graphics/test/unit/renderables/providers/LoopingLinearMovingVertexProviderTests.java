@@ -287,4 +287,10 @@ public class LoopingLinearMovingVertexProviderTests {
         assertEquals(expected.x, provided.x);
         assertEquals(expected.y, provided.y);
     }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _loopingLinearMovingLocationProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _loopingLinearMovingLocationProvider.representation());
+    }
 }

@@ -213,4 +213,10 @@ class FiniteLinearMovingFloatProviderTests {
         assertEquals(weightedValue1 + weightedValue2,
                 (float) _finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
     }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _finiteLinearMovingFloatProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _finiteLinearMovingFloatProvider.representation());
+    }
 }

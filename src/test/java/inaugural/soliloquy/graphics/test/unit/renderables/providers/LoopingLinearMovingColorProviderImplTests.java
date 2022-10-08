@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LoopingMovingColorProviderImplTests {
+class LoopingLinearMovingColorProviderImplTests {
     private final HashMap<Integer, Color> VALUES_AT_TIMES = new HashMap<>();
     private final int TIME_1 = 0;
     private final Color VALUE_1 = new Color(188, 130, 217, 255);
@@ -362,6 +362,12 @@ class LoopingMovingColorProviderImplTests {
     void testGetArchetype() {
         assertThrows(UnsupportedOperationException.class,
                 _loopingLinearMovingColorProvider::getArchetype);
+    }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _loopingLinearMovingColorProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _loopingLinearMovingColorProvider.representation());
     }
 
     @Test

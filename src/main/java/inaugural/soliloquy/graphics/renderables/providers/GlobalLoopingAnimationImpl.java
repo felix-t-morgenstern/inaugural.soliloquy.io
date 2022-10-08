@@ -7,6 +7,8 @@ import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+
 public class GlobalLoopingAnimationImpl
         extends AbstractLoopingProvider<AnimationFrameSnippet>
         implements GlobalLoopingAnimation {
@@ -15,14 +17,14 @@ public class GlobalLoopingAnimationImpl
 
     private static final UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
-    /** @noinspection ConstantConditions */
     public GlobalLoopingAnimationImpl(String id, Animation animation, int periodModuloOffset,
                                       Long pausedTimestamp) {
         // NB: pausedTimestamp is used for both pausedTimestamp and mostRecentTimestamp in parent
         //     constructor since mostRecentTimestamp must be non-null if pausedTimestamp is
         //     non-null
         super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(),
-                periodModuloOffset, pausedTimestamp, pausedTimestamp);
+                periodModuloOffset, pausedTimestamp, pausedTimestamp,
+                generateSimpleArchetype(AnimationFrameSnippet.class));
         ID = Check.ifNullOrEmpty(id, "id");
         ANIMATION = animation;
     }
@@ -61,5 +63,10 @@ public class GlobalLoopingAnimationImpl
     public UUID uuid() throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 "GlobalLoopingAnimationImpl: uuid is not supported");
+    }
+
+    @Override
+    public Object representation() {
+        return ANIMATION.id();
     }
 }

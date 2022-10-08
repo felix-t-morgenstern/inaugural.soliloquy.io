@@ -16,8 +16,9 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
                                                    Map<Long, T> valuesAtTimes,
                                                    List<Float> transitionSharpnesses,
                                                    Long pausedTimestamp,
-                                                   Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+                                                   Long mostRecentTimestamp,
+                                                   T archetype) {
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, archetype);
         Check.ifNull(transitionSharpnesses, "transitionSharpnesses");
         if (transitionSharpnesses.size() != valuesAtTimes.size() - 1) {
             throw new IllegalArgumentException(

@@ -118,6 +118,11 @@ public class FiniteLinearMovingProviderHandler
         }
 
         @Override
+        public Object representation() {
+            return null;
+        }
+
+        @Override
         public Object getArchetype() {
             return 0;
         }
@@ -167,6 +172,11 @@ public class FiniteLinearMovingProviderHandler
 
         @Override
         public T provide(long l) throws IllegalArgumentException {
+            return null;
+        }
+
+        @Override
+        public Object representation() {
             return null;
         }
 

@@ -8,17 +8,12 @@ public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovin
                                             int periodDuration, int periodModuloOffset,
                                             Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp);
+                mostRecentTimestamp, 0f);
     }
 
     @Override
     protected Float interpolate(Float value1, float weight1, Float value2, float weight2,
                                 boolean isClockwise) {
         return Interpolate.floats(value1, weight1, value2, weight2);
-    }
-
-    @Override
-    public Float getArchetype() {
-        return 0f;
     }
 }

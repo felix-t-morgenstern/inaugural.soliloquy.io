@@ -40,6 +40,11 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public void reportPause(long l) throws IllegalArgumentException {
 
     }

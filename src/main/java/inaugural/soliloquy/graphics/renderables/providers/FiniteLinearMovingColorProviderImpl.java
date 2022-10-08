@@ -13,11 +13,10 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
         implements FiniteLinearMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
-    /** @noinspection ConstantConditions */
     public FiniteLinearMovingColorProviderImpl(UUID uuid, Map<Long, Color> valuesAtTimes,
                                                List<Boolean> hueMovementIsClockwise,
                                                Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, Color.BLACK);
         HUE_MOVEMENT_IS_CLOCKWISE = new ArrayList<>();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");
         if (hueMovementIsClockwise.size() != valuesAtTimes.size() - 1) {
@@ -43,12 +42,12 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
     }
 
     @Override
-    public Color getArchetype() {
-        return Color.BLACK;
+    public String getInterfaceName() {
+        return FiniteLinearMovingColorProvider.class.getCanonicalName();
     }
 
     @Override
-    public String getInterfaceName() {
-        return FiniteLinearMovingColorProvider.class.getCanonicalName();
+    public Object representation() {
+        return null;
     }
 }

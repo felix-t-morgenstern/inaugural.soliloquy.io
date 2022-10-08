@@ -295,4 +295,10 @@ class LoopingLinearMovingFloatBoxProviderTests {
         assertEquals(expected,
                 _loopingLinearMovingFloatBoxProvider.provide(timestamp + pauseDuration));
     }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _loopingLinearMovingFloatBoxProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _loopingLinearMovingFloatBoxProvider.representation());
+    }
 }

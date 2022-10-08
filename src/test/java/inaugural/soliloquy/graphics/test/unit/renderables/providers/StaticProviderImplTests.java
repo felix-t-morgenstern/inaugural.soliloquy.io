@@ -90,6 +90,11 @@ class StaticProviderImplTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(PROVIDED_VALUE, _staticProvider.representation());
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(StaticProvider.class.getCanonicalName() + "<" +
                         Object.class.getCanonicalName() + ">",

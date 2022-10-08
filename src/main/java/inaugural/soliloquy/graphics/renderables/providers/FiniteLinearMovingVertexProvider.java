@@ -7,12 +7,10 @@ import java.util.UUID;
 
 public class FiniteLinearMovingVertexProvider
         extends AbstractFiniteLinearMovingProvider<Vertex> {
-    private static final Vertex ARCHETYPE = Vertex.of(0f, 0f);
-
     public FiniteLinearMovingVertexProvider(UUID uuid,
                                             Map<Long, Vertex> valuesAtTimes,
                                             Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, Vertex.of(0f, 0f));
     }
 
     @Override
@@ -22,10 +20,5 @@ public class FiniteLinearMovingVertexProvider
                 Interpolate.floats(value1.x, weight1, value2.x, weight2),
                 Interpolate.floats(value1.y, weight1, value2.y, weight2)
         );
-    }
-
-    @Override
-    public Vertex getArchetype() {
-        return ARCHETYPE;
     }
 }

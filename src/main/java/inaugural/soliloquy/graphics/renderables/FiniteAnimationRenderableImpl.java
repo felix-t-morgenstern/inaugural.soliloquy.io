@@ -26,7 +26,6 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     private long _startTimestamp;
     private Long _pausedTimestamp;
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
@@ -48,7 +47,6 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
@@ -160,6 +158,11 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                 (int) (Math.min(_startTimestamp + ANIMATION.msDuration(),
                         Math.max(_startTimestamp, timestamp))
                         - _startTimestamp));
+    }
+
+    @Override
+    public Object representation() {
+        return null;
     }
 
     @Override

@@ -3,6 +3,7 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
@@ -188,6 +189,12 @@ class ProgressiveStringProviderTests {
     @Test
     void testGetArchetype() {
         assertNotNull(_progressiveStringProvider.getArchetype());
+    }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(new Pair<>(STRING, TIME_TO_COMPLETE),
+                _progressiveStringProvider.representation());
     }
 
     @Test

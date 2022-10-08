@@ -174,6 +174,12 @@ class FiniteLinearMovingVertexProviderTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, _finiteLinearMovingLocationProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, _finiteLinearMovingLocationProvider.representation());
+    }
+
+    @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
                         Vertex.class.getCanonicalName() + ">",

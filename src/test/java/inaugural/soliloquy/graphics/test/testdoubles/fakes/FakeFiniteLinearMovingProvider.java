@@ -38,6 +38,11 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public T getArchetype() {
         return Archetype;
     }

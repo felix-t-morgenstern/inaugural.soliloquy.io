@@ -19,8 +19,10 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
     protected AbstractLoopingLinearMovingProvider(UUID uuid, Map<Integer, T> valuesAtTimes,
                                                   int periodDuration, int periodModuloOffset,
-                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp);
+                                                  Long pausedTimestamp, Long mostRecentTimestamp,
+                                                  T archetype) {
+        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp,
+                archetype);
 
         VALUES_AT_TIMES = new HashMap<>();
         Check.ifNull(valuesAtTimes, "valuesAtTimes");
@@ -103,5 +105,10 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     public String getInterfaceName() {
         return LoopingLinearMovingProvider.class.getName() + "<" +
                 CAN_GET_INTERFACE_NAME.getProperTypeName(getArchetype()) + ">";
+    }
+
+    @Override
+    public Object representation() {
+        return new HashMap<>(VALUES_AT_TIMES);
     }
 }

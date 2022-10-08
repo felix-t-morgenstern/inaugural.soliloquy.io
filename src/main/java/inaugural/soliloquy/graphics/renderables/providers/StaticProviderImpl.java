@@ -37,6 +37,11 @@ public class StaticProviderImpl<T>
     }
 
     @Override
+    public Object representation() {
+        return VALUE;
+    }
+
+    @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
     }

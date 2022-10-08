@@ -242,4 +242,9 @@ class GlobalLoopingAnimationImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimation.reset(timestamp + 2));
     }
+
+    @Test
+    void testRepresentation() {
+        assertEquals(ANIMATION_ID, _globalLoopingAnimation.representation());
+    }
 }

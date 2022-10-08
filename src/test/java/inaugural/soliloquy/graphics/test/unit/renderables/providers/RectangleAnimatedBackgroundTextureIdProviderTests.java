@@ -310,6 +310,14 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
+    void testRepresentation() {
+        assertEquals(VALUES_WITHIN_PERIOD,
+                _rectangleAnimatedBackgroundTextureIdProvider.representation());
+        assertNotSame(VALUES_WITHIN_PERIOD,
+                _rectangleAnimatedBackgroundTextureIdProvider.representation());
+    }
+
+    @Test
     void testGetArchetype() {
         assertEquals(0,
                 (int) _rectangleAnimatedBackgroundTextureIdProvider.getArchetype());

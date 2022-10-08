@@ -6,12 +6,7 @@ import java.util.UUID;
 public class FiniteLinearMovingFloatProvider extends AbstractFiniteLinearMovingProvider<Float> {
     public FiniteLinearMovingFloatProvider(UUID uuid, Map<Long, Float> valuesAtTimes,
                                            Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
-    }
-
-    @Override
-    public Float getArchetype() {
-        return 0f;
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, 0f);
     }
 
     @Override

@@ -20,6 +20,11 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
+    public Object representation() {
+        return null;
+    }
+
+    @Override
     public void reportPause(long l) throws IllegalArgumentException {
 
     }

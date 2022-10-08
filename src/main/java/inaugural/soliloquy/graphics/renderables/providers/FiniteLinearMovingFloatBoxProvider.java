@@ -7,16 +7,17 @@ import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+
 public class FiniteLinearMovingFloatBoxProvider
         extends AbstractFiniteLinearMovingProvider<FloatBox> {
     private final FloatBoxFactory FLOAT_BOX_FACTORY;
 
-    private static final FloatBox ARCHETYPE = new FloatBoxArchetype();
-
     public FiniteLinearMovingFloatBoxProvider(FloatBoxFactory floatBoxFactory, UUID uuid,
                                               Map<Long, FloatBox> valuesAtTimes,
                                               Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp,
+                generateSimpleArchetype(FloatBox.class));
         FLOAT_BOX_FACTORY = Check.ifNull(floatBoxFactory, "floatBoxFactory");
     }
 
@@ -25,58 +26,5 @@ public class FiniteLinearMovingFloatBoxProvider
                                    FloatBox value2, float weight2,
                                    int transitionNumber) {
         return Interpolate.floatBoxes(value1, weight1, value2, weight2, FLOAT_BOX_FACTORY);
-    }
-
-    @Override
-    public FloatBox getArchetype() {
-        return ARCHETYPE;
-    }
-
-    private static class FloatBoxArchetype implements FloatBox {
-
-        @Override
-        public float leftX() {
-            return 0;
-        }
-
-        @Override
-        public float topY() {
-            return 0;
-        }
-
-        @Override
-        public float rightX() {
-            return 0;
-        }
-
-        @Override
-        public float bottomY() {
-            return 0;
-        }
-
-        @Override
-        public float width() {
-            return 0;
-        }
-
-        @Override
-        public float height() {
-            return 0;
-        }
-
-        @Override
-        public FloatBox intersection(FloatBox floatBox) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public FloatBox translate(float v, float v1) {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return FloatBox.class.getCanonicalName();
-        }
     }
 }
