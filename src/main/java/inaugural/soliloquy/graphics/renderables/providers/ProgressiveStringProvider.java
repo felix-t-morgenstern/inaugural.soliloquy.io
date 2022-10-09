@@ -47,7 +47,8 @@ public class ProgressiveStringProvider
 
     @Override
     public Object representation() {
-        return new Pair<>(STRING, TIME_TO_COMPLETE);
+        // TODO: Revise this awful data structure.
+        return new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, _anchorTime));
     }
 
     @Override

@@ -193,7 +193,7 @@ class ProgressiveStringProviderTests {
 
     @Test
     void testRepresentation() {
-        assertEquals(new Pair<>(STRING, TIME_TO_COMPLETE),
+        assertEquals(new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, START_TIMESTAMP)),
                 _progressiveStringProvider.representation());
     }
 
