@@ -25,7 +25,6 @@ import soliloquy.specs.graphics.renderables.providers.factories.StaticMouseCurso
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -40,64 +39,64 @@ import static org.mockito.Mockito.*;
 class GraphicsPreloaderImplTests {
     private final int THREAD_POOL_SIZE = 12;
 
-    private HashMap<AssetType, Integer> _assetTypeBatchSizes;
+    private HashMap<AssetType, Integer> assetTypeBatchSizes;
 
-    @Mock private ImageFactory _mockImageFactory;
-    @Mock private AssetFactory<FontDefinition, Font> _mockFontFactory;
-    @Mock private AssetFactory<SpriteDefinition, Sprite> _mockSpriteFactory;
-    @Mock private AssetFactory<AnimationDefinition, Animation> _mockAnimationFactory;
-    @Mock private GlobalLoopingAnimationFactory _mockGlobalLoopingAnimationFactory;
-    @Mock private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> _mockImageAssetSetFactory;
-    @Mock private MouseCursorImageFactory _mockMouseCursorImageFactory;
-    @Mock private AnimatedMouseCursorProviderFactory _mockAnimatedMouseCursorProviderFactory;
-    @Mock private StaticMouseCursorProviderFactory _mockStaticMouseCursorProviderFactory;
+    @Mock private ImageFactory mockImageFactory;
+    @Mock private AssetFactory<FontDefinition, Font> mockFontFactory;
+    @Mock private AssetFactory<SpriteDefinition, Sprite> mockSpriteFactory;
+    @Mock private AssetFactory<AnimationDefinition, Animation> mockAnimationFactory;
+    @Mock private GlobalLoopingAnimationFactory mockGlobalLoopingAnimationFactory;
+    @Mock private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> mockImageAssetSetFactory;
+    @Mock private MouseCursorImageFactory mockMouseCursorImageFactory;
+    @Mock private AnimatedMouseCursorProviderFactory mockAnimatedMouseCursorProviderFactory;
+    @Mock private StaticMouseCursorProviderFactory mockStaticMouseCursorProviderFactory;
 
-    private AssetDefinitionsDTO _assetDefinitionsDTO;
+    private AssetDefinitionsDTO assetDefinitionsDTO;
 
-    private ImageDefinitionDTO[] _imageDefinitionDTOs;
-    private SpriteDefinitionDTO[] _spriteDefinitionDTOs;
-    private AnimationDefinitionDTO[] _animationDefinitionDTOs;
-    private GlobalLoopingAnimationDefinitionDTO[] _globalLoopingAnimationDefinitionDTOs;
-    private ImageAssetSetDefinitionDTO[] _imageAssetSetDefinitionDTOs;
-    private MouseCursorImageDefinitionDTO[] _mouseCursorImageDefinitionDTOs;
-    private AnimatedMouseCursorDefinitionDTO[] _animatedMouseCursorDefinitionDTOs;
-    private StaticMouseCursorDefinitionDTO[] _staticMouseCursorDefinitionDTOs;
-    private FontDefinitionDTO[] _fontDefinitionDTOs;
+    private ImageDefinitionDTO[] imageDefinitionDTOs;
+    private SpriteDefinitionDTO[] spriteDefinitionDTOs;
+    private AnimationDefinitionDTO[] animationDefinitionDTOs;
+    private GlobalLoopingAnimationDefinitionDTO[] globalLoopingAnimationDefinitionDTOs;
+    private ImageAssetSetDefinitionDTO[] imageAssetSetDefinitionDTOs;
+    private MouseCursorImageDefinitionDTO[] mouseCursorImageDefinitionDTOs;
+    private AnimatedMouseCursorDefinitionDTO[] animatedMouseCursorDefinitionDTOs;
+    private StaticMouseCursorDefinitionDTO[] staticMouseCursorDefinitionDTOs;
+    private FontDefinitionDTO[] fontDefinitionDTOs;
 
-    private CopyOnWriteArrayList<Image> _imageFactoryOutputs;
-    private CopyOnWriteArrayList<Font> _fontFactoryOutputs;
-    private CopyOnWriteArrayList<MouseCursorImageFactory.Output> _mouseCursorImageFactoryOutputs;
+    private CopyOnWriteArrayList<Image> imageFactoryOutputs;
+    private CopyOnWriteArrayList<Font> fontFactoryOutputs;
+    private CopyOnWriteArrayList<MouseCursorImageFactory.Output> mouseCursorImageFactoryOutputs;
 
-    private ArrayList<Sprite> _processedSprites;
-    private ArrayList<Animation> _processedAnimations;
-    private ArrayList<GlobalLoopingAnimation> _processedGlobalLoopingAnimations;
-    private ArrayList<ImageAssetSet> _processedImageAssetSets;
-    private ArrayList<AnimatedMouseCursorProvider> _processedAnimatedMouseCursorProviders;
-    private ArrayList<StaticMouseCursorProvider> _processedStaticMouseCursors;
-    private ArrayList<Font> _processedFonts;
+    private ArrayList<Sprite> processedSprites;
+    private ArrayList<Animation> processedAnimations;
+    private ArrayList<GlobalLoopingAnimation> processedGlobalLoopingAnimations;
+    private ArrayList<ImageAssetSet> processedImageAssetSets;
+    private ArrayList<AnimatedMouseCursorProvider> processedAnimatedMouseCursorProviders;
+    private ArrayList<StaticMouseCursorProvider> processedStaticMouseCursors;
+    private ArrayList<Font> processedFonts;
 
-    private CopyOnWriteArrayList<Object> _allDefinitionsProcessedInOrder;
+    private CopyOnWriteArrayList<Object> allDefinitionsProcessedInOrder;
 
-    private int _assetsProcessedThusFar = 0;
+    private int assetsProcessedThusFar = 0;
 
-    private int _firstImageIndex = -1;
-    private int _lastImageIndex = -1;
-    private int _firstFontIndex = -1;
-    private int _firstSpriteIndex = -1;
-    private int _lastSpriteIndex = -1;
-    private int _firstAnimationIndex = -1;
-    private int _lastAnimationIndex = -1;
-    private int _firstGlobalLoopingAnimationIndex = -1;
-    private int _lastGlobalLoopingAnimationIndex = -1;
-    private int _firstImageAssetSetIndex = -1;
-    private int _firstMouseCursorImageIndex = -1;
-    private int _lastMouseCursorImageIndex = -1;
-    private int _firstAnimatedMouseCursorIndex = -1;
-    private int _firstStaticMouseCursorIndex = -1;
+    private int firstImageIndex = -1;
+    private int lastImageIndex = -1;
+    private int firstFontIndex = -1;
+    private int firstSpriteIndex = -1;
+    private int lastSpriteIndex = -1;
+    private int firstAnimationIndex = -1;
+    private int lastAnimationIndex = -1;
+    private int firstGlobalLoopingAnimationIndex = -1;
+    private int lastGlobalLoopingAnimationIndex = -1;
+    private int firstImageAssetSetIndex = -1;
+    private int firstMouseCursorImageIndex = -1;
+    private int lastMouseCursorImageIndex = -1;
+    private int firstAnimatedMouseCursorIndex = -1;
+    private int firstStaticMouseCursorIndex = -1;
 
     private static final int BATCH_SIZE = 10;
     private static final int NUMBER_OF_IMAGES = Random.randomIntInRange(1000, 2000);
-    // NB: I am making sprites and animations _equal_ to mouse cursor images to test whether the
+    // NB: I am making sprites and animations equal to mouse cursor images to test whether the
     //     images are correctly stored and then passed onto subsequent preloading tasks
     private static final int NUMBER_OF_SPRITES = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_ANIMATIONS = NUMBER_OF_IMAGES;
@@ -106,16 +105,16 @@ class GraphicsPreloaderImplTests {
     private static final int NUMBER_OF_FONTS = Random.randomIntInRange(1000, 2000);
     private static final int NUMBER_OF_MOUSE_CURSOR_IMAGES = Random.randomIntInRange(1000, 2000);
     private static final int NUMBER_OF_ANIMATED_MOUSE_CURSORS = Random.randomIntInRange(1000, 2000);
-    // NB: I am making static mouse cursors _equal_ to mouse cursor images to test whether the
+    // NB: I am making static mouse cursors equal to mouse cursor images to test whether the
     //     mouse cursor images are correctly stored and then passed onto subsequent preloading
     //     tasks
     private static final int NUMBER_OF_STATIC_MOUSE_CURSORS = NUMBER_OF_MOUSE_CURSOR_IMAGES;
 
-    private GraphicsPreloader _graphicsPreloader;
+    private GraphicsPreloader graphicsPreloader;
 
     @BeforeEach
     void setUp() {
-        _assetTypeBatchSizes = new HashMap<AssetType, Integer>() {{
+        assetTypeBatchSizes = new HashMap<AssetType, Integer>() {{
             put(IMAGE, BATCH_SIZE);
             put(SPRITE, BATCH_SIZE);
             put(ANIMATION, BATCH_SIZE);
@@ -127,232 +126,235 @@ class GraphicsPreloaderImplTests {
             put(STATIC_MOUSE_CURSOR_PROVIDER, BATCH_SIZE);
         }};
 
-        _imageDefinitionDTOs = new ImageDefinitionDTO[NUMBER_OF_IMAGES];
+        imageDefinitionDTOs = new ImageDefinitionDTO[NUMBER_OF_IMAGES];
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
-            _imageDefinitionDTOs[i] = randomImageDefinitionDTO();
+            imageDefinitionDTOs[i] = randomImageDefinitionDTO();
         }
 
-        _spriteDefinitionDTOs = new SpriteDefinitionDTO[NUMBER_OF_SPRITES];
+        spriteDefinitionDTOs = new SpriteDefinitionDTO[NUMBER_OF_SPRITES];
         for (int i = 0; i < NUMBER_OF_SPRITES; i++) {
-            _spriteDefinitionDTOs[i] = randomSpriteDefinitionDTO(i);
+            spriteDefinitionDTOs[i] = randomSpriteDefinitionDTO(i);
         }
 
-        _animationDefinitionDTOs = new AnimationDefinitionDTO[NUMBER_OF_ANIMATIONS];
+        animationDefinitionDTOs = new AnimationDefinitionDTO[NUMBER_OF_ANIMATIONS];
         for (int i = 0; i < NUMBER_OF_ANIMATIONS; i++) {
-            _animationDefinitionDTOs[i] = randomAnimationDefinitionDTO(i);
+            animationDefinitionDTOs[i] = randomAnimationDefinitionDTO(i);
         }
 
-        _globalLoopingAnimationDefinitionDTOs =
+        globalLoopingAnimationDefinitionDTOs =
                 new GlobalLoopingAnimationDefinitionDTO[NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS];
         for (int i = 0; i < NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS; i++) {
-            _globalLoopingAnimationDefinitionDTOs[i] = randomGlobalLoopingAnimationDefinitionDTO();
+            globalLoopingAnimationDefinitionDTOs[i] = randomGlobalLoopingAnimationDefinitionDTO();
         }
 
-        _imageAssetSetDefinitionDTOs = new ImageAssetSetDefinitionDTO[NUMBER_OF_IMAGE_ASSET_SETS];
+        imageAssetSetDefinitionDTOs = new ImageAssetSetDefinitionDTO[NUMBER_OF_IMAGE_ASSET_SETS];
         for (int i = 0; i < NUMBER_OF_IMAGE_ASSET_SETS; i++) {
-            _imageAssetSetDefinitionDTOs[i] = randomImageAssetSetDefinitionDTO();
+            imageAssetSetDefinitionDTOs[i] = randomImageAssetSetDefinitionDTO();
         }
 
-        _fontDefinitionDTOs = new FontDefinitionDTO[NUMBER_OF_FONTS];
+        fontDefinitionDTOs = new FontDefinitionDTO[NUMBER_OF_FONTS];
         for (int i = 0; i < NUMBER_OF_FONTS; i++) {
-            _fontDefinitionDTOs[i] = randomFontDefinitionDTO();
+            fontDefinitionDTOs[i] = randomFontDefinitionDTO();
         }
 
-        _mouseCursorImageDefinitionDTOs =
+        mouseCursorImageDefinitionDTOs =
                 new MouseCursorImageDefinitionDTO[NUMBER_OF_MOUSE_CURSOR_IMAGES];
         for (int i = 0; i < NUMBER_OF_MOUSE_CURSOR_IMAGES; i++) {
-            _mouseCursorImageDefinitionDTOs[i] = randomMouseCursorImageDefinitionDTO();
+            mouseCursorImageDefinitionDTOs[i] = randomMouseCursorImageDefinitionDTO();
         }
 
-        _animatedMouseCursorDefinitionDTOs =
+        animatedMouseCursorDefinitionDTOs =
                 new AnimatedMouseCursorDefinitionDTO[NUMBER_OF_ANIMATED_MOUSE_CURSORS];
         for (int i = 0; i < NUMBER_OF_ANIMATED_MOUSE_CURSORS; i++) {
-            _animatedMouseCursorDefinitionDTOs[i] = randomAnimatedMouseCursorDefinitionDTO();
+            animatedMouseCursorDefinitionDTOs[i] = randomAnimatedMouseCursorDefinitionDTO();
         }
 
-        _staticMouseCursorDefinitionDTOs =
+        staticMouseCursorDefinitionDTOs =
                 new StaticMouseCursorDefinitionDTO[NUMBER_OF_STATIC_MOUSE_CURSORS];
         for (int i = 0; i < NUMBER_OF_STATIC_MOUSE_CURSORS; i++) {
-            _staticMouseCursorDefinitionDTOs[i] = randomStaticMouseCursorDefinitionDTO(i);
+            staticMouseCursorDefinitionDTOs[i] = randomStaticMouseCursorDefinitionDTO(i);
         }
 
-        _assetDefinitionsDTO = new AssetDefinitionsDTO(
-                _imageDefinitionDTOs,
-                _fontDefinitionDTOs,
-                _spriteDefinitionDTOs,
-                _animationDefinitionDTOs,
-                _globalLoopingAnimationDefinitionDTOs,
-                _imageAssetSetDefinitionDTOs,
-                _mouseCursorImageDefinitionDTOs,
-                _animatedMouseCursorDefinitionDTOs,
-                _staticMouseCursorDefinitionDTOs
+        assetDefinitionsDTO = new AssetDefinitionsDTO(
+                imageDefinitionDTOs,
+                fontDefinitionDTOs,
+                spriteDefinitionDTOs,
+                animationDefinitionDTOs,
+                globalLoopingAnimationDefinitionDTOs,
+                imageAssetSetDefinitionDTOs,
+                mouseCursorImageDefinitionDTOs,
+                animatedMouseCursorDefinitionDTOs,
+                staticMouseCursorDefinitionDTOs
         );
 
-        _allDefinitionsProcessedInOrder = new CopyOnWriteArrayList<>();
+        allDefinitionsProcessedInOrder = new CopyOnWriteArrayList<>();
 
-        _imageFactoryOutputs = new CopyOnWriteArrayList<>();
-        _mockImageFactory = mock(ImageFactory.class);
-        when(_mockImageFactory.make(any()))
+        imageFactoryOutputs = new CopyOnWriteArrayList<>();
+        mockImageFactory = mock(ImageFactory.class);
+        when(mockImageFactory.make(any()))
                 .thenAnswer((Answer<Image>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstImageIndex,
-                            i -> _firstImageIndex = i,
-                            i -> _lastImageIndex = i
+                            () -> firstImageIndex,
+                            i -> firstImageIndex = i,
+                            i -> lastImageIndex = i
                     );
                     ImageDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     FakeImage output = new FakeImage(definition.relativeLocation());
-                    _imageFactoryOutputs.add(output);
+                    imageFactoryOutputs.add(output);
                     return output;
                 });
 
-        _fontFactoryOutputs = new CopyOnWriteArrayList<>();
+        fontFactoryOutputs = new CopyOnWriteArrayList<>();
         //noinspection unchecked
-        _mockFontFactory = mock(AssetFactory.class);
-        when(_mockFontFactory.make(any()))
+        mockFontFactory = mock(AssetFactory.class);
+        when(mockFontFactory.make(any()))
                 .thenAnswer((Answer<Font>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstFontIndex,
-                            i -> _firstFontIndex = i,
+                            () -> firstFontIndex,
+                            i -> firstFontIndex = i,
                             i -> {}
                     );
                     FontDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     FakeFont output = new FakeFont(definition.id());
-                    _fontFactoryOutputs.add(output);
+                    fontFactoryOutputs.add(output);
                     return output;
                 });
 
         //noinspection unchecked
-        _mockSpriteFactory = mock(AssetFactory.class);
-        when(_mockSpriteFactory.make(any()))
+        mockSpriteFactory = mock(AssetFactory.class);
+        when(mockSpriteFactory.make(any()))
                 .thenAnswer((Answer<Sprite>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstSpriteIndex,
-                            i -> _firstSpriteIndex = i,
-                            i -> _lastSpriteIndex = i
+                            () -> firstSpriteIndex,
+                            i -> firstSpriteIndex = i,
+                            i -> lastSpriteIndex = i
                     );
                     SpriteDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     return new FakeSprite(definition.id(), definition.image());
                 });
 
         //noinspection unchecked
-        _mockAnimationFactory = mock(AssetFactory.class);
-        when(_mockAnimationFactory.make(any()))
+        mockAnimationFactory = mock(AssetFactory.class);
+        when(mockAnimationFactory.make(any()))
                 .thenAnswer((Answer<Animation>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstAnimationIndex,
-                            i -> _firstAnimationIndex = i,
-                            i -> _lastAnimationIndex = i
+                            () -> firstAnimationIndex,
+                            i -> firstAnimationIndex = i,
+                            i -> lastAnimationIndex = i
                     );
                     AnimationDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     return new FakeAnimation(definition.id(), definition.frameSnippetDefinitions());
                 });
 
-        _mockGlobalLoopingAnimationFactory = mock(GlobalLoopingAnimationFactory.class);
-        when(_mockGlobalLoopingAnimationFactory.make(any()))
+        mockGlobalLoopingAnimationFactory = mock(GlobalLoopingAnimationFactory.class);
+        when(mockGlobalLoopingAnimationFactory.make(any()))
                 .thenAnswer(invocation -> {
                     updateAssetIndices(
-                            () -> _firstGlobalLoopingAnimationIndex,
-                            i -> _firstGlobalLoopingAnimationIndex = i,
-                            i -> _lastGlobalLoopingAnimationIndex = i
+                            () -> firstGlobalLoopingAnimationIndex,
+                            i -> firstGlobalLoopingAnimationIndex = i,
+                            i -> lastGlobalLoopingAnimationIndex = i
                     );
                     GlobalLoopingAnimationDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     return new FakeGlobalLoopingAnimation(definition.id());
                 });
 
         //noinspection unchecked
-        _mockImageAssetSetFactory = mock(AssetFactory.class);
-        when(_mockImageAssetSetFactory.make(any()))
+        mockImageAssetSetFactory = mock(AssetFactory.class);
+        when(mockImageAssetSetFactory.make(any()))
                 .thenAnswer((Answer<ImageAssetSet>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstImageAssetSetIndex,
-                            i -> _firstImageAssetSetIndex = i,
+                            () -> firstImageAssetSetIndex,
+                            i -> firstImageAssetSetIndex = i,
                             i -> {}
                     );
                     ImageAssetSetDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     return new FakeImageAssetSet(definition.id());
                 });
 
-        _mouseCursorImageFactoryOutputs = new CopyOnWriteArrayList<>();
-        _mockMouseCursorImageFactory = mock(MouseCursorImageFactory.class);
-        when(_mockMouseCursorImageFactory.make(any()))
+        mouseCursorImageFactoryOutputs = new CopyOnWriteArrayList<>();
+        mockMouseCursorImageFactory = mock(MouseCursorImageFactory.class);
+        when(mockMouseCursorImageFactory.make(any()))
                 .thenAnswer(invocation -> {
                     updateAssetIndices(
-                            () -> _firstMouseCursorImageIndex,
-                            i -> _firstMouseCursorImageIndex = i,
-                            i -> _lastMouseCursorImageIndex = i
+                            () -> firstMouseCursorImageIndex,
+                            i -> firstMouseCursorImageIndex = i,
+                            i -> lastMouseCursorImageIndex = i
                     );
                     MouseCursorImageDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     MouseCursorImageFactory.Output returnValue =
                             new MouseCursorImageFactory.Output(
                                     definition.relativeLocation(),
                                     randomLong()
                             );
-                    _mouseCursorImageFactoryOutputs.add(returnValue);
+                    mouseCursorImageFactoryOutputs.add(returnValue);
                     return returnValue;
                 });
 
-        _mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
-        when(_mockAnimatedMouseCursorProviderFactory.make(any()))
+        mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
+        when(mockAnimatedMouseCursorProviderFactory.make(any()))
                 .thenAnswer((Answer<AnimatedMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstAnimatedMouseCursorIndex,
-                            i -> _firstAnimatedMouseCursorIndex = i,
+                            () -> firstAnimatedMouseCursorIndex,
+                            i -> firstAnimatedMouseCursorIndex = i,
                             i -> {}
                     );
                     AnimatedMouseCursorProviderDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
-                    return new FakeAnimatedMouseCursorProvider(definition.id());
+                    allDefinitionsProcessedInOrder.add(definition);
+                    AnimatedMouseCursorProvider animatedMouseCursorProvider =
+                            mock(AnimatedMouseCursorProvider.class);
+                    when(animatedMouseCursorProvider.id()).thenReturn(definition.id());
+                    return animatedMouseCursorProvider;
                 });
 
-        _mockStaticMouseCursorProviderFactory = mock(StaticMouseCursorProviderFactory.class);
-        when(_mockStaticMouseCursorProviderFactory.make(any()))
+        mockStaticMouseCursorProviderFactory = mock(StaticMouseCursorProviderFactory.class);
+        when(mockStaticMouseCursorProviderFactory.make(any()))
                 .thenAnswer((Answer<StaticMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
-                            () -> _firstStaticMouseCursorIndex,
-                            i -> _firstStaticMouseCursorIndex = i,
+                            () -> firstStaticMouseCursorIndex,
+                            i -> firstStaticMouseCursorIndex = i,
                             i -> {}
                     );
                     StaticMouseCursorProviderDefinition definition = invocation.getArgument(0);
-                    _allDefinitionsProcessedInOrder.add(definition);
+                    allDefinitionsProcessedInOrder.add(definition);
                     return new FakeStaticMouseCursorProvider(definition.id(),
                             definition.mouseCursorImageId());
                 });
 
-        _processedSprites = new ArrayList<>();
-        _processedAnimations = new ArrayList<>();
-        _processedGlobalLoopingAnimations = new ArrayList<>();
-        _processedImageAssetSets = new ArrayList<>();
-        _processedFonts = new ArrayList<>();
-        _processedAnimatedMouseCursorProviders = new ArrayList<>();
-        _processedStaticMouseCursors = new ArrayList<>();
+        processedSprites = new ArrayList<>();
+        processedAnimations = new ArrayList<>();
+        processedGlobalLoopingAnimations = new ArrayList<>();
+        processedImageAssetSets = new ArrayList<>();
+        processedFonts = new ArrayList<>();
+        processedAnimatedMouseCursorProviders = new ArrayList<>();
+        processedStaticMouseCursors = new ArrayList<>();
 
-        _graphicsPreloader = new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+        graphicsPreloader = new GraphicsPreloaderImpl(
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         );
     }
 
@@ -360,10 +362,10 @@ class GraphicsPreloaderImplTests {
                                                  Consumer<Integer> updateFirstIndex,
                                                  Consumer<Integer> updateLastIndex) {
         if (getFirstIndex.get() < 0) {
-            updateFirstIndex.accept(_assetsProcessedThusFar);
+            updateFirstIndex.accept(assetsProcessedThusFar);
         }
-        updateLastIndex.accept(_assetsProcessedThusFar);
-        _assetsProcessedThusFar++;
+        updateLastIndex.accept(assetsProcessedThusFar);
+        assetsProcessedThusFar++;
     }
 
     @Test
@@ -371,392 +373,392 @@ class GraphicsPreloaderImplTests {
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
                 null,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
                 null,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
+                assetTypeBatchSizes,
                 null,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
                 null,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
                 null,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
                 null,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
                 null,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
                 null,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
                 null,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
                 null,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
                 null,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
                 null,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
                 null,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
                 null,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
                 null,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
                 null,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
                 null,
-                _processedStaticMouseCursors::add
+                processedStaticMouseCursors::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
-                _mockImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
                 null
         ));
     }
 
     @Test
     void testAllAssetsProcessedProperly() {
-        _graphicsPreloader.load();
+        graphicsPreloader.load();
 
         assertAssetsProcessed(
                 ImageDefinition.class,
                 NUMBER_OF_IMAGES,
-                _imageFactoryOutputs,
-                _imageDefinitionDTOs,
+                imageFactoryOutputs,
+                imageDefinitionDTOs,
                 Image::relativeLocation,
                 imageDefinitionDTO -> imageDefinitionDTO.RelativeLocation,
                 null
@@ -765,8 +767,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 FontDefinition.class,
                 NUMBER_OF_FONTS,
-                _fontFactoryOutputs,
-                _fontDefinitionDTOs,
+                fontFactoryOutputs,
+                fontDefinitionDTOs,
                 fontDefinitionDTO -> fontDefinitionDTO.id,
                 null
         );
@@ -774,14 +776,14 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 SpriteDefinition.class,
                 NUMBER_OF_SPRITES,
-                _processedSprites,
-                _spriteDefinitionDTOs,
+                processedSprites,
+                spriteDefinitionDTOs,
                 spriteDefinitionDTO -> spriteDefinitionDTO.id,
                 sprite -> {
                     List<Image> matchingOutput =
-                            _imageFactoryOutputs.stream().filter(image ->
-                                    image.relativeLocation()
-                                            .equals(sprite.image().relativeLocation()))
+                            imageFactoryOutputs.stream().filter(image ->
+                                            image.relativeLocation()
+                                                    .equals(sprite.image().relativeLocation()))
                                     .collect(Collectors.toList());
                     assertEquals(1, matchingOutput.size());
                 }
@@ -790,13 +792,13 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 AnimationDefinition.class,
                 NUMBER_OF_ANIMATIONS,
-                _processedAnimations,
-                _animationDefinitionDTOs,
+                processedAnimations,
+                animationDefinitionDTOs,
                 animationDefinitionDTO -> animationDefinitionDTO.id,
                 animation -> {
                     List<Image> matchingOutput =
-                            _imageFactoryOutputs.stream().filter(image ->
-                                    image == (animation.snippetAtFrame(0).image()))
+                            imageFactoryOutputs.stream().filter(image ->
+                                            image == (animation.snippetAtFrame(0).image()))
                                     .collect(Collectors.toList());
                     assertEquals(1, matchingOutput.size());
                 }
@@ -805,8 +807,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsProcessed(
                 GlobalLoopingAnimationDefinition.class,
                 NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS,
-                _processedGlobalLoopingAnimations,
-                _globalLoopingAnimationDefinitionDTOs,
+                processedGlobalLoopingAnimations,
+                globalLoopingAnimationDefinitionDTOs,
                 GlobalLoopingAnimation::id,
                 globalLoopingAnimationDefinitionDTO -> globalLoopingAnimationDefinitionDTO.id,
                 null
@@ -815,8 +817,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 ImageAssetSetDefinition.class,
                 NUMBER_OF_IMAGE_ASSET_SETS,
-                _processedImageAssetSets,
-                _imageAssetSetDefinitionDTOs,
+                processedImageAssetSets,
+                imageAssetSetDefinitionDTOs,
                 imageAssetSetDefinitionDTO -> imageAssetSetDefinitionDTO.id,
                 null
         );
@@ -824,8 +826,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsProcessed(
                 MouseCursorImageDefinition.class,
                 NUMBER_OF_MOUSE_CURSOR_IMAGES,
-                _mouseCursorImageFactoryOutputs,
-                _mouseCursorImageDefinitionDTOs,
+                mouseCursorImageFactoryOutputs,
+                mouseCursorImageDefinitionDTOs,
                 MouseCursorImageFactory.Output::relativeLocation,
                 mouseCursorImageDefinitionDTO -> mouseCursorImageDefinitionDTO.RelativeLocation,
                 null
@@ -834,8 +836,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 AnimatedMouseCursorProviderDefinition.class,
                 NUMBER_OF_ANIMATED_MOUSE_CURSORS,
-                _processedAnimatedMouseCursorProviders,
-                _animatedMouseCursorDefinitionDTOs,
+                processedAnimatedMouseCursorProviders,
+                animatedMouseCursorDefinitionDTOs,
                 animatedMouseCursorDefinitionDTO -> animatedMouseCursorDefinitionDTO.Id,
                 null
         );
@@ -843,13 +845,13 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 StaticMouseCursorProviderDefinition.class,
                 NUMBER_OF_STATIC_MOUSE_CURSORS,
-                _processedStaticMouseCursors,
-                _staticMouseCursorDefinitionDTOs,
+                processedStaticMouseCursors,
+                staticMouseCursorDefinitionDTOs,
                 staticMouseCursorDefinitionDTO -> staticMouseCursorDefinitionDTO.Id,
                 staticMouseCursorProvider -> {
                     List<MouseCursorImageFactory.Output> matchingOutput =
-                            _mouseCursorImageFactoryOutputs.stream().filter(output ->
-                                    output.id() == staticMouseCursorProvider.provide(0L))
+                            mouseCursorImageFactoryOutputs.stream().filter(output ->
+                                            output.id() == staticMouseCursorProvider.provide(0L))
                                     .collect(Collectors.toList());
                     assertEquals(1, matchingOutput.size());
                 }
@@ -858,8 +860,8 @@ class GraphicsPreloaderImplTests {
         assertAssetsWithIdProcessed(
                 FontDefinition.class,
                 NUMBER_OF_FONTS,
-                _processedFonts,
-                _fontDefinitionDTOs,
+                processedFonts,
+                fontDefinitionDTOs,
                 fontDefinitionDTO -> fontDefinitionDTO.id,
                 null
         );
@@ -894,14 +896,14 @@ class GraphicsPreloaderImplTests {
             Function<TAsset, String> getAssetId,
             Function<TDefinitionDTO, String> getDefinitionDTOId,
             Consumer<TAsset> additionalDefinitionAssertions) {
-        List<Object> definitionsProcessed = _allDefinitionsProcessedInOrder.stream()
+        List<Object> definitionsProcessed = allDefinitionsProcessedInOrder.stream()
                 .filter(definitionClass::isInstance)
                 .collect(Collectors.toList());
         assertEquals(numberOfAssets, assetsProcessed.size());
         assertEquals(numberOfAssets, definitionsProcessed.size());
         for (TDefinitionDTO definitionDTO : definitionDTOs) {
             assertEquals(1, (int) assetsProcessed.stream().filter(output ->
-                    getAssetId.apply(output).equals(getDefinitionDTOId.apply(definitionDTO)))
+                            getAssetId.apply(output).equals(getDefinitionDTOId.apply(definitionDTO)))
                     .count());
         }
         if (additionalDefinitionAssertions != null) {
@@ -911,40 +913,40 @@ class GraphicsPreloaderImplTests {
 
     @Test
     void testAllAssetsLoadedInProperOrder() {
-        _graphicsPreloader.load();
+        graphicsPreloader.load();
 
         // Ensure that all Images are loaded first and foremost
 
-        assertEquals(0, _firstImageIndex);
-        assertTrue(_lastImageIndex < _firstSpriteIndex);
-        assertTrue(_lastImageIndex < _firstAnimationIndex);
-        assertTrue(_lastImageIndex < _firstGlobalLoopingAnimationIndex);
-        assertTrue(_lastImageIndex < _firstImageAssetSetIndex);
-        assertTrue(_lastImageIndex < _firstMouseCursorImageIndex);
-        assertTrue(_lastImageIndex < _firstAnimatedMouseCursorIndex);
-        assertTrue(_lastImageIndex < _firstStaticMouseCursorIndex);
-        assertTrue(_lastImageIndex < _firstFontIndex);
+        assertEquals(0, firstImageIndex);
+        assertTrue(lastImageIndex < firstSpriteIndex);
+        assertTrue(lastImageIndex < firstAnimationIndex);
+        assertTrue(lastImageIndex < firstGlobalLoopingAnimationIndex);
+        assertTrue(lastImageIndex < firstImageAssetSetIndex);
+        assertTrue(lastImageIndex < firstMouseCursorImageIndex);
+        assertTrue(lastImageIndex < firstAnimatedMouseCursorIndex);
+        assertTrue(lastImageIndex < firstStaticMouseCursorIndex);
+        assertTrue(lastImageIndex < firstFontIndex);
 
         // Ensure that all Animations are loaded prior to any GlobalLoopingAnimations
 
-        assertTrue(_lastAnimationIndex < _firstGlobalLoopingAnimationIndex);
+        assertTrue(lastAnimationIndex < firstGlobalLoopingAnimationIndex);
 
         // Ensure that all Sprites, Animations, and GlobalLoopingAnimations are loaded prior to any
         // ImageAssetSets
 
-        assertTrue(_lastSpriteIndex < _firstImageAssetSetIndex);
-        assertTrue(_lastAnimationIndex < _firstImageAssetSetIndex);
-        assertTrue(_lastGlobalLoopingAnimationIndex < _firstImageAssetSetIndex);
+        assertTrue(lastSpriteIndex < firstImageAssetSetIndex);
+        assertTrue(lastAnimationIndex < firstImageAssetSetIndex);
+        assertTrue(lastGlobalLoopingAnimationIndex < firstImageAssetSetIndex);
 
         // Ensure that all MouseCursorImages are loaded prior to any animated or static mouse
         // cursor providers
 
-        assertTrue(_lastMouseCursorImageIndex < _firstStaticMouseCursorIndex);
-        assertTrue(_lastMouseCursorImageIndex < _firstAnimatedMouseCursorIndex);
+        assertTrue(lastMouseCursorImageIndex < firstStaticMouseCursorIndex);
+        assertTrue(lastMouseCursorImageIndex < firstAnimatedMouseCursorIndex);
 
         // Ensure that all MouseCursorImages are loaded prior to any Fonts
 
-        assertTrue(_lastMouseCursorImageIndex < _firstFontIndex);
+        assertTrue(lastMouseCursorImageIndex < firstFontIndex);
     }
 
     @Test
@@ -954,25 +956,25 @@ class GraphicsPreloaderImplTests {
                 .thenThrow(new IllegalArgumentException("This is the exception"));
 
         GraphicsPreloader graphicsPreloader = new GraphicsPreloaderImpl(
-                _assetDefinitionsDTO,
+                assetDefinitionsDTO,
                 THREAD_POOL_SIZE,
-                _assetTypeBatchSizes,
-                _mockImageFactory,
-                _mockFontFactory,
-                _mockSpriteFactory,
-                _mockAnimationFactory,
-                _mockGlobalLoopingAnimationFactory,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
                 brokenImageAssetSetFactory,
-                _mockMouseCursorImageFactory,
-                _mockAnimatedMouseCursorProviderFactory,
-                _mockStaticMouseCursorProviderFactory,
-                _processedSprites::add,
-                _processedAnimations::add,
-                _processedGlobalLoopingAnimations::add,
-                _processedImageAssetSets::add,
-                _processedFonts::add,
-                _processedAnimatedMouseCursorProviders::add,
-                _processedStaticMouseCursors::add
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedSprites::add,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
         );
 
         assertThrows(IllegalArgumentException.class, graphicsPreloader::load);
@@ -997,7 +999,7 @@ class GraphicsPreloaderImplTests {
     }
 
     private SpriteDefinitionDTO randomSpriteDefinitionDTO(int i) {
-        return new SpriteDefinitionDTO(randomString(), _imageDefinitionDTOs[i].RelativeLocation,
+        return new SpriteDefinitionDTO(randomString(), imageDefinitionDTOs[i].RelativeLocation,
                 randomIntInRange(0, 100), randomIntInRange(0, 100), randomIntInRange(101, 200),
                 randomIntInRange(101, 200));
     }
@@ -1009,7 +1011,7 @@ class GraphicsPreloaderImplTests {
 
     private AnimationFrameDefinitionDTO[] randomAnimationFrameDefinitionDTOs(int i) {
         return new AnimationFrameDefinitionDTO[]{
-                new AnimationFrameDefinitionDTO(_imageDefinitionDTOs[i].RelativeLocation, 0,
+                new AnimationFrameDefinitionDTO(imageDefinitionDTOs[i].RelativeLocation, 0,
                         randomIntInRange(0, 100), randomIntInRange(0, 100),
                         randomIntInRange(101, 200), randomIntInRange(101, 200),
                         randomFloatInRange(0, 1), randomFloatInRange(0, 1))
@@ -1050,72 +1052,6 @@ class GraphicsPreloaderImplTests {
 
     private StaticMouseCursorDefinitionDTO randomStaticMouseCursorDefinitionDTO(int i) {
         return new StaticMouseCursorDefinitionDTO(randomString(),
-                _mouseCursorImageDefinitionDTOs[i].RelativeLocation);
-    }
-
-    // NB: This class exists because there is a need to generate random
-    //     AnimatedMouseCursorProviders rapidly
-
-    private static class FakeAnimatedMouseCursorProvider implements AnimatedMouseCursorProvider {
-        private String _id;
-
-        private FakeAnimatedMouseCursorProvider(String id) {
-            _id = id;
-        }
-
-        @Override
-        public UUID uuid() throws UnsupportedOperationException {
-            return null;
-        }
-
-        @Override
-        public String id() throws IllegalStateException {
-            return _id;
-        }
-
-        @Override
-        public void reset(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Long provide(long l) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public Object representation() {
-            return null;
-        }
-
-        @Override
-        public Long getArchetype() {
-            return null;
-        }
-
-        @Override
-        public void reportPause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public void reportUnpause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Long pausedTimestamp() {
-            return null;
-        }
-
-        @Override
-        public Long mostRecentTimestamp() {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return null;
-        }
+                mouseCursorImageDefinitionDTOs[i].RelativeLocation);
     }
 }

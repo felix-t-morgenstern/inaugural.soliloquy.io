@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.bootstrap;
 import inaugural.soliloquy.graphics.api.dto.*;
 import inaugural.soliloquy.graphics.bootstrap.tasks.*;
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.*;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
@@ -26,6 +25,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static inaugural.soliloquy.tools.concurrency.Concurrency.*;
 
 public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final AssetDefinitionsDTO ASSET_DEFINITIONS_DTO;
@@ -66,16 +68,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final LinkedBlockingQueue<StaticMouseCursorDefinitionDTO>
             STATIC_MOUSE_CURSOR_DEFINITIONS_QUEUE;
 
-    private int _spriteBatchesExecuted = 0;
-    private int _animationBatchesExecuted = 0;
-    private int _globalLoopingAnimationBatchesExecuted = 0;
-    private int _imageAssetSetBatchesExecuted = 0;
-    private int _animatedMouseCursorBatchesExecuted = 0;
-    private int _staticMouseCursorBatchesExecuted = 0;
+    private int spriteBatchesExecuted = 0;
+    private int animationBatchesExecuted = 0;
+    private int globalLoopingAnimationBatchesExecuted = 0;
+    private int imageAssetSetBatchesExecuted = 0;
+    private int animatedMouseCursorBatchesExecuted = 0;
+    private int staticMouseCursorBatchesExecuted = 0;
 
-    private Throwable _innerThrowable;
+    private Throwable innerThrowable;
+    private final Supplier<Boolean> TASK_HAS_THROWN_EXCEPTION = () -> innerThrowable != null;
 
-    /** @noinspection ConstantConditions */
     public GraphicsPreloaderImpl(AssetDefinitionsDTO assetDefinitionsDTO,
                                  int threadPoolSize,
                                  Map<AssetType, Integer> assetTypeBatchSizes,
@@ -190,7 +192,8 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
 
         ArrayList<CompletableFuture<Void>> parallelizableTasks = new ArrayList<>();
 
-        parallelizableTasks.add(runTaskAsync(this::loadImageAssets, EXECUTOR));
+        parallelizableTasks.add(
+                runTaskAsync(this::loadImageAssets, this::handleThrowable, EXECUTOR));
 
         loadAllSerially(ASSET_DEFINITIONS_DTO.mouseCursorImageDefinitionDTOs, batch ->
                 new MouseCursorImagePreloaderTask(batch, MOUSE_CURSOR_IMAGE_FACTORY, output ->
@@ -211,8 +214,8 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                         ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY,
                         PROCESS_ANIMATED_MOUSE_CURSOR_PROVIDER
                 ),
-                _animatedMouseCursorBatchesExecuted,
-                () -> _animatedMouseCursorBatchesExecuted++
+                animatedMouseCursorBatchesExecuted,
+                () -> animatedMouseCursorBatchesExecuted++
         ));
 
         parallelizableTasks.add(loadBatchesParallellyTask(
@@ -224,28 +227,28 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                         STATIC_MOUSE_CURSOR_PROVIDER_FACTORY,
                         PROCESS_STATIC_MOUSE_CURSOR_PROVIDER
                 ),
-                _staticMouseCursorBatchesExecuted,
-                () -> _staticMouseCursorBatchesExecuted++
+                staticMouseCursorBatchesExecuted,
+                () -> staticMouseCursorBatchesExecuted++
         ));
 
         loadAllSerially(ASSET_DEFINITIONS_DTO.fontDefinitionDTOs, batch ->
                 new FontPreloaderTask(batch, FONT_FACTORY, PROCESS_FONTS));
 
-        waitUntilTasksCompleted(parallelizableTasks);
+        waitUntilTasksCompleted(parallelizableTasks, TASK_HAS_THROWN_EXCEPTION);
 
         EXECUTOR.shutdown();
 
-        if (_innerThrowable != null) {
-            if (_innerThrowable instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) _innerThrowable;
+        if (innerThrowable != null) {
+            if (innerThrowable instanceof IllegalArgumentException) {
+                throw (IllegalArgumentException) innerThrowable;
             }
-            if (_innerThrowable instanceof IllegalStateException) {
-                throw (IllegalStateException) _innerThrowable;
+            if (innerThrowable instanceof IllegalStateException) {
+                throw (IllegalStateException) innerThrowable;
             }
-            if (_innerThrowable instanceof UnsupportedOperationException) {
-                throw (UnsupportedOperationException) _innerThrowable;
+            if (innerThrowable instanceof UnsupportedOperationException) {
+                throw (UnsupportedOperationException) innerThrowable;
             }
-            throw new RuntimeException(_innerThrowable.getMessage());
+            throw new RuntimeException(innerThrowable.getMessage());
         }
     }
 
@@ -257,8 +260,8 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                 ASSET_TYPE_BATCH_SIZES.get(AssetType.SPRITE),
                 spriteDefinitionDTOs -> new SpritePreloaderTask(IMAGES::get, spriteDefinitionDTOs,
                         SPRITE_FACTORY, PROCESS_SPRITE),
-                _spriteBatchesExecuted,
-                () -> _spriteBatchesExecuted++
+                spriteBatchesExecuted,
+                () -> spriteBatchesExecuted++
         ));
 
         loadImageAssetsTasks.add(loadBatchesParallellyTask(
@@ -266,11 +269,11 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                 ASSET_TYPE_BATCH_SIZES.get(AssetType.ANIMATION),
                 animationDefinitionDTOs -> new AnimationPreloaderTask(IMAGES::get,
                         animationDefinitionDTOs, ANIMATION_FACTORY, PROCESS_ANIMATION),
-                _animationBatchesExecuted,
-                () -> _animationBatchesExecuted++
+                animationBatchesExecuted,
+                () -> animationBatchesExecuted++
         ));
 
-        waitUntilTasksCompleted(loadImageAssetsTasks);
+        waitUntilTasksCompleted(loadImageAssetsTasks, TASK_HAS_THROWN_EXCEPTION);
 
         CompletableFuture<Void> globalLoopingAnimationsTask = loadBatchesParallellyTask(
                 GLOBAL_LOOPING_ANIMATIONS_DEFINITIONS_QUEUE,
@@ -279,11 +282,11 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                         ANIMATIONS::get, globalLoopingAnimationDefinitionDTOs,
                         GLOBAL_LOOPING_ANIMATION_FACTORY, PROCESS_GLOBAL_LOOPING_ANIMATION
                 ),
-                _globalLoopingAnimationBatchesExecuted,
-                () -> _globalLoopingAnimationBatchesExecuted++
+                globalLoopingAnimationBatchesExecuted,
+                () -> globalLoopingAnimationBatchesExecuted++
         );
 
-        waitUntilTaskCompleted(globalLoopingAnimationsTask);
+        waitUntilTaskCompleted(globalLoopingAnimationsTask, TASK_HAS_THROWN_EXCEPTION);
 
         CompletableFuture<Void> imageAssetSetsTask = loadBatchesParallellyTask(
                 IMAGE_ASSET_SET_DEFINITIONS_QUEUE,
@@ -292,11 +295,11 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                         imageAssetSetDefinitionDTOs, IMAGE_ASSET_SET_FACTORY,
                         PROCESS_IMAGE_ASSET_SET
                 ),
-                _imageAssetSetBatchesExecuted,
-                () -> _imageAssetSetBatchesExecuted++
+                imageAssetSetBatchesExecuted,
+                () -> imageAssetSetBatchesExecuted++
         );
 
-        waitUntilTaskCompleted(imageAssetSetsTask);
+        waitUntilTaskCompleted(imageAssetSetsTask, TASK_HAS_THROWN_EXCEPTION);
     }
 
     private <TDefinitionDTO> void loadAllSerially(TDefinitionDTO[] definitionDTOs,
@@ -332,14 +335,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
 
         return runTaskAsync(() -> {
             for (int i = 0; i < batchTasksToExecute; i++) {
-                tasks.add(runTaskAsync(() -> loadBatch(definitionDTOs, batchSize,
-                        taskFactory, lockObject, increaseCompletedBatchesCount),
+                tasks.add(runTaskAsync(
+                        () -> loadBatch(definitionDTOs, batchSize, taskFactory, lockObject,
+                                increaseCompletedBatchesCount),
+                        this::handleThrowable,
                         EXECUTOR
                 ));
             }
 
-            waitUntilTasksCompleted(tasks, batchTasksToExecute);
-        }, EXECUTOR);
+            waitUntilTasksCompleted(tasks, batchTasksToExecute, TASK_HAS_THROWN_EXCEPTION);
+        }, this::handleThrowable, EXECUTOR);
     }
 
     private <TDefinitionDTO> void loadBatch(LinkedBlockingQueue<TDefinitionDTO> definitionDTOs,
@@ -356,39 +361,9 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         }
     }
 
-    private CompletableFuture<Void> runTaskAsync(Runnable task, ExecutorService executorService) {
-        return CompletableFuture.runAsync(task, executorService)
-                .exceptionally(e -> {
-                    handleThrowable(e);
-                    return null;
-                });
-    }
-
     private synchronized void handleThrowable(Throwable e) {
-        if (_innerThrowable == null) {
-            _innerThrowable = e.getCause();
-        }
-    }
-
-    // NB: It's usually better to push completion statuses rather than poll for them, but I'm
-    //     assuming the performance hit to be negligible, and keeping everything on one thread
-    //     makes it much easier to visualize the flow while reading the code.
-    private void waitUntilTaskCompleted(CompletableFuture<Void> task) {
-        while (_innerThrowable == null && !task.isDone()) {
-            CheckedExceptionWrapper.sleep(50);
-        }
-    }
-
-    private void waitUntilTasksCompleted(List<CompletableFuture<Void>> tasks) {
-        waitUntilTasksCompleted(tasks, tasks.size());
-    }
-
-    private void waitUntilTasksCompleted(List<CompletableFuture<Void>> tasks,
-                                         int tasksToComplete) {
-        while (_innerThrowable == null &&
-                tasks.size() < tasksToComplete ||
-                tasks.stream().anyMatch(task -> !task.isDone())) {
-            CheckedExceptionWrapper.sleep(50);
+        if (innerThrowable == null) {
+            innerThrowable = e.getCause();
         }
     }
 
