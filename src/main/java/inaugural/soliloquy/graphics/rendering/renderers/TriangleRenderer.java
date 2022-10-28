@@ -33,8 +33,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
                 "renderable.getVertex1Provider");
         Vertex vertex1 = renderable.getVertex1Provider().provide(timestamp);
         Check.ifNull(vertex1, "provided vertex 1");
-        Check.ifNull(vertex1.x, "x value of vertex 1");
-        Check.ifNull(vertex1.y, "y value of vertex 1");
 
         Check.ifNull(renderable.getVertex1ColorProvider(), "renderable.getVertex1ColorProvider");
         Color color1 = renderable.getVertex1ColorProvider().provide(timestamp);
@@ -43,8 +41,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
                 "renderable.getVertex2Provider");
         Vertex vertex2 = renderable.getVertex2Provider().provide(timestamp);
         Check.ifNull(vertex2, "provided vertex 2");
-        Check.ifNull(vertex2.x, "x value of vertex 2");
-        Check.ifNull(vertex2.y, "y value of vertex 2");
 
         Check.ifNull(renderable.getVertex2ColorProvider(), "renderable.getVertex2ColorProvider");
         Color color2 = renderable.getVertex2ColorProvider().provide(timestamp);
@@ -53,8 +49,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
                 "renderable.getVertex3Provider");
         Vertex vertex3 = renderable.getVertex3Provider().provide(timestamp);
         Check.ifNull(vertex3, "provided vertex 3");
-        Check.ifNull(vertex3.x, "x value of vertex 3");
-        Check.ifNull(vertex3.y, "y value of vertex 3");
 
         Check.ifNull(renderable.getVertex3ColorProvider(), "renderable.getVertex3ColorProvider");
         Color color3 = renderable.getVertex3ColorProvider().provide(timestamp);
@@ -79,12 +73,12 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.x;
-        float y1 = vertex1.y;
-        float x2 = vertex2.x;
-        float y2 = vertex2.y;
-        float x3 = vertex3.x;
-        float y3 = vertex3.y;
+        float x1 = vertex1.X;
+        float y1 = vertex1.Y;
+        float x2 = vertex2.X;
+        float y2 = vertex2.Y;
+        float x3 = vertex3.X;
+        float y3 = vertex3.Y;
 
         float minX = 0f;
         float maxX;
@@ -252,7 +246,7 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         }
 
         @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+        public boolean capturesMouseEventAtPoint(Vertex point, long l)
                 throws UnsupportedOperationException, IllegalArgumentException {
             return false;
         }

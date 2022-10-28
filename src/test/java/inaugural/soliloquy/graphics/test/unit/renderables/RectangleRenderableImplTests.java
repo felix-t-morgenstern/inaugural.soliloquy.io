@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -473,7 +474,7 @@ class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP - 1));
+                _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP - 1));
 
         _rectangleRenderable.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -485,7 +486,7 @@ class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP));
+                _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
 
         _rectangleRenderable.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -497,7 +498,7 @@ class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 1));
+                _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 1));
 
         _rectangleRenderable.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -509,9 +510,9 @@ class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 2));
+                _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 2));
 
-        _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 4);
+        _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
@@ -521,7 +522,7 @@ class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _rectangleRenderable.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderable.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 3));
+                _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 3));
     }
 
     @Test
@@ -599,19 +600,20 @@ class RectangleRenderableImplTests {
                 return null;
             }
         };
-        _rectangleRenderable.setRenderingDimensionsProvider(new FakeStaticProvider<>(renderingDimensions));
+        _rectangleRenderable.setRenderingDimensionsProvider(
+                new FakeStaticProvider<>(renderingDimensions));
 
         assertTrue(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.251f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.251f, 0.5f), TIMESTAMP));
         assertFalse(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.249f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.249f, 0.5f), TIMESTAMP));
 
         _rectangleRenderable.setCapturesMouseEvents(false);
 
         assertFalse(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.251f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.251f, 0.5f), TIMESTAMP));
         assertFalse(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.249f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.249f, 0.5f), TIMESTAMP));
     }
 
     @Test
@@ -662,7 +664,8 @@ class RectangleRenderableImplTests {
                 return null;
             }
         };
-        _rectangleRenderable.setRenderingDimensionsProvider(new FakeStaticProvider<>(renderingDimensions));
+        _rectangleRenderable.setRenderingDimensionsProvider(
+                new FakeStaticProvider<>(renderingDimensions));
 
         when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
             @Override
@@ -712,17 +715,25 @@ class RectangleRenderableImplTests {
         });
 
         assertTrue(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.499f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.499f, 0.5f), TIMESTAMP));
         assertFalse(_rectangleRenderable
-                .capturesMouseEventAtPoint(0.501f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.501f, 0.5f), TIMESTAMP));
     }
 
     @Test
     void testCapturesMouseEventsAtPointWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(-0.001f, 0f, TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(1.001f, 0f, TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(0f, -0.001f, TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.capturesMouseEventAtPoint(0f, 1.001f, TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(-0.001f, 0f),
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(1.001f, 0f),
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, -0.001f),
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> _rectangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 1.001f),
+                        TIMESTAMP));
     }
 
     @Test

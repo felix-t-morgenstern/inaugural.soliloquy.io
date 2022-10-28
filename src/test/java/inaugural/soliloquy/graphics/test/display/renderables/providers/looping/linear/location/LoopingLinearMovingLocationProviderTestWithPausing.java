@@ -24,7 +24,7 @@ public class LoopingLinearMovingLocationProviderTestWithPausing
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
                     TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 LoopingLinearMovingLocationProviderTestWithPausing::closeAfterSomeTime

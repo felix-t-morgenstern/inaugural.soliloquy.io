@@ -130,11 +130,10 @@ public class TriangleRenderableImpl
      * .org/check-whether-a-given-point-lies-inside-a-triangle-or-not/ on 2022/08/11
      */
     @Override
-    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+    public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Vertex point = Vertex.of(x, y);
         Vertex v1 = _vertex1Provider.provide(timestamp);
         Vertex v2 = _vertex2Provider.provide(timestamp);
         Vertex v3 = _vertex3Provider.provide(timestamp);
@@ -149,8 +148,8 @@ public class TriangleRenderableImpl
     }
 
     private float area(Vertex v1, Vertex v2, Vertex v3) {
-        return Math.abs(((v1.x * (v2.y - v3.y)) + (v2.x * (v3.y - v1.y)) + (v3.x * (v1.y - v2.y))) /
-                2.0f);
+        return Math.abs(
+                ((v1.X * (v2.Y - v3.Y)) + (v2.X * (v3.Y - v1.Y)) + (v3.X * (v1.Y - v2.Y))) / 2.0f);
     }
 
     @Override

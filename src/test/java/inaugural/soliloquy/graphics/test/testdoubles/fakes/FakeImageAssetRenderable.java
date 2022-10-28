@@ -150,9 +150,9 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+    public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        CapturesMouseEventsAtPointInputLocations.add(Vertex.of(x, y));
+        CapturesMouseEventsAtPointInputLocations.add(point);
         CapturesMouseEventsAtPointInputTimestamps.add(timestamp);
         return CapturesMouseEventsAtPoint;
     }

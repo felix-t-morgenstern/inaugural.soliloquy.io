@@ -30,7 +30,7 @@ abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
     }
 
     protected void drawPoint(Vertex point) {
-        drawPoint(point.x, point.y);
+        drawPoint(point.X, point.Y);
     }
 
     protected void drawPoint(float x, float y) {

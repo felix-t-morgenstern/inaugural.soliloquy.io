@@ -34,8 +34,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
         runTest(TextLineRendererSimpleTest::generateRenderablesAndRenderersWithMeshAndShader,
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererSimpleTest::closeAfterSomeTime);

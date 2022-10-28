@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.unit.assets;
 
-import inaugural.soliloquy.common.test.fakes.FakeCoordinateFactory;
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import inaugural.soliloquy.tools.Tools;
@@ -53,7 +52,6 @@ class FontImplTests {
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC = 0.890f;
     private final static float LEADING_ADJUSTMENT = 0.090f;
     private final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    private final static FakeCoordinateFactory COORDINATE_FACTORY = new FakeCoordinateFactory();
     private final static int ASCII_CHAR_SPACE = 32;
     private final static int ASCII_CHAR_DELETE = 127;
     private final static int NUMBER_EXTENDED_ASCII_CHARS = 256;
@@ -101,8 +99,7 @@ class FontImplTests {
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                         )
                 ),
-                FLOAT_BOX_FACTORY,
-                COORDINATE_FACTORY
+                FLOAT_BOX_FACTORY
         );
     }
 
@@ -149,8 +146,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -184,8 +180,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -219,8 +214,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -254,8 +248,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -289,8 +282,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -319,8 +311,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -354,8 +345,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -389,8 +379,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -424,8 +413,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -459,8 +447,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -494,8 +481,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -524,8 +510,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -559,8 +544,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -594,8 +578,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -629,8 +612,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -664,8 +646,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -699,8 +680,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -729,8 +709,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -764,8 +743,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -799,8 +777,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -834,8 +811,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -869,8 +845,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -904,8 +879,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -934,8 +908,7 @@ class FontImplTests {
                                 ),
                                 null
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -969,8 +942,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1004,8 +976,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1039,8 +1010,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1074,8 +1044,7 @@ class FontImplTests {
                                         -0.0001f
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1109,8 +1078,7 @@ class FontImplTests {
                                         1f - LEADING_ADJUSTMENT
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1144,8 +1112,7 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        FLOAT_BOX_FACTORY,
-                        COORDINATE_FACTORY
+                        FLOAT_BOX_FACTORY
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontImpl(
@@ -1179,42 +1146,6 @@ class FontImplTests {
                                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                 )
                         ),
-                        null,
-                        COORDINATE_FACTORY
-                ));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontImpl(
-                        new FontDefinition(
-                                ID,
-                                RELATIVE_LOCATION,
-                                MAX_LOSSLESS_FONT_SIZE,
-                                LEADING_ADJUSTMENT,
-                                new FontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                ),
-                                new FontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                ),
-                                new FontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                ),
-                                new FontStyleDefinition(
-                                        ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                        GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                        GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                        ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                )
-                        ),
-                        FLOAT_BOX_FACTORY,
                         null
                 ));
     }
@@ -1370,8 +1301,7 @@ class FontImplTests {
                                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                         )
                 ),
-                FLOAT_BOX_FACTORY,
-                COORDINATE_FACTORY
+                FLOAT_BOX_FACTORY
         );
 
         FloatBox glyphBoxPlain_i = Font.plain().getUvCoordinatesForGlyph('i');
@@ -1510,25 +1440,25 @@ class FontImplTests {
     void testDimensionsAndWidthToHeightRatios() {
         int maxDimensions = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
-        assertTrue(Font.plain().textureDimensions().getX() <= maxDimensions);
+        assertTrue(Font.plain().textureDimensions().x() <= maxDimensions);
         assertEquals(Font.plain().textureWidthToHeightRatio(),
-                Font.plain().textureDimensions().getX() /
-                        (float) Font.plain().textureDimensions().getY());
+                Font.plain().textureDimensions().x() /
+                        (float) Font.plain().textureDimensions().y());
 
-        assertTrue(Font.italic().textureDimensions().getX() <= maxDimensions);
+        assertTrue(Font.italic().textureDimensions().x() <= maxDimensions);
         assertEquals(Font.italic().textureWidthToHeightRatio(),
-                Font.italic().textureDimensions().getX() /
-                        (float) Font.italic().textureDimensions().getY());
+                Font.italic().textureDimensions().x() /
+                        (float) Font.italic().textureDimensions().y());
 
-        assertTrue(Font.bold().textureDimensions().getX() <= maxDimensions);
+        assertTrue(Font.bold().textureDimensions().x() <= maxDimensions);
         assertEquals(Font.bold().textureWidthToHeightRatio(),
-                Font.bold().textureDimensions().getX() /
-                        (float) Font.bold().textureDimensions().getY());
+                Font.bold().textureDimensions().x() /
+                        (float) Font.bold().textureDimensions().y());
 
-        assertTrue(Font.boldItalic().textureDimensions().getX() <= maxDimensions);
+        assertTrue(Font.boldItalic().textureDimensions().x() <= maxDimensions);
         assertEquals(Font.boldItalic().textureWidthToHeightRatio(),
-                Font.boldItalic().textureDimensions().getX() /
-                        (float) Font.boldItalic().textureDimensions().getY());
+                Font.boldItalic().textureDimensions().x() /
+                        (float) Font.boldItalic().textureDimensions().y());
     }
 
     @Test

@@ -149,7 +149,7 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+    public boolean capturesMouseEventAtPoint(Vertex point, long l)
             throws UnsupportedOperationException, IllegalArgumentException {
         return false;
     }

@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.unit.bootstrap.tasks;
 
-import inaugural.soliloquy.common.test.fakes.FakeRegistry;
 import inaugural.soliloquy.graphics.api.dto.GlobalLoopingAnimationDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.GlobalLoopingAnimationPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimation;
@@ -29,8 +28,7 @@ class GlobalLoopingAnimationPreloaderTaskTests {
     private final FakeAnimation ANIMATION_2 = new FakeAnimation(ANIMATION_ID_2);
     private final FakeGlobalLoopingAnimationFactory GLOBAL_LOOPING_ANIMATION_FACTORY =
             new FakeGlobalLoopingAnimationFactory();
-    private final FakeRegistry<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS =
-            new FakeRegistry<>(null);
+    private final ArrayList<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS = new ArrayList<>();
 
     private GlobalLoopingAnimationPreloaderTask _globalLoopingAnimationPreloaderTask;
 
@@ -150,11 +148,7 @@ class GlobalLoopingAnimationPreloaderTaskTests {
                 .contains(PERIOD_MODULO_OFFSET_2));
         assertEquals(2, GLOBAL_LOOPING_ANIMATION_FACTORY.Outputs.size());
         assertEquals(2, GLOBAL_LOOPING_ANIMATIONS.size());
-        assertTrue(GLOBAL_LOOPING_ANIMATIONS.contains(GLOBAL_LOOPING_ANIMATION_ID_1));
-        assertTrue(GLOBAL_LOOPING_ANIMATIONS.contains(GLOBAL_LOOPING_ANIMATION_ID_2));
-        assertTrue(GLOBAL_LOOPING_ANIMATION_FACTORY.Outputs.contains(
-                GLOBAL_LOOPING_ANIMATIONS.get(GLOBAL_LOOPING_ANIMATION_ID_1)));
-        assertTrue(GLOBAL_LOOPING_ANIMATION_FACTORY.Outputs.contains(
-                GLOBAL_LOOPING_ANIMATIONS.get(GLOBAL_LOOPING_ANIMATION_ID_2)));
+        GLOBAL_LOOPING_ANIMATION_FACTORY.Outputs.forEach(
+                factoryOutput -> assertTrue(GLOBAL_LOOPING_ANIMATIONS.contains(factoryOutput)));
     }
 }

@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,18 +43,18 @@ class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     void testPutRenderableAndGetCapturingRenderableAtPoint() {
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
 
         assertSame(ImageAssetRenderable1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
         assertNull(_mouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(0.09999f, 0.09999f, 0L));
+                .getCapturingRenderableAtPoint(Vertex.of(0.09999f, 0.09999f), 0L));
         assertSame(ImageAssetRenderable1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.5f, .5f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.5f, .5f), 0L));
         assertNull(_mouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(0.50001f, 0.50001f, 0L));
+                .getCapturingRenderableAtPoint(Vertex.of(0.50001f, 0.50001f), 0L));
     }
 
     @Test
@@ -81,16 +82,16 @@ class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     void testRemoveRenderable() {
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
 
         assertSame(ImageAssetRenderable1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
 
         _mouseEventCapturingSpatialIndex.removeRenderable(ImageAssetRenderable1);
 
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
     }
 
     @Test
@@ -98,14 +99,14 @@ class MouseEventCapturingSpatialIndexImplTests {
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
 
         assertSame(ImageAssetRenderable1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.6f, .6f), 0L));
 
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions2);
 
-        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.1f, .1f, 0L));
+        assertNull(_mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.1f, .1f), 0L));
         assertSame(ImageAssetRenderable1,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.6f, .6f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.6f, .6f), 0L));
     }
 
     @Test
@@ -116,7 +117,7 @@ class MouseEventCapturingSpatialIndexImplTests {
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable4, RenderingDimensions4);
 
         assertSame(ImageAssetRenderable4,
-                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(.45f, .45f, 0L));
+                _mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(Vertex.of(.45f, .45f), 0L));
     }
 
     @Test
@@ -130,21 +131,21 @@ class MouseEventCapturingSpatialIndexImplTests {
         _mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable4, RenderingDimensions4);
 
         assertSame(ImageAssetRenderable2, _mouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(.454f, .456f, 789L));
+                .getCapturingRenderableAtPoint(Vertex.of(.454f, .456f), 789L));
         assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.size());
         assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.size());
         assertEquals(0.454f,
-                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).x);
+                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).X);
         assertEquals(0.456f,
-                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).y);
+                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.get(0).Y);
         assertEquals(789L,
                 (long) ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.get(0));
         assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.size());
         assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.size());
         assertEquals(0.454f,
-                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).x);
+                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).X);
         assertEquals(0.456f,
-                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).y);
+                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.get(0).Y);
         assertEquals(789L,
                 (long) ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.get(0));
     }

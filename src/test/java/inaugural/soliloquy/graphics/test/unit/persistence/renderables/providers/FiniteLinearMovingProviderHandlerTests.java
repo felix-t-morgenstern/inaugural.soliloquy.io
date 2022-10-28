@@ -49,7 +49,7 @@ class FiniteLinearMovingProviderHandlerTests {
     private static final String WRITTEN_VALUE =
             "{\"uuid\":\"uuidWriteOutput\",\"valueType\":\"java.lang.Float\"," +
                     "\"values\":[{\"timestamp\":456,\"value\":\"floatWriteOutput\"}," +
-                    "{\"timestamp\":123,\"value\":\"floatWriteOutput\"},{\"timestamp\":789," +
+                    "{\"timestamp\":789,\"value\":\"floatWriteOutput\"},{\"timestamp\":123," +
                     "\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123," +
                     "\"mostRecentTimestamp\":456}";
 

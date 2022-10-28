@@ -14,11 +14,8 @@ public class FiniteLinearMovingVertexProvider
     }
 
     @Override
-    protected Vertex interpolate(Vertex value1, float weight1, Vertex value2, float weight2,
+    protected Vertex interpolate(Vertex location1, float weight1, Vertex location2, float weight2,
                                  int transitionNumber) {
-        return Vertex.of(
-                Interpolate.floats(value1.x, weight1, value2.x, weight2),
-                Interpolate.floats(value1.y, weight1, value2.y, weight2)
-        );
+        return Interpolate.vertices(location1, weight1, location2, weight2);
     }
 }

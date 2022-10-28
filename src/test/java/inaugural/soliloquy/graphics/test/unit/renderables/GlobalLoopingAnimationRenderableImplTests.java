@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -503,7 +504,7 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, timestamp - 1));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp - 1));
 
         _globalLoopingAnimationRenderableWithMouseEvents.release(0, timestamp + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -516,7 +517,7 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, timestamp));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp));
 
         _globalLoopingAnimationRenderableWithMouseEvents.mouseOver(timestamp + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -529,7 +530,7 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 1));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 1));
 
         _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -542,10 +543,10 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 2));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 2));
 
         _globalLoopingAnimationRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0f, 0f, timestamp + 4);
+                .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 4);
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents.press(0, timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
@@ -556,7 +557,7 @@ class GlobalLoopingAnimationRenderableImplTests {
                 _globalLoopingAnimationRenderableWithMouseEvents.mouseLeave(timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 3));
     }
 
     @Test
@@ -609,7 +610,7 @@ class GlobalLoopingAnimationRenderableImplTests {
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
 
         boolean capturesMouseEventAtPoint = _globalLoopingAnimationRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+                .capturesMouseEventAtPoint(Vertex.of(0.123f, 0.456f), 789L);
 
         assertTrue(capturesMouseEventAtPoint);
         ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
@@ -684,9 +685,9 @@ class GlobalLoopingAnimationRenderableImplTests {
         });
 
         assertTrue(_globalLoopingAnimationRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.499f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.499f, 0f), TIMESTAMP));
         assertFalse(_globalLoopingAnimationRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.501f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.501f, 0f), TIMESTAMP));
     }
 
     @Test
@@ -698,35 +699,35 @@ class GlobalLoopingAnimationRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () ->
                 _globalLoopingAnimationRenderableWithoutMouseEvents
-                        .capturesMouseEventAtPoint(0f, 0f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(0f, 0f), 0L));
 
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(.5f - verySmallNumber, .75f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.5f - verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(1f + verySmallNumber, .75f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(1f + verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(.75f, .5f - verySmallNumber, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.75f, .5f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(.75f, 1.5f + verySmallNumber, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.75f, 1.5f + verySmallNumber), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -0.5f, 0.5f, 0.5f);
 
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0f - verySmallNumber, .25f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(0f - verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(0.5f + verySmallNumber, .25f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(0.5f + verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(.25f, 0f - verySmallNumber, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.25f, 0f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () ->
                 _globalLoopingAnimationRenderableWithMouseEvents
-                        .capturesMouseEventAtPoint(.25f, 0.5f + verySmallNumber, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.25f, 0.5f + verySmallNumber), 0L));
     }
 
     @Test

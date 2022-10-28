@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
@@ -28,6 +29,13 @@ class Interpolate {
                 value1WeightedTopY + value2WeightedTopY,
                 value1WeightedRightX + value2WeightedRightX,
                 value1WeightedBottomY + value2WeightedBottomY
+        );
+    }
+
+    protected static Vertex vertices(Vertex value1, float weight1, Vertex value2, float weight2) {
+        return Vertex.of(
+                Interpolate.floats(value1.X, weight1, value2.X, weight2),
+                Interpolate.floats(value1.Y, weight1, value2.Y, weight2)
         );
     }
 

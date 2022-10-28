@@ -30,7 +30,6 @@ public class AntialiasedLineSegmentRenderer
     private static final AntialiasedLineSegmentRenderable ARCHETYPE =
             new AntialiasedLineSegmentRenderableArchetype();
 
-    /** @noinspection ConstantConditions */
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
                                           Long mostRecentTimestamp) {
         super(ARCHETYPE, mostRecentTimestamp);
@@ -79,10 +78,10 @@ public class AntialiasedLineSegmentRenderer
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.x;
-        float y1 = vertex1.y;
-        float x2 = vertex2.x;
-        float y2 = vertex2.y;
+        float x1 = vertex1.X;
+        float y1 = vertex1.Y;
+        float x2 = vertex2.X;
+        float y2 = vertex2.Y;
 
         Vertex v1OuterCcw;
         Vertex v1ProximalCcw;
@@ -102,10 +101,10 @@ public class AntialiasedLineSegmentRenderer
         Vertex v2InnerCw;
 
         if (x2 < x1) {
-            x1 = vertex2.x;
-            y1 = vertex2.y;
-            x2 = vertex1.x;
-            y2 = vertex1.y;
+            x1 = vertex2.X;
+            y1 = vertex2.Y;
+            x2 = vertex1.X;
+            y2 = vertex1.Y;
         }
 
         float rise = (y2 - y1);
@@ -149,7 +148,7 @@ public class AntialiasedLineSegmentRenderer
             v2InnerCw = Vertex.of(x1 - vertexToProximal, y2 - outerToDistal);
         }
         else {
-            // NB: Slopes are reversed, since y values go from 0.0 at the top to 1.0 at the bottom
+            // NB: Slopes are reversed, since Y values go from 0.0 at the top to 1.0 at the bottom
 
             float length = sqRoot(square(rise) + square(run));
 
@@ -180,8 +179,8 @@ public class AntialiasedLineSegmentRenderer
             float halfThickness = halve(thickness);
 
             Vertex outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
-            float outerCcwXAdjustment = outerCcwAdjustments.x;
-            float outerCcwYAdjustment = outerCcwAdjustments.y;
+            float outerCcwXAdjustment = outerCcwAdjustments.X;
+            float outerCcwYAdjustment = outerCcwAdjustments.Y;
 
             float proximalCcwXAdjustment = outerCcwXAdjustment * (1f - thicknessGradientPercent);
             float proximalCcwYAdjustment = proximalCcwXAdjustment * reciprocalSlope;
@@ -189,36 +188,36 @@ public class AntialiasedLineSegmentRenderer
             Vertex lengthGradientAdjustments =
                     getAdjustments(halve(length) * lengthGradientPercent, providedSlope);
 
-            float lengthGradientXAdjust = lengthGradientAdjustments.x;
-            float lengthGradientYAdjust = lengthGradientAdjustments.y;
+            float lengthGradientXAdjust = lengthGradientAdjustments.X;
+            float lengthGradientYAdjust = lengthGradientAdjustments.Y;
 
             v1OuterCcw = Vertex.of(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
             v1ProximalCcw = Vertex.of(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
-            v1DistalCcw = Vertex.of(v1OuterCcw.x + lengthGradientXAdjust,
-                    v1OuterCcw.y + lengthGradientYAdjust);
-            v1InnerCcw = Vertex.of(v1ProximalCcw.x + lengthGradientXAdjust,
-                    v1ProximalCcw.y + lengthGradientYAdjust);
+            v1DistalCcw = Vertex.of(v1OuterCcw.X + lengthGradientXAdjust,
+                    v1OuterCcw.Y + lengthGradientYAdjust);
+            v1InnerCcw = Vertex.of(v1ProximalCcw.X + lengthGradientXAdjust,
+                    v1ProximalCcw.Y + lengthGradientYAdjust);
 
             v1OuterCw = Vertex.of(x1 - outerCcwXAdjustment, y1 - outerCcwYAdjustment);
             v1ProximalCw = Vertex.of(x1 - proximalCcwXAdjustment, y1 - proximalCcwYAdjustment);
-            v1DistalCw = Vertex.of(v1OuterCw.x + lengthGradientXAdjust,
-                    v1OuterCw.y + lengthGradientYAdjust);
-            v1InnerCw = Vertex.of(v1ProximalCw.x + lengthGradientXAdjust,
-                    v1ProximalCw.y + lengthGradientYAdjust);
+            v1DistalCw = Vertex.of(v1OuterCw.X + lengthGradientXAdjust,
+                    v1OuterCw.Y + lengthGradientYAdjust);
+            v1InnerCw = Vertex.of(v1ProximalCw.X + lengthGradientXAdjust,
+                    v1ProximalCw.Y + lengthGradientYAdjust);
 
             v2OuterCcw = Vertex.of(x2 + outerCcwXAdjustment, y2 + outerCcwYAdjustment);
             v2ProximalCcw = Vertex.of(x2 + proximalCcwXAdjustment, y2 + proximalCcwYAdjustment);
-            v2DistalCcw = Vertex.of(v2OuterCcw.x - lengthGradientXAdjust,
-                    v2OuterCcw.y - lengthGradientYAdjust);
-            v2InnerCcw = Vertex.of(v2ProximalCcw.x - lengthGradientXAdjust,
-                    v2ProximalCcw.y - lengthGradientYAdjust);
+            v2DistalCcw = Vertex.of(v2OuterCcw.X - lengthGradientXAdjust,
+                    v2OuterCcw.Y - lengthGradientYAdjust);
+            v2InnerCcw = Vertex.of(v2ProximalCcw.X - lengthGradientXAdjust,
+                    v2ProximalCcw.Y - lengthGradientYAdjust);
 
             v2OuterCw = Vertex.of(x2 - outerCcwXAdjustment, y2 - outerCcwYAdjustment);
             v2ProximalCw = Vertex.of(x2 - proximalCcwXAdjustment, y2 - proximalCcwYAdjustment);
-            v2DistalCw = Vertex.of(v2OuterCw.x - lengthGradientXAdjust,
-                    v2OuterCw.y - lengthGradientYAdjust);
-            v2InnerCw = Vertex.of(v2ProximalCw.x - lengthGradientXAdjust,
-                    v2ProximalCw.y - lengthGradientYAdjust);
+            v2DistalCw = Vertex.of(v2OuterCw.X - lengthGradientXAdjust,
+                    v2OuterCw.Y - lengthGradientYAdjust);
+            v2InnerCw = Vertex.of(v2ProximalCw.X - lengthGradientXAdjust,
+                    v2ProximalCw.Y - lengthGradientYAdjust);
         }
 
         glBegin(GL_TRIANGLES);

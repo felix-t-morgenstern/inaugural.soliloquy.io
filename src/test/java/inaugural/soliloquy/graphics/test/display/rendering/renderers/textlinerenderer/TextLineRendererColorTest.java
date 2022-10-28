@@ -41,8 +41,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 TextLineRendererColorTest::generateRenderablesAndRenderersWithMeshAndShader,
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererColorTest::closeAfterSomeTime

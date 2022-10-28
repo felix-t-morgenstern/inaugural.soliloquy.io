@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -591,7 +592,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.setType(TYPE);
         _imageAssetSetRenderableWithMouseEvents.setDirection(DIRECTION);
         boolean capturesMouseEventAtPoint = _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+                .capturesMouseEventAtPoint(Vertex.of(0.123f, 0.456f), 789L);
 
         assertTrue(capturesMouseEventAtPoint);
         assertEquals(1, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
@@ -667,9 +668,9 @@ class ImageAssetSetRenderableImplTests {
         });
 
         assertTrue(_imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.499f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.499f, 0f), TIMESTAMP));
         assertFalse(_imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.501f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.501f, 0f), TIMESTAMP));
     }
 
     @Test
@@ -692,7 +693,7 @@ class ImageAssetSetRenderableImplTests {
         _imageAssetSetRenderableWithMouseEvents.setType(TYPE);
         _imageAssetSetRenderableWithMouseEvents.setDirection(DIRECTION);
         boolean capturesMouseEventAtPoint = _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.123f, 0.456f, 789L);
+                .capturesMouseEventAtPoint(Vertex.of(0.123f, 0.456f), 789L);
 
         assertTrue(capturesMouseEventAtPoint);
         assertEquals(1, IMAGE_ASSET_SET_SUPPORTING_MOUSE_EVENTS
@@ -769,9 +770,9 @@ class ImageAssetSetRenderableImplTests {
         });
 
         assertTrue(_imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.499f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.499f, 0f), TIMESTAMP));
         assertFalse(_imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.501f, 0f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.501f, 0f), TIMESTAMP));
     }
 
     @Test
@@ -780,29 +781,29 @@ class ImageAssetSetRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () ->
                 _imageAssetSetRenderableWithoutMouseEvents
-                        .capturesMouseEventAtPoint(.5f, .5f, 0L));
+                        .capturesMouseEventAtPoint(Vertex.of(.5f, .5f), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(.5f, .5f, 1.5f, 1.5f);
 
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.5f - verySmallNumber, .75f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.5f - verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(1f + verySmallNumber, .75f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(1f + verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.75f, .5f - verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.75f, .5f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.75f, 1.5f + verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.75f, 1.5f + verySmallNumber), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -0.5f, 0.5f, 0.5f);
 
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0f - verySmallNumber, .25f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(0f - verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.5f + verySmallNumber, .25f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(0.5f + verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.25f, 0f - verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.25f, 0f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () -> _imageAssetSetRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.25f, 0.5f + verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.25f, 0.5f + verySmallNumber), 0L));
     }
 
     @Test

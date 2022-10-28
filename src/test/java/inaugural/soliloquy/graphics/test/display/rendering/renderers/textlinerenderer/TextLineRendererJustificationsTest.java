@@ -43,8 +43,7 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                     TextLineRenderableLeft.Font =
                             TextLineRenderableCenter.Font =
                                     TextLineRenderableRight.Font =
-                                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY,
-                                                    COORDINATE_FACTORY);
+                                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },

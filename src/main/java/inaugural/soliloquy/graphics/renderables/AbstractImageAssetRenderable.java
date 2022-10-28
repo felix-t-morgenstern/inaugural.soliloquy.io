@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.assets.Image;
@@ -118,40 +119,44 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                 "renderingDimensionsProvider");
     }
 
-    protected boolean capturesMouseEventAtPoint(float x, float y, long timestamp,
+    protected boolean capturesMouseEventAtPoint(Vertex point, long timestamp,
                                                 Supplier<AssetSnippet> snippetSupplier) {
         throwIfNotSupportingMouseEvents("capturesMouseEventAtPoint");
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        Check.throwOnLtValue(x, 0f, "x");
-        Check.throwOnLtValue(y, 0f, "y");
-        Check.throwOnGtValue(x, 1f, "x");
-        Check.throwOnGtValue(y, 1f, "y");
+        Check.throwOnLtValue(point.X, 0f, "point.X");
+        Check.throwOnLtValue(point.Y, 0f, "point.Y");
+        Check.throwOnGtValue(point.X, 1f, "point.X");
+        Check.throwOnGtValue(point.Y, 1f, "point.Y");
 
         FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
-        if (x < renderingBoundaries.leftX() || x > renderingBoundaries.rightX() ||
-                y < renderingBoundaries.topY() || y > renderingBoundaries.bottomY()) {
+        if (point.X < renderingBoundaries.leftX() || point.X > renderingBoundaries.rightX() ||
+                point.Y < renderingBoundaries.topY() || point.Y > renderingBoundaries.bottomY()) {
             return false;
         }
 
         FloatBox renderingArea = _renderingAreaProvider.provide(timestamp);
-        if (x < renderingArea.leftX()) {
-            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: x (" + x
-                    + ") is to the left of left boundary of renderable (" + renderingArea.leftX() +
-                    ")");
+        if (point.X < renderingArea.leftX()) {
+            throw new IllegalArgumentException(
+                    className() + ".capturesMouseEventAtPoint: point.X (" + point.X +
+                            ") is to the left of left boundary of renderable (" +
+                            renderingArea.leftX() + ")");
         }
-        if (x > renderingArea.rightX()) {
-            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: x (" + x
-                    + ") is to the right of right boundary of renderable (" + renderingArea.rightX()
-                    + ")");
+        if (point.X > renderingArea.rightX()) {
+            throw new IllegalArgumentException(
+                    className() + ".capturesMouseEventAtPoint: point.X (" + point.X +
+                            ") is to the right of right boundary of renderable (" +
+                            renderingArea.rightX() + ")");
         }
-        if (y < renderingArea.topY()) {
-            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: y (" + y
-                    + ") is above top boundary of renderable (" + renderingArea.topY() + ")");
+        if (point.Y < renderingArea.topY()) {
+            throw new IllegalArgumentException(
+                    className() + ".capturesMouseEventAtPoint: point.Y (" + point.Y +
+                            ") is above top boundary of renderable (" + renderingArea.topY() + ")");
         }
-        if (y > renderingArea.bottomY()) {
-            throw new IllegalArgumentException(className() + ".capturesMouseEventAtPoint: y (" + y
-                    + ") is below bottom boundary of renderable (" + renderingArea.bottomY() +
-                    ")");
+        if (point.Y > renderingArea.bottomY()) {
+            throw new IllegalArgumentException(
+                    className() + ".capturesMouseEventAtPoint: point.Y (" + point.Y +
+                            ") is below bottom boundary of renderable (" + renderingArea.bottomY() +
+                            ")");
         }
         AssetSnippet snippet = snippetSupplier.get();
         float offsetX = 0f;
@@ -162,10 +167,10 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         }
         Image image = snippet.image();
         int imageX =
-                (int) ((((x - offsetX) - renderingArea.leftX()) / renderingArea.width())
+                (int) ((((point.X - offsetX) - renderingArea.leftX()) / renderingArea.width())
                         * (snippet.rightX() - snippet.leftX())) + snippet.leftX();
         int imageY =
-                (int) ((((y - offsetY) - renderingArea.topY()) / renderingArea.height())
+                (int) ((((point.Y - offsetY) - renderingArea.topY()) / renderingArea.height())
                         * (snippet.bottomY() - snippet.topY())) + snippet.topY();
         return image.capturesMouseEventsAtPixel(imageX, imageY);
     }

@@ -36,8 +36,7 @@ public class TextLineRendererPaddingTest extends TextLineRendererTest {
                 TextLineRendererPaddingTest::generateRenderablesAndRenderersWithMeshAndShader,
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererPaddingTest::closeAfterSomeTime

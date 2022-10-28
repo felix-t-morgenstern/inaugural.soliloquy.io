@@ -168,8 +168,8 @@ public class LoopingLinearMovingVertexProviderTests {
 
         Vertex provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
-        assertEquals(expected.x, provided.x);
-        assertEquals(expected.y, provided.y);
+        assertEquals(expected.X, provided.X);
+        assertEquals(expected.Y, provided.Y);
     }
 
     @Test
@@ -187,8 +187,8 @@ public class LoopingLinearMovingVertexProviderTests {
 
         Vertex provided = _loopingLinearMovingLocationProvider.provide(timestamp);
 
-        assertEquals(expected.x, provided.x);
-        assertEquals(expected.y, provided.y);
+        assertEquals(expected.X, provided.X);
+        assertEquals(expected.Y, provided.Y);
     }
 
     @Test
@@ -284,8 +284,8 @@ public class LoopingLinearMovingVertexProviderTests {
         Vertex provided =
                 _loopingLinearMovingLocationProvider.provide(timestamp + pauseDuration);
 
-        assertEquals(expected.x, provided.x);
-        assertEquals(expected.y, provided.y);
+        assertEquals(expected.X, provided.X);
+        assertEquals(expected.Y, provided.Y);
     }
 
     @Test

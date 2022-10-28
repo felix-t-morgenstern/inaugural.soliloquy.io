@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -446,7 +447,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP - 1));
+                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP - 1));
 
         _spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -458,7 +459,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP));
+                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
 
         _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -470,7 +471,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 1));
+                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 1));
 
         _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -482,9 +483,9 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 2));
+                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 2));
 
-        _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 4);
+        _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
@@ -494,7 +495,7 @@ class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(0f, 0f, TIMESTAMP + 3));
+                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 3));
     }
 
     @Test
@@ -553,7 +554,7 @@ class SpriteRenderableImplTests {
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
 
         boolean capturesMouseEventAtPoint = _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.123f, 0.456f, TIMESTAMP);
+                .capturesMouseEventAtPoint(Vertex.of(0.123f, 0.456f), TIMESTAMP);
 
         assertTrue(capturesMouseEventAtPoint);
         ArrayList<Pair<Integer, Integer>> capturesMouseEventsAtPixelInputs =
@@ -621,9 +622,9 @@ class SpriteRenderableImplTests {
         });
 
         assertTrue(_spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.499f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.499f, 0.5f), TIMESTAMP));
         assertFalse(_spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.501f, 0.5f, TIMESTAMP));
+                .capturesMouseEventAtPoint(Vertex.of(0.501f, 0.5f), TIMESTAMP));
     }
 
     @Test
@@ -631,29 +632,29 @@ class SpriteRenderableImplTests {
         float verySmallNumber = 0.0001f;
 
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.capturesMouseEventAtPoint(.5f, .5f, 0L));
+                _spriteRenderableWithoutMouseEvents.capturesMouseEventAtPoint(Vertex.of(.5f, .5f), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(.5f, .5f, 1.5f, 1.5f);
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.5f - verySmallNumber, .75f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.5f - verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(1f + verySmallNumber, .75f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(1f + verySmallNumber, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.75f, .5f - verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.75f, .5f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.75f, 1.5f + verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.75f, 1.5f + verySmallNumber), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -0.5f, 0.5f, 0.5f);
 
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0f - verySmallNumber, .25f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(0f - verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(0.5f + verySmallNumber, .25f, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(0.5f + verySmallNumber, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.25f, 0f - verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.25f, 0f - verySmallNumber), 0L));
         assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
-                .capturesMouseEventAtPoint(.25f, 0.5f + verySmallNumber, 0L));
+                .capturesMouseEventAtPoint(Vertex.of(.25f, 0.5f + verySmallNumber), 0L));
     }
 
     @Test

@@ -68,10 +68,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             }
             dropShadowOffset = textLineRenderable.dropShadowOffsetProvider().provide(timestamp);
             Check.ifNull(dropShadowOffset, "dropShadowOffset provided by textLineRenderable");
-            Check.ifNull(dropShadowOffset.x,
-                    "dropShadowOffset's x offset provided by textLineRenderable");
-            Check.ifNull(dropShadowOffset.y,
-                    "dropShadowOffset's y offset provided by textLineRenderable");
+            Check.ifNull(dropShadowOffset.X,
+                    "dropShadowOffset's X offset provided by textLineRenderable");
+            Check.ifNull(dropShadowOffset.Y,
+                    "dropShadowOffset's Y offset provided by textLineRenderable");
             dropShadowColor = textLineRenderable.dropShadowColorProvider().provide(timestamp);
             Check.ifNull(dropShadowColor, "dropShadowColor provided by textLineRenderable");
         }
@@ -79,18 +79,18 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         Vertex renderingLocation =
                 textLineRenderable.getRenderingLocationProvider().provide(timestamp);
         float startX;
-        float startY = renderingLocation.y;
+        float startY = renderingLocation.Y;
 
         if (textLineRenderable.getJustification() == TextJustification.LEFT) {
-            startX = renderingLocation.x;
+            startX = renderingLocation.X;
         }
         else {
             float lineLength = textLineLength(textLineRenderable, timestamp);
             if (textLineRenderable.getJustification() == TextJustification.CENTER) {
-                startX = renderingLocation.x - (lineLength / 2f);
+                startX = renderingLocation.X - (lineLength / 2f);
             }
             else {
-                startX = renderingLocation.x - lineLength;
+                startX = renderingLocation.X - lineLength;
             }
         }
         renderAtLocation(textLineRenderable, timestamp, lineHeight, startX, startY,
@@ -102,8 +102,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
                                   Vertex dropShadowOffset, Color dropShadowColor) {
         if (dropShadowSize != null) {
-            float xOffset = dropShadowOffset.x / _getScreenWidthToHeightRatio.get();
-            float yOffset = dropShadowOffset.y;
+            float xOffset = dropShadowOffset.X / _getScreenWidthToHeightRatio.get();
+            float yOffset = dropShadowOffset.Y;
             float sizeAdjustment = dropShadowSize / lineHeight;
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,

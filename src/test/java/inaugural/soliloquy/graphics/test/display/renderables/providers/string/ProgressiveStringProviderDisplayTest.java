@@ -46,8 +46,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                                 ),
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 ProgressiveStringProviderDisplayTest::closeAfterSomeTime);

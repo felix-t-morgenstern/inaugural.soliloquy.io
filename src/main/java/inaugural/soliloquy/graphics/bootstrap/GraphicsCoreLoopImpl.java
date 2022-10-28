@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.bootstrap;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
@@ -130,6 +131,15 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 updateWindow();
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // do some bullshit here and test it
+                glfwSetCursorPosCallback(_window, new GLFWCursorPosCallbackI() {
+                    @Override
+                    public void invoke(long window, double xpos, double ypos) {
+                        System.out.println("x = " + xpos + ", y = " + ypos);
+//                        if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+                    }
+                });
 
                 FRAME_EXECUTOR.execute();
 

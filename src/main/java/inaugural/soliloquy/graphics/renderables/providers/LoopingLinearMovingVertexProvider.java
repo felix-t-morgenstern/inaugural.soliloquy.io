@@ -18,12 +18,8 @@ public class LoopingLinearMovingVertexProvider
     }
 
     @Override
-    protected Vertex interpolate(Vertex location1, float weight1,
-                                             Vertex location2, float weight2,
-                                             boolean isClockwise) {
-        return Vertex.of(
-                Interpolate.floats(location1.x, weight1, location2.x, weight2),
-                Interpolate.floats(location1.y, weight1, location2.y, weight2)
-        );
+    protected Vertex interpolate(Vertex location1, float weight1, Vertex location2, float weight2,
+                                 boolean isClockwise) {
+        return Interpolate.vertices(location1, weight1, location2, weight2);
     }
 }

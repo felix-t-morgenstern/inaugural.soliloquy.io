@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -146,7 +147,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         }
 
         @Override
-        public boolean capturesMouseEventAtPoint(float v, float v1, long l)
+        public boolean capturesMouseEventAtPoint(Vertex point, long l)
                 throws UnsupportedOperationException, IllegalArgumentException {
             return false;
         }

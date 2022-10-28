@@ -50,7 +50,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.366</version>
+            <version>0.0.386</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.common</artifactId>
-            <version>0.0.16</version>
+            <version>0.0.17</version>
         </dependency>
 
         <!-- r-tree library dependencies -->

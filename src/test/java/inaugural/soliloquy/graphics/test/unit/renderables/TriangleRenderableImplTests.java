@@ -496,7 +496,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.mouseLeave(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp - 1));
+                _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp - 1));
 
         _triangleRenderable.release(0, timestamp + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -508,7 +508,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.mouseLeave(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp));
+                _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp));
 
         _triangleRenderable.mouseOver(timestamp + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -520,7 +520,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.mouseLeave(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 1));
+                _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 1));
 
         _triangleRenderable.mouseLeave(timestamp + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -532,9 +532,9 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.mouseLeave(timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 2));
+                _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 2));
 
-        _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 4);
+        _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 4);
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.press(0, timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
@@ -544,7 +544,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 _triangleRenderable.mouseLeave(timestamp + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp + 3));
+                _triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp + 3));
     }
 
     @Test
@@ -579,14 +579,14 @@ class TriangleRenderableImplTests {
                 new FakeStaticProvider<>(Vertex.of(1f, .5f))
         );
 
-        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(0f, 0f, timestamp));
-        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(1f, 0f, timestamp));
-        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(0.55f, 0f, timestamp));
-        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(0.55f, 0.4f, timestamp));
-        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(0.26f, 0.25f, timestamp));
-        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(0.24f, 0.25f, timestamp));
-        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(0.74f, 0.25f, timestamp));
-        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(0.76f, 0.25f, timestamp));
+        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), timestamp));
+        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(1f, 0f), timestamp));
+        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.55f, 0f), timestamp));
+        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.55f, 0.4f), timestamp));
+        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.26f, 0.25f), timestamp));
+        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.24f, 0.25f), timestamp));
+        assertTrue(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.74f, 0.25f), timestamp));
+        assertFalse(_triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.76f, 0.25f), timestamp));
     }
 
     @Test

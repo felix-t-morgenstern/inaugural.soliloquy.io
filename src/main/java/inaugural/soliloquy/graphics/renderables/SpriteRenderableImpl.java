@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
@@ -77,8 +78,8 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
     }
 
     @Override
-    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+    public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return capturesMouseEventAtPoint(x, y, timestamp, () -> _sprite);
+        return capturesMouseEventAtPoint(point, timestamp, () -> _sprite);
     }
 }

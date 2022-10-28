@@ -36,8 +36,7 @@ class TextLineRendererWideQTest extends TextLineRendererTest {
         runTest(TextLineRendererWideQTest::generateRenderablesAndRenderersWithMeshAndShader,
                 timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY, COORDINATE_FACTORY);
+                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererWideQTest::closeAfterSomeTime);

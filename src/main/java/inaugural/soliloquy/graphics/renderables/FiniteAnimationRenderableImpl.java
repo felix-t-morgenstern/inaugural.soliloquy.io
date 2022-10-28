@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
@@ -143,9 +144,9 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+    public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return capturesMouseEventAtPoint(x, y, timestamp, () -> provide(timestamp));
+        return capturesMouseEventAtPoint(point, timestamp, () -> provide(timestamp));
     }
 
     @Override

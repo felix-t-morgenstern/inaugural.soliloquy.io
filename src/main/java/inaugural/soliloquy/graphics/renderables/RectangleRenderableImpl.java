@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -104,15 +105,15 @@ public class RectangleRenderableImpl
     }
 
     @Override
-    public boolean capturesMouseEventAtPoint(float x, float y, long timestamp)
+    public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        if (x < 0f || x > 1f || y < 0f || y > 1f) {
+        if (point.X < 0f || point.X > 1f || point.Y < 0f || point.Y > 1f) {
             throw new IllegalArgumentException(
                     "RectangleRenderableImpl.capturesMouseEventAtPoint: cannot check for mouse " +
                             "event capture at point beyond screen (" +
-                            x + "," + y + ")");
+                            point.X + "," + point.Y + ")");
         }
 
         if (!_capturesMouseEvents) {
@@ -120,15 +121,15 @@ public class RectangleRenderableImpl
         }
 
         FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
-        if (x < renderingBoundaries.leftX() || x > renderingBoundaries.rightX() ||
-                y < renderingBoundaries.topY() || y > renderingBoundaries.bottomY()) {
+        if (point.X < renderingBoundaries.leftX() || point.X > renderingBoundaries.rightX() ||
+                point.Y < renderingBoundaries.topY() || point.Y > renderingBoundaries.bottomY()) {
             return false;
         }
 
         FloatBox renderingDimensions = _renderingDimensionsProvider.provide(timestamp);
         //noinspection RedundantIfStatement
-        if (x < renderingDimensions.leftX() || x > renderingDimensions.rightX() ||
-                y < renderingDimensions.topY() || y > renderingDimensions.bottomY()) {
+        if (point.X < renderingDimensions.leftX() || point.X > renderingDimensions.rightX() ||
+                point.Y < renderingDimensions.topY() || point.Y > renderingDimensions.bottomY()) {
             return false;
         }
 
