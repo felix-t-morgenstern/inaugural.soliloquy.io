@@ -9,6 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProviderTest {
     protected static final float BORDER_THICKNESS = 0.05f;
 
@@ -25,9 +27,9 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
             add(false);
             add(true);
         }};
-        SpriteRenderable.BorderColorProvider = new FiniteLinearMovingColorProviderImpl(
+        when(SpriteRenderable.getBorderColorProvider()).thenReturn(new FiniteLinearMovingColorProviderImpl(
                 java.util.UUID.randomUUID(), borderColorProviderValues, hueMovementIsClockwise,
-                null, null);
+                null, null));
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

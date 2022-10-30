@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.opengl.GL;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
@@ -70,14 +71,13 @@ class WindowResolutionManagerImplTests {
     }
 
     @Test
-    void testSetAndGetDimensions() {
+    void testUpdateAndGetDimensions() {
         int width = 3840;
         int height = 2160;
 
-        _windowResolutionManager.setDimensions(width, height);
+        _windowResolutionManager.updateDimensions(width, height);
 
-        assertEquals(width, _windowResolutionManager.getWidth());
-        assertEquals(height, _windowResolutionManager.getHeight());
+        assertEquals(new Pair<>(width, height), _windowResolutionManager.getWindowDimensions());
     }
 
     @Test
@@ -85,7 +85,7 @@ class WindowResolutionManagerImplTests {
         int width = 3840;
         int height = 2160;
 
-        _windowResolutionManager.setDimensions(width, height);
+        _windowResolutionManager.updateDimensions(width, height);
 
         assertEquals(width / (float) height, _windowResolutionManager.windowWidthToHeightRatio());
     }
@@ -93,19 +93,11 @@ class WindowResolutionManagerImplTests {
     @Test
     void testSetInvalidDimensions() {
         assertThrows(IllegalArgumentException.class,
-                () -> _windowResolutionManager.setDimensions(0, 600));
+                () -> _windowResolutionManager.updateDimensions(0, 600));
         assertThrows(IllegalArgumentException.class,
-                () -> _windowResolutionManager.setDimensions(800, 0));
+                () -> _windowResolutionManager.updateDimensions(800, 0));
         assertThrows(IllegalArgumentException.class,
-                () -> _windowResolutionManager.setDimensions(800, 601));
-    }
-
-    @Test
-    void testSetDimensionsWhileWindowedFullscreen() {
-        _windowResolutionManager.setWindowDisplayMode(WindowDisplayMode.WINDOWED_FULLSCREEN);
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> _windowResolutionManager.setDimensions(800, 600));
+                () -> _windowResolutionManager.updateDimensions(800, 601));
     }
 
     @Test

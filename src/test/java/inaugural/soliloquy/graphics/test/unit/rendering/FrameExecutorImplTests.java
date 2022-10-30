@@ -7,19 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
-import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class FrameExecutorImplTests {
-    private final long GLOBAL_TIMESTAMP = 123456789L;
-
-    @Mock
-    private GlobalClock _mockGlobalClock;
+    private final long GLOBAL_TIMESTAMP = randomLong();
 
     @Mock
     private StackRenderer _mockStackRenderer;
@@ -46,22 +44,16 @@ class FrameExecutorImplTests {
     void setUp() {
         EVENTS_FIRED.clear();
 
-        _mockGlobalClock = mock(GlobalClock.class);
-        when(_mockGlobalClock.globalTimestamp()).thenReturn(GLOBAL_TIMESTAMP);
-
         _mockStackRenderer = mock(StackRenderer.class);
 
-        _frameExecutor = new FrameExecutorImpl(_mockGlobalClock, _mockStackRenderer, 100);
+        _frameExecutor = new FrameExecutorImpl(_mockStackRenderer, 100);
     }
 
     @Test
     void constructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new FrameExecutorImpl(null, _mockStackRenderer, 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FrameExecutorImpl(_mockGlobalClock, null, 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FrameExecutorImpl(_mockGlobalClock, _mockStackRenderer, 0));
+        assertThrows(IllegalArgumentException.class, () -> new FrameExecutorImpl(null, 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FrameExecutorImpl(_mockStackRenderer, 0));
     }
 
     @Test
@@ -69,7 +61,7 @@ class FrameExecutorImplTests {
         _frameExecutor.registerFrameBlockingEvent(FRAME_BLOCKING_EVENT_1);
         _frameExecutor.registerFrameBlockingEvent(FRAME_BLOCKING_EVENT_2);
 
-        _frameExecutor.execute();
+        _frameExecutor.execute(GLOBAL_TIMESTAMP);
         CheckedExceptionWrapper.sleep(30);
 
         assertEquals(2, EVENTS_FIRED.size());

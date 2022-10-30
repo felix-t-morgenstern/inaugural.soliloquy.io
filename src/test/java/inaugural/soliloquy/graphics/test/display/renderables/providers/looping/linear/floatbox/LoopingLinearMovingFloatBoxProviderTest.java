@@ -11,6 +11,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
     protected static ProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER;
 
@@ -26,10 +28,11 @@ class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
             put(2000, origin.translate(translationAmount, translationAmount));
             put(3000, origin.translate(-translationAmount, translationAmount));
         }};
-
-        SpriteRenderable.RenderingDimensionsProvider = RENDERING_DIMENSIONS_PROVIDER =
+        RENDERING_DIMENSIONS_PROVIDER =
                 new LoopingLinearMovingFloatBoxProvider(java.util.UUID.randomUUID(), valuesAtTimes,
                         periodDuration, periodModuloOffset, null, null, new FakeFloatBoxFactory());
+        when(SpriteRenderable.getRenderingDimensionsProvider()).thenReturn(
+                RENDERING_DIMENSIONS_PROVIDER);
 
         Sprite.Image = new ImageFactoryImpl(0.5f)
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));

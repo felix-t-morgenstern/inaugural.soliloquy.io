@@ -8,6 +8,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.awt.*;
 import java.util.UUID;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 public class Constants {
     // Timing constants
     public final static String GMT = "GMT";
@@ -38,4 +40,13 @@ public class Constants {
     public final static FloatBox WHOLE_SCREEN = new FloatBoxFactoryImpl().make(0f, 0f, 1f, 1f);
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
             new StaticProviderImpl<>(UUID.randomUUID(), WHOLE_SCREEN, null);
+
+    public final static int LEFT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_1;
+    public final static int RIGHT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_2;
+    public final static int MIDDLE_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_3;
+    public final static int[] ALL_SUPPORTED_MOUSE_BUTTONS = new int[] {
+            LEFT_MOUSE_BUTTON,
+            RIGHT_MOUSE_BUTTON,
+            MIDDLE_MOUSE_BUTTON
+    };
 }

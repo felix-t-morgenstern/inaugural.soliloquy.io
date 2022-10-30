@@ -9,6 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
     protected static FiniteSinusoidMovingFloatProvider FiniteSinusoidMovingFloatProvider;
 
@@ -23,7 +25,7 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
         borderThicknessValues.put(timestamp, 0f);
         borderThicknessValues.put(timestamp + 4000, BORDER_THICKNESS);
         borderThicknessValues.put(timestamp + 8000, 0f);
-        SpriteRenderable.BorderThicknessProvider =
+        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
                 FiniteSinusoidMovingFloatProvider = new FiniteSinusoidMovingFloatProvider(
                         java.util.UUID.randomUUID(),
                         borderThicknessValues,
@@ -33,7 +35,7 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
                         }},
                         null,
                         null
-                );
+                ));
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

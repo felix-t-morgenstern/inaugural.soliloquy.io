@@ -33,12 +33,12 @@ class FiniteLinearMovingFloatBoxProviderPausingTest
         CheckedExceptionWrapper.sleep(2000);
 
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
-        SpriteRenderable.RenderingDimensionsProvider.reportPause(timestamp);
+        SpriteRenderable.getRenderingDimensionsProvider().reportPause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);
 
         timestamp = GLOBAL_CLOCK.globalTimestamp();
-        SpriteRenderable.RenderingDimensionsProvider.reportUnpause(timestamp);
+        SpriteRenderable.getRenderingDimensionsProvider().reportUnpause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);
 

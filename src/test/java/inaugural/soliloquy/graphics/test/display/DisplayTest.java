@@ -2,6 +2,9 @@ package inaugural.soliloquy.graphics.test.display;
 
 import inaugural.soliloquy.graphics.api.WindowResolution;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.graphics.io.MouseEventCapturingSpatialIndexImpl;
+import inaugural.soliloquy.graphics.io.MouseEventHandlerImpl;
+import inaugural.soliloquy.graphics.io.MouseListenerImpl;
 import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
@@ -10,6 +13,9 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseCursor;
+import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.graphics.io.MouseEventHandler;
+import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
@@ -30,7 +36,8 @@ public class DisplayTest {
     protected final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
             new FakeRenderingBoundaries();
     protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
-    protected final static String SHADER_FILENAME_PREFIX = "./src/main/resources/shaders/defaultShader";
+    protected final static String SHADER_FILENAME_PREFIX =
+            "./src/main/resources/shaders/defaultShader";
     protected final static UUID UUID = java.util.UUID.randomUUID();
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1920x1080;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
@@ -38,6 +45,7 @@ public class DisplayTest {
 
     protected static FakeFrameTimer FrameTimer;
     protected static MouseCursor MouseCursor = new FakeMouseCursor();
+    protected static MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
 
     /** @noinspection rawtypes */
     protected static void runTest(Function<WindowResolutionManager, List<Renderer>>
@@ -58,18 +66,25 @@ public class DisplayTest {
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
-        List<Renderer> renderersWithMeshAndShader =
-                generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);
+        MOUSE_EVENT_CAPTURING_SPATIAL_INDEX = new MouseEventCapturingSpatialIndexImpl();
+
+        MouseEventHandler mouseEventHandler = new MouseEventHandlerImpl(MOUSE_EVENT_CAPTURING_SPATIAL_INDEX);
+
+        MouseListener mouseListener = new MouseListenerImpl(mouseEventHandler);
 
         stackRenderer.RenderAction = stackRendererAction;
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(GLOBAL_CLOCK, stackRenderer, 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(stackRenderer, 100);
 
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), FrameTimer, 0, windowResolutionManager,
-                frameExecutor, new ShaderFactoryImpl(), renderersWithMeshAndShader,
-                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMeshAndShader, MESH_DATA,
-                MESH_DATA, graphicsPreloader, MouseCursor);
+        List<Renderer> renderersWithMeshAndShader =
+                generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);
+
+        GraphicsCoreLoop graphicsCoreLoop =
+                new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),
+                        FrameTimer, 0, windowResolutionManager, GLOBAL_CLOCK, frameExecutor,
+                        new ShaderFactoryImpl(), renderersWithMeshAndShader, SHADER_FILENAME_PREFIX,
+                        meshFactory, renderersWithMeshAndShader, MESH_DATA, MESH_DATA,
+                        graphicsPreloader, MouseCursor, mouseListener);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

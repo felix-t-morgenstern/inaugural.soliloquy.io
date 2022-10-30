@@ -8,6 +8,8 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefini
 import java.awt.*;
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
     protected static final Color BORDER_COLOR = Color.getHSBColor(0.75f, 1f, 1f);
     protected static final Float BORDER_THICKNESS = 0.025f;
@@ -19,11 +21,12 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
         HashMap<Long, Float> borderThicknessProvider = new HashMap<>();
         borderThicknessProvider.put(timestamp, 0f);
         borderThicknessProvider.put(timestamp + 3000, BORDER_THICKNESS);
-        SpriteRenderable.BorderThicknessProvider = new FiniteLinearMovingFloatProvider(
-                java.util.UUID.randomUUID(),
-                borderThicknessProvider,
-                null, null
-        );
+        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
+                new FiniteLinearMovingFloatProvider(
+                        java.util.UUID.randomUUID(),
+                        borderThicknessProvider,
+                        null, null
+                ));
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

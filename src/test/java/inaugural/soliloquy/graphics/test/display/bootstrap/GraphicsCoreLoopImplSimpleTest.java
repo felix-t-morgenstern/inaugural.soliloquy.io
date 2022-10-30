@@ -6,6 +6,7 @@ import inaugural.soliloquy.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test acceptance criteria:
@@ -31,18 +33,19 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
-        FrameExecutor frameExecutor =
-                new FrameExecutorImpl(new GlobalClockImpl(), new FakeStackRenderer(), 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(new FakeStackRenderer(), 100);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
 
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("New window",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, WindowManager, frameExecutor,
-                new FakeShaderFactory(), renderersWithShader, "_", meshFactory, renderersWithMesh,
-                MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), new FakeMouseCursor());
+        GraphicsCoreLoop graphicsCoreLoop =
+                new GraphicsCoreLoopImpl("New window", new FakeGLFWMouseButtonCallback(),
+                        frameTimer, 20, WindowManager, new GlobalClockImpl(), frameExecutor,
+                        new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
+                        renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
+                        new FakeMouseCursor(), mock(MouseListener.class));
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {

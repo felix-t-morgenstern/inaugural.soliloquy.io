@@ -3,21 +3,17 @@ package inaugural.soliloquy.graphics.rendering;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
-import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 public class FrameExecutorImpl implements FrameExecutor {
-    private final GlobalClock GLOBAL_CLOCK;
     private final StackRenderer STACK_RENDERER;
     private final Semaphore SEMAPHORE;
     private final ArrayList<Consumer<Long>> FRAME_BLOCKING_EVENTS;
 
-    public FrameExecutorImpl(GlobalClock globalClock, StackRenderer stackRenderer,
-                             int semaphorePermissions) {
-        GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
+    public FrameExecutorImpl(StackRenderer stackRenderer, int semaphorePermissions) {
         STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
         SEMAPHORE = new Semaphore(
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
@@ -33,9 +29,7 @@ public class FrameExecutorImpl implements FrameExecutor {
     }
 
     @Override
-    public void execute() {
-        long timestamp = GLOBAL_CLOCK.globalTimestamp();
-
+    public void execute(long timestamp) {
         for (Consumer<Long> frameBlockingEvent : FRAME_BLOCKING_EVENTS) {
             try {
                 SEMAPHORE.acquire();

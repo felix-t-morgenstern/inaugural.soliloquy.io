@@ -1,4 +1,4 @@
-package inaugural.soliloquy.graphics.test.display.io;
+package inaugural.soliloquy.graphics.test.display.io.mousecursor;
 
 import inaugural.soliloquy.graphics.io.MouseCursorImpl;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;

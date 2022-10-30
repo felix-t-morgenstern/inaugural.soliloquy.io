@@ -27,7 +27,7 @@ public class FakeFrameExecutor implements FrameExecutor {
     }
 
     @Override
-    public void execute() {
+    public void execute(long timestamp) {
         if (StackRenderer != null) {
             StackRenderer.render(GlobalClock.globalTimestamp());
         }

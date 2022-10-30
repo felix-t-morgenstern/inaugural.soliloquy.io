@@ -8,6 +8,8 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class LoopingLinearMovingFloatProviderTest extends SpriteRendererBorderTest {
     protected static ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER;
 
@@ -22,9 +24,11 @@ class LoopingLinearMovingFloatProviderTest extends SpriteRendererBorderTest {
             put(500, maxBorderThickness * 0.25f);
             put(750, maxBorderThickness);
         }};
-        SpriteRenderable.BorderThicknessProvider = BORDER_THICKNESS_PROVIDER =
+        BORDER_THICKNESS_PROVIDER =
                 new LoopingLinearMovingFloatProvider(java.util.UUID.randomUUID(), valuesAtTimes,
                         periodDuration, periodModuloOffset, null, null);
+        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
+                BORDER_THICKNESS_PROVIDER);
 
         Sprite.Image = new ImageFactoryImpl(0.5f)
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));

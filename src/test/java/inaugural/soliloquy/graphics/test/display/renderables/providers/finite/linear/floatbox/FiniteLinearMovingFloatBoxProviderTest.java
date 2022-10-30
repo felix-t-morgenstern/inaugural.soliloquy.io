@@ -9,6 +9,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static void graphicsPreloaderLoadAction() {
         Sprite.Image = new ImageFactoryImpl(0.5f)
@@ -22,13 +24,9 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
         renderingDimensionsAtTimes.put(timestamp, startingLocation);
         renderingDimensionsAtTimes.put(timestamp + 3000, endingLocation);
 
-        SpriteRenderable.RenderingDimensionsProvider = new FiniteLinearMovingFloatBoxProvider(
-                FLOAT_BOX_FACTORY,
-                java.util.UUID.randomUUID(),
-                renderingDimensionsAtTimes,
-                null,
-                null
-        );
+        when(SpriteRenderable.getRenderingDimensionsProvider()).thenReturn(
+                new FiniteLinearMovingFloatBoxProvider(FLOAT_BOX_FACTORY,
+                        java.util.UUID.randomUUID(), renderingDimensionsAtTimes, null, null));
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }

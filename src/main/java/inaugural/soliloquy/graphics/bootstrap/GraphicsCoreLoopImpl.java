@@ -1,13 +1,17 @@
 package inaugural.soliloquy.graphics.bootstrap;
 
+import inaugural.soliloquy.graphics.api.Constants;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import org.lwjgl.glfw.GLFWCursorPosCallbackI;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
+import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.GraphicsPreloader;
 import soliloquy.specs.graphics.io.MouseCursor;
+import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.Shader;
@@ -15,11 +19,14 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
+import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
+import static inaugural.soliloquy.graphics.api.Constants.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -29,6 +36,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final FrameTimer FRAME_TIMER;
     private final int FRAME_TIMER_POLLING_INTERVAL;
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
+    private final GlobalClock GLOBAL_CLOCK;
     private final FrameExecutor FRAME_EXECUTOR;
     private final ShaderFactory SHADER_FACTORY;
     @SuppressWarnings("rawtypes")
@@ -41,14 +49,20 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final float[] MESH_UV_COORDINATES;
     private final GraphicsPreloader GRAPHICS_PRELOADER;
     private final MouseCursor MOUSE_CURSOR;
+    private final MouseListener MOUSE_LISTENER;
 
-    private long _window;
+    private final HashMap<Integer, Boolean> MOUSE_BUTTON_STATES;
+
+    private long window = Long.MIN_VALUE;
+    private long frameTimestamp;
+    private Vertex screenMouseLocation;
 
     public GraphicsCoreLoopImpl(String titlebar,
                                 GLFWMouseButtonCallback mouseButtonCallback,
                                 FrameTimer frameTimer,
                                 int frameTimerPollingInterval,
                                 WindowResolutionManager windowResolutionManager,
+                                GlobalClock globalClock,
                                 FrameExecutor frameExecutor,
                                 ShaderFactory shaderFactory,
                                 @SuppressWarnings("rawtypes") Collection<Renderer>
@@ -60,7 +74,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                                 float[] meshVertices,
                                 float[] meshUvCoordinates,
                                 GraphicsPreloader graphicsPreloader,
-                                MouseCursor mouseCursor) {
+                                MouseCursor mouseCursor,
+                                MouseListener mouseListener) {
         TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
         MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
@@ -71,6 +86,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         );
         WINDOW_RESOLUTION_MANAGER = Check.ifNull(windowResolutionManager,
                 "windowResolutionManager");
+        GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
         FRAME_EXECUTOR = Check.ifNull(frameExecutor, "frameExecutor");
         SHADER_FACTORY = Check.ifNull(shaderFactory, "shaderFactory");
         RENDERERS_WITH_SHADER = Check.ifNull(renderersWithShader, "renderersWithShader");
@@ -81,6 +97,12 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         MESH_UV_COORDINATES = Check.ifNull(meshUvCoordinates, "meshUvCoordinates");
         GRAPHICS_PRELOADER = Check.ifNull(graphicsPreloader, "graphicsPreloader");
         MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
+        MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
+
+        MOUSE_BUTTON_STATES = new HashMap<>();
+        for (int button : ALL_SUPPORTED_MOUSE_BUTTONS) {
+            MOUSE_BUTTON_STATES.put(button, false);
+        }
     }
 
     @Override
@@ -103,7 +125,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         glDepthMask(false);
         glEnable(GL_TEXTURE_2D);
 
-        glfwSetMouseButtonCallback(_window, MOUSE_BUTTON_CALLBACK);
+        glfwSetMouseButtonCallback(window, MOUSE_BUTTON_CALLBACK);
 
         Shader shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
         shader.bind();
@@ -122,8 +144,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         new Thread(gameThread).start();
 
-        while (!glfwWindowShouldClose(_window)) {
-            MOUSE_CURSOR.updateCursor(_window);
+        while (!glfwWindowShouldClose(window)) {
+            MOUSE_CURSOR.updateCursor(window);
 
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 glfwPollEvents();
@@ -132,18 +154,18 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                // do some bullshit here and test it
-                glfwSetCursorPosCallback(_window, new GLFWCursorPosCallbackI() {
-                    @Override
-                    public void invoke(long window, double xpos, double ypos) {
-                        System.out.println("x = " + xpos + ", y = " + ypos);
-//                        if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-                    }
-                });
+                frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-                FRAME_EXECUTOR.execute();
+                readMouseButtonStates();
 
-                glfwSwapBuffers(_window);
+                if (screenMouseLocation != null) {
+                    MOUSE_LISTENER.registerMousePositionAndButtonStates(screenMouseLocation,
+                            MOUSE_BUTTON_STATES, frameTimestamp);
+                }
+
+                FRAME_EXECUTOR.execute(frameTimestamp);
+
+                glfwSwapBuffers(window);
             }
 
             if (FRAME_TIMER_POLLING_INTERVAL > 0) {
@@ -155,15 +177,57 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     }
 
     private void updateWindow() {
-        _window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(_window, TITLEBAR);
-        if (_window == 0) {
+        long prevWindow = window;
+        window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(window, TITLEBAR);
+        if (window == 0) {
             throw new IllegalStateException("Failed to create window");
+        }
+        if (window != prevWindow) {
+            updateWindowDimensionsInResolutionManager();
+            setNewMouseCallbacks();
         }
     }
 
+    // NB: Getting the screen dimensions for each callback ensures that mouse cursor position
+    // will remain accurately depicted when the resolution changes, but may be a target for
+    // performance enhancements.
+    private void setNewMouseCallbacks() {
+        //noinspection resource
+        glfwSetCursorPosCallback(window, (window, xPixel, yPixel) -> {
+            Pair<Integer, Integer> windowDimensions = updateWindowDimensionsInResolutionManager();
+            int width = windowDimensions.getItem1();
+            int height = windowDimensions.getItem2();
+
+            float x = (float) xPixel / width;
+            float y = (float) yPixel / height;
+
+            screenMouseLocation = Vertex.of(x, y);
+        });
+    }
+
+    private void readMouseButtonStates() {
+        for (int mouseButton : Constants.ALL_SUPPORTED_MOUSE_BUTTONS) {
+            MOUSE_BUTTON_STATES.put(mouseButton,
+                    glfwGetMouseButton(window, mouseButton) == GLFW_PRESS);
+        }
+    }
+
+    private Pair<Integer, Integer> updateWindowDimensionsInResolutionManager() {
+        ByteBuffer widthBuffer = BufferUtils.createByteBuffer(4);
+        ByteBuffer heightBuffer = BufferUtils.createByteBuffer(4);
+        glfwGetWindowSize(window, widthBuffer.asIntBuffer(), heightBuffer.asIntBuffer());
+        int width = widthBuffer.getInt(0);
+        int height = heightBuffer.getInt(0);
+
+        WINDOW_RESOLUTION_MANAGER.updateDimensions(width, height);
+
+        return new Pair<>(width, height);
+    }
+
     @Override
+
     public long windowId() throws UnsupportedOperationException {
-        return _window;
+        return window;
     }
 
     @Override

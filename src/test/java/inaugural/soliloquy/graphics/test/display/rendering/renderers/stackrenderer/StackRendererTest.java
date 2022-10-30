@@ -15,6 +15,7 @@ import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
@@ -28,11 +29,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static org.mockito.Mockito.mock;
 
 public class StackRendererTest extends DisplayTest {
-    private final static String AXE_07_LOCATION = "./src/test/resources/images/items/Axe_512x512_NoBG_07.png";
-    private final static String AXE_09_LOCATION = "./src/test/resources/images/items/Axe_512x512_NoBG_09.png";
-    private final static String SWORD_06_LOCATION = "./src/test/resources/images/items/Sword06_986×2658.png";
+    private final static String AXE_07_LOCATION =
+            "./src/test/resources/images/items/Axe_512x512_NoBG_07.png";
+    private final static String AXE_09_LOCATION =
+            "./src/test/resources/images/items/Axe_512x512_NoBG_09.png";
+    private final static String SWORD_06_LOCATION =
+            "./src/test/resources/images/items/Sword06_986×2658.png";
 
     public static void runTest(Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
         WindowResolution resolution = WindowResolution.RES_1920x1080;
@@ -128,13 +133,14 @@ public class StackRendererTest extends DisplayTest {
         renderableStack.add(spriteRenderable2);
         renderableStack.add(spriteRenderable3);
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(GLOBAL_CLOCK, stackRenderer, 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(stackRenderer, 100);
 
-        GraphicsCoreLoop graphicsCoreLoop = new GraphicsCoreLoopImpl("My title bar",
-                new FakeGLFWMouseButtonCallback(), frameTimer, 20, windowResolutionManager,
-                frameExecutor, new ShaderFactoryImpl(), renderersWithShader,
-                SHADER_FILENAME_PREFIX, meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA,
-                graphicsPreloader, new FakeMouseCursor());
+        GraphicsCoreLoop graphicsCoreLoop =
+                new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),
+                        frameTimer, 20, windowResolutionManager, GLOBAL_CLOCK, frameExecutor,
+                        new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX,
+                        meshFactory, renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader,
+                        new FakeMouseCursor(), mock(MouseListener.class));
 
         graphicsPreloader.LoadAction = () -> {
             spriteAxe07.Image = new ImageFactoryImpl(0.5f)

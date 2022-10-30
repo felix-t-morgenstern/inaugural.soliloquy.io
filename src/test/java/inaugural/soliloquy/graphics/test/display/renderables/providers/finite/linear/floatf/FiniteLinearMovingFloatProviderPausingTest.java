@@ -32,12 +32,12 @@ class FiniteLinearMovingFloatProviderPausingTest extends FiniteLinearMovingFloat
         CheckedExceptionWrapper.sleep(2000);
 
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
-        SpriteRenderable.BorderThicknessProvider.reportPause(timestamp);
+        SpriteRenderable.getBorderThicknessProvider().reportPause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);
 
         timestamp = GLOBAL_CLOCK.globalTimestamp();
-        SpriteRenderable.BorderThicknessProvider.reportUnpause(timestamp);
+        SpriteRenderable.getBorderThicknessProvider().reportUnpause(timestamp);
 
         CheckedExceptionWrapper.sleep(2000);
 

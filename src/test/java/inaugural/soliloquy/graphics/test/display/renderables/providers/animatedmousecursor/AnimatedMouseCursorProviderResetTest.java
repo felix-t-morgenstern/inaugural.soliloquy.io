@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.animatedmousecursor;
 
-import inaugural.soliloquy.graphics.test.display.io.MouseCursorImplTest;
+import inaugural.soliloquy.graphics.test.display.io.mousecursor.MouseCursorImplTest;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 

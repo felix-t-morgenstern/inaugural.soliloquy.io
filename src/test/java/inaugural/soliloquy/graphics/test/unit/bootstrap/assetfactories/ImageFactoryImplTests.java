@@ -14,9 +14,9 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
 
 public class ImageFactoryImplTests {
-    private final String SIMPLE_GRADIENT_RELATIVE_LOCATION = "./src/test/resources/images/ui/gradient.png";
-    private final int SIMPLE_GRADIENT_WIDTH = 20;
-    private final int SIMPLE_GRADIENT_HEIGHT = 20;
+    private final String SIMPLE_GRADIENT_RELATIVE_LOCATION = "./src/test/resources/images/ui/gradient_200x200.png";
+    private final int SIMPLE_GRADIENT_WIDTH = 200;
+    private final int SIMPLE_GRADIENT_HEIGHT = 200;
     @SuppressWarnings("FieldCanBeLocal")
     private final float ALPHA_THRESHOLD = 0.5f;
 
@@ -88,10 +88,10 @@ public class ImageFactoryImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> image.capturesMouseEventsAtPixel(0, image.height()));
 
-        assertTrue(image.capturesMouseEventsAtPixel(9, 0));
-        assertFalse(image.capturesMouseEventsAtPixel(10, 0));
-        assertTrue(image.capturesMouseEventsAtPixel(9, 19));
-        assertFalse(image.capturesMouseEventsAtPixel(10, 19));
+        assertTrue(image.capturesMouseEventsAtPixel(99, 0));
+        assertFalse(image.capturesMouseEventsAtPixel(100, 0));
+        assertTrue(image.capturesMouseEventsAtPixel(99, 199));
+        assertFalse(image.capturesMouseEventsAtPixel(100, 199));
     }
 
     @Test

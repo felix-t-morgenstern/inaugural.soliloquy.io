@@ -10,6 +10,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
     protected static LoopingLinearMovingColorProvider BORDER_COLOR_PROVIDER;
     protected static float BORDER_THICKNESS = 0.03125f;
@@ -31,9 +33,10 @@ class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
             add(false);
         }};
 
-        SpriteRenderable.BorderColorProvider = BORDER_COLOR_PROVIDER =
+        BORDER_COLOR_PROVIDER =
                 new LoopingLinearMovingColorProviderImpl(java.util.UUID.randomUUID(), valuesAtTimes,
                         movementIsClockwise, periodDuration, 0, null, null);
+        when(SpriteRenderable.getBorderColorProvider()).thenReturn(BORDER_COLOR_PROVIDER);
 
         Sprite.Image = new ImageFactoryImpl(0.5f)
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));

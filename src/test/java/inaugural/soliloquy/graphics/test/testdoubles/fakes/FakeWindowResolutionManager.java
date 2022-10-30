@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
@@ -30,20 +31,15 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     }
 
     @Override
-    public void setDimensions(int i, int i1)
+    public void updateDimensions(int i, int i1)
             throws IllegalArgumentException, UnsupportedOperationException {
         _width = i;
         _height = i1;
     }
 
     @Override
-    public int getWidth() throws UnsupportedOperationException {
-        return 0;
-    }
-
-    @Override
-    public int getHeight() throws UnsupportedOperationException {
-        return 0;
+    public Pair<Integer, Integer> getWindowDimensions() {
+        return null;
     }
 
     @Override

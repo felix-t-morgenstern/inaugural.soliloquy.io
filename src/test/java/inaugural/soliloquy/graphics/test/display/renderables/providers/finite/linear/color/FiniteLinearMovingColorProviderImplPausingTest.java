@@ -34,12 +34,12 @@ class FiniteLinearMovingColorProviderImplPausingTest
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
-        SpriteRenderable.BorderColorProvider
+        SpriteRenderable.getBorderColorProvider()
                 .reportPause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);
 
-        SpriteRenderable.BorderColorProvider
+        SpriteRenderable.getBorderColorProvider()
                 .reportUnpause(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);

@@ -10,6 +10,8 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.mockito.Mockito.when;
+
 public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static FiniteSinusoidMovingFloatBoxProvider FiniteSinusoidMovingFloatBoxProvider;
 
@@ -27,7 +29,7 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
         renderingDimensionsAtTimes.put(timestamp + 3000, middleLocation);
         renderingDimensionsAtTimes.put(timestamp + 6000, endingLocation);
 
-        SpriteRenderable.RenderingDimensionsProvider =
+        when(SpriteRenderable.getRenderingDimensionsProvider()).thenReturn(
                 FiniteSinusoidMovingFloatBoxProvider = new FiniteSinusoidMovingFloatBoxProvider(
                         java.util.UUID.randomUUID(),
                         renderingDimensionsAtTimes,
@@ -38,7 +40,7 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
                         null,
                         null,
                         FLOAT_BOX_FACTORY
-                );
+                ));
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }
