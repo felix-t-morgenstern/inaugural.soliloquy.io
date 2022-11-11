@@ -20,16 +20,17 @@ public abstract class AbstractPolygonRenderable
             ProviderAtTime<Integer> backgroundTextureIdProvider,
             float backgroundTextureTileWidth,
             float backgroundTextureTileHeight,
-            Map<Integer, Action<Long>> onPress,
-            Map<Integer, Action<Long>> onRelease,
-            Action<Long> onMouseOver,
-            Action<Long> onMouseLeave,
+            Map<Integer, Action<MouseEventInputs>> onPress,
+            Map<Integer, Action<MouseEventInputs>> onRelease,
+            Action<MouseEventInputs> onMouseOver,
+            Action<MouseEventInputs> onMouseLeave,
             int z,
             java.util.UUID uuid,
             RenderableStack containingStack,
             RenderingBoundaries renderingBoundaries
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack, renderingBoundaries);
+        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
+                renderingBoundaries);
         setBackgroundTextureIdProvider(backgroundTextureIdProvider);
         setBackgroundTextureTileWidth(backgroundTextureTileWidth);
         setBackgroundTextureTileHeight(backgroundTextureTileHeight);

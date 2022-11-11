@@ -27,8 +27,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.390" level="project" />
-    <orderEntry type="library" name="Maven: disorg.soliloquy:inaugural.soliloquy.tools:0.0.96" level="project" />
+    <orderEntry type="library" name="Maven: disorg.soliloquy:soliloquy.specs:0.0.407" level="project" />
+    <orderEntry type="library" name="Maven: disorg.soliloquy:inaugural.soliloquy.tools:0.0.98" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.junit.platform:junit-platform-engine:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />

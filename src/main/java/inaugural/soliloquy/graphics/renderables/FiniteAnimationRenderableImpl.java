@@ -24,8 +24,8 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
         implements FiniteAnimationRenderable {
     private final Animation ANIMATION;
 
-    private long _startTimestamp;
-    private Long _pausedTimestamp;
+    private long startTimestamp;
+    private Long pausedTimestamp;
 
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
@@ -40,9 +40,9 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
-        _startTimestamp = startTimestamp;
+        this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
-        _pausedTimestamp = pausedTimestamp;
+        this.pausedTimestamp = pausedTimestamp;
         if (mostRecentTimestamp != null) {
             TIMESTAMP_VALIDATOR.validateTimestamp(mostRecentTimestamp);
         }
@@ -51,9 +51,10 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
-                                         Map<Integer, Action<Long>> onPress,
-                                         Map<Integer, Action<Long>> onRelease,
-                                         Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                         Map<Integer, Action<MouseEventInputs>> onPress,
+                                         Map<Integer, Action<MouseEventInputs>> onRelease,
+                                         Action<MouseEventInputs> onMouseOver,
+                                         Action<MouseEventInputs> onMouseLeave,
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
@@ -65,9 +66,9 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
                 containingStack, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
-        _startTimestamp = startTimestamp;
+        this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
-        _pausedTimestamp = pausedTimestamp;
+        this.pausedTimestamp = pausedTimestamp;
         if (mostRecentTimestamp != null) {
             TIMESTAMP_VALIDATOR.validateTimestamp(mostRecentTimestamp);
         }
@@ -99,12 +100,12 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
 
     @Override
     public long startTimestamp() {
-        return _startTimestamp;
+        return startTimestamp;
     }
 
     @Override
     public long endTimestamp() {
-        return _startTimestamp + ANIMATION.msDuration();
+        return startTimestamp + ANIMATION.msDuration();
     }
 
     @Override
@@ -119,28 +120,28 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
 
     @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
-        if (_pausedTimestamp != null) {
+        if (pausedTimestamp != null) {
             throw new IllegalArgumentException(
                     "FiniteAnimationRenderableImpl.reportPause: already paused");
         }
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        _pausedTimestamp = timestamp;
+        pausedTimestamp = timestamp;
     }
 
     @Override
     public void reportUnpause(long timestamp) throws IllegalArgumentException {
-        if (_pausedTimestamp == null) {
+        if (pausedTimestamp == null) {
             throw new IllegalArgumentException(
                     "FiniteAnimationRenderableImpl.reportUnpause: not yet paused");
         }
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        _startTimestamp += timestamp - _pausedTimestamp;
-        _pausedTimestamp = null;
+        startTimestamp += timestamp - pausedTimestamp;
+        pausedTimestamp = null;
     }
 
     @Override
     public Long pausedTimestamp() {
-        return _pausedTimestamp;
+        return pausedTimestamp;
     }
 
     @Override
@@ -152,13 +153,13 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     @Override
     public AnimationFrameSnippet provide(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        if (_pausedTimestamp != null) {
-            timestamp = _pausedTimestamp;
+        if (pausedTimestamp != null) {
+            timestamp = pausedTimestamp;
         }
         return ANIMATION.snippetAtFrame(
-                (int) (Math.min(_startTimestamp + ANIMATION.msDuration(),
-                        Math.max(_startTimestamp, timestamp))
-                        - _startTimestamp));
+                (int) (Math.min(startTimestamp + ANIMATION.msDuration(),
+                        Math.max(startTimestamp, timestamp))
+                        - startTimestamp));
     }
 
     @Override

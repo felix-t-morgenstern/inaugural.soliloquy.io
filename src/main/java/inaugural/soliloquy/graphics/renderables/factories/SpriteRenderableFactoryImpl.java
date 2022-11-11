@@ -4,7 +4,7 @@ import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.Sprite;
-import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.SpriteRenderableFactory;
@@ -17,12 +17,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    @SuppressWarnings("ConstantConditions")
     public SpriteRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
@@ -42,9 +40,10 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     @Override
     public SpriteRenderable make(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                  ProviderAtTime<Color> borderColorProvider,
-                                 Map<Integer, Action<Long>> onPress,
-                                 Map<Integer, Action<Long>> onRelease,
-                                 Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                 Map<Integer, Action<MouseEventInputs>> onPress,
+                                 Map<Integer, Action<MouseEventInputs>> onRelease,
+                                 Action<MouseEventInputs> onMouseOver,
+                                 Action<MouseEventInputs> onMouseLeave,
                                  List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  UUID uuid, RenderableStack containingStack)

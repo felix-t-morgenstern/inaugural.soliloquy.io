@@ -201,7 +201,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
+        public void setOnPress(int i, Action<MouseEventInputs> action)
+                throws IllegalArgumentException {
 
         }
 
@@ -217,7 +218,8 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+        public void setOnRelease(int i, Action<MouseEventInputs> action)
+                throws IllegalArgumentException {
 
         }
 
@@ -233,7 +235,7 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setOnMouseOver(Action<Long> action) {
+        public void setOnMouseOver(Action<MouseEventInputs> action) {
 
         }
 
@@ -249,7 +251,7 @@ public class FiniteAnimationRenderer
         }
 
         @Override
-        public void setOnMouseLeave(Action<Long> action) {
+        public void setOnMouseLeave(Action<MouseEventInputs> action) {
 
         }
 

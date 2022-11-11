@@ -5,6 +5,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.FiniteAnimationRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -20,7 +21,6 @@ import java.util.UUID;
 public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    @SuppressWarnings("ConstantConditions")
     public FiniteAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
@@ -46,9 +46,9 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
     public FiniteAnimationRenderable make(Animation animation,
                                           ProviderAtTime<Float> borderThicknessProvider,
                                           ProviderAtTime<Color> borderColorProvider,
-                                          Map<Integer, Action<Long>> onPress,
-                                          Map<Integer, Action<Long>> onRelease,
-                                          Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                          Map<Integer, Action<MouseEventInputs>> onPress,
+                                          Map<Integer, Action<MouseEventInputs>> onRelease,
+                                          Action<MouseEventInputs> onMouseOver, Action<MouseEventInputs> onMouseLeave,
                                           List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                           ProviderAtTime<FloatBox> renderingAreaProvider,
                                           int z, UUID uuid,

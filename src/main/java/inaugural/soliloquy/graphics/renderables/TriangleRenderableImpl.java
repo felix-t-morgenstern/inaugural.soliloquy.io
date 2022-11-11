@@ -2,7 +2,9 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
@@ -30,10 +32,10 @@ public class TriangleRenderableImpl
                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
                                   float backgroundTextureTileWidth,
                                   float backgroundTextureTileHeight,
-                                  Map<Integer, Action<Long>> onPress,
-                                  Map<Integer, Action<Long>> onRelease,
-                                  Action<Long> onMouseOver,
-                                  Action<Long> onMouseLeave,
+                                  Map<Integer, Action<MouseEventInputs>> onPress,
+                                  Map<Integer, Action<MouseEventInputs>> onRelease,
+                                  Action<MouseEventInputs> onMouseOver,
+                                  Action<MouseEventInputs> onMouseLeave,
                                   int z,
                                   java.util.UUID uuid,
                                   RenderableStack containingStack,

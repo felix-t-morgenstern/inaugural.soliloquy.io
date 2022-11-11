@@ -16,11 +16,11 @@ import java.util.UUID;
 public class RectangleRenderableImpl
         extends AbstractPolygonRenderable
         implements RectangleRenderable {
-    private ProviderAtTime<Color> _topLeftColorProvider;
-    private ProviderAtTime<Color> _topRightColorProvider;
-    private ProviderAtTime<Color> _bottomRightColorProvider;
-    private ProviderAtTime<Color> _bottomLeftColorProvider;
-    protected ProviderAtTime<FloatBox> _renderingDimensionsProvider;
+    private ProviderAtTime<Color> topLeftColorProvider;
+    private ProviderAtTime<Color> topRightColorProvider;
+    private ProviderAtTime<Color> bottomRightColorProvider;
+    private ProviderAtTime<Color> bottomLeftColorProvider;
+    protected ProviderAtTime<FloatBox> renderingDimensionsProvider;
 
     public RectangleRenderableImpl(ProviderAtTime<Color> topLeftColorProvider,
                                    ProviderAtTime<Color> topRightColorProvider,
@@ -29,10 +29,10 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    float backgroundTextureTileWidth,
                                    float backgroundTextureTileHeight,
-                                   Map<Integer, Action<Long>> onPress,
-                                   Map<Integer, Action<Long>> onRelease,
-                                   Action<Long> onMouseOver,
-                                   Action<Long> onMouseLeave,
+                                   Map<Integer, Action<MouseEventInputs>> onPress,
+                                   Map<Integer, Action<MouseEventInputs>> onRelease,
+                                   Action<MouseEventInputs> onMouseOver,
+                                   Action<MouseEventInputs> onMouseLeave,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    int z,
                                    UUID uuid,
@@ -60,47 +60,47 @@ public class RectangleRenderableImpl
 
     @Override
     public ProviderAtTime<Color> getTopLeftColorProvider() {
-        return _topLeftColorProvider;
+        return topLeftColorProvider;
     }
 
     @Override
     public void setTopLeftColorProvider(ProviderAtTime<Color> topLeftColorProvider)
             throws IllegalArgumentException {
-        _topLeftColorProvider = Check.ifNull(topLeftColorProvider, "topLeftColorProvider");
+        this.topLeftColorProvider = Check.ifNull(topLeftColorProvider, "topLeftColorProvider");
     }
 
     @Override
     public ProviderAtTime<Color> getTopRightColorProvider() {
-        return _topRightColorProvider;
+        return topRightColorProvider;
     }
 
     @Override
     public void setTopRightColorProvider(ProviderAtTime<Color> topRightColorProvider)
             throws IllegalArgumentException {
-        _topRightColorProvider = Check.ifNull(topRightColorProvider, "topRightColorProvider");
+        this.topRightColorProvider = Check.ifNull(topRightColorProvider, "topRightColorProvider");
     }
 
     @Override
     public ProviderAtTime<Color> getBottomRightColorProvider() {
-        return _bottomRightColorProvider;
+        return bottomRightColorProvider;
     }
 
     @Override
     public void setBottomRightColorProvider(ProviderAtTime<Color> bottomRightColorProvider)
             throws IllegalArgumentException {
-        _bottomRightColorProvider = Check.ifNull(bottomRightColorProvider,
+        this.bottomRightColorProvider = Check.ifNull(bottomRightColorProvider,
                 "bottomRightColorProvider");
     }
 
     @Override
     public ProviderAtTime<Color> getBottomLeftColorProvider() {
-        return _bottomLeftColorProvider;
+        return bottomLeftColorProvider;
     }
 
     @Override
     public void setBottomLeftColorProvider(ProviderAtTime<Color> bottomLeftColorProvider)
             throws IllegalArgumentException {
-        _bottomLeftColorProvider = Check.ifNull(bottomLeftColorProvider,
+        this.bottomLeftColorProvider = Check.ifNull(bottomLeftColorProvider,
                 "bottomLeftColorProvider");
     }
 
@@ -116,7 +116,7 @@ public class RectangleRenderableImpl
                             point.X + "," + point.Y + ")");
         }
 
-        if (!_capturesMouseEvents) {
+        if (!capturesMouseEvents) {
             return false;
         }
 
@@ -126,7 +126,7 @@ public class RectangleRenderableImpl
             return false;
         }
 
-        FloatBox renderingDimensions = _renderingDimensionsProvider.provide(timestamp);
+        FloatBox renderingDimensions = renderingDimensionsProvider.provide(timestamp);
         //noinspection RedundantIfStatement
         if (point.X < renderingDimensions.leftX() || point.X > renderingDimensions.rightX() ||
                 point.Y < renderingDimensions.topY() || point.Y > renderingDimensions.bottomY()) {
@@ -143,14 +143,14 @@ public class RectangleRenderableImpl
 
     @Override
     public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-        return _renderingDimensionsProvider;
+        return renderingDimensionsProvider;
     }
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
                                                        renderingDimensionsProvider)
             throws IllegalArgumentException {
-        _renderingDimensionsProvider = Check.ifNull(renderingDimensionsProvider,
+        this.renderingDimensionsProvider = Check.ifNull(renderingDimensionsProvider,
                 "renderingDimensionsProvider");
     }
 

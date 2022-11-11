@@ -1,13 +1,16 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.UUID;
 
 public class FakeRectangleRenderable implements RectangleRenderable {
@@ -135,12 +138,13 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
+    public void setOnPress(int i, Action<MouseEventInputs> action)
+            throws IllegalArgumentException {
 
     }
 
     @Override
-    public java.util.Map<Integer, String> pressActionIds() {
+    public Map<Integer, String> pressActionIds() {
         return null;
     }
 
@@ -151,7 +155,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+    public void setOnRelease(int i, Action<MouseEventInputs> action)
+            throws IllegalArgumentException {
 
     }
 

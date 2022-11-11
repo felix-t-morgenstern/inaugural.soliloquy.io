@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
@@ -33,41 +34,42 @@ class RectangleRenderableFactoryImplTests {
             new FakeProviderAtTime<>();
     private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
     private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
-    private final HashMap<Integer, Action<Long>> ON_PRESS_ACTIONS = new HashMap<>();
-    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
-    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
+    private final HashMap<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = new HashMap<>();
+    private final FakeAction<MouseEventInputs> ON_MOUSE_OVER = new FakeAction<>();
+    private final FakeAction<MouseEventInputs> ON_MOUSE_LEAVE = new FakeAction<>();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = randomInt();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private RenderableStack _mockContainingStack;
-    @Mock private RenderingBoundaries _mockRenderingBoundaries;
+    @Mock private RenderableStack mockContainingStack;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
 
-    private RectangleRenderableFactory _rectangleRenderableFactory;
+    private RectangleRenderableFactory rectangleRenderableFactory;
 
     @BeforeEach
     void setUp() {
-        _mockContainingStack = mock(RenderableStack.class);
-        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        mockContainingStack = mock(RenderableStack.class);
+        mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        _rectangleRenderableFactory = new RectangleRenderableFactoryImpl(_mockRenderingBoundaries);
+        rectangleRenderableFactory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderableFactoryImpl(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RectangleRenderableFactoryImpl(null));
     }
 
     @Test
     void testMake() {
-        RectangleRenderable rectangleRenderable = _rectangleRenderableFactory.make(
+        RectangleRenderable rectangleRenderable = rectangleRenderableFactory.make(
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                 ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack);
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack);
 
         assertNotNull(rectangleRenderable);
         assertTrue(rectangleRenderable instanceof RectangleRenderableImpl);
@@ -76,70 +78,70 @@ class RectangleRenderableFactoryImplTests {
     @Test
     void testMakeWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(null,
+                rectangleRenderableFactory.make(null,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         null, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, null,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         null, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        null, Z, UUID, _mockContainingStack));
+                        null, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack));
+                        RENDERING_AREA_PROVIDER, Z, null, mockContainingStack));
         assertThrows(IllegalArgumentException.class, () ->
-                _rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
+                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
@@ -150,6 +152,6 @@ class RectangleRenderableFactoryImplTests {
     @Test
     void testGetInterfaceName() {
         assertEquals(RectangleRenderableFactory.class.getCanonicalName(),
-                _rectangleRenderableFactory.getInterfaceName());
+                rectangleRenderableFactory.getInterfaceName());
     }
 }

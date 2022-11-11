@@ -1,25 +1,19 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.Map;
-import java.util.UUID;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.opengl.GL11.*;
 
 public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRenderable>
         implements Renderer<TriangleRenderable> {
-    private static final TriangleRenderable ARCHETYPE = new TriangleRenderableArchetype();
-
     public TriangleRenderer(Long mostRecentTimestamp) {
-        super(ARCHETYPE, mostRecentTimestamp);
+        super(generateSimpleArchetype(TriangleRenderable.class), mostRecentTimestamp);
     }
 
     @Override
@@ -108,19 +102,22 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         setDrawColor(color1);
         if (backgroundTextureId != null) {
-            glTexCoord2f(((x1 - minX) / width) * tilesPerWidth, ((y1 - minY) / height) * tilesPerHeight);
+            glTexCoord2f(((x1 - minX) / width) * tilesPerWidth,
+                    ((y1 - minY) / height) * tilesPerHeight);
         }
         drawPoint(x1, y1);
 
         setDrawColor(color2);
         if (backgroundTextureId != null) {
-            glTexCoord2f(((x2 - minX) / width) * tilesPerWidth, ((y2 - minY) / height) * tilesPerHeight);
+            glTexCoord2f(((x2 - minX) / width) * tilesPerWidth,
+                    ((y2 - minY) / height) * tilesPerHeight);
         }
         drawPoint(x2, y2);
 
         setDrawColor(color3);
         if (backgroundTextureId != null) {
-            glTexCoord2f(((x3 - minX) / width) * tilesPerWidth, ((y3 - minY) / height) * tilesPerHeight);
+            glTexCoord2f(((x3 - minX) / width) * tilesPerWidth,
+                    ((y3 - minY) / height) * tilesPerHeight);
         }
         drawPoint(x3, y3);
 
@@ -130,214 +127,5 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
     @Override
     protected String className() {
         return "TriangleRenderer";
-    }
-
-    private static class TriangleRenderableArchetype implements TriangleRenderable {
-        @Override
-        public String getInterfaceName() {
-            return TriangleRenderable.class.getCanonicalName();
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getVertex1Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getVertex1ColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex1ColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getVertex2Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getVertex2ColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex2ColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getVertex3Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex3Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getVertex3ColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex3ColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public float getBackgroundTextureTileWidth() {
-            return 0;
-        }
-
-        @Override
-        public void setBackgroundTextureTileWidth(float v) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public float getBackgroundTextureTileHeight() {
-            return 0;
-        }
-
-        @Override
-        public void setBackgroundTextureTileHeight(float v) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public boolean getCapturesMouseEvents() {
-            return false;
-        }
-
-        @Override
-        public void setCapturesMouseEvents(boolean b) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public boolean capturesMouseEventAtPoint(Vertex point, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-            return false;
-        }
-
-        @Override
-        public void press(int i, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Map<Integer, String> pressActionIds() {
-            return null;
-        }
-
-        @Override
-        public void release(int i, long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Map<Integer, String> releaseActionIds() {
-            return null;
-        }
-
-        @Override
-        public void mouseOver(long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnMouseOver(Action<Long> action) {
-
-        }
-
-        @Override
-        public String mouseOverActionId() {
-            return null;
-        }
-
-        @Override
-        public void mouseLeave(long l)
-                throws UnsupportedOperationException, IllegalArgumentException {
-
-        }
-
-        @Override
-        public void setOnMouseLeave(Action<Long> action) {
-
-        }
-
-        @Override
-        public String mouseLeaveActionId() {
-            return null;
-        }
-
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
-
-        }
-
-        @Override
-        public RenderableStack containingStack() {
-            return null;
-        }
-
-        @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
-        }
     }
 }

@@ -32,9 +32,10 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
-                                Map<Integer, Action<Long>> onPress,
-                                Map<Integer, Action<Long>> onRelease,
-                                Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                Map<Integer, Action<MouseEventInputs>> onPress,
+                                Map<Integer, Action<MouseEventInputs>> onRelease,
+                                Action<MouseEventInputs> onMouseOver,
+                                Action<MouseEventInputs> onMouseLeave,
                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid, RenderableStack containingStack,
@@ -54,7 +55,7 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
     @Override
     public void setSprite(Sprite sprite) throws IllegalArgumentException {
         Check.ifNull(sprite, "sprite");
-        if (_capturesMouseEvents && !sprite.image().supportsMouseEventCapturing()) {
+        if (capturesMouseEvents && !sprite.image().supportsMouseEventCapturing()) {
             throw new IllegalArgumentException("SpriteRenderableImpl.setSprite: cannot assign " +
                     "Sprite whose Image does not support mouse events to a SpriteRenderable " +
                     "which does support mouse events");

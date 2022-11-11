@@ -23,9 +23,9 @@ import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
 
 public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
-    private ImageAssetSet _imageAssetSet;
-    private String _type;
-    private String _direction;
+    private ImageAssetSet imageAssetSet;
+    private String type;
+    private String direction;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
@@ -42,9 +42,12 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     }
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
-                                       Map<Integer, Action<Long>> onPress,
-                                       Map<Integer, Action<Long>> onRelease,
-                                       Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                       Map<Integer,
+                                               Action<MouseEventInputs>> onPress,
+                                       Map<Integer,
+                                               Action<MouseEventInputs>> onRelease,
+                                       Action<MouseEventInputs> onMouseOver,
+                                       Action<MouseEventInputs> onMouseLeave,
                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
@@ -62,43 +65,43 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
 
     @Override
     public ImageAssetSet getImageAssetSet() {
-        return _imageAssetSet;
+        return imageAssetSet;
     }
 
     @Override
     public void setImageAssetSet(ImageAssetSet imageAssetSet) throws IllegalArgumentException {
         Check.ifNull(imageAssetSet, "imageAssetSet");
-        if (_capturesMouseEvents && !imageAssetSet.supportsMouseEventCapturing()) {
+        if (capturesMouseEvents && !imageAssetSet.supportsMouseEventCapturing()) {
             throw new IllegalArgumentException("ImageAssetSetRenderableImpl.setImageAssetSet: " +
                     "cannot assign ImageAssetSet which does not support mouse events to an " +
                     "ImageAssetSetRenderable which does support mouse events");
         }
-        _imageAssetSet = imageAssetSet;
+        this.imageAssetSet = imageAssetSet;
     }
 
     @Override
     public String getType() {
-        return _type;
+        return type;
     }
 
     @Override
     public void setType(String type) {
-        _type = nullIfEmpty(type);
+        this.type = nullIfEmpty(type);
     }
 
     @Override
     public String getDirection() {
-        return _direction;
+        return direction;
     }
 
     @Override
     public void setDirection(String direction) {
-        _direction = nullIfEmpty(direction);
+        this.direction = nullIfEmpty(direction);
     }
 
     @Override
     protected boolean underlyingAssetSupportsMouseEvents() {
-        return _imageAssetSet.supportsMouseEventCapturing();
+        return imageAssetSet.supportsMouseEventCapturing();
     }
 
     @Override
@@ -116,7 +119,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
             throws UnsupportedOperationException, IllegalArgumentException {
         return capturesMouseEventAtPoint(point, timestamp, () -> {
             ImageAsset imageAsset =
-                    _imageAssetSet.getImageAssetForTypeAndDirection(_type, _direction);
+                    imageAssetSet.getImageAssetForTypeAndDirection(type, direction);
             if (imageAsset instanceof Sprite) {
                 return (Sprite) imageAsset;
             }

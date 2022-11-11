@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -17,7 +18,6 @@ import java.util.UUID;
 public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    @SuppressWarnings("ConstantConditions")
     public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
@@ -32,10 +32,10 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    float backgroundTextureTileWidth,
                                    float backgroundTextureTileHeight,
-                                   Map<Integer, Action<Long>> onPress,
-                                   Map<Integer, Action<Long>> onRelease,
-                                   Action<Long> onMouseOver,
-                                   Action<Long> onMouseLeave,
+                                   Map<Integer, Action<MouseEventInputs>> onPress,
+                                   Map<Integer, Action<MouseEventInputs>> onRelease,
+                                   Action<MouseEventInputs> onMouseOver,
+                                   Action<MouseEventInputs> onMouseLeave,
                                    int z,
                                    UUID uuid,
                                    RenderableStack containingStack)

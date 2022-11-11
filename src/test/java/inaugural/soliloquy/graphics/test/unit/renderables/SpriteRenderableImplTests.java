@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -22,8 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -33,10 +33,7 @@ class SpriteRenderableImplTests {
             new FakeSprite(new FakeImage(false));
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final HashMap<Integer, Action<Long>> ON_PRESS_ACTIONS = new HashMap<>();
-    private final FakeAction<Long> ON_PRESS_ACTION = new FakeAction<>();
-    private final FakeAction<Long> ON_MOUSE_OVER = new FakeAction<>();
-    private final FakeAction<Long> ON_MOUSE_LEAVE = new FakeAction<>();
+    private final HashMap<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = new HashMap<>();
     private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
@@ -45,253 +42,261 @@ class SpriteRenderableImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private RenderableStack _mockContainingStack;
-    @Mock private RenderingBoundaries _mockRenderingBoundaries;
+    @Mock private RenderableStack mockContainingStack;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private Action<MouseEventInputs> mockOnPressAction;
+    @Mock private Action<MouseEventInputs> mockOnMouseOverAction;
+    @Mock private Action<MouseEventInputs> mockOnMouseLeaveAction;
 
-    private SpriteRenderable _spriteRenderableWithMouseEvents;
-    private SpriteRenderable _spriteRenderableWithoutMouseEvents;
+    private SpriteRenderable spriteRenderableWithMouseEvents;
+    private SpriteRenderable spriteRenderableWithoutMouseEvents;
 
     @BeforeEach
     void setUp() {
-        _mockContainingStack = mock(RenderableStack.class);
-        _mockRenderingBoundaries = mock(RenderingBoundaries.class);
-        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+        mockContainingStack = mock(RenderableStack.class);
+        mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        _spriteRenderableWithMouseEvents = new SpriteRenderableImpl(
+        //noinspection unchecked
+        mockOnPressAction = mock(Action.class);
+        //noinspection unchecked
+        mockOnMouseOverAction = mock(Action.class);
+        //noinspection unchecked
+        mockOnMouseLeaveAction = mock(Action.class);
+
+        spriteRenderableWithMouseEvents = new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries);
-        _spriteRenderableWithoutMouseEvents = new SpriteRenderableImpl(
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                mockOnMouseLeaveAction,
+                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries);
+        spriteRenderableWithoutMouseEvents = new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                _mockContainingStack, _mockRenderingBoundaries);
+                mockContainingStack, mockRenderingBoundaries);
     }
 
     @Test
     void testConstructorWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries
+                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                mockOnMouseLeaveAction,
+                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries
         ));
         // NB: These following two constructors should _not_ throw exceptions
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, null,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, null,
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                null, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                null, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, null, _mockContainingStack, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, null, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, null, _mockRenderingBoundaries
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, UUID, null, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, null
+                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFT_PROVIDERS,
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, null
         ));
 
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS,
-                RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack, _mockRenderingBoundaries
+                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
-                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries
+                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
-                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries
+                COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries
+                BORDER_COLOR_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, null, Z, UUID, _mockContainingStack,
-                _mockRenderingBoundaries
+                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, null, Z, UUID, mockContainingStack,
+                mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
-                _mockContainingStack, _mockRenderingBoundaries
+                mockContainingStack, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                null, _mockRenderingBoundaries
+                null, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableImpl(
                 SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                _mockContainingStack, null
+                mockContainingStack, null
         ));
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(SpriteRenderable.class.getCanonicalName(),
-                _spriteRenderableWithMouseEvents.getInterfaceName());
+                spriteRenderableWithMouseEvents.getInterfaceName());
     }
 
     @Test
     void testGetAndSetSprite() {
-        assertSame(SPRITE_SUPPORTING_MOUSE_EVENTS, _spriteRenderableWithMouseEvents.getSprite());
+        assertSame(SPRITE_SUPPORTING_MOUSE_EVENTS, spriteRenderableWithMouseEvents.getSprite());
         assertSame(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
-                _spriteRenderableWithoutMouseEvents.getSprite());
+                spriteRenderableWithoutMouseEvents.getSprite());
 
         FakeSprite newSprite = new FakeSprite(new FakeImage(true));
 
-        _spriteRenderableWithMouseEvents.setSprite(newSprite);
-        _spriteRenderableWithoutMouseEvents.setSprite(newSprite);
+        spriteRenderableWithMouseEvents.setSprite(newSprite);
+        spriteRenderableWithoutMouseEvents.setSprite(newSprite);
 
-        assertSame(newSprite, _spriteRenderableWithMouseEvents.getSprite());
-        assertSame(newSprite, _spriteRenderableWithoutMouseEvents.getSprite());
+        assertSame(newSprite, spriteRenderableWithMouseEvents.getSprite());
+        assertSame(newSprite, spriteRenderableWithoutMouseEvents.getSprite());
     }
 
     @Test
     void testSetSpriteWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setSprite(null));
+                spriteRenderableWithMouseEvents.setSprite(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setSprite(null));
+                spriteRenderableWithoutMouseEvents.setSprite(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setSprite(new FakeSprite(new FakeImage(false))));
+                spriteRenderableWithMouseEvents.setSprite(new FakeSprite(new FakeImage(false))));
     }
 
     @Test
     void testGetAndSetBorderThicknessProvider() {
         assertSame(BORDER_THICKNESS_PROVIDER,
-                _spriteRenderableWithMouseEvents.getBorderThicknessProvider());
+                spriteRenderableWithMouseEvents.getBorderThicknessProvider());
         assertSame(BORDER_THICKNESS_PROVIDER,
-                _spriteRenderableWithoutMouseEvents.getBorderThicknessProvider());
+                spriteRenderableWithoutMouseEvents.getBorderThicknessProvider());
 
         FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
 
-        _spriteRenderableWithMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
-        _spriteRenderableWithoutMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
+        spriteRenderableWithMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
+        spriteRenderableWithoutMouseEvents.setBorderThicknessProvider(newBorderThicknessProvider);
 
         assertSame(newBorderThicknessProvider,
-                _spriteRenderableWithMouseEvents.getBorderThicknessProvider());
+                spriteRenderableWithMouseEvents.getBorderThicknessProvider());
         assertSame(newBorderThicknessProvider,
-                _spriteRenderableWithoutMouseEvents.getBorderThicknessProvider());
+                spriteRenderableWithoutMouseEvents.getBorderThicknessProvider());
     }
 
     @Test
     void testSetBorderThicknessProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setBorderThicknessProvider(null));
+                spriteRenderableWithMouseEvents.setBorderThicknessProvider(null));
     }
 
     @Test
     void testGetAndSetBorderColorProvider() {
         assertSame(BORDER_COLOR_PROVIDER,
-                _spriteRenderableWithMouseEvents.getBorderColorProvider());
+                spriteRenderableWithMouseEvents.getBorderColorProvider());
         assertSame(BORDER_COLOR_PROVIDER,
-                _spriteRenderableWithoutMouseEvents.getBorderColorProvider());
+                spriteRenderableWithoutMouseEvents.getBorderColorProvider());
 
         FakeProviderAtTime<Color> newBorderColorProvider = new FakeProviderAtTime<>();
 
-        _spriteRenderableWithMouseEvents.setBorderColorProvider(newBorderColorProvider);
-        _spriteRenderableWithoutMouseEvents.setBorderColorProvider(newBorderColorProvider);
+        spriteRenderableWithMouseEvents.setBorderColorProvider(newBorderColorProvider);
+        spriteRenderableWithoutMouseEvents.setBorderColorProvider(newBorderColorProvider);
 
         assertSame(newBorderColorProvider,
-                _spriteRenderableWithMouseEvents.getBorderColorProvider());
+                spriteRenderableWithMouseEvents.getBorderColorProvider());
         assertSame(newBorderColorProvider,
-                _spriteRenderableWithoutMouseEvents.getBorderColorProvider());
+                spriteRenderableWithoutMouseEvents.getBorderColorProvider());
     }
 
     @Test
     void testSetBorderColorProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setBorderColorProvider(null));
+                spriteRenderableWithMouseEvents.setBorderColorProvider(null));
     }
 
     @Test
     void testGetAndSetCapturesMouseEvents() {
-        assertTrue(_spriteRenderableWithMouseEvents.getCapturesMouseEvents());
-        assertFalse(_spriteRenderableWithoutMouseEvents.getCapturesMouseEvents());
+        assertTrue(spriteRenderableWithMouseEvents.getCapturesMouseEvents());
+        assertFalse(spriteRenderableWithoutMouseEvents.getCapturesMouseEvents());
 
-        _spriteRenderableWithMouseEvents.setCapturesMouseEvents(false);
+        spriteRenderableWithMouseEvents.setCapturesMouseEvents(false);
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setCapturesMouseEvents(false));
+                spriteRenderableWithoutMouseEvents.setCapturesMouseEvents(false));
 
-        assertFalse(_spriteRenderableWithMouseEvents.getCapturesMouseEvents());
+        assertFalse(spriteRenderableWithMouseEvents.getCapturesMouseEvents());
     }
 
     @Test
     void testPressAndSetOnPress() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.press(2, 0L));
+                spriteRenderableWithoutMouseEvents.press(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
+                spriteRenderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
 
-        _spriteRenderableWithMouseEvents.setOnPress(2, ON_PRESS_ACTION);
+        spriteRenderableWithMouseEvents.setOnPress(2, mockOnPressAction);
 
-        _spriteRenderableWithMouseEvents.press(2, TIMESTAMP);
-        assertEquals(1, ON_PRESS_ACTION.NumberOfTimesCalled);
-        assertEquals(1, ON_PRESS_ACTION.Inputs.size());
-        assertEquals(TIMESTAMP, (long) ON_PRESS_ACTION.Inputs.get(0));
+        spriteRenderableWithMouseEvents.press(2, TIMESTAMP);
 
-        FakeAction<Long> newOnPress = new FakeAction<>();
-        _spriteRenderableWithMouseEvents.setOnPress(2, newOnPress);
+        verify(mockOnPressAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, spriteRenderableWithMouseEvents)));
 
-        _spriteRenderableWithMouseEvents.press(2, TIMESTAMP + 1);
+        //noinspection unchecked
+        Action<MouseEventInputs> newOnPress = mock(Action.class);
+        spriteRenderableWithMouseEvents.setOnPress(2, newOnPress);
 
-        assertEquals(1, newOnPress.NumberOfTimesCalled);
-        assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(TIMESTAMP + 1, (long) newOnPress.Inputs.get(0));
+        spriteRenderableWithMouseEvents.press(2, TIMESTAMP + 1);
 
-        _spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 2);
+        verify(newOnPress, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, spriteRenderableWithMouseEvents)));
 
-        assertEquals(1, newOnPress.NumberOfTimesCalled);
-        assertEquals(1, newOnPress.Inputs.size());
-        assertEquals(TIMESTAMP + 1, (long) newOnPress.Inputs.get(0));
+        spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 2);
+
+        verify(newOnPress, times(1)).run(any());
     }
 
     @Test
     void testPressActionIds() {
-        String id1 = "id1";
-        String id2 = "id2";
-        String id3 = "id3";
+        String id1 = randomString();
+        String id2 = randomString();
+        String id3 = randomString();
 
-        _spriteRenderableWithMouseEvents.setOnPress(0, new FakeAction<>(id1));
-        _spriteRenderableWithMouseEvents.setOnPress(2, new FakeAction<>(id2));
-        _spriteRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
-        _spriteRenderableWithMouseEvents.setOnPress(2, null);
+        spriteRenderableWithMouseEvents.setOnPress(0, new FakeAction<>(id1));
+        spriteRenderableWithMouseEvents.setOnPress(2, new FakeAction<>(id2));
+        spriteRenderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
+        spriteRenderableWithMouseEvents.setOnPress(2, null);
 
-        Map<Integer, String> pressActionIds = _spriteRenderableWithMouseEvents.pressActionIds();
+        Map<Integer, String> pressActionIds = spriteRenderableWithMouseEvents.pressActionIds();
 
         assertNotNull(pressActionIds);
         assertEquals(2, pressActionIds.size());
@@ -302,34 +307,33 @@ class SpriteRenderableImplTests {
     @Test
     void testReleaseAndSetOnRelease() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.release(2, 0L));
+                spriteRenderableWithoutMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setOnRelease(2, new FakeAction<>()));
+                spriteRenderableWithoutMouseEvents.setOnRelease(2, new FakeAction<>()));
 
-        _spriteRenderableWithMouseEvents.release(2, TIMESTAMP);
+        spriteRenderableWithMouseEvents.release(2, TIMESTAMP);
 
-        FakeAction<Long> newOnRelease = new FakeAction<>();
-        _spriteRenderableWithMouseEvents.setOnRelease(2, newOnRelease);
+        //noinspection unchecked
+        Action<MouseEventInputs> newOnRelease = mock(Action.class);
+        spriteRenderableWithMouseEvents.setOnRelease(2, newOnRelease);
 
-        _spriteRenderableWithMouseEvents.release(2, TIMESTAMP + 1);
-        assertEquals(1, newOnRelease.NumberOfTimesCalled);
-        assertEquals(1, newOnRelease.Inputs.size());
-        assertEquals(TIMESTAMP + 1, (long) newOnRelease.Inputs.get(0));
+        spriteRenderableWithMouseEvents.release(2, TIMESTAMP + 1);
+
+        verify(newOnRelease, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, spriteRenderableWithMouseEvents)));
     }
 
     @Test
     void testReleaseActionIds() {
-        String id1 = "id1";
-        String id2 = "id2";
-        String id3 = "id3";
+        String id1 = randomString();
+        String id2 = randomString();
+        String id3 = randomString();
 
-        _spriteRenderableWithMouseEvents.setOnRelease(0, new FakeAction<>(id1));
-        _spriteRenderableWithMouseEvents.setOnRelease(2, new FakeAction<>(id2));
-        _spriteRenderableWithMouseEvents.setOnRelease(7, new FakeAction<>(id3));
-        _spriteRenderableWithMouseEvents.setOnRelease(2, null);
+        spriteRenderableWithMouseEvents.setOnRelease(0, new FakeAction<>(id1));
+        spriteRenderableWithMouseEvents.setOnRelease(2, new FakeAction<>(id2));
+        spriteRenderableWithMouseEvents.setOnRelease(7, new FakeAction<>(id3));
+        spriteRenderableWithMouseEvents.setOnRelease(2, null);
 
-        Map<Integer, String> releaseActionIds =
-                _spriteRenderableWithMouseEvents.releaseActionIds();
+        Map<Integer, String> releaseActionIds = spriteRenderableWithMouseEvents.releaseActionIds();
 
         assertNotNull(releaseActionIds);
         assertEquals(2, releaseActionIds.size());
@@ -341,206 +345,204 @@ class SpriteRenderableImplTests {
     void testPressOrReleaseMethodsWithInvalidButtons() {
 
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setOnPress(-1, new FakeAction<>()));
+                spriteRenderableWithMouseEvents.setOnPress(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setOnRelease(-1, new FakeAction<>()));
+                spriteRenderableWithMouseEvents.setOnRelease(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(-1, TIMESTAMP));
+                spriteRenderableWithMouseEvents.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(-1, TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setOnPress(8, new FakeAction<>()));
+                spriteRenderableWithMouseEvents.setOnPress(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.setOnRelease(8, new FakeAction<>()));
+                spriteRenderableWithMouseEvents.setOnRelease(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(8, TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(8, TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.press(8, TIMESTAMP + 3));
     }
 
     @Test
     void testMouseOverAndSetOnMouseOver() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.mouseOver(0L));
+                spriteRenderableWithoutMouseEvents.mouseOver(0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setOnMouseOver(ON_MOUSE_OVER));
+                spriteRenderableWithoutMouseEvents.setOnMouseOver(mockOnMouseOverAction));
 
-        _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP);
-        assertEquals(1, ON_MOUSE_OVER.NumberOfTimesCalled);
-        assertEquals(1, ON_MOUSE_OVER.Inputs.size());
-        assertEquals(TIMESTAMP, (long) ON_MOUSE_OVER.Inputs.get(0));
+        spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP);
 
-        FakeAction<Long> newOnMouseOver = new FakeAction<>();
-        _spriteRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
+        verify(mockOnMouseOverAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, spriteRenderableWithMouseEvents)));
 
-        _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 1);
-        assertEquals(1, newOnMouseOver.NumberOfTimesCalled);
-        assertEquals(1, newOnMouseOver.Inputs.size());
-        assertEquals(TIMESTAMP + 1, (long) newOnMouseOver.Inputs.get(0));
+        //noinspection unchecked
+        Action<MouseEventInputs> newOnMouseOver = mock(Action.class);
+        spriteRenderableWithMouseEvents.setOnMouseOver(newOnMouseOver);
+
+        spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 1);
+
+        verify(newOnMouseOver, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, spriteRenderableWithMouseEvents)));
     }
 
     @Test
     void testMouseOverActionId() {
-        String mouseOverActionId = "mouseOverActionId";
+        String mouseOverActionId = randomString();
 
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.mouseOverActionId());
+                spriteRenderableWithoutMouseEvents.mouseOverActionId());
 
-        _spriteRenderableWithMouseEvents.setOnMouseOver(null);
+        spriteRenderableWithMouseEvents.setOnMouseOver(null);
 
-        assertNull(_spriteRenderableWithMouseEvents.mouseOverActionId());
+        assertNull(spriteRenderableWithMouseEvents.mouseOverActionId());
 
-        _spriteRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+        spriteRenderableWithMouseEvents.setOnMouseOver(new FakeAction<>(mouseOverActionId));
 
-        assertEquals(mouseOverActionId, _spriteRenderableWithMouseEvents.mouseOverActionId());
+        assertEquals(mouseOverActionId, spriteRenderableWithMouseEvents.mouseOverActionId());
     }
 
     @Test
     void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.mouseLeave(0L));
+                spriteRenderableWithoutMouseEvents.mouseLeave(0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.setOnMouseLeave(ON_MOUSE_LEAVE));
+                spriteRenderableWithoutMouseEvents.setOnMouseLeave(mockOnMouseLeaveAction));
 
-        _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP);
-        assertEquals(1, ON_MOUSE_LEAVE.NumberOfTimesCalled);
-        assertEquals(1, ON_MOUSE_LEAVE.Inputs.size());
-        assertEquals(TIMESTAMP, (long) ON_MOUSE_LEAVE.Inputs.get(0));
+        spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP);
 
-        FakeAction<Long> newOnMouseLeave = new FakeAction<>();
-        _spriteRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
+        verify(mockOnMouseLeaveAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, spriteRenderableWithMouseEvents)));
 
-        _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1);
-        assertEquals(1, newOnMouseLeave.NumberOfTimesCalled);
-        assertEquals(1, newOnMouseLeave.Inputs.size());
-        assertEquals(TIMESTAMP + 1, (long) newOnMouseLeave.Inputs.get(0));
+        //noinspection unchecked
+        Action<MouseEventInputs> newOnMouseLeave = mock(Action.class);
+        spriteRenderableWithMouseEvents.setOnMouseLeave(newOnMouseLeave);
+
+        spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1);
+
+        verify(newOnMouseLeave, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, spriteRenderableWithMouseEvents)));
     }
 
     @Test
     void testMouseLeaveActionId() {
-        String mouseLeaveActionId = "mouseLeaveActionId";
+        String mouseLeaveActionId = randomString();
 
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.mouseLeaveActionId());
+                spriteRenderableWithoutMouseEvents.mouseLeaveActionId());
 
-        _spriteRenderableWithMouseEvents.setOnMouseLeave(null);
+        spriteRenderableWithMouseEvents.setOnMouseLeave(null);
 
-        assertNull(_spriteRenderableWithMouseEvents.mouseLeaveActionId());
+        assertNull(spriteRenderableWithMouseEvents.mouseLeaveActionId());
 
-        _spriteRenderableWithMouseEvents.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+        spriteRenderableWithMouseEvents.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
 
-        assertEquals(mouseLeaveActionId, _spriteRenderableWithMouseEvents.mouseLeaveActionId());
+        assertEquals(mouseLeaveActionId, spriteRenderableWithMouseEvents.mouseLeaveActionId());
     }
 
     @Test
     void testMouseEventCallsToOutdatedTimestamps() {
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(0f, 0f, 1f, 1f);
 
-        _spriteRenderableWithMouseEvents.press(0, TIMESTAMP);
+        spriteRenderableWithMouseEvents.press(0, TIMESTAMP);
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(0, TIMESTAMP - 1));
+                spriteRenderableWithMouseEvents.press(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.release(0, TIMESTAMP - 1));
+                spriteRenderableWithMouseEvents.release(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP - 1));
+                spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP - 1));
+                spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP - 1));
+                spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP - 1));
 
-        _spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 1);
+        spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(0, TIMESTAMP));
+                spriteRenderableWithMouseEvents.press(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.release(0, TIMESTAMP));
+                spriteRenderableWithMouseEvents.release(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP));
+                spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP));
+                spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
+                spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
 
-        _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2);
+        spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 1));
+                spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 1));
 
-        _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3);
+        spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 2));
+                spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 2));
 
-        _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 4);
+        spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.release(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.mouseOver(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                _spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 3));
+                spriteRenderableWithMouseEvents.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 3));
     }
 
     @Test
     void testColorShiftProviders() {
         assertSame(COLOR_SHIFT_PROVIDERS,
-                _spriteRenderableWithMouseEvents.colorShiftProviders());
+                spriteRenderableWithMouseEvents.colorShiftProviders());
         assertSame(COLOR_SHIFT_PROVIDERS,
-                _spriteRenderableWithoutMouseEvents.colorShiftProviders());
+                spriteRenderableWithoutMouseEvents.colorShiftProviders());
     }
 
     @Test
     void testGetAndSetRenderingAreaProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                _spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
+                spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
         assertSame(RENDERING_AREA_PROVIDER,
-                _spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
+                spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
 
         FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
 
-        _spriteRenderableWithMouseEvents
+        spriteRenderableWithMouseEvents
                 .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
-        _spriteRenderableWithoutMouseEvents
+        spriteRenderableWithoutMouseEvents
                 .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
 
         assertSame(newRenderingDimensionsProvider,
-                _spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
+                spriteRenderableWithMouseEvents.getRenderingDimensionsProvider());
         assertSame(newRenderingDimensionsProvider,
-                _spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
+                spriteRenderableWithoutMouseEvents.getRenderingDimensionsProvider());
     }
 
     @Test
     void testGetAndSetZ() {
-        assertEquals(Z, _spriteRenderableWithMouseEvents.getZ());
-        assertEquals(Z, _spriteRenderableWithoutMouseEvents.getZ());
+        assertEquals(Z, spriteRenderableWithMouseEvents.getZ());
+        assertEquals(Z, spriteRenderableWithoutMouseEvents.getZ());
 
         int newZ = 456;
 
-        _spriteRenderableWithMouseEvents.setZ(newZ);
-        _spriteRenderableWithoutMouseEvents.setZ(newZ);
+        spriteRenderableWithMouseEvents.setZ(newZ);
+        spriteRenderableWithoutMouseEvents.setZ(newZ);
 
-        assertEquals(newZ, _spriteRenderableWithMouseEvents.getZ());
-        assertEquals(newZ, _spriteRenderableWithoutMouseEvents.getZ());
+        assertEquals(newZ, spriteRenderableWithMouseEvents.getZ());
+        assertEquals(newZ, spriteRenderableWithoutMouseEvents.getZ());
 
-        verify(_mockContainingStack, times(1)).add(_spriteRenderableWithMouseEvents);
-        verify(_mockContainingStack, times(1)).add(_spriteRenderableWithoutMouseEvents);
+        verify(mockContainingStack, times(1)).add(spriteRenderableWithMouseEvents);
+        verify(mockContainingStack, times(1)).add(spriteRenderableWithoutMouseEvents);
     }
 
     @Test
@@ -553,7 +555,7 @@ class SpriteRenderableImplTests {
         ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Height = 3000;
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -2f, 0.75f, 0.5f);
 
-        boolean capturesMouseEventAtPoint = _spriteRenderableWithMouseEvents
+        boolean capturesMouseEventAtPoint = spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(0.123f, 0.456f), TIMESTAMP);
 
         assertTrue(capturesMouseEventAtPoint);
@@ -574,7 +576,7 @@ class SpriteRenderableImplTests {
     void testCapturesMouseEventsAtPointDoesNotExceedRenderingBoundaries() {
         RENDERING_AREA_PROVIDER.ProvidedValue = WHOLE_SCREEN;
         SPRITE_SUPPORTING_MOUSE_EVENTS.Image = new FakeImage(true);
-        when(_mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
+        when(mockRenderingBoundaries.currentBoundaries()).thenReturn(new FloatBox() {
             @Override
             public float leftX() {
                 return 0f;
@@ -621,9 +623,9 @@ class SpriteRenderableImplTests {
             }
         });
 
-        assertTrue(_spriteRenderableWithMouseEvents
+        assertTrue(spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(0.499f, 0.5f), TIMESTAMP));
-        assertFalse(_spriteRenderableWithMouseEvents
+        assertFalse(spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(0.501f, 0.5f), TIMESTAMP));
     }
 
@@ -632,43 +634,43 @@ class SpriteRenderableImplTests {
         float verySmallNumber = 0.0001f;
 
         assertThrows(UnsupportedOperationException.class, () ->
-                _spriteRenderableWithoutMouseEvents.capturesMouseEventAtPoint(Vertex.of(.5f, .5f), 0L));
+                spriteRenderableWithoutMouseEvents.capturesMouseEventAtPoint(Vertex.of(.5f, .5f), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(.5f, .5f, 1.5f, 1.5f);
 
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(.5f - verySmallNumber, .75f), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(1f + verySmallNumber, .75f), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(.75f, .5f - verySmallNumber), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(.75f, 1.5f + verySmallNumber), 0L));
 
         RENDERING_AREA_PROVIDER.ProvidedValue = new FakeFloatBox(-0.5f, -0.5f, 0.5f, 0.5f);
 
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(0f - verySmallNumber, .25f), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(0.5f + verySmallNumber, .25f), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(.25f, 0f - verySmallNumber), 0L));
-        assertThrows(IllegalArgumentException.class, () -> _spriteRenderableWithMouseEvents
+        assertThrows(IllegalArgumentException.class, () -> spriteRenderableWithMouseEvents
                 .capturesMouseEventAtPoint(Vertex.of(.25f, 0.5f + verySmallNumber), 0L));
     }
 
     @Test
     void testDelete() {
-        _spriteRenderableWithMouseEvents.delete();
-        _spriteRenderableWithoutMouseEvents.delete();
+        spriteRenderableWithMouseEvents.delete();
+        spriteRenderableWithoutMouseEvents.delete();
 
-        verify(_mockContainingStack, times(1)).remove(_spriteRenderableWithMouseEvents);
-        verify(_mockContainingStack, times(1)).remove(_spriteRenderableWithoutMouseEvents);
+        verify(mockContainingStack, times(1)).remove(spriteRenderableWithMouseEvents);
+        verify(mockContainingStack, times(1)).remove(spriteRenderableWithoutMouseEvents);
     }
 
     @Test
     void testUuid() {
-        assertSame(UUID, _spriteRenderableWithMouseEvents.uuid());
-        assertSame(UUID, _spriteRenderableWithoutMouseEvents.uuid());
+        assertSame(UUID, spriteRenderableWithMouseEvents.uuid());
+        assertSame(UUID, spriteRenderableWithoutMouseEvents.uuid());
     }
 }

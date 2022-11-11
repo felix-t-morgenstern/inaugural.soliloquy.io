@@ -50,12 +50,12 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.390</version>
+            <version>0.0.407</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.tools</artifactId>
-            <version>0.0.96</version>
+            <version>0.0.98</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>

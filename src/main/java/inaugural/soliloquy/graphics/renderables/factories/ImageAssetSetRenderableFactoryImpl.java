@@ -5,6 +5,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -20,7 +21,6 @@ import java.util.UUID;
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    @SuppressWarnings("ConstantConditions")
     public ImageAssetSetRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
@@ -41,9 +41,12 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
 
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet, String type, String direction,
-                                        Map<Integer, Action<Long>> onPress,
-                                        Map<Integer, Action<Long>> onRelease,
-                                        Action<Long> onMouseOver, Action<Long> onMouseLeave,
+                                        Map<Integer,
+                                                Action<MouseEventInputs>> onPress,
+                                        Map<Integer,
+                                                Action<MouseEventInputs>> onRelease,
+                                        Action<MouseEventInputs> onMouseOver,
+                                        Action<MouseEventInputs> onMouseLeave,
                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,

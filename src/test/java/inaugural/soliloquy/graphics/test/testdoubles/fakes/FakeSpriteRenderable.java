@@ -1,8 +1,10 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Sprite;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -104,7 +106,8 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<Long> action) throws IllegalArgumentException {
+    public void setOnPress(int i, Action<MouseEventInputs> action)
+            throws IllegalArgumentException {
 
     }
 
@@ -120,7 +123,8 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<Long> action) throws IllegalArgumentException {
+    public void setOnRelease(int i, Action<MouseEventInputs> action)
+            throws IllegalArgumentException {
 
     }
 

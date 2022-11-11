@@ -4,6 +4,7 @@ import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.game.Game;
+import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.logger.Logger;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
@@ -39,9 +40,10 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         SpriteRendererTest.graphicsPreloaderLoadAction();
 
         SpriteRenderable.setCapturesMouseEvents(true);
-        SpriteRenderable.setOnMouseOver(new Action<Long>() {
+        SpriteRenderable.setOnMouseOver(new Action<MouseEventInputs>() {
             @Override
-            public void run(Long aLong) throws IllegalArgumentException {
+            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
+                    throws IllegalArgumentException {
                 System.out.println("MOUSE OVER");
             }
 
@@ -61,7 +63,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Long getArchetype() {
+            public MouseEventInputs getArchetype() {
                 return null;
             }
 
@@ -70,9 +72,10 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnMouseLeave(new Action<Long>() {
+        SpriteRenderable.setOnMouseLeave(new Action<MouseEventInputs>() {
             @Override
-            public void run(Long aLong) throws IllegalArgumentException {
+            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
+                    throws IllegalArgumentException {
                 System.out.println("MOUSE LEAVE");
             }
 
@@ -92,7 +95,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Long getArchetype() {
+            public MouseEventInputs getArchetype() {
                 return null;
             }
 
@@ -101,9 +104,10 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, new Action<Long>() {
+        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, new Action<MouseEventInputs>() {
             @Override
-            public void run(Long aLong) throws IllegalArgumentException {
+            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
+                    throws IllegalArgumentException {
                 System.out.println("LEFT MOUSE BUTTON PRESS");
             }
 
@@ -123,7 +127,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Long getArchetype() {
+            public MouseEventInputs getArchetype() {
                 return null;
             }
 
@@ -132,9 +136,10 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON, new Action<Long>() {
+        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON, new Action<MouseEventInputs>() {
             @Override
-            public void run(Long aLong) throws IllegalArgumentException {
+            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
+                    throws IllegalArgumentException {
                 System.out.println("LEFT MOUSE BUTTON RELEASE");
             }
 
@@ -154,7 +159,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Long getArchetype() {
+            public MouseEventInputs getArchetype() {
                 return null;
             }
 

@@ -19,7 +19,7 @@ import java.util.UUID;
 public class GlobalLoopingAnimationRenderableImpl
         extends AbstractImageAssetRenderable
         implements GlobalLoopingAnimationRenderable {
-    private GlobalLoopingAnimation _globalLoopingAnimation;
+    private GlobalLoopingAnimation globalLoopingAnimation;
 
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
@@ -38,10 +38,10 @@ public class GlobalLoopingAnimationRenderableImpl
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                Map<Integer, Action<Long>> onPress,
-                                                Map<Integer, Action<Long>> onRelease,
-                                                Action<Long> onMouseOver,
-                                                Action<Long> onMouseLeave,
+                                                Map<Integer, Action<MouseEventInputs>> onPress,
+                                                Map<Integer, Action<MouseEventInputs>> onRelease,
+                                                Action<MouseEventInputs> onMouseOver,
+                                                Action<MouseEventInputs> onMouseLeave,
                                                 List<ProviderAtTime<ColorShift>>
                                                         colorShiftProviders,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -56,7 +56,7 @@ public class GlobalLoopingAnimationRenderableImpl
 
     @Override
     protected boolean underlyingAssetSupportsMouseEvents() {
-        return _globalLoopingAnimation.supportsMouseEvents();
+        return globalLoopingAnimation.supportsMouseEvents();
     }
 
     @Override
@@ -71,27 +71,27 @@ public class GlobalLoopingAnimationRenderableImpl
 
     @Override
     public GlobalLoopingAnimation getGlobalLoopingAnimation() {
-        return _globalLoopingAnimation;
+        return globalLoopingAnimation;
     }
 
     @Override
     public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation)
             throws IllegalArgumentException {
         Check.ifNull(globalLoopingAnimation, "globalLoopingAnimation");
-        if (_capturesMouseEvents && !globalLoopingAnimation.supportsMouseEvents()) {
+        if (capturesMouseEvents && !globalLoopingAnimation.supportsMouseEvents()) {
             throw new IllegalArgumentException(
                     "GlobalLoopingAnimationRenderableImpl.setGlobalLoopingAnimation: cannot " +
                             "assign GlobalLoopingAnimation which does not support mouse events " +
                             "to a setGlobalLoopingAnimationRenderable which does support mouse " +
                             "events");
         }
-        _globalLoopingAnimation = globalLoopingAnimation;
+        this.globalLoopingAnimation = globalLoopingAnimation;
     }
 
     @Override
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         return capturesMouseEventAtPoint(point, timestamp,
-                () -> _globalLoopingAnimation.provide(timestamp));
+                () -> globalLoopingAnimation.provide(timestamp));
     }
 }

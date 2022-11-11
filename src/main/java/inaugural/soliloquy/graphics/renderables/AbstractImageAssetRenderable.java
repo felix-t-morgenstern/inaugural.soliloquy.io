@@ -40,28 +40,29 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                 renderingBoundaries);
     }
 
-    protected AbstractImageAssetRenderable(Map<Integer, Action<Long>> onPress,
-                                           Map<Integer, Action<Long>> onRelease,
-                                           Action<Long> onMouseOver,
-                                           Action<Long> onMouseLeave,
-                                           List<ProviderAtTime<ColorShift>> colorShiftProviders,
-                                           ProviderAtTime<Float> borderThicknessProvider,
-                                           ProviderAtTime<Color> borderColorProvider,
-                                           ProviderAtTime<FloatBox> renderingAreaProvider,
-                                           int z,
-                                           UUID uuid,
-                                           RenderableStack containingStack,
-                                           RenderingBoundaries renderingBoundaries) {
+    protected AbstractImageAssetRenderable(
+            Map<Integer, Action<MouseEventInputs>> onPress,
+            Map<Integer, Action<MouseEventInputs>> onRelease,
+            Action<MouseEventInputs> onMouseOver,
+            Action<MouseEventInputs> onMouseLeave,
+            List<ProviderAtTime<ColorShift>> colorShiftProviders,
+            ProviderAtTime<Float> borderThicknessProvider,
+            ProviderAtTime<Color> borderColorProvider,
+            ProviderAtTime<FloatBox> renderingAreaProvider,
+            int z,
+            UUID uuid,
+            RenderableStack containingStack,
+            RenderingBoundaries renderingBoundaries) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave,
                 colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
-                                         Map<Integer, Action<Long>> onPress,
-                                         Map<Integer, Action<Long>> onRelease,
-                                         Action<Long> onMouseOver,
-                                         Action<Long> onMouseLeave,
+                                         Map<Integer, Action<MouseEventInputs>> onPress,
+                                         Map<Integer, Action<MouseEventInputs>> onRelease,
+                                         Action<MouseEventInputs> onMouseOver,
+                                         Action<MouseEventInputs> onMouseLeave,
                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
