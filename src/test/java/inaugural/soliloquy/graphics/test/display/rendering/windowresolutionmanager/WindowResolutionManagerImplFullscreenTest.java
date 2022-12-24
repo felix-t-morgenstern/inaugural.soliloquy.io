@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.mock;
@@ -47,7 +49,7 @@ class WindowResolutionManagerImplFullscreenTest {
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(new FakeStackRenderer(), 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(generateSimpleArchetype(RenderableStack.class), new FakeStackRenderer(), 100);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         GraphicsCoreLoop graphicsCoreLoop =

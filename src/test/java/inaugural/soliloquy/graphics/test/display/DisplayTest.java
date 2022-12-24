@@ -16,10 +16,7 @@ import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
 import soliloquy.specs.graphics.io.MouseListener;
-import soliloquy.specs.graphics.rendering.FrameExecutor;
-import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.WindowDisplayMode;
-import soliloquy.specs.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.List;
@@ -28,6 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class DisplayTest {
@@ -68,13 +66,16 @@ public class DisplayTest {
 
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX = new MouseEventCapturingSpatialIndexImpl();
 
-        MouseEventHandler mouseEventHandler = new MouseEventHandlerImpl(MOUSE_EVENT_CAPTURING_SPATIAL_INDEX);
+        MouseEventHandler mouseEventHandler =
+                new MouseEventHandlerImpl(MOUSE_EVENT_CAPTURING_SPATIAL_INDEX);
 
         MouseListener mouseListener = new MouseListenerImpl(mouseEventHandler);
 
         stackRenderer.RenderAction = stackRendererAction;
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(stackRenderer, 100);
+        FrameExecutor frameExecutor =
+                new FrameExecutorImpl(generateSimpleArchetype(RenderableStack.class), stackRenderer,
+                        100);
 
         List<Renderer> renderersWithMeshAndShader =
                 generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);

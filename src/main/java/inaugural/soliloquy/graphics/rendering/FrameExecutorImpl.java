@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
@@ -9,11 +10,14 @@ import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 public class FrameExecutorImpl implements FrameExecutor {
+    private final RenderableStack TOP_LEVEL_STACK;
     private final StackRenderer STACK_RENDERER;
     private final Semaphore SEMAPHORE;
     private final ArrayList<Consumer<Long>> FRAME_BLOCKING_EVENTS;
 
-    public FrameExecutorImpl(StackRenderer stackRenderer, int semaphorePermissions) {
+    public FrameExecutorImpl(RenderableStack topLevelStack, StackRenderer stackRenderer,
+                             int semaphorePermissions) {
+        TOP_LEVEL_STACK = Check.ifNull(topLevelStack, "topLevelStack");
         STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
         SEMAPHORE = new Semaphore(
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
@@ -44,7 +48,7 @@ public class FrameExecutorImpl implements FrameExecutor {
         }
         FRAME_BLOCKING_EVENTS.clear();
 
-        STACK_RENDERER.render(timestamp);
+        STACK_RENDERER.render(TOP_LEVEL_STACK, timestamp);
     }
 
     @Override

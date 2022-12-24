@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class FakeStackRenderer implements StackRenderer {
     public Consumer<Long> RenderAction;
 
     @Override
-    public void render(long timestamp) {
+    public void render(RenderableStack renderableStack, long timestamp) {
         NumberOfTimesRenderCalled++;
         Timestamps.add(timestamp);
 

@@ -1,75 +1,98 @@
 package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableStack;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.RenderableStack;
+import soliloquy.specs.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class StackRendererImplTests {
-    private final long MOST_RECENT_TIMESTAMP = 123123L;
+    private final long MOST_RECENT_TIMESTAMP = randomLong();
 
-    private FakeRenderableStack _renderableStack;
-    private FakeRenderer _renderer;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private Renderer<Renderable> mockRenderer;
+    @Mock private RenderableStack mockStack;
 
-    private StackRenderer _stackRenderer;
+    private StackRenderer stackRenderer;
 
     @BeforeEach
     void setUp() {
-        _renderableStack = new FakeRenderableStack();
-        _renderer = new FakeRenderer();
+        //noinspection unchecked
+        mockRenderer = (Renderer<Renderable>) mock(Renderer.class);
+        mockRenderingBoundaries = mock(RenderingBoundaries.class);
+        mockStack = mock(RenderableStack.class);
 
-        _stackRenderer = new StackRendererImpl(_renderableStack, _renderer, MOST_RECENT_TIMESTAMP);
+        stackRenderer =
+                new StackRendererImpl(mockRenderer, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new StackRendererImpl(null, _renderer, MOST_RECENT_TIMESTAMP));
+                () -> new StackRendererImpl(null, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StackRendererImpl(_renderableStack, null, MOST_RECENT_TIMESTAMP));
+                () -> new StackRendererImpl(mockRenderer, null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
     void testGetInterfaceName() {
-        assertEquals(StackRenderer.class.getCanonicalName(), _stackRenderer.getInterfaceName());
+        assertEquals(StackRenderer.class.getCanonicalName(), stackRenderer.getInterfaceName());
     }
 
     @Test
     void testRender() {
-        Renderable renderable1 = new FakeRenderableWithDimensions(1);
-        Renderable renderable2 = new FakeRenderableWithDimensions(2);
-        Renderable renderable3 = new FakeRenderableWithDimensions(2);
+        FloatBox mockBoundaries = mock(FloatBox.class);
+        //noinspection unchecked
+        ProviderAtTime<FloatBox> mockBoundariesProvider =
+                (ProviderAtTime<FloatBox>) mock(ProviderAtTime.class);
+        when(mockBoundariesProvider.provide(anyLong())).thenReturn(mockBoundaries);
+        when(mockStack.getRenderingBoundariesProvider()).thenReturn(mockBoundariesProvider);
+        Renderable renderable1 = mock(Renderable.class);
+        Renderable renderable2 = mock(Renderable.class);
+        Renderable renderable3 = mock(Renderable.class);
+        when(mockStack.renderablesByZIndexRepresentation()).thenReturn(
+                new HashMap<Integer, List<Renderable>>() {{
+                    put(1, new ArrayList<Renderable>() {{
+                        add(renderable1);
+                    }});
+                    put(2, new ArrayList<Renderable>() {{
+                        add(renderable2);
+                        add(renderable3);
+                    }});
+                }});
 
-        _renderableStack.add(renderable1);
-        _renderableStack.add(renderable2);
-        _renderableStack.add(renderable3);
+        stackRenderer.render(mockStack, MOST_RECENT_TIMESTAMP);
 
-        _stackRenderer.render(MOST_RECENT_TIMESTAMP);
-
-        assertEquals(3, _renderer.Rendered.size());
-        assertTrue(_renderer.Rendered.get(0) == renderable2 ||
-                _renderer.Rendered.get(0) == renderable3);
-        assertTrue(_renderer.Rendered.get(1) == renderable2 ||
-                _renderer.Rendered.get(1) == renderable3);
-        assertSame(renderable1, _renderer.Rendered.get(2));
-        assertEquals(3, _renderer.Timestamps.size());
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(0));
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(1));
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) _renderer.Timestamps.get(2));
+        InOrder inOrder =
+                inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockStack, mockRenderer);
+        inOrder.verify(mockStack, times(1)).getRenderingBoundariesProvider();
+        inOrder.verify(mockBoundariesProvider, times(1)).provide(MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderingBoundaries, times(1)).pushNewBoundaries(mockBoundaries);
+        inOrder.verify(mockStack, times(1)).renderablesByZIndexRepresentation();
+        inOrder.verify(mockRenderer, times(1)).render(renderable2, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderer, times(1)).render(renderable3, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderer, times(1)).render(renderable1, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderingBoundaries, times(1)).popMostRecentBoundaries();
     }
 
     @Test
     void testRenderOutdatedTimestamp() {
-        FakeRenderableWithDimensions renderable = new FakeRenderableWithDimensions(0);
-        _renderableStack.add(renderable);
-
         assertThrows(IllegalArgumentException.class, () ->
-                _stackRenderer.render(MOST_RECENT_TIMESTAMP - 1L));
+                stackRenderer.render(mockStack, MOST_RECENT_TIMESTAMP - 1L));
     }
 }

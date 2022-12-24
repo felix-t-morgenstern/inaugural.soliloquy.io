@@ -1,10 +1,13 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.rendering.FrameExecutor;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.function.Consumer;
+
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 
 public class FakeFrameExecutor implements FrameExecutor {
     public StackRenderer StackRenderer;
@@ -29,7 +32,8 @@ public class FakeFrameExecutor implements FrameExecutor {
     @Override
     public void execute(long timestamp) {
         if (StackRenderer != null) {
-            StackRenderer.render(GlobalClock.globalTimestamp());
+            StackRenderer.render(generateSimpleArchetype(RenderableStack.class),
+                    GlobalClock.globalTimestamp());
         }
         NumberOfTimesExecuteCalled++;
     }

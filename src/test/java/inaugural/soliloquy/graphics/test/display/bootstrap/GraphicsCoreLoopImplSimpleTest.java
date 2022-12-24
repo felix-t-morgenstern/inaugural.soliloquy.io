@@ -9,12 +9,14 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.mockito.Mockito.mock;
 
@@ -33,7 +35,9 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
-        FrameExecutor frameExecutor = new FrameExecutorImpl(new FakeStackRenderer(), 100);
+        FrameExecutor frameExecutor =
+                new FrameExecutorImpl(generateSimpleArchetype(RenderableStack.class),
+                        new FakeStackRenderer(), 100);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();

@@ -22,6 +22,7 @@ import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +30,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static org.mockito.Mockito.mock;
 
 public class StackRendererTest extends DisplayTest {
@@ -52,8 +54,8 @@ public class StackRendererTest extends DisplayTest {
 
         RenderableStack renderableStack = new RenderableStackImpl();
 
-        soliloquy.specs.graphics.rendering.renderers.StackRenderer stackRenderer =
-                new StackRendererImpl(renderableStack, renderer, null);
+        StackRenderer stackRenderer =
+                new StackRendererImpl(renderer, RENDERING_BOUNDARIES, null);
 
         RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
 
@@ -133,7 +135,7 @@ public class StackRendererTest extends DisplayTest {
         renderableStack.add(spriteRenderable2);
         renderableStack.add(spriteRenderable3);
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(stackRenderer, 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(renderableStack, stackRenderer, 100);
 
         GraphicsCoreLoop graphicsCoreLoop =
                 new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),
