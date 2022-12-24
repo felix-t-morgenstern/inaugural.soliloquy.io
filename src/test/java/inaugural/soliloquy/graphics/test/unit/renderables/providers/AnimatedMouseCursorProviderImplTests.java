@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.HashMap;
 
+import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnimatedMouseCursorProviderImplTests {
@@ -20,12 +21,12 @@ class AnimatedMouseCursorProviderImplTests {
 
     private final HashMap<Integer, Long> CURSORS_AT_MS = new HashMap<>();
 
-    private final String ID = "id";
+    private final String ID = randomString();
     private final int MS_DURATION = 777;
     private final int PERIOD_MODULO_OFFSET = 321;
     private final long MOST_RECENT_TIMESTAMP = 12L;
 
-    private AnimatedMouseCursorProvider _animatedMouseCursorProvider;
+    private AnimatedMouseCursorProvider animatedMouseCursorProvider;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +34,7 @@ class AnimatedMouseCursorProviderImplTests {
         CURSORS_AT_MS.put(MS_2, MOUSE_CURSOR_2);
         CURSORS_AT_MS.put(MS_3, MOUSE_CURSOR_3);
 
-        _animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(ID, CURSORS_AT_MS,
+        animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(ID, CURSORS_AT_MS,
                 MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP);
     }
 
@@ -84,18 +85,18 @@ class AnimatedMouseCursorProviderImplTests {
 
     @Test
     void testUuid() {
-        assertThrows(UnsupportedOperationException.class, _animatedMouseCursorProvider::uuid);
+        assertThrows(UnsupportedOperationException.class, animatedMouseCursorProvider::uuid);
     }
 
     @Test
     void testId() {
-        assertEquals(ID, _animatedMouseCursorProvider.id());
+        assertEquals(ID, animatedMouseCursorProvider.id());
     }
 
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) _animatedMouseCursorProvider.mostRecentTimestamp());
+                (long) animatedMouseCursorProvider.mostRecentTimestamp());
     }
 
     @Test
@@ -111,17 +112,17 @@ class AnimatedMouseCursorProviderImplTests {
 
     @Test
     void testProvide() {
-        assertEquals(MOUSE_CURSOR_3, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_3, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET - 1));
-        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET));
-        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 - 1));
-        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2));
-        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3 - 1));
-        assertEquals(MOUSE_CURSOR_3, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_3, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3));
     }
 
@@ -130,43 +131,33 @@ class AnimatedMouseCursorProviderImplTests {
         long pauseTimestamp = 10000L;
         long unpauseTimestamp = 10001L;
 
-        assertNull(_animatedMouseCursorProvider.pausedTimestamp());
+        assertNull(animatedMouseCursorProvider.pausedTimestamp());
 
-        _animatedMouseCursorProvider.reportPause(pauseTimestamp);
+        animatedMouseCursorProvider.reportPause(pauseTimestamp);
 
-        assertEquals(pauseTimestamp, (long) _animatedMouseCursorProvider.pausedTimestamp());
+        assertEquals(pauseTimestamp, (long) animatedMouseCursorProvider.pausedTimestamp());
 
-        _animatedMouseCursorProvider.reportUnpause(unpauseTimestamp);
+        animatedMouseCursorProvider.reportUnpause(unpauseTimestamp);
 
-        assertNull(_animatedMouseCursorProvider.pausedTimestamp());
+        assertNull(animatedMouseCursorProvider.pausedTimestamp());
     }
 
     @Test
-    void testReportPauseAndUnpauseWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
+    void testReportPauseWhilePausedOrViceVersa() {
+        assertThrows(UnsupportedOperationException.class, () ->
+                animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
 
-        _animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
+        animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP));
-
-        _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP);
-
-
-        assertThrows(IllegalArgumentException.class,
-                () -> _animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
+        assertThrows(UnsupportedOperationException.class, () ->
+                animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
     void testProvideWhenPaused() {
-        _animatedMouseCursorProvider.reportPause(MS_2);
+        animatedMouseCursorProvider.reportPause(MS_2);
 
-        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_3));
     }
 
@@ -174,12 +165,12 @@ class AnimatedMouseCursorProviderImplTests {
     void testUnpauseUpdatesPeriodModuloOffset() {
         long pauseDuration = 123123L;
 
-        _animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
-        _animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
+        animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
+        animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
 
-        assertEquals(MOUSE_CURSOR_1, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_1, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 - 1 + pauseDuration));
-        assertEquals(MOUSE_CURSOR_2, (long) _animatedMouseCursorProvider
+        assertEquals(MOUSE_CURSOR_2, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET + MS_2 + pauseDuration));
     }
 
@@ -187,74 +178,74 @@ class AnimatedMouseCursorProviderImplTests {
     void testReset() {
         long resetTimestamp = 123123L;
 
-        _animatedMouseCursorProvider.reset(resetTimestamp);
+        animatedMouseCursorProvider.reset(resetTimestamp);
 
         assertEquals(MOUSE_CURSOR_1,
-                (long) _animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
+                (long) animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
         assertEquals(MOUSE_CURSOR_2,
-                (long) _animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
+                (long) animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
     }
 
     @Test
     void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
-        _animatedMouseCursorProvider.provide(timestamp);
+        animatedMouseCursorProvider.provide(timestamp);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.provide(timestamp - 1));
+                animatedMouseCursorProvider.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportPause(timestamp - 1));
+                animatedMouseCursorProvider.reportPause(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportUnpause(timestamp - 1));
+                animatedMouseCursorProvider.reportUnpause(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reset(timestamp - 1));
+                animatedMouseCursorProvider.reset(timestamp - 1));
 
-        _animatedMouseCursorProvider.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reset(timestamp));
-
-        _animatedMouseCursorProvider.reportUnpause(timestamp + 2);
+        animatedMouseCursorProvider.reportPause(timestamp + 1);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.provide(timestamp + 1));
+                animatedMouseCursorProvider.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportPause(timestamp + 1));
+                animatedMouseCursorProvider.reportUnpause(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reset(timestamp + 1));
+                animatedMouseCursorProvider.reset(timestamp));
 
-        _animatedMouseCursorProvider.provide(timestamp + 3);
+        animatedMouseCursorProvider.reportUnpause(timestamp + 2);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.provide(timestamp + 2));
+                animatedMouseCursorProvider.provide(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportPause(timestamp + 2));
+                animatedMouseCursorProvider.reportPause(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reportUnpause(timestamp + 2));
+                animatedMouseCursorProvider.reset(timestamp + 1));
+
+        animatedMouseCursorProvider.provide(timestamp + 3);
+
         assertThrows(IllegalArgumentException.class, () ->
-                _animatedMouseCursorProvider.reset(timestamp + 2));
+                animatedMouseCursorProvider.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                animatedMouseCursorProvider.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                animatedMouseCursorProvider.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                animatedMouseCursorProvider.reset(timestamp + 2));
     }
 
     @Test
     void testGetArchetype() {
-        assertNotNull(_animatedMouseCursorProvider.getArchetype());
+        assertNotNull(animatedMouseCursorProvider.getArchetype());
     }
 
     @Test
     void testRepresentation() {
-        assertEquals(CURSORS_AT_MS, _animatedMouseCursorProvider.representation());
-        assertNotSame(CURSORS_AT_MS, _animatedMouseCursorProvider.representation());
+        assertEquals(CURSORS_AT_MS, animatedMouseCursorProvider.representation());
+        assertNotSame(CURSORS_AT_MS, animatedMouseCursorProvider.representation());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
                         long.class.getCanonicalName() + ">",
-                _animatedMouseCursorProvider.getInterfaceName());
+                animatedMouseCursorProvider.getInterfaceName());
     }
 }

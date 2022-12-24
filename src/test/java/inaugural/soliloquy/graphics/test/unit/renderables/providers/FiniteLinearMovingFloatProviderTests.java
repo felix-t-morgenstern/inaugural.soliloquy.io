@@ -28,11 +28,11 @@ class FiniteLinearMovingFloatProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private FiniteLinearMovingProvider<Float> _finiteLinearMovingFloatProvider;
+    private FiniteLinearMovingProvider<Float> finiteLinearMovingFloatProvider;
 
     @BeforeEach
     void setUp() {
-        _finiteLinearMovingFloatProvider = new FiniteLinearMovingFloatProvider(UUID,
+        finiteLinearMovingFloatProvider = new FiniteLinearMovingFloatProvider(UUID,
                 VALUES_AT_TIMES, null, MOST_RECENT_TIMESTAMP);
     }
 
@@ -62,42 +62,42 @@ class FiniteLinearMovingFloatProviderTests {
 
     @Test
     void testUuid() {
-        assertSame(UUID, _finiteLinearMovingFloatProvider.uuid());
+        assertSame(UUID, finiteLinearMovingFloatProvider.uuid());
     }
 
     @Test
     void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
     }
 
     @Test
     void testValuesAtTimestampsRepresentation() {
-        assertNotNull(_finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+        assertNotNull(finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
         assertEquals(VALUES_AT_TIMES,
-                _finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
         assertNotSame(VALUES_AT_TIMES,
-                _finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
     }
 
     @Test
     void testGetArchetype() {
-        assertNotNull(_finiteLinearMovingFloatProvider.getArchetype());
+        assertNotNull(finiteLinearMovingFloatProvider.getArchetype());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(FiniteLinearMovingProvider.class.getCanonicalName() + "<" +
                         Float.class.getCanonicalName() + ">",
-                _finiteLinearMovingFloatProvider.getInterfaceName());
+                finiteLinearMovingFloatProvider.getInterfaceName());
     }
 
     @Test
     void testProvideAtExtremes() {
-        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(TIME_1 - 1));
-        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(TIME_1));
-        assertEquals(VALUE_3, (float) _finiteLinearMovingFloatProvider.provide(TIME_3));
-        assertEquals(VALUE_3, (float) _finiteLinearMovingFloatProvider.provide(TIME_3 + 1));
+        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(TIME_1 - 1));
+        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(TIME_1));
+        assertEquals(VALUE_3, (float) finiteLinearMovingFloatProvider.provide(TIME_3));
+        assertEquals(VALUE_3, (float) finiteLinearMovingFloatProvider.provide(TIME_3 + 1));
     }
 
     @Test
@@ -111,7 +111,7 @@ class FiniteLinearMovingFloatProviderTests {
         float weightedValue2 = VALUE_2 * time2Weight;
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float) _finiteLinearMovingFloatProvider.provide(timestamp));
+                (float) finiteLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
@@ -127,66 +127,66 @@ class FiniteLinearMovingFloatProviderTests {
 
     @Test
     void testProvideWhenPaused() {
-        _finiteLinearMovingFloatProvider.reportPause(TIME_1);
+        finiteLinearMovingFloatProvider.reportPause(TIME_1);
 
-        assertEquals(VALUE_1, (float) _finiteLinearMovingFloatProvider.provide(123123123L));
+        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(123123123L));
     }
 
     @Test
     void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP - 1));
+                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
+                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
+                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
 
-        _finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1);
+        finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP));
+                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
+                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
+                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
 
-        _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
+        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1));
+                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 1));
+                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
+                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
+                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) _finiteLinearMovingFloatProvider.pausedTimestamp());
+                (long) finiteLinearMovingFloatProvider.pausedTimestamp());
 
-        _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
+        finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 2));
+                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2));
+                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
+                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
         assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long) _finiteLinearMovingFloatProvider.mostRecentTimestamp());
-        assertNull(_finiteLinearMovingFloatProvider.pausedTimestamp());
+                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
+        assertNull(finiteLinearMovingFloatProvider.pausedTimestamp());
     }
 
     @Test
     void testReportPauseWhilePausedOrViceVersa() {
-        assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
+        assertThrows(UnsupportedOperationException.class, () ->
+                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
 
-        _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
+        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
+        assertThrows(UnsupportedOperationException.class, () ->
+                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -200,23 +200,23 @@ class FiniteLinearMovingFloatProviderTests {
         float weightedValue1 = VALUE_1 * time1Weight;
         float weightedValue2 = VALUE_2 * time2Weight;
 
-        _finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
-        _finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
+        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
+        finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
 
         Map<Long, Float> valuesAtTimestampsRepresentation =
-                _finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation();
+                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation();
 
         assertEquals(VALUE_1, (float) valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
         assertEquals(VALUE_2, (float) valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
         assertEquals(VALUE_3, (float) valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float) _finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
     }
 
     @Test
     void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, _finiteLinearMovingFloatProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, _finiteLinearMovingFloatProvider.representation());
+        assertEquals(VALUES_AT_TIMES, finiteLinearMovingFloatProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, finiteLinearMovingFloatProvider.representation());
     }
 }

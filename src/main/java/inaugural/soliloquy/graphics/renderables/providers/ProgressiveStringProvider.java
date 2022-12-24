@@ -27,11 +27,11 @@ public class ProgressiveStringProvider
     public String provide(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        if (_pausedTimestamp != null) {
-            timestamp = _pausedTimestamp;
+        if (pausedTimestamp != null) {
+            timestamp = pausedTimestamp;
         }
 
-        long timeWithinPeriod = timestamp - _anchorTime;
+        long timeWithinPeriod = timestamp - anchorTime;
 
         if (timeWithinPeriod <= 0) {
             return "";
@@ -48,7 +48,7 @@ public class ProgressiveStringProvider
     @Override
     public Object representation() {
         // TODO: Revise this awful data structure.
-        return new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, _anchorTime));
+        return new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, anchorTime));
     }
 
     @Override

@@ -24,7 +24,7 @@ class LoopingLinearMovingFloatProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private LoopingLinearMovingProvider<Float> _loopingLinearMovingFloatProvider;
+    private LoopingLinearMovingProvider<Float> loopingLinearMovingFloatProvider;
 
     @BeforeEach
     void setUp() {
@@ -32,7 +32,7 @@ class LoopingLinearMovingFloatProviderTests {
         VALUES_AT_TIMES.put(TIME_2, VALUE_2);
         VALUES_AT_TIMES.put(TIME_3, VALUE_3);
 
-        _loopingLinearMovingFloatProvider = new LoopingLinearMovingFloatProvider(UUID,
+        loopingLinearMovingFloatProvider = new LoopingLinearMovingFloatProvider(UUID,
                 VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null);
     }
 
@@ -86,7 +86,7 @@ class LoopingLinearMovingFloatProviderTests {
 
     @Test
     void testUuid() {
-        assertEquals(UUID, _loopingLinearMovingFloatProvider.uuid());
+        assertEquals(UUID, loopingLinearMovingFloatProvider.uuid());
     }
 
     @Test
@@ -106,16 +106,16 @@ class LoopingLinearMovingFloatProviderTests {
 
     @Test
     void testGetArchetype() {
-        assertNotNull(_loopingLinearMovingFloatProvider.getArchetype());
+        assertNotNull(loopingLinearMovingFloatProvider.getArchetype());
     }
 
     @Test
     void testValuesWithinPeriod() {
         Map<Integer, Float> valuesWithinPeriod =
-                _loopingLinearMovingFloatProvider.valuesWithinPeriod();
+                loopingLinearMovingFloatProvider.valuesWithinPeriod();
 
         assertNotNull(valuesWithinPeriod);
-        assertNotSame(_loopingLinearMovingFloatProvider.valuesWithinPeriod(), valuesWithinPeriod);
+        assertNotSame(loopingLinearMovingFloatProvider.valuesWithinPeriod(), valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
                 assertEquals(VALUES_AT_TIMES.get(key), valuesWithinPeriod.get((int) (long) key)));
@@ -123,24 +123,24 @@ class LoopingLinearMovingFloatProviderTests {
 
     @Test
     void testPeriodDuration() {
-        assertEquals(PERIOD_DURATION, _loopingLinearMovingFloatProvider.periodDuration());
+        assertEquals(PERIOD_DURATION, loopingLinearMovingFloatProvider.periodDuration());
     }
 
     @Test
     void testGetInterfaceName() {
         assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
                         Float.class.getCanonicalName() + ">",
-                _loopingLinearMovingFloatProvider.getInterfaceName());
+                loopingLinearMovingFloatProvider.getInterfaceName());
     }
 
     @Test
     void testProvideAtKey() {
         assertEquals(VALUE_1,
-                (float) _loopingLinearMovingFloatProvider.provide(TIME_1 - MODULO_OFFSET));
+                (float) loopingLinearMovingFloatProvider.provide(TIME_1 - MODULO_OFFSET));
         assertEquals(VALUE_2,
-                (float) _loopingLinearMovingFloatProvider.provide(TIME_2 - MODULO_OFFSET));
+                (float) loopingLinearMovingFloatProvider.provide(TIME_2 - MODULO_OFFSET));
         assertEquals(VALUE_3,
-                (float) _loopingLinearMovingFloatProvider.provide(TIME_3 - MODULO_OFFSET));
+                (float) loopingLinearMovingFloatProvider.provide(TIME_3 - MODULO_OFFSET));
     }
 
     @Test
@@ -153,7 +153,7 @@ class LoopingLinearMovingFloatProviderTests {
 
         float expected = (VALUE_1 * value1Weight) + (VALUE_2 * value2Weight);
 
-        assertEquals(expected, (float) _loopingLinearMovingFloatProvider.provide(timestamp));
+        assertEquals(expected, (float) loopingLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
@@ -166,79 +166,79 @@ class LoopingLinearMovingFloatProviderTests {
 
         float expected = (VALUE_3 * value3Weight) + (VALUE_1 * value1Weight);
 
-        assertEquals(expected, (float) _loopingLinearMovingFloatProvider.provide(timestamp));
+        assertEquals(expected, (float) loopingLinearMovingFloatProvider.provide(timestamp));
     }
 
     @Test
     void testProvideWhenPaused() {
-        _loopingLinearMovingFloatProvider.reportPause(TIME_1 - MODULO_OFFSET);
+        loopingLinearMovingFloatProvider.reportPause(TIME_1 - MODULO_OFFSET);
 
-        assertEquals(VALUE_1, (float) _loopingLinearMovingFloatProvider.provide(123123123L));
+        assertEquals(VALUE_1, (float) loopingLinearMovingFloatProvider.provide(123123123L));
     }
 
     @Test
     void testReset() {
         long resetTimestamp = 123123L;
 
-        _loopingLinearMovingFloatProvider.reset(resetTimestamp);
+        loopingLinearMovingFloatProvider.reset(resetTimestamp);
 
-        assertEquals(VALUE_1, (float) _loopingLinearMovingFloatProvider.provide(resetTimestamp));
+        assertEquals(VALUE_1, (float) loopingLinearMovingFloatProvider.provide(resetTimestamp));
     }
 
     @Test
     void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
-        _loopingLinearMovingFloatProvider.provide(timestamp);
+        loopingLinearMovingFloatProvider.provide(timestamp);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.provide(timestamp - 1));
+                loopingLinearMovingFloatProvider.provide(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportPause(timestamp - 1));
+                loopingLinearMovingFloatProvider.reportPause(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportUnpause(timestamp - 1));
+                loopingLinearMovingFloatProvider.reportUnpause(timestamp - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reset(timestamp - 1));
+                loopingLinearMovingFloatProvider.reset(timestamp - 1));
 
-        _loopingLinearMovingFloatProvider.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reset(timestamp));
-
-        _loopingLinearMovingFloatProvider.reportUnpause(timestamp + 2);
+        loopingLinearMovingFloatProvider.reportPause(timestamp + 1);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.provide(timestamp + 1));
+                loopingLinearMovingFloatProvider.provide(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportPause(timestamp + 1));
+                loopingLinearMovingFloatProvider.reportUnpause(timestamp));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reset(timestamp + 1));
+                loopingLinearMovingFloatProvider.reset(timestamp));
 
-        _loopingLinearMovingFloatProvider.provide(timestamp + 3);
+        loopingLinearMovingFloatProvider.reportUnpause(timestamp + 2);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.provide(timestamp + 2));
+                loopingLinearMovingFloatProvider.provide(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportPause(timestamp + 2));
+                loopingLinearMovingFloatProvider.reportPause(timestamp + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportUnpause(timestamp + 2));
+                loopingLinearMovingFloatProvider.reset(timestamp + 1));
+
+        loopingLinearMovingFloatProvider.provide(timestamp + 3);
+
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reset(timestamp + 2));
+                loopingLinearMovingFloatProvider.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                loopingLinearMovingFloatProvider.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                loopingLinearMovingFloatProvider.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () ->
+                loopingLinearMovingFloatProvider.reset(timestamp + 2));
     }
 
     @Test
     void testReportPauseWhilePausedOrViceVersa() {
-        assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportUnpause(0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                loopingLinearMovingFloatProvider.reportUnpause(0L));
 
-        _loopingLinearMovingFloatProvider.reportPause(0L);
+        loopingLinearMovingFloatProvider.reportPause(0L);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingFloatProvider.reportPause(0L));
+        assertThrows(UnsupportedOperationException.class, () ->
+                loopingLinearMovingFloatProvider.reportPause(0L));
     }
 
     @Test
@@ -253,16 +253,16 @@ class LoopingLinearMovingFloatProviderTests {
 
         float expected = (VALUE_1 * value1Weight) + (VALUE_2 * value2Weight);
 
-        _loopingLinearMovingFloatProvider.reportPause(0L);
-        _loopingLinearMovingFloatProvider.reportUnpause(pauseDuration);
+        loopingLinearMovingFloatProvider.reportPause(0L);
+        loopingLinearMovingFloatProvider.reportUnpause(pauseDuration);
 
         assertEquals(expected,
-                (float) _loopingLinearMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) loopingLinearMovingFloatProvider.provide(timestamp + pauseDuration));
     }
 
     @Test
     void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, _loopingLinearMovingFloatProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, _loopingLinearMovingFloatProvider.representation());
+        assertEquals(VALUES_AT_TIMES, loopingLinearMovingFloatProvider.representation());
+        assertNotSame(VALUES_AT_TIMES, loopingLinearMovingFloatProvider.representation());
     }
 }

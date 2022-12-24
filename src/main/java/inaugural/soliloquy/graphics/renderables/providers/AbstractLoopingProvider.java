@@ -26,19 +26,19 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     public T provide(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         long timestampForProvider;
-        if (_pausedTimestamp == null) {
+        if (pausedTimestamp == null) {
             timestampForProvider = timestamp;
         }
         else {
-            timestampForProvider = _pausedTimestamp;
+            timestampForProvider = pausedTimestamp;
         }
         if (_timestampSentToProviderMostRecently == timestampForProvider &&
-                _periodModuloOffset == _periodModuloOffsetAtMostRecentProvision) {
+                periodModuloOffset == _periodModuloOffsetAtMostRecentProvision) {
             return _mostRecentlyProvidedValue;
         }
         _timestampSentToProviderMostRecently = timestampForProvider;
-        _periodModuloOffsetAtMostRecentProvision = _periodModuloOffset;
-        int msForProvider = (int) ((timestampForProvider + _periodModuloOffset) % PERIOD_DURATION);
+        _periodModuloOffsetAtMostRecentProvision = periodModuloOffset;
+        int msForProvider = (int) ((timestampForProvider + periodModuloOffset) % PERIOD_DURATION);
 
         return _mostRecentlyProvidedValue = provideValueAtMsWithinPeriod(msForProvider);
     }
@@ -59,7 +59,7 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     public void reset(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        _periodModuloOffset = PERIOD_DURATION - (int) (timestamp % PERIOD_DURATION);
+        periodModuloOffset = PERIOD_DURATION - (int) (timestamp % PERIOD_DURATION);
     }
 
     @Override
