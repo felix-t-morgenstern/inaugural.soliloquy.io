@@ -11,7 +11,6 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetS
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class ImageAssetSetPreloaderTask implements Runnable {
@@ -19,7 +18,6 @@ public class ImageAssetSetPreloaderTask implements Runnable {
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS;
     private final Consumer<ImageAssetSet> PROCESS_RESULT;
 
-    /** @noinspection ConstantConditions */
     public ImageAssetSetPreloaderTask(Collection<ImageAssetSetDefinitionDTO>
                                               imageAssetSetDefinitionDTOs,
                                       AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
@@ -68,9 +66,8 @@ public class ImageAssetSetPreloaderTask implements Runnable {
 
     private ImageAssetSetDefinition makeDefinition(ImageAssetSetDefinitionDTO
                                                            imageAssetSetDefinitionDTO) {
-        List<ImageAssetSetAssetDefinition> assetDefinitions = new ArrayList<>();
-        for (ImageAssetSetAssetDefinitionDTO assetDTO :
-                imageAssetSetDefinitionDTO.assets) {
+        var assetDefinitions = new ArrayList<ImageAssetSetAssetDefinition>();
+        for (var assetDTO : imageAssetSetDefinitionDTO.assets) {
             assetDefinitions.add(new ImageAssetSetAssetDefinition(
                     assetDTO.type,
                     assetDTO.direction,

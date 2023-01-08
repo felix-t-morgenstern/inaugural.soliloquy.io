@@ -2,9 +2,9 @@ package inaugural.soliloquy.graphics.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.infrastructure.Registry;
+import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.graphics.assets.*;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.HashMap;
@@ -42,20 +42,19 @@ public class ImageAssetSetFactory
 
         Check.ifNullOrEmpty(imageAssetSetDefinition.id(), "imageAssetSetDefinition.id()");
 
-        Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection = new HashMap<>();
+        var assetsByTypeAndDirection = new HashMap<String, Map<Direction, ImageAsset>>();
 
-        boolean supportsMouseEventCapturing = true;
+        var supportsMouseEventCapturing = true;
 
-        for (ImageAssetSetAssetDefinition assetDefinition :
-                imageAssetSetDefinition.assetDefinitions()) {
+        for (var assetDefinition : imageAssetSetDefinition.assetDefinitions()) {
             Check.ifNullOrEmpty(assetDefinition.assetId(), "assetDefinition.assetId()");
 
-            String type = nullIfEmpty(assetDefinition.type());
-            String direction = nullIfEmpty(assetDefinition.direction());
+            var type = nullIfEmpty(assetDefinition.type());
+            var direction = Direction.fromValue(assetDefinition.direction());
 
             ImageAsset imageAsset;
             switch (assetDefinition.assetType()) {
-                case SPRITE:
+                case SPRITE -> {
                     if (!SPRITES_REGISTRY.contains(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Sprite found with id (" +
@@ -66,8 +65,8 @@ public class ImageAssetSetFactory
                         supportsMouseEventCapturing =
                                 ((Sprite) imageAsset).image().supportsMouseEventCapturing();
                     }
-                    break;
-                case ANIMATION:
+                }
+                case ANIMATION -> {
                     if (!ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Animation found with id (" +
@@ -78,23 +77,21 @@ public class ImageAssetSetFactory
                         supportsMouseEventCapturing =
                                 ((Animation) imageAsset).supportsMouseEventCapturing();
                     }
-                    break;
-                case GLOBAL_LOOPING_ANIMATION:
+                }
+                case GLOBAL_LOOPING_ANIMATION -> {
                     if (!GLOBAL_LOOPING_ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no GlobalLoopingAnimation found " +
                                         "with id (" + assetDefinition.assetId() + ")");
                     }
                     imageAsset = GLOBAL_LOOPING_ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
-                    break;
-                case UNKNOWN:
-                default:
-                    throw new IllegalArgumentException(
-                            "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
-                                    assetDefinition.assetType().toString() + ")");
+                }
+                case default -> throw new IllegalArgumentException(
+                        "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
+                                assetDefinition.assetType().toString() + ")");
             }
 
-            Map<String, ImageAsset> assetsByDirection;
+            Map<Direction, ImageAsset> assetsByDirection;
             if (assetsByTypeAndDirection.containsKey(type)) {
                 assetsByDirection = assetsByTypeAndDirection.get(type);
             }
@@ -123,11 +120,11 @@ public class ImageAssetSetFactory
 
     @SuppressWarnings("InnerClassMayBeStatic")
     class ImageAssetSetImpl implements ImageAssetSet {
-        private final Map<String, Map<String, ImageAsset>> ASSETS_BY_TYPE_AND_DIRECTION;
+        private final Map<String, Map<Direction, ImageAsset>> ASSETS_BY_TYPE_AND_DIRECTION;
         private final String ID;
         private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
 
-        public ImageAssetSetImpl(Map<String, Map<String, ImageAsset>> assetsByTypeAndDirection,
+        public ImageAssetSetImpl(Map<String, Map<Direction, ImageAsset>> assetsByTypeAndDirection,
                                  String id, boolean supportsMouseEventCapturing) {
             ASSETS_BY_TYPE_AND_DIRECTION = assetsByTypeAndDirection;
             ID = id;
@@ -135,11 +132,10 @@ public class ImageAssetSetFactory
         }
 
         @Override
-        public ImageAsset getImageAssetForTypeAndDirection(String type, String direction)
+        public ImageAsset getImageAssetForTypeAndDirection(String type, Direction direction)
                 throws IllegalArgumentException {
             type = emptyIfNull(type);
-            direction = emptyIfNull(direction);
-            return ASSETS_BY_TYPE_AND_DIRECTION.get(nullIfEmpty(type)).get(nullIfEmpty(direction));
+            return ASSETS_BY_TYPE_AND_DIRECTION.get(nullIfEmpty(type)).get(direction);
         }
 
         @Override

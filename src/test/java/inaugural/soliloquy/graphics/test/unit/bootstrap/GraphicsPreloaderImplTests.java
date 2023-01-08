@@ -29,10 +29,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static inaugural.soliloquy.graphics.api.dto.AssetType.*;
 import static inaugural.soliloquy.tools.random.Random.*;
+import static java.awt.GridBagConstraints.SOUTHWEST;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -127,51 +127,51 @@ class GraphicsPreloaderImplTests {
         }};
 
         imageDefinitionDTOs = new ImageDefinitionDTO[NUMBER_OF_IMAGES];
-        for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
+        for (var i = 0; i < NUMBER_OF_IMAGES; i++) {
             imageDefinitionDTOs[i] = randomImageDefinitionDTO();
         }
 
         spriteDefinitionDTOs = new SpriteDefinitionDTO[NUMBER_OF_SPRITES];
-        for (int i = 0; i < NUMBER_OF_SPRITES; i++) {
+        for (var i = 0; i < NUMBER_OF_SPRITES; i++) {
             spriteDefinitionDTOs[i] = randomSpriteDefinitionDTO(i);
         }
 
         animationDefinitionDTOs = new AnimationDefinitionDTO[NUMBER_OF_ANIMATIONS];
-        for (int i = 0; i < NUMBER_OF_ANIMATIONS; i++) {
+        for (var i = 0; i < NUMBER_OF_ANIMATIONS; i++) {
             animationDefinitionDTOs[i] = randomAnimationDefinitionDTO(i);
         }
 
         globalLoopingAnimationDefinitionDTOs =
                 new GlobalLoopingAnimationDefinitionDTO[NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS];
-        for (int i = 0; i < NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS; i++) {
+        for (var i = 0; i < NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS; i++) {
             globalLoopingAnimationDefinitionDTOs[i] = randomGlobalLoopingAnimationDefinitionDTO();
         }
 
         imageAssetSetDefinitionDTOs = new ImageAssetSetDefinitionDTO[NUMBER_OF_IMAGE_ASSET_SETS];
-        for (int i = 0; i < NUMBER_OF_IMAGE_ASSET_SETS; i++) {
+        for (var i = 0; i < NUMBER_OF_IMAGE_ASSET_SETS; i++) {
             imageAssetSetDefinitionDTOs[i] = randomImageAssetSetDefinitionDTO();
         }
 
         fontDefinitionDTOs = new FontDefinitionDTO[NUMBER_OF_FONTS];
-        for (int i = 0; i < NUMBER_OF_FONTS; i++) {
+        for (var i = 0; i < NUMBER_OF_FONTS; i++) {
             fontDefinitionDTOs[i] = randomFontDefinitionDTO();
         }
 
         mouseCursorImageDefinitionDTOs =
                 new MouseCursorImageDefinitionDTO[NUMBER_OF_MOUSE_CURSOR_IMAGES];
-        for (int i = 0; i < NUMBER_OF_MOUSE_CURSOR_IMAGES; i++) {
+        for (var i = 0; i < NUMBER_OF_MOUSE_CURSOR_IMAGES; i++) {
             mouseCursorImageDefinitionDTOs[i] = randomMouseCursorImageDefinitionDTO();
         }
 
         animatedMouseCursorDefinitionDTOs =
                 new AnimatedMouseCursorDefinitionDTO[NUMBER_OF_ANIMATED_MOUSE_CURSORS];
-        for (int i = 0; i < NUMBER_OF_ANIMATED_MOUSE_CURSORS; i++) {
+        for (var i = 0; i < NUMBER_OF_ANIMATED_MOUSE_CURSORS; i++) {
             animatedMouseCursorDefinitionDTOs[i] = randomAnimatedMouseCursorDefinitionDTO();
         }
 
         staticMouseCursorDefinitionDTOs =
                 new StaticMouseCursorDefinitionDTO[NUMBER_OF_STATIC_MOUSE_CURSORS];
-        for (int i = 0; i < NUMBER_OF_STATIC_MOUSE_CURSORS; i++) {
+        for (var i = 0; i < NUMBER_OF_STATIC_MOUSE_CURSORS; i++) {
             staticMouseCursorDefinitionDTOs[i] = randomStaticMouseCursorDefinitionDTO(i);
         }
 
@@ -782,9 +782,8 @@ class GraphicsPreloaderImplTests {
                 sprite -> {
                     List<Image> matchingOutput =
                             imageFactoryOutputs.stream().filter(image ->
-                                            image.relativeLocation()
-                                                    .equals(sprite.image().relativeLocation()))
-                                    .collect(Collectors.toList());
+                                    image.relativeLocation()
+                                            .equals(sprite.image().relativeLocation())).toList();
                     assertEquals(1, matchingOutput.size());
                 }
         );
@@ -798,8 +797,7 @@ class GraphicsPreloaderImplTests {
                 animation -> {
                     List<Image> matchingOutput =
                             imageFactoryOutputs.stream().filter(image ->
-                                            image == (animation.snippetAtFrame(0).image()))
-                                    .collect(Collectors.toList());
+                                    image == (animation.snippetAtFrame(0).image())).toList();
                     assertEquals(1, matchingOutput.size());
                 }
         );
@@ -851,8 +849,7 @@ class GraphicsPreloaderImplTests {
                 staticMouseCursorProvider -> {
                     List<MouseCursorImageFactory.Output> matchingOutput =
                             mouseCursorImageFactoryOutputs.stream().filter(output ->
-                                            output.id() == staticMouseCursorProvider.provide(0L))
-                                    .collect(Collectors.toList());
+                                    output.id() == staticMouseCursorProvider.provide(0L)).toList();
                     assertEquals(1, matchingOutput.size());
                 }
         );
@@ -896,12 +893,11 @@ class GraphicsPreloaderImplTests {
             Function<TAsset, String> getAssetId,
             Function<TDefinitionDTO, String> getDefinitionDTOId,
             Consumer<TAsset> additionalDefinitionAssertions) {
-        List<Object> definitionsProcessed = allDefinitionsProcessedInOrder.stream()
-                .filter(definitionClass::isInstance)
-                .collect(Collectors.toList());
+        var definitionsProcessed = allDefinitionsProcessedInOrder.stream()
+                .filter(definitionClass::isInstance).toList();
         assertEquals(numberOfAssets, assetsProcessed.size());
         assertEquals(numberOfAssets, definitionsProcessed.size());
-        for (TDefinitionDTO definitionDTO : definitionDTOs) {
+        for (var definitionDTO : definitionDTOs) {
             assertEquals(1, (int) assetsProcessed.stream().filter(output ->
                             getAssetId.apply(output).equals(getDefinitionDTOId.apply(definitionDTO)))
                     .count());
@@ -1029,7 +1025,7 @@ class GraphicsPreloaderImplTests {
     }
 
     private ImageAssetSetAssetDefinitionDTO randomImageAssetSetAssetDefinitionDTO() {
-        return new ImageAssetSetAssetDefinitionDTO(randomString(), randomString(),
+        return new ImageAssetSetAssetDefinitionDTO(randomString(), SOUTHWEST,
                 randomIntInRange(1, 3), randomString());
     }
 

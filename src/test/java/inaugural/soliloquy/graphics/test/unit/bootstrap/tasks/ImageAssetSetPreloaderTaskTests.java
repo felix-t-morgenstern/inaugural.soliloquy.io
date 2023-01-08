@@ -7,33 +7,34 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetSetFact
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
-import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.shared.Direction.SOUTH;
+import static soliloquy.specs.common.shared.Direction.SOUTHWEST;
 
 class ImageAssetSetPreloaderTaskTests {
     private final FakeImageAssetSetFactory FACTORY = new FakeImageAssetSetFactory();
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS =
             new ArrayList<>();
     private final FakeRegistry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY = new FakeRegistry<>();
-    private final Map<String, Map<String, ImageAssetSetAssetDefinitionDTO>>
-            ASSETS = new HashMap<>();
+    private final Map<String, Map<Direction, ImageAssetSetAssetDefinitionDTO>> ASSETS =
+            new HashMap<>();
 
-    private ImageAssetSetPreloaderTask _imageAssetSetPreloaderTask;
+    private ImageAssetSetPreloaderTask imageAssetSetPreloaderTask;
 
     @BeforeEach
     void setUp() {
         String type1 = "type1";
         String type2 = "type2";
-        String direction1 = "direction1";
-        String direction2 = "direction2";
 
         String assetId1 = "assetId1";
         String assetId2 = "assetId2";
@@ -43,12 +44,12 @@ class ImageAssetSetPreloaderTaskTests {
         ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset1DTO =
                 new ImageAssetSetAssetDefinitionDTO(type1, null, 1, assetId1);
         ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset2DTO =
-                new ImageAssetSetAssetDefinitionDTO(null, direction1, 2,
+                new ImageAssetSetAssetDefinitionDTO(null, SOUTHWEST.getValue(), 2,
                         assetId2);
         ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset1DTO =
                 new ImageAssetSetAssetDefinitionDTO(type2, null, 2, assetId3);
         ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset2DTO =
-                new ImageAssetSetAssetDefinitionDTO(null, direction2, 1,
+                new ImageAssetSetAssetDefinitionDTO(null, SOUTH.getValue(), 1,
                         assetId4);
 
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet1Asset1DTO);
@@ -71,7 +72,7 @@ class ImageAssetSetPreloaderTaskTests {
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet1DTO);
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet2DTO);
 
-        _imageAssetSetPreloaderTask = new ImageAssetSetPreloaderTask(
+        imageAssetSetPreloaderTask = new ImageAssetSetPreloaderTask(
                 IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, IMAGE_ASSET_SET_REGISTRY::add);
     }
 
@@ -89,100 +90,66 @@ class ImageAssetSetPreloaderTaskTests {
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(null);
-                        }},
+                        listOf((ImageAssetSetDefinitionDTO) null),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    null,
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 1, "assetId")
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO(null,
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 1, "assetId")})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 1, "assetId")
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("",
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 1, "assetId")})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    null));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1", null)),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                                new ImageAssetSetAssetDefinitionDTO[]{})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 0, "assetId")
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 0, "assetId")})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 4, "assetId")
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 4, "assetId")})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 1, null)
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 1, null)})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        new ArrayList<ImageAssetSetDefinitionDTO>() {{
-                            add(new ImageAssetSetDefinitionDTO(
-                                    "imageAssetSet1",
-                                    new ImageAssetSetAssetDefinitionDTO[]{
-                                            new ImageAssetSetAssetDefinitionDTO(
-                                                    "type", "direction", 1, "")
-                                    }));
-                        }},
+                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                                new ImageAssetSetAssetDefinitionDTO[]{
+                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                                SOUTHWEST.getValue(), 1, "")})),
                         FACTORY,
                         IMAGE_ASSET_SET_REGISTRY::add));
 
@@ -192,35 +159,35 @@ class ImageAssetSetPreloaderTaskTests {
 
     @Test
     void testRun() {
-        _imageAssetSetPreloaderTask.run();
+        imageAssetSetPreloaderTask.run();
 
         assertEquals(IMAGE_ASSET_SET_DEFINITION_DTOS.size(), IMAGE_ASSET_SET_REGISTRY.size());
         IMAGE_ASSET_SET_DEFINITION_DTOS.forEach(dto -> {
-            ImageAssetSetDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
+            var createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
             assertEquals(dto.assets.length, createdDefinition.assetDefinitions().size());
             createdDefinition.assetDefinitions().forEach(assetDefinition -> {
-                ImageAssetSetAssetDefinitionDTO assetDTO =
-                        ASSETS.get(assetDefinition.type()).get(assetDefinition.direction());
+                var assetDTO = ASSETS.get(assetDefinition.type())
+                        .get(Direction.fromValue(assetDefinition.direction()));
                 assertEquals(ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType),
                         assetDefinition.assetType());
                 assertEquals(assetDTO.assetId, assetDefinition.assetId());
             });
 
-            ImageAssetSet imageAssetSet =
-                    IMAGE_ASSET_SET_REGISTRY.get(createdDefinition.id());
+            var imageAssetSet = IMAGE_ASSET_SET_REGISTRY.get(createdDefinition.id());
             assertTrue(FACTORY.OUTPUTS.contains(imageAssetSet));
         });
     }
 
-    private void addImageAssetSetAssetDTOToMap(Map<String, Map<String,
-            ImageAssetSetAssetDefinitionDTO>> map,
-                                               ImageAssetSetAssetDefinitionDTO
-                                                       imageAssetSetAssetDefinitionDTO) {
+    private void addImageAssetSetAssetDTOToMap(
+            Map<String, Map<Direction, ImageAssetSetAssetDefinitionDTO>> map,
+            ImageAssetSetAssetDefinitionDTO
+                    imageAssetSetAssetDefinitionDTO) {
         if (!map.containsKey(imageAssetSetAssetDefinitionDTO.type)) {
             map.put(imageAssetSetAssetDefinitionDTO.type, new HashMap<>());
         }
         map.get(imageAssetSetAssetDefinitionDTO.type)
-                .put(imageAssetSetAssetDefinitionDTO.direction, imageAssetSetAssetDefinitionDTO);
+                .put(Direction.fromValue(imageAssetSetAssetDefinitionDTO.direction),
+                        imageAssetSetAssetDefinitionDTO);
     }
 }

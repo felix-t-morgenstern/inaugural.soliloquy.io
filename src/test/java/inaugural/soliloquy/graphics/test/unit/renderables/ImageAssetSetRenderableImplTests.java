@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
@@ -33,7 +34,7 @@ class ImageAssetSetRenderableImplTests {
     private final FakeImageAssetSet IMAGE_ASSET_SET_NOT_SUPPORTING_MOUSE_EVENTS =
             new FakeImageAssetSet(false);
     private final String TYPE = randomString();
-    private final String DIRECTION = randomString();
+    private final Direction DIRECTION = Direction.SOUTHWEST;
     private final HashMap<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = new HashMap<>();
     private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -239,8 +240,8 @@ class ImageAssetSetRenderableImplTests {
         assertEquals(DIRECTION, imageAssetSetRenderableWithMouseEvents.getDirection());
         assertEquals(DIRECTION, imageAssetSetRenderableWithoutMouseEvents.getDirection());
 
-        imageAssetSetRenderableWithMouseEvents.setDirection("");
-        imageAssetSetRenderableWithoutMouseEvents.setDirection("");
+        imageAssetSetRenderableWithMouseEvents.setDirection(null);
+        imageAssetSetRenderableWithoutMouseEvents.setDirection(null);
 
         assertNull(imageAssetSetRenderableWithMouseEvents.getDirection());
         assertNull(imageAssetSetRenderableWithoutMouseEvents.getDirection());

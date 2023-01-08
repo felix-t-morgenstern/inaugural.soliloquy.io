@@ -2,6 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.ImageAsset;
@@ -25,14 +26,18 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
     private ImageAssetSet imageAssetSet;
     private String type;
-    private String direction;
+    private Direction direction;
 
-    public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
+    public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
+                                       String type,
+                                       Direction direction,
                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
-                                       ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid, RenderableStack containingStack,
+                                       ProviderAtTime<FloatBox> renderingDimensionsProvider,
+                                       int z,
+                                       UUID uuid,
+                                       RenderableStack containingStack,
                                        RenderingBoundaries renderingBoundaries) {
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
@@ -41,18 +46,20 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         setDirection(direction);
     }
 
-    public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet, String type, String direction,
-                                       Map<Integer,
-                                               Action<MouseEventInputs>> onPress,
-                                       Map<Integer,
-                                               Action<MouseEventInputs>> onRelease,
+    public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
+                                       String type,
+                                       Direction direction,
+                                       Map<Integer, Action<MouseEventInputs>> onPress,
+                                       Map<Integer, Action<MouseEventInputs>> onRelease,
                                        Action<MouseEventInputs> onMouseOver,
                                        Action<MouseEventInputs> onMouseLeave,
                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
-                                       ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                       UUID uuid, RenderableStack containingStack,
+                                       ProviderAtTime<FloatBox> renderingDimensionsProvider,
+                                       int z,
+                                       UUID uuid,
+                                       RenderableStack containingStack,
                                        RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
@@ -90,13 +97,13 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
     @Override
-    public void setDirection(String direction) {
-        this.direction = nullIfEmpty(direction);
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     @Override
@@ -124,8 +131,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                 return (Sprite) imageAsset;
             }
             // TODO: Refactor ImageAssetSet to support GlobalLoopingAnimation
-            else if (imageAsset instanceof Animation) {
-                Animation animation = (Animation) imageAsset;
+            else if (imageAsset instanceof Animation animation) {
                 return animation.snippetAtFrame((int) (timestamp % animation.msDuration()));
             }
             else {

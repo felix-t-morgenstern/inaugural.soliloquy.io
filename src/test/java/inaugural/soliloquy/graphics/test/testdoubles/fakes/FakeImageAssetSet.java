@@ -1,5 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
+import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
@@ -10,7 +11,7 @@ public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
     public boolean CapturesMouseEvents;
     public ImageAsset ImageAsset;
-    public ArrayList<Pair<String, String>> GetImageAssetForTypeAndDirectionInputs =
+    public ArrayList<Pair<String, Direction>> GetImageAssetForTypeAndDirectionInputs =
             new ArrayList<>();
 
     public FakeImageAssetSet(String id) {
@@ -22,7 +23,7 @@ public class FakeImageAssetSet implements ImageAssetSet {
     }
 
     @Override
-    public ImageAsset getImageAssetForTypeAndDirection(String type, String direction)
+    public ImageAsset getImageAssetForTypeAndDirection(String type, Direction direction)
             throws IllegalArgumentException {
         GetImageAssetForTypeAndDirectionInputs.add(new Pair<>(type, direction));
         return ImageAsset;

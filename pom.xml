@@ -16,6 +16,7 @@
                 <configuration>
                     <source>18</source>
                     <target>18</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -50,7 +51,7 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.433</version>
+            <version>0.0.437</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>

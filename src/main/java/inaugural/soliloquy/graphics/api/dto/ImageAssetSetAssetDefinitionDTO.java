@@ -2,11 +2,11 @@ package inaugural.soliloquy.graphics.api.dto;
 
 public class ImageAssetSetAssetDefinitionDTO {
     public String type;
-    public String direction;
+    public Integer direction;
     public int assetType;
     public String assetId;
 
-    public ImageAssetSetAssetDefinitionDTO(String type, String direction, int assetType,
+    public ImageAssetSetAssetDefinitionDTO(String type, Integer direction, int assetType,
                                            String assetId) {
         this.type = type;
         this.direction = direction;
