@@ -14,8 +14,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>18</source>
+                    <target>18</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -50,17 +50,17 @@
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>soliloquy.specs</artifactId>
-            <version>0.0.420</version>
+            <version>0.0.433</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.tools</artifactId>
-            <version>0.0.102</version>
+            <version>0.0.116</version>
         </dependency>
         <dependency>
             <groupId>disorg.soliloquy</groupId>
             <artifactId>inaugural.soliloquy.common</artifactId>
-            <version>0.0.18</version>
+            <version>0.0.19</version>
         </dependency>
 
         <!-- r-tree library dependencies -->
@@ -73,6 +73,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.11.0</version>
         </dependency>
     </dependencies>
 
