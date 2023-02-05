@@ -7,10 +7,10 @@ import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
 
 /** @noinspection rawtypes */
@@ -35,12 +35,14 @@ public class LoopingLinearMovingProviderHandler
 
     @Override
     public LoopingLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
-        var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"), LoopingLinearMovingProviderDto.class);
+        var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
+                LoopingLinearMovingProviderDto.class);
 
         var innerTypeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.type);
-        var valuesWithinPeriod = new HashMap<Integer, Object>();
+        Map<Integer, Object> valuesWithinPeriod = mapOf();
         for (var valueWithinPeriodDto : dto.valueAtTimes) {
-            valuesWithinPeriod.put(valueWithinPeriodDto.time, innerTypeHandler.read(valueWithinPeriodDto.value));
+            valuesWithinPeriod.put(valueWithinPeriodDto.time,
+                    innerTypeHandler.read(valueWithinPeriodDto.value));
         }
 
         return LOOPING_LINEAR_MOVING_PROVIDER_FACTORY.make(UUID.fromString(dto.id), dto.duration,

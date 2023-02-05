@@ -3,9 +3,7 @@ package inaugural.soliloquy.graphics.test.display.io.mouselistener;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.game.Game;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
-import soliloquy.specs.logger.Logger;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.graphics.api.Constants.LEFT_MOUSE_BUTTON;
@@ -40,7 +38,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         SpriteRendererTest.graphicsPreloaderLoadAction();
 
         SpriteRenderable.setCapturesMouseEvents(true);
-        SpriteRenderable.setOnMouseOver(new Action<MouseEventInputs>() {
+        SpriteRenderable.setOnMouseOver(new Action<>() {
             @Override
             public void run(MouseEventInputs longRenderableWithMouseEventsPair)
                     throws IllegalArgumentException {
@@ -48,16 +46,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Game game() {
-                return null;
-            }
-
-            @Override
-            public Logger logger() {
-                return null;
-            }
-
-            @Override
             public String id() throws IllegalStateException {
                 return null;
             }
@@ -72,7 +60,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnMouseLeave(new Action<MouseEventInputs>() {
+        SpriteRenderable.setOnMouseLeave(new Action<>() {
             @Override
             public void run(MouseEventInputs longRenderableWithMouseEventsPair)
                     throws IllegalArgumentException {
@@ -80,16 +68,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Game game() {
-                return null;
-            }
-
-            @Override
-            public Logger logger() {
-                return null;
-            }
-
-            @Override
             public String id() throws IllegalStateException {
                 return null;
             }
@@ -104,7 +82,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, new Action<MouseEventInputs>() {
+        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, new Action<>() {
             @Override
             public void run(MouseEventInputs longRenderableWithMouseEventsPair)
                     throws IllegalArgumentException {
@@ -112,16 +90,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public Game game() {
-                return null;
-            }
-
-            @Override
-            public Logger logger() {
-                return null;
-            }
-
-            @Override
             public String id() throws IllegalStateException {
                 return null;
             }
@@ -136,21 +104,11 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 return null;
             }
         });
-        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON, new Action<MouseEventInputs>() {
+        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON, new Action<>() {
             @Override
             public void run(MouseEventInputs longRenderableWithMouseEventsPair)
                     throws IllegalArgumentException {
                 System.out.println("LEFT MOUSE BUTTON RELEASE");
-            }
-
-            @Override
-            public Game game() {
-                return null;
-            }
-
-            @Override
-            public Logger logger() {
-                return null;
             }
 
             @Override

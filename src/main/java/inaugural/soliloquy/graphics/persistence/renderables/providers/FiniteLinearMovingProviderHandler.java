@@ -7,10 +7,10 @@ import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
 
 /** @noinspection rawtypes */
@@ -36,7 +36,7 @@ public class FiniteLinearMovingProviderHandler
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingProviderDTO.class);
         var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.valueType);
-        var valuesAtTimestamps = new HashMap<Long, Object>();
+        Map<Long, Object> valuesAtTimestamps = mapOf();
         for (var valueDto : dto.values) {
             valuesAtTimestamps.put(valueDto.timestamp, typeHandler.read(valueDto.value));
         }

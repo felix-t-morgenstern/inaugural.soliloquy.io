@@ -1,59 +1,61 @@
 package inaugural.soliloquy.graphics.test.unit.persistence.renderables.providers;
 
 import inaugural.soliloquy.graphics.persistence.renderables.providers.FiniteLinearMovingProviderHandler;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProviderFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import soliloquy.specs.common.persistence.PersistentValuesHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
+import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.testing.Assertions.assertOnlyContains;
+import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
+import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FiniteLinearMovingProviderHandlerTests {
-    private static final Long TIMESTAMP_1 = 123L;
-    private static final Long TIMESTAMP_2 = 456L;
-    private static final Long TIMESTAMP_3 = 789L;
-    private static final Float VALUE_1 = 0.123f;
-    private static final Float VALUE_2 = 0.456f;
-    private static final Float VALUE_3 = 0.789f;
-    private static final HashMap<Long, Float> VALUES_AT_TIMESTAMPS = new HashMap<>() {{
-        put(TIMESTAMP_1, VALUE_1);
-        put(TIMESTAMP_2, VALUE_2);
-        put(TIMESTAMP_3, VALUE_3);
-    }};
-    private static final Long PAUSED_TIMESTAMP = 123L;
-    private static final Long MOST_RECENT_TIMESTAMP = 456L;
-    private FakeFiniteLinearMovingProvider<Float> finiteLinearMovingProvider;
+    private final Long TIMESTAMP_1 = randomLong();
+    private final Long TIMESTAMP_2 = randomLong();
+    private final Long TIMESTAMP_3 = randomLong();
+    private final Float VALUE_1 = randomFloat();
+    private final Float VALUE_2 = randomFloat();
+    private final Float VALUE_3 = randomFloat();
+    private final Long PAUSED_TIMESTAMP = randomLong();
+    private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
-    private static final UUID UUID = java.util.UUID.randomUUID();
-    private static final float FLOAT_READ_OUTPUT = 0.1312f;
-    private static final String FLOAT_WRITE_OUTPUT = "floatWriteOutput";
+    private final UUID UUID = java.util.UUID.randomUUID();
 
-    private static final int INTEGER_ARCHETYPE = 1312;
+    private final String FLOAT_WRITE_OUTPUT_1 = randomString();
+    private final String FLOAT_WRITE_OUTPUT_2 = randomString();
+    private final String FLOAT_WRITE_OUTPUT_3 = randomString();
+    private final TypeHandler<Float> MOCK_FLOAT_HANDLER = generateSimpleMockTypeHandler(
+            Pair.of(FLOAT_WRITE_OUTPUT_1, VALUE_1),
+            Pair.of(FLOAT_WRITE_OUTPUT_2, VALUE_2),
+            Pair.of(FLOAT_WRITE_OUTPUT_3, VALUE_3));
 
-    private static final FakeFiniteLinearMovingProviderFactory FACTORY =
-            new FakeFiniteLinearMovingProviderFactory();
+    private final int INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER = randomInt();
 
-    // TODO: Mock Map's iterator to make
-    private static final String WRITTEN_VALUE = String.format(
-            "{\"uuid\":\"%s\",\"valueType\":\"java.lang.Float\"," +
-                    "\"values\":[{\"timestamp\":456,\"value\":\"floatWriteOutput\"}," +
-                    "{\"timestamp\":789,\"value\":\"floatWriteOutput\"},{\"timestamp\":123," +
-                    "\"value\":\"floatWriteOutput\"}],\"pausedTimestamp\":123," +
-                    "\"mostRecentTimestamp\":456}", UUID);
 
-    @Mock private PersistentValuesHandler persistentValuesHandler;
-    @Mock private TypeHandler<Float> floatHandler;
+
+    private final String WRITTEN_VALUE = String.format(
+            "{\"uuid\":\"%s\",\"valueType\":\"java.lang.Float\",\"values\":[{\"timestamp\":%d," +
+                    "\"value\":\"%s\"},{\"timestamp\":%d,\"value\":\"%s\"},{\"timestamp\":%d," +
+                    "\"value\":\"%s\"}],\"pausedTimestamp\":%d,\"mostRecentTimestamp\":%d}",
+            UUID, TIMESTAMP_1, FLOAT_WRITE_OUTPUT_1, TIMESTAMP_2, FLOAT_WRITE_OUTPUT_2, TIMESTAMP_3,
+            FLOAT_WRITE_OUTPUT_3, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+
+    @Mock private FiniteLinearMovingProviderFactory mockFactory;
+    @Mock private Map<Long, Float> mockValuesAtTimestamps;
+    @Mock private FiniteLinearMovingProvider<Float> mockFiniteLinearMovingProvider;
+    @Mock private PersistentValuesHandler mockPersistentValuesHandler;
 
     @SuppressWarnings("rawtypes")
     private TypeWithOneGenericParamHandler<FiniteLinearMovingProvider>
@@ -61,70 +63,96 @@ class FiniteLinearMovingProviderHandlerTests {
 
     @BeforeEach
     void setUp() {
-        //noinspection unchecked
-        floatHandler = Mockito.mock(TypeHandler.class);
-        when(floatHandler.read(Mockito.anyString())).thenReturn(FLOAT_READ_OUTPUT);
-        when(floatHandler.write(Mockito.anyFloat())).thenReturn(FLOAT_WRITE_OUTPUT);
-
-        persistentValuesHandler = Mockito.mock(PersistentValuesHandler.class);
-
+        mockPersistentValuesHandler = mock(PersistentValuesHandler.class);
         //noinspection unchecked,rawtypes
-        when(persistentValuesHandler
+        when(mockPersistentValuesHandler
                 .getTypeHandler(Float.class.getCanonicalName()))
-                .thenReturn((TypeHandler) floatHandler);
-
-        when(persistentValuesHandler
+                .thenReturn((TypeHandler) MOCK_FLOAT_HANDLER);
+        when(mockPersistentValuesHandler
                 .generateArchetype(Integer.class.getCanonicalName()))
-                .thenReturn(INTEGER_ARCHETYPE);
+                .thenReturn(INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER);
 
-        finiteLinearMovingProvider =
-                new FakeFiniteLinearMovingProvider<>(UUID, VALUES_AT_TIMESTAMPS, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP, -123123f);
+        mockValuesAtTimestamps = generateMockMap(
+                Pair.of(TIMESTAMP_1, VALUE_1),
+                Pair.of(TIMESTAMP_2, VALUE_2),
+                Pair.of(TIMESTAMP_3, VALUE_3));
+
+        //noinspection unchecked
+        mockFiniteLinearMovingProvider =
+                (FiniteLinearMovingProvider<Float>) mock(FiniteLinearMovingProvider.class);
+        when(mockFiniteLinearMovingProvider.uuid()).thenReturn(UUID);
+        when(mockFiniteLinearMovingProvider.valuesAtTimestampsRepresentation())
+                .thenReturn(mockValuesAtTimestamps);
+        when(mockFiniteLinearMovingProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
+        when(mockFiniteLinearMovingProvider.mostRecentTimestamp()).thenReturn(
+                MOST_RECENT_TIMESTAMP);
+        when(mockFiniteLinearMovingProvider.getArchetype()).thenReturn(randomFloat());
+
+        mockFactory = mock(FiniteLinearMovingProviderFactory.class);
+        //noinspection unchecked,rawtypes
+        when(mockFactory.make(any(), anyMap(), anyLong(), anyLong()))
+                .thenReturn((FiniteLinearMovingProvider) mockFiniteLinearMovingProvider);
 
         finiteLinearMovingProviderHandler =
-                new FiniteLinearMovingProviderHandler(persistentValuesHandler, FACTORY);
+                new FiniteLinearMovingProviderHandler(mockPersistentValuesHandler, mockFactory);
     }
 
     @Test
     void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteLinearMovingProviderHandler(null, FACTORY));
+                () -> new FiniteLinearMovingProviderHandler(null, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteLinearMovingProviderHandler(persistentValuesHandler, null));
+                () -> new FiniteLinearMovingProviderHandler(mockPersistentValuesHandler, null));
     }
 
     @Test
     void testWrite() {
-        var writtenValue = finiteLinearMovingProviderHandler.write(finiteLinearMovingProvider);
+        var writtenValue = finiteLinearMovingProviderHandler.write(mockFiniteLinearMovingProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
-        verify(floatHandler).write(VALUE_1);
-        verify(floatHandler).write(VALUE_2);
-        verify(floatHandler).write(VALUE_3);
+
+        var inOrder = inOrder(mockFiniteLinearMovingProvider, mockPersistentValuesHandler,
+                mockValuesAtTimestamps, MOCK_FLOAT_HANDLER);
+        inOrder.verify(mockFiniteLinearMovingProvider).uuid();
+        inOrder.verify(mockFiniteLinearMovingProvider).getArchetype();
+        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
+        inOrder.verify(mockFiniteLinearMovingProvider).valuesAtTimestampsRepresentation();
+        //noinspection ResultOfMethodCallIgnored
+        inOrder.verify(mockValuesAtTimestamps).size();
+        inOrder.verify(MOCK_FLOAT_HANDLER).write(VALUE_1);
+        inOrder.verify(MOCK_FLOAT_HANDLER).write(VALUE_2);
+        inOrder.verify(MOCK_FLOAT_HANDLER).write(VALUE_3);
+        inOrder.verify(mockFiniteLinearMovingProvider).pausedTimestamp();
+        inOrder.verify(mockFiniteLinearMovingProvider).mostRecentTimestamp();
     }
 
     @Test
     void testWriteWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> finiteLinearMovingProviderHandler.write(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteLinearMovingProviderHandler.write(null));
     }
 
     @Test
     void testRead() {
-        //noinspection unchecked
-        FiniteLinearMovingProvider<Float> finiteLinearMovingProvider =
-                finiteLinearMovingProviderHandler.read(WRITTEN_VALUE);
+        var output = finiteLinearMovingProviderHandler.read(WRITTEN_VALUE);
 
-        assertNotNull(finiteLinearMovingProvider);
-        assertOnlyContains(FACTORY.InputUuids, UUID);
-        assertEquals(1, FACTORY.InputValuesAtTimestamps.size());
-        assertEquals(3, FACTORY.InputValuesAtTimestamps.get(0).size());
-        assertEquals(FLOAT_READ_OUTPUT, FACTORY.InputValuesAtTimestamps.get(0).get(TIMESTAMP_1));
-        assertEquals(FLOAT_READ_OUTPUT, FACTORY.InputValuesAtTimestamps.get(0).get(TIMESTAMP_2));
-        assertEquals(FLOAT_READ_OUTPUT, FACTORY.InputValuesAtTimestamps.get(0).get(TIMESTAMP_3));
-        assertOnlyContains(FACTORY.InputPausedTimestamps, PAUSED_TIMESTAMP);
-        assertOnlyContains(FACTORY.InputMostRecentTimestamps, MOST_RECENT_TIMESTAMP);
-        assertOnlyContains(FACTORY.Outputs, finiteLinearMovingProvider);
-        verify(persistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
-        verify(floatHandler, times(3)).read(FLOAT_WRITE_OUTPUT);
+        assertSame(mockFiniteLinearMovingProvider, output);
+        var inOrder = inOrder(mockPersistentValuesHandler, MOCK_FLOAT_HANDLER, mockFactory);
+        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
+        inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_1);
+        inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_2);
+        inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_3);
+        var factoryCaptor = ArgumentCaptor.forClass(Map.class);
+        //noinspection unchecked
+        inOrder.verify(mockFactory)
+                .make(eq(UUID), (Map<Long, Float>) factoryCaptor.capture(), eq(PAUSED_TIMESTAMP),
+                        eq(MOST_RECENT_TIMESTAMP));
+        //noinspection unchecked
+        var factoryValuesAtTimestamps = (Map<Long, Float>) factoryCaptor.getValue();
+        assertEquals(3, factoryValuesAtTimestamps.size());
+        assertEquals(VALUE_1, factoryValuesAtTimestamps.get(TIMESTAMP_1));
+        assertEquals(VALUE_2, factoryValuesAtTimestamps.get(TIMESTAMP_2));
+        assertEquals(VALUE_3, factoryValuesAtTimestamps.get(TIMESTAMP_3));
     }
 
     @Test
@@ -138,7 +166,7 @@ class FiniteLinearMovingProviderHandlerTests {
     @Test
     void testGenerateArchetype() {
         //noinspection unchecked
-        FiniteLinearMovingProvider<Integer> generatedArchetype =
+        var generatedArchetype =
                 (FiniteLinearMovingProvider<Integer>) finiteLinearMovingProviderHandler
                         .generateArchetype(Integer.class.getCanonicalName());
 
