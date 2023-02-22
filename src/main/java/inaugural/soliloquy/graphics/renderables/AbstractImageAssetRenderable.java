@@ -5,7 +5,6 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AssetSnippet;
-import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -23,9 +22,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         implements ImageAssetRenderable {
     private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS;
 
-    private ProviderAtTime<Float> _borderThicknessProvider;
-    private ProviderAtTime<Color> _borderColorProvider;
-    protected ProviderAtTime<FloatBox> _renderingAreaProvider;
+    private ProviderAtTime<Float> borderThicknessProvider;
+    private ProviderAtTime<Color> borderColorProvider;
+    protected ProviderAtTime<FloatBox> renderingAreaProvider;
 
     protected AbstractImageAssetRenderable(List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                            ProviderAtTime<Float> borderThicknessProvider,
@@ -86,37 +85,37 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
 
     @Override
     public ProviderAtTime<Float> getBorderThicknessProvider() {
-        return _borderThicknessProvider;
+        return borderThicknessProvider;
     }
 
     @Override
     public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
             throws IllegalArgumentException {
-        _borderThicknessProvider =
+        this.borderThicknessProvider =
                 Check.ifNull(borderThicknessProvider, "borderThicknessProvider");
     }
 
     @Override
     public ProviderAtTime<Color> getBorderColorProvider() {
-        return _borderColorProvider;
+        return borderColorProvider;
     }
 
     @Override
     public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
             throws IllegalArgumentException {
-        _borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
+        this.borderColorProvider = Check.ifNull(borderColorProvider, "borderColorProvider");
     }
 
     @Override
     public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
-        return _renderingAreaProvider;
+        return renderingAreaProvider;
     }
 
     @Override
     public void setRenderingDimensionsProvider(ProviderAtTime<FloatBox>
                                                        renderingDimensionsProvider)
             throws IllegalArgumentException {
-        _renderingAreaProvider = Check.ifNull(renderingDimensionsProvider,
+        renderingAreaProvider = Check.ifNull(renderingDimensionsProvider,
                 "renderingDimensionsProvider");
     }
 
@@ -129,13 +128,13 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         Check.throwOnGtValue(point.X, 1f, "point.X");
         Check.throwOnGtValue(point.Y, 1f, "point.Y");
 
-        FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
+        var renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
         if (point.X < renderingBoundaries.leftX() || point.X > renderingBoundaries.rightX() ||
                 point.Y < renderingBoundaries.topY() || point.Y > renderingBoundaries.bottomY()) {
             return false;
         }
 
-        FloatBox renderingArea = _renderingAreaProvider.provide(timestamp);
+        var renderingArea = renderingAreaProvider.provide(timestamp);
         if (point.X < renderingArea.leftX()) {
             throw new IllegalArgumentException(
                     className() + ".capturesMouseEventAtPoint: point.X (" + point.X +
@@ -159,20 +158,20 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                             ") is below bottom boundary of renderable (" + renderingArea.bottomY() +
                             ")");
         }
-        AssetSnippet snippet = snippetSupplier.get();
-        float offsetX = 0f;
-        float offsetY = 0f;
+        var snippet = snippetSupplier.get();
+        var offsetX = 0f;
+        var offsetY = 0f;
         if (snippet instanceof AnimationFrameSnippet) {
             offsetX = ((AnimationFrameSnippet) snippet).offsetX();
             offsetY = ((AnimationFrameSnippet) snippet).offsetY();
         }
-        Image image = snippet.image();
-        int imageX =
-                (int) ((((point.X - offsetX) - renderingArea.leftX()) / renderingArea.width())
-                        * (snippet.rightX() - snippet.leftX())) + snippet.leftX();
-        int imageY =
-                (int) ((((point.Y - offsetY) - renderingArea.topY()) / renderingArea.height())
-                        * (snippet.bottomY() - snippet.topY())) + snippet.topY();
+        var image = snippet.image();
+        var imageX =
+                (int) ((((point.X - offsetX) - renderingArea.leftX()) / renderingArea.width()) *
+                        (snippet.rightX() - snippet.leftX())) + snippet.leftX();
+        var imageY =
+                (int) ((((point.Y - offsetY) - renderingArea.topY()) / renderingArea.height()) *
+                        (snippet.bottomY() - snippet.topY())) + snippet.topY();
         return image.capturesMouseEventsAtPixel(imageX, imageY);
     }
 }

@@ -7,8 +7,9 @@ import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public abstract class AbstractRenderableWithMouseEvents
         extends AbstractRenderable
@@ -35,8 +36,8 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 RenderingBoundaries renderingBoundaries) {
         super(z, uuid, containingStack);
         this.capturesMouseEvents = capturesMouseEvents;
-        ON_PRESS = onPress == null ? new HashMap<>() : onPress;
-        ON_RELEASE = onRelease == null ? new HashMap<>() : onRelease;
+        ON_PRESS = onPress == null ? mapOf() : onPress;
+        ON_RELEASE = onRelease == null ? mapOf() : onRelease;
         this.onMouseOver = onMouseOver;
         this.onMouseLeave = onMouseLeave;
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
@@ -124,7 +125,7 @@ public abstract class AbstractRenderableWithMouseEvents
 
     private Map<Integer, String> getActionIds(
             Map<Integer, Action<MouseEventInputs>> actions) {
-        HashMap<Integer, String> actionIds = new HashMap<>();
+        Map<Integer, String> actionIds = mapOf();
         actions.forEach((button, action) -> actionIds.put(button, action.id()));
         return actionIds;
     }

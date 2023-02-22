@@ -5,7 +5,6 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Animation;
-import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
@@ -125,8 +124,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         return capturesMouseEventAtPoint(point, timestamp, () -> {
-            ImageAsset imageAsset =
-                    imageAssetSet.getImageAssetForTypeAndDirection(type, direction);
+            var imageAsset = imageAssetSet.getImageAssetForTypeAndDirection(type, direction);
             if (imageAsset instanceof Sprite) {
                 return (Sprite) imageAsset;
             }
