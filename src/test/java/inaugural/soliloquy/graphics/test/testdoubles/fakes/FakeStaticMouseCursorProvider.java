@@ -8,10 +8,6 @@ public class FakeStaticMouseCursorProvider implements StaticMouseCursorProvider 
     public String Id;
     public long ValueToProvide;
 
-    public FakeStaticMouseCursorProvider(String id) {
-        Id = id;
-    }
-
     public FakeStaticMouseCursorProvider(String id, long valueToProvide) {
         Id = id;
         ValueToProvide = valueToProvide;

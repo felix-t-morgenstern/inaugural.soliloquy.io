@@ -3,16 +3,8 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.graphics.rendering.Mesh;
 
 public class FakeMesh implements Mesh {
-    public float[] Vertices;
-    public float[] UvCoordinates;
-
     public FakeMesh() {
 
-    }
-
-    public FakeMesh(float[] vertices, float[] uvCoordinates) {
-        Vertices = vertices;
-        UvCoordinates = uvCoordinates;
     }
 
     @Override

@@ -59,12 +59,6 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     void render(FloatBox renderingArea,
                 AssetSnippet snippet,
-                Color matColor) {
-        render(renderingArea, snippet, matColor, null, null);
-    }
-
-    void render(FloatBox renderingArea,
-                AssetSnippet snippet,
                 Color matColor,
                 Color overrideColor) {
         render(renderingArea, snippet, matColor, overrideColor, null);

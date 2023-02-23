@@ -17,16 +17,6 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
 
     }
 
-    public FakeFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimestamps,
-                                          Long pausedTimestamp, Long mostRecentTimestamp,
-                                          T archetype) {
-        Uuid = uuid;
-        ValuesAtTimestamps = valuesAtTimestamps;
-        PausedTimestamp = pausedTimestamp;
-        MostRecentTimestamp = mostRecentTimestamp;
-        Archetype = archetype;
-    }
-
     @Override
     public Map<Long, T> valuesAtTimestampsRepresentation() {
         return new HashMap<>(ValuesAtTimestamps);

@@ -5,6 +5,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Animation;
+import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
@@ -125,17 +126,16 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
             throws UnsupportedOperationException, IllegalArgumentException {
         return capturesMouseEventAtPoint(point, timestamp, () -> {
             var imageAsset = imageAssetSet.getImageAssetForTypeAndDirection(type, direction);
-            if (imageAsset instanceof Sprite) {
-                return (Sprite) imageAsset;
-            }
-            // TODO: Refactor ImageAssetSet to support GlobalLoopingAnimation
-            else if (imageAsset instanceof Animation animation) {
-                return animation.snippetAtFrame((int) (timestamp % animation.msDuration()));
-            }
-            else {
-                // throw exception
-                return null;
-            }
+            return switch (imageAsset) {
+                case Sprite sprite -> sprite;
+                case GlobalLoopingAnimation globalLoopingAnimation ->
+                        globalLoopingAnimation.provide(timestamp);
+                case Animation animation ->
+                        animation.snippetAtFrame((int) (timestamp % animation.msDuration()));
+                case null, default ->
+                    // throw exception
+                        null;
+            };
         });
     }
 }

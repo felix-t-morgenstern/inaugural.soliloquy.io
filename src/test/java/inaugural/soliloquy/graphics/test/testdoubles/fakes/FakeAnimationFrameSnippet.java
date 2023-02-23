@@ -11,10 +11,6 @@ public class FakeAnimationFrameSnippet extends FakeAssetSnippet implements Anima
         this(new FakeImage("", 100, 100), 0, 0, 0, 0, 0f, 0f);
     }
 
-    public FakeAnimationFrameSnippet(Image image) {
-        this(image, 0, 0, 0, 0, 0, 0);
-    }
-
     public FakeAnimationFrameSnippet(Image image, int leftX, int topY, int rightX, int bottomY,
                                      float offsetX, float offsetY) {
         super(image, leftX, topY, rightX, bottomY);
