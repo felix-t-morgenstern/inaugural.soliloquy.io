@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
-import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
@@ -19,6 +18,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class SpriteRendererTest extends DisplayTest {
     protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./src/test/resources/images/items/RPG_Weapons.png";
@@ -34,37 +37,22 @@ public class SpriteRendererTest extends DisplayTest {
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
         Sprite = new FakeSprite(null, 266, 271, 313, 343);
-//        MockSpriteRenderable = new FakeSpriteRenderable(Sprite, new ArrayList<>(),
-//                new StaticProviderImpl<>(
-//                        java.util.UUID.randomUUID(),
-//                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
-//                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderThickness, null),
-//                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderColor, null),
-//                java.util.UUID.randomUUID());
-//        SpriteRenderable = mock(SpriteRenderable.class);
-//        when(SpriteRenderable.getSprite()).thenReturn(Sprite);
-//        when(SpriteRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
-//        when(SpriteRenderable.getZ()).thenReturn(0);
-//        when(SpriteRenderable.colorShiftProviders()).thenReturn(new ArrayList<>());
-//        when(SpriteRenderable.getRenderingDimensionsProvider()).thenReturn(
-//                new StaticProviderImpl<>(java.util.UUID.randomUUID(), SpriteRenderingDimensions,
-//                        null));
-//        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
-//                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderThickness, null));
-//        when(SpriteRenderable.getBorderColorProvider()).thenReturn(
-//                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderColor, null));
-        SpriteRenderable = new SpriteRenderableImpl(
-                Sprite,
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderThickness, null),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderColor, null),
-                new ArrayList<>(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(),
-                        new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f), null),
-                0,
-                java.util.UUID.randomUUID(),
-                RENDERING_STACK,
-                RENDERING_BOUNDARIES);
+
         SpriteRenderingDimensions = new FakeFloatBox(0.25f, 0.125f, 0.75f, 0.875f);
+
+        SpriteRenderable = mock(SpriteRenderable.class);
+        when(SpriteRenderable.getSprite()).thenReturn(Sprite);
+        when(SpriteRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
+        when(SpriteRenderable.getZ()).thenReturn(0);
+        when(SpriteRenderable.colorShiftProviders()).thenReturn(new ArrayList<>());
+        when(SpriteRenderable.getRenderingDimensionsProvider()).thenReturn(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), SpriteRenderingDimensions,
+                        null));
+        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderThickness, null));
+        when(SpriteRenderable.getBorderColorProvider()).thenReturn(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), borderColor, null));
+
         SpriteRenderable.setRenderingDimensionsProvider(
                 new StaticProviderImpl<>(java.util.UUID.randomUUID(), SpriteRenderingDimensions,
                         null));
@@ -76,9 +64,7 @@ public class SpriteRendererTest extends DisplayTest {
                         colorShiftStackAggregator,
                 null);
 
-        return new ArrayList<Renderer>() {{
-            add(SpriteRenderer);
-        }};
+        return listOf(SpriteRenderer);
     }
 
     public static void stackRendererAction(long timestamp) {
