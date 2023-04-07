@@ -1,17 +1,17 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRenderableWithDimensions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
@@ -19,58 +19,58 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RenderableStackImplTests {
+@RunWith(MockitoJUnitRunner.class)
+public class RenderableStackImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
-    @Mock private ProviderAtTime<FloatBox> _mockRenderingBoundariesProvider;
-    @Mock private RenderableStack _mockContainingStack;
+    @Mock private ProviderAtTime<FloatBox> mockRenderingBoundariesProvider;
+    @Mock private RenderableStack mockContainingStack;
 
-    private RenderableStack _topLevelRenderableStack;
-    private RenderableStack _containedRenderableStack;
+    private RenderableStack topLevelRenderableStack;
+    private RenderableStack containedRenderableStack;
 
-    @BeforeEach
-    void setUp() {
-        //noinspection unchecked
-        _mockRenderingBoundariesProvider = mock(ProviderAtTime.class);
-        _mockContainingStack = mock(RenderableStack.class);
-
-        _topLevelRenderableStack = new RenderableStackImpl();
-        _containedRenderableStack =
-                new RenderableStackImpl(UUID, Z, _mockRenderingBoundariesProvider,
-                        _mockContainingStack);
+    @Before
+    public void setUp() {
+        topLevelRenderableStack = new RenderableStackImpl();
+        containedRenderableStack =
+                new RenderableStackImpl(UUID, Z, mockRenderingBoundariesProvider,
+                        mockContainingStack);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(null, Z, _mockRenderingBoundariesProvider,
-                        _mockContainingStack));
+                () -> new RenderableStackImpl(null, Z, mockRenderingBoundariesProvider,
+                        mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(UUID, Z, null, _mockContainingStack));
+                () -> new RenderableStackImpl(UUID, Z, null, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> new RenderableStackImpl(UUID, Z, _mockRenderingBoundariesProvider, null));
+                () -> new RenderableStackImpl(UUID, Z, mockRenderingBoundariesProvider, null));
     }
 
     @Test
-    void testUuid() {
-        assertNull(_topLevelRenderableStack.uuid());
-        assertEquals(UUID, _containedRenderableStack.uuid());
+    public void testUuid() {
+        assertNull(topLevelRenderableStack.uuid());
+        assertEquals(UUID, containedRenderableStack.uuid());
     }
 
     @Test
-    void testAddAndRepresentation() {
-        Renderable renderable1 = new FakeRenderableWithDimensions(1);
-        Renderable renderable2 = new FakeRenderableWithDimensions(2);
-        Renderable renderable3 = new FakeRenderableWithDimensions(1);
+    public void testAddAndRepresentation() {
+        var renderable1 = mock(RenderableWithDimensions.class);
+        when(renderable1.getZ()).thenReturn(1);
+        var renderable2 = mock(RenderableWithDimensions.class);
+        when(renderable2.getZ()).thenReturn(2);
+        var renderable3 = mock(RenderableWithDimensions.class);
+        when(renderable3.getZ()).thenReturn(1);
 
-        _containedRenderableStack.add(renderable1);
-        _containedRenderableStack.add(renderable2);
-        _containedRenderableStack.add(renderable3);
+        containedRenderableStack.add(renderable1);
+        containedRenderableStack.add(renderable2);
+        containedRenderableStack.add(renderable3);
 
-        Map<Integer, List<Renderable>> representation =
-                _containedRenderableStack.renderablesByZIndexRepresentation();
-        Map<Integer, List<Renderable>> representation2 =
-                _containedRenderableStack.renderablesByZIndexRepresentation();
+        var representation =
+                containedRenderableStack.renderablesByZIndexRepresentation();
+        var representation2 =
+                containedRenderableStack.renderablesByZIndexRepresentation();
         representation2.remove(2);
 
         assertNotNull(representation);
@@ -78,28 +78,29 @@ class RenderableStackImplTests {
         assertNotSame(representation, representation2);
         assertEquals(representation.size() - 1, representation2.size());
 
-        List<Renderable> zIndex1 = representation.get(1);
+        var zIndex1 = representation.get(1);
         assertEquals(2, zIndex1.size());
         assertTrue(zIndex1.contains(renderable1));
         assertTrue(zIndex1.contains(renderable3));
 
-        List<Renderable> zIndex2 = representation.get(2);
+        var zIndex2 = representation.get(2);
         assertEquals(1, zIndex2.size());
         assertTrue(zIndex2.contains(renderable2));
     }
 
     @Test
-    void testAddSameRenderableUpdatesZIndex() {
-        FakeRenderableWithDimensions renderable = new FakeRenderableWithDimensions(1);
+    public void testAddSameRenderableUpdatesZIndex() {
+        var renderable = mock(RenderableWithDimensions.class);
+        when(renderable.getZ()).thenReturn(1);
 
-        _containedRenderableStack.add(renderable);
+        containedRenderableStack.add(renderable);
 
-        renderable.Z = 123;
+        when(renderable.getZ()).thenReturn(123);
 
-        _containedRenderableStack.add(renderable);
+        containedRenderableStack.add(renderable);
 
-        Map<Integer, List<Renderable>> representation =
-                _containedRenderableStack.renderablesByZIndexRepresentation();
+        var representation =
+                containedRenderableStack.renderablesByZIndexRepresentation();
 
         assertEquals(1, representation.size());
         assertEquals(1, representation.get(123).size());
@@ -107,111 +108,108 @@ class RenderableStackImplTests {
     }
 
     @Test
-    void testRemove() {
-        Renderable mockRenderable = mock(Renderable.class);
-        int z = randomInt();
+    public void testRemove() {
+        var mockRenderable = mock(Renderable.class);
+        var z = randomInt();
         when(mockRenderable.getZ()).thenReturn(z);
 
-        _topLevelRenderableStack.add(mockRenderable);
+        topLevelRenderableStack.add(mockRenderable);
 
-        assertTrue(_topLevelRenderableStack.renderablesByZIndexRepresentation().containsKey(z));
+        assertTrue(topLevelRenderableStack.renderablesByZIndexRepresentation().containsKey(z));
 
-        _topLevelRenderableStack.remove(mockRenderable);
+        topLevelRenderableStack.remove(mockRenderable);
 
-        assertFalse(_topLevelRenderableStack.renderablesByZIndexRepresentation().containsKey(z));
+        assertFalse(topLevelRenderableStack.renderablesByZIndexRepresentation().containsKey(z));
     }
 
     @Test
-    void testGetRenderingBoundariesProvider() {
+    public void testGetRenderingBoundariesProvider() {
         assertSame(WHOLE_SCREEN_PROVIDER,
-                _topLevelRenderableStack.getRenderingBoundariesProvider());
-        assertSame(_mockRenderingBoundariesProvider,
-                _containedRenderableStack.getRenderingBoundariesProvider());
+                topLevelRenderableStack.getRenderingBoundariesProvider());
+        assertSame(mockRenderingBoundariesProvider,
+                containedRenderableStack.getRenderingBoundariesProvider());
     }
 
     @Test
-    void testSetRenderingBoundariesProvider() {
+    public void testSetRenderingBoundariesProvider() {
         //noinspection unchecked
         ProviderAtTime<FloatBox> newProvider = mock(ProviderAtTime.class);
 
-        _containedRenderableStack.setRenderingBoundariesProvider(newProvider);
+        containedRenderableStack.setRenderingBoundariesProvider(newProvider);
 
-        assertSame(newProvider, _containedRenderableStack.getRenderingBoundariesProvider());
+        assertSame(newProvider, containedRenderableStack.getRenderingBoundariesProvider());
     }
 
     @Test
-    void testSetRenderingBoundariesProviderForTopLevelStack() {
+    public void testSetRenderingBoundariesProviderForTopLevelStack() {
         //noinspection unchecked
         ProviderAtTime<FloatBox> newProvider = mock(ProviderAtTime.class);
 
         assertThrows(UnsupportedOperationException.class,
-                () -> _topLevelRenderableStack.setRenderingBoundariesProvider(newProvider));
+                () -> topLevelRenderableStack.setRenderingBoundariesProvider(newProvider));
     }
 
     @Test
-    void testSetRenderingBoundariesProviderWithInvalidParams() {
+    public void testSetRenderingBoundariesProviderWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> _containedRenderableStack.setRenderingBoundariesProvider(null));
+                () -> containedRenderableStack.setRenderingBoundariesProvider(null));
     }
 
     @Test
-    void testContainingStack() {
-        assertNull(_topLevelRenderableStack.containingStack());
-        assertSame(_mockContainingStack, _containedRenderableStack.containingStack());
+    public void testContainingStack() {
+        assertNull(topLevelRenderableStack.containingStack());
+        assertSame(mockContainingStack, containedRenderableStack.containingStack());
     }
 
     @Test
-    void testClear() {
-        Renderable renderable = new FakeRenderableWithDimensions(0);
+    public void testClear() {
+        containedRenderableStack.add(mock(RenderableWithDimensions.class));
 
-        _containedRenderableStack.add(renderable);
+        containedRenderableStack.clearContainedRenderables();
 
-        _containedRenderableStack.clearContainedRenderables();
-
-        Map<Integer, List<Renderable>> representation =
-                _containedRenderableStack.renderablesByZIndexRepresentation();
+        var representation = containedRenderableStack.renderablesByZIndexRepresentation();
 
         assertEquals(0, representation.size());
     }
 
     @Test
-    void testSetAndGetZ() {
-        assertEquals(Z, _containedRenderableStack.getZ());
-        assertEquals(0, _topLevelRenderableStack.getZ());
+    public void testSetAndGetZ() {
+        assertEquals(Z, containedRenderableStack.getZ());
+        assertEquals(0, topLevelRenderableStack.getZ());
 
-        int newZ = randomInt();
+        var newZ = randomInt();
 
-        _containedRenderableStack.setZ(newZ);
+        containedRenderableStack.setZ(newZ);
         assertThrows(UnsupportedOperationException.class,
-                () -> _topLevelRenderableStack.setZ(randomInt()));
+                () -> topLevelRenderableStack.setZ(randomInt()));
 
-        assertEquals(newZ, _containedRenderableStack.getZ());
+        assertEquals(newZ, containedRenderableStack.getZ());
 
-        verify(_mockContainingStack, times(1)).add(_containedRenderableStack);
+        verify(mockContainingStack).add(containedRenderableStack);
     }
 
     @Test
-    void testDelete() {
-        Renderable mockRenderable1 = mock(Renderable.class);
-        Renderable mockRenderable2 = mock(Renderable.class);
-        Renderable mockRenderable3 = mock(Renderable.class);
+    public void testDelete() {
+        var mockRenderable1 = mock(Renderable.class);
+        var mockRenderable2 = mock(Renderable.class);
+        var mockRenderable3 = mock(Renderable.class);
 
-        _topLevelRenderableStack.add(mockRenderable1);
-        _topLevelRenderableStack.add(mockRenderable2);
-        _topLevelRenderableStack.add(mockRenderable3);
+        topLevelRenderableStack.add(mockRenderable1);
+        topLevelRenderableStack.add(mockRenderable2);
+        topLevelRenderableStack.add(mockRenderable3);
 
-        _topLevelRenderableStack.delete();
+        topLevelRenderableStack.delete();
 
-        verify(mockRenderable1, times(1)).delete();
-        verify(mockRenderable2, times(1)).delete();
-        verify(mockRenderable3, times(1)).delete();
+        verify(mockRenderable1).delete();
+        verify(mockRenderable2).delete();
+        verify(mockRenderable3).delete();
     }
 
     @Test
-    void testGetInterfaceName() {
+    public void testGetInterfaceName() {
         assertEquals(RenderableStack.class.getCanonicalName(),
-                _containedRenderableStack.getInterfaceName());
+                containedRenderableStack.getInterfaceName());
         assertEquals(RenderableStack.class.getCanonicalName(),
-                _topLevelRenderableStack.getInterfaceName());
+                topLevelRenderableStack.getInterfaceName());
     }
 }

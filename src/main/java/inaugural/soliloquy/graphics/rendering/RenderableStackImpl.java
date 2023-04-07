@@ -6,26 +6,30 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class RenderableStackImpl implements RenderableStack {
     private final UUID UUID;
     private final RenderableStack CONTAINING_STACK;
-    private final HashMap<Integer, ArrayList<Renderable>> STACK;
-    private final HashMap<Renderable, Integer> Z_INDICES_OF_INTEGERS;
+    private final Map<Integer, List<Renderable>> STACK;
+    private final Map<Renderable, Integer> Z_INDICES_OF_INTEGERS;
 
-    private int _z;
-    private ProviderAtTime<FloatBox> _renderingBoundariesProvider;
+    private int z;
+    private ProviderAtTime<FloatBox> renderingBoundariesProvider;
 
     public RenderableStackImpl() {
         UUID = null;
-        _z = 0;
-        _renderingBoundariesProvider = WHOLE_SCREEN_PROVIDER;
+        z = 0;
+        renderingBoundariesProvider = WHOLE_SCREEN_PROVIDER;
         CONTAINING_STACK = null;
-        STACK = new HashMap<>();
-        Z_INDICES_OF_INTEGERS = new HashMap<>();
+        STACK = mapOf();
+        Z_INDICES_OF_INTEGERS = mapOf();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -33,12 +37,12 @@ public class RenderableStackImpl implements RenderableStack {
                                ProviderAtTime<FloatBox> renderingBoundariesProvider,
                                RenderableStack containingStack) {
         UUID = Check.ifNull(uuid, "uuid");
-        _z = z;
-        _renderingBoundariesProvider =
+        this.z = z;
+        this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         CONTAINING_STACK = Check.ifNull(containingStack, "containingStack");
-        STACK = new HashMap<>();
-        Z_INDICES_OF_INTEGERS = new HashMap<>();
+        STACK = mapOf();
+        Z_INDICES_OF_INTEGERS = mapOf();
     }
 
     @Override
@@ -49,7 +53,7 @@ public class RenderableStackImpl implements RenderableStack {
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         if (Z_INDICES_OF_INTEGERS.containsKey(renderable)) {
-            int previousZIndex = Z_INDICES_OF_INTEGERS.get(renderable);
+            var previousZIndex = Z_INDICES_OF_INTEGERS.get(renderable);
             if (previousZIndex == renderable.getZ()) {
                 return;
             }
@@ -60,9 +64,7 @@ public class RenderableStackImpl implements RenderableStack {
         }
         Z_INDICES_OF_INTEGERS.put(renderable, renderable.getZ());
         if (!STACK.containsKey(renderable.getZ())) {
-            STACK.put(renderable.getZ(), new ArrayList<Renderable>() {{
-                add(renderable);
-            }});
+            STACK.put(renderable.getZ(), listOf(renderable));
         }
         else {
             STACK.get(renderable.getZ()).add(renderable);
@@ -71,7 +73,7 @@ public class RenderableStackImpl implements RenderableStack {
 
     @Override
     public void remove(Renderable renderable) throws IllegalArgumentException {
-        int z = renderable.getZ();
+        var z = renderable.getZ();
         STACK.get(z).remove(renderable);
         if (STACK.get(z).isEmpty()) {
             STACK.remove(z);
@@ -80,23 +82,23 @@ public class RenderableStackImpl implements RenderableStack {
 
     @Override
     public ProviderAtTime<FloatBox> getRenderingBoundariesProvider() {
-        return _renderingBoundariesProvider;
+        return renderingBoundariesProvider;
     }
 
     @Override
     public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> providerAtTime)
             throws IllegalArgumentException, UnsupportedOperationException {
-        if (_renderingBoundariesProvider == WHOLE_SCREEN_PROVIDER) {
+        if (renderingBoundariesProvider == WHOLE_SCREEN_PROVIDER) {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setRenderingBoundariesProvider: cannot assign new " +
                             "rendering boundaries for top-level stack");
         }
-        _renderingBoundariesProvider = Check.ifNull(providerAtTime, "providerAtTime");
+        renderingBoundariesProvider = Check.ifNull(providerAtTime, "providerAtTime");
     }
 
     @Override
     public Map<Integer, List<Renderable>> renderablesByZIndexRepresentation() {
-        return new HashMap<>(STACK);
+        return mapOf(STACK);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class RenderableStackImpl implements RenderableStack {
 
     @Override
     public int getZ() {
-        return _z;
+        return z;
     }
 
     @Override
@@ -115,7 +117,7 @@ public class RenderableStackImpl implements RenderableStack {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setZ: cannot set z value on top-level stack");
         }
-        _z = z;
+        this.z = z;
         CONTAINING_STACK.add(this);
     }
 
