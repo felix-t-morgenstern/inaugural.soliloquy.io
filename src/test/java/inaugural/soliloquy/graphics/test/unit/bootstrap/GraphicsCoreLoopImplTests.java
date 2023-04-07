@@ -16,10 +16,10 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -38,19 +38,11 @@ class GraphicsCoreLoopImplTests {
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
     private final FakeRenderer RENDERER = new FakeRenderer();
     @SuppressWarnings("rawtypes")
-    private final Collection<Renderer> RENDERERS_WITH_SHADER = new ArrayList<Renderer>() {{
-        add(RENDERER);
-    }};
+    private final List<Renderer> RENDERERS_WITH_SHADER = listOf(RENDERER);
     private final FakeMesh MESH = new FakeMesh();
-    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY = f1 -> f2 -> {
-        MESH.Vertices = f1;
-        MESH.UvCoordinates = f2;
-        return MESH;
-    };
+    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY = f1 -> f2 -> MESH;
     @SuppressWarnings("rawtypes")
-    private final Collection<Renderer> RENDERERS_WITH_MESH = new ArrayList<Renderer>() {{
-        add(RENDERER);
-    }};
+    private final List<Renderer> RENDERERS_WITH_MESH = listOf(RENDERER);
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
@@ -552,7 +544,7 @@ class GraphicsCoreLoopImplTests {
 
     @Test
     void testGraphicsPreloaderCalledBeforeFrameTimer() {
-        ArrayList<Object> invokedClassesInOrder = new ArrayList<>();
+        List<Object> invokedClassesInOrder = listOf();
         FRAME_TIMER.AddThisWhenLoadIsCalled = GRAPHICS_PRELOADER.AddThisWhenLoadIsCalled =
                 invokedClassesInOrder;
 
