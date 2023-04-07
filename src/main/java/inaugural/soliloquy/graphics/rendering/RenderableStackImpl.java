@@ -41,6 +41,7 @@ public class RenderableStackImpl implements RenderableStack {
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         CONTAINING_STACK = Check.ifNull(containingStack, "containingStack");
+        CONTAINING_STACK.add(this);
         STACK = mapOf();
         Z_INDICES_OF_INTEGERS = mapOf();
     }
@@ -52,6 +53,13 @@ public class RenderableStackImpl implements RenderableStack {
 
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
+        if (renderable instanceof RenderableStack renderableStack) {
+            if (renderableStack.containingStack() != this) {
+                throw new IllegalArgumentException(
+                        "RenderableStackImpl.add: cannot add a RenderableStack which does not " +
+                                "have this class as its containingStack");
+            }
+        }
         if (Z_INDICES_OF_INTEGERS.containsKey(renderable)) {
             var previousZIndex = Z_INDICES_OF_INTEGERS.get(renderable);
             if (previousZIndex == renderable.getZ()) {

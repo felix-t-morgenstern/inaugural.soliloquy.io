@@ -38,6 +38,11 @@ public class RenderableStackImplTests {
     }
 
     @Test
+    public void testConstructorCallsAddOnContainingStack() {
+        verify(mockContainingStack).add(containedRenderableStack);
+    }
+
+    @Test
     public void testConstructorWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
                 () -> new RenderableStackImpl(null, Z, mockRenderingBoundariesProvider,
@@ -105,6 +110,16 @@ public class RenderableStackImplTests {
         assertEquals(1, representation.size());
         assertEquals(1, representation.get(123).size());
         assertSame(renderable, representation.get(123).get(0));
+    }
+
+    @Test
+    public void testStackCannotCallAddOnAnotherStackThatDoesNotHaveItAsItsContainingStack() {
+        var stackThatDoesNotHaveTopLevelStackAsItsContainingStack = mock(RenderableStack.class);
+        when(stackThatDoesNotHaveTopLevelStackAsItsContainingStack.containingStack())
+                .thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> containedRenderableStack
+                .add(stackThatDoesNotHaveTopLevelStackAsItsContainingStack));
     }
 
     @Test
@@ -185,7 +200,8 @@ public class RenderableStackImplTests {
 
         assertEquals(newZ, containedRenderableStack.getZ());
 
-        verify(mockContainingStack).add(containedRenderableStack);
+        // Add was already called once in containedRenderableStack's constructor
+        verify(mockContainingStack, times(2)).add(containedRenderableStack);
     }
 
     @Test
