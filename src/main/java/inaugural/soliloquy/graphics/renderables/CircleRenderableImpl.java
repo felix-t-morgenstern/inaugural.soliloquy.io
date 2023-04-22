@@ -4,17 +4,21 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.CircleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
+import java.util.UUID;
 
-public class CircleRenderableImpl implements CircleRenderable {
+public class CircleRenderableImpl extends AbstractRenderable implements CircleRenderable {
     private ProviderAtTime<Vertex> centerProvider;
     private ProviderAtTime<Float> widthProvider;
     private ProviderAtTime<Color> colorProvider;
 
     public CircleRenderableImpl(ProviderAtTime<Vertex> centerProvider,
                                 ProviderAtTime<Float> widthProvider,
-                                ProviderAtTime<Color> colorProvider) {
+                                ProviderAtTime<Color> colorProvider,
+                                int z, UUID uuid, RenderableStack containingStack) {
+        super(z, uuid, containingStack);
         setCenterProvider(centerProvider);
         setWidthProvider(widthProvider);
         setColorProvider(colorProvider);
