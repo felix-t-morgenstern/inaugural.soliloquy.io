@@ -1,12 +1,13 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
 
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
+import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -44,23 +45,23 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.625f, 0.625f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.0f, 0.625f, 0.625f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.0f, 1.0f, 0.625f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.375f, 0.0f, 1.0f, 0.625f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.375f, 0.375f, 1.0f, 1.0f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.375f, 0.375f, 1.0f, 1.0f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.375f, 0.625f, 1.0f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.375f, 0.625f, 1.0f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

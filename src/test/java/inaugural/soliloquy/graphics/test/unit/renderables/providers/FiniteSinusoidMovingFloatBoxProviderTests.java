@@ -1,28 +1,30 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.FiniteSinusoidMovingFloatBoxProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
+import inaugural.soliloquy.graphics.rendering.factories.FloatBoxFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static inaugural.soliloquy.graphics.test.Mocks.mockFloatBox;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FiniteSinusoidMovingFloatBoxProviderTests {
-    private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
+    private final FloatBoxFactory FLOAT_BOX_FACTORY = new FloatBoxFactoryImpl();
 
     private final long TIME_1 = 100L;
     private final float FLOAT_BOX_1_LEFT_X = 0.111f;
     private final float FLOAT_BOX_1_TOP_Y = 0.222f;
     private final float FLOAT_BOX_1_RIGHT_X = 0.333f;
     private final float FLOAT_BOX_1_BOTTOM_Y = 0.444f;
-    private final FakeFloatBox FLOAT_BOX_1 = new FakeFloatBox(FLOAT_BOX_1_LEFT_X,
+    private final FloatBox FLOAT_BOX_1 = mockFloatBox(FLOAT_BOX_1_LEFT_X,
             FLOAT_BOX_1_TOP_Y, FLOAT_BOX_1_RIGHT_X, FLOAT_BOX_1_BOTTOM_Y);
 
     private final long TIME_2 = 300L;
@@ -30,7 +32,7 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     private final float FLOAT_BOX_2_TOP_Y = 0.666f;
     private final float FLOAT_BOX_2_RIGHT_X = 0.777f;
     private final float FLOAT_BOX_2_BOTTOM_Y = 0.888f;
-    private final FakeFloatBox FLOAT_BOX_2 = new FakeFloatBox(FLOAT_BOX_2_LEFT_X,
+    private final FloatBox FLOAT_BOX_2 = mockFloatBox(FLOAT_BOX_2_LEFT_X,
             FLOAT_BOX_2_TOP_Y, FLOAT_BOX_2_RIGHT_X, FLOAT_BOX_2_BOTTOM_Y);
 
     private final long TIME_3 = 500L;
@@ -38,23 +40,20 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     private final float FLOAT_BOX_3_TOP_Y = 0.234f;
     private final float FLOAT_BOX_3_RIGHT_X = 0.345f;
     private final float FLOAT_BOX_3_BOTTOM_Y = 0.456f;
-    private final FakeFloatBox FLOAT_BOX_3 = new FakeFloatBox(FLOAT_BOX_3_LEFT_X,
+    private final FloatBox FLOAT_BOX_3 = mockFloatBox(FLOAT_BOX_3_LEFT_X,
             FLOAT_BOX_3_TOP_Y, FLOAT_BOX_3_RIGHT_X, FLOAT_BOX_3_BOTTOM_Y);
 
-    private final HashMap<Long, FloatBox> VALUES_AT_TIMES = new HashMap<Long, FloatBox>() {{
-        put(TIME_1, FLOAT_BOX_1);
-        put(TIME_2, FLOAT_BOX_2);
-        put(TIME_3, FLOAT_BOX_3);
-    }};
+    private final Map<Long, FloatBox> VALUES_AT_TIMES = mapOf(
+        Pair.of(TIME_1, FLOAT_BOX_1),
+        Pair.of(TIME_2, FLOAT_BOX_2),
+        Pair.of(TIME_3, FLOAT_BOX_3)
+    );
 
     /** @noinspection FieldCanBeLocal */
     private final float SHARPNESS_1 = 1f;
     private final float SHARPNESS_2 = 0.5f;
 
-    private final ArrayList<Float> TRANSITION_SHARPNESSES = new ArrayList<Float>() {{
-        add(SHARPNESS_1);
-        add(SHARPNESS_2);
-    }};
+    private final List<Float> TRANSITION_SHARPNESSES = listOf(SHARPNESS_1, SHARPNESS_2);
 
     private final long MOST_RECENT_TIMESTAMP = 34L;
 
@@ -80,19 +79,15 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, null,
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, new HashMap<>(),
+                () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, mapOf(),
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID,
-                        new HashMap<Long, FloatBox>() {{
-                            put(null, FLOAT_BOX_1);
-                        }},
+                        mapOf(Pair.of(null, FLOAT_BOX_1)),
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID,
-                        new HashMap<Long, FloatBox>() {{
-                            put(TIME_1, null);
-                        }},
+                        mapOf(Pair.of(TIME_1, null)),
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
 
         assertThrows(IllegalArgumentException.class,
@@ -100,12 +95,10 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
                         null, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
-                        new ArrayList<>(), null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
+                        listOf(), null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Float>() {{
-                            add(-0.001f);
-                        }}, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
+                        listOf(-0.001f), null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
@@ -163,71 +156,71 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
 
     @Test
     void testProvideInterpolatedValueWithNoSharpness() {
-        long timeAfterTime1 = 50;
-        long timestamp = TIME_1 + timeAfterTime1;
-        long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
-        double weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
-        double sineValue = Math.sin(weightSine);
-        float percentToAdd = (float) ((sineValue + 1f) / 2f);
+        var timeAfterTime1 = 50;
+        var timestamp = TIME_1 + timeAfterTime1;
+        var distanceBetweenTimes = TIME_2 - TIME_1;
+        var time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
+        var weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
+        var sineValue = Math.sin(weightSine);
+        var percentToAdd = (float) ((sineValue + 1f) / 2f);
 
-        float expectedLeftX =
+        var expectedLeftX =
                 FLOAT_BOX_1_LEFT_X + ((FLOAT_BOX_2_LEFT_X - FLOAT_BOX_1_LEFT_X) * percentToAdd);
-        float expectedTopY =
+        var expectedTopY =
                 FLOAT_BOX_1_TOP_Y + ((FLOAT_BOX_2_TOP_Y - FLOAT_BOX_1_TOP_Y) * percentToAdd);
-        float expectedRightX =
+        var expectedRightX =
                 FLOAT_BOX_1_RIGHT_X + ((FLOAT_BOX_2_RIGHT_X - FLOAT_BOX_1_RIGHT_X) * percentToAdd);
-        float expectedBottomY = FLOAT_BOX_1_BOTTOM_Y +
+        var expectedBottomY = FLOAT_BOX_1_BOTTOM_Y +
                 ((FLOAT_BOX_2_BOTTOM_Y - FLOAT_BOX_1_BOTTOM_Y) * percentToAdd);
 
-        FakeFloatBox expectedValue =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expectedValue =
+                mockFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
-        FloatBox providedValue = finiteSinusoidMovingFloatBoxProvider.provide(timestamp);
+        var providedValue = finiteSinusoidMovingFloatBoxProvider.provide(timestamp);
 
-        assertEquals(expectedValue.LeftX, providedValue.leftX());
-        assertEquals(expectedValue.TopY, providedValue.topY());
-        assertEquals(expectedValue.RightX, providedValue.rightX());
-        assertEquals(expectedValue.BottomY, providedValue.bottomY());
+        assertEquals(expectedValue.leftX(), providedValue.leftX());
+        assertEquals(expectedValue.topY(), providedValue.topY());
+        assertEquals(expectedValue.rightX(), providedValue.rightX());
+        assertEquals(expectedValue.bottomY(), providedValue.bottomY());
     }
 
     @Test
     void testProvideInterpolatedValueWithSharpness() {
-        long timeAfterTime2 = 50;
-        long timestamp = TIME_2 + timeAfterTime2;
-        long distanceBetweenTimes = TIME_3 - TIME_2;
-        float time2Weight = timeAfterTime2 / (float) distanceBetweenTimes;
-        double weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
-        double sineValue = Math.sin(weightSine);
-        double sharpenedSineValue =
+        var timeAfterTime2 = 50;
+        var timestamp = TIME_2 + timeAfterTime2;
+        var distanceBetweenTimes = TIME_3 - TIME_2;
+        var time2Weight = timeAfterTime2 / (float) distanceBetweenTimes;
+        var weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
+        var sineValue = Math.sin(weightSine);
+        var sharpenedSineValue =
                 (sineValue < 0f ? -1f : 1f) * Math.pow(Math.abs(sineValue), SHARPNESS_2);
-        float percentToAdd = (float) ((sharpenedSineValue + 1f) / 2f);
+        var percentToAdd = (float) ((sharpenedSineValue + 1f) / 2f);
 
-        float expectedLeftX =
+        var expectedLeftX =
                 FLOAT_BOX_2_LEFT_X + ((FLOAT_BOX_3_LEFT_X - FLOAT_BOX_2_LEFT_X) * percentToAdd);
-        float expectedTopY =
+        var expectedTopY =
                 FLOAT_BOX_2_TOP_Y + ((FLOAT_BOX_3_TOP_Y - FLOAT_BOX_2_TOP_Y) * percentToAdd);
-        float expectedRightX =
+        var expectedRightX =
                 FLOAT_BOX_2_RIGHT_X + ((FLOAT_BOX_3_RIGHT_X - FLOAT_BOX_2_RIGHT_X) * percentToAdd);
-        float expectedBottomY =
+        var expectedBottomY =
                 FLOAT_BOX_2_BOTTOM_Y +
                         ((FLOAT_BOX_3_BOTTOM_Y - FLOAT_BOX_2_BOTTOM_Y) * percentToAdd);
 
-        FakeFloatBox expectedValue =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expectedValue =
+                mockFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
-        FloatBox providedValue = finiteSinusoidMovingFloatBoxProvider.provide(timestamp);
+        var providedValue = finiteSinusoidMovingFloatBoxProvider.provide(timestamp);
 
-        assertEquals(expectedValue.LeftX, providedValue.leftX());
-        assertEquals(expectedValue.TopY, providedValue.topY());
-        assertEquals(expectedValue.RightX, providedValue.rightX());
-        assertEquals(expectedValue.BottomY, providedValue.bottomY());
+        assertEquals(expectedValue.leftX(), providedValue.leftX());
+        assertEquals(expectedValue.topY(), providedValue.topY());
+        assertEquals(expectedValue.rightX(), providedValue.rightX());
+        assertEquals(expectedValue.bottomY(), providedValue.bottomY());
     }
 
     @Test
     void testPausedTimestamp() {
-        long pausedTimestamp = 12L;
-        FiniteSinusoidMovingProvider<FloatBox> pausedFiniteSinusoidMovingFloatProvider =
+        var pausedTimestamp = 12L;
+        var pausedFiniteSinusoidMovingFloatProvider =
                 new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
                         TRANSITION_SHARPNESSES, pausedTimestamp, MOST_RECENT_TIMESTAMP,
                         FLOAT_BOX_FACTORY);
@@ -302,44 +295,44 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
 
     @Test
     void testReportPauseAndUnpauseUpdatesTimestampsForValues() {
-        long pauseDuration = 123123L;
-        long timeAfterTime1 = 50;
-        long timestamp = TIME_1 + timeAfterTime1;
-        long distanceBetweenTimes = TIME_2 - TIME_1;
-        float time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
-        double weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
-        double sineValue = Math.sin(weightSine);
-        float percentToAdd = (float) ((sineValue + 1f) / 2f);
+        var pauseDuration = 123123L;
+        var timeAfterTime1 = 50;
+        var timestamp = TIME_1 + timeAfterTime1;
+        var distanceBetweenTimes = TIME_2 - TIME_1;
+        var time2Weight = timeAfterTime1 / (float) distanceBetweenTimes;
+        var weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
+        var sineValue = Math.sin(weightSine);
+        var percentToAdd = (float) ((sineValue + 1f) / 2f);
 
-        float expectedLeftX =
+        var expectedLeftX =
                 FLOAT_BOX_1_LEFT_X + ((FLOAT_BOX_2_LEFT_X - FLOAT_BOX_1_LEFT_X) * percentToAdd);
-        float expectedTopY =
+        var expectedTopY =
                 FLOAT_BOX_1_TOP_Y + ((FLOAT_BOX_2_TOP_Y - FLOAT_BOX_1_TOP_Y) * percentToAdd);
-        float expectedRightX =
+        var expectedRightX =
                 FLOAT_BOX_1_RIGHT_X + ((FLOAT_BOX_2_RIGHT_X - FLOAT_BOX_1_RIGHT_X) * percentToAdd);
-        float expectedBottomY = FLOAT_BOX_1_BOTTOM_Y +
+        var expectedBottomY = FLOAT_BOX_1_BOTTOM_Y +
                 ((FLOAT_BOX_2_BOTTOM_Y - FLOAT_BOX_1_BOTTOM_Y) * percentToAdd);
 
-        FakeFloatBox expectedValue =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expectedValue =
+                mockFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
         finiteSinusoidMovingFloatBoxProvider.reportPause(MOST_RECENT_TIMESTAMP);
         finiteSinusoidMovingFloatBoxProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
 
-        Map<Long, FloatBox> valuesAtTimestampsRepresentation =
+        var valuesAtTimestampsRepresentation =
                 finiteSinusoidMovingFloatBoxProvider.valuesAtTimestampsRepresentation();
 
         assertEquals(FLOAT_BOX_1, valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
         assertEquals(FLOAT_BOX_2, valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
         assertEquals(FLOAT_BOX_3, valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
 
-        FloatBox providedValue =
+        var providedValue =
                 finiteSinusoidMovingFloatBoxProvider.provide(timestamp + pauseDuration);
 
-        assertEquals(expectedValue.LeftX, providedValue.leftX());
-        assertEquals(expectedValue.TopY, providedValue.topY());
-        assertEquals(expectedValue.RightX, providedValue.rightX());
-        assertEquals(expectedValue.BottomY, providedValue.bottomY());
+        assertEquals(expectedValue.leftX(), providedValue.leftX());
+        assertEquals(expectedValue.topY(), providedValue.topY());
+        assertEquals(expectedValue.rightX(), providedValue.rightX());
+        assertEquals(expectedValue.bottomY(), providedValue.bottomY());
     }
 
     @Test

@@ -1,13 +1,14 @@
 package inaugural.soliloquy.graphics.test.unit.io;
 
 import inaugural.soliloquy.graphics.io.MouseEventCapturingSpatialIndexImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.graphics.rendering.FloatBox;
 
+import static inaugural.soliloquy.graphics.test.Mocks.mockFloatBox;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MouseEventCapturingSpatialIndexImplTests {
@@ -16,10 +17,10 @@ class MouseEventCapturingSpatialIndexImplTests {
     private final FakeImageAssetRenderable ImageAssetRenderable3 = new FakeImageAssetRenderable();
     private final FakeImageAssetRenderable ImageAssetRenderable4 = new FakeImageAssetRenderable();
 
-    private final FakeFloatBox RenderingDimensions1 = new FakeFloatBox(.1f, .1f, .5f, .5f);
-    private final FakeFloatBox RenderingDimensions2 = new FakeFloatBox(.2f, .2f, .6f, .6f);
-    private final FakeFloatBox RenderingDimensions3 = new FakeFloatBox(.3f, .3f, .7f, .7f);
-    private final FakeFloatBox RenderingDimensions4 = new FakeFloatBox(.4f, .4f, .8f, .8f);
+    private final FloatBox RenderingDimensions1 = mockFloatBox(.1f, .1f, .5f, .5f);
+    private final FloatBox RenderingDimensions2 = mockFloatBox(.2f, .2f, .6f, .6f);
+    private final FloatBox RenderingDimensions3 = mockFloatBox(.3f, .3f, .7f, .7f);
+    private final FloatBox RenderingDimensions4 = mockFloatBox(.4f, .4f, .8f, .8f);
 
     private MouseEventCapturingSpatialIndex _mouseEventCapturingSpatialIndex;
 

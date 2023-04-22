@@ -1,6 +1,7 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
@@ -19,6 +20,7 @@ import java.util.List;
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -106,23 +108,23 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.0f, 0.5f, 0.5f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.0f, 0.5f, 0.5f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.5f, 0.0f, 1.0f, 0.5f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.5f, 0.0f, 1.0f, 0.5f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.5f, 0.5f, 1.0f, 1.0f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.5f, 0.5f, 1.0f, 1.0f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0.0f, 0.5f, 0.5f, 1.0f);
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.5f, 0.5f, 1.0f));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

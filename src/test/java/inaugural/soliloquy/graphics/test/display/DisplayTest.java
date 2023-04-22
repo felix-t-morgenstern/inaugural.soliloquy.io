@@ -5,20 +5,24 @@ import inaugural.soliloquy.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.graphics.io.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.graphics.io.MouseEventHandlerImpl;
 import inaugural.soliloquy.graphics.io.MouseListenerImpl;
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
 import soliloquy.specs.graphics.io.MouseListener;
+import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.*;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -27,16 +31,21 @@ import java.util.function.Function;
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DisplayTest {
     protected final static float[] MESH_DATA =
             new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
-    protected final static FakeRenderingBoundaries RENDERING_BOUNDARIES =
-            new FakeRenderingBoundaries();
+    protected final static RenderingBoundaries RENDERING_BOUNDARIES = mock(RenderingBoundaries.class);
     protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     protected final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
     protected final static UUID UUID = java.util.UUID.randomUUID();
+
+    protected final static ProviderAtTime<Float> ZERO_PROVIDER = new StaticProviderImpl<>(java.util.UUID.randomUUID(), 0f, null);
+    protected final static ProviderAtTime<Color> BLACK_PROVIDER = new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, null);
+
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1920x1080;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
     protected final static FakeRenderableStack RENDERING_STACK = new FakeRenderableStack();
@@ -60,7 +69,7 @@ public class DisplayTest {
 
         FakeStackRenderer stackRenderer = new FakeStackRenderer();
 
-        RENDERING_BOUNDARIES.CurrentBoundaries = WHOLE_SCREEN;
+        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -100,5 +109,16 @@ public class DisplayTest {
         CheckedExceptionWrapper.sleep(totalMs);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+    }
+
+    protected static Sprite generateMockSprite(int leftX, int topY, int rightX, int bottomY) {
+        var mockSprite = mock(Sprite.class);
+
+        when(mockSprite.leftX()).thenReturn(leftX);
+        when(mockSprite.topY()).thenReturn(topY);
+        when(mockSprite.rightX()).thenReturn(rightX);
+        when(mockSprite.bottomY()).thenReturn(bottomY);
+
+        return mockSprite;
     }
 }

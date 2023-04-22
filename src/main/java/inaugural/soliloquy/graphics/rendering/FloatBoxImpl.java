@@ -78,6 +78,17 @@ public class FloatBoxImpl implements FloatBox {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof FloatBox f) {
+            return f.leftX() == LEFT_X && f.topY() == TOP_Y && f.rightX() == RIGHT_X &&
+                    f.bottomY() == BOTTOM_Y;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
     public String getInterfaceName() {
         return FloatBox.class.getCanonicalName();
     }

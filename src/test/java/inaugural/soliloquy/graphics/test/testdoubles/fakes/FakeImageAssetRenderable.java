@@ -21,7 +21,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     public boolean CapturesMouseEventsAtPoint = true;
     public ArrayList<Vertex> CapturesMouseEventsAtPointInputLocations = new ArrayList<>();
     public ArrayList<Long> CapturesMouseEventsAtPointInputTimestamps = new ArrayList<>();
-    public FakeFloatBox RenderingDimensions;
+    public FloatBox RenderingDimensions;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider = new FakeProviderAtTime<>();
     public int Z;
 

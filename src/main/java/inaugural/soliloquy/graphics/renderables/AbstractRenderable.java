@@ -7,31 +7,31 @@ import soliloquy.specs.graphics.rendering.RenderableStack;
 import java.util.UUID;
 
 abstract class AbstractRenderable implements Renderable {
-    private RenderableStack _containingStack;
+    private RenderableStack containingStack;
     private final UUID UUID;
 
-    private int _z;
+    private int z;
 
     protected AbstractRenderable(int z, UUID uuid, RenderableStack containingStack) {
-        _z = z;
+        this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
-        _containingStack = Check.ifNull(containingStack, "containingStack");
+        this.containingStack = Check.ifNull(containingStack, "containingStack");
     }
 
     @Override
     public int getZ() {
-        return _z;
+        return z;
     }
 
     @Override
     public void setZ(int z) {
-        _z = z;
-        _containingStack.add(this);
+        this.z = z;
+        containingStack.add(this);
     }
 
     @Override
     public RenderableStack containingStack() {
-        return _containingStack;
+        return containingStack;
     }
 
     // NB: deleted SpriteRenderables should _NOT_ make other calls unsupported, unlike
@@ -39,8 +39,8 @@ abstract class AbstractRenderable implements Renderable {
     //     contains it, causing a breaking race condition.
     @Override
     public void delete() {
-        RenderableStack stack = _containingStack;
-        _containingStack = null;
+        RenderableStack stack = containingStack;
+        containingStack = null;
         stack.remove(this);
     }
 
