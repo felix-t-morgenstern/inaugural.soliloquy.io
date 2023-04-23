@@ -5,6 +5,7 @@ import inaugural.soliloquy.graphics.rendering.renderers.TriangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -12,7 +13,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -23,28 +27,28 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
  * 3. The window will then close
  */
 class TriangleRendererColorsTest extends TriangleRendererTest {
-    private final static FakeStaticProvider<Vertex> VERTEX_1_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(0.2f, 0.2f));
-    private final static FakeStaticProvider<Color> VERTEX_1_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.RED);
-    private final static FakeStaticProvider<Vertex> VERTEX_2_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(0.8f, 0.4f));
-    private final static FakeStaticProvider<Color> VERTEX_2_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.GREEN);
-    private final static FakeStaticProvider<Vertex> VERTEX_3_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(0.5f, 0.8f));
-    private final static FakeStaticProvider<Color> VERTEX_3_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.BLUE);
-    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final static StaticProvider<Vertex> VERTEX_1_PROVIDER =
+            staticProvider(Vertex.of(0.2f, 0.2f));
+    private final static StaticProvider<Color> VERTEX_1_COLOR_PROVIDER =
+            staticProvider(Color.RED);
+    private final static StaticProvider<Vertex> VERTEX_2_PROVIDER =
+            staticProvider(Vertex.of(0.8f, 0.4f));
+    private final static StaticProvider<Color> VERTEX_2_COLOR_PROVIDER =
+            staticProvider(Color.GREEN);
+    private final static StaticProvider<Vertex> VERTEX_3_PROVIDER =
+            staticProvider(Vertex.of(0.5f, 0.8f));
+    private final static StaticProvider<Color> VERTEX_3_COLOR_PROVIDER =
+            staticProvider(Color.BLUE);
+    @SuppressWarnings("unchecked")
+    private final static StaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            mock(StaticProvider.class);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
 
     public static void main(String[] args) {
         runTest(
                 TriangleRendererColorsTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> TriangleRenderer.render(TriangleRenderable, timestamp),
-                () -> {},
+                () -> when(BACKGROUND_TEXTURE_ID_PROVIDER.getArchetype()).thenReturn(0),
                 DisplayTest::closeAfterSomeTime
         );
     }
@@ -52,20 +56,12 @@ class TriangleRendererColorsTest extends TriangleRendererTest {
     /** @noinspection rawtypes */
     public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        TriangleRenderer = new TriangleRenderer(null);
-
-        TriangleRenderable =
+        return generateRenderersWithMeshAndShader(windowResolutionManager,
                 new TriangleRenderableImpl(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, randomInt(),
-                        java.util.UUID.randomUUID(), RENDERING_STACK, RENDERING_BOUNDARIES);
-
-        FrameTimer.ShouldExecuteNextFrame = true;
-
-        return new ArrayList<Renderer>() {{
-            add(TriangleRenderer);
-        }};
+                        java.util.UUID.randomUUID(), TopLevelStack, RENDERING_BOUNDARIES));
     }
 }

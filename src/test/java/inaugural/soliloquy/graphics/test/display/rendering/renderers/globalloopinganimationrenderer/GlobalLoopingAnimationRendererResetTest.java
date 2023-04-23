@@ -22,8 +22,6 @@ class GlobalLoopingAnimationRendererResetTest extends GlobalLoopingAnimationRend
                                 windowResolutionManager,
                                 null
                         ),
-                timestamp -> GlobalLoopingAnimationRenderer
-                        .render(GlobalLoopingAnimationRenderable, timestamp),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
                 GlobalLoopingAnimationRendererResetTest::runThenClose
         );

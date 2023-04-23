@@ -7,8 +7,6 @@ import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.List;
-
 public class MouseEventCapturingSpatialIndexImpl
         implements MouseEventCapturingSpatialIndex {
     private final RTreeFacade R_TREE;
@@ -21,19 +19,19 @@ public class MouseEventCapturingSpatialIndexImpl
     @Override
     public RenderableWithMouseEvents getCapturingRenderableAtPoint(Vertex point, long timestamp)
             throws IllegalArgumentException {
-        List<RTreeFacade.RenderableWithMouseEventsSearchObject> roughResults = R_TREE.search(point.X, point.Y);
-        int highestZThusFar = Integer.MIN_VALUE;
+        var roughResults = R_TREE.search(point.X, point.Y);
+        var highestZThusFar = Integer.MIN_VALUE;
         RenderableWithMouseEvents renderableWithHighestZThusFar = null;
-        for (RTreeFacade.RenderableWithMouseEventsSearchObject roughResult : roughResults) {
-            if (roughResult._renderingDimensions.leftX() <= point.X &&
-                    roughResult._renderingDimensions.topY() <= point.Y &&
-                    roughResult._renderingDimensions.rightX() >= point.X &&
-                    roughResult._renderingDimensions.bottomY() >= point.Y &&
-                    roughResult._renderableWithMouseEvents.getZ() > highestZThusFar &&
-                    roughResult._renderableWithMouseEvents
+        for (var roughResult : roughResults) {
+            if (roughResult.renderingDimensions.leftX() <= point.X &&
+                    roughResult.renderingDimensions.topY() <= point.Y &&
+                    roughResult.renderingDimensions.rightX() >= point.X &&
+                    roughResult.renderingDimensions.bottomY() >= point.Y &&
+                    roughResult.renderableWithMouseEvents.getZ() > highestZThusFar &&
+                    roughResult.renderableWithMouseEvents
                             .capturesMouseEventAtPoint(point, timestamp)) {
-                highestZThusFar = roughResult._renderableWithMouseEvents.getZ();
-                renderableWithHighestZThusFar = roughResult._renderableWithMouseEvents;
+                highestZThusFar = roughResult.renderableWithMouseEvents.getZ();
+                renderableWithHighestZThusFar = roughResult.renderableWithMouseEvents;
             }
         }
         return renderableWithHighestZThusFar;

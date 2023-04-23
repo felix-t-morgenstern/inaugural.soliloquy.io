@@ -30,7 +30,6 @@ public class FiniteSinusoidMovingFloatBoxProviderPausingTest
                                 .generateRenderablesAndRenderersWithMeshAndShader(0f,
                                         INTACT_COLOR, null,
                                         windowResolutionManager),
-                FiniteSinusoidMovingFloatBoxProviderTest::stackRendererAction,
                 FiniteSinusoidMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 FiniteSinusoidMovingFloatBoxProviderPausingTest::closeAfterSomeTime);
     }

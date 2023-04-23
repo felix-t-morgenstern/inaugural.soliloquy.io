@@ -27,7 +27,6 @@ class FiniteSinusoidMovingFloatBoxProviderSimpleTest
                                 .generateRenderablesAndRenderersWithMeshAndShader(0f,
                                         INTACT_COLOR, null,
                                         windowResolutionManager),
-                FiniteSinusoidMovingFloatBoxProviderTest::stackRendererAction,
                 FiniteSinusoidMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 g -> DisplayTest.closeAfterSomeTime(g, 6000));
     }

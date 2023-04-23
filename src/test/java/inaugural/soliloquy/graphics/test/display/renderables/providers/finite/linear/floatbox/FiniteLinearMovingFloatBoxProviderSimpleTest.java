@@ -20,7 +20,6 @@ class FiniteLinearMovingFloatBoxProviderSimpleTest extends FiniteLinearMovingFlo
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(0f,
                                 INTACT_COLOR, null, windowResolutionManager),
-                FiniteLinearMovingProviderTest::stackRendererAction,
                 FiniteLinearMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

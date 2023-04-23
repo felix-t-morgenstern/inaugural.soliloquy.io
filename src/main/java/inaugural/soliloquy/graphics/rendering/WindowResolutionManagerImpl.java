@@ -92,8 +92,6 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
     @Override
     public long updateWindowSizeAndLocation(long windowId, String titlebar) {
-        // System.out.println("updateWindowSizeAndLocation");
-
         Check.ifNullOrEmpty(titlebar, "titlebar");
 
         if (windowResolution != mostRecentlyRenderedWindowResolution ||

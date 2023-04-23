@@ -14,7 +14,6 @@ class FiniteAnimationRendererSimpleTest extends FiniteAnimationRendererTest {
                         .generateRenderablesAndRenderersWithMeshAndShader(
                                 windowResolutionManager,
                                 null),
-                timestamp -> FiniteAnimationRenderer.render(FiniteAnimationRenderable, timestamp),
                 FiniteAnimationRendererTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TestDurationMs)
         );

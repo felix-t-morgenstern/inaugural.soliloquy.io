@@ -26,8 +26,6 @@ public class GlobalLoopingAnimationRendererWithPausingTest
                                 windowResolutionManager,
                                 null
                         ),
-                timestamp -> GlobalLoopingAnimationRenderer
-                        .render(GlobalLoopingAnimationRenderable, timestamp),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TEST_DURATION_MS)
         );
@@ -36,19 +34,19 @@ public class GlobalLoopingAnimationRendererWithPausingTest
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop, int ms) {
         CheckedExceptionWrapper.sleep(ms / 3);
 
-        long pauseTimestamp = GLOBAL_CLOCK.globalTimestamp();
+        var pauseTimestamp = GLOBAL_CLOCK.globalTimestamp();
         GlobalLoopingAnimation.reportPause(pauseTimestamp);
         System.out.println("Paused at " + pauseTimestamp);
         System.out.println("Period modulo offset = " + GlobalLoopingAnimation.periodModuloOffset());
 
         CheckedExceptionWrapper.sleep(1000);
 
-        long unpauseTimestamp = GLOBAL_CLOCK.globalTimestamp();
+        var unpauseTimestamp = GLOBAL_CLOCK.globalTimestamp();
         GlobalLoopingAnimation.reportUnpause(unpauseTimestamp);
         System.out.println("Unpaused at " + unpauseTimestamp);
         System.out.println("Period modulo offset = " + GlobalLoopingAnimation.periodModuloOffset());
 
-        CheckedExceptionWrapper.sleep((ms * 2) / 3);
+        CheckedExceptionWrapper.sleep((ms * 2L) / 3);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }

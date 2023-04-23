@@ -26,7 +26,6 @@ class FiniteLinearMovingColorProviderImplPausingTest
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
                                         INTACT_COLOR, null, windowResolutionManager),
-                FiniteLinearMovingProviderTest::stackRendererAction,
                 FiniteLinearMovingColorProviderImplSimpleTest::graphicsPreloaderLoadAction,
                 FiniteLinearMovingColorProviderImplPausingTest::closeAfterSomeTime);
     }

@@ -22,7 +22,6 @@ class FiniteSinusoidMovingFloatProviderSimpleTest extends FiniteSinusoidMovingFl
                         FiniteSinusoidMovingFloatProviderTest
                                 .generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
                                         BORDER_COLOR, null, windowResolutionManager),
-                FiniteSinusoidMovingFloatProviderTest::stackRendererAction,
                 FiniteSinusoidMovingFloatProviderTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> DisplayTest.closeAfterSomeTime(graphicsCoreLoop, 8000));
     }

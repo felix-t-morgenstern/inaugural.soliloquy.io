@@ -30,7 +30,6 @@ public class SpriteRendererBrightnessShiftTest extends SpriteRendererTest {
                                 INTACT_COLOR,
                                 colorShiftStackAggregator,
                                 windowResolutionManager),
-                SpriteRendererTest::stackRendererAction,
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

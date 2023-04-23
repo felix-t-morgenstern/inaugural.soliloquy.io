@@ -46,7 +46,6 @@ public class MouseListenerImpl implements MouseListener {
                             "mouse buttons' states reported");
         }
 
-        // System.out.println("MouseListener records left mouse button " + (mouseButtonPressStates.get(LEFT_MOUSE_BUTTON) ? "is" : "is not") + " pressed.");
         HashMap<Integer, MouseEventHandler.EventType> mouseButtonEvents = new HashMap<>();
         mouseButtonPressStates.forEach((button, buttonIsPressedNow) -> {
             Check.ifNull(button, "button");

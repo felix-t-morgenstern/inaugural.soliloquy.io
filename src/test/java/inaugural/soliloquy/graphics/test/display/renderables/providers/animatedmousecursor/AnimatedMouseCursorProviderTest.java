@@ -5,10 +5,13 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.MouseCursorImageFac
 import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.mousecursor.MouseCursorImplTest;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
     private static final String MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION =
@@ -26,20 +29,19 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
 
     protected static final String PROVIDER_ID = "providerId";
 
-    protected static AnimatedMouseCursorProvider _animatedMouseCursorProvider;
+    protected static AnimatedMouseCursorProvider AnimatedMouseCursorProvider;
 
     public static void graphicsPreloaderLoadAction() {
-        ArrayList<MouseCursorImageDefinitionDTO> mouseCursorImageDefinitionDTOs =
-                new ArrayList<>();
-        ArrayList<Long> mouseCursorImages = new ArrayList<>();
-        new ArrayList<String>() {{
-            add(MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION);
-            add(MOUSE_CURSOR_IMAGE_2_RELATIVE_LOCATION);
-            add(MOUSE_CURSOR_IMAGE_3_RELATIVE_LOCATION);
-            add(MOUSE_CURSOR_IMAGE_4_RELATIVE_LOCATION);
-            add(MOUSE_CURSOR_IMAGE_5_RELATIVE_LOCATION);
-            add(MOUSE_CURSOR_IMAGE_6_RELATIVE_LOCATION);
-        }}.forEach(imgLoc -> mouseCursorImageDefinitionDTOs.add(new MouseCursorImageDefinitionDTO(
+        List<MouseCursorImageDefinitionDTO> mouseCursorImageDefinitionDTOs = listOf();
+        List<Long> mouseCursorImages = listOf();
+        listOf(
+            MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION,
+            MOUSE_CURSOR_IMAGE_2_RELATIVE_LOCATION,
+            MOUSE_CURSOR_IMAGE_3_RELATIVE_LOCATION,
+            MOUSE_CURSOR_IMAGE_4_RELATIVE_LOCATION,
+            MOUSE_CURSOR_IMAGE_5_RELATIVE_LOCATION,
+            MOUSE_CURSOR_IMAGE_6_RELATIVE_LOCATION
+        ).forEach(imgLoc -> mouseCursorImageDefinitionDTOs.add(new MouseCursorImageDefinitionDTO(
                 imgLoc, 0, 0
         )));
         new MouseCursorImagePreloaderTask(
@@ -47,21 +49,21 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
                 new MouseCursorImageFactoryImpl(),
                 output -> mouseCursorImages.add(output.id()))
                 .run();
-        HashMap<Integer, Long> mouseCursorsAtMs = new HashMap<Integer, Long>() {{
-            put(0, mouseCursorImages.get(0));
-            put(167, mouseCursorImages.get(1));
-            put(333, mouseCursorImages.get(2));
-            put(500, mouseCursorImages.get(3));
-            put(667, mouseCursorImages.get(4));
-            put(833, mouseCursorImages.get(5));
-        }};
-        int msDuration = 1000;
-        long timestamp = GLOBAL_CLOCK.globalTimestamp();
-        int periodModuloOffset = msDuration - (int) (timestamp % msDuration);
+        var mouseCursorsAtMs = mapOf(
+            Pair.of(0, mouseCursorImages.get(0)),
+            Pair.of(167, mouseCursorImages.get(1)),
+            Pair.of(333, mouseCursorImages.get(2)),
+            Pair.of(500, mouseCursorImages.get(3)),
+            Pair.of(667, mouseCursorImages.get(4)),
+            Pair.of(833, mouseCursorImages.get(5))
+        );
+        var msDuration = 1000;
+        var timestamp = GLOBAL_CLOCK.globalTimestamp();
+        var periodModuloOffset = msDuration - (int) (timestamp % msDuration);
 
-        _animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(
+        AnimatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(
                 "id", mouseCursorsAtMs, msDuration, periodModuloOffset, null, null);
 
-        _mouseCursorProviders.put(PROVIDER_ID, _animatedMouseCursorProvider);
+        MouseCursorProviders.put(PROVIDER_ID, AnimatedMouseCursorProvider);
     }
 }

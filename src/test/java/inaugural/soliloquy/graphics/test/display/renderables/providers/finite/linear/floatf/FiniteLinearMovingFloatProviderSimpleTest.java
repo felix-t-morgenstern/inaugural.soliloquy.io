@@ -19,7 +19,6 @@ class FiniteLinearMovingFloatProviderSimpleTest extends FiniteLinearMovingFloatP
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
                                         BORDER_COLOR, null, windowResolutionManager),
-                FiniteLinearMovingProviderTest::stackRendererAction,
                 FiniteLinearMovingFloatProviderTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

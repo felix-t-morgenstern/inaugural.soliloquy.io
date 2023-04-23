@@ -3,24 +3,25 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -34,14 +35,14 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 class TextLineRendererColorTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Wow, this message is in the colors of the rainbow!";
 
-    private static FakeTextLineRenderable TextLineRenderable;
+    private static TextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
         runTest(
                 TextLineRendererColorTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
+                    when(TextLineRenderable.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererColorTest::closeAfterSomeTime
@@ -53,22 +54,22 @@ class TextLineRendererColorTest extends TextLineRendererTest {
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT.put('j', 0.000625f);
 
-        FontStyleDefinition plain = new FontStyleDefinition(
+        var plain = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_OSWALD);
-        FontStyleDefinition italic = new FontStyleDefinition(
+        var italic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_OSWALD);
-        FontStyleDefinition bold = new FontStyleDefinition(
+        var bold = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_OSWALD);
-        FontStyleDefinition boldItalic = new FontStyleDefinition(
+        var boldItalic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
@@ -77,23 +78,22 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Vertex renderingLocation = Vertex.of(0.1f, 0.475f);
+        var renderingLocation = Vertex.of(0.1f, 0.475f);
 
-        HashMap<Integer, ProviderAtTime<Color>> colorIndices = rainbowGradient(LINE_TEXT);
+        var colorIndices = rainbowGradient(LINE_TEXT);
 
-        TextLineRenderable = new FakeTextLineRenderable(null,
-                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null),
-                colorIndices, null, null,
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), renderingLocation, null),
-                java.util.UUID.randomUUID());
+        TextLineRenderable =
+                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(0f),
+                        staticNullProvider(Color.BLACK), colorIndices, listOf(), listOf(),
+                        staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        return new ArrayList<Renderer>() {{
-            add(TextLineRenderer);
-        }};
+        TopLevelStack.add(TextLineRenderable);
+        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+
+        return listOf(TextLineRenderer);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
@@ -103,44 +103,42 @@ class TextLineRendererColorTest extends TextLineRendererTest {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static HashMap<Integer, ProviderAtTime<Color>> rainbowGradient(String lineText) {
-        HashMap<Integer, ProviderAtTime<Color>> rainbowGradient = new HashMap<>();
+    private static Map<Integer, ProviderAtTime<Color>> rainbowGradient(String lineText) {
+        Map<Integer, ProviderAtTime<Color>> rainbowGradient = mapOf();
 
-        float degreePerLetter = 360f / lineText.length();
-        for (int i = 0; i < lineText.length(); i++) {
-            rainbowGradient.put(i,
-                    new StaticProviderImpl<>(java.util.UUID.randomUUID(),
-                            colorAtDegree((float) i * degreePerLetter), null));
+        var degreePerLetter = 360f / lineText.length();
+        for (var i = 0; i < lineText.length(); i++) {
+            rainbowGradient.put(i, staticProvider(colorAtDegree((float) i * degreePerLetter)));
         }
         return rainbowGradient;
     }
 
     private static Color colorAtDegree(float degree) {
-        float red = getColorComponent(0f, degree);
-        float green = getColorComponent(120f, degree);
-        float blue = getColorComponent(240f, degree);
+        var red = getColorComponent(0f, degree);
+        var green = getColorComponent(120f, degree);
+        var blue = getColorComponent(240f, degree);
 
         return new Color(red, green, blue, 1f);
     }
 
     private static float getColorComponent(float componentCenter, float degree) {
-        float degreesInCircle = 360f;
-        float halfOfCircle = 180f;
-        float sixthOfCircle = 60f;
-        float degreeModulo = degree % degreesInCircle;
-        float distance = componentCenter - degreeModulo;
+        var degreesInCircle = 360f;
+        var halfOfCircle = 180f;
+        var sixthOfCircle = 60f;
+        var degreeModulo = degree % degreesInCircle;
+        var distance = componentCenter - degreeModulo;
         if (distance < -halfOfCircle) {
             distance += degreesInCircle;
         }
-        float absVal = Math.abs(distance);
+        var absVal = Math.abs(distance);
         if (absVal <= sixthOfCircle) {
             return 1f;
         }
         absVal -= sixthOfCircle;
-        float absValWithCeiling = Math.min(sixthOfCircle, absVal);
-        float amountOfSixthOfCircle = sixthOfCircle - absValWithCeiling;
+        var absValWithCeiling = Math.min(sixthOfCircle, absVal);
+        var amountOfSixthOfCircle = sixthOfCircle - absValWithCeiling;
         @SuppressWarnings("UnnecessaryLocalVariable")
-        float colorComponent = amountOfSixthOfCircle / sixthOfCircle;
+        var colorComponent = amountOfSixthOfCircle / sixthOfCircle;
         return colorComponent;
     }
 }

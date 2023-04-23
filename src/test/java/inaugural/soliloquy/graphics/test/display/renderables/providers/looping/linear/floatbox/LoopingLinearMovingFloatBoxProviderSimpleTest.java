@@ -23,7 +23,6 @@ class LoopingLinearMovingFloatBoxProviderSimpleTest
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(0f,
                                 Color.WHITE, null, windowResolutionManager),
-                LoopingLinearMovingFloatBoxProviderTest::stackRendererAction,
                 LoopingLinearMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 LoopingLinearMovingFloatBoxProviderSimpleTest::closeAfterSomeTime);
     }

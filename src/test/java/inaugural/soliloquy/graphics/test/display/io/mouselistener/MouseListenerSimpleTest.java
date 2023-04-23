@@ -29,7 +29,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                         INTACT_COLOR,
                         null,
                         windowResolutionManager),
-                SpriteRendererTest::stackRendererAction,
                 MouseListenerSimpleTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> DisplayTest.closeAfterSomeTime(graphicsCoreLoop, 24000));
     }
@@ -38,96 +37,37 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         SpriteRendererTest.graphicsPreloaderLoadAction();
 
         SpriteRenderable.setCapturesMouseEvents(true);
-        SpriteRenderable.setOnMouseOver(new Action<>() {
-            @Override
-            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
-                    throws IllegalArgumentException {
-                System.out.println("MOUSE OVER");
-            }
-
-            @Override
-            public String id() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public MouseEventInputs getArchetype() {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-        });
-        SpriteRenderable.setOnMouseLeave(new Action<>() {
-            @Override
-            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
-                    throws IllegalArgumentException {
-                System.out.println("MOUSE LEAVE");
-            }
-
-            @Override
-            public String id() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public MouseEventInputs getArchetype() {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-        });
-        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, new Action<>() {
-            @Override
-            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
-                    throws IllegalArgumentException {
-                System.out.println("LEFT MOUSE BUTTON PRESS");
-            }
-
-            @Override
-            public String id() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public MouseEventInputs getArchetype() {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-        });
-        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON, new Action<>() {
-            @Override
-            public void run(MouseEventInputs longRenderableWithMouseEventsPair)
-                    throws IllegalArgumentException {
-                System.out.println("LEFT MOUSE BUTTON RELEASE");
-            }
-
-            @Override
-            public String id() throws IllegalStateException {
-                return null;
-            }
-
-            @Override
-            public MouseEventInputs getArchetype() {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
-        });
+        SpriteRenderable.setOnMouseOver(messageAction("MOUSE OVER"));
+        SpriteRenderable.setOnMouseLeave(messageAction("MOUSE LEAVE"));
+        SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, messageAction("LEFT MOUSE BUTTON PRESS"));
+        SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON,
+                messageAction("LEFT MOUSE BUTTON RELEASE"));
 
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.putRenderable(SpriteRenderable,
                 SpriteRenderingDimensions);
+    }
+
+    private static Action<MouseEventInputs> messageAction(String message) {
+        return new Action<>() {
+            @Override
+            public void run(MouseEventInputs mouseEventInputs) throws IllegalArgumentException {
+                System.out.println(message);
+            }
+
+            @Override
+            public String id() throws IllegalStateException {
+                return null;
+            }
+
+            @Override
+            public MouseEventInputs getArchetype() {
+                return null;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return null;
+            }
+        };
     }
 }

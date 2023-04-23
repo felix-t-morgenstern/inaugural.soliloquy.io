@@ -3,13 +3,14 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.s
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteSinusoidMovingFloatProvider;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.graphics.renderables.SpriteRenderable;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import static org.mockito.Mockito.when;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
     protected static FiniteSinusoidMovingFloatProvider FiniteSinusoidMovingFloatProvider;
@@ -20,22 +21,24 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
     protected static void graphicsPreloaderLoadAction() {
         Sprite.Image = new ImageFactoryImpl(0.5f)
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
-        long timestamp = GLOBAL_CLOCK.globalTimestamp();
-        HashMap<Long, Float> borderThicknessValues = new HashMap<>();
-        borderThicknessValues.put(timestamp, 0f);
-        borderThicknessValues.put(timestamp + 4000, BORDER_THICKNESS);
-        borderThicknessValues.put(timestamp + 8000, 0f);
-        when(SpriteRenderable.getBorderThicknessProvider()).thenReturn(
+        var timestamp = GLOBAL_CLOCK.globalTimestamp();
+        var borderThicknessValues = mapOf(
+                Pair.of(timestamp, 0f),
+                Pair.of(timestamp + 4000, BORDER_THICKNESS),
+                Pair.of(timestamp + 8000, 0f)
+        );
+        SpriteRenderable.setBorderThicknessProvider(
                 FiniteSinusoidMovingFloatProvider = new FiniteSinusoidMovingFloatProvider(
                         java.util.UUID.randomUUID(),
                         borderThicknessValues,
-                        new ArrayList<Float>() {{
-                            add(1f);
-                            add(0.5f);
-                        }},
+                        listOf(1f, 0.5f),
                         null,
                         null
                 ));
+
+        TopLevelStack.add(SpriteRenderable);
+        Renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
+
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 }

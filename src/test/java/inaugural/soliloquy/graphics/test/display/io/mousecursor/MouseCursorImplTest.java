@@ -6,18 +6,21 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class MouseCursorImplTest extends DisplayTest {
-    protected static HashMap<String, ProviderAtTime<Long>> _mouseCursorProviders = new HashMap<>();
+    protected static Map<String, ProviderAtTime<Long>> MouseCursorProviders = mapOf();
 
     /** @noinspection rawtypes, unused */
-    public static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        MouseCursor = new MouseCursorImpl(_mouseCursorProviders, GLOBAL_CLOCK);
+        MouseCursor = new MouseCursorImpl(MouseCursorProviders, GLOBAL_CLOCK);
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return new ArrayList<>();
+        return listOf();
     }
 }

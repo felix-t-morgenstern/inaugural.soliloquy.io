@@ -1,25 +1,25 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.graphics.renderables.TextLineRenderable;
+import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -31,25 +31,24 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  */
 class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING =
-            new HashMap<>();
+            mapOf();
     private final static Map<Character, Float> GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT =
-            new HashMap<>();
+            mapOf();
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
     private final static float LINE_HEIGHT = 0.05f;
-    private final static FakeStaticProvider<Float> LINE_HEIGHT_PROVIDER =
-            new FakeStaticProvider<>(LINE_HEIGHT);
+    private final static StaticProvider<Float> LINE_HEIGHT_PROVIDER = staticProvider(LINE_HEIGHT);
     private final static String LINE_TEXT = "Regular, italic, bold, bold-italic";
 
-    private static FakeTextLineRenderable TextLineRenderable;
+    private static TextLineRenderable TextLineRenderable;
 
     public static void main(String[] args) {
         runTest(
                 TextLineRendererBoldAndItalicTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font = new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
+                    when(TextLineRenderable.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererBoldAndItalicTest::closeAfterSomeTime
@@ -62,22 +61,22 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);
 
-        FontStyleDefinition plain = new FontStyleDefinition(
+        var plain = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FontStyleDefinition italic = new FontStyleDefinition(
+        var italic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FontStyleDefinition bold = new FontStyleDefinition(
+        var bold = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
                 ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING);
-        FontStyleDefinition boldItalic = new FontStyleDefinition(
+        var boldItalic = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC_OSWALD,
                 GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING,
                 GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT,
@@ -86,30 +85,24 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        Vertex renderingLocation = Vertex.of(0.0f, 0.5f - LINE_HEIGHT);
+        var renderingLocation = Vertex.of(0.0f, 0.5f - LINE_HEIGHT);
 
-        ArrayList<Integer> italicIndices = new ArrayList<Integer>() {{
-            add(9);
-            add(17);
-            add(23);
-        }};
+        var italicIndices = listOf(9, 17, 23);
 
-        ArrayList<Integer> boldIndices = new ArrayList<Integer>() {{
-            add(17);
-        }};
+        var boldIndices = listOf(17);
 
-        TextLineRenderable = new FakeTextLineRenderable(null, LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                italicIndices, boldIndices,
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), renderingLocation, null),
-                java.util.UUID.randomUUID());
+        TextLineRenderable =
+                mockTextLineRenderable(LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT, staticNullProvider(0f),
+                        staticNullProvider(Color.BLACK), null, italicIndices, boldIndices,
+                        staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 Color.WHITE, windowResolutionManager, null);
 
-        return new ArrayList<Renderer>() {{
-            add(TextLineRenderer);
-        }};
+        TopLevelStack.add(TextLineRenderable);
+        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+
+        return listOf(TextLineRenderer);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

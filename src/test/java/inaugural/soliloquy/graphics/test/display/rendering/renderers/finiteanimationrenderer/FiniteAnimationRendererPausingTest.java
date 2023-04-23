@@ -19,7 +19,6 @@ class FiniteAnimationRendererPausingTest extends FiniteAnimationRendererTest {
                 windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
                                 windowResolutionManager,
                                 null),
-                timestamp -> FiniteAnimationRenderer.render(FiniteAnimationRenderable, timestamp),
                 FiniteAnimationRendererTest::graphicsPreloaderLoadAction,
                 FiniteAnimationRendererPausingTest::closeAfterSomeTime
         );

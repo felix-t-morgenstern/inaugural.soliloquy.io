@@ -22,7 +22,6 @@ class LoopingLinearMovingFloatProviderResetTest extends LoopingLinearMovingFloat
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
                                 BORDER_COLOR, null, windowResolutionManager),
-                LoopingLinearMovingFloatProviderTest::stackRendererAction,
                 LoopingLinearMovingFloatProviderTest::graphicsPreloaderLoadAction,
                 LoopingLinearMovingFloatProviderResetTest::closeAfterSomeTime);
     }

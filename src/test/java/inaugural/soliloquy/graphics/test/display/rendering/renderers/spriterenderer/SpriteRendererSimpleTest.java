@@ -21,7 +21,6 @@ class SpriteRendererSimpleTest extends SpriteRendererTest {
                                 INTACT_COLOR,
                                 null,
                                 windowResolutionManager),
-                SpriteRendererTest::stackRendererAction,
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

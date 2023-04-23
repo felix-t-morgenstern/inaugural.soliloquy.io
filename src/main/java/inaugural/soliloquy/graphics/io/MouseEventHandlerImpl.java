@@ -42,8 +42,8 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
             Check.ifNull(event, "event type in buttonEvents");
         });
 
-        RenderableWithMouseEvents renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX
-                .getCapturingRenderableAtPoint(location, timestamp);
+        var renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.getCapturingRenderableAtPoint(location,
+                timestamp);
 
         if (renderable != registeredMouseOverRenderable) {
             if (registeredMouseOverRenderable != null) {

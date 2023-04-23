@@ -24,7 +24,6 @@ class LoopingMovingColorProviderImplSimpleTest extends LoopingMovingColorProvide
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
                                 Color.WHITE, null, windowResolutionManager),
-                LoopingMovingColorProviderImplTest::stackRendererAction,
                 LoopingMovingColorProviderImplTest::graphicsPreloaderLoadAction,
                 LoopingMovingColorProviderImplSimpleTest::closeAfterSomeTime);
     }

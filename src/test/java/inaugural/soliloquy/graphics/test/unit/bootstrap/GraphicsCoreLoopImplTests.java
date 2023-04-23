@@ -36,13 +36,13 @@ class GraphicsCoreLoopImplTests {
     private final long GLOBAL_TIMESTAMP = randomLong();
     private final FakeShaderFactory SHADER_FACTORY = new FakeShaderFactory();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
-    private final FakeRenderer RENDERER = new FakeRenderer();
+    @SuppressWarnings("rawtypes") private final Renderer MOCK_RENDERER = mock(Renderer.class);
     @SuppressWarnings("rawtypes")
-    private final List<Renderer> RENDERERS_WITH_SHADER = listOf(RENDERER);
+    private final List<Renderer> RENDERERS_WITH_SHADER = listOf(MOCK_RENDERER);
     private final FakeMesh MESH = new FakeMesh();
     private final Function<float[], Function<float[], Mesh>> MESH_FACTORY = f1 -> f2 -> MESH;
     @SuppressWarnings("rawtypes")
-    private final List<Renderer> RENDERERS_WITH_MESH = listOf(RENDERER);
+    private final List<Renderer> RENDERERS_WITH_MESH = listOf(MOCK_RENDERER);
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
@@ -561,8 +561,8 @@ class GraphicsCoreLoopImplTests {
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
 
-        assertSame(MESH, RENDERER.Mesh);
-        assertSame(SHADER_FACTORY.MostRecentlyCreated, RENDERER.Shader);
+        verify(MOCK_RENDERER).setMesh(MESH);
+        verify(MOCK_RENDERER).setShader(SHADER_FACTORY.MostRecentlyCreated);
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
         assertTrue(MOUSE_CURSOR.NumberOfTimesUpdateCursorCalled > 0);
     }

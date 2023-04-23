@@ -12,8 +12,9 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.*;
 
 /**
  * Test acceptance criteria:
@@ -45,7 +46,6 @@ class RectangleRendererTileTest extends RectangleRendererTest {
     public static void main(String[] args) {
         runTest(
                 RectangleRendererTileTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> RectangleRenderer.render(RectangleRenderable, timestamp),
                 () -> {
                     BACKGROUND_TEXTURE_ID_PROVIDER.ProvidedValue =
                             new ImageFactoryImpl(0.5f)
@@ -64,11 +64,12 @@ class RectangleRendererTileTest extends RectangleRendererTest {
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                 BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null,
-                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), RENDERING_STACK,
+                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), TopLevelStack,
                 RENDERING_BOUNDARIES);
 
-        return new ArrayList<Renderer>() {{
-            add(RectangleRenderer);
-        }};
+        Renderers.registerRenderer(RectangleRenderable.getInterfaceName(), RectangleRenderer);
+        TopLevelStack.add(RectangleRenderable);
+
+        return listOf(RectangleRenderer);
     }
 }

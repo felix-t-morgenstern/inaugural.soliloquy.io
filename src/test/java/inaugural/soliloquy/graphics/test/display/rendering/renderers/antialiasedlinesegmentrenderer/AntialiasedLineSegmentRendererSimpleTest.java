@@ -3,16 +3,15 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.antialiase
 import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 
 /**
@@ -34,7 +33,6 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
         runTest(
                 AntialiasedLineSegmentRendererSimpleTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
-                AntialiasedLineSegmentRendererSimpleTest::stackRendererAction,
                 () -> {},
                 AntialiasedLineSegmentRendererSimpleTest::closeAfterSomeTime
         );
@@ -47,34 +45,37 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
         AntialiasedLineSegmentRenderable1 = new AntialiasedLineSegmentRenderableImpl(
-                new FakeStaticProvider<>(Vertex.of(0.75f, 0.75f)),
-                new FakeStaticProvider<>(Vertex.of(0.25f, 0.25f)),
-                new FakeStaticProvider<>(0.000625f),
-                new FakeStaticProvider<>(Color.RED),
-                new FakeStaticProvider<>(0.1f),
-                new FakeStaticProvider<>(0.01f),
+                staticProvider(Vertex.of(0.75f, 0.75f)),
+                staticProvider(Vertex.of(0.25f, 0.25f)),
+                staticProvider(0.000625f),
+                staticProvider(Color.RED),
+                staticProvider(0.1f),
+                staticProvider(0.01f),
                 randomInt(),
                 java.util.UUID.randomUUID(),
-                RENDERING_STACK
+                TopLevelStack
         );
 
         AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
-                new FakeStaticProvider<>(Vertex.of(0.5f, 0.75f)),
-                new FakeStaticProvider<>(Vertex.of(0.5f, 0.25f)),
-                new FakeStaticProvider<>(0.1f),
-                new FakeStaticProvider<>(new Color(40, 0, 255)),
-                new FakeStaticProvider<>(0.05f),
-                new FakeStaticProvider<>(0.05f),
+                staticProvider(Vertex.of(0.5f, 0.75f)),
+                staticProvider(Vertex.of(0.5f, 0.25f)),
+                staticProvider(0.1f),
+                staticProvider(new Color(40, 0, 255)),
+                staticProvider(0.05f),
+                staticProvider(0.05f),
                 randomInt(),
                 java.util.UUID.randomUUID(),
-                RENDERING_STACK
+                TopLevelStack
         );
+
+        TopLevelStack.add(AntialiasedLineSegmentRenderable1);
+        TopLevelStack.add(AntialiasedLineSegmentRenderable2);
+        Renderers.registerRenderer(AntialiasedLineSegmentRenderable.class.getCanonicalName(),
+                AntialiasedLineSegmentRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return new ArrayList<Renderer>() {{
-            add(AntialiasedLineSegmentRenderer);
-        }};
+        return listOf(AntialiasedLineSegmentRenderer);
     }
 
     private static void stackRendererAction(long timestamp) {

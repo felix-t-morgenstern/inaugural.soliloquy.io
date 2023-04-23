@@ -4,12 +4,10 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimationImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
@@ -25,17 +23,18 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 class GlobalLoopingAnimationRendererTest extends DisplayTest {
     protected final static AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY =
             new AnimationFactory();
-    protected final static HashMap<Integer, AnimationFrameSnippet> FRAMES = new HashMap<>();
+    protected final static Map<Integer, AnimationFrameSnippet> FRAMES = mapOf();
     protected final static String TORCH_RELATIVE_LOCATION =
             "./src/test/resources/images/fixtures/animated_torch_numbered.png";
 
@@ -69,26 +68,24 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                                 colorShiftStackAggregator,
                         null);
 
-        return new ArrayList<Renderer>() {{
-            add(GlobalLoopingAnimationRenderer);
-        }};
+        return listOf(GlobalLoopingAnimationRenderer);
     }
 
     protected static void graphicsPreloaderLoadAction() {
-        Image renderableImage = new ImageFactoryImpl(0.5f)
+        var renderableImage = new ImageFactoryImpl(0.5f)
                 .make(new ImageDefinition(TORCH_RELATIVE_LOCATION, false));
-        for (int i = 0; i < NUMBER_OF_FRAMES; i++) {
-            FRAMES.put(FRAME_DURATION * i, new FakeAnimationFrameSnippet(renderableImage,
-                    FRAME_WIDTH * i, 0, FRAME_WIDTH * (i + 1), FRAME_HEIGHT, 0f, 0f));
+        for (var i = 0; i < NUMBER_OF_FRAMES; i++) {
+            FRAMES.put(FRAME_DURATION * i,
+                    makeSnippet(renderableImage, FRAME_WIDTH * i, 0, FRAME_WIDTH * (i + 1),
+                            FRAME_HEIGHT, 0f, 0f));
         }
-        long globalLoopingAnimationStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
+        var globalLoopingAnimationStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-        AnimationDefinition animationDefinition =
-                new AnimationDefinition("torch", MS_DURATION, FRAMES);
+        var animationDefinition = new AnimationDefinition("torch", MS_DURATION, FRAMES);
 
-        Animation animation = ANIMATION_FACTORY.make(animationDefinition);
+        var animation = ANIMATION_FACTORY.make(animationDefinition);
 
-        int periodModuloOffset =
+        var periodModuloOffset =
                 MS_DURATION - (int) (globalLoopingAnimationStartTimestamp % (MS_DURATION));
 
         GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
@@ -96,16 +93,20 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,
-                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, 0f, null),
-                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, Color.BLACK,
-                                null),
-                        new ArrayList<>(),
-                        new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
+                        staticNullProvider(0f),
+                        staticNullProvider(Color.BLACK),
+                        listOf(),
+                        staticProvider(new FloatBoxImpl(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
-                                MIDPOINT + (ANIMATION_HEIGHT / 2f)), null),
-                        0, java.util.UUID.randomUUID(), RENDERING_STACK, RENDERING_BOUNDARIES);
+                                MIDPOINT + (ANIMATION_HEIGHT / 2f))),
+                        0, java.util.UUID.randomUUID(), TopLevelStack, RENDERING_BOUNDARIES);
+
+        TopLevelStack.add(GlobalLoopingAnimationRenderable);
+        Renderers.registerRenderer(GlobalLoopingAnimationRenderable.class.getCanonicalName(),
+                GlobalLoopingAnimationRenderer);
+
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 
@@ -113,5 +114,51 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         CheckedExceptionWrapper.sleep(ms);
 
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+    }
+
+    private static AnimationFrameSnippet makeSnippet(Image renderableImage, int leftX, int topY,
+                                                     int rightX, int bottomY, float offsetX,
+                                                     float offsetY) {
+        return new AnimationFrameSnippet() {
+            @Override
+            public float offsetX() {
+                return offsetX;
+            }
+
+            @Override
+            public float offsetY() {
+                return offsetY;
+            }
+
+            @Override
+            public Image image() {
+                return renderableImage;
+            }
+
+            @Override
+            public int leftX() {
+                return leftX;
+            }
+
+            @Override
+            public int topY() {
+                return topY;
+            }
+
+            @Override
+            public int rightX() {
+                return rightX;
+            }
+
+            @Override
+            public int bottomY() {
+                return bottomY;
+            }
+
+            @Override
+            public String getInterfaceName() {
+                return AnimationFrameSnippet.class.getCanonicalName();
+            }
+        };
     }
 }

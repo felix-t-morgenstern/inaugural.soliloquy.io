@@ -18,18 +18,17 @@ import static org.lwjgl.glfw.GLFW.*;
 class MouseCursorImplSimpleTest extends MouseCursorImplTest {
     public static void main(String[] args) {
         runTest(MouseCursorImplTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> {},
                 MouseCursorImplSimpleTest::graphicsPreloaderLoadAction,
                 MouseCursorImplSimpleTest::actAndCloseAfterSomeTime);
     }
 
     protected static void graphicsPreloaderLoadAction() {
-        long standardArrowMouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-        long standardHandMouseCursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+        var standardArrowMouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+        var standardHandMouseCursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 
-        _mouseCursorProviders.put(Constants.STANDARD_ARROW_MOUSE_CURSOR_ID,
+        MouseCursorProviders.put(Constants.STANDARD_ARROW_MOUSE_CURSOR_ID,
                 new FakeStaticProvider<>(standardArrowMouseCursor));
-        _mouseCursorProviders.put(Constants.STANDARD_HAND_CURSOR_ID,
+        MouseCursorProviders.put(Constants.STANDARD_HAND_CURSOR_ID,
                 new FakeStaticProvider<>(standardHandMouseCursor));
     }
 

@@ -5,6 +5,7 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -20,10 +21,9 @@ class FiniteLinearMovingLocationProviderTestWithPausing
         extends FiniteLinearMovingLocationProviderDisplayTest {
     public static void main(String[] args) {
         runTest(FiniteLinearMovingLocationProviderDisplayTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> TextLineRenderer.render(TextLineRenderable, timestamp),
                 () -> {
-                    TextLineRenderable.Font =
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
+                    when(TextLineRenderable.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 FiniteLinearMovingLocationProviderTestWithPausing::closeAfterSomeTime);

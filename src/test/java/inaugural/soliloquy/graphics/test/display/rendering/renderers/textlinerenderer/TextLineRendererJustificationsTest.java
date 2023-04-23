@@ -2,22 +2,23 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinere
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.graphics.renderables.TextJustification;
+import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
+import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 
 class TextLineRendererJustificationsTest extends TextLineRendererTest {
     private final static float LEADING_ADJUSTMENT = 0.0f;
@@ -25,24 +26,21 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
     private final static String LINE_TEXT_CENTER = "This is center-aligned";
     private final static String LINE_TEXT_RIGHT = "This is right-aligned";
 
-    private static FakeTextLineRenderable TextLineRenderableLeft;
-    private static FakeTextLineRenderable TextLineRenderableCenter;
-    private static FakeTextLineRenderable TextLineRenderableRight;
+    private static TextLineRenderable TextLineRenderableLeft;
+    private static TextLineRenderable TextLineRenderableCenter;
+    private static TextLineRenderable TextLineRenderableRight;
 
     public static void main(String[] args) {
         runTest(
                 TextLineRendererJustificationsTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> {
-                    TextLineRenderer.render(TextLineRenderableLeft, timestamp);
-                    TextLineRenderer.render(TextLineRenderableCenter, timestamp);
-                    TextLineRenderer.render(TextLineRenderableRight, timestamp);
-                },
                 () -> {
-                    TextLineRenderableLeft.Font =
-                            TextLineRenderableCenter.Font =
-                                    TextLineRenderableRight.Font =
-                                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY);
+                    when(TextLineRenderableLeft.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderableCenter.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderableRight.getFont()).thenReturn(
+                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
@@ -83,31 +81,28 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         var renderingLocationCenter = Vertex.of(0.5f, 0.475f);
         var renderingLocationRight = Vertex.of(0.95f, 0.725f);
 
-        TextLineRenderableLeft = new FakeTextLineRenderable(null,
-                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_LEFT,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                null, null,
-                new FakeStaticProvider<>(renderingLocationLeft),
-                java.util.UUID.randomUUID());
-        TextLineRenderableCenter = new FakeTextLineRenderable(null,
-                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_CENTER,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                null, null,
-                new FakeStaticProvider<>(renderingLocationCenter),
-                java.util.UUID.randomUUID());
-        TextLineRenderableRight = new FakeTextLineRenderable(null,
-                new FakeStaticProvider<>(0.05f), 0f, LINE_TEXT_RIGHT,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                null, null,
-                new FakeStaticProvider<>(renderingLocationRight),
-                java.util.UUID.randomUUID());
+        TextLineRenderableLeft = mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_LEFT,
+                staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticProvider(renderingLocationLeft));
+        TextLineRenderableCenter =
+                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_CENTER,
+                        staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(),
+                        listOf(), staticProvider(renderingLocationCenter));
+        TextLineRenderableRight = mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_RIGHT,
+                staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticProvider(renderingLocationRight));
 
-        TextLineRenderableLeft.Justification = TextJustification.LEFT;
-        TextLineRenderableCenter.Justification = TextJustification.CENTER;
-        TextLineRenderableRight.Justification = TextJustification.RIGHT;
+        when(TextLineRenderableLeft.getJustification()).thenReturn(TextJustification.LEFT);
+        when(TextLineRenderableCenter.getJustification()).thenReturn(TextJustification.CENTER);
+        when(TextLineRenderableRight.getJustification()).thenReturn(TextJustification.RIGHT);
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
+
+        TopLevelStack.add(TextLineRenderableLeft);
+        TopLevelStack.add(TextLineRenderableCenter);
+        TopLevelStack.add(TextLineRenderableRight);
+        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

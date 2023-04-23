@@ -25,7 +25,6 @@ public class RectangleAnimatedBackgroundTextureIdProviderSimpleTest
                 windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
                         0f, Color.BLACK, null, windowResolutionManager
                 ),
-                RectangleAnimatedBackgroundTextureIdProviderTest::stackRendererAction,
                 RectangleAnimatedBackgroundTextureIdProviderTest::graphicsPreloaderLoadAction,
                 RectangleAnimatedBackgroundTextureIdProviderSimpleTest::closeAfterSomeTime
         );

@@ -15,19 +15,16 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeNetColorShifts;
 public class GlobalLoopingAnimationRendererColorRotationShiftTest
         extends GlobalLoopingAnimationRendererTest {
     public static void main(String[] args) {
-        FakeNetColorShifts netColorShifts = new FakeNetColorShifts();
+        var netColorShifts = new FakeNetColorShifts();
         // NB: This should be brought up to 0.6666667f
         netColorShifts.ColorRotationShift = 30.6666667f;
-        FakeColorShiftStackAggregator colorShiftStackAggregator =
-                new FakeColorShiftStackAggregator(netColorShifts);
+        var colorShiftStackAggregator = new FakeColorShiftStackAggregator(netColorShifts);
 
         runTest(
                 windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
                                 windowResolutionManager,
                                 colorShiftStackAggregator
                         ),
-                timestamp -> GlobalLoopingAnimationRenderer
-                        .render(GlobalLoopingAnimationRenderable, timestamp),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TEST_DURATION_MS)
         );

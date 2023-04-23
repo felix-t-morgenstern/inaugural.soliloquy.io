@@ -26,7 +26,6 @@ public class SpriteRendererBorderTest extends SpriteRendererTest {
                                 BORDER_COLOR,
                                 null,
                                 windowResolutionManager),
-                SpriteRendererTest::stackRendererAction,
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

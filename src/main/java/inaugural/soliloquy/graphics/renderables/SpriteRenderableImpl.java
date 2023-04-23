@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SpriteRenderableImpl extends AbstractImageAssetRenderable implements SpriteRenderable {
-    private Sprite _sprite;
+    private Sprite sprite;
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
@@ -49,7 +49,7 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
 
     @Override
     public Sprite getSprite() {
-        return _sprite;
+        return sprite;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                     "Sprite whose Image does not support mouse events to a SpriteRenderable " +
                     "which does support mouse events");
         }
-        _sprite = sprite;
+        this.sprite = sprite;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
 
     @Override
     protected boolean underlyingAssetSupportsMouseEvents() {
-        return _sprite.image().supportsMouseEventCapturing();
+        return sprite.image().supportsMouseEventCapturing();
     }
 
     @Override
@@ -81,6 +81,6 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
     @Override
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
-        return capturesMouseEventAtPoint(point, timestamp, () -> _sprite);
+        return capturesMouseEventAtPoint(point, timestamp, this::getSprite);
     }
 }

@@ -50,13 +50,13 @@ public class RTreeFacade {
     }
 
     public static class RenderableWithMouseEventsSearchObject {
-        public RenderableWithMouseEvents _renderableWithMouseEvents;
-        public FloatBox _renderingDimensions;
+        public RenderableWithMouseEvents renderableWithMouseEvents;
+        public FloatBox renderingDimensions;
 
         private RenderableWithMouseEventsSearchObject(RenderableWithMouseEvents renderable,
                                                       FloatBox renderingDimensions) {
-            _renderableWithMouseEvents = renderable;
-            _renderingDimensions = renderingDimensions;
+            renderableWithMouseEvents = renderable;
+            this.renderingDimensions = renderingDimensions;
         }
     }
 
@@ -67,10 +67,10 @@ public class RTreeFacade {
         public Rect2d getBBox(RenderableWithMouseEventsSearchObject
                                       renderableWithMouseEventsSearchObject) {
             return new Rect2d(
-                    renderableWithMouseEventsSearchObject._renderingDimensions.leftX(),
-                    renderableWithMouseEventsSearchObject._renderingDimensions.topY(),
-                    renderableWithMouseEventsSearchObject._renderingDimensions.rightX(),
-                    renderableWithMouseEventsSearchObject._renderingDimensions.bottomY()
+                    renderableWithMouseEventsSearchObject.renderingDimensions.leftX(),
+                    renderableWithMouseEventsSearchObject.renderingDimensions.topY(),
+                    renderableWithMouseEventsSearchObject.renderingDimensions.rightX(),
+                    renderableWithMouseEventsSearchObject.renderingDimensions.bottomY()
             );
         }
 

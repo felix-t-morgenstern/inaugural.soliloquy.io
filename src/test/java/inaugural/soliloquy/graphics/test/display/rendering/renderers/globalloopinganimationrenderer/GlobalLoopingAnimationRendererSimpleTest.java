@@ -16,8 +16,6 @@ class GlobalLoopingAnimationRendererSimpleTest extends GlobalLoopingAnimationRen
                                 windowResolutionManager,
                                 null
                         ),
-                timestamp -> GlobalLoopingAnimationRenderer
-                        .render(GlobalLoopingAnimationRenderable, timestamp),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TEST_DURATION_MS)
         );

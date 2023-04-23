@@ -17,7 +17,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 class AnimatedMouseCursorProviderSimpleTest extends AnimatedMouseCursorProviderTest {
     public static void main(String[] args) {
         runTest(MouseCursorImplTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> {},
                 AnimatedMouseCursorProviderTest::graphicsPreloaderLoadAction,
                 AnimatedMouseCursorProviderSimpleTest::actAndCloseAfterSomeTime);
     }

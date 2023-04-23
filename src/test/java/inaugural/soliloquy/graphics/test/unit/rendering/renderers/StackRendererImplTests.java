@@ -10,7 +10,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.graphics.rendering.renderers.Renderers;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.ArrayList;
@@ -25,20 +25,19 @@ class StackRendererImplTests {
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private RenderingBoundaries mockRenderingBoundaries;
-    @Mock private Renderer<Renderable> mockRenderer;
+    @Mock private Renderers mockRenderers;
     @Mock private RenderableStack mockStack;
 
     private StackRenderer stackRenderer;
 
     @BeforeEach
     void setUp() {
-        //noinspection unchecked
-        mockRenderer = (Renderer<Renderable>) mock(Renderer.class);
+        mockRenderers = mock(Renderers.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
         mockStack = mock(RenderableStack.class);
 
         stackRenderer =
-                new StackRendererImpl(mockRenderer, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP);
+                new StackRendererImpl(mockRenderers, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
@@ -46,7 +45,7 @@ class StackRendererImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new StackRendererImpl(null, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StackRendererImpl(mockRenderer, null, MOST_RECENT_TIMESTAMP));
+                () -> new StackRendererImpl(mockRenderers, null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -79,14 +78,14 @@ class StackRendererImplTests {
         stackRenderer.render(mockStack, MOST_RECENT_TIMESTAMP);
 
         InOrder inOrder =
-                inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockStack, mockRenderer);
+                inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockStack, mockRenderers);
         inOrder.verify(mockStack, times(1)).getRenderingBoundariesProvider();
         inOrder.verify(mockBoundariesProvider, times(1)).provide(MOST_RECENT_TIMESTAMP);
         inOrder.verify(mockRenderingBoundaries, times(1)).pushNewBoundaries(mockBoundaries);
         inOrder.verify(mockStack, times(1)).renderablesByZIndexRepresentation();
-        inOrder.verify(mockRenderer, times(1)).render(renderable2, MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderer, times(1)).render(renderable3, MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderer, times(1)).render(renderable1, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderers, times(1)).render(renderable2, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderers, times(1)).render(renderable3, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderers, times(1)).render(renderable1, MOST_RECENT_TIMESTAMP);
         inOrder.verify(mockRenderingBoundaries, times(1)).popMostRecentBoundaries();
     }
 

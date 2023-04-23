@@ -19,18 +19,17 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 class AnimatedMouseCursorProviderResetTest extends AnimatedMouseCursorProviderTest {
     public static void main(String[] args) {
         runTest(MouseCursorImplTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> {},
                 AnimatedMouseCursorProviderTest::graphicsPreloaderLoadAction,
                 AnimatedMouseCursorProviderResetTest::actAndCloseAfterSomeTime);
     }
 
     private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         MouseCursor.setMouseCursor(PROVIDER_ID);
-        _animatedMouseCursorProvider.reset(GLOBAL_CLOCK.globalTimestamp());
+        AnimatedMouseCursorProvider.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(1000);
 
-        _animatedMouseCursorProvider.reset(GLOBAL_CLOCK.globalTimestamp());
+        AnimatedMouseCursorProvider.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(3000);
 

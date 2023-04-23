@@ -14,19 +14,18 @@ import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.io.MouseListener;
 import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
-import soliloquy.specs.graphics.rendering.Shader;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.graphics.api.Constants.*;
+import static inaugural.soliloquy.graphics.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
+import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -54,7 +53,6 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final HashMap<Integer, Boolean> MOUSE_BUTTON_STATES;
 
     private long window = Long.MIN_VALUE;
-    private long frameTimestamp;
     private Vertex screenMouseLocation;
 
     public GraphicsCoreLoopImpl(String titlebar,
@@ -100,7 +98,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
 
         MOUSE_BUTTON_STATES = new HashMap<>();
-        for (int button : ALL_SUPPORTED_MOUSE_BUTTONS) {
+        for (var button : ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(button, false);
         }
     }
@@ -127,12 +125,12 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         glfwSetMouseButtonCallback(window, MOUSE_BUTTON_CALLBACK);
 
-        Shader shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
+        var shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
         shader.bind();
 
         RENDERERS_WITH_SHADER.forEach(renderer -> renderer.setShader(shader));
 
-        Mesh mesh = MESH_FACTORY.apply(MESH_VERTICES).apply(MESH_UV_COORDINATES);
+        var mesh = MESH_FACTORY.apply(MESH_VERTICES).apply(MESH_UV_COORDINATES);
 
         RENDERERS_WITH_MESH.forEach(renderer -> renderer.setMesh(mesh));
 
@@ -154,7 +152,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
+                var frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
                 readMouseButtonStates();
 
@@ -177,7 +175,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     }
 
     private void updateWindow() {
-        long prevWindow = window;
+        var prevWindow = window;
         window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(window, TITLEBAR);
         if (window == 0) {
             throw new IllegalStateException("Failed to create window");
@@ -194,34 +192,34 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private void setNewMouseCallbacks() {
         //noinspection resource
         glfwSetCursorPosCallback(window, (window, xPixel, yPixel) -> {
-            Pair<Integer, Integer> windowDimensions = updateWindowDimensionsInResolutionManager();
-            int width = windowDimensions.getItem1();
-            int height = windowDimensions.getItem2();
+            var windowDimensions = updateWindowDimensionsInResolutionManager();
+            var width = windowDimensions.getItem1();
+            var height = windowDimensions.getItem2();
 
-            float x = (float) xPixel / width;
-            float y = (float) yPixel / height;
+            var x = (float) xPixel / width;
+            var y = (float) yPixel / height;
 
             screenMouseLocation = Vertex.of(x, y);
         });
     }
 
     private void readMouseButtonStates() {
-        for (int mouseButton : Constants.ALL_SUPPORTED_MOUSE_BUTTONS) {
+        for (var mouseButton : Constants.ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(mouseButton,
                     glfwGetMouseButton(window, mouseButton) == GLFW_PRESS);
         }
     }
 
     private Pair<Integer, Integer> updateWindowDimensionsInResolutionManager() {
-        ByteBuffer widthBuffer = BufferUtils.createByteBuffer(4);
-        ByteBuffer heightBuffer = BufferUtils.createByteBuffer(4);
+        var widthBuffer = BufferUtils.createByteBuffer(4);
+        var heightBuffer = BufferUtils.createByteBuffer(4);
         glfwGetWindowSize(window, widthBuffer.asIntBuffer(), heightBuffer.asIntBuffer());
-        int width = widthBuffer.getInt(0);
-        int height = heightBuffer.getInt(0);
+        var width = widthBuffer.getInt(0);
+        var height = heightBuffer.getInt(0);
 
         WINDOW_RESOLUTION_MANAGER.updateDimensions(width, height);
 
-        return new Pair<>(width, height);
+        return Pair.of(width, height);
     }
 
     @Override

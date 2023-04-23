@@ -25,7 +25,6 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
 
     public static void main(String[] args) {
         runTest(MouseCursorImplTest::generateRenderablesAndRenderersWithMeshAndShader,
-                timestamp -> {},
                 MouseCursorImplStaticImageTest::graphicsPreloaderLoadAction,
                 MouseCursorImplStaticImageTest::actAndCloseAfterSomeTime);
     }
@@ -39,7 +38,7 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
                     ));
                 }},
                 new MouseCursorImageFactoryImpl(),
-                output -> _mouseCursorProviders.put(
+                output -> MouseCursorProviders.put(
                         output.relativeLocation(),
                         new StaticProviderImpl<>(
                                 randomUUID(),

@@ -7,6 +7,7 @@ import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.graphics.rendering.*;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
+import inaugural.soliloquy.graphics.rendering.renderers.RenderersImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
@@ -15,6 +16,7 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.io.MouseListener;
+import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -44,13 +46,13 @@ public class StackRendererTest extends DisplayTest {
         var frameTimer = mock(soliloquy.specs.graphics.rendering.timing.FrameTimer.class);
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
 
-        var renderer = new FakeRenderer();
+        var renderers = new RenderersImpl(TIMESTAMP_VALIDATOR);
 
         var renderableStack = new RenderableStackImpl();
 
         when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        var stackRenderer = new StackRendererImpl(renderer, RENDERING_BOUNDARIES, null);
+        var stackRenderer = new StackRendererImpl(renderers, RENDERING_BOUNDARIES, null);
 
         var spriteAxe07Width = 512;
         var spriteAxe07Height = 512;
@@ -122,7 +124,7 @@ public class StackRendererTest extends DisplayTest {
         //noinspection rawtypes
         List<Renderer> renderersWithShader = listOf(spriteRenderer);
 
-        renderer.SpriteRenderer = spriteRenderer;
+        renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), spriteRenderer);
         renderableStack.add(spriteRenderable1);
         renderableStack.add(spriteRenderable2);
         renderableStack.add(spriteRenderable3);

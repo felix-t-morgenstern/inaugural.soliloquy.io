@@ -24,7 +24,6 @@ class FiniteLinearMovingFloatBoxProviderPausingTest
         runTest(windowResolutionManager ->
                         generateRenderablesAndRenderersWithMeshAndShader(0f,
                                 INTACT_COLOR, null, windowResolutionManager),
-                FiniteLinearMovingProviderTest::stackRendererAction,
                 FiniteLinearMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 FiniteLinearMovingFloatBoxProviderPausingTest::closeAfterSomeTime);
     }
