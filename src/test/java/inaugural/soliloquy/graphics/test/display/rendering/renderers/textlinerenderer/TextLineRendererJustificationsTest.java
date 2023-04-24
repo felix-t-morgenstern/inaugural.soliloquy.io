@@ -99,9 +99,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        TopLevelStack.add(TextLineRenderableLeft);
-        TopLevelStack.add(TextLineRenderableCenter);
-        TopLevelStack.add(TextLineRenderableRight);
+        FirstChildStack.add(TextLineRenderableLeft);
+        FirstChildStack.add(TextLineRenderableCenter);
+        FirstChildStack.add(TextLineRenderableRight);
         Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

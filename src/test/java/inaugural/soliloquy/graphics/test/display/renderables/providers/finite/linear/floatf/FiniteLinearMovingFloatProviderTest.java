@@ -30,7 +30,7 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
                         null, null
                 ));
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
         Renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

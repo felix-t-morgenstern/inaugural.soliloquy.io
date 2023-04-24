@@ -44,12 +44,12 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
                 staticProvider(Vertex.of(0.25f, 0.25f)),
                 staticProvider(6f), (short) 0xAAAA, (short) 16,
                 staticProvider(new Color(18, 201, 159)),
-                1, java.util.UUID.randomUUID(), TopLevelStack);
+                1, java.util.UUID.randomUUID(), FirstChildStack);
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
 
         Renderers.registerRenderer(RasterizedLineSegmentRenderable.getInterfaceName(),
                 RasterizedLineSegmentRenderer);
-        TopLevelStack.add(RasterizedLineSegmentRenderable);
+        FirstChildStack.add(RasterizedLineSegmentRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(RasterizedLineSegmentRenderer);

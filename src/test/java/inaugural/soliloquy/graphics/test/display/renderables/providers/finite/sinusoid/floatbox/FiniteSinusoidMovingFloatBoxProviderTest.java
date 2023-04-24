@@ -42,7 +42,7 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
                         FLOAT_BOX_FACTORY
                 ));
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
         Renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

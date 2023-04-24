@@ -90,7 +90,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        TopLevelStack.add(TextLineRenderable);
+        FirstChildStack.add(TextLineRenderable);
         Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

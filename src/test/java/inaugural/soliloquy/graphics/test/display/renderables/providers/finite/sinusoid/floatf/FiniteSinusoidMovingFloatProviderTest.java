@@ -36,7 +36,7 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
                         null
                 ));
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
         Renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

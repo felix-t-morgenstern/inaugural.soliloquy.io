@@ -6,10 +6,7 @@ import inaugural.soliloquy.graphics.io.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.graphics.io.MouseEventHandlerImpl;
 import inaugural.soliloquy.graphics.io.MouseListenerImpl;
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
-import inaugural.soliloquy.graphics.rendering.FrameExecutorImpl;
-import inaugural.soliloquy.graphics.rendering.MeshImpl;
-import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
-import inaugural.soliloquy.graphics.rendering.WindowResolutionManagerImpl;
+import inaugural.soliloquy.graphics.rendering.*;
 import inaugural.soliloquy.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RenderersImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
@@ -32,7 +29,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,8 +37,7 @@ import static org.mockito.Mockito.when;
 public class DisplayTest {
     protected final static float[] MESH_DATA =
             new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
-    protected final static RenderingBoundaries RENDERING_BOUNDARIES =
-            mock(RenderingBoundaries.class);
+    protected final static RenderingBoundaries RENDERING_BOUNDARIES = new RenderingBoundariesImpl();
     protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     protected final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
@@ -59,6 +55,7 @@ public class DisplayTest {
 
     protected static FakeFrameTimer FrameTimer;
     protected static RenderableStack TopLevelStack;
+    protected static RenderableStack FirstChildStack;
     protected static Renderers Renderers;
     protected static MouseCursor MouseCursor = new FakeMouseCursor();
     protected static MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
@@ -78,8 +75,7 @@ public class DisplayTest {
         Renderers = new RenderersImpl(TIMESTAMP_VALIDATOR);
 
         var stackRenderer = new StackRendererImpl(Renderers, RENDERING_BOUNDARIES, null);
-
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+        Renderers.registerStackRenderer(stackRenderer);
 
         FakeGraphicsPreloader graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -90,6 +86,9 @@ public class DisplayTest {
         var mouseListener = new MouseListenerImpl(mouseEventHandler);
 
         TopLevelStack = new RenderableStackImpl();
+        FirstChildStack =
+                new RenderableStackImpl(java.util.UUID.randomUUID(), 0, WHOLE_SCREEN_PROVIDER,
+                        TopLevelStack);
 
         var frameExecutor = new FrameExecutorImpl(TopLevelStack, stackRenderer, 100);
 

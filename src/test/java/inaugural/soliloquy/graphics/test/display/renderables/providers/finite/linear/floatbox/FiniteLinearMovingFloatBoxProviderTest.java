@@ -32,7 +32,7 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
                         java.util.UUID.randomUUID(), renderingDimensionsAtTimes, null, null);
         SpriteRenderable.setRenderingDimensionsProvider(finiteLinearMovingFloatBoxProvider);
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
         Renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

@@ -96,7 +96,7 @@ public class RenderableStackImpl implements RenderableStack {
     @Override
     public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> providerAtTime)
             throws IllegalArgumentException, UnsupportedOperationException {
-        if (renderingBoundariesProvider == WHOLE_SCREEN_PROVIDER) {
+        if (CONTAINING_STACK == null) {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setRenderingBoundariesProvider: cannot assign new " +
                             "rendering boundaries for top-level stack");

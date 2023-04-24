@@ -8,8 +8,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import soliloquy.specs.graphics.renderables.*;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.renderers.Renderers;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +22,9 @@ import static org.mockito.Mockito.*;
 public class RenderersImplTests {
     private final Long TIMESTAMP = randomLong();
 
+    @Mock private StackRenderer mockStackRenderer;
     @Mock private AntialiasedLineSegmentRenderable mockAntialiasedLineSegmentRenderable;
+    @Mock private RenderableStack mockRenderableStack;
     @Mock private Renderer<AntialiasedLineSegmentRenderable> mockAntialiasedLineSegmentRenderer;
     @Mock private Renderer<ImageAssetSetRenderable> mockImageAssetSetRenderer;
     @Mock private Renderer<TextLineRenderable> mockTextLineRenderer;
@@ -44,22 +48,46 @@ public class RenderersImplTests {
     }
 
     @Test
+    public void testRenderStack() {
+        renderers.registerStackRenderer(mockStackRenderer);
+        renderers.render(mockRenderableStack, TIMESTAMP);
+
+        verify(mockStackRenderer).render(mockRenderableStack, TIMESTAMP);
+    }
+
+    @Test
+    public void testRenderStackWithoutStackRendererRegistered() {
+        assertThrows(IllegalStateException.class,
+                () -> renderers.render(mockRenderableStack, randomLong()));
+    }
+
+    @Test
+    public void testRegisterStackRendererWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class, () -> renderers.registerStackRenderer(null));
+    }
+
+    @Test
     public void testRegisterRendererAndRender() {
-        renderers.registerRenderer(AntialiasedLineSegmentRenderable.class.getCanonicalName(), mockAntialiasedLineSegmentRenderer);
-        renderers.registerRenderer(ImageAssetSetRenderable.class.getCanonicalName(), mockImageAssetSetRenderer);
-        renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), mockTextLineRenderer);
+        renderers.registerRenderer(AntialiasedLineSegmentRenderable.class.getCanonicalName(),
+                mockAntialiasedLineSegmentRenderer);
+        renderers.registerRenderer(ImageAssetSetRenderable.class.getCanonicalName(),
+                mockImageAssetSetRenderer);
+        renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(),
+                mockTextLineRenderer);
 
         renderers.render(mockAntialiasedLineSegmentRenderable, TIMESTAMP);
 
         verify(mockTimestampValidator).validateTimestamp(TIMESTAMP);
-        verify(mockAntialiasedLineSegmentRenderer).render(mockAntialiasedLineSegmentRenderable, TIMESTAMP);
+        verify(mockAntialiasedLineSegmentRenderer).render(mockAntialiasedLineSegmentRenderable,
+                TIMESTAMP);
     }
 
     @Test
     public void testRenderUnregisteredRenderableType() {
         var unregisteredRenderable = mock(CircleRenderable.class);
 
-        assertThrows(IllegalArgumentException.class, () -> renderers.render(unregisteredRenderable, randomLong()));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderers.render(unregisteredRenderable, randomLong()));
     }
 
     @Test
@@ -69,9 +97,11 @@ public class RenderersImplTests {
 
     @Test
     public void testRenderWithInvalidTimestamp() {
-        doThrow(new IllegalArgumentException()).when(mockTimestampValidator).validateTimestamp(anyLong());
+        doThrow(new IllegalArgumentException()).when(mockTimestampValidator)
+                .validateTimestamp(anyLong());
 
-        assertThrows(IllegalArgumentException.class, () -> renderers.render(mock(Renderable.class), randomLong()));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderers.render(mock(Renderable.class), randomLong()));
     }
 
     @Test

@@ -44,9 +44,9 @@ public class SpriteRendererTest extends DisplayTest {
 
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 0,
-                java.util.UUID.randomUUID(), TopLevelStack, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 windowResolutionManager,

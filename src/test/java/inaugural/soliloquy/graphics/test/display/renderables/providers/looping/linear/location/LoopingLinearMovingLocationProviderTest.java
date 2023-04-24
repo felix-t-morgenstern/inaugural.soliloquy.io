@@ -80,7 +80,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
                         windowResolutionManager, null);
 
-        TopLevelStack.add(TextLineRenderable);
+        FirstChildStack.add(TextLineRenderable);
         Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

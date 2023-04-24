@@ -29,11 +29,6 @@ public class FakeRenderingBoundaries implements RenderingBoundaries {
     }
 
     @Override
-    public Iterator<FloatBox> iterator() {
-        return null;
-    }
-
-    @Override
     public String getInterfaceName() {
         return null;
     }

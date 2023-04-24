@@ -29,7 +29,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
                         borderColorProviderValues, hueMovementIsClockwise, null, null);
         SpriteRenderable.setBorderColorProvider(finiteLinearMovingColorProvider);
 
-        TopLevelStack.add(SpriteRenderable);
+        FirstChildStack.add(SpriteRenderable);
         Renderers.registerRenderer(soliloquy.specs.graphics.renderables.SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

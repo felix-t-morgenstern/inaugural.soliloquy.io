@@ -92,14 +92,14 @@ class FiniteAnimationRendererTest extends DisplayTest {
                         MIDPOINT + (ANIMATION_HEIGHT / 2f))),
                 123,
                 java.util.UUID.randomUUID(),
-                TopLevelStack,
+                FirstChildStack,
                 RENDERING_BOUNDARIES,
                 timestamp + MS_PADDING,
                 null,
                 null
         );
 
-        TopLevelStack.add(FiniteAnimationRenderable);
+        FirstChildStack.add(FiniteAnimationRenderable);
         Renderers.registerRenderer(FiniteAnimationRenderable.class.getCanonicalName(),
                 FiniteAnimationRenderer);
 

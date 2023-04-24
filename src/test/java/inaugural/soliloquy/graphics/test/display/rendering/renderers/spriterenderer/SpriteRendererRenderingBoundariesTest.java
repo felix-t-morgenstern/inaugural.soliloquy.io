@@ -7,7 +7,6 @@ import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
-import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -31,10 +30,10 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
     public static void main(String[] args) {
         runTest(
                 windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
-                                0f,
-                                INTACT_COLOR,
-                                null,
-                                windowResolutionManager),
+                        0f,
+                        INTACT_COLOR,
+                        null,
+                        windowResolutionManager),
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 SpriteRendererRenderingBoundariesTest::closeAfterSomeTime);
     }
@@ -44,23 +43,27 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.0f, 0.625f, 0.625f));
+        FirstChildStack.setRenderingBoundariesProvider(
+                staticProvider(new FloatBoxImpl(0.0f, 0.0f, 0.625f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.375f, 0.0f, 1.0f, 0.625f));
+        FirstChildStack.setRenderingBoundariesProvider(
+                staticProvider(new FloatBoxImpl(0.375f, 0.0f, 1.0f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.375f, 0.375f, 1.0f, 1.0f));
+        FirstChildStack.setRenderingBoundariesProvider(
+                staticProvider(new FloatBoxImpl(0.375f, 0.375f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(new FloatBoxImpl(0.0f, 0.375f, 0.625f, 1.0f));
+        FirstChildStack.setRenderingBoundariesProvider(
+                staticProvider(new FloatBoxImpl(0.0f, 0.375f, 0.625f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

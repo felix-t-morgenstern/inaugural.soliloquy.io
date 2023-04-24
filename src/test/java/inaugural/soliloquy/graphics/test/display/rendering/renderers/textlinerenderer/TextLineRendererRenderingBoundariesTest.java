@@ -95,7 +95,7 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        TopLevelStack.add(TextLineRenderable);
+        FirstChildStack.add(TextLineRenderable);
         Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
@@ -106,27 +106,27 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(
-                new FloatBoxImpl(0.0f, 0.0f, 0.5f, 0.5f));
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+                new FloatBoxImpl(0.0f, 0.0f, 0.5f, 0.5f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(
-                new FloatBoxImpl(0.5f, 0.0f, 1.0f, 0.5f));
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+                new FloatBoxImpl(0.5f, 0.0f, 1.0f, 0.5f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(
-                new FloatBoxImpl(0.5f, 0.5f, 1.0f, 1.0f));
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+                new FloatBoxImpl(0.5f, 0.5f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(
-                new FloatBoxImpl(0.0f, 0.5f, 0.5f, 1.0f));
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+                new FloatBoxImpl(0.0f, 0.5f, 0.5f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        when(RENDERING_BOUNDARIES.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+        FirstChildStack.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

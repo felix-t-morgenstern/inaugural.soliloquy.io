@@ -3,14 +3,18 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.graphics.renderables.Renderable;
+import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.renderers.Renderers;
+import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class RenderersImpl implements Renderers {
+    private StackRenderer stackRenderer;
+
     private final Map<String, Renderer<? extends Renderable>> RENDERERS;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
@@ -29,9 +33,25 @@ public class RenderersImpl implements Renderers {
     }
 
     @Override
+    public void registerStackRenderer(StackRenderer stackRenderer) {
+        this.stackRenderer = Check.ifNull(stackRenderer, "stackRenderer");
+    }
+
+    @Override
     public <T extends Renderable> void render(T renderable, long timestamp)
             throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+
+        if (renderable instanceof RenderableStack renderableStack) {
+            if (stackRenderer == null) {
+                throw new IllegalStateException(
+                        "RenderersImpl.render: cannot render RenderableStacks without " +
+                                "StackRenderer registered");
+            }
+            stackRenderer.render(renderableStack, timestamp);
+            return;
+        }
+
         var renderableInterfaceName = renderable.getInterfaceName();
         //noinspection unchecked
         var renderer = (Renderer<T>) RENDERERS.get(renderableInterfaceName);
