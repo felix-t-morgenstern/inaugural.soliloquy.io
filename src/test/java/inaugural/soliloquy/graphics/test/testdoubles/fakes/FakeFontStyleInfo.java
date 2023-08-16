@@ -1,6 +1,6 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.valueobjects.Coordinate;
+import soliloquy.specs.common.valueobjects.Coordinate2d;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
@@ -18,7 +18,7 @@ public class FakeFontStyleInfo implements FontStyleInfo {
     }
 
     @Override
-    public Coordinate textureDimensions() {
+    public Coordinate2d textureDimensions() {
         return null;
     }
 

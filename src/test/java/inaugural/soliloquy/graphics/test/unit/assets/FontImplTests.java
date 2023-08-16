@@ -1440,25 +1440,25 @@ class FontImplTests {
     void testDimensionsAndWidthToHeightRatios() {
         int maxDimensions = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
-        assertTrue(Font.plain().textureDimensions().x() <= maxDimensions);
+        assertTrue(Font.plain().textureDimensions().X <= maxDimensions);
         assertEquals(Font.plain().textureWidthToHeightRatio(),
-                Font.plain().textureDimensions().x() /
-                        (float) Font.plain().textureDimensions().y());
+                Font.plain().textureDimensions().X /
+                        (float) Font.plain().textureDimensions().Y);
 
-        assertTrue(Font.italic().textureDimensions().x() <= maxDimensions);
+        assertTrue(Font.italic().textureDimensions().X <= maxDimensions);
         assertEquals(Font.italic().textureWidthToHeightRatio(),
-                Font.italic().textureDimensions().x() /
-                        (float) Font.italic().textureDimensions().y());
+                Font.italic().textureDimensions().X /
+                        (float) Font.italic().textureDimensions().Y);
 
-        assertTrue(Font.bold().textureDimensions().x() <= maxDimensions);
+        assertTrue(Font.bold().textureDimensions().X <= maxDimensions);
         assertEquals(Font.bold().textureWidthToHeightRatio(),
-                Font.bold().textureDimensions().x() /
-                        (float) Font.bold().textureDimensions().y());
+                Font.bold().textureDimensions().X /
+                        (float) Font.bold().textureDimensions().Y);
 
-        assertTrue(Font.boldItalic().textureDimensions().x() <= maxDimensions);
+        assertTrue(Font.boldItalic().textureDimensions().X <= maxDimensions);
         assertEquals(Font.boldItalic().textureWidthToHeightRatio(),
-                Font.boldItalic().textureDimensions().x() /
-                        (float) Font.boldItalic().textureDimensions().y());
+                Font.boldItalic().textureDimensions().X /
+                        (float) Font.boldItalic().textureDimensions().Y);
     }
 
     @Test

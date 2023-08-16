@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.assets;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.Coordinate;
+import soliloquy.specs.common.valueobjects.Coordinate2d;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
@@ -14,11 +14,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.opengl.GL11.*;
 
 public class FontImpl implements Font {
@@ -42,8 +42,7 @@ public class FontImpl implements Font {
     private final FontStyleInfoImpl BOLD;
     private final FontStyleInfoImpl BOLD_ITALIC;
 
-    public FontImpl(FontDefinition fontDefinition,
-                    FloatBoxFactory floatBoxFactory) {
+    public FontImpl(FontDefinition fontDefinition, FloatBoxFactory floatBoxFactory) {
         validateFontDefinition(fontDefinition);
         Check.ifNull(floatBoxFactory, "floatBoxFactory");
 
@@ -55,12 +54,12 @@ public class FontImpl implements Font {
 
 
 
-        java.awt.Font fontFromFile = loadFontFromFile(fontDefinition.relativeLocation(),
+        var fontFromFile = loadFontFromFile(fontDefinition.relativeLocation(),
                 fontDefinition.maxLosslessFontSize());
-        java.awt.Font fontFromFileItalic = fontFromFile.deriveFont(java.awt.Font.ITALIC);
-        java.awt.Font fontFromFileBold = fontFromFile.deriveFont(java.awt.Font.BOLD);
-        java.awt.Font fontFromFileBoldItalic = fontFromFile.deriveFont(
-                java.awt.Font.ITALIC | java.awt.Font.BOLD);
+        var fontFromFileItalic = fontFromFile.deriveFont(java.awt.Font.ITALIC);
+        var fontFromFileBold = fontFromFile.deriveFont(java.awt.Font.BOLD);
+        var fontFromFileBoldItalic =
+                fontFromFile.deriveFont(java.awt.Font.ITALIC | java.awt.Font.BOLD);
 
 
 
@@ -82,8 +81,7 @@ public class FontImpl implements Font {
     private void validateFontDefinition(FontDefinition fontDefinition) {
         Check.ifNull(fontDefinition, "fontDefinition");
         Check.ifNullOrEmpty(fontDefinition.id(), "fontDefinition.id()");
-        Check.ifNullOrEmpty(fontDefinition.relativeLocation(),
-                "fontDefinition.relativeLocation()");
+        Check.ifNullOrEmpty(fontDefinition.relativeLocation(), "fontDefinition.relativeLocation()");
         Check.throwOnLteZero(fontDefinition.maxLosslessFontSize(),
                 "fontDefinition.maxLosslessFontSize()");
         Check.throwOnLtValue(fontDefinition.leadingAdjustment(), 0f,
@@ -91,14 +89,11 @@ public class FontImpl implements Font {
         Check.throwOnGteValue(fontDefinition.leadingAdjustment(), 1f,
                 "fontDefinition.leadingAdjustment()");
         Check.ifNull(fontDefinition.plain(), "fontDefinition.plain()");
-        validateFontStyleDefinition(fontDefinition.plain(),
-                fontDefinition.leadingAdjustment());
+        validateFontStyleDefinition(fontDefinition.plain(), fontDefinition.leadingAdjustment());
         Check.ifNull(fontDefinition.italic(), "fontDefinition.italic()");
-        validateFontStyleDefinition(fontDefinition.italic(),
-                fontDefinition.leadingAdjustment());
+        validateFontStyleDefinition(fontDefinition.italic(), fontDefinition.leadingAdjustment());
         Check.ifNull(fontDefinition.bold(), "fontDefinition.bold()");
-        validateFontStyleDefinition(fontDefinition.bold(),
-                fontDefinition.leadingAdjustment());
+        validateFontStyleDefinition(fontDefinition.bold(), fontDefinition.leadingAdjustment());
         Check.ifNull(fontDefinition.boldItalic(), "fontDefinition.boldItalic()");
         validateFontStyleDefinition(fontDefinition.boldItalic(),
                 fontDefinition.leadingAdjustment());
@@ -115,8 +110,7 @@ public class FontImpl implements Font {
         Check.ifNull(fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift(),
                 "fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift()");
         Check.throwOnGteValue(
-                leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
-                1f,
+                leadingAdjustment + fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), 1f,
                 "sum of leadingAdjustment and " +
                         "fontStyleDefinition.additionalGlyphVerticalTextureSpacing()");
     }
@@ -125,22 +119,17 @@ public class FontImpl implements Font {
                                             FontStyleDefinition fontStyleDefinition,
                                             float leadingAdjustment,
                                             FloatBoxFactory floatBoxFactory) {
-        Map<Character, FloatBox> glyphs = new HashMap<>();
+        Map<Character, FloatBox> glyphs = mapOf();
 
-        FontImageInfo textureInfo = generateFontAsset(
-                fontFromFile,
+        var textureInfo = generateFontAsset(fontFromFile,
                 fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(),
                 fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
                 fontStyleDefinition.glyphwiseAdditionalLeftBoundaryShift(),
-                fontStyleDefinition.additionalGlyphVerticalTextureSpacing(),
-                leadingAdjustment,
-                glyphs,
-                floatBoxFactory);
+                fontStyleDefinition.additionalGlyphVerticalTextureSpacing(), leadingAdjustment,
+                glyphs, floatBoxFactory);
 
-        return new FontStyleInfoImpl(
-                glyphs,
-                textureInfo.ImageDimensions,
-                textureInfo.ImageDimensions.x() / (float) textureInfo.ImageDimensions.y(),
+        return new FontStyleInfoImpl(glyphs, textureInfo.ImageDimensions,
+                textureInfo.ImageDimensions.X / (float) textureInfo.ImageDimensions.Y,
                 fontStyleDefinition.additionalGlyphHorizontalTextureSpacing(),
                 fontStyleDefinition.glyphwiseAdditionalHorizontalTextureSpacing(),
                 textureInfo.TextureId
@@ -150,8 +139,8 @@ public class FontImpl implements Font {
     private static java.awt.Font loadFontFromFile(String relativeLocation,
                                                   float maxLosslessFontSize) {
         try {
-            return java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
-                    new File(relativeLocation)).deriveFont(maxLosslessFontSize);
+            return java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File(relativeLocation))
+                    .deriveFont(maxLosslessFontSize);
         }
         catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
@@ -160,49 +149,45 @@ public class FontImpl implements Font {
 
     private static FontImageInfo generateFontAsset(java.awt.Font font,
                                                    float additionalGlyphHorizontalTextureSpacing,
-                                                   Map<Character, Float>
-                                                           glyphwiseAdditionalHorizontalTextureSpacing,
-                                                   Map<Character, Float>
-                                                           glyphwiseAdditionalLeftBoundaryShift,
+                                                   Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
+                                                   Map<Character, Float> glyphwiseAdditionalLeftBoundaryShift,
                                                    float additionalGlyphVerticalTextureSpacing,
                                                    float leadingAdjustment,
                                                    Map<Character, FloatBox> glyphs,
                                                    FloatBoxFactory floatBoxFactory) {
-        GraphicsConfiguration graphicsConfiguration =
+        var graphicsConfiguration =
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
                         .getDefaultConfiguration();
 
-        Graphics2D graphics2d = graphicsConfiguration.createCompatibleImage(1, 1,
-                Transparency.TRANSLUCENT).createGraphics();
+        var graphics2d = graphicsConfiguration.createCompatibleImage(1, 1, Transparency.TRANSLUCENT)
+                .createGraphics();
 
         graphics2d.setFont(font);
 
-        FontMetrics fontMetrics = graphics2d.getFontMetrics();
+        var fontMetrics = graphics2d.getFontMetrics();
 
-        FontImageInfo fontImageInfo = loopOverCharacters(fontMetrics,
-                additionalGlyphHorizontalTextureSpacing,
+        var fontImageInfo = loopOverCharacters(fontMetrics, additionalGlyphHorizontalTextureSpacing,
                 glyphwiseAdditionalHorizontalTextureSpacing, glyphwiseAdditionalLeftBoundaryShift,
                 additionalGlyphVerticalTextureSpacing, leadingAdjustment, null);
 
-        BufferedImage bufferedImage = graphics2d.getDeviceConfiguration()
-                .createCompatibleImage(fontImageInfo.ImageDimensions.x(),
-                        fontImageInfo.ImageDimensions.y(),
-                        Transparency.TRANSLUCENT);
+        var bufferedImage = graphics2d.getDeviceConfiguration()
+                .createCompatibleImage(fontImageInfo.ImageDimensions.X,
+                        fontImageInfo.ImageDimensions.Y, Transparency.TRANSLUCENT);
 
-        int textureId = glGenTextures();
+        var textureId = glGenTextures();
 
-        ByteBuffer generatedImage = generateImage(bufferedImage, font, fontMetrics,
-                fontImageInfo.ImageDimensions.x(), fontImageInfo.ImageDimensions.y(),
-                additionalGlyphHorizontalTextureSpacing,
-                glyphwiseAdditionalHorizontalTextureSpacing, glyphwiseAdditionalLeftBoundaryShift,
-                additionalGlyphVerticalTextureSpacing, leadingAdjustment,
-                fontImageInfo.GlyphHeight, fontImageInfo.GlyphDescent, glyphs, floatBoxFactory);
+        var generatedImage =
+                generateImage(bufferedImage, font, fontMetrics, fontImageInfo.ImageDimensions.X,
+                        fontImageInfo.ImageDimensions.Y, additionalGlyphHorizontalTextureSpacing,
+                        glyphwiseAdditionalHorizontalTextureSpacing,
+                        glyphwiseAdditionalLeftBoundaryShift, additionalGlyphVerticalTextureSpacing,
+                        leadingAdjustment, fontImageInfo.GlyphHeight, fontImageInfo.GlyphDescent,
+                        glyphs, floatBoxFactory);
 
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fontImageInfo.ImageDimensions.x(),
-                fontImageInfo.ImageDimensions.y(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                generatedImage);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fontImageInfo.ImageDimensions.X,
+                fontImageInfo.ImageDimensions.Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, generatedImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -216,24 +201,24 @@ public class FontImpl implements Font {
             Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
             Map<Character, Float> glyphwiseAdditionalLeftBoundaryShift,
             float additionalGlyphVerticalTextureSpacing, float leadingAdjustment,
-            Function<Character, Function<Integer, Function<Integer, Function<Float, Function<Float,
-                    Consumer<Float>>>>>> glyphFunction) {
-        int widthThusFar = 0;
-        int rowNumber = 0;
-        float leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
-        float glyphHeight = fontMetrics.getHeight() - leading;
-        float glyphDescent = fontMetrics.getMaxDescent();
+            Function<Character, Function<Integer, Function<Integer, Function<Float,
+                    Function<Float, Consumer<Float>>>>>> glyphFunction) {
+        var widthThusFar = 0;
+        var rowNumber = 0;
+        var leading = fontMetrics.getLeading() + (leadingAdjustment * fontMetrics.getHeight());
+        var glyphHeight = fontMetrics.getHeight() - leading;
+        var glyphDescent = fontMetrics.getMaxDescent();
 
         float charLeftShift;
-        float nextCharLeftShift = 0f;
+        var nextCharLeftShift = 0f;
 
-        for (int i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
+        for (var i = ASCII_CHAR_SPACE; i < NUMBER_EXTENDED_ASCII_CHARS; i++) {
             if (i == ASCII_CHAR_DELETE) {
                 continue;
             }
 
-            char character = (char) i;
-            char nextCharacter = (char) (i + 1);
+            var character = (char) i;
+            var nextCharacter = (char) (i + 1);
 
             charLeftShift = nextCharLeftShift;
             if (glyphwiseAdditionalLeftBoundaryShift.containsKey(nextCharacter) &&
@@ -244,15 +229,15 @@ public class FontImpl implements Font {
                 nextCharLeftShift = 0f;
             }
 
-            float glyphWidth = fontMetrics.charWidth(character);
+            var glyphWidth = fontMetrics.charWidth(character);
             if (glyphwiseAdditionalHorizontalTextureSpacing != null &&
                     glyphwiseAdditionalHorizontalTextureSpacing.containsKey(character)) {
                 glyphWidth +=
                         (glyphHeight * glyphwiseAdditionalHorizontalTextureSpacing.get(character));
             }
 
-            float glyphWidthWithTextureSpacing = glyphWidth +
-                    (glyphHeight * additionalGlyphHorizontalTextureSpacing);
+            var glyphWidthWithTextureSpacing =
+                    glyphWidth + (glyphHeight * additionalGlyphHorizontalTextureSpacing);
 
             if (widthThusFar + glyphWidthWithTextureSpacing > MAXIMUM_TEXTURE_DIMENSION_SIZE) {
                 widthThusFar = 0;
@@ -270,35 +255,27 @@ public class FontImpl implements Font {
             widthThusFar += glyphWidthWithTextureSpacing + 0.5f;
         }
         // NB: The 0.5f factor is to ensure that the casting rounds up, so no glyph pixels are lost
-        int imageHeight = (int)
-                ((glyphHeight * (1f + additionalGlyphVerticalTextureSpacing) * (rowNumber + 1))
-                        - (glyphHeight * additionalGlyphVerticalTextureSpacing)
-                        + 0.5f);
+        var imageHeight = (int) ((glyphHeight * (1f + additionalGlyphVerticalTextureSpacing) *
+                (rowNumber + 1)) - (glyphHeight * additionalGlyphVerticalTextureSpacing) + 0.5f);
 
 
 
-        return new FontImageInfo(Coordinate.of(
-                rowNumber > 0 ? MAXIMUM_TEXTURE_DIMENSION_SIZE : widthThusFar,
-                imageHeight),
-                glyphHeight,
-                glyphDescent);
+        return new FontImageInfo(
+                Coordinate2d.of(rowNumber > 0 ? MAXIMUM_TEXTURE_DIMENSION_SIZE : widthThusFar,
+                        imageHeight), glyphHeight, glyphDescent);
     }
 
     private static ByteBuffer generateImage(BufferedImage bufferedImage, java.awt.Font font,
-                                            FontMetrics fontMetrics,
-                                            int imageWidth, int imageHeight,
+                                            FontMetrics fontMetrics, int imageWidth,
+                                            int imageHeight,
                                             float additionalGlyphHorizontalTextureSpacing,
-                                            Map<Character, Float>
-                                                    glyphwiseAdditionalHorizontalTextureSpacing,
-                                            Map<Character, Float>
-                                                    glyphwiseAdditionalLeftBoundaryShift,
+                                            Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
+                                            Map<Character, Float> glyphwiseAdditionalLeftBoundaryShift,
                                             float additionalGlyphVerticalTextureSpacing,
-                                            float leadingAdjustment,
-                                            float glyphHeight,
-                                            float glyphDescent,
-                                            Map<Character, FloatBox> glyphs,
+                                            float leadingAdjustment, float glyphHeight,
+                                            float glyphDescent, Map<Character, FloatBox> glyphs,
                                             FloatBoxFactory floatBoxFactory) {
-        Graphics2D graphics2d = (Graphics2D) bufferedImage.getGraphics();
+        var graphics2d = (Graphics2D) bufferedImage.getGraphics();
         graphics2d.setFont(font);
         graphics2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -315,50 +292,43 @@ public class FontImpl implements Font {
     private static void drawCharacters(Graphics2D graphics2d, FontMetrics fontMetrics,
                                        int imageWidth, int imageHeight,
                                        float additionalGlyphHorizontalTextureSpacing,
-                                       Map<Character, Float>
-                                               glyphwiseAdditionalHorizontalTextureSpacing,
+                                       Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
                                        Map<Character, Float> glyphwiseAdditionalLeftBoundaryShift,
                                        float additionalGlyphVerticalTextureSpacing,
-                                       float leadingAdjustment,
-                                       float glyphHeight,
-                                       float glyphDescent,
-                                       Map<Character, FloatBox> glyphs,
+                                       float leadingAdjustment, float glyphHeight,
+                                       float glyphDescent, Map<Character, FloatBox> glyphs,
                                        FloatBoxFactory floatBoxFactory) {
-        float imageWidthFloat = (float) imageWidth;
-        float imageHeightFloat = (float) imageHeight;
-        float rowHeightInclTextureSpacing =
+        var imageWidthFloat = (float) imageWidth;
+        var imageHeightFloat = (float) imageHeight;
+        var rowHeightInclTextureSpacing =
                 (glyphHeight * (1f + additionalGlyphVerticalTextureSpacing));
-        float rowTextureSpacing = (additionalGlyphVerticalTextureSpacing * glyphHeight);
-        float glyphHeightInImage = glyphHeight / imageHeightFloat;
+        var rowTextureSpacing = (additionalGlyphVerticalTextureSpacing * glyphHeight);
+        var glyphHeightInImage = glyphHeight / imageHeightFloat;
         loopOverCharacters(fontMetrics, additionalGlyphHorizontalTextureSpacing,
                 glyphwiseAdditionalHorizontalTextureSpacing, glyphwiseAdditionalLeftBoundaryShift,
                 additionalGlyphVerticalTextureSpacing, leadingAdjustment,
-                character -> widthThusFar -> rowNumber -> glyphWidth -> charLeftShift ->
-                        nextCharLeftShift -> {
-                            float leftX = (widthThusFar / imageWidthFloat)
-                                    - (charLeftShift * glyphHeightInImage);
-                            float topY =
-                                    (rowHeightInclTextureSpacing * rowNumber) / imageHeightFloat;
-                            float rightX = (glyphWidth / imageWidthFloat)
-                                    - (nextCharLeftShift * glyphHeightInImage) + leftX;
-                            float bottomY = topY + glyphHeightInImage;
-                            glyphs.put(character,
-                                    floatBoxFactory.make(leftX, topY, rightX, bottomY));
-
-                            float glyphDrawTopY = (rowHeightInclTextureSpacing * (rowNumber + 1))
-                                    - glyphDescent - rowTextureSpacing;
-                            graphics2d.drawString(String.valueOf(character), widthThusFar,
-                                    glyphDrawTopY);
-                        });
+                character -> widthThusFar -> rowNumber -> glyphWidth -> charLeftShift -> nextCharLeftShift -> {
+                    float leftX =
+                            (widthThusFar / imageWidthFloat) - (charLeftShift * glyphHeightInImage);
+                    float topY = (rowHeightInclTextureSpacing * rowNumber) / imageHeightFloat;
+                    float rightX = (glyphWidth / imageWidthFloat) -
+                            (nextCharLeftShift * glyphHeightInImage) + leftX;
+                    float bottomY = topY + glyphHeightInImage;
+                    glyphs.put(character, floatBoxFactory.make(leftX, topY, rightX, bottomY));
+                    float glyphDrawTopY =
+                            (rowHeightInclTextureSpacing * (rowNumber + 1)) - glyphDescent -
+                                    rowTextureSpacing;
+                    graphics2d.drawString(String.valueOf(character), widthThusFar, glyphDrawTopY);
+                });
     }
 
     private static class FontImageInfo {
-        Coordinate ImageDimensions;
+        Coordinate2d ImageDimensions;
         int TextureId;
         float GlyphHeight;
         float GlyphDescent;
 
-        private FontImageInfo(Coordinate imageDimensions, float glyphHeight, float glyphDescent) {
+        private FontImageInfo(Coordinate2d imageDimensions, float glyphHeight, float glyphDescent) {
             ImageDimensions = imageDimensions;
             GlyphHeight = glyphHeight;
             GlyphDescent = glyphDescent;
@@ -367,13 +337,12 @@ public class FontImpl implements Font {
 
     private static ByteBuffer createBuffer(BufferedImage bufferedImage, int imageWidth,
                                            int imageHeight) {
-        int[] pixels = new int[imageWidth * imageHeight];
+        var pixels = new int[imageWidth * imageHeight];
 
         bufferedImage.getRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
-        ByteBuffer byteBuffer =
-                ByteBuffer.allocateDirect(imageWidth * imageHeight * RGBA_BYTES);
+        var byteBuffer = ByteBuffer.allocateDirect(imageWidth * imageHeight * RGBA_BYTES);
 
-        for (int pixel : pixels) {
+        for (var pixel : pixels) {
             byteBuffer.put((byte) ((pixel >> RED_OFFSET) & 0xFF));
             byteBuffer.put((byte) ((pixel >> GREEN_OFFSET) & 0xFF));
             byteBuffer.put((byte) ((pixel >> BLUE_OFFSET) & 0xFF));
@@ -387,18 +356,16 @@ public class FontImpl implements Font {
 
     private static class FontStyleInfoImpl implements FontStyleInfo {
         private final Map<Character, FloatBox> GLYPHS;
-        private final Coordinate TEXTURE_DIMENSIONS;
+        private final Coordinate2d TEXTURE_DIMENSIONS;
         private final float TEXTURE_WIDTH_TO_HEIGHT_RATIO;
         private final float ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
         private final Map<Character, Float> GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING;
         private final int TEXTURE_ID;
 
-        private FontStyleInfoImpl(Map<Character, FloatBox> glyphs,
-                                  Coordinate textureDimensions,
+        private FontStyleInfoImpl(Map<Character, FloatBox> glyphs, Coordinate2d textureDimensions,
                                   float textureWidthToHeightRatio,
                                   float additionalHorizontalTextureSpacing,
-                                  Map<Character, Float>
-                                          glyphwiseAdditionalHorizontalTextureSpacing,
+                                  Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
                                   int textureId) {
             GLYPHS = glyphs;
             TEXTURE_DIMENSIONS = textureDimensions;
@@ -418,7 +385,7 @@ public class FontImpl implements Font {
         }
 
         @Override
-        public Coordinate textureDimensions() {
+        public Coordinate2d textureDimensions() {
             return TEXTURE_DIMENSIONS;
         }
 
