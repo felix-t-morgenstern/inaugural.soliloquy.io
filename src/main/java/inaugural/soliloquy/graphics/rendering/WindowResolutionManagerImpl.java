@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class WindowResolutionManagerImpl implements WindowResolutionManager {
@@ -74,7 +75,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         }
 
         windowResolution = WindowResolution.getFromWidthAndHeight(width, height);
-        windowDimensions = new Pair<>(width, height);
+        windowDimensions = pairOf(width, height);
     }
 
     @Override
@@ -84,8 +85,8 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
     @Override
     public float windowWidthToHeightRatio() {
-        int width = windowDimensions.getItem1();
-        int height = windowDimensions.getItem2();
+        int width = windowDimensions.item1();
+        int height = windowDimensions.item2();
 
         return width / (float) height;
     }

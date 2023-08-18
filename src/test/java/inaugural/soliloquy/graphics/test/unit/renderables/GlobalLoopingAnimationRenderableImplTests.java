@@ -622,11 +622,11 @@ class GlobalLoopingAnimationRenderableImplTests {
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
                 (int) (((((0.123f - 0.0123f) - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) capturesMouseEventsAtPixelInputs.get(0).item1());
         assertEquals(
                 (int) (((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
                         + 1000),
-                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) capturesMouseEventsAtPixelInputs.get(0).item2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
         assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }

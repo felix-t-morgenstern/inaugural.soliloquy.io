@@ -169,8 +169,8 @@ class FiniteLinearMovingVertexProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(_finiteLinearMovingLocationProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(_finiteLinearMovingLocationProvider.archetype());
     }
 
     @Test

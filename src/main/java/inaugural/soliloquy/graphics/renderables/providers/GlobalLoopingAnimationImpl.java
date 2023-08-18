@@ -45,7 +45,7 @@ public class GlobalLoopingAnimationImpl
     }
 
     @Override
-    public AnimationFrameSnippet getArchetype() {
+    public AnimationFrameSnippet archetype() {
         throw new UnsupportedOperationException();
     }
 

@@ -66,6 +66,6 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
     @Override
     public String getInterfaceName() {
         return FiniteSinusoidMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(getArchetype()) + ">";
+                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
     }
 }

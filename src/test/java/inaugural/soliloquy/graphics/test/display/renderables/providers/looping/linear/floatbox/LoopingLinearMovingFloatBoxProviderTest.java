@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.FloatBox;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
     protected static ProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER;
@@ -22,10 +23,10 @@ class LoopingLinearMovingFloatBoxProviderTest extends SpriteRendererTest {
         var origin = new FloatBoxImpl(0.375f, 0.3125f, 0.625f, 0.6875f);
         var translationAmount = 0.25f;
         var valuesAtTimes = mapOf(
-            Pair.of(0, origin.translate(-translationAmount, -translationAmount)),
-            Pair.of(1000, origin.translate(translationAmount, -translationAmount)),
-            Pair.of(2000, origin.translate(translationAmount, translationAmount)),
-            Pair.of(3000, origin.translate(-translationAmount, translationAmount))
+            pairOf(0, origin.translate(-translationAmount, -translationAmount)),
+            pairOf(1000, origin.translate(translationAmount, -translationAmount)),
+            pairOf(2000, origin.translate(translationAmount, translationAmount)),
+            pairOf(3000, origin.translate(-translationAmount, translationAmount))
         );
         RENDERING_DIMENSIONS_PROVIDER =
                 new LoopingLinearMovingFloatBoxProvider(java.util.UUID.randomUUID(), valuesAtTimes,

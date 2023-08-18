@@ -63,7 +63,7 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return ARCHETYPE;
     }
 }

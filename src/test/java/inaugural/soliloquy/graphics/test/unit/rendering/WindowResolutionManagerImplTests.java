@@ -11,6 +11,7 @@ import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
@@ -77,7 +78,7 @@ class WindowResolutionManagerImplTests {
 
         _windowResolutionManager.updateDimensions(width, height);
 
-        assertEquals(new Pair<>(width, height), _windowResolutionManager.getWindowDimensions());
+        assertEquals(pairOf(width, height), _windowResolutionManager.getWindowDimensions());
     }
 
     @Test

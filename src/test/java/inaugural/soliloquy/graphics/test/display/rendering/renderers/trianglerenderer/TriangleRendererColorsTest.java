@@ -48,7 +48,7 @@ class TriangleRendererColorsTest extends TriangleRendererTest {
     public static void main(String[] args) {
         runTest(
                 TriangleRendererColorsTest::generateRenderablesAndRenderersWithMeshAndShader,
-                () -> when(BACKGROUND_TEXTURE_ID_PROVIDER.getArchetype()).thenReturn(0),
+                () -> when(BACKGROUND_TEXTURE_ID_PROVIDER.archetype()).thenReturn(0),
                 DisplayTest::closeAfterSomeTime
         );
     }

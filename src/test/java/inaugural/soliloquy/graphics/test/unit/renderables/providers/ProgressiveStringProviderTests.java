@@ -9,6 +9,7 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProgressiveStringProviderTests {
@@ -187,13 +188,13 @@ class ProgressiveStringProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(_progressiveStringProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(_progressiveStringProvider.archetype());
     }
 
     @Test
     void testRepresentation() {
-        assertEquals(new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, START_TIMESTAMP)),
+        assertEquals(pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)),
                 _progressiveStringProvider.representation());
     }
 

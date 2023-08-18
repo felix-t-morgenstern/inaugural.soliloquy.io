@@ -43,7 +43,7 @@ public class FakeSetting<T> implements Setting<T> {
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return null;
     }
 

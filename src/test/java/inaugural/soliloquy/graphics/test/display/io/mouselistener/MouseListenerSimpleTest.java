@@ -60,7 +60,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             }
 
             @Override
-            public MouseEventInputs getArchetype() {
+            public MouseEventInputs archetype() {
                 return null;
             }
 

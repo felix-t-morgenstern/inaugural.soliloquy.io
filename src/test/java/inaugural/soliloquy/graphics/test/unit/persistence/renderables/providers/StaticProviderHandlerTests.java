@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -24,8 +25,8 @@ class StaticProviderHandlerTests {
     private final FakeStaticProviderFactory FACTORY = new FakeStaticProviderFactory();
     private final int INT_VALUE = randomInt();
     private final String WRITTEN_INT = randomString();
-    @SuppressWarnings("unchecked") private final TypeHandler<Integer> INT_HANDLER =
-            generateSimpleMockTypeHandler(Pair.of(WRITTEN_INT, INT_VALUE));
+    private final TypeHandler<Integer> INT_HANDLER =
+            generateSimpleMockTypeHandler(pairOf(WRITTEN_INT, INT_VALUE));
     private final int INTEGER_ARCHETYPE = randomInt();
     private final long MOST_RECENT_TIMESTAMP = randomLong();
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -66,10 +67,10 @@ class StaticProviderHandlerTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(_staticProviderHandler.getArchetype());
+    void testArchetype() {
+        assertNotNull(_staticProviderHandler.archetype());
         assertEquals(StaticProvider.class.getCanonicalName(),
-                _staticProviderHandler.getArchetype().getInterfaceName());
+                _staticProviderHandler.archetype().getInterfaceName());
     }
 
     @Test
@@ -115,7 +116,7 @@ class StaticProviderHandlerTests {
                         .generateArchetype(Integer.class.getCanonicalName());
 
         assertNotNull(generatedArchetype);
-        assertNotNull(generatedArchetype.getArchetype());
+        assertNotNull(generatedArchetype.archetype());
     }
 
     @Test

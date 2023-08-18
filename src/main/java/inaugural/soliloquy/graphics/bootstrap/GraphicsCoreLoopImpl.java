@@ -26,6 +26,7 @@ import java.util.function.Function;
 
 import static inaugural.soliloquy.graphics.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -193,8 +194,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         //noinspection resource
         glfwSetCursorPosCallback(window, (window, xPixel, yPixel) -> {
             var windowDimensions = updateWindowDimensionsInResolutionManager();
-            var width = windowDimensions.getItem1();
-            var height = windowDimensions.getItem2();
+            var width = windowDimensions.item1();
+            var height = windowDimensions.item2();
 
             var x = (float) xPixel / width;
             var y = (float) yPixel / height;
@@ -219,7 +220,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         WINDOW_RESOLUTION_MANAGER.updateDimensions(width, height);
 
-        return Pair.of(width, height);
+        return pairOf(width, height);
     }
 
     @Override

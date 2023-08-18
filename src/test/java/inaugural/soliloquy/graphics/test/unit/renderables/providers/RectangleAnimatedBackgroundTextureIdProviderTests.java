@@ -303,8 +303,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
+    void testArchetype() {
         assertEquals(0,
-                (int) rectangleAnimatedBackgroundTextureIdProvider.getArchetype());
+                (int) rectangleAnimatedBackgroundTextureIdProvider.archetype());
     }
 }

@@ -18,6 +18,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,9 +38,9 @@ class FiniteLinearMovingProviderHandlerTests {
     private final String FLOAT_WRITE_OUTPUT_2 = randomString();
     private final String FLOAT_WRITE_OUTPUT_3 = randomString();
     private final TypeHandler<Float> MOCK_FLOAT_HANDLER = generateSimpleMockTypeHandler(
-            Pair.of(FLOAT_WRITE_OUTPUT_1, VALUE_1),
-            Pair.of(FLOAT_WRITE_OUTPUT_2, VALUE_2),
-            Pair.of(FLOAT_WRITE_OUTPUT_3, VALUE_3));
+            pairOf(FLOAT_WRITE_OUTPUT_1, VALUE_1),
+            pairOf(FLOAT_WRITE_OUTPUT_2, VALUE_2),
+            pairOf(FLOAT_WRITE_OUTPUT_3, VALUE_3));
 
     private final int INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER = randomInt();
 
@@ -73,9 +74,9 @@ class FiniteLinearMovingProviderHandlerTests {
                 .thenReturn(INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER);
 
         mockValuesAtTimestamps = generateMockMap(
-                Pair.of(TIMESTAMP_1, VALUE_1),
-                Pair.of(TIMESTAMP_2, VALUE_2),
-                Pair.of(TIMESTAMP_3, VALUE_3));
+                pairOf(TIMESTAMP_1, VALUE_1),
+                pairOf(TIMESTAMP_2, VALUE_2),
+                pairOf(TIMESTAMP_3, VALUE_3));
 
         //noinspection unchecked
         mockFiniteLinearMovingProvider =
@@ -86,7 +87,7 @@ class FiniteLinearMovingProviderHandlerTests {
         when(mockFiniteLinearMovingProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
         when(mockFiniteLinearMovingProvider.mostRecentTimestamp()).thenReturn(
                 MOST_RECENT_TIMESTAMP);
-        when(mockFiniteLinearMovingProvider.getArchetype()).thenReturn(randomFloat());
+        when(mockFiniteLinearMovingProvider.archetype()).thenReturn(randomFloat());
 
         mockFactory = mock(FiniteLinearMovingProviderFactory.class);
         //noinspection unchecked,rawtypes
@@ -114,7 +115,7 @@ class FiniteLinearMovingProviderHandlerTests {
         var inOrder = inOrder(mockFiniteLinearMovingProvider, mockPersistentValuesHandler,
                 mockValuesAtTimestamps, MOCK_FLOAT_HANDLER);
         inOrder.verify(mockFiniteLinearMovingProvider).uuid();
-        inOrder.verify(mockFiniteLinearMovingProvider).getArchetype();
+        inOrder.verify(mockFiniteLinearMovingProvider).archetype();
         inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(mockFiniteLinearMovingProvider).valuesAtTimestampsRepresentation();
         //noinspection ResultOfMethodCallIgnored
@@ -171,7 +172,7 @@ class FiniteLinearMovingProviderHandlerTests {
                         .generateArchetype(Integer.class.getCanonicalName());
 
         assertNotNull(generatedArchetype);
-        assertNotNull(generatedArchetype.getArchetype());
+        assertNotNull(generatedArchetype.archetype());
     }
 
     @Test

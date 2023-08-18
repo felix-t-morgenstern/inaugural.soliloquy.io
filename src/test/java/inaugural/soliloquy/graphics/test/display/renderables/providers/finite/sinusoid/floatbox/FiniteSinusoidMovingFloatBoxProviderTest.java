@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static FiniteSinusoidMovingFloatBoxProvider FiniteSinusoidMovingFloatBoxProvider;
@@ -27,9 +28,9 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
         var endingLocation = new FloatBoxImpl(0.75f, 0.625f, 1f, 1f);
 
         Map<Long, FloatBox> renderingDimensionsAtTimes = mapOf(
-                Pair.of(timestamp, startingLocation),
-                Pair.of(timestamp + 3000, middleLocation),
-                Pair.of(timestamp + 6000, endingLocation)
+                pairOf(timestamp, startingLocation),
+                pairOf(timestamp + 3000, middleLocation),
+                pairOf(timestamp + 6000, endingLocation)
         );
 
         SpriteRenderable.setRenderingDimensionsProvider(

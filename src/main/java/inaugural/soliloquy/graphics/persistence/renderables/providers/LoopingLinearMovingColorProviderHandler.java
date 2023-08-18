@@ -162,7 +162,7 @@ public class LoopingLinearMovingColorProviderHandler
         }
 
         @Override
-        public Color getArchetype() {
+        public Color archetype() {
             return Color.BLACK;
         }
 

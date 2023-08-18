@@ -92,7 +92,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     @Override
     public String getInterfaceName() {
         return FiniteLinearMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(getArchetype()) + ">";
+                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return ARCHETYPE;
     }
 }

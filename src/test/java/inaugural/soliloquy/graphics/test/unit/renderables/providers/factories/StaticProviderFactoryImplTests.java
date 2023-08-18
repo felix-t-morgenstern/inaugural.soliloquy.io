@@ -33,7 +33,7 @@ class StaticProviderFactoryImplTests {
         assertNotNull(staticProvider);
         assertSame(UUID, staticProvider.uuid());
         assertSame(VALUE, staticProvider.provide(MOST_RECENT_TIMESTAMP));
-        assertSame(ARCHETYPE, staticProvider.getArchetype());
+        assertSame(ARCHETYPE, staticProvider.archetype());
         assertEquals(MOST_RECENT_TIMESTAMP, (long) staticProvider.mostRecentTimestamp());
         assertTrue(staticProvider instanceof StaticProviderImpl);
     }

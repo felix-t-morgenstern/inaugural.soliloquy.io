@@ -7,6 +7,8 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+
 public class ProgressiveStringProvider
         extends AbstractFinitePausableAtTime
         implements ProviderAtTime<String> {
@@ -48,11 +50,11 @@ public class ProgressiveStringProvider
     @Override
     public Object representation() {
         // TODO: Revise this awful data structure.
-        return new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, anchorTime));
+        return pairOf(STRING, pairOf(TIME_TO_COMPLETE, anchorTime));
     }
 
     @Override
-    public String getArchetype() {
+    public String archetype() {
         return "";
     }
 

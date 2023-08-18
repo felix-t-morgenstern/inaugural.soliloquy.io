@@ -104,7 +104,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     @Override
     public String getInterfaceName() {
         return LoopingLinearMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(getArchetype()) + ">";
+                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
     }
 
     @Override

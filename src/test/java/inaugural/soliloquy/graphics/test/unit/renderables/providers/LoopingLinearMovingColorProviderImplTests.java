@@ -359,9 +359,9 @@ class LoopingLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testGetArchetype() {
+    void testArchetype() {
         assertThrows(UnsupportedOperationException.class,
-                _loopingLinearMovingColorProvider::getArchetype);
+                _loopingLinearMovingColorProvider::archetype);
     }
 
     @Test

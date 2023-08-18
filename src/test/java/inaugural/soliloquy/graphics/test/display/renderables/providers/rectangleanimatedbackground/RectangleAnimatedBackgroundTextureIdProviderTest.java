@@ -20,6 +20,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTest {
     private final static StaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
@@ -95,14 +96,14 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                         .make(new ImageDefinition(TILE_LOCATION_8, false)).textureId();
 
         var frames = mapOf(
-                Pair.of(0, frame1TextureId),
-                Pair.of(msDuration / 8, frame2TextureId),
-                Pair.of((msDuration * 2) / 8, frame3TextureId),
-                Pair.of((msDuration * 3) / 8, frame4TextureId),
-                Pair.of((msDuration * 4) / 8, frame5TextureId),
-                Pair.of((msDuration * 5) / 8, frame6TextureId),
-                Pair.of((msDuration * 6) / 8, frame7TextureId),
-                Pair.of((msDuration * 7) / 8, frame8TextureId)
+                pairOf(0, frame1TextureId),
+                pairOf(msDuration / 8, frame2TextureId),
+                pairOf((msDuration * 2) / 8, frame3TextureId),
+                pairOf((msDuration * 3) / 8, frame4TextureId),
+                pairOf((msDuration * 4) / 8, frame5TextureId),
+                pairOf((msDuration * 5) / 8, frame6TextureId),
+                pairOf((msDuration * 6) / 8, frame7TextureId),
+                pairOf((msDuration * 7) / 8, frame8TextureId)
         );
 
         RectangleAnimatedBackgroundTextureIdProvider =

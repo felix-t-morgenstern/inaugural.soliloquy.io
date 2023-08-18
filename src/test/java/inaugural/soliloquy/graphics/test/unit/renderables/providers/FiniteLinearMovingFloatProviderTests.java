@@ -81,8 +81,8 @@ class FiniteLinearMovingFloatProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(finiteLinearMovingFloatProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(finiteLinearMovingFloatProvider.archetype());
     }
 
     @Test

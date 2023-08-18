@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.random.Random.randomIntWithInclusiveFloor;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 public class FakeAnimation implements Animation {
     public String Id;
@@ -67,7 +68,7 @@ public class FakeAnimation implements Animation {
         AnimationFrameSnippet snippetProvided = AnimationFrameSnippet != null ?
                 AnimationFrameSnippet :
                 new FakeAnimationFrameSnippet();
-        SnippetsProvided.add(new Pair<>(i, snippetProvided));
+        SnippetsProvided.add(pairOf(i, snippetProvided));
         return snippetProvided;
     }
 

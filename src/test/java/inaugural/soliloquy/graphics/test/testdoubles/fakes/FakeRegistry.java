@@ -82,7 +82,7 @@ public class FakeRegistry<T extends HasId> implements Registry<T> {
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return null;
     }
 

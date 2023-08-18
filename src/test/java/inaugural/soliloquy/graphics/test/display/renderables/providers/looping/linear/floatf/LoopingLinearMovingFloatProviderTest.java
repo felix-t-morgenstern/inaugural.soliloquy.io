@@ -8,6 +8,7 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefini
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class LoopingLinearMovingFloatProviderTest extends SpriteRendererBorderTest {
     protected static ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER;
@@ -18,10 +19,10 @@ class LoopingLinearMovingFloatProviderTest extends SpriteRendererBorderTest {
         var periodModuloOffset = (int) (startTimestamp % periodDuration);
         var maxBorderThickness = 0.03125f;
         var valuesAtTimes = mapOf(
-            Pair.of(0, maxBorderThickness * 0.125f),
-            Pair.of(250, maxBorderThickness * 0.75f),
-            Pair.of(500, maxBorderThickness * 0.25f),
-            Pair.of(750, maxBorderThickness)
+            pairOf(0, maxBorderThickness * 0.125f),
+            pairOf(250, maxBorderThickness * 0.75f),
+            pairOf(500, maxBorderThickness * 0.25f),
+            pairOf(750, maxBorderThickness)
         );
         BORDER_THICKNESS_PROVIDER =
                 new LoopingLinearMovingFloatProvider(java.util.UUID.randomUUID(), valuesAtTimes,

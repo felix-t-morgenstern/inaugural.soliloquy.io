@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static inaugural.soliloquy.graphics.test.Mocks.mockFloatBox;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FiniteSinusoidMovingFloatBoxProviderTests {
@@ -44,9 +45,9 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
             FLOAT_BOX_3_TOP_Y, FLOAT_BOX_3_RIGHT_X, FLOAT_BOX_3_BOTTOM_Y);
 
     private final Map<Long, FloatBox> VALUES_AT_TIMES = mapOf(
-        Pair.of(TIME_1, FLOAT_BOX_1),
-        Pair.of(TIME_2, FLOAT_BOX_2),
-        Pair.of(TIME_3, FLOAT_BOX_3)
+        pairOf(TIME_1, FLOAT_BOX_1),
+        pairOf(TIME_2, FLOAT_BOX_2),
+        pairOf(TIME_3, FLOAT_BOX_3)
     );
 
     /** @noinspection FieldCanBeLocal */
@@ -83,11 +84,11 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID,
-                        mapOf(Pair.of(null, FLOAT_BOX_1)),
+                        mapOf(pairOf(null, FLOAT_BOX_1)),
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID,
-                        mapOf(Pair.of(TIME_1, null)),
+                        mapOf(pairOf(TIME_1, null)),
                         TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP, FLOAT_BOX_FACTORY));
 
         assertThrows(IllegalArgumentException.class,
@@ -134,8 +135,8 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(finiteSinusoidMovingFloatBoxProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(finiteSinusoidMovingFloatBoxProvider.archetype());
     }
 
     @Test

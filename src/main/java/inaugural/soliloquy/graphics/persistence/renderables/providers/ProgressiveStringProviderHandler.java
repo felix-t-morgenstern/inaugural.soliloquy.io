@@ -36,9 +36,9 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         //noinspection unchecked
         Pair<String, Pair<Long, Long>> representation =
                 (Pair<String, Pair<Long, Long>>) provider.representation();
-        dto.string = representation.getItem1();
-        dto.timeToComplete = representation.getItem2().getItem1();
-        dto.startTimestamp = representation.getItem2().getItem2();
+        dto.string = representation.item1();
+        dto.timeToComplete = representation.item2().item1();
+        dto.startTimestamp = representation.item2().item2();
         dto.pausedTimestamp = provider.pausedTimestamp();
         dto.mostRecentTimestamp = provider.mostRecentTimestamp();
 
@@ -68,7 +68,7 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         }
 
         @Override
-        public String getArchetype() {
+        public String archetype() {
             return "";
         }
 

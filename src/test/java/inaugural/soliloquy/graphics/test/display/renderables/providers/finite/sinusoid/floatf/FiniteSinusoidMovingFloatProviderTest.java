@@ -11,6 +11,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
     protected static FiniteSinusoidMovingFloatProvider FiniteSinusoidMovingFloatProvider;
@@ -23,9 +24,9 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
         var timestamp = GLOBAL_CLOCK.globalTimestamp();
         var borderThicknessValues = mapOf(
-                Pair.of(timestamp, 0f),
-                Pair.of(timestamp + 4000, BORDER_THICKNESS),
-                Pair.of(timestamp + 8000, 0f)
+                pairOf(timestamp, 0f),
+                pairOf(timestamp + 4000, BORDER_THICKNESS),
+                pairOf(timestamp + 8000, 0f)
         );
         SpriteRenderable.setBorderThicknessProvider(
                 FiniteSinusoidMovingFloatProvider = new FiniteSinusoidMovingFloatProvider(

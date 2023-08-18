@@ -63,7 +63,7 @@ public class LoopingLinearMovingProviderHandler
         dto.offset = loopingLinearMovingProvider.periodModuloOffset();
 
         dto.type = CAN_GET_INTERFACE_NAME
-                .getProperTypeName(loopingLinearMovingProvider.getArchetype());
+                .getProperTypeName(loopingLinearMovingProvider.archetype());
 
         var innerTypeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.type);
         //noinspection unchecked

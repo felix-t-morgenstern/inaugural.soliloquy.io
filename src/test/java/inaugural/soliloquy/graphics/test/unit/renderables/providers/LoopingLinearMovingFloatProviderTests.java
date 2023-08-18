@@ -105,8 +105,8 @@ class LoopingLinearMovingFloatProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(loopingLinearMovingFloatProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(loopingLinearMovingFloatProvider.archetype());
     }
 
     @Test

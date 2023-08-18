@@ -132,10 +132,10 @@ class LoopingLinearMovingColorProviderHandlerTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(_loopingLinearMovingColorProviderHandler.getArchetype());
+    void testArchetype() {
+        assertNotNull(_loopingLinearMovingColorProviderHandler.archetype());
         assertEquals(LoopingLinearMovingColorProvider.class.getCanonicalName(),
-                _loopingLinearMovingColorProviderHandler.getArchetype().getInterfaceName());
+                _loopingLinearMovingColorProviderHandler.archetype().getInterfaceName());
     }
 
     @Test

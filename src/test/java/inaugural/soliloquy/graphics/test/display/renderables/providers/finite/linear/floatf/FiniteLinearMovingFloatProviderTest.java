@@ -10,6 +10,7 @@ import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
     protected static final Color BORDER_COLOR = Color.getHSBColor(0.75f, 1f, 1f);
@@ -20,8 +21,8 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
         var timestamp = GLOBAL_CLOCK.globalTimestamp();
         var borderThicknessProvider = mapOf(
-                Pair.of(timestamp, 0f),
-                Pair.of(timestamp + 3000, BORDER_THICKNESS)
+                pairOf(timestamp, 0f),
+                pairOf(timestamp + 3000, BORDER_THICKNESS)
         );
         SpriteRenderable.setBorderThicknessProvider(
                 new FiniteLinearMovingFloatProvider(

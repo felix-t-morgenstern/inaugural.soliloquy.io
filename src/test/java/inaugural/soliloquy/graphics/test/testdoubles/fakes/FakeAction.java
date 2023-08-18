@@ -29,7 +29,7 @@ public class FakeAction<T> implements Action<T> {
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return null;
     }
 

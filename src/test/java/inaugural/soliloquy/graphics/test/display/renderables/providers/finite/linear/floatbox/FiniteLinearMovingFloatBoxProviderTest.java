@@ -12,6 +12,7 @@ import soliloquy.specs.graphics.rendering.FloatBox;
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderTest {
     protected static void graphicsPreloaderLoadAction() {
@@ -23,8 +24,8 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
         var endingLocation = new FloatBoxImpl(0.25f, 0.125f, 0.75f, 0.875f);
 
         Map<Long, FloatBox> renderingDimensionsAtTimes = mapOf(
-                Pair.of(timestamp, startingLocation),
-                Pair.of(timestamp + 3000, endingLocation)
+                pairOf(timestamp, startingLocation),
+                pairOf(timestamp + 3000, endingLocation)
         );
 
         var finiteLinearMovingFloatBoxProvider =

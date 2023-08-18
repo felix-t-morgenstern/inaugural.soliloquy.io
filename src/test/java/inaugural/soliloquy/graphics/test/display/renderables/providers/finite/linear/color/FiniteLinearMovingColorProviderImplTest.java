@@ -10,6 +10,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProviderTest {
     protected static final float BORDER_THICKNESS = 0.05f;
@@ -19,9 +20,9 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
                 .make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, false));
         var timestamp = GLOBAL_CLOCK.globalTimestamp();
         var borderColorProviderValues = mapOf(
-                Pair.of(timestamp, new Color(68, 20, 135, 0)),
-                Pair.of(timestamp + 1000, new Color(0, 238, 255, 127)),
-                Pair.of(timestamp + 3000, new Color(83, 94, 112, 63))
+                pairOf(timestamp, new Color(68, 20, 135, 0)),
+                pairOf(timestamp + 1000, new Color(0, 238, 255, 127)),
+                pairOf(timestamp + 3000, new Color(83, 94, 112, 63))
         );
         var hueMovementIsClockwise = listOf(false, true);
         var finiteLinearMovingColorProvider =

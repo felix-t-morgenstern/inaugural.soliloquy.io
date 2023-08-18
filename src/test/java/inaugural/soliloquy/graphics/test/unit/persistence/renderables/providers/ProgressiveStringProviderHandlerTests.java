@@ -11,6 +11,7 @@ import soliloquy.specs.graphics.renderables.providers.factories.ProgressiveStrin
 
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,7 @@ class ProgressiveStringProviderHandlerTests {
         mockProgressiveStringProvider = mock(ProviderAtTime.class);
         when(mockProgressiveStringProvider.uuid()).thenReturn(UUID.fromString(UUID_STRING));
         when(mockProgressiveStringProvider.representation()).thenReturn(
-                new Pair<>(STRING, new Pair<>(TIME_TO_COMPLETE, START_TIMESTAMP)));
+                pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)));
         when(mockProgressiveStringProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
         when(mockProgressiveStringProvider.mostRecentTimestamp()).thenReturn(MOST_RECENT_TIMESTAMP);
 

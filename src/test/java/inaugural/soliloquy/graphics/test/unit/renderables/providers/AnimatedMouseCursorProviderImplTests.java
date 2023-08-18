@@ -232,8 +232,8 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(animatedMouseCursorProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(animatedMouseCursorProvider.archetype());
     }
 
     @Test

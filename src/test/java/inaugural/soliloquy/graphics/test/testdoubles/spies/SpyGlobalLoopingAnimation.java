@@ -40,7 +40,7 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
-    public AnimationFrameSnippet getArchetype() {
+    public AnimationFrameSnippet archetype() {
         return null;
     }
 

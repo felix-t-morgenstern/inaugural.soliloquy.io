@@ -53,7 +53,7 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return ProvidedValue;
     }
 

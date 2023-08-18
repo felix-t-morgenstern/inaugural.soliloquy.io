@@ -53,7 +53,7 @@ public class FiniteLinearMovingProviderHandler
         dto.uuid = finiteLinearMovingProvider.uuid().toString();
 
         var valueType = dto.valueType =
-                CAN_GET_INTERFACE_NAME.getProperTypeName(finiteLinearMovingProvider.getArchetype());
+                CAN_GET_INTERFACE_NAME.getProperTypeName(finiteLinearMovingProvider.archetype());
 
         var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(valueType);
         //noinspection unchecked

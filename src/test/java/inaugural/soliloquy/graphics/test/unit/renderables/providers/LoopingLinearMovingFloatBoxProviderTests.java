@@ -132,8 +132,8 @@ class LoopingLinearMovingFloatBoxProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(loopingLinearMovingFloatBoxProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(loopingLinearMovingFloatBoxProvider.archetype());
     }
 
     @Test

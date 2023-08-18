@@ -114,7 +114,7 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public AnimationFrameSnippet getArchetype() {
+    public AnimationFrameSnippet archetype() {
         throw new UnsupportedOperationException();
     }
 

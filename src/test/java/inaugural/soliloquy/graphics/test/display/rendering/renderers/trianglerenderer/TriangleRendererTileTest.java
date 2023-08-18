@@ -52,13 +52,13 @@ class TriangleRendererTileTest extends TriangleRendererTest {
         runTest(
                 TriangleRendererTileTest::generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(VERTEX_1_COLOR_PROVIDER.getArchetype()).thenReturn(Color.BLACK);
-                    when(VERTEX_2_COLOR_PROVIDER.getArchetype()).thenReturn(Color.BLACK);
-                    when(VERTEX_3_COLOR_PROVIDER.getArchetype()).thenReturn(Color.BLACK);
+                    when(VERTEX_1_COLOR_PROVIDER.archetype()).thenReturn(Color.BLACK);
+                    when(VERTEX_2_COLOR_PROVIDER.archetype()).thenReturn(Color.BLACK);
+                    when(VERTEX_3_COLOR_PROVIDER.archetype()).thenReturn(Color.BLACK);
                     when(BACKGROUND_TEXTURE_ID_PROVIDER.provide(anyLong()))
                             .thenReturn(new ImageFactoryImpl(0.5f)
                                     .make(new ImageDefinition(TILE_LOCATION, false)).textureId());
-                    when(BACKGROUND_TEXTURE_ID_PROVIDER.getArchetype()).thenReturn(0);
+                    when(BACKGROUND_TEXTURE_ID_PROVIDER.archetype()).thenReturn(0);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 DisplayTest::closeAfterSomeTime

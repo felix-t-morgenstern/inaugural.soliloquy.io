@@ -135,7 +135,7 @@ public class FiniteLinearMovingColorProviderHandler
         // NB: An archetype is needed to pass validation checks for parent classes, but it is not
         //     in fact used to generate the interface name
         @Override
-        public Color getArchetype() {
+        public Color archetype() {
             return Color.BLACK;
         }
 

@@ -46,7 +46,7 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
-    public AnimationFrameSnippet getArchetype() {
+    public AnimationFrameSnippet archetype() {
         return null;
     }
 

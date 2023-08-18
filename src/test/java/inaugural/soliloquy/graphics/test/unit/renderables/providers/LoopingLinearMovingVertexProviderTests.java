@@ -121,8 +121,8 @@ public class LoopingLinearMovingVertexProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(loopingLinearMovingLocationProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(loopingLinearMovingLocationProvider.archetype());
     }
 
     @Test

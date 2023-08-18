@@ -5,6 +5,8 @@ import soliloquy.specs.graphics.assets.Image;
 
 import java.util.ArrayList;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+
 public class FakeImage implements Image {
     public String RelativeLocation;
 
@@ -70,7 +72,7 @@ public class FakeImage implements Image {
     @Override
     public boolean capturesMouseEventsAtPixel(int x, int y)
             throws UnsupportedOperationException, IllegalArgumentException {
-        CapturesMouseEventsAtPixelInputs.add(new Pair<>(x, y));
+        CapturesMouseEventsAtPixelInputs.add(pairOf(x, y));
         return true;
     }
 

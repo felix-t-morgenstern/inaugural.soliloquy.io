@@ -111,8 +111,8 @@ public class FiniteSinusoidMovingFloatProviderTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(finiteSinusoidMovingFloatProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(finiteSinusoidMovingFloatProvider.archetype());
     }
 
     @Test

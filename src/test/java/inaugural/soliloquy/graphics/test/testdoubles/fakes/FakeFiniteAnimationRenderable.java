@@ -228,7 +228,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public AnimationFrameSnippet getArchetype() {
+    public AnimationFrameSnippet archetype() {
         return null;
     }
 

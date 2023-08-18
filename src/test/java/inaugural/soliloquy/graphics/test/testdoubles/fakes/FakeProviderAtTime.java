@@ -20,7 +20,7 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return null;
     }
 

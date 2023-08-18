@@ -42,7 +42,7 @@ public class StaticProviderHandler
     @Override
     public String write(StaticProvider staticProvider) {
         Check.ifNull(staticProvider, "staticProvider");
-        var innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.getArchetype());
+        var innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.archetype());
         var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
         StaticProviderDTO staticProviderDTO = new StaticProviderDTO();
         staticProviderDTO.uuid = staticProvider.uuid().toString();

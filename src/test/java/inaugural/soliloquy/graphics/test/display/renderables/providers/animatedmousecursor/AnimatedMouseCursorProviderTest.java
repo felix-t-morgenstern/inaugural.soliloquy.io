@@ -12,6 +12,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
     private static final String MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION =
@@ -50,12 +51,12 @@ class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
                 output -> mouseCursorImages.add(output.id()))
                 .run();
         var mouseCursorsAtMs = mapOf(
-            Pair.of(0, mouseCursorImages.get(0)),
-            Pair.of(167, mouseCursorImages.get(1)),
-            Pair.of(333, mouseCursorImages.get(2)),
-            Pair.of(500, mouseCursorImages.get(3)),
-            Pair.of(667, mouseCursorImages.get(4)),
-            Pair.of(833, mouseCursorImages.get(5))
+            pairOf(0, mouseCursorImages.get(0)),
+            pairOf(167, mouseCursorImages.get(1)),
+            pairOf(333, mouseCursorImages.get(2)),
+            pairOf(500, mouseCursorImages.get(3)),
+            pairOf(667, mouseCursorImages.get(4)),
+            pairOf(833, mouseCursorImages.get(5))
         );
         var msDuration = 1000;
         var timestamp = GLOBAL_CLOCK.globalTimestamp();

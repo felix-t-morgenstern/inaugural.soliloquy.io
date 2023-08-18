@@ -11,6 +11,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
     protected static LoopingLinearMovingColorProvider BORDER_COLOR_PROVIDER;
@@ -20,10 +21,10 @@ class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
         var periodDuration = 4000;
 
         var valuesAtTimes = mapOf(
-                Pair.of(0, Color.RED),
-                Pair.of(periodDuration / 4, Color.BLUE),
-                Pair.of((periodDuration / 4) * 2, Color.GREEN),
-                Pair.of((periodDuration / 4) * 3, new Color(152, 52, 235))
+                pairOf(0, Color.RED),
+                pairOf(periodDuration / 4, Color.BLUE),
+                pairOf((periodDuration / 4) * 2, Color.GREEN),
+                pairOf((periodDuration / 4) * 3, new Color(152, 52, 235))
         );
 
         var movementIsClockwise = listOf(true, false, true, false);

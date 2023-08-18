@@ -51,7 +51,7 @@ public class LoopingLinearMovingColorProviderImpl
     }
 
     @Override
-    public Color getArchetype() {
+    public Color archetype() {
         throw new UnsupportedOperationException();
     }
 

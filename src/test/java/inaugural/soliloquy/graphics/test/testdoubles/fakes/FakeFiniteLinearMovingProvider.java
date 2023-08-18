@@ -33,7 +33,7 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return Archetype;
     }
 

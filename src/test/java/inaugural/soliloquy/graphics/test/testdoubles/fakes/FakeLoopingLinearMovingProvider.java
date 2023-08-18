@@ -37,7 +37,7 @@ public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingPr
     }
 
     @Override
-    public T getArchetype() {
+    public T archetype() {
         return null;
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Wheee!";
@@ -56,10 +57,10 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
         var periodDuration = 4000;
         var periodModuloOffset = periodDuration - (int) (startTimestamp % (periodDuration));
         var valuesAtTimes = mapOf(
-                Pair.of(0, Vertex.of(0.125f, 0.125f)),
-                Pair.of(1000, Vertex.of(0.75f, 0.125f)),
-                Pair.of(2000, Vertex.of(0.75f, 0.75f)),
-                Pair.of(3000, Vertex.of(0.125f, 0.75f))
+                pairOf(0, Vertex.of(0.125f, 0.125f)),
+                pairOf(1000, Vertex.of(0.75f, 0.125f)),
+                pairOf(2000, Vertex.of(0.75f, 0.75f)),
+                pairOf(3000, Vertex.of(0.125f, 0.75f))
         );
 
         LoopingLinearMovingLocationProvider = new LoopingLinearMovingVertexProvider(

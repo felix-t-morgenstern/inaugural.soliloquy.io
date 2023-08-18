@@ -17,6 +17,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest {
     private static final String LINE_TEXT = "Whee!!!";
@@ -56,9 +57,9 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
         RenderingLocationProvider = new FiniteLinearMovingVertexProvider(
                 java.util.UUID.randomUUID(),
                 mapOf(
-                        Pair.of(now + 1000, Vertex.of(-0.25f, -0.25f)),
-                        Pair.of(now + 2000, Vertex.of(0.75f, 0.5f)),
-                        Pair.of(now + 3000, Vertex.of(-0.25f, 1.25f))
+                        pairOf(now + 1000, Vertex.of(-0.25f, -0.25f)),
+                        pairOf(now + 2000, Vertex.of(0.75f, 0.5f)),
+                        pairOf(now + 3000, Vertex.of(-0.25f, 1.25f))
                 ),
                 null, null);
 

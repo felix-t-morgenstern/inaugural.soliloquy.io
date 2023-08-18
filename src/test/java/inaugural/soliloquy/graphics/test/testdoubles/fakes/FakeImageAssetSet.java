@@ -7,6 +7,8 @@ import soliloquy.specs.graphics.assets.ImageAssetSet;
 
 import java.util.ArrayList;
 
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+
 public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
     public boolean CapturesMouseEvents;
@@ -25,7 +27,7 @@ public class FakeImageAssetSet implements ImageAssetSet {
     @Override
     public ImageAsset getImageAssetForTypeAndDirection(String type, Direction direction)
             throws IllegalArgumentException {
-        GetImageAssetForTypeAndDirectionInputs.add(new Pair<>(type, direction));
+        GetImageAssetForTypeAndDirectionInputs.add(pairOf(type, direction));
         return ImageAsset;
     }
 

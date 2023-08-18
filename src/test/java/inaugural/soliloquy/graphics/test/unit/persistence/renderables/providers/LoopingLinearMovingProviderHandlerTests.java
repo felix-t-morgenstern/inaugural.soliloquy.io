@@ -19,6 +19,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -40,8 +41,8 @@ class LoopingLinearMovingProviderHandlerTests {
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
     private final TypeHandler<Float> MOCK_FLOAT_HANDLER =
-            generateSimpleMockTypeHandler(Pair.of(VALUE_1_WRITTEN, VALUE_1),
-                    Pair.of(VALUE_2_WRITTEN, VALUE_2), Pair.of(VALUE_3_WRITTEN, VALUE_3));
+            generateSimpleMockTypeHandler(pairOf(VALUE_1_WRITTEN, VALUE_1),
+                    pairOf(VALUE_2_WRITTEN, VALUE_2), pairOf(VALUE_3_WRITTEN, VALUE_3));
 
     private final int INTEGER_ARCHETYPE = randomInt();
     private final float FLOAT_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER = randomFloat();
@@ -78,9 +79,9 @@ class LoopingLinearMovingProviderHandlerTests {
                 .thenReturn(mockLoopingLinearMovingProviderFactoryOutput);
 
         mockValuesWithinPeriod = generateMockMap(
-                Pair.of(TIMESTAMP_1, VALUE_1),
-                Pair.of(TIMESTAMP_2, VALUE_2),
-                Pair.of(TIMESTAMP_3, VALUE_3));
+                pairOf(TIMESTAMP_1, VALUE_1),
+                pairOf(TIMESTAMP_2, VALUE_2),
+                pairOf(TIMESTAMP_3, VALUE_3));
 
         mockLoopingLinearMovingProvider = mock(LoopingLinearMovingProvider.class);
         when(mockLoopingLinearMovingProvider.uuid()).thenReturn(UUID);
@@ -94,7 +95,7 @@ class LoopingLinearMovingProviderHandlerTests {
                 .thenReturn(PAUSED_TIMESTAMP);
         when(mockLoopingLinearMovingProvider.mostRecentTimestamp())
                 .thenReturn(MOST_RECENT_TIMESTAMP);
-        when(mockLoopingLinearMovingProvider.getArchetype())
+        when(mockLoopingLinearMovingProvider.archetype())
                 .thenReturn(randomFloat());
 
         mockPersistentValuesHandler = Mockito.mock(PersistentValuesHandler.class);
@@ -134,7 +135,7 @@ class LoopingLinearMovingProviderHandlerTests {
         inOrder.verify(mockLoopingLinearMovingProvider).uuid();
         inOrder.verify(mockLoopingLinearMovingProvider).periodDuration();
         inOrder.verify(mockLoopingLinearMovingProvider).periodModuloOffset();
-        inOrder.verify(mockLoopingLinearMovingProvider).getArchetype();
+        inOrder.verify(mockLoopingLinearMovingProvider).archetype();
         inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(mockLoopingLinearMovingProvider).valuesWithinPeriod();
         //noinspection ResultOfMethodCallIgnored
@@ -191,7 +192,7 @@ class LoopingLinearMovingProviderHandlerTests {
                         .generateArchetype(Integer.class.getCanonicalName());
 
         assertNotNull(generatedArchetype);
-        assertNotNull(generatedArchetype.getArchetype());
+        assertNotNull(generatedArchetype.archetype());
     }
 
     @Test

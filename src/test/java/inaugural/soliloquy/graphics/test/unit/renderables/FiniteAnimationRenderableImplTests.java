@@ -583,27 +583,27 @@ class FiniteAnimationRenderableImplTests {
 
         assertEquals(5, ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(0,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).item1());
         assertEquals(0,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).item1());
         assertEquals(msAfterStartTimestampForMidpointFrame,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).item1());
         assertEquals(ANIMATION_DURATION,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).item1());
         assertEquals(ANIMATION_DURATION,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).item1());
 
         assertEquals(5, ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(0,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).item1());
         assertEquals(0,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(1).item1());
         assertEquals(msAfterStartTimestampForMidpointFrame,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(2).item1());
         assertEquals(ANIMATION_DURATION,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(3).item1());
         assertEquals(ANIMATION_DURATION,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(4).item1());
     }
 
     @Test
@@ -616,10 +616,10 @@ class FiniteAnimationRenderableImplTests {
 
         assertEquals(1, ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
-                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).item1());
         assertEquals(1, ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.size());
         assertEquals(PAUSED_TIMESTAMP_2 - START_TIMESTAMP,
-                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).getItem1());
+                (int) ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS.SnippetsProvided.get(0).item1());
     }
 
     @Test
@@ -872,10 +872,10 @@ class FiniteAnimationRenderableImplTests {
         assertEquals(1, capturesMouseEventsAtPixelInputs.size());
         assertEquals(
                 (int) ((((0.123f - (-0.5f)) / (0.75f - (-0.5f))) * (750 - 250)) + 250),
-                (int) capturesMouseEventsAtPixelInputs.get(0).getItem1());
+                (int) capturesMouseEventsAtPixelInputs.get(0).item1());
         assertEquals(
                 (int) ((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
-                (int) capturesMouseEventsAtPixelInputs.get(0).getItem2());
+                (int) capturesMouseEventsAtPixelInputs.get(0).item2());
         assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
         assertEquals(789L, (long) RENDERING_AREA_PROVIDER.TimestampInputs.get(0));
     }
@@ -996,10 +996,10 @@ class FiniteAnimationRenderableImplTests {
     }
 
     @Test
-    void testGetArchetype() {
+    void testArchetype() {
         assertThrows(UnsupportedOperationException.class,
-                finiteAnimationRenderableWithMouseEvents::getArchetype);
+                finiteAnimationRenderableWithMouseEvents::archetype);
         assertThrows(UnsupportedOperationException.class,
-                finiteAnimationRenderableWithoutMouseEvents::getArchetype);
+                finiteAnimationRenderableWithoutMouseEvents::archetype);
     }
 }

@@ -31,6 +31,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockWithId;
+import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -115,7 +116,7 @@ public class ImageAssetSetRenderableImplTests {
         when(mockRenderingBoundaries.currentBoundaries())
                 .thenReturn(mockCurrentRenderingBoundaries);
 
-        onPressActions = mapOf(Pair.of(2, mockOnMousePressAction));
+        onPressActions = mapOf(pairOf(2, mockOnMousePressAction));
         colorShiftProviders = listOf();
 
         when(mockImage.capturesMouseEventsAtPixel(anyInt(), anyInt()))

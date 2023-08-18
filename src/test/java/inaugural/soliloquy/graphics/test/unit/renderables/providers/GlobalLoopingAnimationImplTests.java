@@ -93,13 +93,13 @@ class GlobalLoopingAnimationImplTests {
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetWithFrame =
                 ANIMATION.SnippetsProvided.get(0);
-        assertEquals(expectedFrame, (int) providedSnippetWithFrame.getItem1());
-        assertSame(providedSnippetWithFrame.getItem2(), providedSnippet);
+        assertEquals(expectedFrame, (int) providedSnippetWithFrame.item1());
+        assertSame(providedSnippetWithFrame.item2(), providedSnippet);
     }
 
     @Test
-    void testGetArchetype() {
-        assertThrows(UnsupportedOperationException.class, globalLoopingAnimation::getArchetype);
+    void testArchetype() {
+        assertThrows(UnsupportedOperationException.class, globalLoopingAnimation::archetype);
     }
 
     @Test
@@ -158,8 +158,8 @@ class GlobalLoopingAnimationImplTests {
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionWhilePaused =
                 ANIMATION.SnippetsProvided.get(0);
         assertEquals(expectedMsSentToProviderWhilePaused,
-                (int) providedSnippetAndMsPositionWhilePaused.getItem1());
-        assertSame(providedSnippetWhilePaused, providedSnippetAndMsPositionWhilePaused.getItem2());
+                (int) providedSnippetAndMsPositionWhilePaused.item1());
+        assertSame(providedSnippetWhilePaused, providedSnippetAndMsPositionWhilePaused.item2());
 
         globalLoopingAnimation.reportUnpause(unpauseTimestamp);
 
@@ -173,9 +173,9 @@ class GlobalLoopingAnimationImplTests {
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionAfterUnpaused =
                 ANIMATION.SnippetsProvided.get(1);
         assertEquals(expectedMsSentToProviderAfterUnpaused,
-                (int) providedSnippetAndMsPositionAfterUnpaused.getItem1());
+                (int) providedSnippetAndMsPositionAfterUnpaused.item1());
         assertSame(providedSnippetAfterUnpaused,
-                providedSnippetAndMsPositionAfterUnpaused.getItem2());
+                providedSnippetAndMsPositionAfterUnpaused.item2());
     }
 
     @Test

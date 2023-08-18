@@ -152,8 +152,8 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testGetArchetype() {
-        assertNotNull(finiteLinearMovingColorProvider.getArchetype());
+    void testArchetype() {
+        assertNotNull(finiteLinearMovingColorProvider.archetype());
     }
 
     @Test
