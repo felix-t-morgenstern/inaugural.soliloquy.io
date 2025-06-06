@@ -4,10 +4,12 @@ import inaugural.soliloquy.graphics.api.dto.*;
 import inaugural.soliloquy.graphics.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageAssetSetFactory;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.random.Random;
+import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import soliloquy.specs.common.shared.HasId;
 import soliloquy.specs.graphics.assets.*;
@@ -22,24 +24,26 @@ import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCur
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static inaugural.soliloquy.graphics.api.dto.AssetType.*;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static java.awt.GridBagConstraints.SOUTHWEST;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class GraphicsPreloaderImplTests {
+@ExtendWith(MockitoExtension.class)
+public class GraphicsPreloaderImplTests {
     private final int THREAD_POOL_SIZE = 12;
 
-    private HashMap<AssetType, Integer> assetTypeBatchSizes;
+    private Map<AssetType, Integer> assetTypeBatchSizes;
 
     @Mock private ImageFactory mockImageFactory;
     @Mock private AssetFactory<FontDefinition, Font> mockFontFactory;
@@ -67,13 +71,13 @@ class GraphicsPreloaderImplTests {
     private CopyOnWriteArrayList<Font> fontFactoryOutputs;
     private CopyOnWriteArrayList<MouseCursorImageFactory.Output> mouseCursorImageFactoryOutputs;
 
-    private ArrayList<Sprite> processedSprites;
-    private ArrayList<Animation> processedAnimations;
-    private ArrayList<GlobalLoopingAnimation> processedGlobalLoopingAnimations;
-    private ArrayList<ImageAssetSet> processedImageAssetSets;
-    private ArrayList<AnimatedMouseCursorProvider> processedAnimatedMouseCursorProviders;
-    private ArrayList<StaticMouseCursorProvider> processedStaticMouseCursors;
-    private ArrayList<Font> processedFonts;
+    private List<Sprite> processedSprites;
+    private List<Animation> processedAnimations;
+    private List<GlobalLoopingAnimation> processedGlobalLoopingAnimations;
+    private List<ImageAssetSet> processedImageAssetSets;
+    private List<AnimatedMouseCursorProvider> processedAnimatedMouseCursorProviders;
+    private List<StaticMouseCursorProvider> processedStaticMouseCursors;
+    private List<Font> processedFonts;
 
     private CopyOnWriteArrayList<Object> allDefinitionsProcessedInOrder;
 
@@ -95,16 +99,16 @@ class GraphicsPreloaderImplTests {
     private int firstStaticMouseCursorIndex = -1;
 
     private static final int BATCH_SIZE = 10;
-    private static final int NUMBER_OF_IMAGES = Random.randomIntInRange(1000, 2000);
     // NB: I am making sprites and animations equal to mouse cursor images to test whether the
     //     images are correctly stored and then passed onto subsequent preloading tasks
+    private static final int NUMBER_OF_IMAGES = randomNumberOfAssetsInRange();
     private static final int NUMBER_OF_SPRITES = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_ANIMATIONS = NUMBER_OF_IMAGES;
     private static final int NUMBER_OF_GLOBAL_LOOPING_ANIMATIONS = NUMBER_OF_IMAGES;
-    private static final int NUMBER_OF_IMAGE_ASSET_SETS = 1;//Random.randomIntInRange(1000,2000);
-    private static final int NUMBER_OF_FONTS = Random.randomIntInRange(1000, 2000);
-    private static final int NUMBER_OF_MOUSE_CURSOR_IMAGES = Random.randomIntInRange(1000, 2000);
-    private static final int NUMBER_OF_ANIMATED_MOUSE_CURSORS = Random.randomIntInRange(1000, 2000);
+    private static final int NUMBER_OF_IMAGE_ASSET_SETS = randomNumberOfAssetsInRange();
+    private static final int NUMBER_OF_FONTS = randomNumberOfAssetsInRange();
+    private static final int NUMBER_OF_MOUSE_CURSOR_IMAGES = randomNumberOfAssetsInRange();
+    private static final int NUMBER_OF_ANIMATED_MOUSE_CURSORS = randomNumberOfAssetsInRange();
     // NB: I am making static mouse cursors equal to mouse cursor images to test whether the
     //     mouse cursor images are correctly stored and then passed onto subsequent preloading
     //     tasks
@@ -112,19 +116,23 @@ class GraphicsPreloaderImplTests {
 
     private GraphicsPreloader graphicsPreloader;
 
+    private static int randomNumberOfAssetsInRange() {
+        return randomIntInRange(10, 50);
+    }
+
     @BeforeEach
-    void setUp() {
-        assetTypeBatchSizes = new HashMap<AssetType, Integer>() {{
-            put(IMAGE, BATCH_SIZE);
-            put(SPRITE, BATCH_SIZE);
-            put(ANIMATION, BATCH_SIZE);
-            put(GLOBAL_LOOPING_ANIMATION, BATCH_SIZE);
-            put(IMAGE_ASSET_SET, BATCH_SIZE);
-            put(FONT, BATCH_SIZE);
-            put(MOUSE_CURSOR_IMAGE, BATCH_SIZE);
-            put(ANIMATED_MOUSE_CURSOR_PROVIDER, BATCH_SIZE);
-            put(STATIC_MOUSE_CURSOR_PROVIDER, BATCH_SIZE);
-        }};
+    public void setUp() {
+        assetTypeBatchSizes = Collections.mapOf(
+            pairOf(IMAGE, BATCH_SIZE),
+            pairOf(SPRITE, BATCH_SIZE),
+            pairOf(ANIMATION, BATCH_SIZE),
+            pairOf(GLOBAL_LOOPING_ANIMATION, BATCH_SIZE),
+            pairOf(IMAGE_ASSET_SET, BATCH_SIZE),
+            pairOf(FONT, BATCH_SIZE),
+            pairOf(MOUSE_CURSOR_IMAGE, BATCH_SIZE),
+            pairOf(ANIMATED_MOUSE_CURSOR_PROVIDER, BATCH_SIZE),
+            pairOf(STATIC_MOUSE_CURSOR_PROVIDER, BATCH_SIZE)
+        );
 
         imageDefinitionDTOs = new ImageDefinitionDTO[NUMBER_OF_IMAGES];
         for (var i = 0; i < NUMBER_OF_IMAGES; i++) {
@@ -190,8 +198,7 @@ class GraphicsPreloaderImplTests {
         allDefinitionsProcessedInOrder = new CopyOnWriteArrayList<>();
 
         imageFactoryOutputs = new CopyOnWriteArrayList<>();
-        mockImageFactory = mock(ImageFactory.class);
-        when(mockImageFactory.make(any()))
+        lenient().when(mockImageFactory.make(any()))
                 .thenAnswer((Answer<Image>) invocation -> {
                     updateAssetIndices(
                             () -> firstImageIndex,
@@ -206,9 +213,7 @@ class GraphicsPreloaderImplTests {
                 });
 
         fontFactoryOutputs = new CopyOnWriteArrayList<>();
-        //noinspection unchecked
-        mockFontFactory = mock(AssetFactory.class);
-        when(mockFontFactory.make(any()))
+        lenient().when(mockFontFactory.make(any()))
                 .thenAnswer((Answer<Font>) invocation -> {
                     updateAssetIndices(
                             () -> firstFontIndex,
@@ -222,9 +227,7 @@ class GraphicsPreloaderImplTests {
                     return output;
                 });
 
-        //noinspection unchecked
-        mockSpriteFactory = mock(AssetFactory.class);
-        when(mockSpriteFactory.make(any()))
+        lenient().when(mockSpriteFactory.make(any()))
                 .thenAnswer((Answer<Sprite>) invocation -> {
                     updateAssetIndices(
                             () -> firstSpriteIndex,
@@ -236,9 +239,7 @@ class GraphicsPreloaderImplTests {
                     return new FakeSprite(definition.id(), definition.image());
                 });
 
-        //noinspection unchecked
-        mockAnimationFactory = mock(AssetFactory.class);
-        when(mockAnimationFactory.make(any()))
+        lenient().when(mockAnimationFactory.make(any()))
                 .thenAnswer((Answer<Animation>) invocation -> {
                     updateAssetIndices(
                             () -> firstAnimationIndex,
@@ -250,8 +251,7 @@ class GraphicsPreloaderImplTests {
                     return new FakeAnimation(definition.id(), definition.frameSnippetDefinitions());
                 });
 
-        mockGlobalLoopingAnimationFactory = mock(GlobalLoopingAnimationFactory.class);
-        when(mockGlobalLoopingAnimationFactory.make(any()))
+        lenient().when(mockGlobalLoopingAnimationFactory.make(any()))
                 .thenAnswer(invocation -> {
                     updateAssetIndices(
                             () -> firstGlobalLoopingAnimationIndex,
@@ -263,9 +263,7 @@ class GraphicsPreloaderImplTests {
                     return new FakeGlobalLoopingAnimation(definition.id());
                 });
 
-        //noinspection unchecked
-        mockImageAssetSetFactory = mock(AssetFactory.class);
-        when(mockImageAssetSetFactory.make(any()))
+        lenient().when(mockImageAssetSetFactory.make(any()))
                 .thenAnswer((Answer<ImageAssetSet>) invocation -> {
                     updateAssetIndices(
                             () -> firstImageAssetSetIndex,
@@ -278,8 +276,7 @@ class GraphicsPreloaderImplTests {
                 });
 
         mouseCursorImageFactoryOutputs = new CopyOnWriteArrayList<>();
-        mockMouseCursorImageFactory = mock(MouseCursorImageFactory.class);
-        when(mockMouseCursorImageFactory.make(any()))
+        lenient().when(mockMouseCursorImageFactory.make(any()))
                 .thenAnswer(invocation -> {
                     updateAssetIndices(
                             () -> firstMouseCursorImageIndex,
@@ -297,8 +294,7 @@ class GraphicsPreloaderImplTests {
                     return returnValue;
                 });
 
-        mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
-        when(mockAnimatedMouseCursorProviderFactory.make(any()))
+        lenient().when(mockAnimatedMouseCursorProviderFactory.make(any()))
                 .thenAnswer((Answer<AnimatedMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
                             () -> firstAnimatedMouseCursorIndex,
@@ -309,12 +305,11 @@ class GraphicsPreloaderImplTests {
                     allDefinitionsProcessedInOrder.add(definition);
                     AnimatedMouseCursorProvider animatedMouseCursorProvider =
                             mock(AnimatedMouseCursorProvider.class);
-                    when(animatedMouseCursorProvider.id()).thenReturn(definition.id());
+                    lenient().when(animatedMouseCursorProvider.id()).thenReturn(definition.id());
                     return animatedMouseCursorProvider;
                 });
 
-        mockStaticMouseCursorProviderFactory = mock(StaticMouseCursorProviderFactory.class);
-        when(mockStaticMouseCursorProviderFactory.make(any()))
+        lenient().when(mockStaticMouseCursorProviderFactory.make(any()))
                 .thenAnswer((Answer<StaticMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
                             () -> firstStaticMouseCursorIndex,
@@ -327,13 +322,13 @@ class GraphicsPreloaderImplTests {
                             definition.mouseCursorImageId());
                 });
 
-        processedSprites = new ArrayList<>();
-        processedAnimations = new ArrayList<>();
-        processedGlobalLoopingAnimations = new ArrayList<>();
-        processedImageAssetSets = new ArrayList<>();
-        processedFonts = new ArrayList<>();
-        processedAnimatedMouseCursorProviders = new ArrayList<>();
-        processedStaticMouseCursors = new ArrayList<>();
+        processedSprites = listOf();
+        processedAnimations = listOf();
+        processedGlobalLoopingAnimations = listOf();
+        processedImageAssetSets = listOf();
+        processedFonts = listOf();
+        processedAnimatedMouseCursorProviders = listOf();
+        processedStaticMouseCursors = listOf();
 
         graphicsPreloader = new GraphicsPreloaderImpl(
                 assetDefinitionsDTO,
@@ -369,7 +364,7 @@ class GraphicsPreloaderImplTests {
     }
 
     @Test
-    void constructorWithInvalidParams() {
+    public void constructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
                 null,
                 THREAD_POOL_SIZE,
@@ -751,7 +746,7 @@ class GraphicsPreloaderImplTests {
     }
 
     @Test
-    void testAllAssetsProcessedProperly() {
+    public void testAllAssetsProcessedProperly() {
         graphicsPreloader.load();
 
         assertAssetsProcessed(
@@ -908,7 +903,7 @@ class GraphicsPreloaderImplTests {
     }
 
     @Test
-    void testAllAssetsLoadedInProperOrder() {
+    public void testAllAssetsLoadedInProperOrder() {
         graphicsPreloader.load();
 
         // Ensure that all Images are loaded first and foremost
@@ -946,8 +941,8 @@ class GraphicsPreloaderImplTests {
     }
 
     @Test
-    void testExceptionThrownInSpawnedThreadPropagatesToMain() {
-        ImageAssetSetFactory brokenImageAssetSetFactory = mock(ImageAssetSetFactory.class);
+    public void testExceptionThrownInSpawnedThreadPropagatesToMain() {
+        var brokenImageAssetSetFactory = mock(ImageAssetSetFactory.class);
         when(brokenImageAssetSetFactory.make(any()))
                 .thenThrow(new IllegalArgumentException("This is the exception"));
 
