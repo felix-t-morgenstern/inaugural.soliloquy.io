@@ -10,7 +10,7 @@ public class FiniteLinearMovingVertexProvider
     public FiniteLinearMovingVertexProvider(UUID uuid,
                                             Map<Long, Vertex> valuesAtTimes,
                                             Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, Vertex.of(0f, 0f));
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
+import inaugural.soliloquy.graphics.renderables.providers.ValuesAtTimestampType;
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
-import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
+import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
@@ -11,34 +11,32 @@ import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
 
 /** @noinspection rawtypes */
-public class LoopingLinearMovingProviderHandler
-        extends AbstractTypeWithOneGenericParamHandler<LoopingLinearMovingProvider> {
+public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<LoopingLinearMovingProvider> {
     private final LoopingLinearMovingProviderFactory LOOPING_LINEAR_MOVING_PROVIDER_FACTORY;
+    private final PersistenceHandler PERSISTENCE_HANDLER;
 
-    private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-
-    public LoopingLinearMovingProviderHandler(PersistentValuesHandler persistentValuesHandler,
+    public LoopingLinearMovingProviderHandler(PersistenceHandler persistenceHandler,
                                               LoopingLinearMovingProviderFactory
                                                       loopingLinearMovingProviderFactory) {
-        //noinspection unchecked
-        super(generateArchetypeWithOneGenericParam(LoopingLinearMovingProvider.class, 0,
-                        LoopingLinearMovingProvider.class.getCanonicalName()),
-                persistentValuesHandler,
-                archetype -> generateArchetypeWithOneGenericParam(LoopingLinearMovingProvider.class,
-                        archetype));
+        PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         LOOPING_LINEAR_MOVING_PROVIDER_FACTORY = Check.ifNull(loopingLinearMovingProviderFactory,
                 "loopingLinearMovingProviderFactory");
     }
 
     @Override
+    public String typeHandled() {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public LoopingLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 LoopingLinearMovingProviderDto.class);
 
-        var innerTypeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.type);
+        var innerTypeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.type);
         Map<Integer, Object> valuesWithinPeriod = mapOf();
         for (var valueWithinPeriodDto : dto.valueAtTimes) {
             valuesWithinPeriod.put(valueWithinPeriodDto.time,
@@ -46,8 +44,7 @@ public class LoopingLinearMovingProviderHandler
         }
 
         return LOOPING_LINEAR_MOVING_PROVIDER_FACTORY.make(UUID.fromString(dto.id), dto.duration,
-                dto.offset, valuesWithinPeriod, dto.pausedTimestamp, dto.mostRecentTimestamp,
-                PERSISTENT_VALUES_HANDLER.generateArchetype(dto.type));
+                dto.offset, valuesWithinPeriod, dto.pausedTimestamp, dto.mostRecentTimestamp);
     }
 
     @Override
@@ -62,10 +59,10 @@ public class LoopingLinearMovingProviderHandler
 
         dto.offset = loopingLinearMovingProvider.periodModuloOffset();
 
-        dto.type = CAN_GET_INTERFACE_NAME
-                .getProperTypeName(loopingLinearMovingProvider.archetype());
+        //noinspection unchecked
+        dto.type = ValuesAtTimestampType.get(loopingLinearMovingProvider.valuesWithinPeriod());
 
-        var innerTypeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.type);
+        var innerTypeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.type);
         //noinspection unchecked
         Map<Integer, Object> valuesWithinPeriod = loopingLinearMovingProvider.valuesWithinPeriod();
         var valuesWithinPeriodSize = valuesWithinPeriod.size();

@@ -2,12 +2,12 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -61,11 +61,6 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                     "which does support mouse events");
         }
         this.sprite = sprite;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return SpriteRenderable.class.getCanonicalName();
     }
 
     @Override

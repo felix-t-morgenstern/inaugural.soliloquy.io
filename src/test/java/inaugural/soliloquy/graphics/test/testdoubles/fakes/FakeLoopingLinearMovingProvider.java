@@ -37,11 +37,6 @@ public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingPr
     }
 
     @Override
-    public T archetype() {
-        return null;
-    }
-
-    @Override
     public UUID uuid() {
         return null;
     }
@@ -63,11 +58,6 @@ public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingPr
 
     @Override
     public Long mostRecentTimestamp() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
         return null;
     }
 }

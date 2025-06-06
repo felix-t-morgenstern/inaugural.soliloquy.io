@@ -10,7 +10,7 @@ import static inaugural.soliloquy.tools.random.Random.randomIntInRange;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MouseCursorImageFactoryImplTests {
+public class MouseCursorImageFactoryImplTests {
     private final String RELATIVE_LOCATION =
             "./src/test/resources/images/mouse_cursors/cursor_green_default.png";
     private final int IMAGE_WIDTH = 128;
@@ -18,20 +18,20 @@ class MouseCursorImageFactoryImplTests {
     private final int HOTSPOT_X = randomIntInRange(0, IMAGE_WIDTH - 1);
     private final int HOTSPOT_Y = randomIntInRange(0, IMAGE_HEIGHT - 1);
 
-    private MouseCursorImageFactory _mouseCursorImageFactory;
+    private MouseCursorImageFactory mouseCursorImageFactory;
 
     @BeforeEach
-    void setUp() {
-        _mouseCursorImageFactory = new MouseCursorImageFactoryImpl();
+    public void setUp() {
+        mouseCursorImageFactory = new MouseCursorImageFactoryImpl();
     }
 
     @Test
-    void testMake() {
+    public void testMake() {
         // NB: This method only returns a long, which will typically be 0, so this method is not
-        //     doing much to test the actual functionality. Pradoxically, testMakeWithInvalidParams
+        //     doing much to test the actual functionality. Pradoxically, testMakeWithInvalidArgs
         //     does more to validate that, since it throws an exception when the hotspots are
         //     beyond the bounds of the image, which can only work if the image is actually loaded.
-        _mouseCursorImageFactory.make(
+        mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         RELATIVE_LOCATION,
                         HOTSPOT_X,
@@ -41,26 +41,26 @@ class MouseCursorImageFactoryImplTests {
     }
 
     @Test
-    void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+    public void testMakeWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 null
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         null,
                         HOTSPOT_X,
                         HOTSPOT_Y
                 )
         ));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         "",
                         HOTSPOT_X,
                         HOTSPOT_Y
                 )
         ));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         randomString(),
                         HOTSPOT_X,
@@ -68,14 +68,14 @@ class MouseCursorImageFactoryImplTests {
                 )
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         RELATIVE_LOCATION,
                         -1,
                         HOTSPOT_Y
                 )
         ));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         RELATIVE_LOCATION,
                         IMAGE_WIDTH,
@@ -83,14 +83,14 @@ class MouseCursorImageFactoryImplTests {
                 )
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         RELATIVE_LOCATION,
                         HOTSPOT_X,
                         -1
                 )
         ));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursorImageFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> mouseCursorImageFactory.make(
                 new MouseCursorImageDefinition(
                         RELATIVE_LOCATION,
                         HOTSPOT_X,

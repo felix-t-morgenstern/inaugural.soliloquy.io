@@ -8,7 +8,7 @@ public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovin
                                             int periodDuration, int periodModuloOffset,
                                             Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp, 0f);
+                mostRecentTimestamp);
     }
 
     @Override

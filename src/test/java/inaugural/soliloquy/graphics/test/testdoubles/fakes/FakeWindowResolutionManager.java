@@ -7,9 +7,9 @@ import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import java.util.concurrent.Callable;
 
 public class FakeWindowResolutionManager implements WindowResolutionManager {
-    WindowDisplayMode _windowDisplayMode;
-    int _width;
-    int _height;
+    WindowDisplayMode windowDisplayMode;
+    int width;
+    int height;
 
     public boolean CallUpdateWindowSizeAndLocationOnlyOnce;
     private boolean UpdateWindowSizeAndLocationCalled;
@@ -21,20 +21,20 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
 
     @Override
     public WindowDisplayMode getWindowDisplayMode() {
-        return _windowDisplayMode;
+        return windowDisplayMode;
     }
 
     @Override
     public void setWindowDisplayMode(WindowDisplayMode windowDisplayMode)
             throws IllegalArgumentException {
-        _windowDisplayMode = windowDisplayMode;
+        windowDisplayMode = windowDisplayMode;
     }
 
     @Override
     public void updateDimensions(int i, int i1)
             throws IllegalArgumentException, UnsupportedOperationException {
-        _width = i;
-        _height = i1;
+        width = i;
+        height = i1;
     }
 
     @Override
@@ -63,10 +63,5 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
             }
         }
         return WindowIdOutput != null ? WindowIdOutput : windowId;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

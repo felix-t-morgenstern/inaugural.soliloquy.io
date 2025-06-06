@@ -1,27 +1,27 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingFloatBoxProvider;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBoxFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class LoopingLinearMovingFloatBoxProviderTests {
+public class LoopingLinearMovingFloatBoxProviderTests {
     private final int TIME_1 = 0;
     private final float BOX_1_LEFT_X = 0.1f;
     private final float BOX_1_TOP_Y = 0.11f;
     private final float BOX_1_RIGHT_X = 0.111f;
     private final float BOX_1_BOTTOM_Y = 0.1111f;
     private final FloatBox BOX_1 =
-            new FakeFloatBox(BOX_1_LEFT_X, BOX_1_TOP_Y, BOX_1_RIGHT_X, BOX_1_BOTTOM_Y);
+            floatBoxOf(BOX_1_LEFT_X, BOX_1_TOP_Y, BOX_1_RIGHT_X, BOX_1_BOTTOM_Y);
 
     private final int TIME_2 = 100;
     private final float BOX_2_LEFT_X = 0.2f;
@@ -29,7 +29,7 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final float BOX_2_RIGHT_X = 0.222f;
     private final float BOX_2_BOTTOM_Y = 0.2222f;
     private final FloatBox BOX_2 =
-            new FakeFloatBox(BOX_2_LEFT_X, BOX_2_TOP_Y, BOX_2_RIGHT_X, BOX_2_BOTTOM_Y);
+            floatBoxOf(BOX_2_LEFT_X, BOX_2_TOP_Y, BOX_2_RIGHT_X, BOX_2_BOTTOM_Y);
 
     private final int TIME_3 = 300;
     private final float BOX_3_LEFT_X = 0.3f;
@@ -37,93 +37,89 @@ class LoopingLinearMovingFloatBoxProviderTests {
     private final float BOX_3_RIGHT_X = 0.333f;
     private final float BOX_3_BOTTOM_Y = 0.3333f;
     private final FloatBox BOX_3 =
-            new FakeFloatBox(BOX_3_LEFT_X, BOX_3_TOP_Y, BOX_3_RIGHT_X, BOX_3_BOTTOM_Y);
+            floatBoxOf(BOX_3_LEFT_X, BOX_3_TOP_Y, BOX_3_RIGHT_X, BOX_3_BOTTOM_Y);
 
     private final int PERIOD_DURATION = 600;
     private final int MODULO_OFFSET = 123;
-    private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
 
-    private final HashMap<Integer, FloatBox> VALUES_AT_TIMES = new HashMap<Integer, FloatBox>() {{
-        put(TIME_1, BOX_1);
-        put(TIME_2, BOX_2);
-        put(TIME_3, BOX_3);
-    }};
+    private final Map<Integer, FloatBox> VALUES_AT_TIMES = mapOf(
+            pairOf(TIME_1, BOX_1),
+            pairOf(TIME_2, BOX_2),
+            pairOf(TIME_3, BOX_3)
+    );
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private LoopingLinearMovingProvider<FloatBox> loopingLinearMovingFloatBoxProvider;
+
+    private LoopingLinearMovingProvider<FloatBox> provider;
 
     @BeforeEach
-    void setUp() {
-        loopingLinearMovingFloatBoxProvider = new LoopingLinearMovingFloatBoxProvider(UUID,
-                VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY);
+    public void setUp() {
+        provider = new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                MODULO_OFFSET, null, null);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                        MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, null, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<>(), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(), PERIOD_DURATION,
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
-                    put(null, BOX_1);
-                }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
+                        pairOf(null, BOX_1)
+                ), PERIOD_DURATION,
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
-                    put(TIME_1, null);
-                }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
+                        pairOf(TIME_1, null)
+                ), PERIOD_DURATION,
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
-                    put(TIME_2, BOX_2);
-                }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
+                        pairOf(TIME_2, BOX_2)
+                ), PERIOD_DURATION,
+                        MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, new HashMap<Integer, FloatBox>() {{
-                    put(PERIOD_DURATION + 1, BOX_1);
-                }}, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, FLOAT_BOX_FACTORY));
+                new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
+                        pairOf(PERIOD_DURATION + 1, BOX_1)
+                ), PERIOD_DURATION,
+                        MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        -1, null, null, FLOAT_BOX_FACTORY));
+                        -1, null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        PERIOD_DURATION, null, null, FLOAT_BOX_FACTORY));
+                        PERIOD_DURATION, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 123123L, null, FLOAT_BOX_FACTORY));
+                        MODULO_OFFSET, 123123L, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 1L, 0L, FLOAT_BOX_FACTORY));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null, null));
+                        MODULO_OFFSET, 1L, 0L));
     }
 
     @Test
-    void testUuid() {
-        assertEquals(UUID, loopingLinearMovingFloatBoxProvider.uuid());
+    public void testUuid() {
+        assertEquals(UUID, provider.uuid());
     }
 
     @Test
-    void testMostRecentTimestampAndPausedTimestamp() {
+    public void testMostRecentTimestampAndPausedTimestamp() {
         long pausedTimestamp = 123123L;
         long mostRecentTimestamp = 456456L;
 
         LoopingLinearMovingProvider<FloatBox> loopingLinearMovingFloatBoxProvider =
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp, FLOAT_BOX_FACTORY);
+                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
 
         assertEquals(pausedTimestamp,
                 (long) loopingLinearMovingFloatBoxProvider.pausedTimestamp());
@@ -132,17 +128,11 @@ class LoopingLinearMovingFloatBoxProviderTests {
     }
 
     @Test
-    void testArchetype() {
-        assertNotNull(loopingLinearMovingFloatBoxProvider.archetype());
-    }
-
-    @Test
-    void testValuesWithinPeriod() {
-        Map<Integer, FloatBox> valuesWithinPeriod =
-                loopingLinearMovingFloatBoxProvider.valuesWithinPeriod();
+    public void testValuesWithinPeriod() {
+        Map<Integer, FloatBox> valuesWithinPeriod = provider.valuesWithinPeriod();
 
         assertNotNull(valuesWithinPeriod);
-        assertNotSame(loopingLinearMovingFloatBoxProvider.valuesWithinPeriod(),
+        assertNotSame(provider.valuesWithinPeriod(),
                 valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
@@ -150,19 +140,19 @@ class LoopingLinearMovingFloatBoxProviderTests {
     }
 
     @Test
-    void testPeriodDuration() {
-        assertEquals(PERIOD_DURATION, loopingLinearMovingFloatBoxProvider.periodDuration());
+    public void testPeriodDuration() {
+        assertEquals(PERIOD_DURATION, provider.periodDuration());
     }
 
     @Test
-    void testProvideAtKey() {
-        assertEquals(BOX_1, loopingLinearMovingFloatBoxProvider.provide(TIME_1 - MODULO_OFFSET));
-        assertEquals(BOX_2, loopingLinearMovingFloatBoxProvider.provide(TIME_2 - MODULO_OFFSET));
-        assertEquals(BOX_3, loopingLinearMovingFloatBoxProvider.provide(TIME_3 - MODULO_OFFSET));
+    public void testProvideAtKey() {
+        assertEquals(BOX_1, provider.provide(TIME_1 - MODULO_OFFSET));
+        assertEquals(BOX_2, provider.provide(TIME_2 - MODULO_OFFSET));
+        assertEquals(BOX_3, provider.provide(TIME_3 - MODULO_OFFSET));
     }
 
     @Test
-    void testProvideWithinProvidedValues() {
+    public void testProvideWithinProvidedValues() {
         long timeAfterValue1 = 50L;
         long timestamp = TIME_1 - MODULO_OFFSET + timeAfterValue1;
         long timeInterval = TIME_2 - TIME_1;
@@ -174,14 +164,13 @@ class LoopingLinearMovingFloatBoxProviderTests {
         float expectedRightX = (BOX_1_RIGHT_X * value1Weight) + (BOX_2_RIGHT_X * value2Weight);
         float expectedBottomY = (BOX_1_BOTTOM_Y * value1Weight) + (BOX_2_BOTTOM_Y * value2Weight);
 
-        FakeFloatBox expected =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expected = floatBoxOf(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
-        assertEquals(expected, loopingLinearMovingFloatBoxProvider.provide(timestamp));
+        assertEquals(expected, provider.provide(timestamp));
     }
 
     @Test
-    void testProvidePastProvidedValues() {
+    public void testProvidePastProvidedValues() {
         long timeAfterValue3 = 50L;
         long timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
         long timeInterval = PERIOD_DURATION - TIME_3;
@@ -193,86 +182,69 @@ class LoopingLinearMovingFloatBoxProviderTests {
         float expectedRightX = (BOX_3_RIGHT_X * value3Weight) + (BOX_1_RIGHT_X * value1Weight);
         float expectedBottomY = (BOX_3_BOTTOM_Y * value3Weight) + (BOX_1_BOTTOM_Y * value1Weight);
 
-        FakeFloatBox expected =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expected = floatBoxOf(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
-        assertEquals(expected, loopingLinearMovingFloatBoxProvider.provide(timestamp));
+        assertEquals(expected, provider.provide(timestamp));
     }
 
     @Test
-    void testProvideWhenPaused() {
-        loopingLinearMovingFloatBoxProvider.reportPause(TIME_1 - MODULO_OFFSET);
+    public void testProvideWhenPaused() {
+        provider.reportPause(TIME_1 - MODULO_OFFSET);
 
-        assertEquals(BOX_1, loopingLinearMovingFloatBoxProvider.provide(123123123L));
+        assertEquals(BOX_1, provider.provide(123123123L));
     }
 
     @Test
-    void testReset() {
+    public void testReset() {
         long resetTimestamp = 123123L;
 
-        loopingLinearMovingFloatBoxProvider.reset(resetTimestamp);
+        provider.reset(resetTimestamp);
 
-        assertEquals(BOX_1, loopingLinearMovingFloatBoxProvider.provide(resetTimestamp));
+        assertEquals(BOX_1, provider.provide(resetTimestamp));
     }
 
     @Test
-    void testReportPauseOrProvideWithOutdatedTimestamp() {
+    public void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
-        loopingLinearMovingFloatBoxProvider.provide(timestamp);
+        provider.provide(timestamp);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.provide(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportPause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reset(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp - 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp - 1));
 
-        loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 1);
+        provider.reportPause(timestamp + 1);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reset(timestamp));
+        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp));
+        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp));
 
-        loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 2);
+        provider.reportUnpause(timestamp + 2);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.provide(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reset(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp + 1));
+        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp + 1));
 
-        loopingLinearMovingFloatBoxProvider.provide(timestamp + 3);
+        provider.provide(timestamp + 3);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.provide(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportPause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportUnpause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reset(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp + 2));
+        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp + 2));
     }
 
     @Test
-    void testReportPauseWhilePausedOrViceVersa() {
-        assertThrows(UnsupportedOperationException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportUnpause(0L));
+    public void testReportPauseWhilePausedOrViceVersa() {
+        assertThrows(UnsupportedOperationException.class, () -> provider.reportUnpause(0L));
 
-        loopingLinearMovingFloatBoxProvider.reportPause(0L);
+        provider.reportPause(0L);
 
-        assertThrows(UnsupportedOperationException.class, () ->
-                loopingLinearMovingFloatBoxProvider.reportPause(0L));
+        assertThrows(UnsupportedOperationException.class, () -> provider.reportPause(0L));
     }
 
     @Test
-    void testReportPauseAndUnpauseUpdatesOffset() {
+    public void testReportPauseAndUnpauseUpdatesOffset() {
         long pauseDuration = 123123L;
 
         long timeAfterValue1 = 50L;
@@ -286,19 +258,17 @@ class LoopingLinearMovingFloatBoxProviderTests {
         float expectedRightX = (BOX_1_RIGHT_X * value1Weight) + (BOX_2_RIGHT_X * value2Weight);
         float expectedBottomY = (BOX_1_BOTTOM_Y * value1Weight) + (BOX_2_BOTTOM_Y * value2Weight);
 
-        FakeFloatBox expected =
-                new FakeFloatBox(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
+        var expected = floatBoxOf(expectedLeftX, expectedTopY, expectedRightX, expectedBottomY);
 
-        loopingLinearMovingFloatBoxProvider.reportPause(0L);
-        loopingLinearMovingFloatBoxProvider.reportUnpause(pauseDuration);
+        provider.reportPause(0L);
+        provider.reportUnpause(pauseDuration);
 
-        assertEquals(expected,
-                loopingLinearMovingFloatBoxProvider.provide(timestamp + pauseDuration));
+        assertEquals(expected, provider.provide(timestamp + pauseDuration));
     }
 
     @Test
-    void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, loopingLinearMovingFloatBoxProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, loopingLinearMovingFloatBoxProvider.representation());
+    public void testRepresentation() {
+        assertEquals(VALUES_AT_TIMES, provider.representation());
+        assertNotSame(VALUES_AT_TIMES, provider.representation());
     }
 }

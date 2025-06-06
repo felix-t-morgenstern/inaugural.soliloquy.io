@@ -7,8 +7,8 @@ import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
-import java.util.ArrayList;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -30,19 +30,15 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
     }
 
     protected static void graphicsPreloaderLoadAction() {
-        new MouseCursorImagePreloaderTask(
-                new ArrayList<MouseCursorImageDefinitionDTO>() {{
-                    add(new MouseCursorImageDefinitionDTO(
+        new MouseCursorImagePreloaderTask(listOf(new MouseCursorImageDefinitionDTO(
                             MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION,
                             0, 0
-                    ));
-                }},
+                    )),
                 new MouseCursorImageFactoryImpl(),
                 output -> MouseCursorProviders.put(
                         output.relativeLocation(),
                         new StaticProviderImpl<>(
                                 randomUUID(),
-                                output.id(),
                                 output.id(),
                                 null
                         )

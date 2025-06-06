@@ -1,15 +1,14 @@
 package inaugural.soliloquy.graphics.bootstrap.tasks;
 
-import inaugural.soliloquy.graphics.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
 
@@ -42,8 +41,7 @@ public class ImageAssetSetPreloaderTask implements Runnable {
                         "imageAssetSetDefinitionDTO.assets within imageAssetSetDefinitionDTOs (" +
                         imageAssetSetDefinitionDTO.id + ") is empty");
             }
-            for (ImageAssetSetAssetDefinitionDTO imageAssetSetAssetDTO :
-                    imageAssetSetDefinitionDTO.assets) {
+            for (var imageAssetSetAssetDTO : imageAssetSetDefinitionDTO.assets) {
                 Check.ifNullOrEmpty(imageAssetSetAssetDTO.assetId,
                         "imageAssetSetAssetDTO.assetId within imageAssetSetDefinitionDTOs (" +
                                 imageAssetSetDefinitionDTO.id + ")");
@@ -66,7 +64,7 @@ public class ImageAssetSetPreloaderTask implements Runnable {
 
     private ImageAssetSetDefinition makeDefinition(ImageAssetSetDefinitionDTO
                                                            imageAssetSetDefinitionDTO) {
-        var assetDefinitions = new ArrayList<ImageAssetSetAssetDefinition>();
+        var assetDefinitions = Collections.<ImageAssetSetAssetDefinition>listOf();
         for (var assetDTO : imageAssetSetDefinitionDTO.assets) {
             assetDefinitions.add(new ImageAssetSetAssetDefinition(
                     assetDTO.type,

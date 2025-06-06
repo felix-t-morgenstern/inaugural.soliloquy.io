@@ -3,13 +3,13 @@ package inaugural.soliloquy.graphics.renderables.factories;
 import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.assets.Sprite;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -51,10 +51,5 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
                 renderingDimensionsProvider, z, uuid, containingStack, RENDERING_BOUNDARIES);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return SpriteRenderableFactory.class.getCanonicalName();
     }
 }

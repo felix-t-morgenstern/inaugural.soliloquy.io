@@ -14,9 +14,4 @@ public class FakeMouseCursor implements MouseCursor {
     public void updateCursor(long windowId) {
         NumberOfTimesUpdateCursorCalled++;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

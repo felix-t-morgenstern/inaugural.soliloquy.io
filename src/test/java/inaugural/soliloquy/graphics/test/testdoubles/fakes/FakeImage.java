@@ -3,9 +3,12 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.Image;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+
+
 
 public class FakeImage implements Image {
     public String RelativeLocation;
@@ -15,7 +18,7 @@ public class FakeImage implements Image {
 
     public boolean SupportsMouseEventCapturing;
 
-    public ArrayList<Pair<Integer, Integer>> CapturesMouseEventsAtPixelInputs = new ArrayList<>();
+    public List<Pair<Integer, Integer>> CapturesMouseEventsAtPixelInputs = listOf();
 
     public FakeImage(String relativeLocation) {
         RelativeLocation = relativeLocation;
@@ -74,10 +77,5 @@ public class FakeImage implements Image {
             throws UnsupportedOperationException, IllegalArgumentException {
         CapturesMouseEventsAtPixelInputs.add(pairOf(x, y));
         return true;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

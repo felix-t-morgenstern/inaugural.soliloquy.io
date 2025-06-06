@@ -34,7 +34,7 @@ abstract class AbstractRenderable implements Renderable {
         return containingStack;
     }
 
-    // NB: deleted SpriteRenderables should _NOT_ make other calls unsupported, unlike
+    // NB: deleted SpriteRenderables should NOT_ make other calls unsupported, unlike
     //     TileEntities, since it might be deleted in the middle of rendering a frame which
     //     contains it, causing a breaking race condition.
     @Override

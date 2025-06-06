@@ -13,13 +13,13 @@ import soliloquy.specs.graphics.rendering.factories.ShaderFactory;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-class ShaderFactoryImplTests {
+public class ShaderFactoryImplTests {
     private static final String SHADER_FILENAME_PREFIX = "./src/test/resources/shaders/unitTestingShader";
 
-    private ShaderFactory _shaderFactory;
+    private ShaderFactory shaderFactory;
 
     @BeforeAll
-    static void setUpFixture() {
+    public static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -35,26 +35,21 @@ class ShaderFactoryImplTests {
     }
 
     @BeforeEach
-    void setUp() {
-        _shaderFactory = new ShaderFactoryImpl();
+    public void setUp() {
+        shaderFactory = new ShaderFactoryImpl();
     }
 
     @Test
-    void testMake() {
-        Shader shader = _shaderFactory.make(SHADER_FILENAME_PREFIX);
+    public void testMake() {
+        Shader shader = shaderFactory.make(SHADER_FILENAME_PREFIX);
 
         assertNotNull(shader);
-        assertTrue(shader instanceof ShaderImpl);
+        assertInstanceOf(ShaderImpl.class, shader);
     }
 
     @Test
-    void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _shaderFactory.make(null));
-        assertThrows(IllegalArgumentException.class, () -> _shaderFactory.make(""));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(ShaderFactory.class.getCanonicalName(), _shaderFactory.getInterfaceName());
+    public void testMakeWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> shaderFactory.make(null));
+        assertThrows(IllegalArgumentException.class, () -> shaderFactory.make(""));
     }
 }

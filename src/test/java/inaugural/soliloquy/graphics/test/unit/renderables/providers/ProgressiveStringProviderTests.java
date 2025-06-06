@@ -3,16 +3,15 @@ package inaugural.soliloquy.graphics.test.unit.renderables.providers;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class ProgressiveStringProviderTests {
+public class ProgressiveStringProviderTests {
     private final String STRING = randomString();
     private final int STRING_LENGTH = STRING.length();
     // NB: Values here are divided by 2 to prevent overflow issues in tests
@@ -24,16 +23,17 @@ class ProgressiveStringProviderTests {
 
     private static final UUID UUID = java.util.UUID.randomUUID();
 
-    private ProviderAtTime<String> _progressiveStringProvider;
+    private ProviderAtTime<String> provider;
 
     @BeforeEach
-    void setUp() {
-        _progressiveStringProvider = new ProgressiveStringProvider(UUID, STRING,
-                START_TIMESTAMP, TIME_TO_COMPLETE, null, null);
+    public void setUp() {
+        provider =
+                new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE, null,
+                        null);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new ProgressiveStringProvider(null, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
@@ -52,19 +52,19 @@ class ProgressiveStringProviderTests {
     }
 
     @Test
-    void testUuid() {
-        assertSame(UUID, _progressiveStringProvider.uuid());
+    public void testUuid() {
+        assertSame(UUID, provider.uuid());
     }
 
     @Test
-    void testPausedTimestamp() {
-        _progressiveStringProvider.reportPause(PAUSED_TIMESTAMP);
+    public void testPausedTimestamp() {
+        provider.reportPause(PAUSED_TIMESTAMP);
 
-        assertEquals(PAUSED_TIMESTAMP, _progressiveStringProvider.pausedTimestamp());
+        assertEquals(PAUSED_TIMESTAMP, provider.pausedTimestamp());
     }
 
     @Test
-    void testMostRecentTimestamp() {
+    public void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
                 new ProgressiveStringProvider(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE,
                         null, MOST_RECENT_TIMESTAMP)
@@ -72,7 +72,7 @@ class ProgressiveStringProviderTests {
     }
 
     @Test
-    void testProvide() {
+    public void testProvide() {
         int numberOfCharactersToProvide = randomIntInRange(1, STRING_LENGTH - 1);
         double percentOfString = (numberOfCharactersToProvide / (double) STRING_LENGTH);
         long timestampWithinPeriod = (long) (TIME_TO_COMPLETE * percentOfString);
@@ -88,29 +88,29 @@ class ProgressiveStringProviderTests {
         long marginOfError = (long) (0.01D * characterLengthWithinPeriod);
 
         assertEquals(numberOfCharactersToProvide - 1,
-                _progressiveStringProvider.provide(timestamp - marginOfError).length());
+                provider.provide(timestamp - marginOfError).length());
         assertEquals(numberOfCharactersToProvide,
-                _progressiveStringProvider.provide(timestamp + marginOfError).length());
+                provider.provide(timestamp + marginOfError).length());
     }
 
     @Test
-    void testProvideBeforeStartOfRange() {
+    public void testProvideBeforeStartOfRange() {
         long characterLengthWithinPeriod =
                 (long) (TIME_TO_COMPLETE * (1 / (double) STRING_LENGTH));
         long marginOfError = 10 * characterLengthWithinPeriod;
 
         assertEquals(0,
-                _progressiveStringProvider.provide(START_TIMESTAMP - marginOfError).length());
+                provider.provide(START_TIMESTAMP - marginOfError).length());
     }
 
     @Test
-    void testProvideAfterEndOfRange() {
+    public void testProvideAfterEndOfRange() {
         assertEquals(STRING_LENGTH,
-                _progressiveStringProvider.provide(Long.MAX_VALUE / 2).length());
+                provider.provide(Long.MAX_VALUE / 2).length());
     }
 
     @Test
-    void testProvideWhilePaused() {
+    public void testProvideWhilePaused() {
         int numberOfCharactersToProvideWhilePaused = randomIntInRange(1, STRING_LENGTH - 1);
         double percentOfString = (numberOfCharactersToProvideWhilePaused / (double) STRING_LENGTH);
         long timestampWithinPeriod = (long) (TIME_TO_COMPLETE * percentOfString);
@@ -122,17 +122,17 @@ class ProgressiveStringProviderTests {
 
         long pauseTimestamp = timestamp + marginOfError;
 
-        _progressiveStringProvider.reportPause(pauseTimestamp);
+        provider.reportPause(pauseTimestamp);
 
         assertEquals(numberOfCharactersToProvideWhilePaused,
-                _progressiveStringProvider
+                provider
                         .provide(randomLongWithInclusiveFloor(pauseTimestamp
                                 + (characterLengthWithinPeriod * 10)))
                         .length());
     }
 
     @Test
-    void testUnpauseUpdatesStartingTime() {
+    public void testUnpauseUpdatesStartingTime() {
         long pauseDuration = randomLongInRange(1000000000L, Long.MAX_VALUE / 2);
         int numberOfCharactersToProvide = randomIntInRange(1, STRING_LENGTH - 1);
         double percentOfString = (numberOfCharactersToProvide / (double) STRING_LENGTH);
@@ -148,60 +148,48 @@ class ProgressiveStringProviderTests {
                 (long) (TIME_TO_COMPLETE * (1 / (double) STRING_LENGTH));
         long marginOfError = (long) (0.01D * characterLengthWithinPeriod);
 
-        _progressiveStringProvider.reportPause(PAUSED_TIMESTAMP);
-        _progressiveStringProvider.reportUnpause(PAUSED_TIMESTAMP + pauseDuration);
+        provider.reportPause(PAUSED_TIMESTAMP);
+        provider.reportUnpause(PAUSED_TIMESTAMP + pauseDuration);
 
         assertEquals(numberOfCharactersToProvide - 1,
-                _progressiveStringProvider.provide(timestamp - marginOfError).length());
+                provider.provide(timestamp - marginOfError).length());
         assertEquals(numberOfCharactersToProvide,
-                _progressiveStringProvider.provide(timestamp + marginOfError).length());
+                provider.provide(timestamp + marginOfError).length());
     }
 
     @Test
-    void testOutdatedTimestamp() {
-        _progressiveStringProvider.provide(MOST_RECENT_TIMESTAMP);
+    public void testOutdatedTimestamp() {
+        provider.provide(MOST_RECENT_TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class, () ->
-                _progressiveStringProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
+                provider.reportPause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _progressiveStringProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
+                provider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                _progressiveStringProvider.provide(MOST_RECENT_TIMESTAMP - 1));
+                provider.provide(MOST_RECENT_TIMESTAMP - 1));
     }
 
     @Test
-    void testMostRecentTimestampUpdates() {
-        _progressiveStringProvider.reportPause(MOST_RECENT_TIMESTAMP + 1);
+    public void testMostRecentTimestampUpdates() {
+        provider.reportPause(MOST_RECENT_TIMESTAMP + 1);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long) _progressiveStringProvider.mostRecentTimestamp());
+                (long) provider.mostRecentTimestamp());
 
-        _progressiveStringProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2);
+        provider.reportUnpause(MOST_RECENT_TIMESTAMP + 2);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) _progressiveStringProvider.mostRecentTimestamp());
+                (long) provider.mostRecentTimestamp());
 
-        _progressiveStringProvider.provide(MOST_RECENT_TIMESTAMP + 3);
+        provider.provide(MOST_RECENT_TIMESTAMP + 3);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long) _progressiveStringProvider.mostRecentTimestamp());
+                (long) provider.mostRecentTimestamp());
     }
 
     @Test
-    void testArchetype() {
-        assertNotNull(_progressiveStringProvider.archetype());
-    }
-
-    @Test
-    void testRepresentation() {
+    public void testRepresentation() {
         assertEquals(pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)),
-                _progressiveStringProvider.representation());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
-                        String.class.getCanonicalName() + ">",
-                _progressiveStringProvider.getInterfaceName());
+                provider.representation());
     }
 }

@@ -8,18 +8,19 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
 import soliloquy.specs.graphics.io.MouseListener;
 
-import java.util.HashMap;
-
 import static inaugural.soliloquy.graphics.api.Constants.*;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-class MouseListenerImplTests {
+public class MouseListenerImplTests {
     private final float X = randomFloatInRange(0f, 1f);
     private final float Y = randomFloatInRange(0f, 1f);
-    private final Vertex POSITION = Vertex.of(X, Y);
+    private final Vertex POSITION = vertexOf(X, Y);
     private final long TIMESTAMP = randomLong();
 
     @Mock private MouseEventHandler mockMouseEventHandler;
@@ -27,202 +28,197 @@ class MouseListenerImplTests {
     private MouseListener mouseListener;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockMouseEventHandler = mock(MouseEventHandler.class);
 
         mouseListener = new MouseListenerImpl(mockMouseEventHandler);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new MouseListenerImpl(null));
     }
 
     @Test
-    void testMouseButtonPressed() {
+    public void testMouseButtonPressed() {
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, true);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, true),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, times(1)).actOnMouseLocationAndEvents(eq(POSITION),
-                eq(new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS);
-                }}), eq(TIMESTAMP));
+        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+                eq(mapOf(
+                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
+                )), eq(TIMESTAMP));
     }
 
     @Test
-    void testMouseButtonPressedOnlyOncePerStateChange() {
+    public void testMouseButtonPressedOnlyOncePerStateChange() {
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, true);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, true),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, true);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, true),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, times(1)).actOnMouseLocationAndEvents(eq(POSITION),
-                eq(new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS);
-                }}), eq(TIMESTAMP));
+        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+                eq(mapOf(
+                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
+                )), eq(TIMESTAMP));
     }
 
     @Test
-    void testMouseButtonReleasedAfterPressed() {
+    public void testMouseButtonReleasedAfterPressed() {
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, true);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, true),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, false);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, false),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, times(1)).actOnMouseLocationAndEvents(eq(POSITION),
-                eq(new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE);
-                }}), eq(TIMESTAMP));
+        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+                eq(mapOf(
+                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
+                )), eq(TIMESTAMP));
     }
 
     @Test
-    void testMouseButtonReleasedAfterPressedOnlyOncePerRelease() {
+    public void testMouseButtonReleasedAfterPressedOnlyOncePerRelease() {
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, true);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, true),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, false);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, false),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
         mouseListener.registerMousePositionAndButtonStates(POSITION,
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, false);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, false),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, times(1)).actOnMouseLocationAndEvents(eq(POSITION),
-                eq(new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE);
-                }}), eq(TIMESTAMP));
+        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+                eq(mapOf(
+                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
+                )), eq(TIMESTAMP));
     }
 
     @Test
-    void testRegisterMousePositionAndButtonStatesWithInvalidParams() {
+    public void testRegisterMousePositionAndButtonStatesWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> mouseListener.registerMousePositionAndButtonStates(null,
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }},
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(-0.0001f, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(-0.0001f, 0),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(1.0001f, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(1.0001f, 0),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, -0.0001f),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, -0.0001f),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 1.0001f),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 1.0001f),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0), null,
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0), null,
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(null, true);
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(null, true),
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON - 1), true);
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON - 1), true),
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON + 1), true);
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON + 1), true),
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(LEFT_MOUSE_BUTTON, null);
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(LEFT_MOUSE_BUTTON, null),
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(MIDDLE_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true);
-                            put(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true);
-                        }}, TIMESTAMP));
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(randomIntWithInclusiveFloor(LEFT_MOUSE_BUTTON), true),
+                            pairOf(randomIntWithInclusiveFloor(RIGHT_MOUSE_BUTTON), true)
+                        ), TIMESTAMP));
     }
 
     @Test
-    void testThrowsOnOutdatedTimestamp() {
-        mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                new HashMap<Integer, Boolean>() {{
-                    put(LEFT_MOUSE_BUTTON, false);
-                    put(RIGHT_MOUSE_BUTTON, false);
-                    put(MIDDLE_MOUSE_BUTTON, false);
-                }}, TIMESTAMP);
+    public void testThrowsOnOutdatedTimestamp() {
+        mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, false),
+                    pairOf(RIGHT_MOUSE_BUTTON, false),
+                    pairOf(MIDDLE_MOUSE_BUTTON, false)
+                ), TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(Vertex.of(0, 0),
-                        new HashMap<Integer, Boolean>() {{
-                            put(LEFT_MOUSE_BUTTON, false);
-                            put(RIGHT_MOUSE_BUTTON, false);
-                            put(MIDDLE_MOUSE_BUTTON, false);
-                        }}, TIMESTAMP - 1));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(MouseListener.class.getCanonicalName(), mouseListener.getInterfaceName());
+                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+                        mapOf(
+                            pairOf(LEFT_MOUSE_BUTTON, false),
+                            pairOf(RIGHT_MOUSE_BUTTON, false),
+                            pairOf(MIDDLE_MOUSE_BUTTON, false)
+                        ), TIMESTAMP - 1));
     }
 }

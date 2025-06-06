@@ -26,9 +26,4 @@ public class FakeMesh implements Mesh {
     public void cleanUp() {
 
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

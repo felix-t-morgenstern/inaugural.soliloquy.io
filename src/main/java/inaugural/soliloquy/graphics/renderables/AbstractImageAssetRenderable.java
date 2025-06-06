@@ -2,13 +2,13 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.AssetSnippet;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -129,33 +129,33 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         Check.throwOnGtValue(point.Y, 1f, "point.Y");
 
         var renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
-        if (point.X < renderingBoundaries.leftX() || point.X > renderingBoundaries.rightX() ||
-                point.Y < renderingBoundaries.topY() || point.Y > renderingBoundaries.bottomY()) {
+        if (point.X < renderingBoundaries.LEFT_X || point.X > renderingBoundaries.RIGHT_X ||
+                point.Y < renderingBoundaries.TOP_Y || point.Y > renderingBoundaries.BOTTOM_Y) {
             return false;
         }
 
         var renderingArea = renderingAreaProvider.provide(timestamp);
-        if (point.X < renderingArea.leftX()) {
+        if (point.X < renderingArea.LEFT_X) {
             throw new IllegalArgumentException(
                     className() + ".capturesMouseEventAtPoint: point.X (" + point.X +
                             ") is to the left of left boundary of renderable (" +
-                            renderingArea.leftX() + ")");
+                            renderingArea.LEFT_X + ")");
         }
-        if (point.X > renderingArea.rightX()) {
+        if (point.X > renderingArea.RIGHT_X) {
             throw new IllegalArgumentException(
                     className() + ".capturesMouseEventAtPoint: point.X (" + point.X +
                             ") is to the right of right boundary of renderable (" +
-                            renderingArea.rightX() + ")");
+                            renderingArea.RIGHT_X + ")");
         }
-        if (point.Y < renderingArea.topY()) {
+        if (point.Y < renderingArea.TOP_Y) {
             throw new IllegalArgumentException(
                     className() + ".capturesMouseEventAtPoint: point.Y (" + point.Y +
-                            ") is above top boundary of renderable (" + renderingArea.topY() + ")");
+                            ") is above top boundary of renderable (" + renderingArea.TOP_Y + ")");
         }
-        if (point.Y > renderingArea.bottomY()) {
+        if (point.Y > renderingArea.BOTTOM_Y) {
             throw new IllegalArgumentException(
                     className() + ".capturesMouseEventAtPoint: point.Y (" + point.Y +
-                            ") is below bottom boundary of renderable (" + renderingArea.bottomY() +
+                            ") is below bottom boundary of renderable (" + renderingArea.BOTTOM_Y +
                             ")");
         }
         var snippet = snippetSupplier.get();
@@ -167,10 +167,10 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
         }
         var image = snippet.image();
         var imageX =
-                (int) ((((point.X - offsetX) - renderingArea.leftX()) / renderingArea.width()) *
+                (int) ((((point.X - offsetX) - renderingArea.LEFT_X) / renderingArea.width()) *
                         (snippet.rightX() - snippet.leftX())) + snippet.leftX();
         var imageY =
-                (int) ((((point.Y - offsetY) - renderingArea.topY()) / renderingArea.height()) *
+                (int) ((((point.Y - offsetY) - renderingArea.TOP_Y) / renderingArea.height()) *
                         (snippet.bottomY() - snippet.topY())) + snippet.topY();
         return image.capturesMouseEventsAtPixel(imageX, imageY);
     }

@@ -10,10 +10,11 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class AnimationPreloaderTask implements Runnable {
     private final Function<String, Image> GET_IMAGE;
@@ -79,7 +80,7 @@ public class AnimationPreloaderTask implements Runnable {
     }
 
     private AnimationDefinition makeDefinition(AnimationDefinitionDTO animationDefinitionDTO) {
-        Map<Integer, AnimationFrameSnippet> snippetDefinitions = new HashMap<>();
+        Map<Integer, AnimationFrameSnippet> snippetDefinitions = mapOf();
         for (AnimationFrameDefinitionDTO frameSnippetDTO : animationDefinitionDTO.frames) {
             snippetDefinitions.put(frameSnippetDTO.ms, new AnimationFrameSnippet() {
                 @Override
@@ -115,11 +116,6 @@ public class AnimationPreloaderTask implements Runnable {
                 @Override
                 public float offsetY() {
                     return frameSnippetDTO.offsetY;
-                }
-
-                @Override
-                public String getInterfaceName() {
-                    return AnimationFrameSnippet.class.getCanonicalName();
                 }
             });
         }

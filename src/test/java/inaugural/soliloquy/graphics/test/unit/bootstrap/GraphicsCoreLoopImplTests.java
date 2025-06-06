@@ -21,13 +21,12 @@ import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class GraphicsCoreLoopImplTests {
+public class GraphicsCoreLoopImplTests {
     private final String TITLEBAR = "My title bar";
     private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK =
             new FakeGLFWMouseButtonCallback();
@@ -57,7 +56,7 @@ class GraphicsCoreLoopImplTests {
     private GraphicsCoreLoop graphicsCoreLoop;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockGlobalClock = mock(GlobalClock.class);
         when(mockGlobalClock.globalTimestamp()).thenReturn(GLOBAL_TIMESTAMP);
 
@@ -98,7 +97,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testInvalidConstructorParams() {
+    public void testInvalidConstructorParams() {
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 null,
                 MOUSE_BUTTON_CALLBACK,
@@ -482,18 +481,12 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(GraphicsCoreLoop.class.getCanonicalName(),
-                graphicsCoreLoop.getInterfaceName());
-    }
-
-    @Test
-    void testGetTitlebar() {
+    public void testGetTitlebar() {
         assertEquals(TITLEBAR, graphicsCoreLoop.getTitlebar());
     }
 
     @Test
-    void testUpdateWhenWindowIdIsZero() {
+    public void testUpdateWhenWindowIdIsZero() {
         FRAME_TIMER.ShouldExecuteNextFrame = true;
         when(mockWindowResolutionManager.updateWindowSizeAndLocation(anyLong(),
                 anyString())).thenReturn(0L);
@@ -503,18 +496,18 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testWhenFrameTimerDoesNotPermitNewFrames() {
+    public void testWhenFrameTimerDoesNotPermitNewFrames() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
 
         verify(mockFrameExecutor, never()).execute(anyLong());
-        verify(mockWindowResolutionManager, times(1))
+        verify(mockWindowResolutionManager, once())
                 .updateWindowSizeAndLocation(anyLong(), anyString());
     }
 
     @Test
-    void testUpdateDimensionsOnFrame() {
+    public void testUpdateDimensionsOnFrame() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
@@ -523,7 +516,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testWhenFrameTimerPermitsNewFrames() {
+    public void testWhenFrameTimerPermitsNewFrames() {
         FRAME_TIMER.ShouldExecuteNextFrame = true;
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
@@ -543,7 +536,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testGraphicsPreloaderCalledBeforeFrameTimer() {
+    public void testGraphicsPreloaderCalledBeforeFrameTimer() {
         List<Object> invokedClassesInOrder = listOf();
         FRAME_TIMER.AddThisWhenLoadIsCalled = GRAPHICS_PRELOADER.AddThisWhenLoadIsCalled =
                 invokedClassesInOrder;
@@ -556,7 +549,7 @@ class GraphicsCoreLoopImplTests {
     }
 
     @Test
-    void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalledAndMouseCursorUpdateCalled() {
+    public void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalledAndMouseCursorUpdateCalled() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));

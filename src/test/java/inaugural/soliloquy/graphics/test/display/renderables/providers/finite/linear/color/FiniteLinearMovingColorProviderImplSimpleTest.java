@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.color;
 
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 

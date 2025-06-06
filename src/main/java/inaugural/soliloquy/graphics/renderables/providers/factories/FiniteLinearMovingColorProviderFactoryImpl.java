@@ -20,9 +20,4 @@ public class FiniteLinearMovingColorProviderFactoryImpl
         return new FiniteLinearMovingColorProviderImpl(uuid, valuesAtTimestamps,
                 hueMovementIsClockwise, pausedTimestamp, mostRecentTimestamp);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return FiniteLinearMovingColorProviderFactoryImpl.class.getCanonicalName();
-    }
 }

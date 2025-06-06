@@ -2,12 +2,11 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class ProgressiveStringProvider
         extends AbstractFinitePausableAtTime
@@ -54,11 +53,6 @@ public class ProgressiveStringProvider
     }
 
     @Override
-    public String archetype() {
-        return "";
-    }
-
-    @Override
     public UUID uuid() {
         return UUID;
     }
@@ -66,11 +60,5 @@ public class ProgressiveStringProvider
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return ProviderAtTime.class.getCanonicalName() + "<" + String.class.getCanonicalName() +
-                ">";
     }
 }

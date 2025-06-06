@@ -16,6 +16,7 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -30,15 +31,15 @@ import static org.mockito.Mockito.when;
  */
 public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest {
     private final static StaticProvider<Vertex> VERTEX_1_PROVIDER =
-            staticProvider(Vertex.of(0.2f, 0.2f));
+            staticProvider(vertexOf(0.2f, 0.2f));
     private final static StaticProvider<Color> VERTEX_1_COLOR_PROVIDER =
             staticProvider(Color.RED);
     private final static StaticProvider<Vertex> VERTEX_2_PROVIDER =
-            staticProvider(Vertex.of(0.8f, 0.4f));
+            staticProvider(vertexOf(0.8f, 0.4f));
     private final static StaticProvider<Color> VERTEX_2_COLOR_PROVIDER =
             staticProvider(Color.GREEN);
     private final static StaticProvider<Vertex> VERTEX_3_PROVIDER =
-            staticProvider(Vertex.of(0.5f, 0.8f));
+            staticProvider(vertexOf(0.5f, 0.8f));
     private final static StaticProvider<Color> VERTEX_3_COLOR_PROVIDER =
             staticProvider(Color.BLUE);
     @SuppressWarnings("unchecked")
@@ -56,7 +57,6 @@ public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest
                     when(BACKGROUND_TEXTURE_ID_PROVIDER.provide(anyLong()))
                             .thenReturn(new ImageFactoryImpl(0.5f)
                                     .make(new ImageDefinition(TILE_LOCATION, false)).textureId());
-                    when(BACKGROUND_TEXTURE_ID_PROVIDER.archetype()).thenReturn(0);
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 DisplayTest::closeAfterSomeTime

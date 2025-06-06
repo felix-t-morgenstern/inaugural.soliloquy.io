@@ -2,13 +2,13 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -114,11 +114,6 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public AnimationFrameSnippet archetype() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
         if (pausedTimestamp != null) {
             throw new IllegalArgumentException(
@@ -170,10 +165,5 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return FiniteAnimationRenderable.class.getCanonicalName();
     }
 }

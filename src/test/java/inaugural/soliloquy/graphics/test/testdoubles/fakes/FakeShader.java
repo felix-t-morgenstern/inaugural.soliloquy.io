@@ -40,9 +40,4 @@ public class FakeShader implements Shader {
     public void setUniform(String s, Color color) throws IllegalArgumentException {
 
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

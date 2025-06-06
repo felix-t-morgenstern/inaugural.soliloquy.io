@@ -4,13 +4,13 @@ import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.shared.Direction;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -62,10 +62,5 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                 onMouseOver, onMouseLeave, colorShiftProviders, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
                 RENDERING_BOUNDARIES);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return ImageAssetSetRenderableFactory.class.getCanonicalName();
     }
 }

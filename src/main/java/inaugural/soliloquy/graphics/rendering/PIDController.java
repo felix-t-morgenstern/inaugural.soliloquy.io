@@ -3,24 +3,26 @@ package inaugural.soliloquy.graphics.rendering;
 import com.stormbots.MiniPID;
 import inaugural.soliloquy.graphics.api.Settings;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Setting;
-import soliloquy.specs.common.infrastructure.SettingsRepo;
+import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.graphics.rendering.OutputController;
 
+import java.util.function.Function;
+
 public class PIDController implements OutputController {
-    private MiniPID _pidController;
+    private final MiniPID PID_CONTROLLER;
 
-    public PIDController(SettingsRepo settingsRepo) {
-        Check.ifNull(settingsRepo, "settingsRepo");
-        double p = getDoubleSettingValue(settingsRepo, Settings.PID_CONTROLLER_P_SETTING_ID);
-        double i = getDoubleSettingValue(settingsRepo, Settings.PID_CONTROLLER_I_SETTING_ID);
-        double d = getDoubleSettingValue(settingsRepo, Settings.PID_CONTROLLER_D_SETTING_ID);
+    public PIDController(@SuppressWarnings("rawtypes") Function<String, Setting> getSetting) {
+        Check.ifNull(getSetting, "getSetting");
+        double p = getDoubleSettingValue(getSetting, Settings.PID_CONTROLLER_P_SETTING_ID);
+        double i = getDoubleSettingValue(getSetting, Settings.PID_CONTROLLER_I_SETTING_ID);
+        double d = getDoubleSettingValue(getSetting, Settings.PID_CONTROLLER_D_SETTING_ID);
 
-        _pidController = new MiniPID(p, i, d);
+        PID_CONTROLLER = new MiniPID(p, i, d);
     }
 
-    private double getDoubleSettingValue(SettingsRepo settingsRepo, String settingId) {
-        @SuppressWarnings("rawtypes") Setting setting = settingsRepo.getSetting(settingId);
+    private double getDoubleSettingValue(
+            @SuppressWarnings("rawtypes") Function<String, Setting> getSetting, String settingId) {
+        @SuppressWarnings("rawtypes") Setting setting = getSetting.apply(settingId);
         if (setting == null) {
             throw new IllegalArgumentException("PIDController: setting not found: " + settingId);
         }
@@ -39,16 +41,11 @@ public class PIDController implements OutputController {
 
     @Override
     public void reset() {
-        _pidController.reset();
+        PID_CONTROLLER.reset();
     }
 
     @Override
     public double getOutput(double actual, double target) {
-        return _pidController.getOutput(actual, target);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return OutputController.class.getCanonicalName();
+        return PID_CONTROLLER.getOutput(actual, target);
     }
 }

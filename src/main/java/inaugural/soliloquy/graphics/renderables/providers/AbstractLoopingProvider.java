@@ -9,17 +9,15 @@ import java.util.UUID;
 public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausableAtTime
         implements LoopingProvider<T> {
     private final UUID UUID;
-    private final T ARCHETYPE;
 
-    private long _timestampSentToProviderMostRecently;
-    private int _periodModuloOffsetAtMostRecentProvision;
-    private T _mostRecentlyProvidedValue;
+    private long timestampSentToProviderMostRecently;
+    private int periodModuloOffsetAtMostRecentProvision;
+    private T mostRecentlyProvidedValue;
 
     protected AbstractLoopingProvider(UUID uuid, int periodDuration, int periodModuloOffset,
-                                      Long pauseTimestamp, Long mostRecentTimestamp, T archetype) {
+                                      Long pauseTimestamp, Long mostRecentTimestamp) {
         super(periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
-        ARCHETYPE = Check.ifNull(archetype, "archetype");
     }
 
     @Override
@@ -32,15 +30,15 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
         else {
             timestampForProvider = pausedTimestamp;
         }
-        if (_timestampSentToProviderMostRecently == timestampForProvider &&
-                periodModuloOffset == _periodModuloOffsetAtMostRecentProvision) {
-            return _mostRecentlyProvidedValue;
+        if (timestampSentToProviderMostRecently == timestampForProvider &&
+                periodModuloOffset == periodModuloOffsetAtMostRecentProvision) {
+            return mostRecentlyProvidedValue;
         }
-        _timestampSentToProviderMostRecently = timestampForProvider;
-        _periodModuloOffsetAtMostRecentProvision = periodModuloOffset;
+        timestampSentToProviderMostRecently = timestampForProvider;
+        periodModuloOffsetAtMostRecentProvision = periodModuloOffset;
         int msForProvider = (int) ((timestampForProvider + periodModuloOffset) % PERIOD_DURATION);
 
-        return _mostRecentlyProvidedValue = provideValueAtMsWithinPeriod(msForProvider);
+        return mostRecentlyProvidedValue = provideValueAtMsWithinPeriod(msForProvider);
     }
 
     protected abstract T provideValueAtMsWithinPeriod(int msWithinPeriod);
@@ -60,10 +58,5 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
         periodModuloOffset = PERIOD_DURATION - (int) (timestamp % PERIOD_DURATION);
-    }
-
-    @Override
-    public T archetype() {
-        return ARCHETYPE;
     }
 }

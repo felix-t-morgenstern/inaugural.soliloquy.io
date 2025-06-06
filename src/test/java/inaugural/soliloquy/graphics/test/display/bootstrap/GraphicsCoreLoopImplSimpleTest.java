@@ -7,16 +7,14 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.io.MouseListener;
-import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.Mesh;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.mockito.Mockito.mock;
 
@@ -34,14 +32,13 @@ class GraphicsCoreLoopImplSimpleTest {
     static FakeWindowResolutionManager WindowManager;
 
     public static void main(String[] args) {
-        FakeFrameTimer frameTimer = new FakeFrameTimer();
-        FrameExecutor frameExecutor =
-                new FrameExecutorImpl(generateSimpleArchetype(RenderableStack.class),
-                        new FakeStackRenderer(), 100);
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
+        var frameTimer = new FakeFrameTimer();
+        var frameExecutor =
+                new FrameExecutorImpl(mock(RenderableStack.class), new FakeStackRenderer(), 100);
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = listOf();
         WindowManager = new FakeWindowResolutionManager();
-        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        Function<float[], Function<float[], Mesh>> meshFactory = _ -> _ -> new FakeMesh();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = listOf();
 
 
         GraphicsCoreLoop graphicsCoreLoop =
@@ -53,7 +50,7 @@ class GraphicsCoreLoopImplSimpleTest {
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {
-            long windowId = glfwCreateWindow(800, 600, "My titlebar", 0, 0);
+            var windowId = glfwCreateWindow(800, 600, "My titlebar", 0, 0);
             glfwShowWindow(windowId);
             glfwMakeContextCurrent(windowId);
             return windowId;

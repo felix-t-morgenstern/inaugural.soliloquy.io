@@ -27,6 +27,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.concurrency.Concurrency.*;
 
 public class GraphicsPreloaderImpl implements GraphicsPreloader {
@@ -53,9 +55,9 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final Consumer<AnimatedMouseCursorProvider> PROCESS_ANIMATED_MOUSE_CURSOR_PROVIDER;
     private final Consumer<StaticMouseCursorProvider> PROCESS_STATIC_MOUSE_CURSOR_PROVIDER;
 
-    private final HashMap<String, Image> IMAGES;
-    private final HashMap<String, Animation> ANIMATIONS;
-    private final HashMap<String, Long> MOUSE_CURSOR_IMAGES;
+    private final Map<String, Image> IMAGES;
+    private final Map<String, Animation> ANIMATIONS;
+    private final Map<String, Long> MOUSE_CURSOR_IMAGES;
 
     private final LinkedBlockingQueue<SpriteDefinitionDTO> SPRITE_DEFINITIONS_QUEUE;
     private final LinkedBlockingQueue<AnimationDefinitionDTO> ANIMATION_DEFINITIONS_QUEUE;
@@ -121,9 +123,9 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         STATIC_MOUSE_CURSOR_PROVIDER_FACTORY =
                 Check.ifNull(staticMouseCursorProviderFactory, "staticMouseCursorProviderFactory");
 
-        IMAGES = new HashMap<>();
-        ANIMATIONS = new HashMap<>();
-        MOUSE_CURSOR_IMAGES = new HashMap<>();
+        IMAGES = mapOf();
+        ANIMATIONS = mapOf();
+        MOUSE_CURSOR_IMAGES = mapOf();
 
         Check.ifNull(processSprite, "processSprite");
         PROCESS_SPRITE = sprite -> blockedConsumer(sprite, processSprite);
@@ -190,7 +192,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         //         -> GlobalLoopingAnimations
         //             -> ImageAssetSets
 
-        ArrayList<CompletableFuture<Void>> parallelizableTasks = new ArrayList<>();
+        List<CompletableFuture<Void>> parallelizableTasks = listOf();
 
         parallelizableTasks.add(
                 runTaskAsync(this::loadImageAssets, this::handleThrowable, EXECUTOR));
@@ -239,21 +241,21 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         EXECUTOR.shutdown();
 
         if (innerThrowable != null) {
-            if (innerThrowable instanceof IllegalArgumentException) {
-                throw (IllegalArgumentException) innerThrowable;
-            }
-            if (innerThrowable instanceof IllegalStateException) {
-                throw (IllegalStateException) innerThrowable;
-            }
-            if (innerThrowable instanceof UnsupportedOperationException) {
-                throw (UnsupportedOperationException) innerThrowable;
+            switch (innerThrowable) {
+                case IllegalArgumentException illegalArgumentException ->
+                        throw illegalArgumentException;
+                case IllegalStateException illegalStateException -> throw illegalStateException;
+                case UnsupportedOperationException unsupportedOperationException ->
+                        throw unsupportedOperationException;
+                default -> {
+                }
             }
             throw new RuntimeException(innerThrowable.getMessage());
         }
     }
 
     private void loadImageAssets() {
-        ArrayList<CompletableFuture<Void>> loadImageAssetsTasks = new ArrayList<>();
+        List<CompletableFuture<Void>> loadImageAssetsTasks = listOf();
 
         loadImageAssetsTasks.add(loadBatchesParallellyTask(
                 SPRITE_DEFINITIONS_QUEUE,
@@ -312,7 +314,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         while (assetsLoaded < totalAssets) {
             int numberToTake = Math.min(batchSize + assetsLoaded, totalAssets);
 
-            ArrayList<TDefinitionDTO> batch = new ArrayList<>(
+            List<TDefinitionDTO> batch = listOf(
                     Arrays.asList(definitionDTOs)
                             .subList(assetsLoaded, numberToTake));
 
@@ -331,10 +333,10 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         // NB: This magic works, since int division always rounds down
         int batchTasksToExecute = ((definitionDTOs.size() - 1) / batchSize) + 1;
 
-        ArrayList<CompletableFuture<Void>> tasks = new ArrayList<>();
+        List<CompletableFuture<Void>> tasks = listOf();
 
         return runTaskAsync(() -> {
-            for (int i = 0; i < batchTasksToExecute; i++) {
+            for (var i = 0; i < batchTasksToExecute; i++) {
                 tasks.add(runTaskAsync(
                         () -> loadBatch(definitionDTOs, batchSize, taskFactory, lockObject,
                                 increaseCompletedBatchesCount),
@@ -352,7 +354,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                                             Function<List<TDefinitionDTO>, Runnable> taskFactory,
                                             Object lockObject,
                                             Runnable increaseCompletedBatchesCount) {
-        ArrayList<TDefinitionDTO> batch = new ArrayList<>();
+        List<TDefinitionDTO> batch = listOf();
         definitionDTOs.drainTo(batch, batchSize);
         taskFactory.apply(batch).run();
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
@@ -365,10 +367,5 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         if (innerThrowable == null) {
             innerThrowable = e.getCause();
         }
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

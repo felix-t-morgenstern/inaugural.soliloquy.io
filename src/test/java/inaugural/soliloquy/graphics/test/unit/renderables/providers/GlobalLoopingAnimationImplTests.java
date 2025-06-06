@@ -10,7 +10,7 @@ import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GlobalLoopingAnimationImplTests {
+public class GlobalLoopingAnimationImplTests {
     private final String ID = "globalLoopingAnimationId";
     private final int MS_DURATION = 456;
     private final int PERIOD_MODULO_OFFSET = 123;
@@ -21,13 +21,13 @@ class GlobalLoopingAnimationImplTests {
     private GlobalLoopingAnimation globalLoopingAnimation;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         globalLoopingAnimation = new GlobalLoopingAnimationImpl(ID, ANIMATION,
                 PERIOD_MODULO_OFFSET, null);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET, null));
         assertThrows(IllegalArgumentException.class, () ->
@@ -41,28 +41,22 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(GlobalLoopingAnimation.class.getCanonicalName(),
-                globalLoopingAnimation.getInterfaceName());
-    }
-
-    @Test
-    void testId() {
+    public void testId() {
         assertEquals(ID, globalLoopingAnimation.id());
     }
 
     @Test
-    void testUuid() {
+    public void testUuid() {
         assertThrows(UnsupportedOperationException.class, globalLoopingAnimation::uuid);
     }
 
     @Test
-    void testAnimationId() {
+    public void testAnimationId() {
         assertEquals(ANIMATION_ID, globalLoopingAnimation.animationId());
     }
 
     @Test
-    void testSupportsMouseEvents() {
+    public void testSupportsMouseEvents() {
         assertTrue(globalLoopingAnimation.supportsMouseEvents());
 
         ANIMATION.SupportsMouseEventCapturing = false;
@@ -71,19 +65,19 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testPeriodModuloOffset() {
+    public void testPeriodModuloOffset() {
         assertEquals(PERIOD_MODULO_OFFSET, globalLoopingAnimation.periodModuloOffset());
     }
 
     @Test
-    void testPauseTimestamp() {
+    public void testPauseTimestamp() {
         long pauseTimestamp = 111L;
         assertEquals(pauseTimestamp, (long) new GlobalLoopingAnimationImpl(ID, ANIMATION,
                 PERIOD_MODULO_OFFSET, pauseTimestamp).pausedTimestamp());
     }
 
     @Test
-    void testProvideAndMostRecentTimestamp() {
+    public void testProvideAndMostRecentTimestamp() {
         long timestamp = 789789L;
         int expectedFrame = (int) ((timestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
 
@@ -92,18 +86,13 @@ class GlobalLoopingAnimationImplTests {
         assertEquals(timestamp, (long) globalLoopingAnimation.mostRecentTimestamp());
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetWithFrame =
-                ANIMATION.SnippetsProvided.get(0);
-        assertEquals(expectedFrame, (int) providedSnippetWithFrame.item1());
-        assertSame(providedSnippetWithFrame.item2(), providedSnippet);
+                ANIMATION.SnippetsProvided.getFirst();
+        assertEquals(expectedFrame, (int) providedSnippetWithFrame.FIRST);
+        assertSame(providedSnippetWithFrame.SECOND, providedSnippet);
     }
 
     @Test
-    void testArchetype() {
-        assertThrows(UnsupportedOperationException.class, globalLoopingAnimation::archetype);
-    }
-
-    @Test
-    void testReportPauseAndUnpause() {
+    public void testReportPauseAndUnpause() {
         long pauseTimestamp = 10000L;
         long unpauseTimestamp = 10001L;
         int expectedPeriodModuloOffset =
@@ -123,7 +112,7 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testReportPauseWhilePausedOrViceVersa() {
+    public void testReportPauseWhilePausedOrViceVersa() {
         assertThrows(UnsupportedOperationException.class, () ->
                 globalLoopingAnimation.reportUnpause(0L));
 
@@ -134,7 +123,7 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testTimestampSentToProviderWhenPausedAndUnpaused() {
+    public void testTimestampSentToProviderWhenPausedAndUnpaused() {
         long pauseTimestamp = 10000L;
         int expectedMsSentToProviderWhilePaused =
                 (int) ((pauseTimestamp + PERIOD_MODULO_OFFSET) % MS_DURATION);
@@ -156,10 +145,10 @@ class GlobalLoopingAnimationImplTests {
 
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionWhilePaused =
-                ANIMATION.SnippetsProvided.get(0);
+                ANIMATION.SnippetsProvided.getFirst();
         assertEquals(expectedMsSentToProviderWhilePaused,
-                (int) providedSnippetAndMsPositionWhilePaused.item1());
-        assertSame(providedSnippetWhilePaused, providedSnippetAndMsPositionWhilePaused.item2());
+                (int) providedSnippetAndMsPositionWhilePaused.FIRST);
+        assertSame(providedSnippetWhilePaused, providedSnippetAndMsPositionWhilePaused.SECOND);
 
         globalLoopingAnimation.reportUnpause(unpauseTimestamp);
 
@@ -173,13 +162,13 @@ class GlobalLoopingAnimationImplTests {
         Pair<Integer, AnimationFrameSnippet> providedSnippetAndMsPositionAfterUnpaused =
                 ANIMATION.SnippetsProvided.get(1);
         assertEquals(expectedMsSentToProviderAfterUnpaused,
-                (int) providedSnippetAndMsPositionAfterUnpaused.item1());
+                (int) providedSnippetAndMsPositionAfterUnpaused.FIRST);
         assertSame(providedSnippetAfterUnpaused,
-                providedSnippetAndMsPositionAfterUnpaused.item2());
+                providedSnippetAndMsPositionAfterUnpaused.SECOND);
     }
 
     @Test
-    void testReset() {
+    public void testReset() {
         long resetTimestamp = 123123L;
 
         globalLoopingAnimation.reset(resetTimestamp);
@@ -189,7 +178,7 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testReportPauseOrProvideWithOutdatedTimestamp() {
+    public void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
         globalLoopingAnimation.provide(timestamp);
@@ -234,7 +223,7 @@ class GlobalLoopingAnimationImplTests {
     }
 
     @Test
-    void testRepresentation() {
+    public void testRepresentation() {
         assertEquals(ANIMATION_ID, globalLoopingAnimation.representation());
     }
 }

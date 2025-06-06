@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -21,6 +21,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 class TextLineRendererBorderTest extends TextLineRendererTest {
     private final static String RELATIVE_LOCATION =
@@ -41,8 +42,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         runTest(
                 TextLineRendererBorderTest::generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(TextLineRenderable.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderable.getFont()).thenReturn(new FontImpl(FontDefinition));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererBorderTest::closeAfterSomeTime);
@@ -77,18 +77,18 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        var renderingLocation = Vertex.of(0.5f, 0.45f);
+        var renderingLocation = vertexOf(0.5f, 0.45f);
 
         TextLineRenderable = mockTextLineRenderable(staticProvider(0.1f), 0f, LINE_TEXT,
                 staticProvider(0.00125f), staticProvider(new Color(255, 25, 119)), null, listOf(),
                 listOf(), staticProvider(renderingLocation));
         when(TextLineRenderable.getJustification()).thenReturn(TextJustification.CENTER);
 
-        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

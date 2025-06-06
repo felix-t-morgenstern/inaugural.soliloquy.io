@@ -1,54 +1,58 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
+import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
-import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
+import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticProviderFactory;
 
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
-
 /** @noinspection rawtypes */
-public class StaticProviderHandler
-        extends AbstractTypeWithOneGenericParamHandler<StaticProvider> {
+public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
     private final StaticProviderFactory FACTORY;
+    private final PersistenceHandler PERSISTENCE_HANDLER;
 
-    private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-
-    public StaticProviderHandler(PersistentValuesHandler persistentValuesHandler,
+    public StaticProviderHandler(PersistenceHandler persistenceHandler,
                                  StaticProviderFactory factory) {
-        //noinspection unchecked
-        super(generateArchetypeWithOneGenericParam(StaticProvider.class, 0,
-                        StaticProvider.class.getCanonicalName()), persistentValuesHandler,
-                archetype -> generateArchetypeWithOneGenericParam(StaticProvider.class, archetype));
+        PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
     }
 
+    @Override
+    public String typeHandled() {
+        return StaticProviderImpl.class.getCanonicalName();
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public StaticProvider read(String writtenValue) throws IllegalArgumentException {
         Check.ifNullOrEmpty(writtenValue, "writtenValue");
         var dto = JSON.fromJson(writtenValue, StaticProviderDTO.class);
         var uuid = UUID.fromString(dto.uuid);
-        var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.innerType);
+        var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.innerType);
         return FACTORY.make(uuid,
                 typeHandler.read(dto.val),
-                PERSISTENT_VALUES_HANDLER.generateArchetype(dto.innerType),
                 dto.mostRecentTimestamp);
     }
 
     @Override
     public String write(StaticProvider staticProvider) {
         Check.ifNull(staticProvider, "staticProvider");
-        var innerType = CAN_GET_INTERFACE_NAME.getProperTypeName(staticProvider.archetype());
-        var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(innerType);
-        StaticProviderDTO staticProviderDTO = new StaticProviderDTO();
-        staticProviderDTO.uuid = staticProvider.uuid().toString();
-        staticProviderDTO.innerType = innerType;
-        staticProviderDTO.val = typeHandler
-                .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
+
+        var staticProviderDTO = new StaticProviderDTO();
+
+        var staticValue = staticProvider.provide(staticProvider.mostRecentTimestamp());
+        if (staticValue != null) {
+            var type = staticValue.getClass().getCanonicalName();
+            var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(type);
+            staticProviderDTO.uuid = staticProvider.uuid().toString();
+            staticProviderDTO.innerType = type;
+            staticProviderDTO.val = typeHandler
+                    .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
+        }
+
         staticProviderDTO.mostRecentTimestamp = staticProvider.mostRecentTimestamp();
         return JSON.toJson(staticProviderDTO);
     }

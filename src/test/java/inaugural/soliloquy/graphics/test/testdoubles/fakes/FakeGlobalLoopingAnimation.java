@@ -41,16 +41,6 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     }
 
     @Override
-    public String getInterfaceName() {
-        return null;
-    }
-
-    @Override
-    public AnimationFrameSnippet archetype() {
-        return null;
-    }
-
-    @Override
     public boolean supportsMouseEvents() {
         return SupportsMouseEvents;
     }

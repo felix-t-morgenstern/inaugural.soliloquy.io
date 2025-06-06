@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer;
 
-import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
  * Test acceptance criteria:
@@ -44,22 +44,22 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
         FirstChildStack.setRenderingBoundariesProvider(
-                staticProvider(new FloatBoxImpl(0.0f, 0.0f, 0.625f, 0.625f)));
+                staticProvider(floatBoxOf(0.0f, 0.0f, 0.625f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
         FirstChildStack.setRenderingBoundariesProvider(
-                staticProvider(new FloatBoxImpl(0.375f, 0.0f, 1.0f, 0.625f)));
+                staticProvider(floatBoxOf(0.375f, 0.0f, 1.0f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
         FirstChildStack.setRenderingBoundariesProvider(
-                staticProvider(new FloatBoxImpl(0.375f, 0.375f, 1.0f, 1.0f)));
+                staticProvider(floatBoxOf(0.375f, 0.375f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
         FirstChildStack.setRenderingBoundariesProvider(
-                staticProvider(new FloatBoxImpl(0.0f, 0.375f, 0.625f, 1.0f)));
+                staticProvider(floatBoxOf(0.0f, 0.375f, 0.625f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

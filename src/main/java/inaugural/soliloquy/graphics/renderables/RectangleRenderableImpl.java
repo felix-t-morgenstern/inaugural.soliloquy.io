@@ -2,10 +2,10 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -121,24 +121,19 @@ public class RectangleRenderableImpl
         }
 
         FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
-        if (point.X < renderingBoundaries.leftX() || point.X > renderingBoundaries.rightX() ||
-                point.Y < renderingBoundaries.topY() || point.Y > renderingBoundaries.bottomY()) {
+        if (point.X < renderingBoundaries.LEFT_X || point.X > renderingBoundaries.RIGHT_X ||
+                point.Y < renderingBoundaries.TOP_Y || point.Y > renderingBoundaries.BOTTOM_Y) {
             return false;
         }
 
         FloatBox renderingDimensions = renderingDimensionsProvider.provide(timestamp);
         //noinspection RedundantIfStatement
-        if (point.X < renderingDimensions.leftX() || point.X > renderingDimensions.rightX() ||
-                point.Y < renderingDimensions.topY() || point.Y > renderingDimensions.bottomY()) {
+        if (point.X < renderingDimensions.LEFT_X || point.X > renderingDimensions.RIGHT_X ||
+                point.Y < renderingDimensions.TOP_Y || point.Y > renderingDimensions.BOTTOM_Y) {
             return false;
         }
 
         return true;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return RectangleRenderable.class.getCanonicalName();
     }
 
     @Override

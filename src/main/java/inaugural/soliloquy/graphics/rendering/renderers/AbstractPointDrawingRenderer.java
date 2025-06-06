@@ -11,8 +11,8 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 
 abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
         extends AbstractRenderer<TRenderable> {
-    protected AbstractPointDrawingRenderer(TRenderable archetype, Long mostRecentTimestamp) {
-        super(archetype, mostRecentTimestamp);
+    protected AbstractPointDrawingRenderer(Long mostRecentTimestamp) {
+        super(mostRecentTimestamp);
     }
 
     protected void setDrawColor(Color color) {
@@ -38,15 +38,15 @@ abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
     }
 
     protected void unbindMeshAndShader() {
-        if (_mesh == null) {
+        if (mesh == null) {
             throw new IllegalStateException(className() + ".render: mesh cannot be null");
         }
-        if (_shader == null) {
+        if (shader == null) {
             throw new IllegalStateException(className() + ".render: shader cannot be null");
         }
 
-        _mesh.unbind();
-        _shader.unbind();
+        mesh.unbind();
+        shader.unbind();
     }
 
     protected abstract String className();

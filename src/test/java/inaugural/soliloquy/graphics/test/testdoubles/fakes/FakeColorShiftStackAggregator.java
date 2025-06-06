@@ -24,9 +24,4 @@ public class FakeColorShiftStackAggregator implements ColorShiftStackAggregator 
         Input = timestamp;
         return Output;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

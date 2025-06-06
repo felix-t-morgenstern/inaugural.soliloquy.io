@@ -10,20 +10,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.FiniteAnimationRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -37,10 +39,10 @@ public class FiniteAnimationRenderableFactoryImplTests {
             new FakeAnimation(ANIMATION_NOT_SUPPORTING_ID, false);
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final HashMap<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = new HashMap<>();
+    private final Map<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final FakeAction<MouseEventInputs> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<MouseEventInputs> ON_MOUSE_LEAVE = new FakeAction<>();
-    private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
+    private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = listOf();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = randomInt();
@@ -57,7 +59,7 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private FiniteAnimationRenderableFactory finiteAnimationRenderableFactory;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockContainingStack = mock(RenderableStack.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
@@ -66,13 +68,13 @@ public class FiniteAnimationRenderableFactoryImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableFactoryImpl(null));
     }
 
     @Test
-    void testMake() {
+    public void testMake() {
         FiniteAnimationRenderable finiteAnimationRenderableWithMouseEvents =
                 finiteAnimationRenderableFactory.make(
                         ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
@@ -91,14 +93,14 @@ public class FiniteAnimationRenderableFactoryImplTests {
 
         assertNotNull(finiteAnimationRenderableWithMouseEvents);
         assertNotNull(finiteAnimationRenderableWithoutMouseEvents);
-        assertTrue(finiteAnimationRenderableWithMouseEvents
-                instanceof FiniteAnimationRenderableImpl);
-        assertTrue(finiteAnimationRenderableWithoutMouseEvents
-                instanceof FiniteAnimationRenderableImpl);
+        assertInstanceOf(FiniteAnimationRenderableImpl.class,
+                finiteAnimationRenderableWithMouseEvents);
+        assertInstanceOf(FiniteAnimationRenderableImpl.class,
+                finiteAnimationRenderableWithoutMouseEvents);
     }
 
     @Test
-    void testMakeWithInvalidParams() {
+    public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
                 null, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
@@ -208,11 +210,5 @@ public class FiniteAnimationRenderableFactoryImplTests {
                 mockContainingStack, START_TIMESTAMP, MOST_RECENT_TIMESTAMP + 1,
                 MOST_RECENT_TIMESTAMP
         ));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(FiniteAnimationRenderableFactory.class.getCanonicalName(),
-                finiteAnimationRenderableFactory.getInterfaceName());
     }
 }

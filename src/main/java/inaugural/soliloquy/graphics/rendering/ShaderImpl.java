@@ -8,16 +8,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.opengl.GL20.*;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class ShaderImpl implements Shader {
-    private int _program;
+    private final int PROGRAM;
 
     private final int NO_PROGRAM = 0;
 
@@ -28,14 +28,14 @@ public class ShaderImpl implements Shader {
     private final int ATTRIBUTE_LOCATION_VERTICES = 0;
     private final int ATTRIBUTE_LOCATION_UV_COORDS = 1;
 
-    private final HashMap<String, Object> UNIFORM_VALUES = new HashMap<>();
+    private final Map<String, Object> UNIFORM_VALUES = mapOf();
 
-    private final Map<String, Integer> UNIFORM_LOCATIONS = new HashMap<>();
+    private final Map<String, Integer> UNIFORM_LOCATIONS = mapOf();
 
     public ShaderImpl(String filename) {
         Check.ifNullOrEmpty(filename, "filename");
 
-        _program = glCreateProgram();
+        PROGRAM = glCreateProgram();
 
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShader, createShader(filename + ".vs"));
@@ -51,25 +51,25 @@ public class ShaderImpl implements Shader {
             throw new RuntimeException(glGetShaderInfoLog(fragmentShader));
         }
 
-        glAttachShader(_program, vertexShader);
-        glAttachShader(_program, fragmentShader);
+        glAttachShader(PROGRAM, vertexShader);
+        glAttachShader(PROGRAM, fragmentShader);
 
-        glBindAttribLocation(_program, ATTRIBUTE_LOCATION_VERTICES, "vertices");
-        glBindAttribLocation(_program, ATTRIBUTE_LOCATION_UV_COORDS, "uvCoords");
+        glBindAttribLocation(PROGRAM, ATTRIBUTE_LOCATION_VERTICES, "vertices");
+        glBindAttribLocation(PROGRAM, ATTRIBUTE_LOCATION_UV_COORDS, "uvCoords");
 
-        glLinkProgram(_program);
-        if (glGetProgrami(_program, GL_LINK_STATUS) != STATUS_OK) {
-            throw new RuntimeException(glGetProgramInfoLog(_program));
+        glLinkProgram(PROGRAM);
+        if (glGetProgrami(PROGRAM, GL_LINK_STATUS) != STATUS_OK) {
+            throw new RuntimeException(glGetProgramInfoLog(PROGRAM));
         }
 
-        glValidateProgram(_program);
-        if (glGetProgrami(_program, GL_VALIDATE_STATUS) != STATUS_OK) {
-            throw new RuntimeException(glGetProgramInfoLog(_program));
+        glValidateProgram(PROGRAM);
+        if (glGetProgrami(PROGRAM, GL_VALIDATE_STATUS) != STATUS_OK) {
+            throw new RuntimeException(glGetProgramInfoLog(PROGRAM));
         }
     }
 
     private static String createShader(String filename) {
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         BufferedReader bufferedReader;
         try {
             bufferedReader = new BufferedReader(new FileReader(new File(filename)));
@@ -87,7 +87,7 @@ public class ShaderImpl implements Shader {
     }
 
     public void bind() {
-        glUseProgram(_program);
+        glUseProgram(PROGRAM);
     }
 
     public void unbind() {
@@ -98,7 +98,7 @@ public class ShaderImpl implements Shader {
         Check.ifNullOrEmpty(name, "name");
         int location;
         if (!UNIFORM_LOCATIONS.containsKey(name)) {
-            location = glGetUniformLocation(_program, name);
+            location = glGetUniformLocation(PROGRAM, name);
             if (location == INVALID_LOCATION) {
                 throw new RuntimeException("ShaderImpl.setUniform: Invalid location name (" + name +
                         ")");
@@ -146,7 +146,7 @@ public class ShaderImpl implements Shader {
             throws IllegalArgumentException {
         synchronized (this) {
             if (UNIFORM_VALUES.containsKey(name)) {
-                float[] uniformValue = (float[]) UNIFORM_VALUES.get(name);
+                var uniformValue = (float[]) UNIFORM_VALUES.get(name);
                 if (uniformValue[0] == f1 && uniformValue[1] == f2 && uniformValue[2] == f3) {
                     return;
                 }
@@ -161,7 +161,7 @@ public class ShaderImpl implements Shader {
             throws IllegalArgumentException {
         synchronized (this) {
             if (UNIFORM_VALUES.containsKey(name)) {
-                float[] uniformValue = (float[]) UNIFORM_VALUES.get(name);
+                var uniformValue = (float[]) UNIFORM_VALUES.get(name);
                 if (uniformValue[0] == f1 && uniformValue[1] == f2 && uniformValue[2] == f3 &&
                         uniformValue[3] == f4) {
                     return;
@@ -176,12 +176,7 @@ public class ShaderImpl implements Shader {
     @Override
     public void setUniform(String name, Color color) throws IllegalArgumentException {
         Check.ifNull(color, "color");
-        float[] rgba = color.getColorComponents(null);
+        var rgba = color.getColorComponents(null);
         setUniform(name, rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return Shader.class.getCanonicalName();
     }
 }

@@ -34,11 +34,6 @@ public class FakeStaticMouseCursorProvider implements StaticMouseCursorProvider 
     }
 
     @Override
-    public Long archetype() {
-        return ValueToProvide;
-    }
-
-    @Override
     public void reportPause(long l) throws IllegalArgumentException {
 
     }
@@ -55,11 +50,6 @@ public class FakeStaticMouseCursorProvider implements StaticMouseCursorProvider 
 
     @Override
     public Long mostRecentTimestamp() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
         return null;
     }
 }

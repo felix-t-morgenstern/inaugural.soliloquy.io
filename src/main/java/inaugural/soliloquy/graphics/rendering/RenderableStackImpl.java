@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.List;
@@ -107,11 +107,6 @@ public class RenderableStackImpl implements RenderableStack {
     @Override
     public Map<Integer, List<Renderable>> renderablesByZIndexRepresentation() {
         return mapOf(STACK);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return RenderableStack.class.getCanonicalName();
     }
 
     @Override

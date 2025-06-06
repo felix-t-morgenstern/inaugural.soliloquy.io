@@ -6,17 +6,14 @@ import soliloquy.specs.graphics.rendering.Mesh;
 
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class MeshImpl implements Mesh {
 
-    private int _vertexArrayObject;
+    private final int VERTEX_ARRAY_OBJECT;
 
-    private int _verticesId;
-    private int _uvId;
+    private final int VERTICES_ID;
+    private final int UV_ID;
 
     private final int POSITIONS = 0;
     private final int TEXTURE_COORDS = 1;
@@ -30,17 +27,17 @@ public class MeshImpl implements Mesh {
         Check.ifNull(vertices, "vertices");
         Check.ifNull(uvCoordinates, "uvCoordinates");
 
-        _vertexArrayObject = glGenVertexArrays();
-        glBindVertexArray(_vertexArrayObject);
+        VERTEX_ARRAY_OBJECT = glGenVertexArrays();
+        glBindVertexArray(VERTEX_ARRAY_OBJECT);
 
-        _verticesId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, _verticesId);
+        VERTICES_ID = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, VERTICES_ID);
         glBufferData(GL_ARRAY_BUFFER, createBuffer(vertices), GL_STATIC_DRAW);
         glVertexAttribPointer(0, vertices.length / 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        _uvId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, _uvId);
+        UV_ID = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, UV_ID);
         glBufferData(GL_ARRAY_BUFFER, createBuffer(uvCoordinates), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -61,14 +58,14 @@ public class MeshImpl implements Mesh {
 
     @Override
     public void bind() {
-        glBindVertexArray(_vertexArrayObject);
+        glBindVertexArray(VERTEX_ARRAY_OBJECT);
         glEnableVertexAttribArray(POSITIONS);
         glEnableVertexAttribArray(TEXTURE_COORDS);
 
-        glBindBuffer(GL_ARRAY_BUFFER, _verticesId);
+        glBindBuffer(GL_ARRAY_BUFFER, VERTICES_ID);
         glVertexAttribPointer(POSITIONS, 2, GL_FLOAT, false, 0, 0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, _uvId);
+        glBindBuffer(GL_ARRAY_BUFFER, UV_ID);
         glVertexAttribPointer(TEXTURE_COORDS, 2, GL_FLOAT, false, 0, 0);
     }
 
@@ -82,12 +79,7 @@ public class MeshImpl implements Mesh {
 
     @Override
     public void cleanUp() {
-        glDeleteVertexArrays(_vertexArrayObject);
-        glDeleteBuffers(_verticesId);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return Mesh.class.getCanonicalName();
+        glDeleteVertexArrays(VERTEX_ARRAY_OBJECT);
+        glDeleteBuffers(VERTICES_ID);
     }
 }

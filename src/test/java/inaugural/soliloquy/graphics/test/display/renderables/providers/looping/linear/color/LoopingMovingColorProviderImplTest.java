@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.looping.
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.spriterenderer.SpriteRendererBorderTest;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
@@ -11,7 +10,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 class LoopingMovingColorProviderImplTest extends SpriteRendererBorderTest {
     protected static LoopingLinearMovingColorProvider BORDER_COLOR_PROVIDER;

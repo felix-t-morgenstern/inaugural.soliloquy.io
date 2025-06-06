@@ -12,7 +12,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProgressiveStringProviderFactoryTests {
+public class ProgressiveStringProviderFactoryTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final String STRING = randomString();
     private final long START_TIMESTAMP = randomLong();
@@ -20,48 +20,41 @@ class ProgressiveStringProviderFactoryTests {
     private final long PAUSED_TIMESTAMP = randomLong();
     private final long MOST_RECENT_TIMESTAMP = randomLongWithInclusiveFloor(PAUSED_TIMESTAMP);
 
-    private ProgressiveStringProviderFactory _progressiveStringProviderFactory;
+    private ProgressiveStringProviderFactory progressiveStringProviderFactory;
 
     @BeforeEach
-    void setUp() {
-        _progressiveStringProviderFactory = new ProgressiveStringProviderFactoryImpl();
+    public void setUp() {
+        progressiveStringProviderFactory = new ProgressiveStringProviderFactoryImpl();
     }
 
     @Test
-    void testMake() {
-        ProviderAtTime<String> provider =
-                _progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
-                        TIME_TO_COMPLETE, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+    public void testMake() {
+        var provider = progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
+                TIME_TO_COMPLETE, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
         assertNotNull(provider);
-        assertTrue(provider instanceof ProgressiveStringProvider);
+        assertInstanceOf(ProgressiveStringProvider.class, provider);
         assertEquals(UUID, provider.uuid());
         assertEquals((Long) PAUSED_TIMESTAMP, provider.pausedTimestamp());
         assertEquals((Long) MOST_RECENT_TIMESTAMP, provider.mostRecentTimestamp());
     }
 
     @Test
-    void testMakeWithInvalidParams() {
+    public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> _progressiveStringProviderFactory.make(null, STRING, START_TIMESTAMP,
+                () -> progressiveStringProviderFactory.make(null, STRING, START_TIMESTAMP,
                         TIME_TO_COMPLETE, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> _progressiveStringProviderFactory.make(UUID, null, START_TIMESTAMP,
+                () -> progressiveStringProviderFactory.make(UUID, null, START_TIMESTAMP,
                         TIME_TO_COMPLETE, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> _progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
+                () -> progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
                         0L, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> _progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
+                () -> progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
                         TIME_TO_COMPLETE, PAUSED_TIMESTAMP, null));
         assertThrows(IllegalArgumentException.class,
-                () -> _progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
+                () -> progressiveStringProviderFactory.make(UUID, STRING, START_TIMESTAMP,
                         TIME_TO_COMPLETE, PAUSED_TIMESTAMP, PAUSED_TIMESTAMP - 1));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(ProgressiveStringProviderFactory.class.getCanonicalName(),
-                _progressiveStringProviderFactory.getInterfaceName());
     }
 }

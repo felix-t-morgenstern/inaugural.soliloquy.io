@@ -11,9 +11,4 @@ public class GlobalClockImpl implements GlobalClock {
     public long globalTimestamp() {
         return Calendar.getInstance(TimeZone.getTimeZone(Constants.GMT)).getTimeInMillis();
     }
-
-    @Override
-    public String getInterfaceName() {
-        return GlobalClock.class.getCanonicalName();
-    }
 }

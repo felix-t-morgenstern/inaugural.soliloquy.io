@@ -5,13 +5,16 @@ import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 
 public class FakeGlobalLoopingAnimationFactory implements GlobalLoopingAnimationFactory {
-    public ArrayList<String> InputIds = new ArrayList<>();
-    public ArrayList<Animation> InputAnimations = new ArrayList<>();
-    public ArrayList<Integer> InputPeriodModuloOffsets = new ArrayList<>();
-    public ArrayList<GlobalLoopingAnimation> Outputs = new ArrayList<>();
+    public List<String> InputIds = listOf();
+    public List<Animation> InputAnimations = listOf();
+    public List<Integer> InputPeriodModuloOffsets = listOf();
+    public List<GlobalLoopingAnimation> Outputs = listOf();
 
     @Override
     public GlobalLoopingAnimation make(GlobalLoopingAnimationDefinition definition)
@@ -23,10 +26,5 @@ public class FakeGlobalLoopingAnimationFactory implements GlobalLoopingAnimation
         FakeGlobalLoopingAnimation output = new FakeGlobalLoopingAnimation(definition.id());
         Outputs.add(output);
         return output;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

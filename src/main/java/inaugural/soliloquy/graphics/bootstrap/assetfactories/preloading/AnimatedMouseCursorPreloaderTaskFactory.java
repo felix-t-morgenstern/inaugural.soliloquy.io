@@ -42,11 +42,4 @@ public class AnimatedMouseCursorPreloaderTaskFactory
                 PROCESS_RESULT
         );
     }
-
-    @Override
-    public String getInterfaceName() {
-        return AssetPreloaderTaskFactory.class.getCanonicalName() + "<" +
-                AnimatedMouseCursorDefinitionDTO.class.getCanonicalName() + "," +
-                AnimatedMouseCursorPreloaderTask.class.getCanonicalName() + ">";
-    }
 }

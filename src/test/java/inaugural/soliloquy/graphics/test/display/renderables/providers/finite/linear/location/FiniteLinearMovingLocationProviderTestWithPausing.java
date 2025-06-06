@@ -22,8 +22,7 @@ class FiniteLinearMovingLocationProviderTestWithPausing
     public static void main(String[] args) {
         runTest(FiniteLinearMovingLocationProviderDisplayTest::generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(TextLineRenderable.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderable.getFont()).thenReturn(new FontImpl(FontDefinition));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 FiniteLinearMovingLocationProviderTestWithPausing::closeAfterSomeTime);

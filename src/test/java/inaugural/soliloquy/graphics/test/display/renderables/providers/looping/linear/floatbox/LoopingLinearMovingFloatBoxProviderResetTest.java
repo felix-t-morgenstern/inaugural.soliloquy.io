@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.looping.linear.floatbox;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.renderables.providers.ResettableProvider;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 

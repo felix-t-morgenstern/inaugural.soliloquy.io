@@ -21,14 +21,16 @@ import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.graphics.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final String TITLEBAR;
@@ -51,7 +53,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final MouseCursor MOUSE_CURSOR;
     private final MouseListener MOUSE_LISTENER;
 
-    private final HashMap<Integer, Boolean> MOUSE_BUTTON_STATES;
+    private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
     private long window = Long.MIN_VALUE;
     private Vertex screenMouseLocation;
@@ -98,7 +100,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
         MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
 
-        MOUSE_BUTTON_STATES = new HashMap<>();
+        MOUSE_BUTTON_STATES = mapOf();
         for (var button : ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(button, false);
         }
@@ -137,7 +139,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         mesh.bind();
 
-        // TODO: Consider test for whether GraphicsPreloader.load was called _before_ the first
+        // TODO: Consider test for whether GraphicsPreloader.load was called before_ the first
         //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
 
@@ -194,13 +196,13 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         //noinspection resource
         glfwSetCursorPosCallback(window, (window, xPixel, yPixel) -> {
             var windowDimensions = updateWindowDimensionsInResolutionManager();
-            var width = windowDimensions.item1();
-            var height = windowDimensions.item2();
+            var width = windowDimensions.FIRST;
+            var height = windowDimensions.SECOND;
 
             var x = (float) xPixel / width;
             var y = (float) yPixel / height;
 
-            screenMouseLocation = Vertex.of(x, y);
+            screenMouseLocation = vertexOf(x, y);
         });
     }
 
@@ -232,10 +234,5 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     @Override
     public String getTitlebar() {
         return TITLEBAR;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return GraphicsCoreLoop.class.getCanonicalName();
     }
 }

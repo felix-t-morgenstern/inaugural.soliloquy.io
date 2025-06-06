@@ -19,9 +19,4 @@ public class FakeGraphicsPreloader implements GraphicsPreloader {
             LoadAction.run();
         }
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

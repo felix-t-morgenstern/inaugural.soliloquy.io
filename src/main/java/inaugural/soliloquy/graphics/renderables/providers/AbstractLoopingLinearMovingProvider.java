@@ -2,29 +2,26 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 // NB: This class has plenty of shared functionality with AbstractFiniteLinearMovingProvider, but
 //     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoopingProvider<T>
         implements LoopingLinearMovingProvider<T> {
-    protected final HashMap<Integer, T> VALUES_AT_TIMES;
+    protected final Map<Integer, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
-    private final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
     protected AbstractLoopingLinearMovingProvider(UUID uuid, Map<Integer, T> valuesAtTimes,
                                                   int periodDuration, int periodModuloOffset,
-                                                  Long pausedTimestamp, Long mostRecentTimestamp,
-                                                  T archetype) {
-        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp,
-                archetype);
+                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
+        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp);
 
-        VALUES_AT_TIMES = new HashMap<>();
+        VALUES_AT_TIMES = mapOf();
         Check.ifNull(valuesAtTimes, "valuesAtTimes");
         if (valuesAtTimes.isEmpty()) {
             throw new IllegalArgumentException(
@@ -41,7 +38,6 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
 
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromIntegers(VALUES_AT_TIMES.keySet());
-        CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
     }
 
     @Override
@@ -93,7 +89,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     }
 
     public Map<Integer, T> valuesWithinPeriod() {
-        return new HashMap<>(VALUES_AT_TIMES);
+        return mapOf(VALUES_AT_TIMES);
     }
 
     @Override
@@ -102,13 +98,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     }
 
     @Override
-    public String getInterfaceName() {
-        return LoopingLinearMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
-    }
-
-    @Override
     public Object representation() {
-        return new HashMap<>(VALUES_AT_TIMES);
+        return mapOf(VALUES_AT_TIMES);
     }
 }

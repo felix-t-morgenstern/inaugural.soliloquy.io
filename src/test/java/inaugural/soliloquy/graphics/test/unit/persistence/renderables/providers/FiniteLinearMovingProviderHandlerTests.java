@@ -5,10 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
@@ -18,11 +16,11 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class FiniteLinearMovingProviderHandlerTests {
+public class FiniteLinearMovingProviderHandlerTests {
     private final Long TIMESTAMP_1 = randomLong();
     private final Long TIMESTAMP_2 = randomLong();
     private final Long TIMESTAMP_3 = randomLong();
@@ -42,8 +40,6 @@ class FiniteLinearMovingProviderHandlerTests {
             pairOf(FLOAT_WRITE_OUTPUT_2, VALUE_2),
             pairOf(FLOAT_WRITE_OUTPUT_3, VALUE_3));
 
-    private final int INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER = randomInt();
-
 
 
     private final String WRITTEN_VALUE = String.format(
@@ -53,30 +49,28 @@ class FiniteLinearMovingProviderHandlerTests {
             UUID, TIMESTAMP_1, FLOAT_WRITE_OUTPUT_1, TIMESTAMP_2, FLOAT_WRITE_OUTPUT_2, TIMESTAMP_3,
             FLOAT_WRITE_OUTPUT_3, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
+    private Map<Long, Float> mockValuesAtTimestamps;
+
     @Mock private FiniteLinearMovingProviderFactory mockFactory;
-    @Mock private Map<Long, Float> mockValuesAtTimestamps;
     @Mock private FiniteLinearMovingProvider<Float> mockFiniteLinearMovingProvider;
-    @Mock private PersistentValuesHandler mockPersistentValuesHandler;
+    @Mock private PersistenceHandler mockPersistenceHandler;
 
     @SuppressWarnings("rawtypes")
-    private TypeWithOneGenericParamHandler<FiniteLinearMovingProvider>
-            finiteLinearMovingProviderHandler;
+    private TypeHandler<FiniteLinearMovingProvider> handler;
 
     @BeforeEach
-    void setUp() {
-        mockPersistentValuesHandler = mock(PersistentValuesHandler.class);
+    public void setUp() {
+        mockPersistenceHandler = mock(PersistenceHandler.class);
         //noinspection unchecked,rawtypes
-        when(mockPersistentValuesHandler
+        when(mockPersistenceHandler
                 .getTypeHandler(Float.class.getCanonicalName()))
                 .thenReturn((TypeHandler) MOCK_FLOAT_HANDLER);
-        when(mockPersistentValuesHandler
-                .generateArchetype(Integer.class.getCanonicalName()))
-                .thenReturn(INTEGER_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER);
 
         mockValuesAtTimestamps = generateMockMap(
                 pairOf(TIMESTAMP_1, VALUE_1),
                 pairOf(TIMESTAMP_2, VALUE_2),
-                pairOf(TIMESTAMP_3, VALUE_3));
+                pairOf(TIMESTAMP_3, VALUE_3)
+        );
 
         //noinspection unchecked
         mockFiniteLinearMovingProvider =
@@ -87,37 +81,34 @@ class FiniteLinearMovingProviderHandlerTests {
         when(mockFiniteLinearMovingProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
         when(mockFiniteLinearMovingProvider.mostRecentTimestamp()).thenReturn(
                 MOST_RECENT_TIMESTAMP);
-        when(mockFiniteLinearMovingProvider.archetype()).thenReturn(randomFloat());
 
         mockFactory = mock(FiniteLinearMovingProviderFactory.class);
         //noinspection unchecked,rawtypes
         when(mockFactory.make(any(), anyMap(), anyLong(), anyLong()))
                 .thenReturn((FiniteLinearMovingProvider) mockFiniteLinearMovingProvider);
 
-        finiteLinearMovingProviderHandler =
-                new FiniteLinearMovingProviderHandler(mockPersistentValuesHandler, mockFactory);
+        handler = new FiniteLinearMovingProviderHandler(mockPersistenceHandler, mockFactory);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteLinearMovingProviderHandler(null, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteLinearMovingProviderHandler(mockPersistentValuesHandler, null));
+                () -> new FiniteLinearMovingProviderHandler(mockPersistenceHandler, null));
     }
 
     @Test
-    void testWrite() {
-        var writtenValue = finiteLinearMovingProviderHandler.write(mockFiniteLinearMovingProvider);
+    public void testWrite() {
+        var writtenValue = handler.write(mockFiniteLinearMovingProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
 
-        var inOrder = inOrder(mockFiniteLinearMovingProvider, mockPersistentValuesHandler,
+        var inOrder = inOrder(mockFiniteLinearMovingProvider, mockPersistenceHandler,
                 mockValuesAtTimestamps, MOCK_FLOAT_HANDLER);
         inOrder.verify(mockFiniteLinearMovingProvider).uuid();
-        inOrder.verify(mockFiniteLinearMovingProvider).archetype();
-        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(mockFiniteLinearMovingProvider).valuesAtTimestampsRepresentation();
+        inOrder.verify(mockPersistenceHandler).getTypeHandler(Float.class.getCanonicalName());
         //noinspection ResultOfMethodCallIgnored
         inOrder.verify(mockValuesAtTimestamps).size();
         inOrder.verify(MOCK_FLOAT_HANDLER).write(VALUE_1);
@@ -128,18 +119,18 @@ class FiniteLinearMovingProviderHandlerTests {
     }
 
     @Test
-    void testWriteWithInvalidParams() {
+    public void testWriteWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> finiteLinearMovingProviderHandler.write(null));
+                () -> handler.write(null));
     }
 
     @Test
-    void testRead() {
-        var output = finiteLinearMovingProviderHandler.read(WRITTEN_VALUE);
+    public void testRead() {
+        var output = handler.read(WRITTEN_VALUE);
 
         assertSame(mockFiniteLinearMovingProvider, output);
-        var inOrder = inOrder(mockPersistentValuesHandler, MOCK_FLOAT_HANDLER, mockFactory);
-        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
+        var inOrder = inOrder(mockPersistenceHandler, MOCK_FLOAT_HANDLER, mockFactory);
+        inOrder.verify(mockPersistenceHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_1);
         inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_2);
         inOrder.verify(MOCK_FLOAT_HANDLER).read(FLOAT_WRITE_OUTPUT_3);
@@ -157,36 +148,10 @@ class FiniteLinearMovingProviderHandlerTests {
     }
 
     @Test
-    void testReadWithInvalidParams() {
+    public void testReadWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingProviderHandler.read(null));
+                handler.read(null));
         assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingProviderHandler.read(""));
-    }
-
-    @Test
-    void testGenerateArchetype() {
-        //noinspection unchecked
-        var generatedArchetype =
-                (FiniteLinearMovingProvider<Integer>) finiteLinearMovingProviderHandler
-                        .generateArchetype(Integer.class.getCanonicalName());
-
-        assertNotNull(generatedArchetype);
-        assertNotNull(generatedArchetype.archetype());
-    }
-
-    @Test
-    void testGenerateArchetypeWithInvalidInputs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingProviderHandler.generateArchetype(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingProviderHandler.generateArchetype(""));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(TypeHandler.class.getCanonicalName() + "<" +
-                        FiniteLinearMovingProvider.class.getCanonicalName() + ">",
-                finiteLinearMovingProviderHandler.getInterfaceName());
+                handler.read(""));
     }
 }

@@ -56,9 +56,4 @@ public class CircleRenderableImpl extends AbstractRenderable implements CircleRe
             throws IllegalArgumentException {
         this.colorProvider = Check.ifNull(colorProvider, "colorProvider");
     }
-
-    @Override
-    public String getInterfaceName() {
-        return CircleRenderable.class.getCanonicalName();
-    }
 }

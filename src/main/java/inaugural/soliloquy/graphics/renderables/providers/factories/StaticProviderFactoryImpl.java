@@ -8,14 +8,8 @@ import java.util.UUID;
 
 public class StaticProviderFactoryImpl implements StaticProviderFactory {
     @Override
-    public <T> StaticProvider<T> make(UUID id, T value, T archetype,
-                                      Long mostRecentTimestamp)
+    public <T> StaticProvider<T> make(UUID id, T value, Long mostRecentTimestamp)
             throws IllegalArgumentException {
-        return new StaticProviderImpl<>(id, value, archetype, mostRecentTimestamp);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return StaticProviderFactory.class.getCanonicalName();
+        return new StaticProviderImpl<>(id, value, mostRecentTimestamp);
     }
 }

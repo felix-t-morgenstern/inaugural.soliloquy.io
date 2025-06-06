@@ -14,7 +14,7 @@ public class LoopingLinearMovingVertexProvider
                                              int periodDuration, int periodModuloOffset,
                                              Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp, Vertex.of(0f, 0f));
+                mostRecentTimestamp);
     }
 
     @Override

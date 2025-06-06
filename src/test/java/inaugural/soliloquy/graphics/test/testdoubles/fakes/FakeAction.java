@@ -2,10 +2,13 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 
 public class FakeAction<T> implements Action<T> {
-    public ArrayList<T> Inputs = new ArrayList<>();
+    public List<T> Inputs = listOf();
     public int NumberOfTimesCalled;
     public String Id;
 
@@ -26,15 +29,5 @@ public class FakeAction<T> implements Action<T> {
     @Override
     public String id() throws IllegalStateException {
         return Id;
-    }
-
-    @Override
-    public T archetype() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

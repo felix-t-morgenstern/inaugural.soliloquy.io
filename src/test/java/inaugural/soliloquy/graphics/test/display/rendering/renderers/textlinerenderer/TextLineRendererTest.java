@@ -15,6 +15,7 @@ import java.util.Map;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class TextLineRendererTest extends DisplayTest {
     protected final static String RELATIVE_LOCATION_TRAJAN =
@@ -78,19 +79,17 @@ public class TextLineRendererTest extends DisplayTest {
         when(mockTextLineRenderable.getRenderingLocationProvider()).thenReturn(
                 renderingLocationProvider);
         when(mockTextLineRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
-        when(mockTextLineRenderable.getInterfaceName()).thenReturn(
-                TextLineRenderable.class.getCanonicalName());
         when(mockTextLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
         when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(staticNullProvider(0f));
         when(mockTextLineRenderable.dropShadowOffsetProvider()).thenReturn(
-                staticNullProvider(Vertex.of(0f, 0f)));
+                staticNullProvider(vertexOf(0f, 0f)));
         when(mockTextLineRenderable.dropShadowColorProvider()).thenReturn(
                 staticNullProvider(Color.BLACK));
 
         return mockTextLineRenderable(lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
                 boldIndices, renderingLocationProvider, staticNullProvider(0f),
-                staticNullProvider(Vertex.of(0f, 0f)), staticNullProvider(Color.BLACK));
+                staticNullProvider(vertexOf(0f, 0f)), staticNullProvider(Color.BLACK));
     }
 
     protected static TextLineRenderable mockTextLineRenderable(
@@ -120,8 +119,6 @@ public class TextLineRendererTest extends DisplayTest {
         when(mockTextLineRenderable.getRenderingLocationProvider()).thenReturn(
                 renderingLocationProvider);
         when(mockTextLineRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
-        when(mockTextLineRenderable.getInterfaceName()).thenReturn(
-                TextLineRenderable.class.getCanonicalName());
         when(mockTextLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
         when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(dropShadowSizeProvider);
         when(mockTextLineRenderable.dropShadowOffsetProvider()).thenReturn(

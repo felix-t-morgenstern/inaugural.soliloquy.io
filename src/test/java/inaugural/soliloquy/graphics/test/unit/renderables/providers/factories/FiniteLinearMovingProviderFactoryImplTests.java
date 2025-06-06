@@ -1,137 +1,116 @@
 package inaugural.soliloquy.graphics.test.unit.renderables.providers.factories;
 
 import inaugural.soliloquy.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactoryImpl;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFiniteLinearMovingProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomFloat;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class FiniteLinearMovingProviderFactoryImplTests {
+public class FiniteLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
-    private final FiniteLinearMovingProvider<Float> FACTORY_1_OUTPUT =
-            new FakeFiniteLinearMovingProvider<>();
+
+    private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
+
+    @Mock private FiniteLinearMovingProvider<Float> mockFactory1Output;
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Map, Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_1 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
-                _factory1InputUuid = uuid;
-                _factory1InputValuesAtTimes = valuesAtTime;
-                _factory1InputPausedTimestamp = pausedTimestamp;
-                _factory1InputMostRecentTimestamp = mostRecentTimestamp;
-                return FACTORY_1_OUTPUT;
+                factory1InputUuid = uuid;
+                factory1InputValuesAtTimes = valuesAtTime;
+                factory1InputPausedTimestamp = pausedTimestamp;
+                factory1InputMostRecentTimestamp = mostRecentTimestamp;
+                return mockFactory1Output;
             };
 
-    private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
-    private final FiniteLinearMovingProvider<FloatBox> FACTORY_2_OUTPUT =
-            new FakeFiniteLinearMovingProvider<>();
+    @Mock private FiniteLinearMovingProvider<FloatBox> mockFactory2Output;
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Map, Function<Long, Function<Long,
             FiniteLinearMovingProvider>>>> FACTORY_2 =
             uuid -> valuesAtTime -> pausedTimestamp -> mostRecentTimestamp -> {
-                _factory2InputUuid = uuid;
-                _factory2InputValuesAtTimes = valuesAtTime;
-                _factory2InputPausedTimestamp = pausedTimestamp;
-                _factory2InputMostRecentTimestamp = mostRecentTimestamp;
-                return FACTORY_2_OUTPUT;
+                factory2InputUuid = uuid;
+                factory2InputValuesAtTimes = valuesAtTime;
+                factory2InputPausedTimestamp = pausedTimestamp;
+                factory2InputMostRecentTimestamp = mostRecentTimestamp;
+                return mockFactory2Output;
             };
-
-    private UUID _factory1InputUuid;
+    
+    private UUID factory1InputUuid;
     /** @noinspection rawtypes */
-    private Map _factory1InputValuesAtTimes;
-    private Long _factory1InputPausedTimestamp;
-    private Long _factory1InputMostRecentTimestamp;
+    private Map factory1InputValuesAtTimes;
+    private Long factory1InputPausedTimestamp;
+    private Long factory1InputMostRecentTimestamp;
 
     @SuppressWarnings("unused")
-    private UUID _factory2InputUuid;
+    private UUID factory2InputUuid;
     /** @noinspection rawtypes, unused */
-    private Map _factory2InputValuesAtTimes;
+    private Map factory2InputValuesAtTimes;
     @SuppressWarnings("unused")
-    private Long _factory2InputPausedTimestamp;
+    private Long factory2InputPausedTimestamp;
     @SuppressWarnings("unused")
-    private Long _factory2InputMostRecentTimestamp;
+    private Long factory2InputMostRecentTimestamp;
 
-    private FiniteLinearMovingProviderFactory _finiteLinearMovingProviderFactory;
+    private FiniteLinearMovingProviderFactory finiteLinearMovingProviderFactory;
 
     @BeforeEach
-    void setUp() {
-        //noinspection rawtypes
-        _finiteLinearMovingProviderFactory = new FiniteLinearMovingProviderFactoryImpl(
-                new HashMap<String, Function<UUID, Function<Map, Function<Long, Function<Long,
-                        FiniteLinearMovingProvider>>>>>() {{
-                    put(FACTORY_1_TYPE_NAME, FACTORY_1);
-                    put(FACTORY_2_TYPE_NAME, FACTORY_2);
-                }});
+    public void setUp() {
+        finiteLinearMovingProviderFactory = new FiniteLinearMovingProviderFactoryImpl(
+                mapOf(
+                        pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
+                        pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
+                ));
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(null));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingProviderFactoryImpl(new HashMap<>()));
-        //noinspection rawtypes
+                new FiniteLinearMovingProviderFactoryImpl(mapOf()));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
-                                Function<Long,
-                                FiniteLinearMovingProvider>>>>>() {{
-                            put(null, FACTORY_1);
-                        }}));
-        //noinspection rawtypes
+                        mapOf(pairOf(null, FACTORY_1))));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
-                                Function<Long,
-                                FiniteLinearMovingProvider>>>>>() {{
-                            put("", FACTORY_1);
-                        }}));
-        //noinspection rawtypes
+                        mapOf(pairOf("", FACTORY_1))));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Map, Function<Long,
-                                Function<Long, FiniteLinearMovingProvider>>>>>() {{
-                            put(FACTORY_1_TYPE_NAME, null);
-                        }}));
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null))));
     }
 
     @Test
-    void testMake() {
-        UUID uuid = UUID.randomUUID();
-        HashMap<Long, Float> valuesAtTimestamps = new HashMap<Long, Float>() {{
-            put(0L, randomFloat());
-            put(1L, randomFloat());
-            put(2L, randomFloat());
-        }};
+    public void testMake() {
+        var uuid = UUID.randomUUID();
+        var valuesAtTimestamps = mapOf(
+                pairOf(0L, randomFloat()),
+                pairOf(1L, randomFloat()),
+                pairOf(2L, randomFloat())
+        );
         Long pausedTimestamp = randomLong();
         Long mostRecentTimestamp = pausedTimestamp + 1;
 
-        FiniteLinearMovingProvider<Float> provider = _finiteLinearMovingProviderFactory
+        FiniteLinearMovingProvider<Float> provider = finiteLinearMovingProviderFactory
                 .make(uuid, valuesAtTimestamps, pausedTimestamp, mostRecentTimestamp);
 
-        assertSame(FACTORY_1_OUTPUT, provider);
-        assertSame(uuid, _factory1InputUuid);
-        assertSame(valuesAtTimestamps, _factory1InputValuesAtTimes);
-        assertEquals(pausedTimestamp, _factory1InputPausedTimestamp);
-        assertEquals(mostRecentTimestamp, _factory1InputMostRecentTimestamp);
+        assertSame(mockFactory1Output, provider);
+        assertSame(uuid, factory1InputUuid);
+        assertSame(valuesAtTimestamps, factory1InputValuesAtTimes);
+        assertEquals(pausedTimestamp, factory1InputPausedTimestamp);
+        assertEquals(mostRecentTimestamp, factory1InputMostRecentTimestamp);
     }
 
     // NB: No specific test is provided for make with invalid params, since the individual
     //     factories provided to this class should handle those edge cases.
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(FiniteLinearMovingProviderFactory.class.getCanonicalName(),
-                _finiteLinearMovingProviderFactory.getInterfaceName());
-    }
 }

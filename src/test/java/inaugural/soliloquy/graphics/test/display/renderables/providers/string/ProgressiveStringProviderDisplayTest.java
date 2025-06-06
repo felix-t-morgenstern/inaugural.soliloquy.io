@@ -1,12 +1,12 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.string;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.ProgressiveStringProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -22,6 +22,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -46,8 +47,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                                         4000L
                                 ),
                 () -> {
-                    when(TextLineRenderable.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderable.getFont()).thenReturn(new FontImpl(FontDefinition));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 ProgressiveStringProviderDisplayTest::closeAfterSomeTime);
@@ -82,7 +82,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        var renderingLocation = Vertex.of(0.1f, 0.475f);
+        var renderingLocation = vertexOf(0.1f, 0.475f);
 
         var now = new FakeGlobalClock().globalTimestamp();
         LineTextProvider = new ProgressiveStringProvider(java.util.UUID.randomUUID(), LINE_TEXT,
@@ -94,11 +94,11 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 staticProvider(renderingLocation));
 
         TextLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager, null);
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager,
+                        null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

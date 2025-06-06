@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -19,6 +19,7 @@ import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 class TextLineRendererJustificationsTest extends TextLineRendererTest {
     private final static float LEADING_ADJUSTMENT = 0.0f;
@@ -35,12 +36,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 TextLineRendererJustificationsTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(TextLineRenderableLeft.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
-                    when(TextLineRenderableCenter.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
-                    when(TextLineRenderableRight.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderableLeft.getFont()).thenReturn(new FontImpl(FontDefinition));
+                    when(TextLineRenderableCenter.getFont()).thenReturn(new FontImpl(FontDefinition));
+                    when(TextLineRenderableRight.getFont()).thenReturn(new FontImpl(FontDefinition));
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
@@ -77,9 +75,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_TRAJAN, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        var renderingLocationLeft = Vertex.of(0.05f, 0.225f);
-        var renderingLocationCenter = Vertex.of(0.5f, 0.475f);
-        var renderingLocationRight = Vertex.of(0.95f, 0.725f);
+        var renderingLocationLeft = vertexOf(0.05f, 0.225f);
+        var renderingLocationCenter = vertexOf(0.5f, 0.475f);
+        var renderingLocationRight = vertexOf(0.95f, 0.725f);
 
         TextLineRenderableLeft = mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_LEFT,
                 staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
@@ -96,13 +94,15 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         when(TextLineRenderableCenter.getJustification()).thenReturn(TextJustification.CENTER);
         when(TextLineRenderableRight.getJustification()).thenReturn(TextJustification.RIGHT);
 
-        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
         FirstChildStack.add(TextLineRenderableLeft);
         FirstChildStack.add(TextLineRenderableCenter);
         FirstChildStack.add(TextLineRenderableRight);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderableLeft.getClass(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderableCenter.getClass(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderableRight.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

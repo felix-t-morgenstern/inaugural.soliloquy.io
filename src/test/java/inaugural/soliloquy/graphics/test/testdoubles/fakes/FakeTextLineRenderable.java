@@ -8,10 +8,11 @@ import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FakeTextLineRenderable implements TextLineRenderable {
     public Font Font;
@@ -45,8 +46,8 @@ public class FakeTextLineRenderable implements TextLineRenderable {
         BorderThicknessProvider = borderThicknessProvider;
         BorderColorProvider = borderColorProvider;
         ColorProviderIndices = colorProviderIndices;
-        ItalicIndices = italicIndices == null ? new ArrayList<>() : italicIndices;
-        BoldIndices = boldIndices == null ? new ArrayList<>() : boldIndices;
+        ItalicIndices = italicIndices == null ? listOf() : italicIndices;
+        BoldIndices = boldIndices == null ? listOf() : boldIndices;
         DropShadowSizeProvider = new FakeStaticProvider<>(null);
         DropShadowOffsetProvider = new FakeStaticProvider<>(null);
         DropShadowColorProvider = new FakeStaticProvider<>(null);
@@ -241,11 +242,6 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     @Override
     public void delete() {
 
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 
     @Override

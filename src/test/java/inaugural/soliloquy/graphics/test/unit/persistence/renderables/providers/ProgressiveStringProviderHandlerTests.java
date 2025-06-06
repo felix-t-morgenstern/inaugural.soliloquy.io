@@ -5,18 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.renderables.providers.factories.ProgressiveStringProviderFactory;
 
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class ProgressiveStringProviderHandlerTests {
+public class ProgressiveStringProviderHandlerTests {
     private final String UUID_STRING = "819f5a14-466a-4c3b-af43-11d39cd0c9c9";
     private final String STRING = "string";
     private final long TIME_TO_COMPLETE = 111L;
@@ -34,7 +33,7 @@ class ProgressiveStringProviderHandlerTests {
             "\"pausedTimestamp\":333,\"mostRecentTimestamp\":444}";
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         //noinspection unchecked
         mockProgressiveStringProvider = mock(ProviderAtTime.class);
         when(mockProgressiveStringProvider.uuid()).thenReturn(UUID.fromString(UUID_STRING));
@@ -52,46 +51,39 @@ class ProgressiveStringProviderHandlerTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ProgressiveStringProviderHandler(null));
     }
 
     @Test
-    void testWrite() {
+    public void testWrite() {
         String output = progressiveStringProviderHandler.write(mockProgressiveStringProvider);
 
         assertEquals(WRITTEN_VALUE, output);
     }
 
     @Test
-    void testWriteWithInvalidParams() {
+    public void testWriteWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> progressiveStringProviderHandler.write(null));
     }
 
     @Test
-    void testRead() {
+    public void testRead() {
         ProviderAtTime<String> output = progressiveStringProviderHandler.read(WRITTEN_VALUE);
 
         assertNotNull(output);
         assertSame(mockProgressiveStringProvider, output);
-        verify(mockProgressiveStringProviderFactory, times(1)).make(UUID.fromString(UUID_STRING),
+        verify(mockProgressiveStringProviderFactory, once()).make(UUID.fromString(UUID_STRING),
                 STRING, TIME_TO_COMPLETE, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testReadWithInvalidParams() {
+    public void testReadWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> progressiveStringProviderHandler.read(null));
         assertThrows(IllegalArgumentException.class,
                 () -> progressiveStringProviderHandler.read(""));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(TypeHandler.class.getCanonicalName() + "<" +
-                ProviderAtTime.class.getCanonicalName() + "<" + String.class.getCanonicalName() +
-                ">>", progressiveStringProviderHandler.getInterfaceName());
     }
 }

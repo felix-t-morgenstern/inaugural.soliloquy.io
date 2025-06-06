@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.finiteanim
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.FiniteAnimationRenderableImpl;
-import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSnippet;
@@ -28,6 +27,7 @@ import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 class FiniteAnimationRendererTest extends DisplayTest {
     protected final static int NUMBER_OF_FRAMES = 12;
@@ -62,7 +62,6 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 FRAME_DURATION * NUMBER_OF_FRAMES, FRAMES);
 
         FiniteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY,
                 colorShiftStackAggregator == null ?
                         new FakeColorShiftStackAggregator() :
                         colorShiftStackAggregator,
@@ -85,7 +84,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 staticNullProvider(0f),
                 staticNullProvider(Color.BLACK),
                 listOf(),
-                staticProvider(new FloatBoxImpl(
+                staticProvider(floatBoxOf(
                         MIDPOINT - (ANIMATION_WIDTH / 2f),
                         MIDPOINT - (ANIMATION_HEIGHT / 2f),
                         MIDPOINT + (ANIMATION_WIDTH / 2f),
@@ -100,7 +99,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
         );
 
         FirstChildStack.add(FiniteAnimationRenderable);
-        Renderers.registerRenderer(FiniteAnimationRenderable.class.getCanonicalName(),
+        Renderers.registerRenderer(FiniteAnimationRenderableImpl.class,
                 FiniteAnimationRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

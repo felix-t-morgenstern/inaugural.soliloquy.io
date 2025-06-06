@@ -1,121 +1,92 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RenderingBoundariesImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import soliloquy.specs.graphics.rendering.FloatBox;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.valueobjects.FloatBox.intersection;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RenderingBoundariesImplTests {
-    @Mock private FloatBox mockFloatBox1;
-    @Mock private FloatBox mockFloatBox2;
-    @Mock private FloatBox mockFloatBox3;
-    @Mock private FloatBox mockFloatBox1Intersected2;
-    @Mock private FloatBox mockFloatBox1Intersected2Intersected3;
+    private final FloatBox RENDERING_BOUNDARIES_1 = randomValidFloatBox();
+    private final FloatBox RENDERING_BOUNDARIES_2 =
+            randomFloatBoxIntersecting(RENDERING_BOUNDARIES_1);
 
     private RenderingBoundaries renderingBoundaries;
 
-    @Before
-    public void setUp() {
-        when(mockFloatBox1.intersection(any())).thenReturn(mockFloatBox1Intersected2);
-        when(mockFloatBox1Intersected2.intersection(any())).thenReturn(
-                mockFloatBox1Intersected2Intersected3);
+    private FloatBox randomFloatBoxIntersecting(FloatBox f) {
+        var leftX = randomFloatInRange(f.LEFT_X, f.RIGHT_X);
+        var topY = randomFloatInRange(f.TOP_Y, f.BOTTOM_Y);
+        var rightX = randomFloatWithInclusiveFloor(f.RIGHT_X);
+        var bottomY = randomFloatWithInclusiveFloor(f.BOTTOM_Y);
 
+        return floatBoxOf(leftX, topY, rightX, bottomY);
+    }
+
+    @BeforeEach
+    public void setUp() {
         renderingBoundaries = new RenderingBoundariesImpl();
     }
 
     @Test
-    public void testCurrentBoundariesWithoutAnyInput() {
+    public void testDefaultCurrentBoundaries() {
+        assertEquals(WHOLE_SCREEN, renderingBoundaries.currentBoundaries());
+    }
+
+    @Test
+    public void testPushNewBoundaries() {
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_1);
+
+        var currentBoundaries = renderingBoundaries.currentBoundaries();
+
+        assertEquals(RENDERING_BOUNDARIES_1, currentBoundaries);
+    }
+
+    @Test
+    public void testPushMultipleBoundariesOnlyPushesIntersection() {
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_1);
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_2);
+
+        var currentBoundaries = renderingBoundaries.currentBoundaries();
+
+        var expectedBoundaries = intersection(RENDERING_BOUNDARIES_1, RENDERING_BOUNDARIES_2);
+        assertEquals(expectedBoundaries, currentBoundaries);
+    }
+
+    @Test
+    public void testPushNewBoundariesWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> renderingBoundaries.pushNewBoundaries(null));
+        assertThrows(IllegalArgumentException.class, () -> renderingBoundaries.pushNewBoundaries(floatBoxOf(0f, 0f, -1f, 0f)));
+        assertThrows(IllegalArgumentException.class, () -> renderingBoundaries.pushNewBoundaries(floatBoxOf(0f, 0f, 0f, -1f)));
+    }
+
+    @Test
+    public void testPopMostRecentBoundary() {
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_1);
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_2);
+
+        renderingBoundaries.popMostRecentBoundaries();
+        var currentBoundaries = renderingBoundaries.currentBoundaries();
+
+        assertEquals(RENDERING_BOUNDARIES_1, currentBoundaries);
+    }
+
+    @Test
+    public void testClearAllBoundariesRevertsToDefault() {
+        renderingBoundaries.pushNewBoundaries(RENDERING_BOUNDARIES_1);
+
+        renderingBoundaries.clearAllBoundaries();
         var currentBoundaries = renderingBoundaries.currentBoundaries();
 
         assertEquals(WHOLE_SCREEN, currentBoundaries);
-    }
-
-    @Test
-    public void testPushOneNewBoundaries() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-
-        assertSame(mockFloatBox1, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushTwoNewBoundaries() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-
-        assertSame(mockFloatBox1Intersected2, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushThreeNewBoundaries() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox3);
-
-        assertSame(mockFloatBox1Intersected2Intersected3, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushThreeNewBoundariesThenPopOne() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox3);
-        renderingBoundaries.popMostRecentBoundaries();
-
-        assertSame(mockFloatBox1Intersected2, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushThreeNewBoundariesThenPopTwo() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox3);
-        renderingBoundaries.popMostRecentBoundaries();
-        renderingBoundaries.popMostRecentBoundaries();
-
-        assertSame(mockFloatBox1, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushThreeNewBoundariesThenPopThree() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox3);
-        renderingBoundaries.popMostRecentBoundaries();
-        renderingBoundaries.popMostRecentBoundaries();
-        renderingBoundaries.popMostRecentBoundaries();
-
-        assertEquals(WHOLE_SCREEN, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testClearAllBoundaries() {
-        renderingBoundaries.pushNewBoundaries(mockFloatBox1);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox2);
-        renderingBoundaries.pushNewBoundaries(mockFloatBox3);
-        renderingBoundaries.clearAllBoundaries();
-
-        assertEquals(WHOLE_SCREEN, renderingBoundaries.currentBoundaries());
-    }
-
-    @Test
-    public void testPushNewBoundariesWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class,
-                () -> renderingBoundaries.pushNewBoundaries(null));
-    }
-
-    @Test
-    public void testGetInterfaceName() {
-        assertEquals(RenderingBoundaries.class.getCanonicalName(),
-                renderingBoundaries.getInterfaceName());
     }
 }

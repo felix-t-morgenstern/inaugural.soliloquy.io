@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -20,6 +20,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -47,8 +48,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                 TextLineRendererBoldAndItalicTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(TextLineRenderable.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderable.getFont()).thenReturn(new FontImpl(FontDefinition));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererBoldAndItalicTest::closeAfterSomeTime
@@ -85,7 +85,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        var renderingLocation = Vertex.of(0.0f, 0.5f - LINE_HEIGHT);
+        var renderingLocation = vertexOf(0.0f, 0.5f - LINE_HEIGHT);
 
         var italicIndices = listOf(9, 17, 23);
 
@@ -96,11 +96,11 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                         staticNullProvider(Color.BLACK), null, italicIndices, boldIndices,
                         staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 Color.WHITE, windowResolutionManager, null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

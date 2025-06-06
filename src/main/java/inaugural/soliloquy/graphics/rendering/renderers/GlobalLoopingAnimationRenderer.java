@@ -4,24 +4,17 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
-
 public class GlobalLoopingAnimationRenderer
         extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
     public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                          FloatBoxFactory floatBoxFactory,
                                           ColorShiftStackAggregator colorShiftStackAggregator,
                                           Long mostRecentTimestamp) {
-        super(renderingBoundaries, floatBoxFactory,
-                generateSimpleArchetype(GlobalLoopingAnimationRenderable.class),
-                mostRecentTimestamp);
+        super(renderingBoundaries, mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }
@@ -32,7 +25,7 @@ public class GlobalLoopingAnimationRenderer
             throws IllegalArgumentException {
         Check.ifNull(globalLoopingAnimationRenderable, "globalLoopingAnimationRenderable");
 
-        FloatBox renderingArea =
+        var renderingArea =
                 Check.ifNull(globalLoopingAnimationRenderable.getRenderingDimensionsProvider(),
                                 "globalLoopingAnimationRenderable.getRenderingDimensionsProvider()")
                         .provide(timestamp);

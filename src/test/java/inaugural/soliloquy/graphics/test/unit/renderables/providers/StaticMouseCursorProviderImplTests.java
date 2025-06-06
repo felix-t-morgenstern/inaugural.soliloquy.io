@@ -8,21 +8,21 @@ import soliloquy.specs.graphics.renderables.providers.StaticMouseCursorProvider;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class StaticMouseCursorProviderImplTests {
+public class StaticMouseCursorProviderImplTests {
     private final String ID = randomString();
     private final Long PROVIDED_VALUE = randomLong();
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
-    private StaticMouseCursorProvider _staticMouseCursorProvider;
+    private StaticMouseCursorProvider staticMouseCursorProvider;
 
     @BeforeEach
-    void setUp() {
-        _staticMouseCursorProvider =
+    public void setUp() {
+        staticMouseCursorProvider =
                 new StaticMouseCursorProviderImpl(ID, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new StaticMouseCursorProviderImpl(
                 null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP
         ));
@@ -32,67 +32,67 @@ class StaticMouseCursorProviderImplTests {
     }
 
     @Test
-    void testUuid() {
-        assertThrows(UnsupportedOperationException.class, _staticMouseCursorProvider::uuid);
+    public void testUuid() {
+        assertThrows(UnsupportedOperationException.class, staticMouseCursorProvider::uuid);
     }
 
     @Test
-    void testId() {
-        assertEquals(ID, _staticMouseCursorProvider.id());
+    public void testId() {
+        assertEquals(ID, staticMouseCursorProvider.id());
     }
 
     @Test
-    void testProvide() {
-        assertEquals(PROVIDED_VALUE, _staticMouseCursorProvider.provide(MOST_RECENT_TIMESTAMP));
+    public void testProvide() {
+        assertEquals(PROVIDED_VALUE, staticMouseCursorProvider.provide(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
-    void testCallsMadeToPriorTimestamps() {
+    public void testCallsMadeToPriorTimestamps() {
         long timestamp1 = randomLongWithInclusiveFloor(MOST_RECENT_TIMESTAMP + 1);
         long timestamp2 = randomLongWithInclusiveFloor(timestamp1 + 1);
         long timestamp3 = randomLongWithInclusiveFloor(timestamp2 + 1);
 
-        _staticMouseCursorProvider.provide(timestamp1);
+        staticMouseCursorProvider.provide(timestamp1);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.provide(timestamp1 - 1));
+                () -> staticMouseCursorProvider.provide(timestamp1 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportPause(timestamp1 - 1));
+                () -> staticMouseCursorProvider.reportPause(timestamp1 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportUnpause(timestamp1 - 1));
+                () -> staticMouseCursorProvider.reportUnpause(timestamp1 - 1));
 
-        _staticMouseCursorProvider.reportPause(timestamp2);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.provide(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportPause(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportUnpause(timestamp2 - 1));
-
-        _staticMouseCursorProvider.reportUnpause(timestamp3);
+        staticMouseCursorProvider.reportPause(timestamp2);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.provide(timestamp3 - 1));
+                () -> staticMouseCursorProvider.provide(timestamp2 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportPause(timestamp3 - 1));
+                () -> staticMouseCursorProvider.reportPause(timestamp2 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticMouseCursorProvider.reportUnpause(timestamp3 - 1));
+                () -> staticMouseCursorProvider.reportUnpause(timestamp2 - 1));
+
+        staticMouseCursorProvider.reportUnpause(timestamp3);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> staticMouseCursorProvider.provide(timestamp3 - 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> staticMouseCursorProvider.reportPause(timestamp3 - 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> staticMouseCursorProvider.reportUnpause(timestamp3 - 1));
     }
 
     @Test
-    void testPausedTimestamp() {
+    public void testPausedTimestamp() {
         assertThrows(UnsupportedOperationException.class,
-                _staticMouseCursorProvider::pausedTimestamp);
+                staticMouseCursorProvider::pausedTimestamp);
     }
 
     @Test
-    void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, _staticMouseCursorProvider.mostRecentTimestamp());
+    public void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, staticMouseCursorProvider.mostRecentTimestamp());
     }
 
     @Test
-    void testRepresentation() {
-        assertEquals(PROVIDED_VALUE, _staticMouseCursorProvider.representation());
+    public void testRepresentation() {
+        assertEquals(PROVIDED_VALUE, staticMouseCursorProvider.representation());
     }
 }

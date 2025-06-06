@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.bootstrap.assetfactories;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.assets.Sprite;
-import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 public class SpriteFactory extends AbstractAssetFactory<SpriteDefinition, Sprite> {
@@ -45,18 +44,6 @@ public class SpriteFactory extends AbstractAssetFactory<SpriteDefinition, Sprite
             public int bottomY() {
                 return spriteDefinition.bottomY();
             }
-
-            @Override
-            public String getInterfaceName() {
-                return Sprite.class.getCanonicalName();
-            }
         };
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return AssetFactory.class.getCanonicalName() + "<" +
-                SpriteDefinition.class.getCanonicalName() + "," + Sprite.class.getCanonicalName() +
-                ">";
     }
 }

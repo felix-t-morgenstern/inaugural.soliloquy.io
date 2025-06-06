@@ -9,95 +9,83 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StaticProviderImplTests {
+public class StaticProviderImplTests {
     private final Object PROVIDED_VALUE = new Object();
     private final long MOST_RECENT_TIMESTAMP = 111L;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private StaticProvider<Object> _staticProvider;
+    private StaticProvider<Object> staticProvider;
 
     @BeforeEach
-    void setUp() {
-        _staticProvider = new StaticProviderImpl<>(UUID, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP);
+    public void setUp() {
+        staticProvider = new StaticProviderImpl<>(UUID, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new StaticProviderImpl<>(null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                new StaticProviderImpl<>(UUID, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(UUID, PROVIDED_VALUE, null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, PROVIDED_VALUE,
-                        MOST_RECENT_TIMESTAMP));
+                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
-    void testUuid() {
-        assertSame(UUID, _staticProvider.uuid());
+    public void testUuid() {
+        assertSame(UUID, staticProvider.uuid());
     }
 
     @Test
-    void testProvide() {
-        assertSame(PROVIDED_VALUE, _staticProvider.provide(MOST_RECENT_TIMESTAMP));
+    public void testProvide() {
+        assertSame(PROVIDED_VALUE, staticProvider.provide(MOST_RECENT_TIMESTAMP));
     }
 
     @Test
-    void testCallsMadeToPriorTimestamps() {
+    public void testCallsMadeToPriorTimestamps() {
         long timestamp1 = 123L;
         long timestamp2 = 456L;
         long timestamp3 = 789L;
 
-        _staticProvider.provide(timestamp1);
+        staticProvider.provide(timestamp1);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.provide(timestamp1 - 1));
+                () -> staticProvider.provide(timestamp1 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportPause(timestamp1 - 1));
+                () -> staticProvider.reportPause(timestamp1 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportUnpause(timestamp1 - 1));
+                () -> staticProvider.reportUnpause(timestamp1 - 1));
 
-        _staticProvider.reportPause(timestamp2);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.provide(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportPause(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportUnpause(timestamp2 - 1));
-
-        _staticProvider.reportUnpause(timestamp3);
+        staticProvider.reportPause(timestamp2);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.provide(timestamp3 - 1));
+                () -> staticProvider.provide(timestamp2 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportPause(timestamp3 - 1));
+                () -> staticProvider.reportPause(timestamp2 - 1));
         assertThrows(IllegalArgumentException.class,
-                () -> _staticProvider.reportUnpause(timestamp3 - 1));
+                () -> staticProvider.reportUnpause(timestamp2 - 1));
+
+        staticProvider.reportUnpause(timestamp3);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> staticProvider.provide(timestamp3 - 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> staticProvider.reportPause(timestamp3 - 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> staticProvider.reportUnpause(timestamp3 - 1));
     }
 
     @Test
-    void testPausedTimestamp() {
-        assertThrows(UnsupportedOperationException.class, _staticProvider::pausedTimestamp);
+    public void testPausedTimestamp() {
+        assertThrows(UnsupportedOperationException.class, staticProvider::pausedTimestamp);
     }
 
     @Test
-    void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) _staticProvider.mostRecentTimestamp());
+    public void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) staticProvider.mostRecentTimestamp());
     }
 
     @Test
-    void testRepresentation() {
-        assertEquals(PROVIDED_VALUE, _staticProvider.representation());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(StaticProvider.class.getCanonicalName() + "<" +
-                        Object.class.getCanonicalName() + ">",
-                _staticProvider.getInterfaceName());
+    public void testRepresentation() {
+        assertEquals(PROVIDED_VALUE, staticProvider.representation());
     }
 }

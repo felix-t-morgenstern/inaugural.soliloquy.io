@@ -5,15 +5,17 @@ import soliloquy.specs.graphics.rendering.FrameExecutor;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FrameExecutorImpl implements FrameExecutor {
     private final RenderableStack TOP_LEVEL_STACK;
     private final StackRenderer STACK_RENDERER;
     private final Semaphore SEMAPHORE;
-    private final ArrayList<Consumer<Long>> FRAME_BLOCKING_EVENTS;
+    private final List<Consumer<Long>> FRAME_BLOCKING_EVENTS;
 
     public FrameExecutorImpl(RenderableStack topLevelStack, StackRenderer stackRenderer,
                              int semaphorePermissions) {
@@ -23,7 +25,7 @@ public class FrameExecutorImpl implements FrameExecutor {
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
                 true
         );
-        FRAME_BLOCKING_EVENTS = new ArrayList<>();
+        FRAME_BLOCKING_EVENTS = listOf();
     }
 
     @Override
@@ -49,10 +51,5 @@ public class FrameExecutorImpl implements FrameExecutor {
         FRAME_BLOCKING_EVENTS.clear();
 
         STACK_RENDERER.render(TOP_LEVEL_STACK, timestamp);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return FrameExecutor.class.getCanonicalName();
     }
 }

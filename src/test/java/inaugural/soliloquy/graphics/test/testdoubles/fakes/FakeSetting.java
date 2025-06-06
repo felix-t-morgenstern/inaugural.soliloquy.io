@@ -1,35 +1,35 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
-import soliloquy.specs.common.infrastructure.Setting;
-import soliloquy.specs.common.infrastructure.VariableCache;
+import soliloquy.specs.common.infrastructure.ImmutableMap;
+import soliloquy.specs.gamestate.entities.Setting;
 
 public class FakeSetting<T> implements Setting<T> {
-    private String _id;
-    private T _value;
+    private String id;
+    private T value;
 
     public FakeSetting(String id, T value) {
-        _id = id;
-        _value = value;
+        this.id = id;
+        this.value = value;
     }
 
     @Override
     public T getValue() {
-        return _value;
+        return value;
     }
 
     @Override
     public void setValue(T t) throws IllegalArgumentException {
-        _value = t;
+        value = t;
     }
 
     @Override
-    public VariableCache controlParams() {
+    public ImmutableMap<String, Object> controlParams() {
         return null;
     }
 
     @Override
     public String id() throws IllegalStateException {
-        return _id;
+        return id;
     }
 
     @Override
@@ -40,15 +40,5 @@ public class FakeSetting<T> implements Setting<T> {
     @Override
     public void setName(String s) {
 
-    }
-
-    @Override
-    public T archetype() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

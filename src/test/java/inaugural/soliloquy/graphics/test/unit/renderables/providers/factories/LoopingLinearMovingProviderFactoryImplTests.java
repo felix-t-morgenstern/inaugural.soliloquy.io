@@ -4,34 +4,34 @@ import inaugural.soliloquy.graphics.renderables.providers.factories.LoopingLinea
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeLoopingLinearMovingProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class LoopingLinearMovingProviderFactoryImplTests {
+public class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map,
-            Function<Long, Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>>
+            Function<Long, Function<Long, LoopingLinearMovingProvider>>>>>>
             FACTORY_1 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
-                    mostRecentTimestamp -> archetype -> {
-                        _factory1InputUuid = uuid;
-                        _factory1InputPeriodDuration = periodDuration;
-                        _factory1InputPeriodModuloOffset = periodModuloOffset;
-                        _factory1InputValuesAtTimes = valuesAtTime;
-                        _factory1InputPausedTimestamp = pausedTimestamp;
-                        _factory1InputMostRecentTimestamp = mostRecentTimestamp;
-                        _factory1InputArchetype = (float) archetype;
+                    mostRecentTimestamp -> {
+                        factory1InputUuid = uuid;
+                        factory1InputPeriodDuration = periodDuration;
+                        factory1InputPeriodModuloOffset = periodModuloOffset;
+                        factory1InputValuesAtTimes = valuesAtTime;
+                        factory1InputPausedTimestamp = pausedTimestamp;
+                        factory1InputMostRecentTimestamp = mostRecentTimestamp;
                         return FACTORY_1_OUTPUT;
                     };
 
@@ -40,116 +40,68 @@ class LoopingLinearMovingProviderFactoryImplTests {
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map, Function<Long,
-            Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>> FACTORY_2 =
-            uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
-                    mostRecentTimestamp -> archetype -> {
-                        _factory2InputUuid = uuid;
-                        _factory2InputPeriodDuration = periodDuration;
-                        _factory2InputPeriodModuloOffset = periodModuloOffset;
-                        _factory2InputValuesAtTimes = valuesAtTime;
-                        _factory2InputPausedTimestamp = pausedTimestamp;
-                        _factory2InputMostRecentTimestamp = mostRecentTimestamp;
-                        _factory2InputArchetype = (FloatBox) archetype;
-                        return FACTORY_2_OUTPUT;
-                    };
+            Function<Long, LoopingLinearMovingProvider>>>>>> FACTORY_2 =
+            _ -> _ -> _ -> _ -> _ -> _ -> FACTORY_2_OUTPUT;
 
-    private UUID _factory1InputUuid;
-    private int _factory1InputPeriodDuration;
-    private int _factory1InputPeriodModuloOffset;
+    private UUID factory1InputUuid;
+    private int factory1InputPeriodDuration;
+    private int factory1InputPeriodModuloOffset;
     /** @noinspection rawtypes */
-    private Map _factory1InputValuesAtTimes;
-    private Long _factory1InputPausedTimestamp;
-    private Long _factory1InputMostRecentTimestamp;
-    private float _factory1InputArchetype;
+    private Map factory1InputValuesAtTimes;
+    private Long factory1InputPausedTimestamp;
+    private Long factory1InputMostRecentTimestamp;
 
-    private UUID _factory2InputUuid;
-    private int _factory2InputPeriodDuration;
-    private int _factory2InputPeriodModuloOffset;
-    /** @noinspection rawtypes */
-    private Map _factory2InputValuesAtTimes;
-    private Long _factory2InputPausedTimestamp;
-    private Long _factory2InputMostRecentTimestamp;
-    private FloatBox _factory2InputArchetype;
-
-    private LoopingLinearMovingProviderFactory _loopingLinearMovingProviderFactory;
+    private LoopingLinearMovingProviderFactory loopingLinearMovingProviderFactory;
 
     @BeforeEach
-    void setUp() {
-        //noinspection rawtypes
-        _loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(
-                new HashMap<String, Function<UUID, Function<Integer, Function<Integer,
-                        Function<Map, Function<Long, Function<Long, Function<Object,
-                                LoopingLinearMovingProvider>>>>>>>>() {{
-                    put(FACTORY_1_TYPE_NAME, FACTORY_1);
-                    put(FACTORY_2_TYPE_NAME, FACTORY_2);
-                }}
+    public void setUp() {
+        loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(
+                mapOf(
+                        pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
+                        pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
+                )
         );
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderFactoryImpl(null));
-        //noinspection rawtypes
+        assertThrows(IllegalArgumentException.class, () ->
+                new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1))));
+        assertThrows(IllegalArgumentException.class, () ->
+                new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1))));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Integer,
-                                Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
-                            put(null, FACTORY_1);
-                        }}));
-        //noinspection rawtypes
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Integer,
-                                Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
-                            put("", FACTORY_1);
-                        }}));
-        //noinspection rawtypes
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(
-                        new HashMap<String, Function<UUID, Function<Integer,
-                                Function<Integer, Function<Map, Function<Long, Function<Long,
-                                        Function<Object, LoopingLinearMovingProvider>>>>>>>>() {{
-                            put(FACTORY_1_TYPE_NAME, null);
-                        }}));
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null))));
     }
 
     @Test
-    void testMake() {
-        UUID uuid = UUID.randomUUID();
-        int periodDuration = 456;
-        int periodModuloOffset = 123;
-        HashMap<Integer, Float> valuesAtTimestamps = new HashMap<Integer, Float>() {{
-            put(0, 123f);
-            put(1, 456f);
-            put(2, 789f);
-        }};
-        Long pausedTimestamp = 123123L;
-        Long mostRecentTimestamp = 456456L;
-        float archetype = 0.123123f;
+    public void testMake() {
+        var uuid = UUID.randomUUID();
+        var periodDuration = 456;
+        var periodModuloOffset = 123;
+        var valuesAtTimestamps = mapOf(
+                pairOf(0, 123f),
+                pairOf(1, 456f),
+                pairOf(2, 789f)
+        );
+        var pausedTimestamp = 123123L;
+        var mostRecentTimestamp = 456456L;
 
-        LoopingLinearMovingProvider<Float> provider = _loopingLinearMovingProviderFactory
+        var provider = loopingLinearMovingProviderFactory
                 .make(uuid, periodDuration, periodModuloOffset, valuesAtTimestamps,
-                        pausedTimestamp, mostRecentTimestamp, archetype);
+                        pausedTimestamp, mostRecentTimestamp);
 
         assertSame(FACTORY_1_OUTPUT, provider);
-        assertSame(uuid, _factory1InputUuid);
-        assertEquals(periodDuration, _factory1InputPeriodDuration);
-        assertEquals(periodModuloOffset, _factory1InputPeriodModuloOffset);
-        assertSame(valuesAtTimestamps, _factory1InputValuesAtTimes);
-        assertEquals(pausedTimestamp, _factory1InputPausedTimestamp);
-        assertEquals(mostRecentTimestamp, _factory1InputMostRecentTimestamp);
-        assertEquals(archetype, _factory1InputArchetype);
+        assertSame(uuid, factory1InputUuid);
+        assertEquals(periodDuration, factory1InputPeriodDuration);
+        assertEquals(periodModuloOffset, factory1InputPeriodModuloOffset);
+        assertSame(valuesAtTimestamps, factory1InputValuesAtTimes);
+        assertEquals(pausedTimestamp, factory1InputPausedTimestamp);
+        assertEquals(mostRecentTimestamp, factory1InputMostRecentTimestamp);
     }
 
     // NB: No specific test is provided for make with invalid params, since the individual
     //     factories provided to this class should handle those edge cases.
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(LoopingLinearMovingProviderFactory.class.getCanonicalName(),
-                _loopingLinearMovingProviderFactory.getInterfaceName());
-    }
 }

@@ -12,8 +12,8 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinit
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.util.ArrayList;
-import java.util.Map;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FontPreloaderTaskTests {
@@ -55,8 +55,8 @@ class FontPreloaderTaskTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -84,8 +84,8 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         null,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
@@ -95,8 +95,8 @@ class FontPreloaderTaskTests {
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     null,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -124,14 +124,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     "",
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -159,14 +159,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     null,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -194,14 +194,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     "",
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -229,14 +229,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     0f,
@@ -264,14 +264,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -294,14 +294,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -329,14 +329,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -364,14 +364,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -399,14 +399,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -434,14 +434,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -469,14 +469,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -499,14 +499,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -534,14 +534,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -569,14 +569,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -604,14 +604,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -639,14 +639,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -674,14 +674,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -704,14 +704,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -739,14 +739,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -774,14 +774,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -809,14 +809,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -844,14 +844,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -879,14 +879,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -909,14 +909,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
-                                    null));
-                        }},
+                                    null)
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -944,14 +944,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -979,14 +979,14 @@ class FontPreloaderTaskTests {
                                             null,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -1014,14 +1014,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             null,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -1049,14 +1049,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             -0.0001f
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -1084,14 +1084,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             1f - LEADING_ADJUSTMENT
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -1119,14 +1119,14 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
-                        new ArrayList<FontDefinitionDTO>() {{
-                            add(new FontDefinitionDTO(
+                        listOf(
+                            new FontDefinitionDTO(
                                     ID,
                                     RELATIVE_LOCATION,
                                     MAX_LOSSLESS_FONT_SIZE,
@@ -1154,8 +1154,8 @@ class FontPreloaderTaskTests {
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    )));
-                        }},
+                                    ))
+                        ),
                         FONT_FACTORY,
                         null));
     }
@@ -1195,9 +1195,9 @@ class FontPreloaderTaskTests {
                 ));
 
         FontPreloaderTask fontPreloaderTask = new FontPreloaderTask(
-                new ArrayList<FontDefinitionDTO>() {{
-                    add(fontDefinitionDTO);
-                }},
+                listOf(
+                    fontDefinitionDTO
+                ),
                 FONT_FACTORY,
                 fonts::add
         );
@@ -1206,7 +1206,7 @@ class FontPreloaderTaskTests {
 
         assertEquals(1, FONT_FACTORY.INPUTS.size());
         assertEquals(1, FONT_FACTORY.OUTPUTS.size());
-        FontDefinition input = FONT_FACTORY.INPUTS.get(0);
+        FontDefinition input = FONT_FACTORY.INPUTS.getFirst();
         assertNotNull(input);
         assertEquals(ID, input.id());
         assertEquals(RELATIVE_LOCATION, input.relativeLocation());
@@ -1216,7 +1216,7 @@ class FontPreloaderTaskTests {
         assertStyleDefinitionsEqual(fontDefinitionDTO.italic, input.italic());
         assertStyleDefinitionsEqual(fontDefinitionDTO.bold, input.bold());
         assertStyleDefinitionsEqual(fontDefinitionDTO.boldItalic, input.boldItalic());
-        assertSame(FONT_FACTORY.OUTPUTS.get(0), fonts.get(0));
+        assertSame(FONT_FACTORY.OUTPUTS.getFirst(), fonts.getFirst());
     }
 
     private void assertStyleDefinitionsEqual(FontStyleDefinitionDTO dto,
@@ -1226,15 +1226,6 @@ class FontPreloaderTaskTests {
 
         assertEquals(dto.additionalGlyphVerticalTextureSpacing,
                 definition.additionalGlyphVerticalTextureSpacing());
-    }
-
-    private void assertStyleDefinitionGlyphPropertiesEqual(FontStyleDefinitionGlyphPropertyDTO[]
-                                                                   dtos,
-                                                           Map<Character, Float> definitions) {
-        assertEquals(dtos.length, definitions.size());
-        for (FontStyleDefinitionGlyphPropertyDTO dto : dtos) {
-            assertEquals(dto.amount, (float) definitions.get(dto.glyph));
-        }
     }
 
     private static FontStyleDefinitionGlyphPropertyDTO[] makeRandomGlyphPropertyDTOs() {

@@ -1,16 +1,12 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 
 public class FiniteAnimationRenderer
         extends CanRenderSnippets<FiniteAnimationRenderable>
@@ -18,12 +14,9 @@ public class FiniteAnimationRenderer
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                   FloatBoxFactory floatBoxFactory,
                                    ColorShiftStackAggregator colorShiftStackAggregator,
                                    Long mostRecentTimestamp) {
-        super(renderingBoundaries, floatBoxFactory,
-                generateArchetypeWithOneGenericParam(FiniteAnimationRenderable.class,
-                        generateSimpleArchetype(AnimationFrameSnippet.class)), mostRecentTimestamp);
+        super(renderingBoundaries, mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }

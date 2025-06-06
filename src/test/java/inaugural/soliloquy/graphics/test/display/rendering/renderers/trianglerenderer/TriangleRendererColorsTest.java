@@ -1,22 +1,18 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.trianglerenderer;
 
 import inaugural.soliloquy.graphics.renderables.TriangleRenderableImpl;
-import inaugural.soliloquy.graphics.rendering.renderers.TriangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -28,15 +24,15 @@ import static org.mockito.Mockito.when;
  */
 class TriangleRendererColorsTest extends TriangleRendererTest {
     private final static StaticProvider<Vertex> VERTEX_1_PROVIDER =
-            staticProvider(Vertex.of(0.2f, 0.2f));
+            staticProvider(vertexOf(0.2f, 0.2f));
     private final static StaticProvider<Color> VERTEX_1_COLOR_PROVIDER =
             staticProvider(Color.RED);
     private final static StaticProvider<Vertex> VERTEX_2_PROVIDER =
-            staticProvider(Vertex.of(0.8f, 0.4f));
+            staticProvider(vertexOf(0.8f, 0.4f));
     private final static StaticProvider<Color> VERTEX_2_COLOR_PROVIDER =
             staticProvider(Color.GREEN);
     private final static StaticProvider<Vertex> VERTEX_3_PROVIDER =
-            staticProvider(Vertex.of(0.5f, 0.8f));
+            staticProvider(vertexOf(0.5f, 0.8f));
     private final static StaticProvider<Color> VERTEX_3_COLOR_PROVIDER =
             staticProvider(Color.BLUE);
     @SuppressWarnings("unchecked")
@@ -48,7 +44,7 @@ class TriangleRendererColorsTest extends TriangleRendererTest {
     public static void main(String[] args) {
         runTest(
                 TriangleRendererColorsTest::generateRenderablesAndRenderersWithMeshAndShader,
-                () -> when(BACKGROUND_TEXTURE_ID_PROVIDER.archetype()).thenReturn(0),
+                () -> {},
                 DisplayTest::closeAfterSomeTime
         );
     }

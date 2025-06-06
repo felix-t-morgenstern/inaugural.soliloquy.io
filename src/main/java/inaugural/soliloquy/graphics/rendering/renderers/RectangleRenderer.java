@@ -2,18 +2,16 @@ package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
     public RectangleRenderer(Long mostRecentTimestamp) {
-        super(generateSimpleArchetype(RectangleRenderable.class), mostRecentTimestamp);
+        super(mostRecentTimestamp);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         Check.ifNull(rectangleRenderable.getRenderingDimensionsProvider(),
                 "rectangleRenderable.getRenderingDimensionsProvider()");
 
-        FloatBox renderingDimensions =
+        var renderingDimensions =
                 rectangleRenderable.getRenderingDimensionsProvider().provide(timestamp);
 
         Check.ifNull(renderingDimensions, "renderingDimensions provided by " +
@@ -82,25 +80,25 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         if (hasTexture) {
             glTexCoord2f(0f, 0f);
         }
-        drawPoint(renderingDimensions.leftX(), renderingDimensions.topY());
+        drawPoint(renderingDimensions.LEFT_X, renderingDimensions.TOP_Y);
 
         setDrawColor(topRightColor);
         if (hasTexture) {
             glTexCoord2f(tilesPerWidth, 0f);
         }
-        drawPoint(renderingDimensions.rightX(), renderingDimensions.topY());
+        drawPoint(renderingDimensions.RIGHT_X, renderingDimensions.TOP_Y);
 
         setDrawColor(bottomRightColor);
         if (hasTexture) {
             glTexCoord2f(tilesPerWidth, tilesPerHeight);
         }
-        drawPoint(renderingDimensions.rightX(), renderingDimensions.bottomY());
+        drawPoint(renderingDimensions.RIGHT_X, renderingDimensions.BOTTOM_Y);
 
         setDrawColor(bottomLeftColor);
         if (hasTexture) {
             glTexCoord2f(0f, tilesPerHeight);
         }
-        drawPoint(renderingDimensions.leftX(), renderingDimensions.bottomY());
+        drawPoint(renderingDimensions.LEFT_X, renderingDimensions.BOTTOM_Y);
 
         glEnd();
     }

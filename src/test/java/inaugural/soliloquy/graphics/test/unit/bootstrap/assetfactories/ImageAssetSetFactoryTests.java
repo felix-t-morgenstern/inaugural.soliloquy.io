@@ -10,14 +10,14 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static soliloquy.specs.common.shared.Direction.*;
 
-class ImageAssetSetFactoryTests {
+public class ImageAssetSetFactoryTests {
     private final String IMAGE_ASSET_SET_ID = "imageAssetSetId";
 
     private final FakeImage CAPTURING_IMAGE = new FakeImage(true);
@@ -43,10 +43,9 @@ class ImageAssetSetFactoryTests {
     private final FakeGlobalLoopingAnimation GLOBAL_LOOPING_ANIMATION_2 =
             new FakeGlobalLoopingAnimation(GLOBAL_LOOPING_ANIMATION_2_ID);
 
-    private final FakeRegistry<Sprite> SPRITES_REGISTRY = new FakeRegistry<Sprite>();
-    private final FakeRegistry<Animation> ANIMATIONS_REGISTRY = new FakeRegistry<Animation>();
-    private final FakeRegistry<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS_REGISTRY =
-            new FakeRegistry<GlobalLoopingAnimation>();
+    private final Map<String, Sprite> GET_SPRITE = mapOf();
+    private final Map<String, Animation> GET_ANIMATION = mapOf();
+    private final Map<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION = mapOf();
 
     private final String TYPE1 = "type1";
     private final String TYPE2 = "type2";
@@ -85,43 +84,36 @@ class ImageAssetSetFactoryTests {
     private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> imageAssetSetFactory;
 
     @BeforeEach
-    void setUp() {
-        SPRITES_REGISTRY.add(SPRITE_1);
-        SPRITES_REGISTRY.add(SPRITE_2);
+    public void setUp() {
+        GET_SPRITE.put(SPRITE_1_ID, SPRITE_1);
+        GET_SPRITE.put(SPRITE_2_ID, SPRITE_2);
 
-        ANIMATIONS_REGISTRY.add(ANIMATION_1);
-        ANIMATIONS_REGISTRY.add(ANIMATION_2);
+        GET_ANIMATION.put(ANIMATION_1_ID, ANIMATION_1);
+        GET_ANIMATION.put(ANIMATION_2_ID, ANIMATION_2);
 
-        GLOBAL_LOOPING_ANIMATIONS_REGISTRY.add(GLOBAL_LOOPING_ANIMATION_1);
-        GLOBAL_LOOPING_ANIMATIONS_REGISTRY.add(GLOBAL_LOOPING_ANIMATION_2);
+        GET_GLOBAL_LOOPING_ANIMATION.put(GLOBAL_LOOPING_ANIMATION_1_ID, GLOBAL_LOOPING_ANIMATION_1);
+        GET_GLOBAL_LOOPING_ANIMATION.put(GLOBAL_LOOPING_ANIMATION_2_ID, GLOBAL_LOOPING_ANIMATION_2);
 
-        imageAssetSetFactory = new ImageAssetSetFactory(SPRITES_REGISTRY, ANIMATIONS_REGISTRY,
-                GLOBAL_LOOPING_ANIMATIONS_REGISTRY);
+        imageAssetSetFactory =
+                new ImageAssetSetFactory(immutable(GET_SPRITE), immutable(GET_ANIMATION),
+                        immutable(GET_GLOBAL_LOOPING_ANIMATION));
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetFactory(null, ANIMATIONS_REGISTRY,
-                        GLOBAL_LOOPING_ANIMATIONS_REGISTRY));
+                () -> new ImageAssetSetFactory(null, immutable(GET_ANIMATION),
+                        immutable(GET_GLOBAL_LOOPING_ANIMATION)));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetFactory(SPRITES_REGISTRY, null,
-                        GLOBAL_LOOPING_ANIMATIONS_REGISTRY));
+                () -> new ImageAssetSetFactory(immutable(GET_SPRITE), null,
+                        immutable(GET_GLOBAL_LOOPING_ANIMATION)));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetFactory(SPRITES_REGISTRY, ANIMATIONS_REGISTRY,
+                () -> new ImageAssetSetFactory(immutable(GET_SPRITE), immutable(GET_ANIMATION),
                         null));
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(AssetFactory.class.getCanonicalName() + "<" +
-                        ImageAssetSetDefinition.class.getCanonicalName() + "," +
-                        ImageAssetSet.class.getCanonicalName() + ">",
-                imageAssetSetFactory.getInterfaceName());
-    }
-
-    @Test
-    void testCreateWithInvalidParams() {
+    public void testCreateWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(null));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
@@ -135,7 +127,7 @@ class ImageAssetSetFactoryTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
-                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID, new ArrayList<>())
+                new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID, listOf())
         ));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
@@ -143,30 +135,30 @@ class ImageAssetSetFactoryTests {
                         listOf(
                                 new ImageAssetSetAssetDefinition(TYPE1, null,
                                         ImageAsset.ImageAssetType.SPRITE, null),
-                        ASSET_2_DEFINITION, ASSET_3_DEFINITION, ASSET_4_DEFINITION,
-                        ASSET_5_DEFINITION, ASSET_6_DEFINITION
-                )
-        )));
+                                ASSET_2_DEFINITION, ASSET_3_DEFINITION, ASSET_4_DEFINITION,
+                                ASSET_5_DEFINITION, ASSET_6_DEFINITION
+                        )
+                )));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
                 new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
                         listOf(
                                 new ImageAssetSetAssetDefinition(TYPE1, null,
                                         ImageAsset.ImageAssetType.SPRITE, ""), ASSET_2_DEFINITION,
-                        ASSET_3_DEFINITION, ASSET_4_DEFINITION, ASSET_5_DEFINITION,
-                        ASSET_6_DEFINITION
-                )
-        )));
+                                ASSET_3_DEFINITION, ASSET_4_DEFINITION, ASSET_5_DEFINITION,
+                                ASSET_6_DEFINITION
+                        )
+                )));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
                 new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
                         listOf(
                                 new ImageAssetSetAssetDefinition(TYPE1, null,
                                         ImageAsset.ImageAssetType.SPRITE, "InvalidSpriteId"),
-                        ASSET_2_DEFINITION, ASSET_3_DEFINITION, ASSET_4_DEFINITION,
-                        ASSET_5_DEFINITION, ASSET_6_DEFINITION
-                )
-        )));
+                                ASSET_2_DEFINITION, ASSET_3_DEFINITION, ASSET_4_DEFINITION,
+                                ASSET_5_DEFINITION, ASSET_6_DEFINITION
+                        )
+                )));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
                 new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
@@ -174,9 +166,9 @@ class ImageAssetSetFactoryTests {
                                 ASSET_1_DEFINITION, ASSET_2_DEFINITION,
                                 new ImageAssetSetAssetDefinition(TYPE2, null,
                                         ImageAsset.ImageAssetType.ANIMATION, "InvalidAnimationId"),
-                        ASSET_4_DEFINITION, ASSET_5_DEFINITION, ASSET_6_DEFINITION
-                )
-        )));
+                                ASSET_4_DEFINITION, ASSET_5_DEFINITION, ASSET_6_DEFINITION
+                        )
+                )));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetFactory.make(
                 new ImageAssetSetDefinition(IMAGE_ASSET_SET_ID,
@@ -184,20 +176,20 @@ class ImageAssetSetFactoryTests {
                                 ASSET_1_DEFINITION, ASSET_2_DEFINITION,
                                 new ImageAssetSetAssetDefinition(TYPE1, null,
                                         ImageAsset.ImageAssetType.ANIMATION, ANIMATION_1_ID),
-                        ASSET_4_DEFINITION, ASSET_5_DEFINITION, ASSET_6_DEFINITION
-                )
-        )));
+                                ASSET_4_DEFINITION, ASSET_5_DEFINITION, ASSET_6_DEFINITION
+                        )
+                )));
     }
 
     @Test
-    void testCreatedImageAssetSetId() {
+    public void testCreatedImageAssetSetId() {
         var output = imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         assertEquals(IMAGE_ASSET_SET_ID, output.id());
     }
 
     @Test
-    void testCreatedImageAssetSetGetImageAssetForTypeAndDirection() {
+    public void testCreatedImageAssetSetGetImageAssetForTypeAndDirection() {
         var output = imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         // NB: The invocations here use null, whereas the asset definitions fed to the factory use
@@ -209,13 +201,16 @@ class ImageAssetSetFactoryTests {
         assertSame(ANIMATION_1, output.getImageAssetForTypeAndDirection(TYPE2, null));
         assertSame(ANIMATION_2, output.getImageAssetForTypeAndDirection(null, DIRECTION2));
         assertSame(ANIMATION_2, output.getImageAssetForTypeAndDirection("", DIRECTION2));
-        assertSame(GLOBAL_LOOPING_ANIMATION_1, output.getImageAssetForTypeAndDirection(TYPE3, null));
-        assertSame(GLOBAL_LOOPING_ANIMATION_2, output.getImageAssetForTypeAndDirection("", DIRECTION3));
-        assertSame(GLOBAL_LOOPING_ANIMATION_2, output.getImageAssetForTypeAndDirection(null, DIRECTION3));
+        assertSame(GLOBAL_LOOPING_ANIMATION_1,
+                output.getImageAssetForTypeAndDirection(TYPE3, null));
+        assertSame(GLOBAL_LOOPING_ANIMATION_2,
+                output.getImageAssetForTypeAndDirection("", DIRECTION3));
+        assertSame(GLOBAL_LOOPING_ANIMATION_2,
+                output.getImageAssetForTypeAndDirection(null, DIRECTION3));
     }
 
     @Test
-    void testCreatedImageAssetSetSupportsMouseEventsCapturing() {
+    public void testCreatedImageAssetSetSupportsMouseEventsCapturing() {
         var output = imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
 
         assertTrue(output.supportsMouseEventCapturing());
@@ -238,12 +233,5 @@ class ImageAssetSetFactoryTests {
 
         assertFalse(output.supportsMouseEventCapturing());
 
-    }
-
-    @Test
-    void testCreatedImageAssetSetGetInterfaceName() {
-        var output = imageAssetSetFactory.make(IMAGE_ASSET_SET_DEFINITION);
-
-        assertEquals(ImageAssetSet.class.getCanonicalName(), output.getInterfaceName());
     }
 }

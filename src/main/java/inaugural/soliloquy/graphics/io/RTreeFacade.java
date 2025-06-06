@@ -2,23 +2,25 @@ package com.conversantmedia.util.collection.spatial;
 
 import com.conversantmedia.util.collection.geometry.Point2d;
 import com.conversantmedia.util.collection.geometry.Rect2d;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class RTreeFacade {
     private final RTree<RenderableWithMouseEventsSearchObject> R_TREE;
-    private final HashMap<RenderableWithMouseEvents, RenderableWithMouseEventsSearchObject> ITEMS;
+    private final Map<RenderableWithMouseEvents, RenderableWithMouseEventsSearchObject> ITEMS;
     /** @noinspection FieldCanBeLocal */
     private final float TOLERANCE = 0.001f;
 
     public RTreeFacade() {
         R_TREE = new RTree<>(new RenderableWithMouseEventsSearchObjectRectBuilder(), 2, 8,
                 RTree.Split.AXIAL);
-        ITEMS = new HashMap<>();
+        ITEMS = mapOf();
     }
 
     public void put(RenderableWithMouseEvents renderableWithMouseEvents,
@@ -37,9 +39,8 @@ public class RTreeFacade {
     }
 
     public List<RenderableWithMouseEventsSearchObject> search(float x, float y) {
-        ArrayList<RenderableWithMouseEventsSearchObject> results = new ArrayList<>();
-        Rect2d searchRect = new Rect2d(x - TOLERANCE, y - TOLERANCE,
-                x + TOLERANCE, y + TOLERANCE);
+        List<RenderableWithMouseEventsSearchObject> results = listOf();
+        var searchRect = new Rect2d(x - TOLERANCE, y - TOLERANCE, x + TOLERANCE, y + TOLERANCE);
         R_TREE.intersects(searchRect, results::add);
         return results;
     }
@@ -67,10 +68,10 @@ public class RTreeFacade {
         public Rect2d getBBox(RenderableWithMouseEventsSearchObject
                                       renderableWithMouseEventsSearchObject) {
             return new Rect2d(
-                    renderableWithMouseEventsSearchObject.renderingDimensions.leftX(),
-                    renderableWithMouseEventsSearchObject.renderingDimensions.topY(),
-                    renderableWithMouseEventsSearchObject.renderingDimensions.rightX(),
-                    renderableWithMouseEventsSearchObject.renderingDimensions.bottomY()
+                    renderableWithMouseEventsSearchObject.renderingDimensions.LEFT_X,
+                    renderableWithMouseEventsSearchObject.renderingDimensions.TOP_Y,
+                    renderableWithMouseEventsSearchObject.renderingDimensions.RIGHT_X,
+                    renderableWithMouseEventsSearchObject.renderingDimensions.BOTTOM_Y
             );
         }
 

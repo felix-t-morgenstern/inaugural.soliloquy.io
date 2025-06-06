@@ -6,10 +6,10 @@ import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutpu
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FrameRateReporterImpl implements FrameRateReporter {
     private final int PERIODS_PER_AGGREGATE;
@@ -17,23 +17,23 @@ public class FrameRateReporterImpl implements FrameRateReporter {
     private final Map<String, Boolean> AGGREGATE_OUTPUTS_ACTIVATION_STATUSES;
     private final boolean AGGREGATE_OUTPUT_DEFAULT_ACTIVE_STATUS = true;
 
-    private Long _lastReportedDate;
-    private Float _currentActualFps;
-    private long _currentAggregateStartDate;
-    private Float[] _targetFpsInCurrentAggregate;
-    private float[] _actualFpsInCurrentAggregate;
-    private int _periodWithinCurrentAggregate;
-    private float _aggregateTargetFpsDivisor;
-    private Long _pauseStart;
-    private int[] _msPausedPerPeriodInCurrentAggregate;
-    private int _msPausedWithinCurrentAggregate;
+    private Long lastReportedDate;
+    private Float currentActualFps;
+    private long currentAggregateStartDate;
+    private Float[] targetFpsInCurrentAggregate;
+    private float[] actualFpsInCurrentAggregate;
+    private int periodWithinCurrentAggregate;
+    private float aggregateTargetFpsDivisor;
+    private Long pauseStart;
+    private int[] msPausedPerPeriodInCurrentAggregate;
+    private int msPausedWithinCurrentAggregate;
 
     @SuppressWarnings("ConstantConditions")
     public FrameRateReporterImpl(int periodsPerAggregate,
                                  Collection<FrameRateReporterAggregateOutput> aggregateOutputs) {
         PERIODS_PER_AGGREGATE = Check.throwOnLteZero(periodsPerAggregate, "periodsPerAggregate");
         AGGREGATE_OUTPUTS = aggregateOutputs;
-        AGGREGATE_OUTPUTS_ACTIVATION_STATUSES = new HashMap<>();
+        AGGREGATE_OUTPUTS_ACTIVATION_STATUSES = mapOf();
         Check.ifNull(aggregateOutputs, "aggregateOutputs").forEach(aggregateOutput -> {
             Check.ifNull(aggregateOutput, "aggregateOutput");
             Check.ifNullOrEmpty(aggregateOutput.id(), "aggregateOutput.id()");
@@ -45,19 +45,19 @@ public class FrameRateReporterImpl implements FrameRateReporter {
             AGGREGATE_OUTPUTS_ACTIVATION_STATUSES.put(aggregateOutput.id(),
                     AGGREGATE_OUTPUT_DEFAULT_ACTIVE_STATUS);
         });
-        _targetFpsInCurrentAggregate = new Float[PERIODS_PER_AGGREGATE];
-        _actualFpsInCurrentAggregate = new float[PERIODS_PER_AGGREGATE];
-        _periodWithinCurrentAggregate = 0;
-        _aggregateTargetFpsDivisor = 0;
-        _msPausedPerPeriodInCurrentAggregate = new int[PERIODS_PER_AGGREGATE];
-        _msPausedWithinCurrentAggregate = 0;
+        targetFpsInCurrentAggregate = new Float[PERIODS_PER_AGGREGATE];
+        actualFpsInCurrentAggregate = new float[PERIODS_PER_AGGREGATE];
+        periodWithinCurrentAggregate = 0;
+        aggregateTargetFpsDivisor = 0;
+        msPausedPerPeriodInCurrentAggregate = new int[PERIODS_PER_AGGREGATE];
+        msPausedWithinCurrentAggregate = 0;
     }
 
     @Override
     public void reportFrameRate(long datetime, Float targetFps, float actualFps)
             throws IllegalArgumentException {
         synchronized (this) {
-            if (_lastReportedDate != null && datetime - _lastReportedDate != MS_PER_SECOND) {
+            if (lastReportedDate != null && datetime - lastReportedDate != MS_PER_SECOND) {
                 throw new IllegalArgumentException("FrameRateReporterImpl.reportFrameRate: " +
                         "datetime must be precisely 1000ms after previously reported datetime");
             }
@@ -66,46 +66,46 @@ public class FrameRateReporterImpl implements FrameRateReporter {
             }
             Check.throwOnLtValue(actualFps, 0f, "actualFps");
 
-            if (_periodWithinCurrentAggregate == 0) {
-                _currentAggregateStartDate = datetime;
+            if (periodWithinCurrentAggregate == 0) {
+                currentAggregateStartDate = datetime;
             }
 
             if (targetFps != null) {
-                _targetFpsInCurrentAggregate[_periodWithinCurrentAggregate] = targetFps;
+                targetFpsInCurrentAggregate[periodWithinCurrentAggregate] = targetFps;
             }
-            _actualFpsInCurrentAggregate[_periodWithinCurrentAggregate] = actualFps;
+            actualFpsInCurrentAggregate[periodWithinCurrentAggregate] = actualFps;
 
-            if (_pauseStart != null) {
-                _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate] +=
-                        Math.min(datetime - _pauseStart + MS_PER_SECOND, MS_PER_SECOND);
-                _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate] = Math.min(
-                        _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate],
+            if (pauseStart != null) {
+                msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate] +=
+                        (int) Math.min(datetime - pauseStart + MS_PER_SECOND, MS_PER_SECOND);
+                msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate] = Math.min(
+                        msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate],
                         MS_PER_SECOND
                 );
             }
             if (targetFps != null) {
-                _aggregateTargetFpsDivisor += (MS_PER_SECOND -
-                        _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate]);
+                aggregateTargetFpsDivisor += (MS_PER_SECOND -
+                        msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate]);
             }
-            _msPausedWithinCurrentAggregate +=
-                    _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate];
+            msPausedWithinCurrentAggregate +=
+                    msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate];
 
-            if (_periodWithinCurrentAggregate == PERIODS_PER_AGGREGATE - 1) {
+            if (periodWithinCurrentAggregate == PERIODS_PER_AGGREGATE - 1) {
                 Float aggregateTargetFps = null;
                 float aggregateActualFps = 0f;
                 float aggregateActualFpsDivisor = (float) PERIODS_PER_AGGREGATE -
-                        (_msPausedWithinCurrentAggregate / (float) MS_PER_SECOND);
-                boolean entireAggregatePaused = _msPausedWithinCurrentAggregate ==
+                        (msPausedWithinCurrentAggregate / (float) MS_PER_SECOND);
+                boolean entireAggregatePaused = msPausedWithinCurrentAggregate ==
                         MS_PER_SECOND * PERIODS_PER_AGGREGATE;
-                for (int period = 0; period < PERIODS_PER_AGGREGATE; period++) {
+                for (var period = 0; period < PERIODS_PER_AGGREGATE; period++) {
                     if (!entireAggregatePaused) {
                         float percentageOfPeriodPausedAdj =
-                                1f - (_msPausedPerPeriodInCurrentAggregate[period]
+                                1f - (msPausedPerPeriodInCurrentAggregate[period]
                                         / (float) MS_PER_SECOND);
-                        if (_targetFpsInCurrentAggregate[period] != null) {
+                        if (targetFpsInCurrentAggregate[period] != null) {
                             // I hate this statement. It works, but I hate it.
                             float toAddToAggregateTargetFps =
-                                    (_targetFpsInCurrentAggregate[period] *
+                                    (targetFpsInCurrentAggregate[period] *
                                             percentageOfPeriodPausedAdj);
                             if (aggregateTargetFps == null) {
                                 aggregateTargetFps = toAddToAggregateTargetFps;
@@ -114,48 +114,48 @@ public class FrameRateReporterImpl implements FrameRateReporter {
                                 aggregateTargetFps += toAddToAggregateTargetFps;
                             }
                         }
-                        aggregateActualFps += (_actualFpsInCurrentAggregate[period] *
+                        aggregateActualFps += (actualFpsInCurrentAggregate[period] *
                                 percentageOfPeriodPausedAdj);
                     }
 
-                    _targetFpsInCurrentAggregate[period] = null;
-                    _actualFpsInCurrentAggregate[period] = 0f;
-                    _msPausedPerPeriodInCurrentAggregate[period] = 0;
+                    targetFpsInCurrentAggregate[period] = null;
+                    actualFpsInCurrentAggregate[period] = 0f;
+                    msPausedPerPeriodInCurrentAggregate[period] = 0;
                 }
 
                 if (aggregateTargetFps != null) {
-                    aggregateTargetFps /= (_aggregateTargetFpsDivisor / (float) MS_PER_SECOND);
+                    aggregateTargetFps /= (aggregateTargetFpsDivisor / (float) MS_PER_SECOND);
                 }
                 aggregateActualFps /= aggregateActualFpsDivisor;
 
                 for (FrameRateReporterAggregateOutput aggregateOutput : AGGREGATE_OUTPUTS) {
                     if (AGGREGATE_OUTPUTS_ACTIVATION_STATUSES.get(aggregateOutput.id())) {
                         aggregateOutput.outputAggregateFrameRateData(
-                                new Date(_currentAggregateStartDate),
+                                new Date(currentAggregateStartDate),
                                 entireAggregatePaused ? null : aggregateTargetFps,
                                 entireAggregatePaused ? null : aggregateActualFps);
                     }
                 }
 
-                _msPausedWithinCurrentAggregate = 0;
-                _periodWithinCurrentAggregate = 0;
-                _aggregateTargetFpsDivisor = 0f;
+                msPausedWithinCurrentAggregate = 0;
+                periodWithinCurrentAggregate = 0;
+                aggregateTargetFpsDivisor = 0f;
             }
             else {
-                _periodWithinCurrentAggregate++;
+                periodWithinCurrentAggregate++;
             }
 
-            _lastReportedDate = datetime;
+            lastReportedDate = datetime;
 
-            if (_pauseStart == null) {
-                _currentActualFps = actualFps;
+            if (pauseStart == null) {
+                currentActualFps = actualFps;
             }
         }
     }
 
     @Override
     public Float currentActualFps() {
-        return _currentActualFps;
+        return currentActualFps;
     }
 
     @Override
@@ -181,29 +181,29 @@ public class FrameRateReporterImpl implements FrameRateReporter {
     @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
         synchronized (this) {
-            if (_lastReportedDate != null) {
+            if (lastReportedDate != null) {
                 Check.throwOnLtValue(timestamp, nextReportingDate(), "timestamp");
                 Check.throwOnGteValue(timestamp, nextReportingDate() + MS_PER_SECOND, "timestamp");
             }
 
-            _currentActualFps = null;
-            _pauseStart = timestamp;
+            currentActualFps = null;
+            pauseStart = timestamp;
         }
     }
 
     @Override
     public void reportUnpause(long timestamp) throws IllegalArgumentException {
         synchronized (this) {
-            if (_lastReportedDate != null) {
+            if (lastReportedDate != null) {
                 Check.throwOnLtValue(timestamp, nextReportingDate(), "timestamp");
                 Check.throwOnGteValue(timestamp, nextReportingDate() + MS_PER_SECOND, "timestamp");
             }
 
-            if (_lastReportedDate != null && _pauseStart != null) {
-                _msPausedPerPeriodInCurrentAggregate[_periodWithinCurrentAggregate] +=
-                        timestamp - Math.max(nextReportingDate(), _pauseStart);
+            if (lastReportedDate != null && pauseStart != null) {
+                msPausedPerPeriodInCurrentAggregate[periodWithinCurrentAggregate] +=
+                        (int) (timestamp - Math.max(nextReportingDate(), pauseStart));
             }
-            _pauseStart = null;
+            pauseStart = null;
         }
     }
 
@@ -213,12 +213,7 @@ public class FrameRateReporterImpl implements FrameRateReporter {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getInterfaceName() {
-        return FrameRateReporter.class.getCanonicalName();
-    }
-
     private long nextReportingDate() {
-        return _lastReportedDate + MS_PER_SECOND;
+        return lastReportedDate + MS_PER_SECOND;
     }
 }

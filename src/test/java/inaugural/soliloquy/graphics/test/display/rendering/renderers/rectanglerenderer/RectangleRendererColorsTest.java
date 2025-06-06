@@ -3,17 +3,17 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.rectangler
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
-import soliloquy.specs.graphics.rendering.FloatBox;
+import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
  * Test acceptance criteria:
@@ -39,7 +39,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
     private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
+            new FakeStaticProvider<>(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
 
     public static void main(String[] args) {
         runTest(
@@ -60,7 +60,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), FirstChildStack,
                 RENDERING_BOUNDARIES);
 
-        Renderers.registerRenderer(RectangleRenderable.getInterfaceName(), RectangleRenderer);
+        Renderers.registerRenderer(RectangleRenderableImpl.class, RectangleRenderer);
         FirstChildStack.add(RectangleRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;
 

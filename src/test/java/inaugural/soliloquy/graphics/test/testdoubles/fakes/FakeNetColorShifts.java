@@ -37,9 +37,4 @@ public class FakeNetColorShifts implements NetColorShifts {
     public float colorRotationShift() {
         return ColorRotationShift;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

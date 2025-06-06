@@ -12,22 +12,25 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+
 public class TextLineRenderableImpl extends AbstractRenderable implements TextLineRenderable {
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES;
     private final List<Integer> ITALIC_INDICES;
     private final List<Integer> BOLD_INDICES;
 
-    private Font _font;
-    private ProviderAtTime<String> _lineTextProvider;
-    private ProviderAtTime<Float> _lineHeightProvider;
-    private TextJustification _justification;
-    private ProviderAtTime<Vertex> _renderingLocationProvider;
-    private float _paddingBetweenGlyphs;
-    private ProviderAtTime<Float> _borderThicknessProvider;
-    private ProviderAtTime<Color> _borderColorProvider;
-    private ProviderAtTime<Float> _dropShadowSizeProvider;
-    private ProviderAtTime<Vertex> _dropShadowOffsetProvider;
-    private ProviderAtTime<Color> _dropShadowColorProvider;
+    private Font font;
+    private ProviderAtTime<String> lineTextProvider;
+    private ProviderAtTime<Float> lineHeightProvider;
+    private TextJustification justification;
+    private ProviderAtTime<Vertex> renderingLocationProvider;
+    private float paddingBetweenGlyphs;
+    private ProviderAtTime<Float> borderThicknessProvider;
+    private ProviderAtTime<Color> borderColorProvider;
+    private ProviderAtTime<Float> dropShadowSizeProvider;
+    private ProviderAtTime<Vertex> dropShadowOffsetProvider;
+    private ProviderAtTime<Color> dropShadowColorProvider;
 
     /** @noinspection ConstantConditions */
     public TextLineRenderableImpl(Font font, ProviderAtTime<String> lineTextProvider,
@@ -55,69 +58,69 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         setDropShadowSizeProvider(dropShadowSizeProvider);
         setDropShadowOffsetProvider(dropShadowOffsetProvider);
         setDropShadowColorProvider(dropShadowColorProvider);
-        COLOR_PROVIDER_INDICES = new HashMap<>(colorProviderIndices);
-        ITALIC_INDICES = new ArrayList<>(Check.ifNull(italicIndices, "italicIndices"));
-        BOLD_INDICES = new ArrayList<>(Check.ifNull(boldIndices, "boldIndices"));
+        COLOR_PROVIDER_INDICES = mapOf(colorProviderIndices);
+        ITALIC_INDICES = listOf(Check.ifNull(italicIndices, "italicIndices"));
+        BOLD_INDICES = listOf(Check.ifNull(boldIndices, "boldIndices"));
     }
 
     @Override
     public Font getFont() {
-        return _font;
+        return font;
     }
 
     @Override
     public void setFont(Font font) throws IllegalArgumentException {
-        _font = Check.ifNull(font, "font");
+        this.font = Check.ifNull(font, "font");
     }
 
     @Override
     public ProviderAtTime<String> getLineTextProvider() {
-        return _lineTextProvider;
+        return lineTextProvider;
     }
 
     @Override
     public void setLineTextProvider(ProviderAtTime<String> lineTextProvider)
             throws IllegalArgumentException {
-        _lineTextProvider = Check.ifNull(lineTextProvider, "lineTextProvider");
+        this.lineTextProvider = Check.ifNull(lineTextProvider, "lineTextProvider");
     }
 
     @Override
     public ProviderAtTime<Vertex> getRenderingLocationProvider() {
-        return _renderingLocationProvider;
+        return renderingLocationProvider;
     }
 
     @Override
     public void setRenderingLocationProvider(ProviderAtTime<Vertex>
                                                      renderingLocationProvider)
             throws IllegalArgumentException {
-        _renderingLocationProvider = Check.ifNull(renderingLocationProvider,
+        this.renderingLocationProvider = Check.ifNull(renderingLocationProvider,
                 "renderingLocationProvider");
     }
 
     @Override
     public ProviderAtTime<Float> lineHeightProvider() {
-        return _lineHeightProvider;
+        return lineHeightProvider;
     }
 
     @Override
     public void setLineHeightProvider(ProviderAtTime<Float> lineHeightProvider)
             throws IllegalArgumentException {
-        _lineHeightProvider = Check.ifNull(lineHeightProvider, "lineHeightProvider");
+        this.lineHeightProvider = Check.ifNull(lineHeightProvider, "lineHeightProvider");
     }
 
     @Override
     public float getPaddingBetweenGlyphs() {
-        return _paddingBetweenGlyphs;
+        return paddingBetweenGlyphs;
     }
 
     @Override
     public void setPaddingBetweenGlyphs(float paddingBetweenGlyphs) {
-        _paddingBetweenGlyphs = paddingBetweenGlyphs;
+        this.paddingBetweenGlyphs = paddingBetweenGlyphs;
     }
 
     @Override
     public TextJustification getJustification() {
-        return _justification;
+        return justification;
     }
 
     @Override
@@ -127,7 +130,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
             throw new IllegalArgumentException(
                     "TextLineRenderableImpl.setJustification: justification cannot be UNKNOWN");
         }
-        _justification = justification;
+        this.justification = justification;
     }
 
     @Override
@@ -147,74 +150,69 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
 
     @Override
     public ProviderAtTime<Float> dropShadowSizeProvider() {
-        return _dropShadowSizeProvider;
+        return dropShadowSizeProvider;
     }
 
     @Override
     public void setDropShadowSizeProvider(ProviderAtTime<Float> dropShadowSizeProvider)
             throws IllegalArgumentException {
-        _dropShadowSizeProvider = Check.ifNull(dropShadowSizeProvider, "dropShadowSizeProvider");
+        this.dropShadowSizeProvider = Check.ifNull(dropShadowSizeProvider, "dropShadowSizeProvider");
     }
 
     @Override
     public ProviderAtTime<Vertex> dropShadowOffsetProvider() {
-        return _dropShadowOffsetProvider;
+        return dropShadowOffsetProvider;
     }
 
     @Override
     public void setDropShadowOffsetProvider(ProviderAtTime<Vertex>
                                                     dropShadowOffsetProvider)
             throws IllegalArgumentException {
-        _dropShadowOffsetProvider = Check.ifNull(dropShadowOffsetProvider,
+        this.dropShadowOffsetProvider = Check.ifNull(dropShadowOffsetProvider,
                 "dropShadowOffsetProvider");
     }
 
     @Override
     public ProviderAtTime<Color> dropShadowColorProvider() {
-        return _dropShadowColorProvider;
+        return dropShadowColorProvider;
     }
 
     @Override
     public void setDropShadowColorProvider(ProviderAtTime<Color> dropShadowColorProvider)
             throws IllegalArgumentException {
-        _dropShadowColorProvider = Check.ifNull(dropShadowColorProvider,
+        this.dropShadowColorProvider = Check.ifNull(dropShadowColorProvider,
                 "dropShadowColorProvider");
     }
 
     @Override
-    public String getInterfaceName() {
-        return TextLineRenderable.class.getCanonicalName();
-    }
-
-    @Override
     public ProviderAtTime<Float> getBorderThicknessProvider() {
-        return _borderThicknessProvider;
+        return borderThicknessProvider;
     }
 
     @Override
     public void setBorderThicknessProvider(ProviderAtTime<Float> borderThicknessProvider)
             throws IllegalArgumentException {
-        if (borderThicknessProvider != null && _borderColorProvider == null) {
+        if (borderThicknessProvider != null && borderColorProvider == null) {
             throw new IllegalArgumentException("TextLineRenderableImpl.setBorderColorProvider: " +
                     "cannot set borderThicknessProvider to non-null while borderColorProvider " +
                     "is null");
         }
-        _borderThicknessProvider = borderThicknessProvider;
+        this.borderThicknessProvider = borderThicknessProvider;
     }
 
     @Override
     public ProviderAtTime<Color> getBorderColorProvider() {
-        return _borderColorProvider;
+        return borderColorProvider;
     }
 
     @Override
     public void setBorderColorProvider(ProviderAtTime<Color> borderColorProvider)
             throws IllegalArgumentException {
-        if (_borderThicknessProvider != null && borderColorProvider == null) {
+        if (borderThicknessProvider != null && borderColorProvider == null) {
             throw new IllegalArgumentException("TextLineRenderableImpl.setBorderColorProvider: " +
                     "cannot set borderColorProvider to null while borderThicknessProvider is " +
                     "non-null");
         }
-        _borderColorProvider = borderColorProvider;
+        this.borderColorProvider = borderColorProvider;
     }
 }

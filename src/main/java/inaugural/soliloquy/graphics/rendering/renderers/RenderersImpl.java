@@ -15,7 +15,7 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 public class RenderersImpl implements Renderers {
     private StackRenderer stackRenderer;
 
-    private final Map<String, Renderer<? extends Renderable>> RENDERERS;
+    private final Map<Class<?>, Renderer<? extends Renderable>> RENDERERS;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     public RenderersImpl(TimestampValidator timestampValidator) {
@@ -24,11 +24,11 @@ public class RenderersImpl implements Renderers {
     }
 
     @Override
-    public <T extends Renderable> void registerRenderer(String renderableInterfaceName,
-                                                        Renderer<T> renderer)
+    public <T extends Renderable, T2 extends T> void registerRenderer(Class<T2> renderableClass,
+                                                                      Renderer<T> renderer)
             throws IllegalArgumentException {
         RENDERERS.put(
-                Check.ifNullOrEmpty(renderableInterfaceName, "renderableInterfaceName"),
+                Check.ifNull(renderableClass, "renderableClass"),
                 Check.ifNull(renderer, "renderer"));
     }
 
@@ -52,9 +52,9 @@ public class RenderersImpl implements Renderers {
             return;
         }
 
-        var renderableInterfaceName = renderable.getInterfaceName();
+        var renderableInterfaceName = renderable.getClass().getCanonicalName();
         //noinspection unchecked
-        var renderer = (Renderer<T>) RENDERERS.get(renderableInterfaceName);
+        var renderer = (Renderer<T>) RENDERERS.get(renderable.getClass());
         if (renderer == null) {
             throw new IllegalArgumentException("RenderersImpl.render: renderable class (" +
                     renderableInterfaceName + ") is unregistered");
@@ -65,10 +65,5 @@ public class RenderersImpl implements Renderers {
     @Override
     public Long mostRecentTimestamp() {
         return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return Renderer.class.getCanonicalName();
     }
 }

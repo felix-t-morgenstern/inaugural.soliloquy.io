@@ -2,12 +2,12 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -62,11 +62,6 @@ public class GlobalLoopingAnimationRenderableImpl
     @Override
     protected String className() {
         return "GlobalLoopingAnimationRenderableImpl";
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return GlobalLoopingAnimationRenderable.class.getCanonicalName();
     }
 
     @Override

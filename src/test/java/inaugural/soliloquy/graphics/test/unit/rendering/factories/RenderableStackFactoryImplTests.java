@@ -5,8 +5,8 @@ import inaugural.soliloquy.graphics.rendering.factories.RenderableStackFactoryIm
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.factories.RenderableStackFactory;
 
@@ -16,37 +16,29 @@ import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-class RenderableStackFactoryImplTests {
+public class RenderableStackFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
     @SuppressWarnings("unchecked")
-    @Mock private ProviderAtTime<FloatBox> _mockRenderingBoundariesProvider =
+    @Mock private ProviderAtTime<FloatBox> mockRenderingBoundariesProvider =
             mock(ProviderAtTime.class);
-    @Mock private RenderableStack _mockContainingStack = mock(RenderableStack.class);
+    @Mock private RenderableStack mockContainingStack = mock(RenderableStack.class);
 
-    private RenderableStackFactory _renderableStackFactory;
+    private RenderableStackFactory renderableStackFactory;
 
     @BeforeEach
-    void setUp() {
-        _renderableStackFactory = new RenderableStackFactoryImpl();
+    public void setUp() {
+        renderableStackFactory = new RenderableStackFactoryImpl();
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(RenderableStackFactory.class.getCanonicalName(),
-                _renderableStackFactory.getInterfaceName());
-    }
-
-    @Test
-    void testMakeTopLevelStack() {
-        RenderableStack topLevelStack = _renderableStackFactory.makeTopLevelStack();
+    public void testMakeTopLevelStack() {
+        var topLevelStack = renderableStackFactory.makeTopLevelStack();
 
         assertNotNull(topLevelStack);
-        assertTrue(topLevelStack instanceof RenderableStackImpl);
+        assertInstanceOf(RenderableStackImpl.class, topLevelStack);
         assertNull(topLevelStack.uuid());
         assertEquals(WHOLE_SCREEN,
                 topLevelStack.getRenderingBoundariesProvider().provide(randomLong()));
@@ -54,16 +46,16 @@ class RenderableStackFactoryImplTests {
     }
 
     @Test
-    void testMakeContainedStack() {
-        RenderableStack containedStack = _renderableStackFactory.makeContainedStack(UUID, Z,
-                _mockRenderingBoundariesProvider, _mockContainingStack);
+    public void testMakeContainedStack() {
+        var containedStack = renderableStackFactory.makeContainedStack(UUID, Z,
+                mockRenderingBoundariesProvider, mockContainingStack);
 
         assertNotNull(containedStack);
-        assertTrue(containedStack instanceof RenderableStackImpl);
+        assertInstanceOf(RenderableStackImpl.class, containedStack);
         assertEquals(UUID, containedStack.uuid());
         assertEquals(Z, containedStack.getZ());
-        assertSame(_mockRenderingBoundariesProvider,
+        assertSame(mockRenderingBoundariesProvider,
                 containedStack.getRenderingBoundariesProvider());
-        assertSame(_mockContainingStack, containedStack.containingStack());
+        assertSame(mockContainingStack, containedStack.containingStack());
     }
 }

@@ -12,10 +12,10 @@ import java.util.UUID;
 abstract class AbstractLineSegmentRenderable
         extends AbstractRenderable
         implements LineSegmentRenderable {
-    private ProviderAtTime<Vertex> _vertex1Provider;
-    private ProviderAtTime<Vertex> _vertex2Provider;
-    private ProviderAtTime<Float> _thicknessProvider;
-    private ProviderAtTime<Color> _colorProvider;
+    private ProviderAtTime<Vertex> vertex1Provider;
+    private ProviderAtTime<Vertex> vertex2Provider;
+    private ProviderAtTime<Float> thicknessProvider;
+    private ProviderAtTime<Color> colorProvider;
 
     public AbstractLineSegmentRenderable(ProviderAtTime<Vertex> vertex1Provider,
                                          ProviderAtTime<Vertex> vertex2Provider,
@@ -32,45 +32,45 @@ abstract class AbstractLineSegmentRenderable
 
     @Override
     public ProviderAtTime<Vertex> getVertex1Provider() {
-        return _vertex1Provider;
+        return vertex1Provider;
     }
 
     @Override
     public void setVertex1Provider(ProviderAtTime<Vertex> vertex1Provider)
             throws IllegalArgumentException {
-        _vertex1Provider = Check.ifNull(vertex1Provider, "vertex1Provider");
+        this.vertex1Provider = Check.ifNull(vertex1Provider, "vertex1Provider");
     }
 
     @Override
     public ProviderAtTime<Vertex> getVertex2Provider() {
-        return _vertex2Provider;
+        return vertex2Provider;
     }
 
     @Override
     public void setVertex2Provider(ProviderAtTime<Vertex> vertex2Provider)
             throws IllegalArgumentException {
-        _vertex2Provider = Check.ifNull(vertex2Provider, "vertex2Provider");
+        this.vertex2Provider = Check.ifNull(vertex2Provider, "vertex2Provider");
     }
 
     @Override
     public ProviderAtTime<Float> getThicknessProvider() {
-        return _thicknessProvider;
+        return thicknessProvider;
     }
 
     @Override
     public void setThicknessProvider(ProviderAtTime<Float> thicknessProvider)
             throws IllegalArgumentException {
-        _thicknessProvider = Check.ifNull(thicknessProvider, "thicknessProvider");
+        this.thicknessProvider = Check.ifNull(thicknessProvider, "thicknessProvider");
     }
 
     @Override
     public ProviderAtTime<Color> getColorProvider() {
-        return _colorProvider;
+        return colorProvider;
     }
 
     @Override
     public void setColorProvider(ProviderAtTime<Color> colorProvider)
             throws IllegalArgumentException {
-        _colorProvider = Check.ifNull(colorProvider, "colorProvider");
+        this.colorProvider = Check.ifNull(colorProvider, "colorProvider");
     }
 }

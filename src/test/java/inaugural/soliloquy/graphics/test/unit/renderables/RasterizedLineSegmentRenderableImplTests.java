@@ -14,10 +14,11 @@ import java.awt.*;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RasterizedLineSegmentRenderableImplTests {
+public class RasterizedLineSegmentRenderableImplTests {
     private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final short STIPPLE_PATTERN = 456;
     private final short STIPPLE_FACTOR = 123;
@@ -28,52 +29,52 @@ class RasterizedLineSegmentRenderableImplTests {
 
     private static final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderableStack mockContainingStack;
 
-    private RasterizedLineSegmentRenderable _rasterizedLineSegmentRenderable;
+    private RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable;
 
     @BeforeEach
-    void setUp() {
-        _mockContainingStack = mock(RenderableStack.class);
+    public void setUp() {
+        mockContainingStack = mock(RenderableStack.class);
 
-        _rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
+        rasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack);
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingStack);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 null, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, null, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, _mockContainingStack
+                STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, _mockContainingStack
+                STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null, _mockContainingStack
+                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null, mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
@@ -82,122 +83,116 @@ class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(RasterizedLineSegmentRenderable.class.getCanonicalName(),
-                _rasterizedLineSegmentRenderable.getInterfaceName());
-    }
-
-    @Test
-    void testGetAndSetThicknessProvider() {
-        assertSame(THICKNESS_PROVIDER, _rasterizedLineSegmentRenderable.getThicknessProvider());
+    public void testGetAndSetThicknessProvider() {
+        assertSame(THICKNESS_PROVIDER, rasterizedLineSegmentRenderable.getThicknessProvider());
 
         FakeProviderAtTime<Float> newThicknessProvider = new FakeProviderAtTime<>();
 
-        _rasterizedLineSegmentRenderable.setThicknessProvider(newThicknessProvider);
+        rasterizedLineSegmentRenderable.setThicknessProvider(newThicknessProvider);
 
-        assertSame(newThicknessProvider, _rasterizedLineSegmentRenderable.getThicknessProvider());
+        assertSame(newThicknessProvider, rasterizedLineSegmentRenderable.getThicknessProvider());
     }
 
     @Test
-    void testSetThicknessProviderWithInvalidParams() {
+    public void testSetThicknessProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setThicknessProvider(null));
+                rasterizedLineSegmentRenderable.setThicknessProvider(null));
     }
 
     @Test
-    void testGetAndSetStipplePattern() {
-        assertEquals(STIPPLE_PATTERN, _rasterizedLineSegmentRenderable.getStipplePattern());
+    public void testGetAndSetStipplePattern() {
+        assertEquals(STIPPLE_PATTERN, rasterizedLineSegmentRenderable.getStipplePattern());
 
         short newStipplePattern = 789;
-        _rasterizedLineSegmentRenderable.setStipplePattern(newStipplePattern);
+        rasterizedLineSegmentRenderable.setStipplePattern(newStipplePattern);
 
-        assertEquals(newStipplePattern, _rasterizedLineSegmentRenderable.getStipplePattern());
+        assertEquals(newStipplePattern, rasterizedLineSegmentRenderable.getStipplePattern());
     }
 
     @Test
-    void testSetStipplePatternWithInvalidParams() {
+    public void testSetStipplePatternWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setStipplePattern((short) 0));
+                rasterizedLineSegmentRenderable.setStipplePattern((short) 0));
     }
 
     @Test
-    void testGetAndSetStippleFactor() {
-        assertEquals(STIPPLE_FACTOR, _rasterizedLineSegmentRenderable.getStippleFactor());
+    public void testGetAndSetStippleFactor() {
+        assertEquals(STIPPLE_FACTOR, rasterizedLineSegmentRenderable.getStippleFactor());
 
         short newStippleFactor = 234;
-        _rasterizedLineSegmentRenderable.setStippleFactor(newStippleFactor);
+        rasterizedLineSegmentRenderable.setStippleFactor(newStippleFactor);
 
-        assertEquals(newStippleFactor, _rasterizedLineSegmentRenderable.getStippleFactor());
+        assertEquals(newStippleFactor, rasterizedLineSegmentRenderable.getStippleFactor());
     }
 
     @Test
-    void testSetStippleFactorWithInvalidParams() {
+    public void testSetStippleFactorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setStippleFactor((short) 0));
+                rasterizedLineSegmentRenderable.setStippleFactor((short) 0));
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setStippleFactor((short) 257));
+                rasterizedLineSegmentRenderable.setStippleFactor((short) 257));
     }
 
     @Test
-    void testGetAndSetColorProvider() {
-        assertSame(COLOR_PROVIDER, _rasterizedLineSegmentRenderable.getColorProvider());
+    public void testGetAndSetColorProvider() {
+        assertSame(COLOR_PROVIDER, rasterizedLineSegmentRenderable.getColorProvider());
 
         FakeProviderAtTime<Color> newColorProvider = new FakeProviderAtTime<>();
-        _rasterizedLineSegmentRenderable.setColorProvider(newColorProvider);
+        rasterizedLineSegmentRenderable.setColorProvider(newColorProvider);
 
-        assertSame(newColorProvider, _rasterizedLineSegmentRenderable.getColorProvider());
+        assertSame(newColorProvider, rasterizedLineSegmentRenderable.getColorProvider());
     }
 
     @Test
-    void testSetColorProviderWithInvalidParams() {
+    public void testSetColorProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setColorProvider(null));
+                rasterizedLineSegmentRenderable.setColorProvider(null));
     }
 
     @Test
-    void testSetAndGetVertexProviders() {
-        assertSame(VERTEX_1_PROVIDER, _rasterizedLineSegmentRenderable.getVertex1Provider());
-        assertSame(VERTEX_2_PROVIDER, _rasterizedLineSegmentRenderable.getVertex2Provider());
+    public void testSetAndGetVertexProviders() {
+        assertSame(VERTEX_1_PROVIDER, rasterizedLineSegmentRenderable.getVertex1Provider());
+        assertSame(VERTEX_2_PROVIDER, rasterizedLineSegmentRenderable.getVertex2Provider());
 
         FakeProviderAtTime<Vertex> newVertex1Provider =
                 new FakeProviderAtTime<>();
         FakeProviderAtTime<Vertex> newVertex2Provider =
                 new FakeProviderAtTime<>();
-        _rasterizedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
-        _rasterizedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
+        rasterizedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
+        rasterizedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
 
-        assertSame(newVertex1Provider, _rasterizedLineSegmentRenderable.getVertex1Provider());
-        assertSame(newVertex2Provider, _rasterizedLineSegmentRenderable.getVertex2Provider());
+        assertSame(newVertex1Provider, rasterizedLineSegmentRenderable.getVertex1Provider());
+        assertSame(newVertex2Provider, rasterizedLineSegmentRenderable.getVertex2Provider());
     }
 
     @Test
-    void testSetVertexProvidersWithInvalidParams() {
+    public void testSetVertexProvidersWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setVertex1Provider(null));
+                rasterizedLineSegmentRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _rasterizedLineSegmentRenderable.setVertex2Provider(null));
+                rasterizedLineSegmentRenderable.setVertex2Provider(null));
     }
 
     @Test
-    void testGetAndSetZ() {
-        assertEquals(Z, _rasterizedLineSegmentRenderable.getZ());
+    public void testGetAndSetZ() {
+        assertEquals(Z, rasterizedLineSegmentRenderable.getZ());
 
         int newZ = 456;
-        _rasterizedLineSegmentRenderable.setZ(newZ);
+        rasterizedLineSegmentRenderable.setZ(newZ);
 
-        assertEquals(newZ, _rasterizedLineSegmentRenderable.getZ());
-        verify(_mockContainingStack, times(1)).add(_rasterizedLineSegmentRenderable);
+        assertEquals(newZ, rasterizedLineSegmentRenderable.getZ());
+        verify(mockContainingStack, once()).add(rasterizedLineSegmentRenderable);
     }
 
     @Test
-    void testDelete() {
-        _rasterizedLineSegmentRenderable.delete();
+    public void testDelete() {
+        rasterizedLineSegmentRenderable.delete();
 
-        verify(_mockContainingStack, times(1)).remove(_rasterizedLineSegmentRenderable);
+        verify(mockContainingStack, once()).remove(rasterizedLineSegmentRenderable);
     }
 
     @Test
-    void testUuid() {
-        assertSame(UUID, _rasterizedLineSegmentRenderable.uuid());
+    public void testUuid() {
+        assertSame(UUID, rasterizedLineSegmentRenderable.uuid());
     }
 }

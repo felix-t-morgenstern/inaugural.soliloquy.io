@@ -2,12 +2,15 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporter;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 
 public class FakeFrameRateReporter implements FrameRateReporter {
-    public ArrayList<Long> Dates = new ArrayList<>();
-    public ArrayList<Float> TargetFps = new ArrayList<>();
-    public ArrayList<Float> ActualFps = new ArrayList<>();
+    public List<Long> Dates = listOf();
+    public List<Float> TargetFps = listOf();
+    public List<Float> ActualFps = listOf();
 
     @Override
     public void reportFrameRate(long date, Float targetFps, float actualFps)
@@ -44,11 +47,6 @@ public class FakeFrameRateReporter implements FrameRateReporter {
 
     @Override
     public Long pausedTimestamp() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
         return null;
     }
 }

@@ -11,29 +11,29 @@ import soliloquy.specs.graphics.renderables.providers.factories.GlobalLoopingAni
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GlobalLoopingAnimationFactoryImplTests {
+public class GlobalLoopingAnimationFactoryImplTests {
     private final String ID = "globalLoopingAnimationId";
     private final int MS_DURATION = 456;
     private final String ANIMATION_ID = "animationId";
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION);
     private final int PERIOD_MODULO_OFFSET = 123;
 
-    private GlobalLoopingAnimationFactory _globalLoopingAnimationFactory;
+    private GlobalLoopingAnimationFactory globalLoopingAnimationFactory;
 
     @BeforeEach
-    void setUp() {
-        _globalLoopingAnimationFactory = new GlobalLoopingAnimationFactoryImpl();
+    public void setUp() {
+        globalLoopingAnimationFactory = new GlobalLoopingAnimationFactoryImpl();
     }
 
     @Test
-    void testMake() {
-        long pauseTimestamp = 456456L;
+    public void testMake() {
+        var pauseTimestamp = 456456L;
         GlobalLoopingAnimation globalLoopingAnimation =
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         ID, ANIMATION, PERIOD_MODULO_OFFSET, pauseTimestamp));
 
         assertNotNull(globalLoopingAnimation);
-        assertTrue(globalLoopingAnimation instanceof GlobalLoopingAnimationImpl);
+        assertInstanceOf(GlobalLoopingAnimationImpl.class, globalLoopingAnimation);
         assertSame(ID, globalLoopingAnimation.id());
         assertSame(ANIMATION_ID, globalLoopingAnimation.animationId());
         assertEquals(PERIOD_MODULO_OFFSET, globalLoopingAnimation.periodModuloOffset());
@@ -41,27 +41,21 @@ class GlobalLoopingAnimationFactoryImplTests {
     }
 
     @Test
-    void testMakeWithInvalidParams() {
+    public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         null, ANIMATION, PERIOD_MODULO_OFFSET, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         "", ANIMATION, PERIOD_MODULO_OFFSET, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         ID, null, PERIOD_MODULO_OFFSET, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         ID, ANIMATION, -1, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                _globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
+                globalLoopingAnimationFactory.make(new GlobalLoopingAnimationDefinition(
                         ID, ANIMATION, MS_DURATION, null)));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(GlobalLoopingAnimationFactory.class.getCanonicalName(),
-                _globalLoopingAnimationFactory.getInterfaceName());
     }
 }

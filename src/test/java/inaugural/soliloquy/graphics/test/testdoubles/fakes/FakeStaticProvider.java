@@ -2,13 +2,15 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FakeStaticProvider<T> implements StaticProvider<T> {
     public T ProvidedValue;
     public UUID Uuid;
-    public ArrayList<Long> TimestampInputs = new ArrayList<>();
+    public List<Long> TimestampInputs = listOf();
     public Long MostRecentTimestamp;
 
     public FakeStaticProvider(T providedValue) {
@@ -45,16 +47,6 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     @Override
     public Long pausedTimestamp() {
         return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
-
-    @Override
-    public T archetype() {
-        return ProvidedValue;
     }
 
     @Override

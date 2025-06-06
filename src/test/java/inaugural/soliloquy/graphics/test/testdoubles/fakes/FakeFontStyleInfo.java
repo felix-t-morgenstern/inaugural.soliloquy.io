@@ -1,15 +1,16 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.valueobjects.Coordinate2d;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+
 public class FakeFontStyleInfo implements FontStyleInfo {
-    public HashMap<Character, FloatBox> Glyphs = new HashMap<>();
-    public HashMap<Character, Float> GlyphwiseAdditionalHorizontalTextureSpacing = new HashMap<>();
+    public Map<Character, FloatBox> Glyphs = mapOf();
+    public Map<Character, Float> GlyphwiseAdditionalHorizontalTextureSpacing = mapOf();
     public float TextureWidthToHeightRatio;
 
     @Override
@@ -40,10 +41,5 @@ public class FakeFontStyleInfo implements FontStyleInfo {
     @Override
     public int textureId() {
         return 0;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

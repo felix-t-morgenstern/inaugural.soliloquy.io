@@ -9,32 +9,32 @@ import org.mockito.Mock;
 import soliloquy.specs.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
-import java.util.ArrayList;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class AnimatedMouseCursorPreloaderTaskFactoryTests {
+public class AnimatedMouseCursorPreloaderTaskFactoryTests {
     @Mock
-    private AnimatedMouseCursorProviderFactory _mockAnimatedMouseCursorProviderFactory;
+    private AnimatedMouseCursorProviderFactory mockAnimatedMouseCursorProviderFactory;
 
     private AssetPreloaderTaskFactory<AnimatedMouseCursorDefinitionDTO,
-            AnimatedMouseCursorPreloaderTask> _animatedMouseCursorPreloaderTaskFactory;
+            AnimatedMouseCursorPreloaderTask> animatedMouseCursorPreloaderTaskFactory;
 
     @BeforeEach
-    void setUp() {
-        _mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
+    public void setUp() {
+        mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
 
-        _animatedMouseCursorPreloaderTaskFactory = new AnimatedMouseCursorPreloaderTaskFactory(
-                id -> 0L, _mockAnimatedMouseCursorProviderFactory, result -> {}
+        animatedMouseCursorPreloaderTaskFactory = new AnimatedMouseCursorPreloaderTaskFactory(
+                _ -> 0L, mockAnimatedMouseCursorProviderFactory, _ -> {}
         );
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTaskFactory(
-                        null, _mockAnimatedMouseCursorProviderFactory, result -> {}
+                        null, mockAnimatedMouseCursorProviderFactory, result -> {}
                 ));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTaskFactory(
@@ -42,23 +42,15 @@ class AnimatedMouseCursorPreloaderTaskFactoryTests {
                 ));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTaskFactory(
-                        id -> 0L, _mockAnimatedMouseCursorProviderFactory, null
+                        id -> 0L, mockAnimatedMouseCursorProviderFactory, null
                 ));
     }
 
     @Test
-    void testMake() {
+    public void testMake() {
         AnimatedMouseCursorPreloaderTask task =
-                _animatedMouseCursorPreloaderTaskFactory.make(new ArrayList<>());
+                animatedMouseCursorPreloaderTaskFactory.make(listOf());
 
         assertNotNull(task);
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(AssetPreloaderTaskFactory.class.getCanonicalName() + "<" +
-                        AnimatedMouseCursorDefinitionDTO.class.getCanonicalName() + "," +
-                        AnimatedMouseCursorPreloaderTask.class.getCanonicalName() + ">",
-                _animatedMouseCursorPreloaderTaskFactory.getInterfaceName());
     }
 }

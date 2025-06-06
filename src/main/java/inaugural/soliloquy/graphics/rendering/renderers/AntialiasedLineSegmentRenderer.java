@@ -8,31 +8,33 @@ import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL11.*;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class AntialiasedLineSegmentRenderer
         extends AbstractPointDrawingRenderer<AntialiasedLineSegmentRenderable> {
     private final Supplier<Float> WINDOW_WIDTH_TO_HEIGHT_RATIO;
 
-    private static final HashMap<Float, HashMap<Float, Vertex>>
+    private static final Map<Float, Map<Float, Vertex>>
             GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION =
-            new HashMap<>();
-    private static final HashMap<Float, Float> HALVING_MEMOIZATION = new HashMap<>();
-    private static final HashMap<Float, Float> SQUARE_ROOT_MEMOIZATION = new HashMap<>();
-    private static final HashMap<Float, Float> SQUARING_MEMOIZATION = new HashMap<>();
+            mapOf();
+    private static final Map<Float, Float> HALVING_MEMOIZATION = mapOf();
+    private static final Map<Float, Float> SQUARE_ROOT_MEMOIZATION = mapOf();
+    private static final Map<Float, Float> SQUARING_MEMOIZATION = mapOf();
 
     private static final AntialiasedLineSegmentRenderable ARCHETYPE =
             new AntialiasedLineSegmentRenderableArchetype();
 
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
                                           Long mostRecentTimestamp) {
-        super(ARCHETYPE, mostRecentTimestamp);
+        super(mostRecentTimestamp);
         Check.ifNull(windowResolutionManager, "windowResolutionManager");
         WINDOW_WIDTH_TO_HEIGHT_RATIO = windowResolutionManager::windowWidthToHeightRatio;
     }
@@ -111,7 +113,7 @@ public class AntialiasedLineSegmentRenderer
         float run = (x2 - x1);
 
         if (run == 0) {
-            // Logic for vertical line segments should be _MUCH_ simpler.
+            // Logic for vertical line segments should be MUCH_ simpler.
 
             if (rise == 0f) {
                 // If there is simply no line at all, don't draw it. Maybe this should throw an
@@ -130,22 +132,22 @@ public class AntialiasedLineSegmentRenderer
             float vertexToProximal = halve(thickness) * (1f - thicknessGradientPercent);
             float outerToDistal = halve(y2 - y1) * lengthGradientPercent;
 
-            v1OuterCcw = Vertex.of(x1 + vertexToOuter, y1);
-            v1ProximalCcw = Vertex.of(x1 + vertexToProximal, y1);
-            v1DistalCcw = Vertex.of(x1 + vertexToOuter, y1 + outerToDistal);
-            v1InnerCcw = Vertex.of(x1 + vertexToProximal, y1 + outerToDistal);
-            v1OuterCw = Vertex.of(x1 - vertexToOuter, y1);
-            v1ProximalCw = Vertex.of(x1 - vertexToProximal, y1);
-            v1DistalCw = Vertex.of(x1 - vertexToOuter, y1 + outerToDistal);
-            v1InnerCw = Vertex.of(x1 - vertexToProximal, y1 + outerToDistal);
-            v2OuterCcw = Vertex.of(x1 + vertexToOuter, y2);
-            v2ProximalCcw = Vertex.of(x1 + vertexToProximal, y2);
-            v2DistalCcw = Vertex.of(x1 + vertexToOuter, y2 - outerToDistal);
-            v2InnerCcw = Vertex.of(x1 + vertexToProximal, y2 - outerToDistal);
-            v2OuterCw = Vertex.of(x1 - vertexToOuter, y2);
-            v2ProximalCw = Vertex.of(x1 - vertexToProximal, y2);
-            v2DistalCw = Vertex.of(x1 - vertexToOuter, y2 - outerToDistal);
-            v2InnerCw = Vertex.of(x1 - vertexToProximal, y2 - outerToDistal);
+            v1OuterCcw = vertexOf(x1 + vertexToOuter, y1);
+            v1ProximalCcw = vertexOf(x1 + vertexToProximal, y1);
+            v1DistalCcw = vertexOf(x1 + vertexToOuter, y1 + outerToDistal);
+            v1InnerCcw = vertexOf(x1 + vertexToProximal, y1 + outerToDistal);
+            v1OuterCw = vertexOf(x1 - vertexToOuter, y1);
+            v1ProximalCw = vertexOf(x1 - vertexToProximal, y1);
+            v1DistalCw = vertexOf(x1 - vertexToOuter, y1 + outerToDistal);
+            v1InnerCw = vertexOf(x1 - vertexToProximal, y1 + outerToDistal);
+            v2OuterCcw = vertexOf(x1 + vertexToOuter, y2);
+            v2ProximalCcw = vertexOf(x1 + vertexToProximal, y2);
+            v2DistalCcw = vertexOf(x1 + vertexToOuter, y2 - outerToDistal);
+            v2InnerCcw = vertexOf(x1 + vertexToProximal, y2 - outerToDistal);
+            v2OuterCw = vertexOf(x1 - vertexToOuter, y2);
+            v2ProximalCw = vertexOf(x1 - vertexToProximal, y2);
+            v2DistalCw = vertexOf(x1 - vertexToOuter, y2 - outerToDistal);
+            v2InnerCw = vertexOf(x1 - vertexToProximal, y2 - outerToDistal);
         }
         else {
             // NB: Slopes are reversed, since Y values go from 0.0 at the top to 1.0 at the bottom
@@ -191,32 +193,32 @@ public class AntialiasedLineSegmentRenderer
             float lengthGradientXAdjust = lengthGradientAdjustments.X;
             float lengthGradientYAdjust = lengthGradientAdjustments.Y;
 
-            v1OuterCcw = Vertex.of(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
-            v1ProximalCcw = Vertex.of(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
-            v1DistalCcw = Vertex.of(v1OuterCcw.X + lengthGradientXAdjust,
+            v1OuterCcw = vertexOf(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
+            v1ProximalCcw = vertexOf(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
+            v1DistalCcw = vertexOf(v1OuterCcw.X + lengthGradientXAdjust,
                     v1OuterCcw.Y + lengthGradientYAdjust);
-            v1InnerCcw = Vertex.of(v1ProximalCcw.X + lengthGradientXAdjust,
+            v1InnerCcw = vertexOf(v1ProximalCcw.X + lengthGradientXAdjust,
                     v1ProximalCcw.Y + lengthGradientYAdjust);
 
-            v1OuterCw = Vertex.of(x1 - outerCcwXAdjustment, y1 - outerCcwYAdjustment);
-            v1ProximalCw = Vertex.of(x1 - proximalCcwXAdjustment, y1 - proximalCcwYAdjustment);
-            v1DistalCw = Vertex.of(v1OuterCw.X + lengthGradientXAdjust,
+            v1OuterCw = vertexOf(x1 - outerCcwXAdjustment, y1 - outerCcwYAdjustment);
+            v1ProximalCw = vertexOf(x1 - proximalCcwXAdjustment, y1 - proximalCcwYAdjustment);
+            v1DistalCw = vertexOf(v1OuterCw.X + lengthGradientXAdjust,
                     v1OuterCw.Y + lengthGradientYAdjust);
-            v1InnerCw = Vertex.of(v1ProximalCw.X + lengthGradientXAdjust,
+            v1InnerCw = vertexOf(v1ProximalCw.X + lengthGradientXAdjust,
                     v1ProximalCw.Y + lengthGradientYAdjust);
 
-            v2OuterCcw = Vertex.of(x2 + outerCcwXAdjustment, y2 + outerCcwYAdjustment);
-            v2ProximalCcw = Vertex.of(x2 + proximalCcwXAdjustment, y2 + proximalCcwYAdjustment);
-            v2DistalCcw = Vertex.of(v2OuterCcw.X - lengthGradientXAdjust,
+            v2OuterCcw = vertexOf(x2 + outerCcwXAdjustment, y2 + outerCcwYAdjustment);
+            v2ProximalCcw = vertexOf(x2 + proximalCcwXAdjustment, y2 + proximalCcwYAdjustment);
+            v2DistalCcw = vertexOf(v2OuterCcw.X - lengthGradientXAdjust,
                     v2OuterCcw.Y - lengthGradientYAdjust);
-            v2InnerCcw = Vertex.of(v2ProximalCcw.X - lengthGradientXAdjust,
+            v2InnerCcw = vertexOf(v2ProximalCcw.X - lengthGradientXAdjust,
                     v2ProximalCcw.Y - lengthGradientYAdjust);
 
-            v2OuterCw = Vertex.of(x2 - outerCcwXAdjustment, y2 - outerCcwYAdjustment);
-            v2ProximalCw = Vertex.of(x2 - proximalCcwXAdjustment, y2 - proximalCcwYAdjustment);
-            v2DistalCw = Vertex.of(v2OuterCw.X - lengthGradientXAdjust,
+            v2OuterCw = vertexOf(x2 - outerCcwXAdjustment, y2 - outerCcwYAdjustment);
+            v2ProximalCw = vertexOf(x2 - proximalCcwXAdjustment, y2 - proximalCcwYAdjustment);
+            v2DistalCw = vertexOf(v2OuterCw.X - lengthGradientXAdjust,
                     v2OuterCw.Y - lengthGradientYAdjust);
-            v2InnerCw = Vertex.of(v2ProximalCw.X - lengthGradientXAdjust,
+            v2InnerCw = vertexOf(v2ProximalCw.X - lengthGradientXAdjust,
                     v2ProximalCw.Y - lengthGradientYAdjust);
         }
 
@@ -318,9 +320,9 @@ public class AntialiasedLineSegmentRenderer
     private static Vertex getAdjustments(float lineSegment,
                                                      float slope) {
         if (!GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.containsKey(lineSegment)) {
-            GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.put(lineSegment, new HashMap<>());
+            GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.put(lineSegment, mapOf());
         }
-        HashMap<Float, Vertex> memosForSegmentLength =
+        Map<Float, Vertex> memosForSegmentLength =
                 GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.get(lineSegment);
         if (memosForSegmentLength.containsKey(slope)) {
             return memosForSegmentLength.get(slope);
@@ -329,7 +331,7 @@ public class AntialiasedLineSegmentRenderer
             float result1 =
                     sqRoot(square(lineSegment) / (1 + square(slope)));
             float result2 = result1 * slope;
-            Vertex result = Vertex.of(result1, result2);
+            Vertex result = vertexOf(result1, result2);
             memosForSegmentLength.put(slope, result);
             return result;
         }
@@ -349,7 +351,7 @@ public class AntialiasedLineSegmentRenderer
 
     private static float simpleOperationMemoized(float value,
                                                  Function<Float, Float> operation,
-                                                 HashMap<Float, Float> memoization) {
+                                                 Map<Float, Float> memoization) {
         if (memoization.containsKey(value)) {
             return memoization.get(value);
         }
@@ -366,11 +368,6 @@ public class AntialiasedLineSegmentRenderer
 
     private static class AntialiasedLineSegmentRenderableArchetype
             implements AntialiasedLineSegmentRenderable {
-        @Override
-        public String getInterfaceName() {
-            return AntialiasedLineSegmentRenderable.class.getCanonicalName();
-        }
-
         @Override
         public ProviderAtTime<Vertex> getVertex1Provider() {
             return null;

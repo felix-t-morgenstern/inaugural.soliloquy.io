@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.looping.linear.location;
 
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.LoopingLinearMovingVertexProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -17,7 +17,8 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTest {
     private final static String LINE_TEXT = "Wheee!";
@@ -57,10 +58,10 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
         var periodDuration = 4000;
         var periodModuloOffset = periodDuration - (int) (startTimestamp % (periodDuration));
         var valuesAtTimes = mapOf(
-                pairOf(0, Vertex.of(0.125f, 0.125f)),
-                pairOf(1000, Vertex.of(0.75f, 0.125f)),
-                pairOf(2000, Vertex.of(0.75f, 0.75f)),
-                pairOf(3000, Vertex.of(0.125f, 0.75f))
+                pairOf(0, vertexOf(0.125f, 0.125f)),
+                pairOf(1000, vertexOf(0.75f, 0.125f)),
+                pairOf(2000, vertexOf(0.75f, 0.75f)),
+                pairOf(3000, vertexOf(0.125f, 0.75f))
         );
 
         LoopingLinearMovingLocationProvider = new LoopingLinearMovingVertexProvider(
@@ -77,12 +78,10 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
                         staticNullProvider(Color.BLACK), null, listOf(), listOf(),
                         LoopingLinearMovingLocationProvider);
 
-        TextLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager, null);
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

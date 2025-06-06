@@ -29,6 +29,7 @@ import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class StackRendererTest extends DisplayTest {
     private final static String AXE_07_LOCATION =
@@ -77,7 +78,7 @@ public class StackRendererTest extends DisplayTest {
                 spriteAxe07,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FloatBoxImpl(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
@@ -93,7 +94,7 @@ public class StackRendererTest extends DisplayTest {
                 spriteAxe09,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
@@ -108,7 +109,7 @@ public class StackRendererTest extends DisplayTest {
                 spriteSword06,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), new FakeFloatBox(
+                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteSword06LeftX,
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,
@@ -118,15 +119,14 @@ public class StackRendererTest extends DisplayTest {
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
-        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                FLOAT_BOX_FACTORY, windowResolutionManager, new FakeColorShiftStackAggregator(),
+        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, windowResolutionManager, new FakeColorShiftStackAggregator(),
                 null);
         //noinspection rawtypes
         List<Renderer> renderersWithMesh = listOf(spriteRenderer);
         //noinspection rawtypes
         List<Renderer> renderersWithShader = listOf(spriteRenderer);
 
-        renderers.registerRenderer(SpriteRenderable.class.getCanonicalName(), spriteRenderer);
+        renderers.registerRenderer(SpriteRenderableImpl.class, spriteRenderer);
         FirstChildStack.add(spriteRenderable1);
         FirstChildStack.add(spriteRenderable2);
         FirstChildStack.add(spriteRenderable3);

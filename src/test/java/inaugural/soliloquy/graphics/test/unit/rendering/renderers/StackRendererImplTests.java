@@ -3,25 +3,25 @@ package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 import inaugural.soliloquy.graphics.rendering.renderers.StackRendererImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
 import org.mockito.Mock;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.renderers.Renderers;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomFloatBox;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
-import static org.junit.jupiter.api.Assertions.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class StackRendererImplTests {
+public class StackRendererImplTests {
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private RenderingBoundaries mockRenderingBoundaries;
@@ -31,17 +31,18 @@ class StackRendererImplTests {
     private StackRenderer stackRenderer;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockRenderers = mock(Renderers.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
         mockStack = mock(RenderableStack.class);
 
         stackRenderer =
-                new StackRendererImpl(mockRenderers, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP);
+                new StackRendererImpl(mockRenderers, mockRenderingBoundaries,
+                        MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new StackRendererImpl(null, mockRenderingBoundaries, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
@@ -49,48 +50,34 @@ class StackRendererImplTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(StackRenderer.class.getCanonicalName(), stackRenderer.getInterfaceName());
-    }
-
-    @Test
-    void testRender() {
-        FloatBox mockBoundaries = mock(FloatBox.class);
+    public void testRender() {
+        var boundaries = randomFloatBox();
         //noinspection unchecked
-        ProviderAtTime<FloatBox> mockBoundariesProvider =
-                (ProviderAtTime<FloatBox>) mock(ProviderAtTime.class);
-        when(mockBoundariesProvider.provide(anyLong())).thenReturn(mockBoundaries);
+        var mockBoundariesProvider = (ProviderAtTime<FloatBox>) mock(ProviderAtTime.class);
+        when(mockBoundariesProvider.provide(anyLong())).thenReturn(boundaries);
         when(mockStack.getRenderingBoundariesProvider()).thenReturn(mockBoundariesProvider);
-        Renderable renderable1 = mock(Renderable.class);
-        Renderable renderable2 = mock(Renderable.class);
-        Renderable renderable3 = mock(Renderable.class);
+        var renderable1 = mock(Renderable.class);
+        var renderable2 = mock(Renderable.class);
+        var renderable3 = mock(Renderable.class);
         when(mockStack.renderablesByZIndexRepresentation()).thenReturn(
-                new HashMap<Integer, List<Renderable>>() {{
-                    put(1, new ArrayList<Renderable>() {{
-                        add(renderable1);
-                    }});
-                    put(2, new ArrayList<Renderable>() {{
-                        add(renderable2);
-                        add(renderable3);
-                    }});
-                }});
+                mapOf(pairOf(1, listOf(renderable1)), pairOf(2, listOf(renderable2, renderable3))));
 
         stackRenderer.render(mockStack, MOST_RECENT_TIMESTAMP);
 
-        InOrder inOrder =
+        var inOrder =
                 inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockStack, mockRenderers);
-        inOrder.verify(mockStack, times(1)).getRenderingBoundariesProvider();
-        inOrder.verify(mockBoundariesProvider, times(1)).provide(MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderingBoundaries, times(1)).pushNewBoundaries(mockBoundaries);
-        inOrder.verify(mockStack, times(1)).renderablesByZIndexRepresentation();
-        inOrder.verify(mockRenderers, times(1)).render(renderable2, MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderers, times(1)).render(renderable3, MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderers, times(1)).render(renderable1, MOST_RECENT_TIMESTAMP);
-        inOrder.verify(mockRenderingBoundaries, times(1)).popMostRecentBoundaries();
+        inOrder.verify(mockStack, once()).getRenderingBoundariesProvider();
+        inOrder.verify(mockBoundariesProvider, once()).provide(MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderingBoundaries, once()).pushNewBoundaries(boundaries);
+        inOrder.verify(mockStack, once()).renderablesByZIndexRepresentation();
+        inOrder.verify(mockRenderers, once()).render(renderable2, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderers, once()).render(renderable3, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderers, once()).render(renderable1, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderingBoundaries, once()).popMostRecentBoundaries();
     }
 
     @Test
-    void testRenderOutdatedTimestamp() {
+    public void testRenderOutdatedTimestamp() {
         assertThrows(IllegalArgumentException.class, () ->
                 stackRenderer.render(mockStack, MOST_RECENT_TIMESTAMP - 1L));
     }

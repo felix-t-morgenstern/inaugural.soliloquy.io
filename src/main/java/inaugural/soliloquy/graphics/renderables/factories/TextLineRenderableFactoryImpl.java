@@ -36,9 +36,4 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                 renderingLocationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
                 dropShadowColorProvider, z, uuid, containingStack);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return TextLineRenderableFactory.class.getCanonicalName();
-    }
 }

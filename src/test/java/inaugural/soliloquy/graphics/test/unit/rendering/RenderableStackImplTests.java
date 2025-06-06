@@ -1,15 +1,15 @@
 package inaugural.soliloquy.graphics.test.unit.rendering;
 
 import inaugural.soliloquy.graphics.rendering.RenderableStackImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.RenderableWithDimensions;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.util.UUID;
@@ -19,7 +19,7 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RenderableStackImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
@@ -29,7 +29,7 @@ public class RenderableStackImplTests {
     private RenderableStack topLevelRenderableStack;
     private RenderableStack containedRenderableStack;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         topLevelRenderableStack = new RenderableStackImpl();
         containedRenderableStack =
@@ -43,7 +43,7 @@ public class RenderableStackImplTests {
     }
 
     @Test
-    public void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new RenderableStackImpl(null, Z, mockRenderingBoundariesProvider,
                         mockContainingStack));
@@ -109,7 +109,7 @@ public class RenderableStackImplTests {
 
         assertEquals(1, representation.size());
         assertEquals(1, representation.get(123).size());
-        assertSame(renderable, representation.get(123).get(0));
+        assertSame(renderable, representation.get(123).getFirst());
     }
 
     @Test
@@ -165,7 +165,7 @@ public class RenderableStackImplTests {
     }
 
     @Test
-    public void testSetRenderingBoundariesProviderWithInvalidParams() {
+    public void testSetRenderingBoundariesProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> containedRenderableStack.setRenderingBoundariesProvider(null));
     }
@@ -219,13 +219,5 @@ public class RenderableStackImplTests {
         verify(mockRenderable1).delete();
         verify(mockRenderable2).delete();
         verify(mockRenderable3).delete();
-    }
-
-    @Test
-    public void testGetInterfaceName() {
-        assertEquals(RenderableStack.class.getCanonicalName(),
-                containedRenderableStack.getInterfaceName());
-        assertEquals(RenderableStack.class.getCanonicalName(),
-                topLevelRenderableStack.getInterfaceName());
     }
 }

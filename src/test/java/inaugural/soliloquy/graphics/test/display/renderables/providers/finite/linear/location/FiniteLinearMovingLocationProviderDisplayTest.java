@@ -1,9 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.location;
 
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingVertexProvider;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -17,7 +17,8 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest {
     private static final String LINE_TEXT = "Whee!!!";
@@ -57,9 +58,9 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
         RenderingLocationProvider = new FiniteLinearMovingVertexProvider(
                 java.util.UUID.randomUUID(),
                 mapOf(
-                        pairOf(now + 1000, Vertex.of(-0.25f, -0.25f)),
-                        pairOf(now + 2000, Vertex.of(0.75f, 0.5f)),
-                        pairOf(now + 3000, Vertex.of(-0.25f, 1.25f))
+                        pairOf(now + 1000, vertexOf(-0.25f, -0.25f)),
+                        pairOf(now + 2000, vertexOf(0.75f, 0.5f)),
+                        pairOf(now + 3000, vertexOf(-0.25f, 1.25f))
                 ),
                 null, null);
 
@@ -69,11 +70,11 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
                         RenderingLocationProvider);
 
         TextLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY, Color.WHITE,
-                        windowResolutionManager, null);
+                new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager,
+                        null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

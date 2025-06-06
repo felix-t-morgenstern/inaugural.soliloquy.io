@@ -30,9 +30,4 @@ public class FakeColorComponentIntensityShift implements ColorComponentIntensity
     public boolean overridesPriorShiftsOfSameType() {
         return OverridesPriorShiftsOfSameType;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

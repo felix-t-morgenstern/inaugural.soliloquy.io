@@ -1,7 +1,8 @@
 package inaugural.soliloquy.graphics.api;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public enum WindowResolution {
     RES_TEST_SQUARE(1800, 1800),
@@ -26,13 +27,12 @@ public enum WindowResolution {
     RES_3840x1620(3840, 1620),
     RES_3840x2160(3840, 2160);
 
-    private static final Map<Integer, Map<Integer, WindowResolution>> BY_WIDTH_AND_HEIGHT =
-            new HashMap<>();
+    private static final Map<Integer, Map<Integer, WindowResolution>> BY_WIDTH_AND_HEIGHT = mapOf();
 
     static {
         for (WindowResolution w : values()) {
             if (!BY_WIDTH_AND_HEIGHT.containsKey(w.WIDTH)) {
-                BY_WIDTH_AND_HEIGHT.put(w.WIDTH, new HashMap<>());
+                BY_WIDTH_AND_HEIGHT.put(w.WIDTH, mapOf());
             }
             BY_WIDTH_AND_HEIGHT.get(w.WIDTH).put(w.HEIGHT, w);
         }

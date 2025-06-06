@@ -11,8 +11,8 @@ import java.awt.*;
 public class AntialiasedLineSegmentRenderableImpl
         extends AbstractLineSegmentRenderable
         implements AntialiasedLineSegmentRenderable {
-    private ProviderAtTime<Float> _thicknessGradientPercentProvider;
-    private ProviderAtTime<Float> _lengthGradientPercentProvider;
+    private ProviderAtTime<Float> thicknessGradientPercentProvider;
+    private ProviderAtTime<Float> lengthGradientPercentProvider;
 
     public AntialiasedLineSegmentRenderableImpl(
             ProviderAtTime<Vertex> vertex1Provider,
@@ -32,32 +32,27 @@ public class AntialiasedLineSegmentRenderableImpl
 
     @Override
     public ProviderAtTime<Float> getThicknessGradientPercentProvider() {
-        return _thicknessGradientPercentProvider;
+        return thicknessGradientPercentProvider;
     }
 
     @Override
     public void setThicknessGradientPercentProvider(
             ProviderAtTime<Float> thicknessGradientPercentProvider)
             throws IllegalArgumentException {
-        _thicknessGradientPercentProvider =
+        this.thicknessGradientPercentProvider =
                 Check.ifNull(thicknessGradientPercentProvider, "thicknessGradientPercentProvider");
     }
 
     @Override
     public ProviderAtTime<Float> getLengthGradientPercentProvider() {
-        return _lengthGradientPercentProvider;
+        return lengthGradientPercentProvider;
     }
 
     @Override
     public void setLengthGradientPercentProvider(
             ProviderAtTime<Float> lengthGradientPercentProvider)
             throws IllegalArgumentException {
-        _lengthGradientPercentProvider =
+        this.lengthGradientPercentProvider =
                 Check.ifNull(lengthGradientPercentProvider, "lengthGradientPercentProvider");
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return AntialiasedLineSegmentRenderable.class.getCanonicalName();
     }
 }

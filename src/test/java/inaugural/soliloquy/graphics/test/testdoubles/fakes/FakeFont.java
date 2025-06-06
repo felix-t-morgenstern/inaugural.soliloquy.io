@@ -31,11 +31,6 @@ public class FakeFont implements Font {
     }
 
     @Override
-    public String getInterfaceName() {
-        return null;
-    }
-
-    @Override
     public FontStyleInfo plain() {
         return Plain;
     }

@@ -1,28 +1,29 @@
 package inaugural.soliloquy.graphics.io;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
 import soliloquy.specs.graphics.io.MouseListener;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class MouseListenerImpl implements MouseListener {
     private final MouseEventHandler MOUSE_EVENT_HANDLER;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
-    private final HashMap<Integer, Boolean> MOUSE_BUTTON_STATES;
+    private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
     public MouseListenerImpl(MouseEventHandler mouseEventHandler) {
         MOUSE_EVENT_HANDLER = Check.ifNull(mouseEventHandler, "mouseEventHandler");
 
         TIMESTAMP_VALIDATOR = new TimestampValidator(null);
 
-        MOUSE_BUTTON_STATES = new HashMap<>();
+        MOUSE_BUTTON_STATES = mapOf();
         for(int button : ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(button, false);
         }
@@ -46,7 +47,7 @@ public class MouseListenerImpl implements MouseListener {
                             "mouse buttons' states reported");
         }
 
-        HashMap<Integer, MouseEventHandler.EventType> mouseButtonEvents = new HashMap<>();
+        var mouseButtonEvents = Collections.<Integer, MouseEventHandler.EventType>mapOf();
         mouseButtonPressStates.forEach((button, buttonIsPressedNow) -> {
             Check.ifNull(button, "button");
             if (Arrays.stream(ALL_SUPPORTED_MOUSE_BUTTONS).noneMatch(button::equals)) {
@@ -69,10 +70,5 @@ public class MouseListenerImpl implements MouseListener {
         });
 
         MOUSE_EVENT_HANDLER.actOnMouseLocationAndEvents(position, mouseButtonEvents, timestamp);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return MouseListener.class.getCanonicalName();
     }
 }

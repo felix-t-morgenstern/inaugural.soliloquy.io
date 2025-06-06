@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.antialiase
 import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -45,8 +45,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
         AntialiasedLineSegmentRenderable1 = new AntialiasedLineSegmentRenderableImpl(
-                staticProvider(Vertex.of(0.75f, 0.75f)),
-                staticProvider(Vertex.of(0.25f, 0.25f)),
+                staticProvider(vertexOf(0.75f, 0.75f)),
+                staticProvider(vertexOf(0.25f, 0.25f)),
                 staticProvider(0.000625f),
                 staticProvider(Color.RED),
                 staticProvider(0.1f),
@@ -57,8 +57,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
         );
 
         AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
-                staticProvider(Vertex.of(0.5f, 0.75f)),
-                staticProvider(Vertex.of(0.5f, 0.25f)),
+                staticProvider(vertexOf(0.5f, 0.75f)),
+                staticProvider(vertexOf(0.5f, 0.25f)),
                 staticProvider(0.1f),
                 staticProvider(new Color(40, 0, 255)),
                 staticProvider(0.05f),
@@ -70,7 +70,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
 
         FirstChildStack.add(AntialiasedLineSegmentRenderable1);
         FirstChildStack.add(AntialiasedLineSegmentRenderable2);
-        Renderers.registerRenderer(AntialiasedLineSegmentRenderable.class.getCanonicalName(),
+        Renderers.registerRenderer(AntialiasedLineSegmentRenderableImpl.class,
                 AntialiasedLineSegmentRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

@@ -5,16 +5,19 @@ import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+
+
 
 public class FakeImageAssetSet implements ImageAssetSet {
     public String Id;
     public boolean CapturesMouseEvents;
     public ImageAsset ImageAsset;
-    public ArrayList<Pair<String, Direction>> GetImageAssetForTypeAndDirectionInputs =
-            new ArrayList<>();
+    public List<Pair<String, Direction>> GetImageAssetForTypeAndDirectionInputs =
+            listOf();
 
     public FakeImageAssetSet(String id) {
         Id = id;
@@ -39,10 +42,5 @@ public class FakeImageAssetSet implements ImageAssetSet {
     @Override
     public String id() throws IllegalStateException {
         return Id;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

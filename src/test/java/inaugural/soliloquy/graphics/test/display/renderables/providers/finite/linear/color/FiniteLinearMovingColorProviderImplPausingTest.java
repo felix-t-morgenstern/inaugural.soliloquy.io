@@ -1,6 +1,5 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.color;
 
-import inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 

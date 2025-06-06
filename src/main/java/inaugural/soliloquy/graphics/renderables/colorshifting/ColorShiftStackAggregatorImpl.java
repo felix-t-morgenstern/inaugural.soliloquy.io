@@ -33,10 +33,8 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
                 }
                 netBrightnessSealed = netBrightnessSealed || overrides;
             }
-            if (colorShift instanceof ColorComponentIntensityShift) {
-                ColorComponentIntensityShift ColorComponentIntensityShift =
-                        (ColorComponentIntensityShift) colorShift;
-                ColorComponent colorComponent = ColorComponentIntensityShift.colorComponent();
+            if (colorShift instanceof ColorComponentIntensityShift ColorComponentIntensityShift) {
+                var colorComponent = ColorComponentIntensityShift.colorComponent();
                 Check.ifNull(colorComponent,
                         "ColorComponent provided by ColorComponentIntensityShift");
                 switch (colorComponent) {
@@ -75,11 +73,11 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
 
         // NB: These variables exist to facilitate use of final or effectively final values for
         //     the NetColorShift values
-        float finalBrightnessShift = netBrightnessShift;
-        float finalRedShift = netRedShift;
-        float finalGreenShift = netGreenShift;
-        float finalBlueShift = netBlueShift;
-        float finalColorRotationShift = netColorRotationShift;
+        var finalBrightnessShift = netBrightnessShift;
+        var finalRedShift = netRedShift;
+        var finalGreenShift = netGreenShift;
+        var finalBlueShift = netBlueShift;
+        var finalColorRotationShift = netColorRotationShift;
 
         return new NetColorShifts() {
             @Override
@@ -105,11 +103,6 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
             @Override
             public float colorRotationShift() {
                 return finalColorRotationShift;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return NetColorShifts.class.getCanonicalName();
             }
         };
     }
@@ -137,10 +130,5 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
         else { // newModifier < 0
             return previousValue + ((1f + previousValue) * newModifier);
         }
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return ColorShiftStackAggregator.class.getCanonicalName();
     }
 }

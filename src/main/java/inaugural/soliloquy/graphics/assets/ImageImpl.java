@@ -10,7 +10,7 @@ public class ImageImpl extends ReadsCapturingMasks implements Image {
     private final int HEIGHT;
     private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
 
-    // NB: _capturingMask is a 2d array of longs, where each long represents 64 pixels of the
+    // NB: capturingMask is a 2d array of longs, where each long represents 64 pixels of the
     // Image, starting at ([0-63],0), and moving horizontally and vertically according to the array
     // dimensions. Each bit in each long represents whether the corresponding pixel in that pixel
     // range. So, for a long representing ([0-63],0), (0,0) would be represented by the 2^63 bit,
@@ -89,14 +89,9 @@ public class ImageImpl extends ReadsCapturingMasks implements Image {
         @SuppressWarnings("ConstantConditions")
         long pixelsRange = CAPTURING_MASK[x / BITS_PER_LONG][y];
         String binary = convertLongToString(pixelsRange);
-        int index = x % BITS_PER_LONG;
+        var index = x % BITS_PER_LONG;
         char bitAtPixel = binary.charAt(index);
 
         return bitAtPixel == '1';
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return Image.class.getCanonicalName();
     }
 }

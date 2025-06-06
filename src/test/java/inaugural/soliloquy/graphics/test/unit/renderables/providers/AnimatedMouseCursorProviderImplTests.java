@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-import java.util.HashMap;
 
+import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class AnimatedMouseCursorProviderImplTests {
+public class AnimatedMouseCursorProviderImplTests {
     private final int MS_1 = 0;
     private final long MOUSE_CURSOR_1 = 123L;
     private final int MS_2 = 111;
@@ -19,7 +22,7 @@ class AnimatedMouseCursorProviderImplTests {
     private final int MS_3 = 444;
     private final long MOUSE_CURSOR_3 = 789L;
 
-    private final HashMap<Integer, Long> CURSORS_AT_MS = new HashMap<>();
+    private final Map<Integer, Long> CURSORS_AT_MS = mapOf();
 
     private final String ID = randomString();
     private final int MS_DURATION = 777;
@@ -29,7 +32,7 @@ class AnimatedMouseCursorProviderImplTests {
     private AnimatedMouseCursorProvider animatedMouseCursorProvider;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         CURSORS_AT_MS.put(MS_1, MOUSE_CURSOR_1);
         CURSORS_AT_MS.put(MS_2, MOUSE_CURSOR_2);
         CURSORS_AT_MS.put(MS_3, MOUSE_CURSOR_3);
@@ -39,7 +42,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(null,
                 CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl("",
@@ -48,23 +51,19 @@ class AnimatedMouseCursorProviderImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 null, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<>(), MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Integer, Long>() {{
-                    put(null, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Integer, Long>() {{
-                    put(-1, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Integer, Long>() {{
-                    put(MS_1, null);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                new HashMap<Integer, Long>() {{
-                    put(1, MOUSE_CURSOR_1);
-                }}, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                mapOf(), MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(null, MOUSE_CURSOR_1)),
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(-1, MOUSE_CURSOR_1)),
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(MS_1, null)),
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(1, MOUSE_CURSOR_1)),
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 CURSORS_AT_MS, 0, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
@@ -84,23 +83,23 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testUuid() {
+    public void testUuid() {
         assertThrows(UnsupportedOperationException.class, animatedMouseCursorProvider::uuid);
     }
 
     @Test
-    void testId() {
+    public void testId() {
         assertEquals(ID, animatedMouseCursorProvider.id());
     }
 
     @Test
-    void testMostRecentTimestamp() {
+    public void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
                 (long) animatedMouseCursorProvider.mostRecentTimestamp());
     }
 
     @Test
-    void testPausedTimestamp() {
+    public void testPausedTimestamp() {
         long pausedTimestamp = -234L;
 
         ProviderAtTime<Long> animatedMouseCursorProvider =
@@ -111,7 +110,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testProvide() {
+    public void testProvide() {
         assertEquals(MOUSE_CURSOR_3, (long) animatedMouseCursorProvider
                 .provide(MS_DURATION - PERIOD_MODULO_OFFSET - 1));
         assertEquals(MOUSE_CURSOR_1, (long) animatedMouseCursorProvider
@@ -127,7 +126,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testReportPauseAndUnpause() {
+    public void testReportPauseAndUnpause() {
         long pauseTimestamp = 10000L;
         long unpauseTimestamp = 10001L;
 
@@ -143,7 +142,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testReportPauseWhilePausedOrViceVersa() {
+    public void testReportPauseWhilePausedOrViceVersa() {
         assertThrows(UnsupportedOperationException.class, () ->
                 animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
 
@@ -154,7 +153,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testProvideWhenPaused() {
+    public void testProvideWhenPaused() {
         animatedMouseCursorProvider.reportPause(MS_2);
 
         assertEquals(MOUSE_CURSOR_2, (long) animatedMouseCursorProvider
@@ -162,7 +161,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testUnpauseUpdatesPeriodModuloOffset() {
+    public void testUnpauseUpdatesPeriodModuloOffset() {
         long pauseDuration = 123123L;
 
         animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
@@ -175,7 +174,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testReset() {
+    public void testReset() {
         long resetTimestamp = 123123L;
 
         animatedMouseCursorProvider.reset(resetTimestamp);
@@ -187,7 +186,7 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testReportPauseOrProvideWithOutdatedTimestamp() {
+    public void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
         animatedMouseCursorProvider.provide(timestamp);
@@ -232,20 +231,8 @@ class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    void testArchetype() {
-        assertNotNull(animatedMouseCursorProvider.archetype());
-    }
-
-    @Test
-    void testRepresentation() {
+    public void testRepresentation() {
         assertEquals(CURSORS_AT_MS, animatedMouseCursorProvider.representation());
         assertNotSame(CURSORS_AT_MS, animatedMouseCursorProvider.representation());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(ProviderAtTime.class.getCanonicalName() + "<" +
-                        long.class.getCanonicalName() + ">",
-                animatedMouseCursorProvider.getInterfaceName());
     }
 }

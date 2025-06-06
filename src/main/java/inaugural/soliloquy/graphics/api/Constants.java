@@ -1,14 +1,14 @@
 package inaugural.soliloquy.graphics.api;
 
 import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
-import inaugural.soliloquy.graphics.rendering.factories.FloatBoxFactoryImpl;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 import java.awt.*;
 import java.util.UUID;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class Constants {
     // Timing constants
@@ -37,7 +37,7 @@ public class Constants {
     public final static String STANDARD_H_RESIZE_CURSOR_ID = "standardHResizeCursor";
     public final static String STANDARD_V_RESIZE_CURSOR_ID = "standardVResizeCursor";
 
-    public final static FloatBox WHOLE_SCREEN = new FloatBoxFactoryImpl().make(0f, 0f, 1f, 1f);
+    public final static FloatBox WHOLE_SCREEN = floatBoxOf(0f, 0f, 1f, 1f);
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
             new StaticProviderImpl<>(UUID.randomUUID(), WHOLE_SCREEN, null);
 

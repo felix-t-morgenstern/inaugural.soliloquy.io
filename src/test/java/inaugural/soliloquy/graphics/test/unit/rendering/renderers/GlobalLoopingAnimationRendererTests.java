@@ -12,25 +12,26 @@ import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-class GlobalLoopingAnimationRendererTests {
+public class GlobalLoopingAnimationRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
-    private final FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
             new FakeColorShiftStackAggregator();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
 
-    private Renderer<GlobalLoopingAnimationRenderable> _globalLoopingAnimationRenderer;
+    private Renderer<GlobalLoopingAnimationRenderable> globalLoopingAnimationRenderer;
 
     @BeforeAll
-    static void setUpFixture() {
+    public static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -46,157 +47,145 @@ class GlobalLoopingAnimationRendererTests {
     }
 
     @BeforeEach
-    void setUp() {
-        RENDERING_BOUNDARIES.CurrentBoundaries = new FakeFloatBox(0f, 0f, 1f, 1f);
-        _globalLoopingAnimationRenderer =
-                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+    public void setUp() {
+        RENDERING_BOUNDARIES.CurrentBoundaries = floatBoxOf(0f, 0f, 1f, 1f);
+        globalLoopingAnimationRenderer =
+                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES,
                         COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationRenderer(null, FLOAT_BOX_FACTORY,
+                new GlobalLoopingAnimationRenderer(null,
                         COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, null,
-                        COLOR_SHIFT_STACK_AGGREGATOR, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+                new GlobalLoopingAnimationRenderer(RENDERING_BOUNDARIES,
                         null, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
-    void testSetMeshWithInvalidParams() {
+    public void testSetMeshWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimationRenderer.setMesh(null));
+                () -> globalLoopingAnimationRenderer.setMesh(null));
     }
 
     @Test
-    void testSetShaderWithInvalidParams() {
+    public void testSetShaderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimationRenderer.setShader(null));
+                () -> globalLoopingAnimationRenderer.setShader(null));
     }
 
     @Test
-    void testRenderWithInvalidParams() {
-        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
-        float leftX = 0.11f;
-        float topY = 0.22f;
-        float rightX = 0.33f;
-        float bottomY = 0.44f;
+    public void testRenderWithInvalidArgs() {
+        var renderableAnimation = new SpyGlobalLoopingAnimation();
+        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var leftX = 0.11f;
+        var topY = 0.22f;
+        var rightX = 0.33f;
+        var bottomY = 0.44f;
 
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimationRenderer.render(null, 0L));
+                () -> globalLoopingAnimationRenderer.render(null, 0L));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(null, colorShiftProviders,
                         new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                                floatBoxOf(leftX, topY, rightX, bottomY)),
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                                floatBoxOf(leftX, topY, rightX, bottomY)),
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         null,
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(null),
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
                         new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, leftX, bottomY)),
+                                floatBoxOf(leftX, topY, leftX, bottomY)),
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, topY)),
+                                floatBoxOf(leftX, topY, rightX, topY)),
                         UUID.randomUUID()),
                 0L
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> _globalLoopingAnimationRenderer.render(
+        assertThrows(IllegalArgumentException.class, () -> globalLoopingAnimationRenderer.render(
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, null,
                         new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                                floatBoxOf(leftX, topY, rightX, bottomY)),
                         null),
                 0L
         ));
     }
 
     @Test
-    void testRenderOutdatedTimestamp() {
-        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
-        float leftX = 0.11f;
-        float topY = 0.22f;
-        float rightX = 0.33f;
-        float bottomY = 0.44f;
-        FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
+    public void testRenderOutdatedTimestamp() {
+        var renderableAnimation = new SpyGlobalLoopingAnimation();
+        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var leftX = 0.11f;
+        var topY = 0.22f;
+        var rightX = 0.33f;
+        var bottomY = 0.44f;
+        var globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeStaticProvider<>(floatBoxOf(leftX, topY, rightX, bottomY)),
                         UUID.randomUUID());
-        _globalLoopingAnimationRenderer.setShader(new FakeShader());
-        _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
+        globalLoopingAnimationRenderer.setShader(new FakeShader());
+        globalLoopingAnimationRenderer.setMesh(new FakeMesh());
 
         assertThrows(IllegalArgumentException.class,
-                () -> _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
+                () -> globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
                         MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
-    void testRenderPassesTimestampToColorShiftStackAggregator() {
-        SpyGlobalLoopingAnimation renderableAnimation = new SpyGlobalLoopingAnimation();
-        ArrayList<ProviderAtTime<ColorShift>> colorShiftProviders = new ArrayList<>();
-        float leftX = 0.11f;
-        float topY = 0.22f;
-        float rightX = 0.33f;
-        float bottomY = 0.44f;
-        FakeGlobalLoopingAnimationRenderable globalLoopingAnimationRenderable =
+    public void testRenderPassesTimestampToColorShiftStackAggregator() {
+        var renderableAnimation = new SpyGlobalLoopingAnimation();
+        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var leftX = 0.11f;
+        var topY = 0.22f;
+        var rightX = 0.33f;
+        var bottomY = 0.44f;
+        var globalLoopingAnimationRenderable =
                 new FakeGlobalLoopingAnimationRenderable(renderableAnimation, colorShiftProviders,
-                        new FakeStaticProvider<>(
-                                new FakeFloatBox(leftX, topY, rightX, bottomY)),
+                        new FakeStaticProvider<>(floatBoxOf(leftX, topY, rightX, bottomY)),
                         UUID.randomUUID());
-        _globalLoopingAnimationRenderer.setShader(new FakeShader());
-        _globalLoopingAnimationRenderer.setMesh(new FakeMesh());
-        _globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
+        globalLoopingAnimationRenderer.setShader(new FakeShader());
+        globalLoopingAnimationRenderer.setMesh(new FakeMesh());
+        globalLoopingAnimationRenderer.render(globalLoopingAnimationRenderable,
                 MOST_RECENT_TIMESTAMP + 123);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 123, (long) COLOR_SHIFT_STACK_AGGREGATOR.Input);
     }
 
     @Test
-    void testMostRecentTimestamp() {
+    public void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) _globalLoopingAnimationRenderer.mostRecentTimestamp());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(Renderer.class.getCanonicalName() + "<" +
-                        GlobalLoopingAnimationRenderable.class.getCanonicalName() + ">",
-                _globalLoopingAnimationRenderer.getInterfaceName());
+                (long) globalLoopingAnimationRenderer.mostRecentTimestamp());
     }
 }

@@ -9,15 +9,18 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
+import java.util.List;
+import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
 
-class GlobalLoopingAnimationPreloaderTaskTests {
-    private final HashMap<String, Animation> ANIMATIONS = new HashMap<>();
-    private final ArrayList<GlobalLoopingAnimationDefinitionDTO>
-            GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS = new ArrayList<>();
+public class GlobalLoopingAnimationPreloaderTaskTests {
+    private final Map<String, Animation> ANIMATIONS = mapOf();
+    private final List<GlobalLoopingAnimationDefinitionDTO>
+            GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS = listOf();
     private final String GLOBAL_LOOPING_ANIMATION_ID_1 = "globalLoopingAnimationId1";
     private final String GLOBAL_LOOPING_ANIMATION_ID_2 = "globalLoopingAnimationId2";
     private final int PERIOD_MODULO_OFFSET_1 = 123;
@@ -28,12 +31,12 @@ class GlobalLoopingAnimationPreloaderTaskTests {
     private final FakeAnimation ANIMATION_2 = new FakeAnimation(ANIMATION_ID_2);
     private final FakeGlobalLoopingAnimationFactory GLOBAL_LOOPING_ANIMATION_FACTORY =
             new FakeGlobalLoopingAnimationFactory();
-    private final ArrayList<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS = new ArrayList<>();
+    private final List<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS = listOf();
 
-    private GlobalLoopingAnimationPreloaderTask _globalLoopingAnimationPreloaderTask;
+    private GlobalLoopingAnimationPreloaderTask globalLoopingAnimationPreloaderTask;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         ANIMATIONS.put(ANIMATION_ID_1, ANIMATION_1);
         ANIMATIONS.put(ANIMATION_ID_2, ANIMATION_2);
         GlobalLoopingAnimationDefinitionDTO definitionDTO1 =
@@ -45,13 +48,13 @@ class GlobalLoopingAnimationPreloaderTaskTests {
         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS.add(definitionDTO1);
         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS.add(definitionDTO2);
 
-        _globalLoopingAnimationPreloaderTask = new GlobalLoopingAnimationPreloaderTask(
+        globalLoopingAnimationPreloaderTask = new GlobalLoopingAnimationPreloaderTask(
                 ANIMATIONS::get, GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS,
                 GLOBAL_LOOPING_ANIMATION_FACTORY, GLOBAL_LOOPING_ANIMATIONS::add);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(null,
                         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS, GLOBAL_LOOPING_ANIMATION_FACTORY,
@@ -68,58 +71,56 @@ class GlobalLoopingAnimationPreloaderTaskTests {
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<>(), GLOBAL_LOOPING_ANIMATION_FACTORY,
+                        listOf(), GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(null);
-                        }},
+                        listOf((GlobalLoopingAnimationDefinitionDTO) null),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(new GlobalLoopingAnimationDefinitionDTO(
+                        listOf(
+                                new GlobalLoopingAnimationDefinitionDTO(
                                     null, ANIMATION_ID_1,
-                                    PERIOD_MODULO_OFFSET_1));
-                        }},
+                                    PERIOD_MODULO_OFFSET_1)
+                        ),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(new GlobalLoopingAnimationDefinitionDTO(
+                        listOf(
+                                new GlobalLoopingAnimationDefinitionDTO(
                                     "", ANIMATION_ID_1,
-                                    PERIOD_MODULO_OFFSET_1));
-                        }},
+                                    PERIOD_MODULO_OFFSET_1)
+                        ),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(new GlobalLoopingAnimationDefinitionDTO(
+                        listOf(
+                                new GlobalLoopingAnimationDefinitionDTO(
                                     GLOBAL_LOOPING_ANIMATION_ID_1, null,
-                                    PERIOD_MODULO_OFFSET_1));
-                        }},
+                                    PERIOD_MODULO_OFFSET_1)
+                        ),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(new GlobalLoopingAnimationDefinitionDTO(
+                        listOf(
+                                new GlobalLoopingAnimationDefinitionDTO(
                                     GLOBAL_LOOPING_ANIMATION_ID_1, "",
-                                    PERIOD_MODULO_OFFSET_1));
-                        }},
+                                    PERIOD_MODULO_OFFSET_1)
+                        ),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
         assertThrows(IllegalArgumentException.class, () ->
                 new GlobalLoopingAnimationPreloaderTask(ANIMATIONS::get,
-                        new ArrayList<GlobalLoopingAnimationDefinitionDTO>() {{
-                            add(new GlobalLoopingAnimationDefinitionDTO(
+                        listOf(
+                                new GlobalLoopingAnimationDefinitionDTO(
                                     GLOBAL_LOOPING_ANIMATION_ID_1, ANIMATION_ID_1,
-                                    -1));
-                        }},
+                                    -1)
+                        ),
                         GLOBAL_LOOPING_ANIMATION_FACTORY,
                         GLOBAL_LOOPING_ANIMATIONS::add));
 
@@ -130,8 +131,8 @@ class GlobalLoopingAnimationPreloaderTaskTests {
     }
 
     @Test
-    void testRun() {
-        _globalLoopingAnimationPreloaderTask.run();
+    public void testRun() {
+        globalLoopingAnimationPreloaderTask.run();
 
         assertEquals(2, GLOBAL_LOOPING_ANIMATION_FACTORY.InputIds.size());
         assertTrue(GLOBAL_LOOPING_ANIMATION_FACTORY.InputIds

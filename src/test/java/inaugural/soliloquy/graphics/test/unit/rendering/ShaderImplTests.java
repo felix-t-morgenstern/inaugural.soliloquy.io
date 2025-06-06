@@ -9,26 +9,24 @@ import org.lwjgl.opengl.GL;
 import soliloquy.specs.graphics.rendering.Shader;
 
 import java.awt.*;
-import java.nio.FloatBuffer;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL20.*;
 
-class ShaderImplTests {
+public class ShaderImplTests {
     private static final String SHADER_FILENAME_PREFIX = "./src/test/resources/shaders/unitTestingShader";
 
     private static Shader Shader;
 
     @BeforeAll
-    static void setUpFixture() {
+    public static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
 
-        long window = glfwCreateWindow(1, 1, "", 0, 0);
+        var window = glfwCreateWindow(1, 1, "", 0, 0);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
 
@@ -41,13 +39,13 @@ class ShaderImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new ShaderImpl(null));
         assertThrows(IllegalArgumentException.class, () -> new ShaderImpl(""));
     }
 
     @Test
-    void testBindAndUnbind() {
+    public void testBindAndUnbind() {
         Shader.bind();
 
         assertNotEquals(0, glGetInteger(GL_CURRENT_PROGRAM));
@@ -58,34 +56,34 @@ class ShaderImplTests {
     }
 
     @Test
-    void testSetUniform1f() {
-        String uniformName = "zIndex";
-        float value = 0.111f;
+    public void testSetUniform1f() {
+        var uniformName = "zIndex";
+        var value = 0.111f;
 
         Shader.bind();
         Shader.setUniform(uniformName, value);
 
-        int program = glGetInteger(GL_CURRENT_PROGRAM);
-        int location = glGetUniformLocation(program, uniformName);
+        var program = glGetInteger(GL_CURRENT_PROGRAM);
+        var location = glGetUniformLocation(program, uniformName);
 
-        float valueFromShader = glGetUniformf(program, location);
+        var valueFromShader = glGetUniformf(program, location);
 
         assertEquals(value, valueFromShader);
     }
 
     @Test
-    void testSetUniform2f() {
-        String uniformName = "pixelScale";
-        float value1 = 0.111f;
-        float value2 = 0.222f;
+    public void testSetUniform2f() {
+        var uniformName = "pixelScale";
+        var value1 = 0.111f;
+        var value2 = 0.222f;
 
         Shader.bind();
         Shader.setUniform(uniformName, value1, value2);
 
-        int program = glGetInteger(GL_CURRENT_PROGRAM);
-        int location = glGetUniformLocation(program, uniformName);
+        var program = glGetInteger(GL_CURRENT_PROGRAM);
+        var location = glGetUniformLocation(program, uniformName);
 
-        FloatBuffer valuesFromShader = BufferUtils.createFloatBuffer(2);
+        var valuesFromShader = BufferUtils.createFloatBuffer(2);
         glGetUniformfv(program, location, valuesFromShader);
 
         assertEquals(value1, valuesFromShader.get(0));
@@ -93,19 +91,19 @@ class ShaderImplTests {
     }
 
     @Test
-    void testSetUniform3f() {
-        String uniformName = "dummyVar";
-        float value1 = 0.111f;
-        float value2 = 0.222f;
-        float value3 = 0.333f;
+    public void testSetUniform3f() {
+        var uniformName = "dummyVar";
+        var value1 = 0.111f;
+        var value2 = 0.222f;
+        var value3 = 0.333f;
 
         Shader.bind();
         Shader.setUniform(uniformName, value1, value2, value3);
 
-        int program = glGetInteger(GL_CURRENT_PROGRAM);
-        int location = glGetUniformLocation(program, uniformName);
+        var program = glGetInteger(GL_CURRENT_PROGRAM);
+        var location = glGetUniformLocation(program, uniformName);
 
-        FloatBuffer valuesFromShader = BufferUtils.createFloatBuffer(3);
+        var valuesFromShader = BufferUtils.createFloatBuffer(3);
         glGetUniformfv(program, location, valuesFromShader);
 
         assertEquals(value1, valuesFromShader.get(0));
@@ -114,20 +112,20 @@ class ShaderImplTests {
     }
 
     @Test
-    void testSetUniform4f() {
-        String uniformName = "matColor";
-        float value1 = 0.111f;
-        float value2 = 0.222f;
-        float value3 = 0.333f;
-        float value4 = 0.444f;
+    public void testSetUniform4f() {
+        var uniformName = "matColor";
+        var value1 = 0.111f;
+        var value2 = 0.222f;
+        var value3 = 0.333f;
+        var value4 = 0.444f;
 
         Shader.bind();
         Shader.setUniform(uniformName, value1, value2, value3, value4);
 
-        int program = glGetInteger(GL_CURRENT_PROGRAM);
-        int location = glGetUniformLocation(program, uniformName);
+        var program = glGetInteger(GL_CURRENT_PROGRAM);
+        var location = glGetUniformLocation(program, uniformName);
 
-        FloatBuffer valuesFromShader = BufferUtils.createFloatBuffer(4);
+        var valuesFromShader = BufferUtils.createFloatBuffer(4);
         glGetUniformfv(program, location, valuesFromShader);
 
         assertEquals(value1, valuesFromShader.get(0));
@@ -137,21 +135,21 @@ class ShaderImplTests {
     }
 
     @Test
-    void testSetUniformColor() {
-        String uniformName = "matColor";
-        int red = 12;
-        int green = 23;
-        int blue = 34;
-        int alpha = 45;
-        Color matColor = new Color(red, green, blue, alpha);
+    public void testSetUniformColor() {
+        var uniformName = "matColor";
+        var red = 12;
+        var green = 23;
+        var blue = 34;
+        var alpha = 45;
+        var matColor = new Color(red, green, blue, alpha);
 
         Shader.bind();
         Shader.setUniform(uniformName, matColor);
 
-        int program = glGetInteger(GL_CURRENT_PROGRAM);
-        int location = glGetUniformLocation(program, uniformName);
+        var program = glGetInteger(GL_CURRENT_PROGRAM);
+        var location = glGetUniformLocation(program, uniformName);
 
-        FloatBuffer valuesFromShader = BufferUtils.createFloatBuffer(4);
+        var valuesFromShader = BufferUtils.createFloatBuffer(4);
         glGetUniformfv(program, location, valuesFromShader);
 
         assertEquals(red / MAX_CHANNEL_VAL, valuesFromShader.get(0));
@@ -161,8 +159,8 @@ class ShaderImplTests {
     }
 
     @Test
-    void testSetUniformWithInvalidParams() {
-        String uniformName = "matColor";
+    public void testSetUniformWithInvalidArgs() {
+        var uniformName = "matColor";
 
         Shader.bind();
 
@@ -192,11 +190,5 @@ class ShaderImplTests {
                 () -> Shader.setUniform("", Color.RED));
         assertThrows(IllegalArgumentException.class,
                 () -> Shader.setUniform(uniformName, (Color) null));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(soliloquy.specs.graphics.rendering.Shader.class.getCanonicalName(),
-                Shader.getInterfaceName());
     }
 }

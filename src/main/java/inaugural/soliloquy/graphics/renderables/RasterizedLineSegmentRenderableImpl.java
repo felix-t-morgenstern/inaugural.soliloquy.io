@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRenderable
         implements RasterizedLineSegmentRenderable {
-    private short _stipplePattern;
-    private short _stippleFactor;
+    private short stipplePattern;
+    private short stippleFactor;
 
     public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Vertex> vertex1Provider,
                                                ProviderAtTime<Vertex> vertex2Provider,
@@ -28,29 +28,24 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRend
 
     @Override
     public short getStipplePattern() {
-        return _stipplePattern;
+        return stipplePattern;
     }
 
     @Override
     public void setStipplePattern(short stipplePattern) throws IllegalArgumentException {
-        _stipplePattern = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
+        this.stipplePattern = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
     }
 
     @Override
     public short getStippleFactor() {
-        return _stippleFactor;
+        return stippleFactor;
     }
 
     @Override
     public void setStippleFactor(short stippleFactor) throws IllegalArgumentException {
-        _stippleFactor = Check.throwOnLtValue(
+        this.stippleFactor = Check.throwOnLtValue(
                 Check.throwOnGtValue(stippleFactor, (short) 256, "stippleFactor"),
                 (short) 1, "stippleFactor"
         );
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return RasterizedLineSegmentRenderable.class.getCanonicalName();
     }
 }

@@ -3,15 +3,13 @@ package inaugural.soliloquy.graphics.test.display.renderables.providers.rectangl
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.RectangleAnimatedBackgroundTextureIdProvider;
-import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -20,7 +18,8 @@ import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTest {
     private final static StaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
@@ -34,7 +33,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.1f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.075f;
     private final static StaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            staticProvider(new FloatBoxImpl(0.25f, 0.25f, 0.75f, 0.75f));
+            staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
     private final static String TILE_LOCATION_1 =
             "./src/test/resources/images/backgrounds/stone_tile_1.png";
     private final static String TILE_LOCATION_2 =
@@ -118,7 +117,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                 RENDERING_BOUNDARIES);
 
         FirstChildStack.add(RectangleRenderable);
-        Renderers.registerRenderer(RectangleRenderable.class.getCanonicalName(), RectangleRenderer);
+        Renderers.registerRenderer(RectangleRenderableImpl.class, RectangleRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }

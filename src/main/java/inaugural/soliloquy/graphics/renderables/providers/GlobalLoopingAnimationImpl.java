@@ -7,8 +7,6 @@ import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
-
 public class GlobalLoopingAnimationImpl
         extends AbstractLoopingProvider<AnimationFrameSnippet>
         implements GlobalLoopingAnimation {
@@ -23,8 +21,7 @@ public class GlobalLoopingAnimationImpl
         //     constructor since mostRecentTimestamp must be non-null if pausedTimestamp is
         //     non-null
         super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(),
-                periodModuloOffset, pausedTimestamp, pausedTimestamp,
-                generateSimpleArchetype(AnimationFrameSnippet.class));
+                periodModuloOffset, pausedTimestamp, pausedTimestamp);
         ID = Check.ifNullOrEmpty(id, "id");
         ANIMATION = animation;
     }
@@ -42,16 +39,6 @@ public class GlobalLoopingAnimationImpl
     @Override
     protected AnimationFrameSnippet provideValueAtMsWithinPeriod(int msWithinPeriod) {
         return ANIMATION.snippetAtFrame(msWithinPeriod);
-    }
-
-    @Override
-    public AnimationFrameSnippet archetype() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return GlobalLoopingAnimation.class.getCanonicalName();
     }
 
     @Override

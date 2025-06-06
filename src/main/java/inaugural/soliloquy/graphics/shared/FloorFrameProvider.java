@@ -3,10 +3,11 @@ package inaugural.soliloquy.graphics.shared;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FloorFrameProvider<T> {
     public final int MS_DURATION;
@@ -33,9 +34,9 @@ public class FloorFrameProvider<T> {
         if (frames.isEmpty()) {
             throw new IllegalArgumentException("AnimationImpl: frames cannot be empty");
         }
-        boolean frameAt0Ms = false;
-        boolean supportsMouseEventCapturing = true;
-        for (Map.Entry<Integer, T> frameWithMs : frames.entrySet()) {
+        var frameAt0Ms = false;
+        var supportsMouseEventCapturing = true;
+        for (var frameWithMs : frames.entrySet()) {
             Check.ifNonNegative(frameWithMs.getKey(), "frameWithMs.getKey()");
             Check.throwOnSecondLte(frameWithMs.getKey(), MS_DURATION, "frameWithMs.getKey()",
                     "MS_DURATION");
@@ -66,6 +67,6 @@ public class FloorFrameProvider<T> {
     }
 
     public Map<Integer, T> representation() {
-        return new HashMap<>(FRAMES);
+        return mapOf(FRAMES);
     }
 }

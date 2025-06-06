@@ -3,70 +3,80 @@ package inaugural.soliloquy.graphics.test.unit.rendering.factories;
 import inaugural.soliloquy.graphics.api.Settings;
 import inaugural.soliloquy.graphics.rendering.PIDController;
 import inaugural.soliloquy.graphics.rendering.factories.PIDControllerFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSettingsRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.rendering.OutputController;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.graphics.rendering.factories.OutputControllerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.function.Function;
 
-class PIDControllerFactoryTests {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class PIDControllerFactoryTests {
     private final double P = 0.25f;
     private final double I = 0.01f;
     private final double D = 0.4f;
-    private final FakeSettingsRepo SETTINGS_REPO = new FakeSettingsRepo();
+    @SuppressWarnings("rawtypes")
+    @Mock private Function<String, Setting> mockGetSetting;
+    @Mock private Setting<Double> mockSetting_P;
+    @Mock private Setting<Double> mockSetting_I;
+    @Mock private Setting<Double> mockSetting_D;
 
-    private OutputControllerFactory _pidControllerFactory;
+    private OutputControllerFactory pidControllerFactory;
 
     @BeforeEach
-    void setUp() {
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_P_SETTING_ID, P);
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_I_SETTING_ID, I);
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_D_SETTING_ID, D);
+    public void setUp() {
+        when(mockSetting_P.getValue()).thenReturn(P);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_P_SETTING_ID)).thenReturn(
+                mockSetting_P);
 
-        _pidControllerFactory = new PIDControllerFactory();
+        when(mockSetting_I.getValue()).thenReturn(I);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_I_SETTING_ID)).thenReturn(
+                mockSetting_I);
+
+        when(mockSetting_D.getValue()).thenReturn(D);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_D_SETTING_ID)).thenReturn(
+                mockSetting_D);
+
+        pidControllerFactory = new PIDControllerFactory();
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _pidControllerFactory.make(null));
+    public void testConstructorWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> pidControllerFactory.make(null));
 
-        SETTINGS_REPO.removeItem(Settings.PID_CONTROLLER_P_SETTING_ID);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_P_SETTING_ID)).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_P_SETTING_ID, null);
-        assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_P_SETTING_ID, P);
+                () -> pidControllerFactory.make(mockGetSetting));
 
-        SETTINGS_REPO.removeItem(Settings.PID_CONTROLLER_I_SETTING_ID);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_P_SETTING_ID)).thenReturn(mockSetting_P);
+        when(mockSetting_P.getValue()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_I_SETTING_ID, null);
-        assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_I_SETTING_ID, I);
+                () -> pidControllerFactory.make(mockGetSetting));
+        when(mockSetting_P.getValue()).thenReturn(P);
 
-        SETTINGS_REPO.removeItem(Settings.PID_CONTROLLER_D_SETTING_ID);
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_I_SETTING_ID)).thenReturn(mockSetting_I);
+        when(mockSetting_I.getValue()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_D_SETTING_ID, null);
+                () -> pidControllerFactory.make(mockGetSetting));
+        when(mockSetting_I.getValue()).thenReturn(I);
+
+        when(mockGetSetting.apply(Settings.PID_CONTROLLER_D_SETTING_ID)).thenReturn(mockSetting_D);
+        when(mockSetting_D.getValue()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
-                () -> _pidControllerFactory.make(SETTINGS_REPO));
-        SETTINGS_REPO.setSetting(Settings.PID_CONTROLLER_D_SETTING_ID, D);
+                () -> pidControllerFactory.make(mockGetSetting));
     }
 
     @Test
-    void testMake() {
-        OutputController outputController = _pidControllerFactory.make(SETTINGS_REPO);
+    public void testMake() {
+        var outputController = pidControllerFactory.make(mockGetSetting);
+
         assertNotNull(outputController);
-        assertTrue(outputController instanceof PIDController);
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(OutputControllerFactory.class.getCanonicalName(),
-                _pidControllerFactory.getInterfaceName());
+        assertInstanceOf(PIDController.class, outputController);
     }
 }

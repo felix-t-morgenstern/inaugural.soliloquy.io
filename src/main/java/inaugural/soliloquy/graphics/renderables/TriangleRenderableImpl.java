@@ -2,9 +2,7 @@ package inaugural.soliloquy.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
@@ -16,12 +14,12 @@ import java.util.Map;
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
         implements TriangleRenderable {
-    private ProviderAtTime<Vertex> _vertex1Provider;
-    private ProviderAtTime<Color> _vertex1ColorProvider;
-    private ProviderAtTime<Vertex> _vertex2Provider;
-    private ProviderAtTime<Color> _vertex2ColorProvider;
-    private ProviderAtTime<Vertex> _vertex3Provider;
-    private ProviderAtTime<Color> _vertex3ColorProvider;
+    private ProviderAtTime<Vertex> vertex1Provider;
+    private ProviderAtTime<Color> vertex1ColorProvider;
+    private ProviderAtTime<Vertex> vertex2Provider;
+    private ProviderAtTime<Color> vertex2ColorProvider;
+    private ProviderAtTime<Vertex> vertex3Provider;
+    private ProviderAtTime<Color> vertex3ColorProvider;
 
     public TriangleRenderableImpl(ProviderAtTime<Vertex> vertex1Provider,
                                   ProviderAtTime<Color> vertex1ColorProvider,
@@ -63,68 +61,68 @@ public class TriangleRenderableImpl
 
     @Override
     public ProviderAtTime<Vertex> getVertex1Provider() {
-        return _vertex1Provider;
+        return vertex1Provider;
     }
 
     @Override
     public void setVertex1Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex1Provider = Check.ifNull(provider, "provider");
+        vertex1Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
     public ProviderAtTime<Color> getVertex1ColorProvider() {
-        return _vertex1ColorProvider;
+        return vertex1ColorProvider;
     }
 
     @Override
     public void setVertex1ColorProvider(ProviderAtTime<Color> provider)
             throws IllegalArgumentException {
-        _vertex1ColorProvider = Check.ifNull(provider, "provider");
+        vertex1ColorProvider = Check.ifNull(provider, "provider");
     }
 
     @Override
     public ProviderAtTime<Vertex> getVertex2Provider() {
-        return _vertex2Provider;
+        return vertex2Provider;
     }
 
     @Override
     public void setVertex2Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex2Provider = Check.ifNull(provider, "provider");
+        vertex2Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
     public ProviderAtTime<Color> getVertex2ColorProvider() {
-        return _vertex2ColorProvider;
+        return vertex2ColorProvider;
     }
 
     @Override
     public void setVertex2ColorProvider(ProviderAtTime<Color> provider)
             throws IllegalArgumentException {
-        _vertex2ColorProvider = Check.ifNull(provider, "provider");
+        vertex2ColorProvider = Check.ifNull(provider, "provider");
     }
 
     @Override
     public ProviderAtTime<Vertex> getVertex3Provider() {
-        return _vertex3Provider;
+        return vertex3Provider;
     }
 
     @Override
     public void setVertex3Provider(ProviderAtTime<Vertex> provider)
             throws IllegalArgumentException {
-        _vertex3Provider = Check.ifNull(provider, "provider");
+        vertex3Provider = Check.ifNull(provider, "provider");
     }
 
     @Override
     public ProviderAtTime<Color> getVertex3ColorProvider() {
-        return _vertex3ColorProvider;
+        return vertex3ColorProvider;
     }
 
     @Override
     public void setVertex3ColorProvider(ProviderAtTime<Color> provider)
             throws IllegalArgumentException {
-        _vertex3ColorProvider = Check.ifNull(provider, "provider");
+        vertex3ColorProvider = Check.ifNull(provider, "provider");
     }
 
     /*
@@ -136,9 +134,9 @@ public class TriangleRenderableImpl
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Vertex v1 = _vertex1Provider.provide(timestamp);
-        Vertex v2 = _vertex2Provider.provide(timestamp);
-        Vertex v3 = _vertex3Provider.provide(timestamp);
+        Vertex v1 = vertex1Provider.provide(timestamp);
+        Vertex v2 = vertex2Provider.provide(timestamp);
+        Vertex v3 = vertex3Provider.provide(timestamp);
 
         float renderableArea = area(v1, v2, v3);
 
@@ -152,10 +150,5 @@ public class TriangleRenderableImpl
     private float area(Vertex v1, Vertex v2, Vertex v3) {
         return Math.abs(
                 ((v1.X * (v2.Y - v3.Y)) + (v2.X * (v3.Y - v1.Y)) + (v3.X * (v1.Y - v2.Y))) / 2.0f);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return TriangleRenderable.class.getCanonicalName();
     }
 }

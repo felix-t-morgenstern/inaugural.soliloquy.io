@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.shared.FloorFrameProvider;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Map;
@@ -15,13 +14,6 @@ public class AnimationFactory extends AbstractAssetFactory<AnimationDefinition, 
         Check.ifNull(animationDefinition, "animationDefinition");
         return new AnimationImpl(animationDefinition.id(), animationDefinition.msDuration(),
                 animationDefinition.frameSnippetDefinitions());
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return AssetFactory.class.getCanonicalName() + "<" +
-                AnimationDefinition.class.getCanonicalName() + "," +
-                Animation.class.getCanonicalName() + ">";
     }
 
     @SuppressWarnings("InnerClassMayBeStatic")
@@ -56,11 +48,6 @@ public class AnimationFactory extends AbstractAssetFactory<AnimationDefinition, 
         @Override
         public String id() throws IllegalStateException {
             return ID;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return Animation.class.getCanonicalName();
         }
     }
 }

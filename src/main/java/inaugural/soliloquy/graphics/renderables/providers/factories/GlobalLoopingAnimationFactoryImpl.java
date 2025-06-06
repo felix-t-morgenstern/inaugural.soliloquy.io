@@ -16,9 +16,4 @@ public class GlobalLoopingAnimationFactoryImpl implements GlobalLoopingAnimation
                 definition.pauseTimestamp()
         );
     }
-
-    @Override
-    public String getInterfaceName() {
-        return GlobalLoopingAnimationFactory.class.getCanonicalName();
-    }
 }

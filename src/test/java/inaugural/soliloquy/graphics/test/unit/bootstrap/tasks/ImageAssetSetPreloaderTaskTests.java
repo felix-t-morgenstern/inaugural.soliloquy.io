@@ -4,67 +4,72 @@ import inaugural.soliloquy.graphics.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.graphics.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.ImageAssetSetPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageAssetSetFactory;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.graphics.assets.ImageAsset;
 import soliloquy.specs.graphics.assets.ImageAssetSet;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomString;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static soliloquy.specs.common.shared.Direction.SOUTH;
 import static soliloquy.specs.common.shared.Direction.SOUTHWEST;
 
-class ImageAssetSetPreloaderTaskTests {
+@ExtendWith(MockitoExtension.class)
+public class ImageAssetSetPreloaderTaskTests {
     private final FakeImageAssetSetFactory FACTORY = new FakeImageAssetSetFactory();
     private final Collection<ImageAssetSetDefinitionDTO> IMAGE_ASSET_SET_DEFINITION_DTOS =
-            new ArrayList<>();
-    private final FakeRegistry<ImageAssetSet> IMAGE_ASSET_SET_REGISTRY = new FakeRegistry<>();
+            listOf();
     private final Map<String, Map<Direction, ImageAssetSetAssetDefinitionDTO>> ASSETS =
-            new HashMap<>();
+            mapOf();
+
+    @Mock private Consumer<ImageAssetSet> addImageAsset;
 
     private ImageAssetSetPreloaderTask imageAssetSetPreloaderTask;
 
     @BeforeEach
-    void setUp() {
-        String type1 = "type1";
-        String type2 = "type2";
+    public void setUp() {
+        var type1 = randomString();
+        var type2 = randomString();
 
-        String assetId1 = "assetId1";
-        String assetId2 = "assetId2";
-        String assetId3 = "assetId3";
-        String assetId4 = "assetId4";
+        var assetId1 = randomString();
+        var assetId2 = randomString();
+        var assetId3 = randomString();
+        var assetId4 = randomString();
 
-        ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset1DTO =
-                new ImageAssetSetAssetDefinitionDTO(type1, null, 1, assetId1);
-        ImageAssetSetAssetDefinitionDTO imageAssetSet1Asset2DTO =
-                new ImageAssetSetAssetDefinitionDTO(null, SOUTHWEST.getValue(), 2,
-                        assetId2);
-        ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset1DTO =
-                new ImageAssetSetAssetDefinitionDTO(type2, null, 2, assetId3);
-        ImageAssetSetAssetDefinitionDTO imageAssetSet2Asset2DTO =
-                new ImageAssetSetAssetDefinitionDTO(null, SOUTH.getValue(), 1,
-                        assetId4);
+        var imageAssetSet1Asset1DTO = new ImageAssetSetAssetDefinitionDTO(type1, null, 1, assetId1);
+        var imageAssetSet1Asset2DTO =
+                new ImageAssetSetAssetDefinitionDTO(null, SOUTHWEST.getValue(), 2, assetId2);
+        var imageAssetSet2Asset1DTO = new ImageAssetSetAssetDefinitionDTO(type2, null, 2, assetId3);
+        var imageAssetSet2Asset2DTO =
+                new ImageAssetSetAssetDefinitionDTO(null, SOUTH.getValue(), 1, assetId4);
 
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet1Asset1DTO);
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet1Asset2DTO);
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet2Asset1DTO);
         addImageAssetSetAssetDTOToMap(ASSETS, imageAssetSet2Asset2DTO);
 
-        ImageAssetSetDefinitionDTO imageAssetSet1DTO = new ImageAssetSetDefinitionDTO(
-                "imageAssetSet1",
+        var imageAssetSet1DTO = new ImageAssetSetDefinitionDTO(
+                randomString(),
                 new ImageAssetSetAssetDefinitionDTO[]{
                         imageAssetSet1Asset1DTO, imageAssetSet1Asset2DTO
                 });
 
-        ImageAssetSetDefinitionDTO imageAssetSet2DTO = new ImageAssetSetDefinitionDTO(
-                "imageAssetSet2",
+        var imageAssetSet2DTO = new ImageAssetSetDefinitionDTO(
+                randomString(),
                 new ImageAssetSetAssetDefinitionDTO[]{
                         imageAssetSet2Asset1DTO, imageAssetSet2Asset2DTO
                 });
@@ -73,95 +78,95 @@ class ImageAssetSetPreloaderTaskTests {
         IMAGE_ASSET_SET_DEFINITION_DTOS.add(imageAssetSet2DTO);
 
         imageAssetSetPreloaderTask = new ImageAssetSetPreloaderTask(
-                IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, IMAGE_ASSET_SET_REGISTRY::add);
+                IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, addImageAsset);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(IMAGE_ASSET_SET_DEFINITION_DTOS, null,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(null, FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(new ArrayList<>(), FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                new ImageAssetSetPreloaderTask(listOf(), FACTORY,
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf((ImageAssetSetDefinitionDTO) null),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(null,
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
                                                 SOUTHWEST.getValue(), 1, "assetId")})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO("",
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
                                                 SOUTHWEST.getValue(), 1, "assetId")})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1", null)),
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(), null)),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(),
                                 new ImageAssetSetAssetDefinitionDTO[]{})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(),
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
                                                 SOUTHWEST.getValue(), 0, "assetId")})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(),
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
-                                                SOUTHWEST.getValue(), 4, "assetId")})),
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
+                                                SOUTHWEST.getValue(), 4, randomString())})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(),
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
                                                 SOUTHWEST.getValue(), 1, null)})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO("imageAssetSet1",
+                        listOf(new ImageAssetSetDefinitionDTO(randomString(),
                                 new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO("type",
+                                        new ImageAssetSetAssetDefinitionDTO(randomString(),
                                                 SOUTHWEST.getValue(), 1, "")})),
                         FACTORY,
-                        IMAGE_ASSET_SET_REGISTRY::add));
+                        addImageAsset));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(IMAGE_ASSET_SET_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test
-    void testRun() {
+    public void testRun() {
         imageAssetSetPreloaderTask.run();
 
-        assertEquals(IMAGE_ASSET_SET_DEFINITION_DTOS.size(), IMAGE_ASSET_SET_REGISTRY.size());
+        verify(addImageAsset, times(IMAGE_ASSET_SET_DEFINITION_DTOS.size())).accept(any());
         IMAGE_ASSET_SET_DEFINITION_DTOS.forEach(dto -> {
             var createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
@@ -174,8 +179,7 @@ class ImageAssetSetPreloaderTaskTests {
                 assertEquals(assetDTO.assetId, assetDefinition.assetId());
             });
 
-            var imageAssetSet = IMAGE_ASSET_SET_REGISTRY.get(createdDefinition.id());
-            assertTrue(FACTORY.OUTPUTS.contains(imageAssetSet));
+            FACTORY.OUTPUTS.forEach(output -> verify(addImageAsset, once()).accept(output));
         });
     }
 
@@ -184,7 +188,7 @@ class ImageAssetSetPreloaderTaskTests {
             ImageAssetSetAssetDefinitionDTO
                     imageAssetSetAssetDefinitionDTO) {
         if (!map.containsKey(imageAssetSetAssetDefinitionDTO.type)) {
-            map.put(imageAssetSetAssetDefinitionDTO.type, new HashMap<>());
+            map.put(imageAssetSetAssetDefinitionDTO.type, mapOf());
         }
         map.get(imageAssetSetAssetDefinitionDTO.type)
                 .put(Direction.fromValue(imageAssetSetAssetDefinitionDTO.direction),

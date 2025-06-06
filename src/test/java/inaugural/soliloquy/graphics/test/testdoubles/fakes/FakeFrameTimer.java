@@ -35,9 +35,4 @@ public class FakeFrameTimer implements FrameTimer {
         }
         return ShouldExecuteNextFrame;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

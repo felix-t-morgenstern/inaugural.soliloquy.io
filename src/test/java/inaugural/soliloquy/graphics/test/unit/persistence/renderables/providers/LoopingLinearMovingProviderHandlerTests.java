@@ -6,10 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.common.persistence.TypeWithOneGenericParamHandler;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
@@ -19,12 +17,11 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class LoopingLinearMovingProviderHandlerTests {
+public class LoopingLinearMovingProviderHandlerTests {
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int TIMESTAMP_1 = randomInt();
     private final int TIMESTAMP_2 = randomInt();
@@ -44,9 +41,6 @@ class LoopingLinearMovingProviderHandlerTests {
             generateSimpleMockTypeHandler(pairOf(VALUE_1_WRITTEN, VALUE_1),
                     pairOf(VALUE_2_WRITTEN, VALUE_2), pairOf(VALUE_3_WRITTEN, VALUE_3));
 
-    private final int INTEGER_ARCHETYPE = randomInt();
-    private final float FLOAT_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER = randomFloat();
-
     private final String WRITTEN_VALUE = String.format(
             "{\"id\":\"%s\",\"duration\":%d,\"offset\":%d,\"valueAtTimes\":[{\"time\":%d," +
                     "\"value\":\"%s\"},{\"time\":%d,\"value\":\"%s\"},{\"time\":%d," +
@@ -55,7 +49,7 @@ class LoopingLinearMovingProviderHandlerTests {
             UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET, TIMESTAMP_1, VALUE_1_WRITTEN, TIMESTAMP_2,
             VALUE_2_WRITTEN, TIMESTAMP_3, VALUE_3_WRITTEN, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
 
-    @Mock private PersistentValuesHandler mockPersistentValuesHandler;
+    @Mock private PersistenceHandler mockPersistenceHandler;
 
     @Mock private Map<Integer, Float> mockValuesWithinPeriod;
     /** @noinspection rawtypes */
@@ -65,17 +59,16 @@ class LoopingLinearMovingProviderHandlerTests {
     @Mock private LoopingLinearMovingProviderFactory mockFactory;
 
     /** @noinspection rawtypes */
-    private TypeWithOneGenericParamHandler<LoopingLinearMovingProvider>
-            loopingLinearMovingProviderHandler;
+    private TypeHandler<LoopingLinearMovingProvider> loopingLinearMovingProviderHandler;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockLoopingLinearMovingProviderFactoryOutput = mock(LoopingLinearMovingProvider.class);
 
         mockFactory = mock(LoopingLinearMovingProviderFactory.class);
         //noinspection unchecked
         when(mockFactory
-                .make(any(), anyInt(), anyInt(), anyMap(), anyLong(), anyLong(), any()))
+                .make(any(), anyInt(), anyInt(), anyMap(), anyLong(), anyLong()))
                 .thenReturn(mockLoopingLinearMovingProviderFactoryOutput);
 
         mockValuesWithinPeriod = generateMockMap(
@@ -95,48 +88,38 @@ class LoopingLinearMovingProviderHandlerTests {
                 .thenReturn(PAUSED_TIMESTAMP);
         when(mockLoopingLinearMovingProvider.mostRecentTimestamp())
                 .thenReturn(MOST_RECENT_TIMESTAMP);
-        when(mockLoopingLinearMovingProvider.archetype())
-                .thenReturn(randomFloat());
 
-        mockPersistentValuesHandler = Mockito.mock(PersistentValuesHandler.class);
+        mockPersistenceHandler = Mockito.mock(PersistenceHandler.class);
 
         //noinspection unchecked,rawtypes
-        when(mockPersistentValuesHandler
+        when(mockPersistenceHandler
                 .getTypeHandler(Float.class.getCanonicalName()))
                 .thenReturn((TypeHandler) MOCK_FLOAT_HANDLER);
 
-        when(mockPersistentValuesHandler
-                .generateArchetype(Integer.class.getCanonicalName()))
-                .thenReturn(INTEGER_ARCHETYPE);
-        when(mockPersistentValuesHandler
-                .generateArchetype(Float.class.getCanonicalName()))
-                .thenReturn(FLOAT_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER);
-
         loopingLinearMovingProviderHandler =
-                new LoopingLinearMovingProviderHandler(mockPersistentValuesHandler, mockFactory);
+                new LoopingLinearMovingProviderHandler(mockPersistenceHandler, mockFactory);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingProviderHandler(null, mockFactory));
         assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderHandler(mockPersistentValuesHandler, null));
+                new LoopingLinearMovingProviderHandler(mockPersistenceHandler, null));
     }
 
     @Test
-    void testWrite() {
+    public void testWrite() {
         var writtenValue =
                 loopingLinearMovingProviderHandler.write(mockLoopingLinearMovingProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
-        var inOrder = inOrder(mockLoopingLinearMovingProvider, mockPersistentValuesHandler,
+        var inOrder = inOrder(mockLoopingLinearMovingProvider, mockPersistenceHandler,
                 MOCK_FLOAT_HANDLER, mockValuesWithinPeriod);
         inOrder.verify(mockLoopingLinearMovingProvider).uuid();
         inOrder.verify(mockLoopingLinearMovingProvider).periodDuration();
         inOrder.verify(mockLoopingLinearMovingProvider).periodModuloOffset();
-        inOrder.verify(mockLoopingLinearMovingProvider).archetype();
-        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
+        inOrder.verify(mockPersistenceHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(mockLoopingLinearMovingProvider).valuesWithinPeriod();
         //noinspection ResultOfMethodCallIgnored
         inOrder.verify(mockValuesWithinPeriod).size();
@@ -148,26 +131,26 @@ class LoopingLinearMovingProviderHandlerTests {
     }
 
     @Test
-    void testWriteWithInvalidParams() {
+    public void testWriteWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 loopingLinearMovingProviderHandler.write(null));
     }
 
     @Test
-    void testRead() {
+    public void testRead() {
         var output = loopingLinearMovingProviderHandler.read(WRITTEN_VALUE);
 
         assertSame(mockLoopingLinearMovingProviderFactoryOutput, output);
-        var inOrder = inOrder(mockPersistentValuesHandler, MOCK_FLOAT_HANDLER, mockFactory);
-        inOrder.verify(mockPersistentValuesHandler).getTypeHandler(Float.class.getCanonicalName());
+        var inOrder = inOrder(mockPersistenceHandler, MOCK_FLOAT_HANDLER, mockFactory);
+        inOrder.verify(mockPersistenceHandler).getTypeHandler(Float.class.getCanonicalName());
         inOrder.verify(MOCK_FLOAT_HANDLER).read(VALUE_1_WRITTEN);
         inOrder.verify(MOCK_FLOAT_HANDLER).read(VALUE_2_WRITTEN);
         inOrder.verify(MOCK_FLOAT_HANDLER).read(VALUE_3_WRITTEN);
         var valuesWithinPeriodCapture = ArgumentCaptor.forClass(Map.class);
         //noinspection unchecked
         inOrder.verify(mockFactory).make(eq(UUID), eq(PERIOD_DURATION), eq(PERIOD_MODULO_OFFSET),
-                valuesWithinPeriodCapture.capture(), eq(PAUSED_TIMESTAMP), eq(MOST_RECENT_TIMESTAMP), eq(
-                        FLOAT_ARCHETYPE_FROM_PERSISTENT_VALUES_HANDLER));
+                valuesWithinPeriodCapture.capture(), eq(PAUSED_TIMESTAMP),
+                eq(MOST_RECENT_TIMESTAMP));
         //noinspection unchecked
         var factoryValuesWithinPeriod = (Map<Integer, Float>) valuesWithinPeriodCapture.getValue();
         assertEquals(3, factoryValuesWithinPeriod.size());
@@ -177,36 +160,10 @@ class LoopingLinearMovingProviderHandlerTests {
     }
 
     @Test
-    void testReadWithInvalidParams() {
+    public void testReadWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 loopingLinearMovingProviderHandler.read(null));
         assertThrows(IllegalArgumentException.class, () ->
                 loopingLinearMovingProviderHandler.read(""));
-    }
-
-    @Test
-    void testGenerateArchetype() {
-        //noinspection unchecked
-        var generatedArchetype =
-                (LoopingLinearMovingProvider<Integer>) loopingLinearMovingProviderHandler
-                        .generateArchetype(Integer.class.getCanonicalName());
-
-        assertNotNull(generatedArchetype);
-        assertNotNull(generatedArchetype.archetype());
-    }
-
-    @Test
-    void testGenerateArchetypeWithInvalidInputs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingProviderHandler.generateArchetype(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingProviderHandler.generateArchetype(""));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(TypeHandler.class.getCanonicalName() + "<" +
-                        LoopingLinearMovingProvider.class.getCanonicalName() + ">",
-                loopingLinearMovingProviderHandler.getInterfaceName());
     }
 }

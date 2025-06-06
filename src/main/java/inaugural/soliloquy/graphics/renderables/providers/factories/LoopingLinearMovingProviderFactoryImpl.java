@@ -1,7 +1,7 @@
 package inaugural.soliloquy.graphics.renderables.providers.factories;
 
+import inaugural.soliloquy.graphics.renderables.providers.ValuesAtTimestampType;
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
 
@@ -11,16 +11,14 @@ import java.util.function.Function;
 
 public class LoopingLinearMovingProviderFactoryImpl implements LoopingLinearMovingProviderFactory {
     /** @noinspection rawtypes */
-    private final Map<String, Function<UUID, Function<Integer, Function<Integer,
-            Function<Map, Function<Long, Function<Long, Function<Object,
-                    LoopingLinearMovingProvider>>>>>>>> FACTORIES;
-
-    private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
+    private final Map<String, Function<UUID, Function<Integer, Function<Integer, Function<Map,
+            Function<Long, Function<Long, LoopingLinearMovingProvider>>>>>>>
+            FACTORIES;
 
     public LoopingLinearMovingProviderFactoryImpl(
-            @SuppressWarnings({"rawtypes", "ConstantConditions"}) Map<String, Function<UUID,
-                    Function<Integer, Function<Integer, Function<Map, Function<Long, Function<Long,
-                            Function<Object, LoopingLinearMovingProvider>>>>>>>> factories) {
+            @SuppressWarnings({"rawtypes", "ConstantConditions"})
+            Map<String, Function<UUID, Function<Integer, Function<Integer, Function<Map,
+                    Function<Long, Function<Long, LoopingLinearMovingProvider>>>>>>> factories) {
         Check.ifNull(factories, "factories");
         factories.forEach((type, factory) -> {
             Check.ifNullOrEmpty(type, "type within factories");
@@ -33,12 +31,12 @@ public class LoopingLinearMovingProviderFactoryImpl implements LoopingLinearMovi
     public <T> LoopingLinearMovingProvider<T> make(UUID uuid, int periodDuration,
                                                    int periodModuloOffset,
                                                    Map<Integer, T> valuesWithinPeriod,
-                                                   Long mostRecentTimestamp, Long pausedTimestamp,
-                                                   T archetype) throws IllegalArgumentException {
-        String type = CAN_GET_INTERFACE_NAME.getProperTypeName(archetype);
+                                                   Long mostRecentTimestamp, Long pausedTimestamp)
+            throws IllegalArgumentException {
+        var type = ValuesAtTimestampType.get(valuesWithinPeriod);
         //noinspection rawtypes
         Function<UUID, Function<Integer, Function<Integer, Function<Map, Function<Long,
-                Function<Long, Function<Object, LoopingLinearMovingProvider>>>>>>> factory =
+                Function<Long, LoopingLinearMovingProvider>>>>>> factory =
                 FACTORIES.get(type);
         //noinspection unchecked
         return (LoopingLinearMovingProvider<T>) factory
@@ -47,12 +45,6 @@ public class LoopingLinearMovingProviderFactoryImpl implements LoopingLinearMovi
                 .apply(periodModuloOffset)
                 .apply(valuesWithinPeriod)
                 .apply(mostRecentTimestamp)
-                .apply(pausedTimestamp)
-                .apply(archetype);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return LoopingLinearMovingProviderFactory.class.getCanonicalName();
+                .apply(pausedTimestamp);
     }
 }

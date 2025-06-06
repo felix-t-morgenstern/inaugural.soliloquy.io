@@ -3,16 +3,16 @@ package inaugural.soliloquy.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Long>
         implements AnimatedMouseCursorProvider {
     private final String ID;
-    private final HashMap<Integer, Long> CURSORS_AT_MS;
+    private final Map<Integer, Long> CURSORS_AT_MS;
     private final NearestFloorAndCeilingTree MS_POSITIONS;
 
     private final static UUID PLACEHOLDER_UUID = new UUID(0, 0);
@@ -21,7 +21,7 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
                                            int periodDuration, int periodModuloOffset,
                                            Long pauseTimestamp, Long mostRecentTimestamp) {
         super(PLACEHOLDER_UUID, periodDuration, periodModuloOffset, pauseTimestamp,
-                mostRecentTimestamp, 0L);
+                mostRecentTimestamp);
         ID = Check.ifNullOrEmpty(id, "id");
         Check.ifNull(cursorsAtMs, "cursorsAtMs");
         if (cursorsAtMs.isEmpty()) {
@@ -36,7 +36,7 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
             Check.ifNull(ms, "ms within cursorsAtMs");
             Check.ifNull(cursor, "cursor within cursorsAtMs");
         });
-        CURSORS_AT_MS = new HashMap<>(cursorsAtMs);
+        CURSORS_AT_MS = mapOf(cursorsAtMs);
         MS_POSITIONS = NearestFloorAndCeilingTree.FromIntegers(cursorsAtMs.keySet());
         Check.throwOnSecondLte(MS_POSITIONS.MaximumValue, periodDuration,
                 "maximum ms within cursorsAtMs", "periodDuration");
@@ -45,11 +45,6 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
     @Override
     protected Long provideValueAtMsWithinPeriod(int msWithinPeriod) {
         return CURSORS_AT_MS.get((int) MS_POSITIONS.getNearestFloor(msWithinPeriod));
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return ProviderAtTime.class.getCanonicalName() + "<" + long.class.getCanonicalName() + ">";
     }
 
     @Override
@@ -65,6 +60,6 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
 
     @Override
     public Object representation() {
-        return new HashMap<>(CURSORS_AT_MS);
+        return mapOf(CURSORS_AT_MS);
     }
 }

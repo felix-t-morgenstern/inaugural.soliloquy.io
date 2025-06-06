@@ -1,7 +1,6 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.floatf;
 
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
 
 /**
  * Test acceptance criteria:

@@ -121,9 +121,4 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     public UUID uuid() {
         return null;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

@@ -64,9 +64,4 @@ public class FakeSprite implements Sprite {
     public int bottomY() {
         return BottomY;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

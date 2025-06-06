@@ -6,9 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -18,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-class RectangleRendererTests {
+public class RectangleRendererTests {
     private final ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -29,16 +30,16 @@ class RectangleRendererTests {
     private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
     private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(new FakeFloatBox(0f, 0f, 1f, 1f));
+            new FakeStaticProvider<>(floatBoxOf(0f, 0f, 1f, 1f));
     private final UUID UUID = java.util.UUID.randomUUID();
     private final long MOST_RECENT_TIMESTAMP = 123123L;
     private final FakeMesh MESH = new FakeMesh();
     private final FakeShader SHADER = new FakeShader();
 
-    private Renderer<RectangleRenderable> _rectangleRenderable;
+    private Renderer<RectangleRenderable> rectangleRenderable;
 
     @BeforeAll
-    static void setUpFixture() {
+    public static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -54,83 +55,76 @@ class RectangleRendererTests {
     }
 
     @BeforeEach
-    void setUp() {
-        _rectangleRenderable = new RectangleRenderer(MOST_RECENT_TIMESTAMP);
+    public void setUp() {
+        rectangleRenderable = new RectangleRenderer(MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(Renderer.class.getCanonicalName() + "<" +
-                        RectangleRenderable.class.getCanonicalName() + ">",
-                _rectangleRenderable.getInterfaceName());
+    public void testSetMeshAndShaderWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.setMesh(null));
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.setShader(null));
     }
 
     @Test
-    void testSetMeshAndShaderWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.setMesh(null));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.setShader(null));
-    }
+    public void testRenderWithInvalidArgs() {
+        rectangleRenderable.setMesh(MESH);
+        rectangleRenderable.setShader(SHADER);
 
-    @Test
-    void testRenderWithInvalidParams() {
-        _rectangleRenderable.setMesh(MESH);
-        _rectangleRenderable.setShader(SHADER);
-
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(null, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, null,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         null, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         null, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, -0.0001f,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         -0.0001f, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, null, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
                         BACKGROUND_TEXTURE_TILE_HEIGHT, new FakeStaticProvider<>(null), UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
@@ -139,11 +133,11 @@ class RectangleRendererTests {
     }
 
     @Test
-    void testRenderWithInvalidTimestamp() {
-        _rectangleRenderable.setMesh(MESH);
-        _rectangleRenderable.setShader(SHADER);
+    public void testRenderWithInvalidTimestamp() {
+        rectangleRenderable.setMesh(MESH);
+        rectangleRenderable.setShader(SHADER);
 
-        assertThrows(IllegalArgumentException.class, () -> _rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
@@ -152,7 +146,7 @@ class RectangleRendererTests {
     }
 
     @Test
-    void testRenderWithoutMeshOrShader() {
+    public void testRenderWithoutMeshOrShader() {
         RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                 BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
@@ -175,7 +169,7 @@ class RectangleRendererTests {
     }
 
     @Test
-    void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) _rectangleRenderable.mostRecentTimestamp());
+    public void testMostRecentTimestamp() {
+        assertEquals(MOST_RECENT_TIMESTAMP, (long) rectangleRenderable.mostRecentTimestamp());
     }
 }

@@ -9,10 +9,12 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FontPreloaderTask implements Runnable {
     private final AssetFactory<FontDefinition, Font> FACTORY;
@@ -28,7 +30,7 @@ public class FontPreloaderTask implements Runnable {
         for (FontDefinitionDTO fontDefinitionDTO : fontDefinitionDTOs) {
             validateFontDefinitionDTO(fontDefinitionDTO);
         }
-        FONT_DEFINITIONS = new ArrayList<>();
+        FONT_DEFINITIONS = listOf();
         fontDefinitionDTOs.forEach(fontDefinitionDTO ->
                 FONT_DEFINITIONS.add(makeFontDefinition(fontDefinitionDTO)));
         PROCESS_RESULT = Check.ifNull(processResult, "processResult");
@@ -108,9 +110,9 @@ public class FontPreloaderTask implements Runnable {
         );
     }
 
-    private HashMap<Character, Float> makeFontStyleDefinitionGlyphProperties(
+    private Map<Character, Float> makeFontStyleDefinitionGlyphProperties(
             FontStyleDefinitionGlyphPropertyDTO[] dtos) {
-        HashMap<Character, Float> glyphProperties = new HashMap<>();
+        Map<Character, Float> glyphProperties = mapOf();
 
         for (FontStyleDefinitionGlyphPropertyDTO dto : dtos) {
             glyphProperties.put(dto.glyph, dto.amount);

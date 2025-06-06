@@ -38,7 +38,6 @@ public class DisplayTest {
     protected final static float[] MESH_DATA =
             new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
     protected final static RenderingBoundaries RENDERING_BOUNDARIES = new RenderingBoundariesImpl();
-    protected final static FakeFloatBoxFactory FLOAT_BOX_FACTORY = new FakeFloatBoxFactory();
     protected final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
     protected final static UUID UUID = java.util.UUID.randomUUID();
@@ -122,7 +121,7 @@ public class DisplayTest {
     }
 
     protected static <T> StaticProvider<T> staticNullProvider(T archetype) {
-        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, archetype, null);
+        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, null);
     }
 
     protected static Sprite generateMockSprite(int leftX, int topY, int rightX, int bottomY) {

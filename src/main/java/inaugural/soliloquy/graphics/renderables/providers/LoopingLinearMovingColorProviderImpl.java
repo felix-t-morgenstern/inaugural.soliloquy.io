@@ -4,10 +4,11 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class LoopingLinearMovingColorProviderImpl
         extends AbstractLoopingLinearMovingProvider<Color>
@@ -20,9 +21,9 @@ public class LoopingLinearMovingColorProviderImpl
                                                 int periodDuration, int periodModuloOffset,
                                                 Long pausedTimestamp, Long mostRecentTimestamp) {
         super(uuid, valuesWithinPeriod, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp, Color.BLACK);
+                mostRecentTimestamp);
 
-        HUE_MOVEMENT_IS_CLOCKWISE = new ArrayList<>();
+        HUE_MOVEMENT_IS_CLOCKWISE = listOf();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");
         if (hueMovementIsClockwise.size() != valuesWithinPeriod.size()) {
             throw new IllegalArgumentException("FiniteLinearMovingColorProviderImpl: " +
@@ -47,16 +48,6 @@ public class LoopingLinearMovingColorProviderImpl
 
     @Override
     public List<Boolean> hueMovementIsClockwise() {
-        return new ArrayList<>(HUE_MOVEMENT_IS_CLOCKWISE);
-    }
-
-    @Override
-    public Color archetype() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return LoopingLinearMovingColorProvider.class.getCanonicalName();
+        return listOf(HUE_MOVEMENT_IS_CLOCKWISE);
     }
 }

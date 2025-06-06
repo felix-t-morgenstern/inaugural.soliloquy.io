@@ -10,19 +10,19 @@ import soliloquy.specs.graphics.rendering.timing.FrameTimer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FrameTimerImplTests {
+public class FrameTimerImplTests {
     private final FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
     private final FakeFrameRateReporter FRAME_RATE_REPORTER = new FakeFrameRateReporter();
 
-    private FrameTimer _frameTimer;
+    private FrameTimer frameTimer;
 
     @BeforeEach
-    void setUp() {
-        _frameTimer = new FrameTimerImpl(GLOBAL_CLOCK, FRAME_RATE_REPORTER);
+    public void setUp() {
+        frameTimer = new FrameTimerImpl(GLOBAL_CLOCK, FRAME_RATE_REPORTER);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new FrameTimerImpl(null, FRAME_RATE_REPORTER));
         assertThrows(IllegalArgumentException.class,
@@ -30,32 +30,32 @@ class FrameTimerImplTests {
     }
 
     @Test
-    void testCannotStartTwice() {
-        new Thread(_frameTimer::start).start();
+    public void testCannotStartTwice() {
+        new Thread(frameTimer::start).start();
         CheckedExceptionWrapper.sleep(50);
 
-        assertThrows(UnsupportedOperationException.class, _frameTimer::start);
+        assertThrows(UnsupportedOperationException.class, frameTimer::start);
 
-        _frameTimer.stop();
+        frameTimer.stop();
     }
 
     @Test
-    void testCannotStopBeforeStarted() {
-        assertThrows(UnsupportedOperationException.class, _frameTimer::stop);
+    public void testCannotStopBeforeStarted() {
+        assertThrows(UnsupportedOperationException.class, frameTimer::stop);
     }
 
     @Test
-    void testCannotBeStoppedTwice() {
-        new Thread(_frameTimer::start).start();
+    public void testCannotBeStoppedTwice() {
+        new Thread(frameTimer::start).start();
         CheckedExceptionWrapper.sleep(50);
-        _frameTimer.stop();
+        frameTimer.stop();
 
-        assertThrows(UnsupportedOperationException.class, _frameTimer::stop);
+        assertThrows(UnsupportedOperationException.class, frameTimer::stop);
     }
 
     @Test
-    void testSetTargetFpsWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _frameTimer.setTargetFps(0f));
+    public void testSetTargetFpsWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> frameTimer.setTargetFps(0f));
     }
 
     // NB: Ignored due to time constraints
@@ -63,10 +63,10 @@ class FrameTimerImplTests {
 //    void testCorrectNumberOfPeriodsElapsed() {
 //        int numberOfPeriodsToElapse = 3;
 //
-//        new Thread(_frameTimer::start).start();
+//        new Thread(frameTimer::start).start();
 //        CheckedExceptionWrapper.sleep(
 //                (MS_PER_SECOND * numberOfPeriodsToElapse) + MS_PER_SECOND / 2);
-//        _frameTimer.stop();
+//        frameTimer.stop();
 //
 //        assertEquals(numberOfPeriodsToElapse, FRAME_RATE_REPORTER.Dates.size());
 //    }
@@ -76,14 +76,14 @@ class FrameTimerImplTests {
 //    void testEquidistantPeriods() {
 //        int numberOfPeriodsToElapse = 3;
 //
-//        new Thread(_frameTimer::start).start();
+//        new Thread(frameTimer::start).start();
 //        CheckedExceptionWrapper.sleep(
 //                (MS_PER_SECOND * numberOfPeriodsToElapse) + MS_PER_SECOND / 2);
-//        _frameTimer.stop();
+//        frameTimer.stop();
 //
 //        assertEquals(numberOfPeriodsToElapse, FRAME_RATE_REPORTER.Dates.size());
 //
-//        for (int i = 1; i < FRAME_RATE_REPORTER.Dates.size(); i++) {
+//        for (var i = 1; i < FRAME_RATE_REPORTER.Dates.size(); i++) {
 //            assertEquals(1000,
 //                    FRAME_RATE_REPORTER.Dates.get(i) - FRAME_RATE_REPORTER.Dates.get(i - 1));
 //        }
@@ -95,11 +95,11 @@ class FrameTimerImplTests {
 //        int numberOfPeriodsToElapse = 3;
 //        float targetFps = 123f;
 //
-//        _frameTimer.setTargetFps(targetFps);
-//        new Thread(_frameTimer::start).start();
+//        frameTimer.setTargetFps(targetFps);
+//        new Thread(frameTimer::start).start();
 //        CheckedExceptionWrapper.sleep(
 //                (MS_PER_SECOND * numberOfPeriodsToElapse) + MS_PER_SECOND / 2);
-//        _frameTimer.stop();
+//        frameTimer.stop();
 //
 //        assertEquals(numberOfPeriodsToElapse, FRAME_RATE_REPORTER.TargetFps.size());
 //
@@ -113,16 +113,16 @@ class FrameTimerImplTests {
 //        int numberOfPeriodsToElapse = 3;
 //        float actualFpsToAchieve = 8f;
 //
-//        new Thread(_frameTimer::start).start();
+//        new Thread(frameTimer::start).start();
 //        CheckedExceptionWrapper.sleep(MS_PER_SECOND / 4);
-//        for (int i = 0; i < numberOfPeriodsToElapse; i++) {
-//            for (int j = 0; j < actualFpsToAchieve; j++) {
-//                _frameTimer.registerFrameExecution();
+//        for (var i = 0; i < numberOfPeriodsToElapse; i++) {
+//            for (var j = 0; j < actualFpsToAchieve; j++) {
+//                frameTimer.registerFrameExecution();
 //            }
 //            CheckedExceptionWrapper.sleep(MS_PER_SECOND);
 //        }
 //        CheckedExceptionWrapper.sleep(MS_PER_SECOND / 4);
-//        _frameTimer.stop();
+//        frameTimer.stop();
 //
 //        assertEquals(numberOfPeriodsToElapse, FRAME_RATE_REPORTER.ActualFps.size());
 //
@@ -131,56 +131,51 @@ class FrameTimerImplTests {
 //    }
 
     @Test
-    void testShouldExecuteNextFrame() {
+    public void testShouldExecuteNextFrame() {
         float targetFps = 7f;
 
-        _frameTimer.setTargetFps(targetFps);
-        new Thread(_frameTimer::start).start();
+        frameTimer.setTargetFps(targetFps);
+        new Thread(frameTimer::start).start();
         CheckedExceptionWrapper.sleep(50);
-        for (int i = 0; i < 20; i++) {
-            if (_frameTimer.shouldExecuteNextFrame()) {
-                _frameTimer.registerFrameExecution();
+        for (var i = 0; i < 20; i++) {
+            if (frameTimer.shouldExecuteNextFrame()) {
+                frameTimer.registerFrameExecution();
             }
             CheckedExceptionWrapper.sleep(50);
         }
-        _frameTimer.stop();
+        frameTimer.stop();
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
-        assertEquals(targetFps, (float) FRAME_RATE_REPORTER.ActualFps.get(0));
+        assertEquals(targetFps, (float) FRAME_RATE_REPORTER.ActualFps.getFirst());
     }
 
     @Test
-    void testNullTargetFps() {
+    public void testNullTargetFps() {
         int numberOfFramesToExecute = 1234;
-        _frameTimer.setTargetFps(null);
-        new Thread(_frameTimer::start).start();
+        frameTimer.setTargetFps(null);
+        new Thread(frameTimer::start).start();
         CheckedExceptionWrapper.sleep(50);
-        for (int i = 0; i < numberOfFramesToExecute; i++) {
-            if (_frameTimer.shouldExecuteNextFrame()) {
-                _frameTimer.registerFrameExecution();
+        for (var i = 0; i < numberOfFramesToExecute; i++) {
+            if (frameTimer.shouldExecuteNextFrame()) {
+                frameTimer.registerFrameExecution();
             }
         }
         CheckedExceptionWrapper.sleep(1050);
-        _frameTimer.stop();
+        frameTimer.stop();
 
         assertEquals(1, FRAME_RATE_REPORTER.ActualFps.size());
-        assertEquals(numberOfFramesToExecute, (float) FRAME_RATE_REPORTER.ActualFps.get(0));
+        assertEquals(numberOfFramesToExecute, (float) FRAME_RATE_REPORTER.ActualFps.getFirst());
     }
 
     @Test
-    void testShouldExecuteNextFrameWhenStopped() {
+    public void testShouldExecuteNextFrameWhenStopped() {
         new Thread(() -> {
-            _frameTimer.start();
+            frameTimer.start();
             CheckedExceptionWrapper.sleep(50);
         }).start();
         CheckedExceptionWrapper.sleep(10);
-        _frameTimer.stop();
+        frameTimer.stop();
 
-        assertFalse(_frameTimer.shouldExecuteNextFrame());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(FrameTimer.class.getCanonicalName(), _frameTimer.getInterfaceName());
+        assertFalse(frameTimer.shouldExecuteNextFrame());
     }
 }

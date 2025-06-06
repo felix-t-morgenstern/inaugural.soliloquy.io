@@ -2,16 +2,16 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProvider<T> {
     public UUID Uuid;
     public Map<Long, T> ValuesAtTimestamps;
     public Long PausedTimestamp;
     public Long MostRecentTimestamp;
-    public T Archetype;
 
     public FakeFiniteLinearMovingProvider() {
 
@@ -19,7 +19,7 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
 
     @Override
     public Map<Long, T> valuesAtTimestampsRepresentation() {
-        return new HashMap<>(ValuesAtTimestamps);
+        return mapOf(ValuesAtTimestamps);
     }
 
     @Override
@@ -30,11 +30,6 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
     @Override
     public Object representation() {
         return null;
-    }
-
-    @Override
-    public T archetype() {
-        return Archetype;
     }
 
     @Override
@@ -60,10 +55,5 @@ public class FakeFiniteLinearMovingProvider<T> implements FiniteLinearMovingProv
     @Override
     public Long mostRecentTimestamp() {
         return MostRecentTimestamp;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

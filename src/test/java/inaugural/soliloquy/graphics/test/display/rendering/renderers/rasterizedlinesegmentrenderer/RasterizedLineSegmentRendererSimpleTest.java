@@ -3,7 +3,6 @@ package inaugural.soliloquy.graphics.test.display.rendering.renderers.rasterized
 import inaugural.soliloquy.graphics.renderables.RasterizedLineSegmentRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -11,6 +10,7 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -40,14 +40,14 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
         RasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 // NB: The coordinates are in this order to ensure that
                 // RasterizedLineSegmentRenderable does not care about order
-                staticProvider(Vertex.of(0.75f, 0.5f)),
-                staticProvider(Vertex.of(0.25f, 0.25f)),
+                staticProvider(vertexOf(0.75f, 0.5f)),
+                staticProvider(vertexOf(0.25f, 0.25f)),
                 staticProvider(6f), (short) 0xAAAA, (short) 16,
                 staticProvider(new Color(18, 201, 159)),
                 1, java.util.UUID.randomUUID(), FirstChildStack);
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
 
-        Renderers.registerRenderer(RasterizedLineSegmentRenderable.getInterfaceName(),
+        Renderers.registerRenderer(RasterizedLineSegmentRenderableImpl.class,
                 RasterizedLineSegmentRenderer);
         FirstChildStack.add(RasterizedLineSegmentRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;

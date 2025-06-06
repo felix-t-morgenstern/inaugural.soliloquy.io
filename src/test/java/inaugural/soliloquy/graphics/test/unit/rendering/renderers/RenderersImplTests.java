@@ -2,11 +2,11 @@ package inaugural.soliloquy.graphics.test.unit.rendering.renderers;
 
 import inaugural.soliloquy.graphics.rendering.renderers.RenderersImpl;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.graphics.renderables.*;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
@@ -14,11 +14,11 @@ import soliloquy.specs.graphics.rendering.renderers.Renderers;
 import soliloquy.specs.graphics.rendering.renderers.StackRenderer;
 
 import static inaugural.soliloquy.tools.random.Random.randomLong;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RenderersImplTests {
     private final Long TIMESTAMP = randomLong();
 
@@ -33,17 +33,15 @@ public class RenderersImplTests {
 
     private Renderers renderers;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        when(mockAntialiasedLineSegmentRenderable.getInterfaceName())
-                .thenReturn(AntialiasedLineSegmentRenderable.class.getCanonicalName());
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(TIMESTAMP);
+        lenient().when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(TIMESTAMP);
 
         renderers = new RenderersImpl(mockTimestampValidator);
     }
 
     @Test
-    public void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new RenderersImpl(null));
     }
 
@@ -62,18 +60,16 @@ public class RenderersImplTests {
     }
 
     @Test
-    public void testRegisterStackRendererWithInvalidParams() {
+    public void testRegisterStackRendererWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> renderers.registerStackRenderer(null));
     }
 
     @Test
     public void testRegisterRendererAndRender() {
-        renderers.registerRenderer(AntialiasedLineSegmentRenderable.class.getCanonicalName(),
+        renderers.registerRenderer(mockAntialiasedLineSegmentRenderable.getClass(),
                 mockAntialiasedLineSegmentRenderer);
-        renderers.registerRenderer(ImageAssetSetRenderable.class.getCanonicalName(),
-                mockImageAssetSetRenderer);
-        renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(),
-                mockTextLineRenderer);
+        renderers.registerRenderer(ImageAssetSetRenderable.class, mockImageAssetSetRenderer);
+        renderers.registerRenderer(TextLineRenderable.class, mockTextLineRenderer);
 
         renderers.render(mockAntialiasedLineSegmentRenderable, TIMESTAMP);
 
@@ -91,7 +87,7 @@ public class RenderersImplTests {
     }
 
     @Test
-    public void testRenderWithInvalidParams() {
+    public void testRenderWithInvalidArgs() {
 
     }
 
@@ -110,10 +106,5 @@ public class RenderersImplTests {
 
         assertEquals(TIMESTAMP, mostRecentTimestamp);
         verify(mockTimestampValidator).mostRecentTimestamp();
-    }
-
-    @Test
-    public void testGetInterfaceName() {
-        assertEquals(Renderer.class.getCanonicalName(), renderers.getInterfaceName());
     }
 }

@@ -8,8 +8,10 @@ import org.mockito.Mock;
 import soliloquy.specs.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
 
-import java.util.ArrayList;
 
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,77 +19,76 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MouseCursorImagePreloaderTaskTests {
+public class MouseCursorImagePreloaderTaskTests {
     private final String MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION = randomString();
     private final int HOTSPOT_X = randomInt();
     private final int HOTSPOT_Y = randomInt();
     private final long FACTORY_OUTPUT = randomLong();
 
     @Mock
-    private MouseCursorImageFactory _mockMouseCursorImageFactory;
-    private MouseCursorImageDefinition _mockMouseCursorImageFactoryInput;
+    private MouseCursorImageFactory mockMouseCursorImageFactory;
+    private MouseCursorImageDefinition mockMouseCursorImageFactoryInput;
 
-    private ArrayList<MouseCursorImageDefinitionDTO> _mouseCursorImageDefinitionDTOs;
-    private ArrayList<MouseCursorImageFactory.Output> _mouseCursorImages;
+    private List<MouseCursorImageDefinitionDTO> mouseCursorImageDefinitionDTOs;
+    private List<MouseCursorImageFactory.Output> mouseCursorImages;
 
     @BeforeEach
-    void setUp() {
-        _mouseCursorImageDefinitionDTOs = new ArrayList<MouseCursorImageDefinitionDTO>() {{
-            add(new MouseCursorImageDefinitionDTO(
+    public void setUp() {
+        mouseCursorImageDefinitionDTOs = listOf(
+            new MouseCursorImageDefinitionDTO(
                     MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION,
                     HOTSPOT_X,
-                    HOTSPOT_Y
-            ));
-        }};
+                    HOTSPOT_Y)
+        );
 
-        _mockMouseCursorImageFactory = mock(MouseCursorImageFactory.class);
-        when(_mockMouseCursorImageFactory.make(any()))
+        mockMouseCursorImageFactory = mock(MouseCursorImageFactory.class);
+        when(mockMouseCursorImageFactory.make(any()))
                 .thenAnswer(invocation -> {
                     MouseCursorImageDefinition definition = invocation.getArgument(0);
-                    _mockMouseCursorImageFactoryInput = definition;
+                    mockMouseCursorImageFactoryInput = definition;
                     return new MouseCursorImageFactory.Output(definition.relativeLocation(),
                             FACTORY_OUTPUT);
                 });
 
-        _mouseCursorImages = new ArrayList<>();
+        mouseCursorImages = listOf();
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
                 null,
-                _mockMouseCursorImageFactory,
-                _mouseCursorImages::add
+                mockMouseCursorImageFactory,
+                mouseCursorImages::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
-                _mouseCursorImageDefinitionDTOs,
+                mouseCursorImageDefinitionDTOs,
                 null,
-                _mouseCursorImages::add
+                mouseCursorImages::add
         ));
         assertThrows(IllegalArgumentException.class, () -> new MouseCursorImagePreloaderTask(
-                _mouseCursorImageDefinitionDTOs,
-                _mockMouseCursorImageFactory,
+                mouseCursorImageDefinitionDTOs,
+                mockMouseCursorImageFactory,
                 null
         ));
     }
 
     @Test
-    void testRun() {
+    public void testRun() {
         new MouseCursorImagePreloaderTask(
-                _mouseCursorImageDefinitionDTOs,
-                _mockMouseCursorImageFactory,
-                _mouseCursorImages::add)
+                mouseCursorImageDefinitionDTOs,
+                mockMouseCursorImageFactory,
+                mouseCursorImages::add)
                 .run();
 
-        assertEquals(1, _mouseCursorImages.size());
+        assertEquals(1, mouseCursorImages.size());
         assertEquals(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION,
-                _mouseCursorImages.get(0).relativeLocation());
-        assertEquals(FACTORY_OUTPUT, _mouseCursorImages.get(0).id());
-        assertEquals(_mouseCursorImageDefinitionDTOs.get(0).RelativeLocation,
-                _mockMouseCursorImageFactoryInput.relativeLocation());
-        assertEquals(_mouseCursorImageDefinitionDTOs.get(0).HotspotX,
-                _mockMouseCursorImageFactoryInput.hotspotX());
-        assertEquals(_mouseCursorImageDefinitionDTOs.get(0).HotspotY,
-                _mockMouseCursorImageFactoryInput.hotspotY());
+                mouseCursorImages.getFirst().relativeLocation());
+        assertEquals(FACTORY_OUTPUT, mouseCursorImages.getFirst().id());
+        assertEquals(mouseCursorImageDefinitionDTOs.getFirst().RelativeLocation,
+                mockMouseCursorImageFactoryInput.relativeLocation());
+        assertEquals(mouseCursorImageDefinitionDTOs.getFirst().HotspotX,
+                mockMouseCursorImageFactoryInput.hotspotX());
+        assertEquals(mouseCursorImageDefinitionDTOs.getFirst().HotspotY,
+                mockMouseCursorImageFactoryInput.hotspotY());
     }
 }

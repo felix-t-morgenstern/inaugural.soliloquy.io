@@ -1,30 +1,31 @@
 package inaugural.soliloquy.graphics.renderables.providers;
 
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.rendering.FloatBox;
-import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 
 import java.awt.*;
+
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 class Interpolate {
     protected static float floats(float value1, float weight1, float value2, float weight2) {
         return (value1 * weight1) + (value2 * weight2);
     }
 
-    protected static FloatBox floatBoxes(FloatBox value1, float weight1, FloatBox value2,
-                                         float weight2,
-                                         FloatBoxFactory floatBoxFactory) {
-        float value1WeightedLeftX = value1.leftX() * weight1;
-        float value1WeightedTopY = value1.topY() * weight1;
-        float value1WeightedRightX = value1.rightX() * weight1;
-        float value1WeightedBottomY = value1.bottomY() * weight1;
+    protected static FloatBox floatBoxes(FloatBox value1, float weight1,
+                                         FloatBox value2, float weight2) {
+        float value1WeightedLeftX = value1.LEFT_X * weight1;
+        float value1WeightedTopY = value1.TOP_Y * weight1;
+        float value1WeightedRightX = value1.RIGHT_X * weight1;
+        float value1WeightedBottomY = value1.BOTTOM_Y * weight1;
 
-        float value2WeightedLeftX = value2.leftX() * weight2;
-        float value2WeightedTopY = value2.topY() * weight2;
-        float value2WeightedRightX = value2.rightX() * weight2;
-        float value2WeightedBottomY = value2.bottomY() * weight2;
+        float value2WeightedLeftX = value2.LEFT_X * weight2;
+        float value2WeightedTopY = value2.TOP_Y * weight2;
+        float value2WeightedRightX = value2.RIGHT_X * weight2;
+        float value2WeightedBottomY = value2.BOTTOM_Y * weight2;
 
-        return floatBoxFactory.make(
+        return floatBoxOf(
                 value1WeightedLeftX + value2WeightedLeftX,
                 value1WeightedTopY + value2WeightedTopY,
                 value1WeightedRightX + value2WeightedRightX,
@@ -33,7 +34,7 @@ class Interpolate {
     }
 
     protected static Vertex vertices(Vertex value1, float weight1, Vertex value2, float weight2) {
-        return Vertex.of(
+        return vertexOf(
                 Interpolate.floats(value1.X, weight1, value2.X, weight2),
                 Interpolate.floats(value1.Y, weight1, value2.Y, weight2)
         );

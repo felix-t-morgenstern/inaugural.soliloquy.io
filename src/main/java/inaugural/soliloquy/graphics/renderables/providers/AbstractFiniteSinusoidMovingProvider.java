@@ -3,9 +3,10 @@ package inaugural.soliloquy.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 abstract class AbstractFiniteSinusoidMovingProvider<T>
         extends AbstractFiniteLinearMovingProvider<T>
@@ -16,9 +17,8 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
                                                    Map<Long, T> valuesAtTimes,
                                                    List<Float> transitionSharpnesses,
                                                    Long pausedTimestamp,
-                                                   Long mostRecentTimestamp,
-                                                   T archetype) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp, archetype);
+                                                   Long mostRecentTimestamp) {
+        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
         Check.ifNull(transitionSharpnesses, "transitionSharpnesses");
         if (transitionSharpnesses.size() != valuesAtTimes.size() - 1) {
             throw new IllegalArgumentException(
@@ -58,14 +58,8 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
 
     @Override
     public List<Float> transitionSharpnesses() {
-        return new ArrayList<>(TRANSITION_SHARPNESSES);
+        return listOf(TRANSITION_SHARPNESSES);
     }
 
     protected abstract String className();
-
-    @Override
-    public String getInterfaceName() {
-        return FiniteSinusoidMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
-    }
 }

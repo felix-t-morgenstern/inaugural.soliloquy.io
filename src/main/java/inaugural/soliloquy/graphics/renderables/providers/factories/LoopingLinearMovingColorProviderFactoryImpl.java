@@ -22,9 +22,4 @@ public class LoopingLinearMovingColorProviderFactoryImpl
                 hueMovementIsClockwise, periodDuration, periodModuloOffset, pausedTimestamp,
                 mostRecentTimestamp);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return LoopingLinearMovingColorProviderFactory.class.getCanonicalName();
-    }
 }

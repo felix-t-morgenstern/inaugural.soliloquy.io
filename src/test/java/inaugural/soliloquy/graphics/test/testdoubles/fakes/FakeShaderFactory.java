@@ -10,9 +10,4 @@ public class FakeShaderFactory implements ShaderFactory {
     public Shader make(String s) throws IllegalArgumentException {
         return MostRecentlyCreated = new FakeShader();
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

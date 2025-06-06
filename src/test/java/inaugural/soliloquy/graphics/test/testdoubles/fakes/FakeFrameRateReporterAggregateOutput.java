@@ -2,14 +2,16 @@ package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FakeFrameRateReporterAggregateOutput implements FrameRateReporterAggregateOutput {
     public String Id;
-    public ArrayList<Date> OutputtedAggregateDates = new ArrayList<>();
-    public ArrayList<Float> OutputtedAggregateTargetFps = new ArrayList<>();
-    public ArrayList<Float> OutputtedAggregateActualFps = new ArrayList<>();
+    public List<Date> OutputtedAggregateDates = listOf();
+    public List<Float> OutputtedAggregateTargetFps = listOf();
+    public List<Float> OutputtedAggregateActualFps = listOf();
 
     public FakeFrameRateReporterAggregateOutput(String id) {
         Id = id;
@@ -25,10 +27,5 @@ public class FakeFrameRateReporterAggregateOutput implements FrameRateReporterAg
     @Override
     public String id() throws IllegalStateException {
         return Id;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

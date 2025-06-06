@@ -5,34 +5,43 @@ import inaugural.soliloquy.graphics.api.dto.AnimationFrameDefinitionDTO;
 import inaugural.soliloquy.graphics.bootstrap.tasks.AnimationPreloaderTask;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFactory;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImage;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-class AnimationPreloaderTaskTests {
-    private final java.util.Map<String, Image> IMAGES = new HashMap<>();
+@ExtendWith(MockitoExtension.class)
+public class AnimationPreloaderTaskTests {
+    private final java.util.Map<String, Image> IMAGES = mapOf();
     private final FakeAnimationFactory FACTORY = new FakeAnimationFactory();
-    private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS = new ArrayList<>();
-    private final FakeRegistry<Animation> REGISTRY = new FakeRegistry<>();
+    private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS = listOf();
 
-    private AnimationPreloaderTask _animationPreloaderTask;
+    @Mock private Consumer<Animation> animations;
+
+    private AnimationPreloaderTask animationPreloaderTask;
 
     @BeforeEach
-    void setUp() {
-        String relativeLocation1 = "relativeLocation1";
-        String relativeLocation2 = "relativeLocation2";
-        String relativeLocation3 = "relativeLocation3";
-        String relativeLocation4 = "relativeLocation4";
+    public void setUp() {
+        var relativeLocation1 = "relativeLocation1";
+        var relativeLocation2 = "relativeLocation2";
+        var relativeLocation3 = "relativeLocation3";
+        var relativeLocation4 = "relativeLocation4";
 
         IMAGES.put(relativeLocation1, new FakeImage(relativeLocation1));
         IMAGES.put(relativeLocation2, new FakeImage(relativeLocation2));
@@ -64,26 +73,26 @@ class AnimationPreloaderTaskTests {
         ANIMATION_DEFINITION_DTOS.add(animation1DTO);
         ANIMATION_DEFINITION_DTOS.add(animation2DTO);
 
-        _animationPreloaderTask = new AnimationPreloaderTask(IMAGES::get,
-                ANIMATION_DEFINITION_DTOS, FACTORY, REGISTRY::add);
+        animationPreloaderTask = new AnimationPreloaderTask(IMAGES::get,
+                ANIMATION_DEFINITION_DTOS, FACTORY, animations);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(null, ANIMATION_DEFINITION_DTOS, FACTORY,
-                        REGISTRY::add));
+                        animations));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get, ANIMATION_DEFINITION_DTOS, null,
-                        REGISTRY::add));
+                        animations));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get, null, FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
-                new AnimationPreloaderTask(IMAGES::get, new ArrayList<>(), FACTORY,
-                        REGISTRY::add));
+                new AnimationPreloaderTask(IMAGES::get, listOf(), FACTORY,
+                        animations));
 
         String animationId = "animationId";
         String relativeLocation1 = "relativeLocation1";
@@ -97,98 +106,81 @@ class AnimationPreloaderTaskTests {
 
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(null);
-                        }},
+                        listOf((AnimationDefinitionDTO) null),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(null, 123,
-                                    new AnimationFrameDefinitionDTO[]{
-                                            animation1Frame1
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO(null, 123,
+                                new AnimationFrameDefinitionDTO[]{
+                                        animation1Frame1
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO("", 123,
-                                    new AnimationFrameDefinitionDTO[]{
-                                            animation1Frame1
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO("", 123,
+                                new AnimationFrameDefinitionDTO[]{
+                                        animation1Frame1
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(animationId, 0,
-                                    new AnimationFrameDefinitionDTO[]{
-                                            animation1Frame1
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO(animationId, 0,
+                                new AnimationFrameDefinitionDTO[]{
+                                        animation1Frame1
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(animationId, animation1Frame2.ms - 1,
-                                    new AnimationFrameDefinitionDTO[]{
-                                            animation1Frame1,
-                                            animation1Frame2
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO(animationId, animation1Frame2.ms - 1,
+                                new AnimationFrameDefinitionDTO[]{
+                                        animation1Frame1,
+                                        animation1Frame2
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(animationId, 123,
-                                    null));
-                        }},
+                        listOf(new AnimationDefinitionDTO(animationId, 123,
+                                null)),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(animationId, 123,
-                                    new AnimationFrameDefinitionDTO[]{
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO(animationId, 123,
+                                new AnimationFrameDefinitionDTO[]{
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get,
-                        new ArrayList<AnimationDefinitionDTO>() {{
-                            add(new AnimationDefinitionDTO(animationId, 123,
-                                    new AnimationFrameDefinitionDTO[]{
-                                            new AnimationFrameDefinitionDTO(
-                                                    relativeLocation1, 1,
-                                                    11, 22, 33, 44, 0.1f, 0.2f)
-                                    }));
-                        }},
+                        listOf(new AnimationDefinitionDTO(animationId, 123,
+                                new AnimationFrameDefinitionDTO[]{
+                                        new AnimationFrameDefinitionDTO(
+                                                relativeLocation1, 1,
+                                                11, 22, 33, 44, 0.1f, 0.2f)
+                                })),
                         FACTORY,
-                        REGISTRY::add));
+                        animations));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimationPreloaderTask(IMAGES::get, ANIMATION_DEFINITION_DTOS, FACTORY, null));
     }
 
     @Test
-    void testRun() {
-        _animationPreloaderTask.run();
+    public void testRun() {
+        animationPreloaderTask.run();
 
-        assertEquals(ANIMATION_DEFINITION_DTOS.size(), REGISTRY.size());
+        verify(animations, times(ANIMATION_DEFINITION_DTOS.size())).accept(any());
         ANIMATION_DEFINITION_DTOS.forEach(dto -> {
-            AnimationDefinition createdDefinition = FACTORY.INPUTS.get(dto.id);
+            var createdDefinition = FACTORY.INPUTS.get(dto.id);
             assertNotNull(createdDefinition);
             assertEquals(dto.frames.length, createdDefinition.frameSnippetDefinitions().size());
             ANIMATION_DEFINITION_DTOS.forEach(animationDefinitionDTO -> {
-                AnimationDefinition inputDefinition =
-                        FACTORY.INPUTS.get(animationDefinitionDTO.id);
+                var inputDefinition = FACTORY.INPUTS.get(animationDefinitionDTO.id);
                 assertNotNull(inputDefinition);
                 assertEquals(animationDefinitionDTO.msDur, inputDefinition.msDuration());
                 assertEquals(animationDefinitionDTO.frames.length,
@@ -208,8 +200,8 @@ class AnimationPreloaderTaskTests {
                 }
             });
 
-            Animation animation = REGISTRY.get(createdDefinition.id());
-            assertTrue(FACTORY.OUTPUTS.contains(animation));
+            FACTORY.OUTPUTS.forEach(
+                    factoryOutput -> verify(animations, once()).accept(factoryOutput));
         });
     }
 }

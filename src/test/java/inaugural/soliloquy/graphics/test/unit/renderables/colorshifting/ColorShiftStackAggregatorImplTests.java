@@ -6,125 +6,71 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorComponentInt
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorRotationShift;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorComponent;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
-import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
+import soliloquy.specs.graphics.renderables.colorshifting.*;
 
-import java.util.ArrayList;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ColorShiftStackAggregatorImplTests {
-    private ColorShiftStackAggregator _colorShiftStackAggregator;
+public class ColorShiftStackAggregatorImplTests {
+    private ColorShiftStackAggregator colorShiftStackAggregator;
 
     @BeforeEach
-    void setUp() {
-        _colorShiftStackAggregator = new ColorShiftStackAggregatorImpl();
+    public void setUp() {
+        colorShiftStackAggregator = new ColorShiftStackAggregatorImpl();
     }
 
     @Test
-    void testAggregateWithInvalidParams() {
-        float belowNegativeOne = -1.00001f;
-        float aboveOne = 1.00001f;
+    public void testAggregateWithInvalidArgs() {
+        var belowNegativeOne = -1.00001f;
+        var aboveOne = 1.00001f;
 
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                null, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(null);
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeBrightnessShift(null, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeBrightnessShift(belowNegativeOne, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeBrightnessShift(aboveOne, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorComponentIntensityShift(null, 0f, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorComponentIntensityShift(ColorComponent.RED, null, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorComponentIntensityShift(ColorComponent.RED, belowNegativeOne,
-                            true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorComponentIntensityShift(ColorComponent.RED, aboveOne, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorRotationShift(null, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorRotationShift(belowNegativeOne, true));
-                }}, 0L
-        ));
-        assertThrows(IllegalArgumentException.class, () -> _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(new FakeColorRotationShift(aboveOne, true));
-                }}, 0L
-        ));
+        assertThrows(IllegalArgumentException.class,
+                () -> colorShiftStackAggregator.aggregate(null, 0L));
+        assertThrows(IllegalArgumentException.class,
+                () -> colorShiftStackAggregator.aggregate(listOf((BrightnessShift) null), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeBrightnessShift(null, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeBrightnessShift(belowNegativeOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeBrightnessShift(aboveOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorComponentIntensityShift(null, 0f, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, null, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, belowNegativeOne,
+                        true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, aboveOne, true)),
+                0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorRotationShift(null, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorRotationShift(belowNegativeOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
+                listOf(new FakeColorRotationShift(aboveOne, true)), 0L));
     }
 
     @Test
-    void testAggregateSingleColorShift() {
-        FakeBrightnessShift brightnessShift = new FakeBrightnessShift(0.123f, false);
-        FakeColorComponentIntensityShift redShift =
-                new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        FakeColorComponentIntensityShift greenShift =
-                new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
-        FakeColorComponentIntensityShift blueShift =
-                new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        FakeColorRotationShift colorRotationShift = new FakeColorRotationShift(0.789f, false);
+    public void testAggregateSingleColorShift() {
+        var brightnessShift = new FakeBrightnessShift(0.123f, false);
+        var redShift = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
+        var greenShift = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
+        var blueShift = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
+        var colorRotationShift = new FakeColorRotationShift(0.789f, false);
 
-        NetColorShifts brightnessShiftNetColorShifts = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(brightnessShift);
-                }}, 0L);
-        NetColorShifts redIntensityShift = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(redShift);
-                }}, 0L);
-        NetColorShifts greenIntensityShift = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(greenShift);
-                }}, 0L);
-        NetColorShifts blueIntensityShift = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(blueShift);
-                }}, 0L);
-        NetColorShifts colorRotationShiftNetColorShifts = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(colorRotationShift);
-                }}, 0L);
+        var brightnessShiftNetColorShifts =
+                colorShiftStackAggregator.aggregate(listOf(brightnessShift), 0L);
+        var redIntensityShift = colorShiftStackAggregator.aggregate(listOf(redShift), 0L);
+        var greenIntensityShift = colorShiftStackAggregator.aggregate(listOf(greenShift), 0L);
+        var blueIntensityShift = colorShiftStackAggregator.aggregate(listOf(blueShift), 0L);
+        var colorRotationShiftNetColorShifts =
+                colorShiftStackAggregator.aggregate(listOf(colorRotationShift), 0L);
 
         assertNotNull(brightnessShiftNetColorShifts);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                brightnessShiftNetColorShifts.getInterfaceName());
         assertEquals(0.123f, brightnessShiftNetColorShifts.brightnessShift());
         assertEquals(0f, brightnessShiftNetColorShifts.redIntensityShift());
         assertEquals(0f, brightnessShiftNetColorShifts.greenIntensityShift());
@@ -132,8 +78,6 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0f, brightnessShiftNetColorShifts.colorRotationShift());
 
         assertNotNull(redIntensityShift);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                redIntensityShift.getInterfaceName());
         assertEquals(0f, redIntensityShift.brightnessShift());
         assertEquals(0.444f, redIntensityShift.redIntensityShift());
         assertEquals(0f, redIntensityShift.greenIntensityShift());
@@ -141,8 +85,6 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0f, redIntensityShift.colorRotationShift());
 
         assertNotNull(greenIntensityShift);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                greenIntensityShift.getInterfaceName());
         assertEquals(0f, greenIntensityShift.brightnessShift());
         assertEquals(0f, greenIntensityShift.redIntensityShift());
         assertEquals(0.555f, greenIntensityShift.greenIntensityShift());
@@ -150,8 +92,6 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0f, greenIntensityShift.colorRotationShift());
 
         assertNotNull(blueIntensityShift);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                blueIntensityShift.getInterfaceName());
         assertEquals(0f, blueIntensityShift.brightnessShift());
         assertEquals(0f, blueIntensityShift.redIntensityShift());
         assertEquals(0f, blueIntensityShift.greenIntensityShift());
@@ -159,8 +99,6 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0f, blueIntensityShift.colorRotationShift());
 
         assertNotNull(colorRotationShiftNetColorShifts);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                colorRotationShiftNetColorShifts.getInterfaceName());
         assertEquals(0f, colorRotationShiftNetColorShifts.brightnessShift());
         assertEquals(0f, colorRotationShiftNetColorShifts.redIntensityShift());
         assertEquals(0f, colorRotationShiftNetColorShifts.greenIntensityShift());
@@ -168,45 +106,35 @@ class ColorShiftStackAggregatorImplTests {
         assertEquals(0.789f, colorRotationShiftNetColorShifts.colorRotationShift());
     }
 
-    /** @noinspection RedundantCast */
     @Test
-    void testAggregateMultipleValuesOfEachType() {
-        FakeBrightnessShift brightnessShift1 = new FakeBrightnessShift(0.123f, false);
-        FakeBrightnessShift brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
-        FakeColorComponentIntensityShift redShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, false);
-        FakeColorComponentIntensityShift redShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        FakeColorComponentIntensityShift greenShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
-        FakeColorComponentIntensityShift greenShift2 =
+    public void testAggregateMultipleValuesOfEachType() {
+        var brightnessShift1 = new FakeBrightnessShift(0.123f, false);
+        var brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
+        var redShift1 = new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, false);
+        var redShift2 = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
+        var greenShift1 = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
+        var greenShift2 =
                 new FakeColorComponentIntensityShift(ColorComponent.GREEN, -0.555f, false);
-        FakeColorComponentIntensityShift blueShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, false);
-        FakeColorComponentIntensityShift blueShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        FakeColorRotationShift colorRotationShift1 = new FakeColorRotationShift(0.789f, false);
-        FakeColorRotationShift colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
+        var blueShift1 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, false);
+        var blueShift2 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
+        var colorRotationShift1 = new FakeColorRotationShift(0.789f, false);
+        var colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
 
-        NetColorShifts netColorShifts = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(brightnessShift1);
-                    add(brightnessShift2);
-                    add(redShift1);
-                    add(redShift2);
-                    add(greenShift1);
-                    add(greenShift2);
-                    add(blueShift1);
-                    add(blueShift2);
-                    add(colorRotationShift1);
-                    add(colorRotationShift2);
-                }}, 0L);
+        var netColorShifts =
+                colorShiftStackAggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
+                        redShift1,
+                        redShift2,
+                        greenShift1,
+                        greenShift2,
+                        blueShift1,
+                        blueShift2,
+                        colorRotationShift1,
+                        colorRotationShift2
+                ), 0L);
 
         Function<Float, Float> getExpectedValue = value -> value - ((1f + value) * value);
 
         assertNotNull(netColorShifts);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                netColorShifts.getInterfaceName());
         assertEquals((float) getExpectedValue.apply(0.123f), netColorShifts.brightnessShift());
         assertEquals(-(float) getExpectedValue.apply(0.444f), netColorShifts.redIntensityShift());
         assertEquals((float) getExpectedValue.apply(0.555f), netColorShifts.greenIntensityShift());
@@ -215,51 +143,36 @@ class ColorShiftStackAggregatorImplTests {
     }
 
     @Test
-    void testAggregateWithOverridesPriorShiftsOfSameType() {
-        FakeBrightnessShift brightnessShift1 = new FakeBrightnessShift(0.123f, true);
-        FakeBrightnessShift brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
-        FakeColorComponentIntensityShift redShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, true);
-        FakeColorComponentIntensityShift redShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        FakeColorComponentIntensityShift greenShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, true);
-        FakeColorComponentIntensityShift greenShift2 =
+    public void testAggregateWithOverridesPriorShiftsOfSameType() {
+        var brightnessShift1 = new FakeBrightnessShift(0.123f, true);
+        var brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
+        var redShift1 = new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, true);
+        var redShift2 = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
+        var greenShift1 = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, true);
+        var greenShift2 =
                 new FakeColorComponentIntensityShift(ColorComponent.GREEN, -0.555f, false);
-        FakeColorComponentIntensityShift blueShift1 =
-                new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, true);
-        FakeColorComponentIntensityShift blueShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        FakeColorRotationShift colorRotationShift1 = new FakeColorRotationShift(0.789f, true);
-        FakeColorRotationShift colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
+        var blueShift1 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, true);
+        var blueShift2 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
+        var colorRotationShift1 = new FakeColorRotationShift(0.789f, true);
+        var colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
 
-        NetColorShifts netColorShifts = _colorShiftStackAggregator.aggregate(
-                new ArrayList<ColorShift>() {{
-                    add(brightnessShift1);
-                    add(brightnessShift2);
-                    add(redShift1);
-                    add(redShift2);
-                    add(greenShift1);
-                    add(greenShift2);
-                    add(blueShift1);
-                    add(blueShift2);
-                    add(colorRotationShift1);
-                    add(colorRotationShift2);
-                }}, 0L);
+        var netColorShifts =
+                colorShiftStackAggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
+                        redShift1,
+                        redShift2,
+                        greenShift1,
+                        greenShift2,
+                        blueShift1,
+                        blueShift2,
+                        colorRotationShift1,
+                        colorRotationShift2
+                ), 0L);
 
         assertNotNull(netColorShifts);
-        assertEquals(NetColorShifts.class.getCanonicalName(),
-                netColorShifts.getInterfaceName());
         assertEquals(0.123f, netColorShifts.brightnessShift());
         assertEquals(-0.444f, netColorShifts.redIntensityShift());
         assertEquals(0.555f, netColorShifts.greenIntensityShift());
         assertEquals(-0.666f, netColorShifts.blueIntensityShift());
         assertEquals(0.789f, netColorShifts.colorRotationShift());
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(ColorShiftStackAggregator.class.getCanonicalName(),
-                _colorShiftStackAggregator.getInterfaceName());
     }
 }

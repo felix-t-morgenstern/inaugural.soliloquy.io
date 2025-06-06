@@ -12,13 +12,13 @@ public class FrameTimerImpl implements FrameTimer {
     private final GlobalClock GLOBAL_CLOCK;
     private final FrameRateReporter FRAME_RATE_REPORTER;
 
-    private boolean _started;
-    private boolean _stopped;
-    private Float _targetFps;
+    private boolean started;
+    private boolean stopped;
+    private Float targetFps;
 
-    private Long _currentPeriodStartTimestamp;
-    private Long _currentPeriodEndTimestamp;
-    private int _framesExecutedInCurrentPeriod;
+    private Long currentPeriodStartTimestamp;
+    private Long currentPeriodEndTimestamp;
+    private int framesExecutedInCurrentPeriod;
 
     public FrameTimerImpl(GlobalClock globalClock, FrameRateReporter frameRateReporter) {
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
@@ -28,67 +28,67 @@ public class FrameTimerImpl implements FrameTimer {
     @Override
     public void setTargetFps(Float targetFps) throws IllegalArgumentException {
         if (targetFps == null) {
-            _targetFps = null;
+            this.targetFps = null;
         }
         else {
-            _targetFps = Check.throwOnLteZero(targetFps, "targetFps");
+            this.targetFps = Check.throwOnLteZero(targetFps, "targetFps");
         }
     }
 
     @Override
     public void start() throws UnsupportedOperationException {
-        if (_started) {
+        if (started) {
             throw new UnsupportedOperationException("FrameTimerImpl: cannot be started twice");
         }
         new Thread(this::startNewPeriodLoopIteration).start();
-        _started = true;
+        started = true;
 
-        while (!_stopped) {
+        while (!stopped) {
             CheckedExceptionWrapper.sleep(MS_PER_SECOND / 2);
         }
     }
 
     @Override
     public void stop() throws UnsupportedOperationException {
-        if (!_started) {
+        if (!started) {
             throw new UnsupportedOperationException(
                     "FrameTimerImpl: cannot be stopped before started");
         }
-        if (_stopped) {
+        if (stopped) {
             throw new UnsupportedOperationException(
                     "FrameTimerImpl: can only be stopped while running");
         }
-        _stopped = true;
+        stopped = true;
     }
 
     @Override
     public void registerFrameExecution() throws UnsupportedOperationException {
         synchronized (this) {
-            _framesExecutedInCurrentPeriod++;
+            framesExecutedInCurrentPeriod++;
         }
     }
 
     private void startNewPeriodLoopIteration() {
-        if (_stopped) {
+        if (stopped) {
             return;
         }
 
-        if (_currentPeriodStartTimestamp != null) {
+        if (currentPeriodStartTimestamp != null) {
             synchronized (this) {
-                reportFrameInformation(_currentPeriodStartTimestamp, _targetFps,
-                        _framesExecutedInCurrentPeriod);
-                _framesExecutedInCurrentPeriod = 0;
+                reportFrameInformation(currentPeriodStartTimestamp, targetFps,
+                        framesExecutedInCurrentPeriod);
+                framesExecutedInCurrentPeriod = 0;
             }
-            _currentPeriodStartTimestamp = _currentPeriodEndTimestamp;
+            currentPeriodStartTimestamp = currentPeriodEndTimestamp;
         }
         else {
-            _currentPeriodStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
+            currentPeriodStartTimestamp = GLOBAL_CLOCK.globalTimestamp();
         }
-        _currentPeriodEndTimestamp = _currentPeriodStartTimestamp + MS_PER_SECOND;
+        currentPeriodEndTimestamp = currentPeriodStartTimestamp + MS_PER_SECOND;
 
         long currentTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
-        CheckedExceptionWrapper.sleep(_currentPeriodEndTimestamp - currentTimestamp);
+        CheckedExceptionWrapper.sleep(currentPeriodEndTimestamp - currentTimestamp);
 
         startNewPeriodLoopIteration();
     }
@@ -99,10 +99,10 @@ public class FrameTimerImpl implements FrameTimer {
 
     @Override
     public boolean shouldExecuteNextFrame() throws UnsupportedOperationException {
-        if (_stopped) {
+        if (stopped) {
             return false;
         }
-        if (_targetFps == null) {
+        if (targetFps == null) {
             return true;
         }
 
@@ -111,9 +111,9 @@ public class FrameTimerImpl implements FrameTimer {
         float targetFps;
 
         synchronized (this) {
-            msThroughCurrentPeriod = GLOBAL_CLOCK.globalTimestamp() - _currentPeriodStartTimestamp;
-            framesExecutedInCurrentPeriod = _framesExecutedInCurrentPeriod;
-            targetFps = _targetFps;
+            msThroughCurrentPeriod = GLOBAL_CLOCK.globalTimestamp() - currentPeriodStartTimestamp;
+            framesExecutedInCurrentPeriod = this.framesExecutedInCurrentPeriod;
+            targetFps = this.targetFps;
         }
 
         if (framesExecutedInCurrentPeriod == 0) {
@@ -127,10 +127,5 @@ public class FrameTimerImpl implements FrameTimer {
         float msThresholdForNextFrame = framesExecutedInCurrentPeriod * msBetweenFrames;
 
         return msThroughCurrentPeriod >= msThresholdForNextFrame;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return FrameTimer.class.getCanonicalName();
     }
 }

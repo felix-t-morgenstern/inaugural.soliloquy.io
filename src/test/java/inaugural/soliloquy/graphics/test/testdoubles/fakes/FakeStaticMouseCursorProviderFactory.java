@@ -4,10 +4,13 @@ import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.StaticMouse
 import soliloquy.specs.graphics.renderables.providers.StaticMouseCursorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 
 public class FakeStaticMouseCursorProviderFactory implements StaticMouseCursorProviderFactory {
-    public ArrayList<StaticMouseCursorProviderDefinition> Inputs = new ArrayList<>();
+    public List<StaticMouseCursorProviderDefinition> Inputs = listOf();
 
     @Override
     public StaticMouseCursorProvider make(StaticMouseCursorProviderDefinition definition)

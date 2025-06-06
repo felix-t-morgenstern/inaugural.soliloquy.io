@@ -1,26 +1,25 @@
 package inaugural.soliloquy.graphics.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
-import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 public class FakeImageAssetRenderable implements ImageAssetRenderable {
     public boolean CapturesMouseEvents;
     public boolean CapturesMouseEventsAtPoint = true;
-    public ArrayList<Vertex> CapturesMouseEventsAtPointInputLocations = new ArrayList<>();
-    public ArrayList<Long> CapturesMouseEventsAtPointInputTimestamps = new ArrayList<>();
+    public List<Vertex> CapturesMouseEventsAtPointInputLocations = listOf();
+    public List<Long> CapturesMouseEventsAtPointInputTimestamps = listOf();
     public FloatBox RenderingDimensions;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider = new FakeProviderAtTime<>();
     public int Z;
@@ -168,11 +167,6 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
 
     @Override
     public UUID uuid() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
         return null;
     }
 }

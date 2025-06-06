@@ -4,7 +4,9 @@ import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderable
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
@@ -14,10 +16,12 @@ import java.awt.*;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AntialiasedLineSegmentRenderableImplTests {
+@ExtendWith(MockitoExtension.class)
+public class AntialiasedLineSegmentRenderableImplTests {
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -29,15 +33,15 @@ class AntialiasedLineSegmentRenderableImplTests {
     private final int Z = randomInt();
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderableStack mockContainingStack;
 
-    private AntialiasedLineSegmentRenderable _antialiasedLineSegmentRenderable;
+    private AntialiasedLineSegmentRenderable antialiasedLineSegmentRenderable;
 
     @BeforeEach
-    void setUp() {
-        _mockContainingStack = mock(RenderableStack.class);
+    public void setUp() {
+        mockContainingStack = mock(RenderableStack.class);
 
-        _antialiasedLineSegmentRenderable = new AntialiasedLineSegmentRenderableImpl(
+        antialiasedLineSegmentRenderable = new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
                 THICKNESS_PROVIDER,
@@ -46,12 +50,12 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         );
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 null,
                 VERTEX_2_PROVIDER,
@@ -61,7 +65,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -72,7 +76,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -83,7 +87,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -94,7 +98,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -105,7 +109,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -116,7 +120,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 null,
                 Z,
                 UUID,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -127,7 +131,7 @@ class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 null,
-                _mockContainingStack
+                mockContainingStack
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -143,110 +147,104 @@ class AntialiasedLineSegmentRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexProviders() {
-        assertSame(VERTEX_1_PROVIDER, _antialiasedLineSegmentRenderable.getVertex1Provider());
-        assertSame(VERTEX_2_PROVIDER, _antialiasedLineSegmentRenderable.getVertex2Provider());
+    public void testSetAndGetVertexProviders() {
+        assertSame(VERTEX_1_PROVIDER, antialiasedLineSegmentRenderable.getVertex1Provider());
+        assertSame(VERTEX_2_PROVIDER, antialiasedLineSegmentRenderable.getVertex2Provider());
 
-        FakeProviderAtTime<Vertex> newVertex1Provider = new FakeProviderAtTime<>();
-        FakeProviderAtTime<Vertex> newVertex2Provider = new FakeProviderAtTime<>();
+        var newVertex1Provider = new FakeProviderAtTime<Vertex>();
+        var newVertex2Provider = new FakeProviderAtTime<Vertex>();
 
-        _antialiasedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
-        _antialiasedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
+        antialiasedLineSegmentRenderable.setVertex1Provider(newVertex1Provider);
+        antialiasedLineSegmentRenderable.setVertex2Provider(newVertex2Provider);
 
-        assertSame(newVertex1Provider, _antialiasedLineSegmentRenderable.getVertex1Provider());
-        assertSame(newVertex2Provider, _antialiasedLineSegmentRenderable.getVertex2Provider());
+        assertSame(newVertex1Provider, antialiasedLineSegmentRenderable.getVertex1Provider());
+        assertSame(newVertex2Provider, antialiasedLineSegmentRenderable.getVertex2Provider());
     }
 
     @Test
-    void testGetAndSetThicknessProvider() {
-        assertSame(THICKNESS_PROVIDER, _antialiasedLineSegmentRenderable.getThicknessProvider());
+    public void testGetAndSetThicknessProvider() {
+        assertSame(THICKNESS_PROVIDER, antialiasedLineSegmentRenderable.getThicknessProvider());
 
-        FakeProviderAtTime<Float> newThicknessProvider = new FakeProviderAtTime<>();
+        var newThicknessProvider = new FakeProviderAtTime<Float>();
 
-        _antialiasedLineSegmentRenderable.setThicknessProvider(newThicknessProvider);
+        antialiasedLineSegmentRenderable.setThicknessProvider(newThicknessProvider);
 
-        assertSame(newThicknessProvider, _antialiasedLineSegmentRenderable.getThicknessProvider());
+        assertSame(newThicknessProvider, antialiasedLineSegmentRenderable.getThicknessProvider());
     }
 
     @Test
-    void testSetThicknessProviderWithInvalidParams() {
+    public void testSetThicknessProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setThicknessProvider(null));
+                antialiasedLineSegmentRenderable.setThicknessProvider(null));
     }
 
     @Test
-    void testGetAndSetColorProvider() {
-        assertSame(COLOR_PROVIDER, _antialiasedLineSegmentRenderable.getColorProvider());
+    public void testGetAndSetColorProvider() {
+        assertSame(COLOR_PROVIDER, antialiasedLineSegmentRenderable.getColorProvider());
 
         FakeProviderAtTime<Color> newColorProvider = new FakeProviderAtTime<>();
-        _antialiasedLineSegmentRenderable.setColorProvider(newColorProvider);
+        antialiasedLineSegmentRenderable.setColorProvider(newColorProvider);
 
-        assertSame(newColorProvider, _antialiasedLineSegmentRenderable.getColorProvider());
+        assertSame(newColorProvider, antialiasedLineSegmentRenderable.getColorProvider());
     }
 
     @Test
-    void testGetAndSetThicknessGradientPercentProvider() {
+    public void testGetAndSetThicknessGradientPercentProvider() {
         assertSame(THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                _antialiasedLineSegmentRenderable.getThicknessGradientPercentProvider());
+                antialiasedLineSegmentRenderable.getThicknessGradientPercentProvider());
 
         ProviderAtTime<Float> newThicknessGradientPercentProvider = new FakeProviderAtTime<>();
 
-        _antialiasedLineSegmentRenderable
+        antialiasedLineSegmentRenderable
                 .setThicknessGradientPercentProvider(newThicknessGradientPercentProvider);
 
         assertSame(newThicknessGradientPercentProvider,
-                _antialiasedLineSegmentRenderable.getThicknessGradientPercentProvider());
+                antialiasedLineSegmentRenderable.getThicknessGradientPercentProvider());
     }
 
     @Test
-    void testGetAndSetLengthGradientPercentProvider() {
+    public void testGetAndSetLengthGradientPercentProvider() {
         assertSame(LENGTH_GRADIENT_PERCENT_PROVIDER,
-                _antialiasedLineSegmentRenderable.getLengthGradientPercentProvider());
+                antialiasedLineSegmentRenderable.getLengthGradientPercentProvider());
 
         ProviderAtTime<Float> newLengthGradientPercentProvider = new FakeProviderAtTime<>();
 
-        _antialiasedLineSegmentRenderable
+        antialiasedLineSegmentRenderable
                 .setLengthGradientPercentProvider(newLengthGradientPercentProvider);
 
         assertSame(newLengthGradientPercentProvider,
-                _antialiasedLineSegmentRenderable.getLengthGradientPercentProvider());
+                antialiasedLineSegmentRenderable.getLengthGradientPercentProvider());
     }
 
     @Test
-    void testSetColorProviderWithInvalidParams() {
+    public void testSetColorProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setColorProvider(null));
+                antialiasedLineSegmentRenderable.setColorProvider(null));
     }
 
     @Test
-    void testSetVertexProvidersWithInvalidParams() {
+    public void testSetVertexProvidersWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setVertex1Provider(null));
+                antialiasedLineSegmentRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                _antialiasedLineSegmentRenderable.setVertex2Provider(null));
+                antialiasedLineSegmentRenderable.setVertex2Provider(null));
     }
 
     @Test
-    void testGetAndSetZ() {
-        assertEquals(Z, _antialiasedLineSegmentRenderable.getZ());
+    public void testGetAndSetZ() {
+        assertEquals(Z, antialiasedLineSegmentRenderable.getZ());
 
         int newZ = 456;
-        _antialiasedLineSegmentRenderable.setZ(newZ);
+        antialiasedLineSegmentRenderable.setZ(newZ);
 
-        assertEquals(newZ, _antialiasedLineSegmentRenderable.getZ());
-        verify(_mockContainingStack, times(1)).add(_antialiasedLineSegmentRenderable);
+        assertEquals(newZ, antialiasedLineSegmentRenderable.getZ());
+        verify(mockContainingStack, once()).add(antialiasedLineSegmentRenderable);
     }
 
     @Test
-    void testDelete() {
-        _antialiasedLineSegmentRenderable.delete();
+    public void testDelete() {
+        antialiasedLineSegmentRenderable.delete();
 
-        verify(_mockContainingStack, times(1)).remove(_antialiasedLineSegmentRenderable);
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(AntialiasedLineSegmentRenderable.class.getCanonicalName(),
-                _antialiasedLineSegmentRenderable.getInterfaceName());
+        verify(mockContainingStack, once()).remove(antialiasedLineSegmentRenderable);
     }
 }

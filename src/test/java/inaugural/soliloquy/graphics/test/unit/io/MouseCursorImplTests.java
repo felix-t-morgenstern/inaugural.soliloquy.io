@@ -7,25 +7,24 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.io.MouseCursor;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MouseCursorImplTests {
-    private final Map<String, ProviderAtTime<Long>> MOUSE_CURSORS = new HashMap<>();
+public class MouseCursorImplTests {
+    private final Map<String, ProviderAtTime<Long>> MOUSE_CURSORS = mapOf();
     private final FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
 
-    private MouseCursor _mouseCursor;
+    private MouseCursor mouseCursor;
 
     @BeforeEach
-    void setUp() {
-        _mouseCursor = new MouseCursorImpl(MOUSE_CURSORS, GLOBAL_CLOCK);
+    public void setUp() {
+        mouseCursor = new MouseCursorImpl(MOUSE_CURSORS, GLOBAL_CLOCK);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new MouseCursorImpl(null, GLOBAL_CLOCK));
         assertThrows(IllegalArgumentException.class, () ->
@@ -33,14 +32,9 @@ class MouseCursorImplTests {
     }
 
     @Test
-    void testSetMouseCursorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursor.setMouseCursor(null));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursor.setMouseCursor(""));
-        assertThrows(IllegalArgumentException.class, () -> _mouseCursor.setMouseCursor("invalid"));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(MouseCursor.class.getCanonicalName(), _mouseCursor.getInterfaceName());
+    public void testSetMouseCursorWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> mouseCursor.setMouseCursor(null));
+        assertThrows(IllegalArgumentException.class, () -> mouseCursor.setMouseCursor(""));
+        assertThrows(IllegalArgumentException.class, () -> mouseCursor.setMouseCursor("invalid"));
     }
 }

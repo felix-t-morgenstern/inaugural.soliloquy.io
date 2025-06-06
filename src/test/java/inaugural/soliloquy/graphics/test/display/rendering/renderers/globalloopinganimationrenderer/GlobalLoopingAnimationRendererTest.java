@@ -4,7 +4,6 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.GlobalLoopingAnimationImpl;
-import inaugural.soliloquy.graphics.rendering.FloatBoxImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeColorShiftStackAggregator;
@@ -30,6 +29,7 @@ import static inaugural.soliloquy.graphics.api.Constants.MS_PER_SECOND;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 class GlobalLoopingAnimationRendererTest extends DisplayTest {
     protected final static AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY =
@@ -62,7 +62,6 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         GlobalLoopingAnimationRenderer =
                 new GlobalLoopingAnimationRenderer(
                         RENDERING_BOUNDARIES,
-                        FLOAT_BOX_FACTORY,
                         colorShiftStackAggregator == null ?
                                 new FakeColorShiftStackAggregator() :
                                 colorShiftStackAggregator,
@@ -96,7 +95,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                         staticNullProvider(0f),
                         staticNullProvider(Color.BLACK),
                         listOf(),
-                        staticProvider(new FloatBoxImpl(
+                        staticProvider(floatBoxOf(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
@@ -104,7 +103,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                         0, java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
 
         FirstChildStack.add(GlobalLoopingAnimationRenderable);
-        Renderers.registerRenderer(GlobalLoopingAnimationRenderable.class.getCanonicalName(),
+        Renderers.registerRenderer(GlobalLoopingAnimationRenderableImpl.class,
                 GlobalLoopingAnimationRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
@@ -153,11 +152,6 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
             @Override
             public int bottomY() {
                 return bottomY;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return AnimationFrameSnippet.class.getCanonicalName();
             }
         };
     }

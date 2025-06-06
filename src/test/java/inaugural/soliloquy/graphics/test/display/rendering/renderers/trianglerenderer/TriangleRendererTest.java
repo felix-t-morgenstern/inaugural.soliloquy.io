@@ -10,7 +10,6 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
 
 class TriangleRendererTest extends DisplayTest {
     protected static TriangleRenderable TriangleRenderable;
@@ -24,7 +23,7 @@ class TriangleRendererTest extends DisplayTest {
 
         TriangleRenderable = renderable;
 
-        Renderers.registerRenderer(TriangleRenderable.getInterfaceName(),
+        Renderers.registerRenderer(TriangleRenderableImpl.class,
                 TriangleRenderer);
         FirstChildStack.add(TriangleRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;

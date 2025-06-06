@@ -4,12 +4,14 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAnimationFrameSni
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.graphics.assets.GlobalLoopingAnimation;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+
 public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
-    public ArrayList<Long> Timestamps = new ArrayList<>();
-    public ArrayList<AnimationFrameSnippet> OutputSnippets = new ArrayList<>();
+    public List<Long> Timestamps = listOf();
+    public List<AnimationFrameSnippet> OutputSnippets = listOf();
 
     @Override
     public AnimationFrameSnippet provide(long timestamp) throws IllegalArgumentException {
@@ -32,16 +34,6 @@ public class SpyGlobalLoopingAnimation implements GlobalLoopingAnimation {
     @Override
     public void reportUnpause(long l) throws IllegalArgumentException {
 
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
-
-    @Override
-    public AnimationFrameSnippet archetype() {
-        return null;
     }
 
     @Override

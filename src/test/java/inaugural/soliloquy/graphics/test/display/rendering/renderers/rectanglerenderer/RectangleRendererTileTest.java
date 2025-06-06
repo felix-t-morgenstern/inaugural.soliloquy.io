@@ -4,10 +4,9 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.graphics.test.display.DisplayTest;
-import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeFloatBox;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeStaticProvider;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
@@ -15,6 +14,7 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
  * Test acceptance criteria:
@@ -39,7 +39,7 @@ class RectangleRendererTileTest extends RectangleRendererTest {
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.16667f;
     private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(new FakeFloatBox(0.25f, 0.25f, 0.75f, 0.75f));
+            new FakeStaticProvider<>(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
     private final static String TILE_LOCATION =
             "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
@@ -67,7 +67,7 @@ class RectangleRendererTileTest extends RectangleRendererTest {
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), FirstChildStack,
                 RENDERING_BOUNDARIES);
 
-        Renderers.registerRenderer(RectangleRenderable.getInterfaceName(), RectangleRenderer);
+        Renderers.registerRenderer(RectangleRenderableImpl.class, RectangleRenderer);
         FirstChildStack.add(RectangleRenderable);
 
         return listOf(RectangleRenderer);

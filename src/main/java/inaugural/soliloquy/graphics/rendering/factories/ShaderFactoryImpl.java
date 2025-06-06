@@ -9,9 +9,4 @@ public class ShaderFactoryImpl implements ShaderFactory {
     public Shader make(String filenamePrefix) throws IllegalArgumentException {
         return new ShaderImpl(filenamePrefix);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return ShaderFactory.class.getCanonicalName();
-    }
 }

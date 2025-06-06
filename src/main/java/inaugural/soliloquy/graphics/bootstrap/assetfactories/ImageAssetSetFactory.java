@@ -1,31 +1,31 @@
 package inaugural.soliloquy.graphics.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.infrastructure.Registry;
+import inaugural.soliloquy.tools.collections.Collections;
+import soliloquy.specs.common.infrastructure.ImmutableMap;
 import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.graphics.assets.*;
-import soliloquy.specs.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.Tools.emptyIfNull;
 import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class ImageAssetSetFactory
         extends AbstractAssetFactory<ImageAssetSetDefinition, ImageAssetSet> {
-    private final Registry<Sprite> SPRITES_REGISTRY;
-    private final Registry<Animation> ANIMATIONS_REGISTRY;
-    private final Registry<GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATIONS_REGISTRY;
+    private final ImmutableMap<String, Sprite> GET_SPRITE;
+    private final ImmutableMap<String, Animation> GET_ANIMATION;
+    private final ImmutableMap<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION;
 
-    public ImageAssetSetFactory(Registry<Sprite> spritesRegistry,
-                                Registry<Animation> animationsRegistry,
-                                Registry<GlobalLoopingAnimation> globalLoopingAnimationsRegistry) {
-        SPRITES_REGISTRY = Check.ifNull(spritesRegistry, "spritesRegistry");
-        ANIMATIONS_REGISTRY = Check.ifNull(animationsRegistry, "animationsRegistry");
-        GLOBAL_LOOPING_ANIMATIONS_REGISTRY = Check.ifNull(globalLoopingAnimationsRegistry,
-                "globalLoopingAnimationsRegistry");
+    public ImageAssetSetFactory(ImmutableMap<String, Sprite> getSprite,
+                                ImmutableMap<String, Animation> getAnimation,
+                                ImmutableMap<String, GlobalLoopingAnimation> getGlobalLoopingAnimation) {
+        GET_SPRITE = Check.ifNull(getSprite, "getSprite");
+        GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
+        GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation,
+                "getGlobalLoopingAnimation");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ImageAssetSetFactory
 
         Check.ifNullOrEmpty(imageAssetSetDefinition.id(), "imageAssetSetDefinition.id()");
 
-        var assetsByTypeAndDirection = new HashMap<String, Map<Direction, ImageAsset>>();
+        var assetsByTypeAndDirection = Collections.<String, Map<Direction, ImageAsset>>mapOf();
 
         var supportsMouseEventCapturing = true;
 
@@ -55,38 +55,39 @@ public class ImageAssetSetFactory
             ImageAsset imageAsset;
             switch (assetDefinition.assetType()) {
                 case SPRITE -> {
-                    if (!SPRITES_REGISTRY.contains(assetDefinition.assetId())) {
+                    if (!GET_SPRITE.containsKey(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Sprite found with id (" +
                                         assetDefinition.assetId() + ")");
                     }
-                    imageAsset = SPRITES_REGISTRY.get(assetDefinition.assetId());
+                    imageAsset = GET_SPRITE.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
                                 ((Sprite) imageAsset).image().supportsMouseEventCapturing();
                     }
                 }
                 case ANIMATION -> {
-                    if (!ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
+                    if (!GET_ANIMATION.containsKey(assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Animation found with id (" +
                                         assetDefinition.assetId() + ")");
                     }
-                    imageAsset = ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
+                    imageAsset = GET_ANIMATION.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
                                 ((Animation) imageAsset).supportsMouseEventCapturing();
                     }
                 }
                 case GLOBAL_LOOPING_ANIMATION -> {
-                    if (!GLOBAL_LOOPING_ANIMATIONS_REGISTRY.contains(assetDefinition.assetId())) {
+                    if (!GET_GLOBAL_LOOPING_ANIMATION.containsKey(
+                            assetDefinition.assetId())) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no GlobalLoopingAnimation found " +
                                         "with id (" + assetDefinition.assetId() + ")");
                     }
-                    imageAsset = GLOBAL_LOOPING_ANIMATIONS_REGISTRY.get(assetDefinition.assetId());
+                    imageAsset = GET_GLOBAL_LOOPING_ANIMATION.get(assetDefinition.assetId());
                 }
-                case default -> throw new IllegalArgumentException(
+                default -> throw new IllegalArgumentException(
                         "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
                                 assetDefinition.assetType().toString() + ")");
             }
@@ -96,7 +97,7 @@ public class ImageAssetSetFactory
                 assetsByDirection = assetsByTypeAndDirection.get(type);
             }
             else {
-                assetsByTypeAndDirection.put(type, assetsByDirection = new HashMap<>());
+                assetsByTypeAndDirection.put(type, assetsByDirection = mapOf());
             }
             if (assetsByDirection.containsKey(direction)) {
                 throw new IllegalArgumentException(
@@ -109,13 +110,6 @@ public class ImageAssetSetFactory
 
         return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id(),
                 supportsMouseEventCapturing);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return AssetFactory.class.getCanonicalName() + "<" +
-                ImageAssetSetDefinition.class.getCanonicalName() + "," +
-                ImageAssetSet.class.getCanonicalName() + ">";
     }
 
     @SuppressWarnings("InnerClassMayBeStatic")
@@ -146,11 +140,6 @@ public class ImageAssetSetFactory
         @Override
         public String id() throws IllegalStateException {
             return ID;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return ImageAssetSet.class.getCanonicalName();
         }
     }
 }

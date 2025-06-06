@@ -18,23 +18,25 @@ import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-class TriangleRendererTests {
+public class TriangleRendererTests {
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(randomFloat(), randomFloat()));
+            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER =
             new FakeStaticProvider<>(randomColor());
     private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(randomFloat(), randomFloat()));
+            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER =
             new FakeStaticProvider<>(randomColor());
     private final ProviderAtTime<Vertex> VERTEX_3_PROVIDER =
-            new FakeStaticProvider<>(Vertex.of(randomFloat(), randomFloat()));
+            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER =
             new FakeStaticProvider<>(randomColor());
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
@@ -49,13 +51,13 @@ class TriangleRendererTests {
 
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
-    @Mock private Mesh _mockMesh;
-    @Mock private Shader _mockShader;
+    @Mock private Mesh mockMesh;
+    @Mock private Shader mockShader;
 
-    private Renderer<TriangleRenderable> _triangleRenderer;
+    private Renderer<TriangleRenderable> triangleRenderer;
 
     @BeforeAll
-    static void setUpFixture() {
+    public static void setUpFixture() {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -71,103 +73,103 @@ class TriangleRendererTests {
     }
 
     @BeforeEach
-    void setUp() {
-        _mockMesh = mock(Mesh.class);
-        _mockShader = mock(Shader.class);
+    public void setUp() {
+        mockMesh = mock(Mesh.class);
+        mockShader = mock(Shader.class);
 
-        _triangleRenderer = new TriangleRenderer(MOST_RECENT_TIMESTAMP);
+        triangleRenderer = new TriangleRenderer(MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testMostRecentTimestamp() {
-        _triangleRenderer.setMesh(_mockMesh);
-        _triangleRenderer.setShader(_mockShader);
+    public void testMostRecentTimestamp() {
+        triangleRenderer.setMesh(mockMesh);
+        triangleRenderer.setShader(mockShader);
 
-        assertEquals(MOST_RECENT_TIMESTAMP, _triangleRenderer.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP, triangleRenderer.mostRecentTimestamp());
 
-        _triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP + 1);
+        triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP + 1);
 
-        assertEquals(MOST_RECENT_TIMESTAMP + 1, (long) _triangleRenderer.mostRecentTimestamp());
+        assertEquals(MOST_RECENT_TIMESTAMP + 1, (long) triangleRenderer.mostRecentTimestamp());
     }
 
     @Test
-    void testRenderWithInvalidParams() {
-        _triangleRenderer.setMesh(_mockMesh);
-        _triangleRenderer.setShader(_mockShader);
+    public void testRenderWithInvalidArgs() {
+        triangleRenderer.setMesh(mockMesh);
+        triangleRenderer.setShader(mockShader);
 
         assertThrows(IllegalArgumentException.class,
-                () -> _triangleRenderer.render(null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+                () -> triangleRenderer.render(null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(null,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(new FakeStaticProvider<>(null),
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 null, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, null,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, new FakeStaticProvider<>(null),
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 null, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, null,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, new FakeStaticProvider<>(null),
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 null, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, null,
                                 BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -175,7 +177,7 @@ class TriangleRendererTests {
                                 randomFloatWithInclusiveCeiling(-0.001f),
                                 BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -183,14 +185,14 @@ class TriangleRendererTests {
                                 BACKGROUND_TEXTURE_TILE_WIDTH,
                                 randomFloatWithInclusiveCeiling(-0.001f)),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, new FakeStaticProvider<>(randomInt()),
                                 0f, BACKGROUND_TEXTURE_TILE_HEIGHT),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> _triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -200,12 +202,12 @@ class TriangleRendererTests {
     }
 
     @Test
-    void testRenderWithMeshAndShaderUnset() {
+    public void testRenderWithMeshAndShaderUnset() {
         TriangleRenderer triangleRendererWithoutMesh = new TriangleRenderer(null);
         TriangleRenderer triangleRendererWithoutShader = new TriangleRenderer(null);
 
-        triangleRendererWithoutMesh.setShader(_mockShader);
-        triangleRendererWithoutShader.setMesh(_mockMesh);
+        triangleRendererWithoutMesh.setShader(mockShader);
+        triangleRendererWithoutShader.setMesh(mockMesh);
 
         assertThrows(IllegalStateException.class, () -> triangleRendererWithoutMesh
                 .render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP));
@@ -214,20 +216,13 @@ class TriangleRendererTests {
     }
 
     @Test
-    void testRenderUnbindsMeshAndShader() {
-        _triangleRenderer.setMesh(_mockMesh);
-        _triangleRenderer.setShader(_mockShader);
+    public void testRenderUnbindsMeshAndShader() {
+        triangleRenderer.setMesh(mockMesh);
+        triangleRenderer.setShader(mockShader);
 
-        _triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP);
+        triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP);
 
-        verify(_mockMesh, times(1)).unbind();
-        verify(_mockShader, times(1)).unbind();
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(Renderer.class.getCanonicalName() + "<" +
-                        TriangleRenderable.class.getCanonicalName() + ">",
-                _triangleRenderer.getInterfaceName());
+        verify(mockMesh, once()).unbind();
+        verify(mockShader, once()).unbind();
     }
 }

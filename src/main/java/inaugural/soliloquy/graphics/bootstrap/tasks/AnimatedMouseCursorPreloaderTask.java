@@ -8,9 +8,11 @@ import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvide
 import soliloquy.specs.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class AnimatedMouseCursorPreloaderTask implements Runnable {
     private final Collection<AnimatedMouseCursorDefinitionDTO> DEFINITION_DTOS;
@@ -98,7 +100,7 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
     @Override
     public void run() {
         DEFINITION_DTOS.forEach(animatedMouseCursorDefinitionDTO -> {
-            HashMap<Integer, Long> cursorsAtMs = new HashMap<>();
+            Map<Integer, Long> cursorsAtMs = mapOf();
             for (AnimatedMouseCursorFrameDefinitionDTO frame :
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));

@@ -16,15 +16,17 @@ import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 import static inaugural.soliloquy.graphics.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-class TriangleRenderableImplTests {
+public class TriangleRenderableImplTests {
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -32,7 +34,7 @@ class TriangleRenderableImplTests {
             new FakeProviderAtTime<>();
     private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
     private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
-    private final HashMap<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = new HashMap<>();
+    private final Map<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_3_PROVIDER = new FakeProviderAtTime<>();
@@ -50,7 +52,7 @@ class TriangleRenderableImplTests {
     private TriangleRenderable triangleRenderableNotSupportingMouseEvents;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockContainingStack = mock(RenderableStack.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
@@ -86,7 +88,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 null, VERTEX_1_COLOR_PROVIDER,
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
@@ -198,13 +200,10 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexProviders() {
-        FakeStaticProvider<Vertex> provider1 =
-                new FakeStaticProvider<>(Vertex.of(0f, 0f));
-        FakeStaticProvider<Vertex> provider2 =
-                new FakeStaticProvider<>(Vertex.of(0f, 0f));
-        FakeStaticProvider<Vertex> provider3 =
-                new FakeStaticProvider<>(Vertex.of(0f, 0f));
+    public void testSetAndGetVertexProviders() {
+        var provider1 = new FakeStaticProvider<>(vertexOf(0f, 0f));
+        var provider2 = new FakeStaticProvider<>(vertexOf(0f, 0f));
+        var provider3 = new FakeStaticProvider<>(vertexOf(0f, 0f));
 
         triangleRenderable.setVertex1Provider(provider1);
         triangleRenderable.setVertex2Provider(provider2);
@@ -216,10 +215,10 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetVertexColorProviders() {
-        FakeStaticProvider<Color> provider1 = new FakeStaticProvider<>(Color.BLACK);
-        FakeStaticProvider<Color> provider2 = new FakeStaticProvider<>(Color.BLACK);
-        FakeStaticProvider<Color> provider3 = new FakeStaticProvider<>(Color.BLACK);
+    public void testSetAndGetVertexColorProviders() {
+        var provider1 = new FakeStaticProvider<>(Color.BLACK);
+        var provider2 = new FakeStaticProvider<>(Color.BLACK);
+        var provider3 = new FakeStaticProvider<>(Color.BLACK);
 
         triangleRenderable.setVertex1ColorProvider(provider1);
         triangleRenderable.setVertex2ColorProvider(provider2);
@@ -231,7 +230,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetBackgroundTextureIdProvider() {
+    public void testSetAndGetBackgroundTextureIdProvider() {
         assertSame(BACKGROUND_TEXTURE_ID_PROVIDER,
                 triangleRenderable.getBackgroundTextureIdProvider());
 
@@ -243,11 +242,11 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetBackgroundTextureTileWidth() {
+    public void testSetAndGetBackgroundTextureTileWidth() {
         assertEquals(BACKGROUND_TEXTURE_TILE_WIDTH,
                 triangleRenderable.getBackgroundTextureTileWidth());
 
-        float newWidth = 0.1312f;
+        var newWidth = 0.1312f;
 
         triangleRenderable.setBackgroundTextureTileWidth(newWidth);
 
@@ -255,11 +254,11 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetAndGetBackgroundTextureTileHeight() {
+    public void testSetAndGetBackgroundTextureTileHeight() {
         assertEquals(BACKGROUND_TEXTURE_TILE_HEIGHT,
                 triangleRenderable.getBackgroundTextureTileHeight());
 
-        float newHeight = 0.1312f;
+        var newHeight = 0.1312f;
 
         triangleRenderable.setBackgroundTextureTileHeight(newHeight);
 
@@ -267,7 +266,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testSetVertexProvidersWithInvalidParams() {
+    public void testSetVertexProvidersWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.setVertex1Provider(null));
         assertThrows(IllegalArgumentException.class, () ->
@@ -283,7 +282,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testGetAndSetCapturesMouseEvents() {
+    public void testGetAndSetCapturesMouseEvents() {
         assertTrue(triangleRenderable.getCapturesMouseEvents());
 
         triangleRenderable.setCapturesMouseEvents(false);
@@ -292,7 +291,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testPressAndSetOnPress() {
+    public void testPressAndSetOnPress() {
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.press(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
@@ -302,7 +301,8 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.press(2, TIMESTAMP);
 
-        verify(mockOnPressAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
+        verify(mockOnPressAction, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnPress = mock(Action.class);
@@ -310,18 +310,19 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
+        verify(newOnPress, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
 
         triangleRenderable.press(0, TIMESTAMP + 2);
 
-        verify(newOnPress, times(1)).run(any());
+        verify(newOnPress, once()).run(any());
     }
 
     @Test
-    void testPressActionIds() {
-        String id1 = "id1";
-        String id2 = "id2";
-        String id3 = "id3";
+    public void testPressActionIds() {
+        var id1 = "id1";
+        var id2 = "id2";
+        var id3 = "id3";
 
         triangleRenderable.setOnPress(0, new FakeAction<>(id1));
         triangleRenderable.setOnPress(2, new FakeAction<>(id2));
@@ -337,7 +338,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testReleaseAndSetOnRelease() {
+    public void testReleaseAndSetOnRelease() {
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
@@ -351,14 +352,15 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.release(2, TIMESTAMP + 1);
 
-        verify(newOnRelease, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
+        verify(newOnRelease, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
     }
 
     @Test
-    void testReleaseActionIds() {
-        String id1 = "id1";
-        String id2 = "id2";
-        String id3 = "id3";
+    public void testReleaseActionIds() {
+        var id1 = "id1";
+        var id2 = "id2";
+        var id3 = "id3";
 
         triangleRenderable.setOnRelease(0, new FakeAction<>(id1));
         triangleRenderable.setOnRelease(2, new FakeAction<>(id2));
@@ -375,7 +377,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testPressOrReleaseMethodsWithInvalidButtons() {
+    public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.setOnPress(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
@@ -396,7 +398,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testMouseOverAndSetOnMouseOver() {
+    public void testMouseOverAndSetOnMouseOver() {
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.mouseOver(0L));
         assertThrows(UnsupportedOperationException.class, () ->
@@ -404,7 +406,8 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.mouseOver(TIMESTAMP);
 
-        verify(mockOnMouseOverAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
+        verify(mockOnMouseOverAction, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnMouseOver = mock(Action.class);
@@ -412,12 +415,13 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
+        verify(newOnMouseOver, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
     }
 
     @Test
-    void testMouseOverActionId() {
-        String mouseOverActionId = "mouseOverActionId";
+    public void testMouseOverActionId() {
+        var mouseOverActionId = "mouseOverActionId";
 
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.mouseOverActionId());
@@ -432,7 +436,7 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testMouseLeaveAndSetOnMouseLeave() {
+    public void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.mouseLeave(0L));
         assertThrows(UnsupportedOperationException.class, () ->
@@ -440,7 +444,8 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.mouseLeave(TIMESTAMP);
 
-        verify(mockOnMouseLeaveAction, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
+        verify(mockOnMouseLeaveAction, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP, triangleRenderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnMouseLeave = mock(Action.class);
@@ -448,12 +453,13 @@ class TriangleRenderableImplTests {
 
         triangleRenderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, times(1)).run(eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
+        verify(newOnMouseLeave, once()).run(
+                eq(MouseEventInputs.of(TIMESTAMP + 1, triangleRenderable)));
     }
 
     @Test
-    void testMouseLeaveActionId() {
-        String mouseLeaveActionId = "mouseLeaveActionId";
+    public void testMouseLeaveActionId() {
+        var mouseLeaveActionId = "mouseLeaveActionId";
 
         assertThrows(UnsupportedOperationException.class, () ->
                 triangleRenderableNotSupportingMouseEvents.mouseLeaveActionId());
@@ -468,18 +474,18 @@ class TriangleRenderableImplTests {
     }
 
     @Test
-    void testMouseEventCallsToOutdatedTimestamps() {
+    public void testMouseEventCallsToOutdatedTimestamps() {
         triangleRenderable.setVertex1Provider(
                 new FakeStaticProvider<>(
-                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        vertexOf(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
         triangleRenderable.setVertex2Provider(
                 new FakeStaticProvider<>(
-                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        vertexOf(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
         triangleRenderable.setVertex3Provider(
                 new FakeStaticProvider<>(
-                        Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
+                        vertexOf(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f)))
         );
 
         triangleRenderable.press(0, TIMESTAMP);
@@ -492,7 +498,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP - 1));
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP - 1));
 
         triangleRenderable.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
@@ -504,7 +510,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP));
 
         triangleRenderable.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
@@ -516,7 +522,7 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 1));
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 1));
 
         triangleRenderable.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
@@ -528,9 +534,9 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 2));
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 2));
 
-        triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 4);
+        triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
@@ -540,11 +546,11 @@ class TriangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 triangleRenderable.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP + 3));
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 3));
     }
 
     @Test
-    void testGetAndSetZ() {
+    public void testGetAndSetZ() {
         assertEquals(Z, triangleRenderable.getZ());
 
         int newZ = 456;
@@ -552,45 +558,41 @@ class TriangleRenderableImplTests {
         triangleRenderable.setZ(newZ);
 
         assertEquals(newZ, triangleRenderable.getZ());
-        verify(mockContainingStack, times(1)).add(triangleRenderable);
+        verify(mockContainingStack, once()).add(triangleRenderable);
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(TriangleRenderable.class.getCanonicalName(),
-                triangleRenderable.getInterfaceName());
-    }
-
-    @Test
-    void testCapturesMouseEventsAtPoint() {
+    public void testCapturesMouseEventsAtPoint() {
         triangleRenderable.setVertex1Provider(
-                new FakeStaticProvider<>(Vertex.of(0.5f, 0f))
+                new FakeStaticProvider<>(vertexOf(0.5f, 0f))
         );
         triangleRenderable.setVertex2Provider(
-                new FakeStaticProvider<>(Vertex.of(0f, .5f))
+                new FakeStaticProvider<>(vertexOf(0f, .5f))
         );
         triangleRenderable.setVertex3Provider(
-                new FakeStaticProvider<>(Vertex.of(1f, .5f))
+                new FakeStaticProvider<>(vertexOf(1f, .5f))
         );
 
-        assertFalse(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f), TIMESTAMP));
-        assertFalse(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(1f, 0f), TIMESTAMP));
-        assertFalse(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.55f, 0f), TIMESTAMP));
-        assertTrue(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.55f, 0.4f), TIMESTAMP));
-        assertTrue(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.26f, 0.25f), TIMESTAMP));
-        assertFalse(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.24f, 0.25f), TIMESTAMP));
-        assertTrue(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.74f, 0.25f), TIMESTAMP));
-        assertFalse(triangleRenderable.capturesMouseEventAtPoint(Vertex.of(0.76f, 0.25f), TIMESTAMP));
+        assertFalse(triangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP));
+        assertFalse(triangleRenderable.capturesMouseEventAtPoint(vertexOf(1f, 0f), TIMESTAMP));
+        assertFalse(triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.55f, 0f), TIMESTAMP));
+        assertTrue(triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.55f, 0.4f), TIMESTAMP));
+        assertTrue(triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.26f, 0.25f), TIMESTAMP));
+        assertFalse(
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.24f, 0.25f), TIMESTAMP));
+        assertTrue(triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.74f, 0.25f), TIMESTAMP));
+        assertFalse(
+                triangleRenderable.capturesMouseEventAtPoint(vertexOf(0.76f, 0.25f), TIMESTAMP));
     }
 
     @Test
-    void testDelete() {
+    public void testDelete() {
         triangleRenderable.delete();
-        verify(mockContainingStack, times(1)).remove(triangleRenderable);
+        verify(mockContainingStack, once()).remove(triangleRenderable);
     }
 
     @Test
-    void testUuid() {
+    public void testUuid() {
         assertSame(UUID, triangleRenderable.uuid());
     }
 }

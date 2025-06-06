@@ -1,16 +1,13 @@
 package inaugural.soliloquy.graphics.renderables.factories;
 
 import inaugural.soliloquy.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
-import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
-import soliloquy.specs.graphics.renderables.Renderable;
 import soliloquy.specs.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
-import java.util.function.Consumer;
 
 public class AntialiasedLineSegmentRenderableFactoryImpl
         implements AntialiasedLineSegmentRenderableFactory {
@@ -30,10 +27,5 @@ public class AntialiasedLineSegmentRenderableFactoryImpl
         return new AntialiasedLineSegmentRenderableImpl(vertex1Provider, vertex2Provider,
                 thicknessProvider, colorProvider, thicknessGradientPercentProvider,
                 lengthGradientPercentProvider, z, uuid, containingStack);
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return AntialiasedLineSegmentRenderableFactory.class.getCanonicalName();
     }
 }

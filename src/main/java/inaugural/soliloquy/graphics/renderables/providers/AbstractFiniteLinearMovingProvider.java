@@ -2,32 +2,28 @@ package inaugural.soliloquy.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 // NB: This class has plenty of shared functionality with AbstractLoopingLinearMovingProvider, but
 //     since Java does not support multiple inheritance, the functionality is duplicated.
 public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFinitePausableAtTime
         implements FiniteLinearMovingProvider<T> {
     private final UUID UUID;
-    private final T ARCHETYPE;
-    private final HashMap<Long, T> VALUES_AT_TIMES;
+    private final Map<Long, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
-    protected final CanGetInterfaceName CAN_GET_INTERFACE_NAME;
 
     protected AbstractFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimes,
-                                                 Long pausedTimestamp, Long mostRecentTimestamp,
-                                                 T archetype) {
+                                                 Long pausedTimestamp, Long mostRecentTimestamp) {
         super(pausedTimestamp, mostRecentTimestamp);
         UUID = Check.ifNull(uuid, "uuid");
-        ARCHETYPE = Check.ifNull(archetype, "archetype");
 
-        VALUES_AT_TIMES = new HashMap<>();
+        VALUES_AT_TIMES = mapOf();
         Check.ifNull(valuesAtTimes, "valuesAtTimes");
         if (valuesAtTimes.isEmpty()) {
             throw new IllegalArgumentException(
@@ -40,12 +36,11 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
 
         NEAREST_FLOOR_AND_CEILING_TREE =
                 NearestFloorAndCeilingTree.FromLongs(VALUES_AT_TIMES.keySet());
-        CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
     }
 
     @Override
     public Map<Long, T> valuesAtTimestampsRepresentation() {
-        return new HashMap<>(VALUES_AT_TIMES);
+        return mapOf(VALUES_AT_TIMES);
     }
 
     @Override
@@ -90,15 +85,9 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     }
 
     @Override
-    public String getInterfaceName() {
-        return FiniteLinearMovingProvider.class.getName() + "<" +
-                CAN_GET_INTERFACE_NAME.getProperTypeName(archetype()) + ">";
-    }
-
-    @Override
     protected void updateInternalValuesOnUnpause(long timestamp) {
         long pauseDuration = timestamp - pausedTimestamp;
-        for (int i = 0; i < NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues.length; i++) {
+        for (var i = 0; i < NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues.length; i++) {
             T value = VALUES_AT_TIMES.get(NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues[i]);
             VALUES_AT_TIMES.remove(NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues[i]);
             VALUES_AT_TIMES.put(NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues[i] + pauseDuration,
@@ -109,11 +98,6 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
 
     @Override
     public Object representation() {
-        return new HashMap<>(VALUES_AT_TIMES);
-    }
-
-    @Override
-    public T archetype() {
-        return ARCHETYPE;
+        return mapOf(VALUES_AT_TIMES);
     }
 }

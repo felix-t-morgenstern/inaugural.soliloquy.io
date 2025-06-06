@@ -9,37 +9,31 @@ import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class GlobalClockImplTests {
+public class GlobalClockImplTests {
     @SuppressWarnings("FieldCanBeLocal")
     private final String TIME_ZONE = "GMT";
 
-    private GlobalClock _globalClock;
+    private GlobalClock globalClock;
 
     @BeforeEach
-    void setUp() {
-        _globalClock = new GlobalClockImpl();
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(GlobalClock.class.getCanonicalName(), _globalClock.getInterfaceName());
+    public void setUp() {
+        globalClock = new GlobalClockImpl();
     }
 
     // NB: Indeterminate tests are generally a testing antipattern, but it is unavoidable in this
     //     instance, so the test is run enough times to ensure that it is highly reliable and
     //     fairly accurate.
     @Test
-    void testStartAndGlobalTimestamp() {
-        final int numberOfTestsToRun = 10;
-        int timestampMsDifferenceTolerance = 20;
+    public void testStartAndGlobalTimestamp() {
+        final var numberOfTestsToRun = 10;
+        var timestampMsDifferenceTolerance = 20;
 
-        for (int i = 0; i < numberOfTestsToRun; i++) {
-            long actualGlobalTimestamp =
+        for (var i = 0; i < numberOfTestsToRun; i++) {
+            var actualGlobalTimestamp =
                     Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE)).getTimeInMillis();
-            long globalTimestampFromGlobalClock = _globalClock.globalTimestamp();
+            var globalTimestampFromGlobalClock = globalClock.globalTimestamp();
 
             assertTrue(Math.abs(actualGlobalTimestamp - globalTimestampFromGlobalClock)
                     < timestampMsDifferenceTolerance);

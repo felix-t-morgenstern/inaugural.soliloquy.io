@@ -1,14 +1,8 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
-
-import java.awt.*;
-import java.util.UUID;
 
 import static inaugural.soliloquy.graphics.api.Constants.MAX_CHANNEL_VAL;
 import static org.lwjgl.opengl.GL11.*;
@@ -18,7 +12,7 @@ public class RasterizedLineSegmentRenderer
         implements Renderer<RasterizedLineSegmentRenderable> {
 
     public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
-        super(ARCHETYPE, mostRecentTimestamp);
+        super(mostRecentTimestamp);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -28,11 +22,11 @@ public class RasterizedLineSegmentRenderer
             throws IllegalArgumentException {
         Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
 
-        Vertex vertex1 =
+        var vertex1 =
                 Check.ifNull(rasterizedLineSegmentRenderable.getVertex1Provider(),
                         "rasterizedLineSegmentRenderable.getVertex1Provider()")
                         .provide(timestamp);
-        Vertex vertex2 =
+        var vertex2 =
                 Check.ifNull(rasterizedLineSegmentRenderable.getVertex2Provider(),
                         "rasterizedLineSegmentRenderable.getVertex2Provider()")
                         .provide(timestamp);
@@ -42,7 +36,7 @@ public class RasterizedLineSegmentRenderer
                         .provide(timestamp),
                 "value provided by " +
                         "rasterizedLineSegmentRenderable.getThicknessProvider()");
-        Color color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
+        var color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
                 "rasterizedLineSegmentRenderable.getColorProvider()")
                 .provide(timestamp);
 
@@ -66,16 +60,16 @@ public class RasterizedLineSegmentRenderer
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        if (_mesh == null) {
+        if (mesh == null) {
             throw new IllegalStateException(
                     "RasterizedLineSegmentRenderer.render: mesh cannot be null");
         }
-        if (_shader == null) {
+        if (shader == null) {
             throw new IllegalStateException(
                     "RasterizedLineSegmentRenderer.render: shader cannot be null");
         }
-        _mesh.unbind();
-        _shader.unbind();
+        mesh.unbind();
+        shader.unbind();
 
         glLineWidth(thickness);
 
@@ -94,108 +88,6 @@ public class RasterizedLineSegmentRenderer
 
         glEnd();
     }
-
-    @Override
-    protected String getUnparameterizedInterfaceName() {
-        return Renderer.class.getCanonicalName();
-    }
-
-    private static final RasterizedLineSegmentRenderable ARCHETYPE =
-            new RasterizedLineSegmentRenderable() {
-                @Override
-                public UUID uuid() {
-                    return null;
-                }
-
-                @Override
-                public int getZ() {
-                    return 0;
-                }
-
-                @Override
-                public void setZ(int i) {
-
-                }
-
-                @Override
-                public RenderableStack containingStack() {
-                    return null;
-                }
-
-                @Override
-                public void delete() {
-
-                }
-
-                @Override
-                public ProviderAtTime<Vertex> getVertex1Provider() {
-                    return null;
-                }
-
-                @Override
-                public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public ProviderAtTime<Vertex> getVertex2Provider() {
-                    return null;
-                }
-
-                @Override
-                public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public ProviderAtTime<Float> getThicknessProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setThicknessProvider(ProviderAtTime<Float> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public ProviderAtTime<Color> getColorProvider() {
-                    return null;
-                }
-
-                @Override
-                public void setColorProvider(ProviderAtTime<Color> providerAtTime)
-                        throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public short getStipplePattern() {
-                    return 0;
-                }
-
-                @Override
-                public void setStipplePattern(short i) throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public short getStippleFactor() {
-                    return 0;
-                }
-
-                @Override
-                public void setStippleFactor(short i) throws IllegalArgumentException {
-
-                }
-
-                @Override
-                public String getInterfaceName() {
-                    return RasterizedLineSegmentRenderable.class.getCanonicalName();
-                }
-            };
 
     @Override
     protected String className() {

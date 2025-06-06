@@ -9,24 +9,25 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeSprite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class SpriteRenderableFactoryImplTests {
+public class SpriteRenderableFactoryImplTests {
     private final FakeSprite SPRITE_SUPPORTS_MOUSE_EVENTS =
             new FakeSprite(new FakeImage(true));
     private final FakeSprite SPRITE_NOT_SUPPORTS_MOUSE_EVENTS =
@@ -35,7 +36,7 @@ class SpriteRenderableFactoryImplTests {
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final FakeAction<MouseEventInputs> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<MouseEventInputs> ON_MOUSE_LEAVE = new FakeAction<>();
-    private final ArrayList<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = new ArrayList<>();
+    private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = listOf();
     private final FakeProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = randomInt();
 
@@ -47,7 +48,7 @@ class SpriteRenderableFactoryImplTests {
     private SpriteRenderableFactory spriteRenderableFactory;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockContainingStack = mock(RenderableStack.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
@@ -55,25 +56,19 @@ class SpriteRenderableFactoryImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new SpriteRenderableFactoryImpl(null));
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(SpriteRenderableFactory.class.getCanonicalName(),
-                spriteRenderableFactory.getInterfaceName());
-    }
-
-    @Test
-    void testMake() {
+    public void testMake() {
         SpriteRenderable spriteRenderableWithMouseEvents = spriteRenderableFactory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack);
 
         assertNotNull(spriteRenderableWithMouseEvents);
-        assertTrue(spriteRenderableWithMouseEvents instanceof SpriteRenderableImpl);
+        assertInstanceOf(SpriteRenderableImpl.class, spriteRenderableWithMouseEvents);
         assertTrue(spriteRenderableWithMouseEvents.getCapturesMouseEvents());
 
         SpriteRenderable spriteRenderableWithoutMouseEvents = spriteRenderableFactory.make(
@@ -82,12 +77,12 @@ class SpriteRenderableFactoryImplTests {
                 mockContainingStack);
 
         assertNotNull(spriteRenderableWithoutMouseEvents);
-        assertTrue(spriteRenderableWithoutMouseEvents instanceof SpriteRenderableImpl);
+        assertInstanceOf(SpriteRenderableImpl.class, spriteRenderableWithoutMouseEvents);
         assertFalse(spriteRenderableWithoutMouseEvents.getCapturesMouseEvents());
     }
 
     @Test
-    void testMakeWithInvalidParams() {
+    public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> spriteRenderableFactory.make(
                 null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                 null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS,

@@ -12,7 +12,7 @@ public class FiniteSinusoidMovingFloatProvider extends AbstractFiniteSinusoidMov
                                              List<Float> transitionSharpnesses,
                                              Long pausedTimestamp,
                                              Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp, 0f);
+        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp);
     }
 
     @Override

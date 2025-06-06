@@ -1,16 +1,16 @@
 package inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.color;
 
 import inaugural.soliloquy.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.graphics.renderables.providers.FiniteLinearMovingColorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProviderTest {
     protected static final float BORDER_THICKNESS = 0.05f;
@@ -31,7 +31,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
         SpriteRenderable.setBorderColorProvider(finiteLinearMovingColorProvider);
 
         FirstChildStack.add(SpriteRenderable);
-        Renderers.registerRenderer(soliloquy.specs.graphics.renderables.SpriteRenderable.class.getCanonicalName(), SpriteRenderer);
+        Renderers.registerRenderer(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }

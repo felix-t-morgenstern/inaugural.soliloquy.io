@@ -41,9 +41,4 @@ public class StackRendererImpl implements StackRenderer {
 
         RENDERING_BOUNDARIES.popMostRecentBoundaries();
     }
-
-    @Override
-    public String getInterfaceName() {
-        return StackRenderer.class.getCanonicalName();
-    }
 }

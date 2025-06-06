@@ -1,19 +1,15 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
-
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
 import static org.lwjgl.opengl.GL11.*;
 
 public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRenderable>
         implements Renderer<TriangleRenderable> {
     public TriangleRenderer(Long mostRecentTimestamp) {
-        super(generateSimpleArchetype(TriangleRenderable.class), mostRecentTimestamp);
+        super(mostRecentTimestamp);
     }
 
     @Override
@@ -25,27 +21,27 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         Check.ifNull(renderable.getVertex1Provider(),
                 "renderable.getVertex1Provider");
-        Vertex vertex1 = renderable.getVertex1Provider().provide(timestamp);
+        var vertex1 = renderable.getVertex1Provider().provide(timestamp);
         Check.ifNull(vertex1, "provided vertex 1");
 
         Check.ifNull(renderable.getVertex1ColorProvider(), "renderable.getVertex1ColorProvider");
-        Color color1 = renderable.getVertex1ColorProvider().provide(timestamp);
+        var color1 = renderable.getVertex1ColorProvider().provide(timestamp);
 
         Check.ifNull(renderable.getVertex2Provider(),
                 "renderable.getVertex2Provider");
-        Vertex vertex2 = renderable.getVertex2Provider().provide(timestamp);
+        var vertex2 = renderable.getVertex2Provider().provide(timestamp);
         Check.ifNull(vertex2, "provided vertex 2");
 
         Check.ifNull(renderable.getVertex2ColorProvider(), "renderable.getVertex2ColorProvider");
-        Color color2 = renderable.getVertex2ColorProvider().provide(timestamp);
+        var color2 = renderable.getVertex2ColorProvider().provide(timestamp);
 
         Check.ifNull(renderable.getVertex3Provider(),
                 "renderable.getVertex3Provider");
-        Vertex vertex3 = renderable.getVertex3Provider().provide(timestamp);
+        var vertex3 = renderable.getVertex3Provider().provide(timestamp);
         Check.ifNull(vertex3, "provided vertex 3");
 
         Check.ifNull(renderable.getVertex3ColorProvider(), "renderable.getVertex3ColorProvider");
-        Color color3 = renderable.getVertex3ColorProvider().provide(timestamp);
+        var color3 = renderable.getVertex3ColorProvider().provide(timestamp);
 
         Check.ifNull(renderable.getBackgroundTextureIdProvider(),
                 "renderable.getBackgroundTextureIdProvider");
@@ -67,21 +63,21 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.X;
-        float y1 = vertex1.Y;
-        float x2 = vertex2.X;
-        float y2 = vertex2.Y;
-        float x3 = vertex3.X;
-        float y3 = vertex3.Y;
+        var x1 = vertex1.X;
+        var y1 = vertex1.Y;
+        var x2 = vertex2.X;
+        var y2 = vertex2.Y;
+        var x3 = vertex3.X;
+        var y3 = vertex3.Y;
 
-        float minX = 0f;
+        var minX = 0f;
         float maxX;
-        float minY = 0f;
+        var minY = 0f;
         float maxY;
-        float height = 0f;
-        float width = 0f;
-        float tilesPerWidth = 0f;
-        float tilesPerHeight = 0f;
+        var height = 0f;
+        var width = 0f;
+        var tilesPerWidth = 0f;
+        var tilesPerHeight = 0f;
 
         if (backgroundTextureId != null) {
             maxX = Math.max(x3, Math.max(x2, x1));

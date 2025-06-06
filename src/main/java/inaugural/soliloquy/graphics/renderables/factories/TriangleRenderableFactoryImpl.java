@@ -46,9 +46,4 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                 backgroundTextureTileHeight, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
                 containingStack, RENDERING_BOUNDARIES);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return TriangleRenderableFactory.class.getCanonicalName();
-    }
 }

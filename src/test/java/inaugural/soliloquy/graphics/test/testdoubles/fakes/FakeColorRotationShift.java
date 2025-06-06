@@ -21,9 +21,4 @@ public class FakeColorRotationShift implements ColorRotationShift {
     public boolean overridesPriorShiftsOfSameType() {
         return OverridesPriorShiftsOfSameType;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

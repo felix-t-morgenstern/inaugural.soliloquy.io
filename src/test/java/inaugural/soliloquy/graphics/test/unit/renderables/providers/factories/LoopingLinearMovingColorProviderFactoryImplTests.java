@@ -8,14 +8,17 @@ import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorPr
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class LoopingLinearMovingColorProviderFactoryImplTests {
-    private final HashMap<Integer, Color> VALUES_AT_TIMES = new HashMap<>();
+public class LoopingLinearMovingColorProviderFactoryImplTests {
+    private final Map<Integer, Color> VALUES_AT_TIMES = mapOf();
     private final int TIME_1 = 0;
     private final Color VALUE_1 = new Color(188, 130, 217, 255);
     private final int TIME_2 = 100;
@@ -38,122 +41,110 @@ class LoopingLinearMovingColorProviderFactoryImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private ArrayList<Boolean> _hueMovementIsClockwise;
+    private List<Boolean> hueMovementIsClockwise;
 
-    private LoopingLinearMovingColorProviderFactory _loopingLinearMovingColorProviderFactory;
+    private LoopingLinearMovingColorProviderFactory loopingLinearMovingColorProviderFactory;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         VALUES_AT_TIMES.put(TIME_1, VALUE_1);
         VALUES_AT_TIMES.put(TIME_2, VALUE_2);
         VALUES_AT_TIMES.put(TIME_3, VALUE_3);
         VALUES_AT_TIMES.put(TIME_4, VALUE_4);
         VALUES_AT_TIMES.put(TIME_5, VALUE_5);
 
-        _hueMovementIsClockwise = new ArrayList<Boolean>() {{
-            add(TRANSITION_1_IS_CLOCKWISE);
-            add(TRANSITION_2_IS_CLOCKWISE);
-            add(TRANSITION_3_IS_CLOCKWISE);
-            add(TRANSITION_4_IS_CLOCKWISE);
-            add(TRANSITION_5_IS_CLOCKWISE);
-        }};
+        hueMovementIsClockwise = listOf(
+            TRANSITION_1_IS_CLOCKWISE,
+            TRANSITION_2_IS_CLOCKWISE,
+            TRANSITION_3_IS_CLOCKWISE,
+            TRANSITION_4_IS_CLOCKWISE,
+            TRANSITION_5_IS_CLOCKWISE
+        );
 
-        _loopingLinearMovingColorProviderFactory =
+        loopingLinearMovingColorProviderFactory =
                 new LoopingLinearMovingColorProviderFactoryImpl();
     }
 
     @Test
-    void testMake() {
+    public void testMake() {
         LoopingLinearMovingColorProvider loopingMovingColorProvider =
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null);
 
         assertNotNull(loopingMovingColorProvider);
-        assertTrue(loopingMovingColorProvider instanceof LoopingLinearMovingColorProviderImpl);
+        assertInstanceOf(LoopingLinearMovingColorProviderImpl.class, loopingMovingColorProvider);
     }
 
     @Test
-    void testMakeWithInvalidParams() {
+    public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(null, VALUES_AT_TIMES,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(null, VALUES_AT_TIMES,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, null,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, null,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<>(),
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, mapOf(),
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                            put(null, Color.RED);
-                        }},
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, mapOf(pairOf(null, Color.RED)),
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                            put(0, null);
-                        }},
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, mapOf(pairOf(0, null)),
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, new HashMap<Integer, Color>() {{
-                            put(123, Color.RED);
-                        }},
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
+                loopingLinearMovingColorProviderFactory.make(UUID, mapOf(pairOf(123, Color.RED)),
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null,
                         null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
                         null, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(null);
-                        }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            null
+                        ), PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                        }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE
+                        ), PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                        }}, PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE
+                        ), PERIOD_DURATION, PERIOD_MODULO_OFFSET, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_DURATION, null, null));
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_DURATION, null, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 12L,
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 12L,
                         null));
         assertThrows(IllegalArgumentException.class, () ->
-                _loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
-                        _hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 1L, 0L));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(LoopingLinearMovingColorProviderFactory.class.getCanonicalName(),
-                _loopingLinearMovingColorProviderFactory.getInterfaceName());
+                loopingLinearMovingColorProviderFactory.make(UUID, VALUES_AT_TIMES,
+                        hueMovementIsClockwise, PERIOD_DURATION, PERIOD_MODULO_OFFSET, 1L, 0L));
     }
 }

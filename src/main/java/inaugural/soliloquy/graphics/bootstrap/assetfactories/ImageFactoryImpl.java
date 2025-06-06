@@ -84,10 +84,10 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
         long[][] capturingMask = new long[(width / BITS_PER_LONG) + 1][height];
         StringBuilder binaryBase;
         int captureMaskXIndex;
-        for (int y = 0; y < height; y++) {
+        for (var y = 0; y < height; y++) {
             binaryBase = newBinaryBase();
             captureMaskXIndex = 0;
-            for (int x = 0; x < width; x++) {
+            for (var x = 0; x < width; x++) {
                 if (x % BITS_PER_LONG == 0 && x > 0) {
                     capturingMask[captureMaskXIndex][y] =
                             convertStringToLong(binaryBase.toString());
@@ -95,7 +95,7 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
                     captureMaskXIndex++;
                 }
 
-                int index = (DESIRED_CHANNELS * (x + (height * y))) + 3;
+                var index = (DESIRED_CHANNELS * (x + (height * y))) + 3;
                 byte value = imageBytes.get(index);
                 int valueEquivalent = value & 0xFF;
                 float alpha = (float) valueEquivalent / MAX_ALPHA_VALUE;
@@ -109,11 +109,6 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
         }
 
         return capturingMask;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return ImageFactory.class.getCanonicalName();
     }
 
     private static class ImageData {

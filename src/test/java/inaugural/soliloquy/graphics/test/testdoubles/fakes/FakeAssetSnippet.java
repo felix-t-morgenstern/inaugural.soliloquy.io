@@ -42,9 +42,4 @@ public class FakeAssetSnippet implements AssetSnippet {
     public int bottomY() {
         return BottomY;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

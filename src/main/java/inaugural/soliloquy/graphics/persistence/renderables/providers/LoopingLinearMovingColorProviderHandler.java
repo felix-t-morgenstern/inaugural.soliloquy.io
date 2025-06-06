@@ -2,7 +2,6 @@ package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
-import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.LoopingLinearMovingColorProviderFactory;
 
@@ -10,31 +9,35 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+
 public class LoopingLinearMovingColorProviderHandler
         extends AbstractTypeHandler<LoopingLinearMovingColorProvider> {
     private final LoopingLinearMovingColorProviderFactory
             LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
-    private final TypeHandler<UUID> UUID_HANDLER;
 
     public LoopingLinearMovingColorProviderHandler(LoopingLinearMovingColorProviderFactory
-                                                           loopingLinearMovingColorProviderFactory,
-                                                   TypeHandler<UUID> uuidHandler) {
-        super(new LoopingLinearMovingColorProviderArchetype());
+                                                           factory) {
         LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY =
-                Check.ifNull(loopingLinearMovingColorProviderFactory,
-                        "loopingLinearMovingColorProviderFactory");
-        UUID_HANDLER = Check.ifNull(uuidHandler, "uuidHandler");
+                Check.ifNull(factory,
+                        "factory");
     }
 
+    @Override
+    public String typeHandled() {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public LoopingLinearMovingColorProvider read(String data) throws IllegalArgumentException {
         Check.ifNullOrEmpty(data, "data");
 
-        LoopingLinearMovingColorProviderDTO dto =
-                JSON.fromJson(data, LoopingLinearMovingColorProviderDTO.class);
+        var dto = JSON.fromJson(data, LoopingLinearMovingColorProviderDTO.class);
 
-        HashMap<Integer, Color> valuesWithinPeriod = new HashMap<>();
-        for (int i = 0; i < dto.periodValues.length; i++) {
+        Map<Integer, Color> valuesWithinPeriod = mapOf();
+        for (var i = 0; i < dto.periodValues.length; i++) {
             valuesWithinPeriod.put(
                     dto.periodTimestamps[i],
                     new Color(
@@ -46,13 +49,13 @@ public class LoopingLinearMovingColorProviderHandler
             );
         }
 
-        ArrayList<Boolean> hueMovementIsClockwise = new ArrayList<>();
-        for (int i = 0; i < dto.hueMovementIsClockwise.length; i++) {
+        List<Boolean> hueMovementIsClockwise = listOf();
+        for (var i = 0; i < dto.hueMovementIsClockwise.length; i++) {
             hueMovementIsClockwise.add(dto.hueMovementIsClockwise[i]);
         }
 
         return LOOPING_LINEAR_MOVING_COLOR_PROVIDER_FACTORY.make(
-                UUID_HANDLER.read(dto.uuid),
+                UUID.fromString(dto.uuid),
                 valuesWithinPeriod,
                 hueMovementIsClockwise,
                 dto.periodDuration,
@@ -63,18 +66,17 @@ public class LoopingLinearMovingColorProviderHandler
     }
 
     @Override
-    public String write(LoopingLinearMovingColorProvider loopingLinearMovingColorProvider) {
-        Check.ifNull(loopingLinearMovingColorProvider, "loopingLinearMovingColorProvider");
+    public String write(LoopingLinearMovingColorProvider provider) {
+        Check.ifNull(provider, "provider");
 
-        LoopingLinearMovingColorProviderDTO dto = new LoopingLinearMovingColorProviderDTO();
+        var dto = new LoopingLinearMovingColorProviderDTO();
 
-        dto.uuid = UUID_HANDLER.write(loopingLinearMovingColorProvider.uuid());
+        dto.uuid = provider.uuid().toString();
 
-        Map<Integer, Color> valuesWithinPeriod =
-                loopingLinearMovingColorProvider.valuesWithinPeriod();
+        Map<Integer, Color> valuesWithinPeriod = provider.valuesWithinPeriod();
         dto.periodTimestamps = new int[valuesWithinPeriod.size()];
         dto.periodValues = new ColorDTO[valuesWithinPeriod.size()];
-        int index = 0;
+        var index = 0;
         for (Map.Entry<Integer, Color> valueWithinPeriod : valuesWithinPeriod.entrySet()) {
             dto.periodTimestamps[index] = valueWithinPeriod.getKey();
             Color value = valueWithinPeriod.getValue();
@@ -83,17 +85,16 @@ public class LoopingLinearMovingColorProviderHandler
             index++;
         }
 
-        List<Boolean> hueMovementIsClockwise =
-                loopingLinearMovingColorProvider.hueMovementIsClockwise();
+        List<Boolean> hueMovementIsClockwise = provider.hueMovementIsClockwise();
         dto.hueMovementIsClockwise = new boolean[hueMovementIsClockwise.size()];
-        for (int i = 0; i < hueMovementIsClockwise.size(); i++) {
+        for (var i = 0; i < hueMovementIsClockwise.size(); i++) {
             dto.hueMovementIsClockwise[i] = hueMovementIsClockwise.get(i);
         }
 
-        dto.periodDuration = loopingLinearMovingColorProvider.periodDuration();
-        dto.periodModuloOffset = loopingLinearMovingColorProvider.periodModuloOffset();
-        dto.pausedTimestamp = loopingLinearMovingColorProvider.pausedTimestamp();
-        dto.mostRecentTimestamp = loopingLinearMovingColorProvider.mostRecentTimestamp();
+        dto.periodDuration = provider.periodDuration();
+        dto.periodModuloOffset = provider.periodModuloOffset();
+        dto.pausedTimestamp = provider.pausedTimestamp();
+        dto.mostRecentTimestamp = provider.mostRecentTimestamp();
 
         return JSON.toJson(dto);
     }
@@ -121,79 +122,5 @@ public class LoopingLinearMovingColorProviderHandler
         int g;
         int b;
         int a;
-    }
-
-    private static class LoopingLinearMovingColorProviderArchetype
-            implements LoopingLinearMovingColorProvider {
-
-        @Override
-        public List<Boolean> hueMovementIsClockwise() {
-            return null;
-        }
-
-        @Override
-        public Map<Integer, Color> valuesWithinPeriod() {
-            return null;
-        }
-
-        @Override
-        public int periodDuration() {
-            return 0;
-        }
-
-        @Override
-        public int periodModuloOffset() {
-            return 0;
-        }
-
-        @Override
-        public void reset(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Color provide(long l) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public Object representation() {
-            return null;
-        }
-
-        @Override
-        public Color archetype() {
-            return Color.BLACK;
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
-        }
-
-        @Override
-        public void reportPause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public void reportUnpause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Long pausedTimestamp() {
-            return null;
-        }
-
-        @Override
-        public Long mostRecentTimestamp() {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return LoopingLinearMovingColorProvider.class.getCanonicalName();
-        }
     }
 }

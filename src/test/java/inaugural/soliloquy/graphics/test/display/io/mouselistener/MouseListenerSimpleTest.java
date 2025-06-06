@@ -58,16 +58,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
             public String id() throws IllegalStateException {
                 return null;
             }
-
-            @Override
-            public MouseEventInputs archetype() {
-                return null;
-            }
-
-            @Override
-            public String getInterfaceName() {
-                return null;
-            }
         };
     }
 }

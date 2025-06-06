@@ -27,9 +27,4 @@ public class RasterizedLineSegmentRenderableFactoryImpl
                 thicknessProvider, stipplePattern, stippleFactor, colorProvider, z, uuid,
                 containingStack);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return RasterizedLineSegmentRenderableFactory.class.getCanonicalName();
-    }
 }

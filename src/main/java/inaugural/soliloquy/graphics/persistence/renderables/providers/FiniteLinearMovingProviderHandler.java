@@ -1,47 +1,47 @@
 package inaugural.soliloquy.graphics.persistence.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.generic.CanGetInterfaceName;
-import inaugural.soliloquy.tools.persistence.AbstractTypeWithOneGenericParamHandler;
-import soliloquy.specs.common.persistence.PersistentValuesHandler;
+import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
+import soliloquy.specs.common.persistence.PersistenceHandler;
+import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingProvider;
 import soliloquy.specs.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateArchetypeWithOneGenericParam;
 
 /** @noinspection rawtypes */
-public class FiniteLinearMovingProviderHandler
-        extends AbstractTypeWithOneGenericParamHandler<FiniteLinearMovingProvider> {
+public class FiniteLinearMovingProviderHandler extends
+        AbstractTypeHandler<FiniteLinearMovingProvider> {
+    private final PersistenceHandler PERSISTENCE_HANDLER;
     private final FiniteLinearMovingProviderFactory FACTORY;
 
-    private static final CanGetInterfaceName CAN_GET_INTERFACE_NAME = new CanGetInterfaceName();
-
-    public FiniteLinearMovingProviderHandler(PersistentValuesHandler persistentValuesHandler,
+    public FiniteLinearMovingProviderHandler(PersistenceHandler persistenceHandler,
                                              FiniteLinearMovingProviderFactory factory) {
-        //noinspection unchecked
-        super(generateArchetypeWithOneGenericParam(FiniteLinearMovingProvider.class, 0,
-                        FiniteLinearMovingProvider.class.getCanonicalName()),
-                persistentValuesHandler,
-                archetype -> generateArchetypeWithOneGenericParam(FiniteLinearMovingProvider.class,
-                        archetype));
+        PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public FiniteLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 FiniteLinearMovingProviderDTO.class);
-        var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(dto.valueType);
+        var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.valueType);
         Map<Long, Object> valuesAtTimestamps = mapOf();
         for (var valueDto : dto.values) {
             valuesAtTimestamps.put(valueDto.timestamp, typeHandler.read(valueDto.value));
         }
         return FACTORY.make(UUID.fromString(dto.uuid), valuesAtTimestamps, dto.pausedTimestamp,
                 dto.mostRecentTimestamp);
+    }
+
+    @Override
+    public String typeHandled() {
+        return null;
     }
 
     @Override
@@ -52,13 +52,18 @@ public class FiniteLinearMovingProviderHandler
 
         dto.uuid = finiteLinearMovingProvider.uuid().toString();
 
-        var valueType = dto.valueType =
-                CAN_GET_INTERFACE_NAME.getProperTypeName(finiteLinearMovingProvider.archetype());
-
-        var typeHandler = PERSISTENT_VALUES_HANDLER.getTypeHandler(valueType);
         //noinspection unchecked
         Map<Long, Object> valuesAtTimestamps =
                 finiteLinearMovingProvider.valuesAtTimestampsRepresentation();
+        var firstNonNullValue =
+                valuesAtTimestamps.values().stream().filter(Objects::nonNull).findFirst();
+
+        TypeHandler typeHandler = null;
+        if (firstNonNullValue.isPresent()) {
+            var valueType = dto.valueType = firstNonNullValue.get().getClass().getCanonicalName();
+            typeHandler = PERSISTENCE_HANDLER.getTypeHandler(valueType);
+        }
+
         var valuesSize = valuesAtTimestamps.size();
         dto.values = new FiniteLinearMovingProviderValueAtTimestampDTO[valuesSize];
         var index = 0;
@@ -66,7 +71,13 @@ public class FiniteLinearMovingProviderHandler
             var valueDto = new FiniteLinearMovingProviderValueAtTimestampDTO();
 
             valueDto.timestamp = valueAtTimestamp.getKey();
-            valueDto.value = typeHandler.write(valueAtTimestamp.getValue());
+            if (valueAtTimestamp.getValue() == null) {
+                valueDto.value = null;
+            }
+            else {
+                //noinspection unchecked
+                valueDto.value = typeHandler.write(valueAtTimestamp.getValue());
+            }
             dto.values[index++] = valueDto;
         }
 

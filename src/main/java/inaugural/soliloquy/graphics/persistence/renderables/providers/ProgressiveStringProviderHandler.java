@@ -12,10 +12,15 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
     private final ProgressiveStringProviderFactory FACTORY;
 
     public ProgressiveStringProviderHandler(ProgressiveStringProviderFactory factory) {
-        super(new ProgressiveStringProviderArchetype());
         FACTORY = Check.ifNull(factory, "factory");
     }
 
+    @Override
+    public String typeHandled() {
+        return "";
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public ProviderAtTime<String> read(String data) throws IllegalArgumentException {
         Check.ifNullOrEmpty(data, "data");
@@ -36,9 +41,9 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         //noinspection unchecked
         Pair<String, Pair<Long, Long>> representation =
                 (Pair<String, Pair<Long, Long>>) provider.representation();
-        dto.string = representation.item1();
-        dto.timeToComplete = representation.item2().item1();
-        dto.startTimestamp = representation.item2().item2();
+        dto.string = representation.FIRST;
+        dto.timeToComplete = representation.SECOND.FIRST;
+        dto.startTimestamp = representation.SECOND.SECOND;
         dto.pausedTimestamp = provider.pausedTimestamp();
         dto.mostRecentTimestamp = provider.mostRecentTimestamp();
 
@@ -52,55 +57,5 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         private long startTimestamp;
         private Long pausedTimestamp;
         private Long mostRecentTimestamp;
-    }
-
-    private static final class ProgressiveStringProviderArchetype
-            implements ProviderAtTime<String> {
-
-        @Override
-        public String provide(long l) throws IllegalArgumentException {
-            return null;
-        }
-
-        @Override
-        public Object representation() {
-            return null;
-        }
-
-        @Override
-        public String archetype() {
-            return "";
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
-        }
-
-        @Override
-        public void reportPause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public void reportUnpause(long l) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Long pausedTimestamp() {
-            return null;
-        }
-
-        @Override
-        public Long mostRecentTimestamp() {
-            return null;
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return ProviderAtTime.class.getCanonicalName() + "<" + String.class.getCanonicalName() +
-                    ">";
-        }
     }
 }

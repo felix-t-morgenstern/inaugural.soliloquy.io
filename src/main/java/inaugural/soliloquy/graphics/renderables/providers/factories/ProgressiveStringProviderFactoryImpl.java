@@ -14,9 +14,4 @@ public class ProgressiveStringProviderFactoryImpl implements ProgressiveStringPr
         return new ProgressiveStringProvider(uuid, string, startTimestamp, timeToComplete,
                 pausedTimestamp, mostRecentTimestamp);
     }
-
-    @Override
-    public String getInterfaceName() {
-        return ProgressiveStringProviderFactory.class.getCanonicalName();
-    }
 }

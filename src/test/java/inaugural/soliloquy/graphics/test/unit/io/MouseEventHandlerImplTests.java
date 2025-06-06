@@ -9,19 +9,21 @@ import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.io.MouseEventHandler;
 import soliloquy.specs.graphics.renderables.ImageAssetRenderable;
 
-import java.util.HashMap;
 
 import static inaugural.soliloquy.graphics.api.Constants.LEFT_MOUSE_BUTTON;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-class MouseEventHandlerImplTests {
+public class MouseEventHandlerImplTests {
     private final Vertex POSITION =
-            Vertex.of(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f));
+            vertexOf(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f));
     private final long TIMESTAMP = randomLong();
 
     @Mock private MouseEventCapturingSpatialIndex mockMouseEventCapturingSpatialIndex;
@@ -31,7 +33,7 @@ class MouseEventHandlerImplTests {
     private MouseEventHandler mouseEventHandler;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         mockImageAssetRenderable = mock(ImageAssetRenderable.class);
         mockImageAssetRenderable2 = mock(ImageAssetRenderable.class);
 
@@ -45,13 +47,13 @@ class MouseEventHandlerImplTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new MouseEventHandlerImpl(null));
     }
 
     @Test
-    void testMouseOver() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
+    public void testMouseOver() {
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
 
         verify(mockMouseEventCapturingSpatialIndex).getCapturingRenderableAtPoint(POSITION,
                 TIMESTAMP);
@@ -59,28 +61,28 @@ class MouseEventHandlerImplTests {
     }
 
     @Test
-    void testMouseOverOnlyOnce() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(),
+    public void testMouseOverOnlyOnce() {
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
                 TIMESTAMP + 1);
 
-        verify(mockMouseEventCapturingSpatialIndex, times(1))
+        verify(mockMouseEventCapturingSpatialIndex, once())
                 .getCapturingRenderableAtPoint(POSITION, TIMESTAMP);
-        verify(mockMouseEventCapturingSpatialIndex, times(1))
+        verify(mockMouseEventCapturingSpatialIndex, once())
                 .getCapturingRenderableAtPoint(POSITION, TIMESTAMP + 1);
-        verify(mockImageAssetRenderable, times(1)).mouseOver(TIMESTAMP);
+        verify(mockImageAssetRenderable, once()).mouseOver(TIMESTAMP);
         verify(mockImageAssetRenderable, never()).mouseOver(TIMESTAMP + 1);
     }
 
     @Test
-    void testMouseLeave() {
+    public void testMouseLeave() {
         when(mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(),
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
                 TIMESTAMP + 1);
 
         verify(mockImageAssetRenderable).mouseOver(TIMESTAMP);
@@ -88,14 +90,14 @@ class MouseEventHandlerImplTests {
     }
 
     @Test
-    void testMouseLeaveAndMouseOverNewRenderable() {
+    public void testMouseLeaveAndMouseOverNewRenderable() {
         when(mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(mockImageAssetRenderable2);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(),
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
                 TIMESTAMP + 1);
 
         verify(mockImageAssetRenderable).mouseOver(TIMESTAMP);
@@ -104,121 +106,115 @@ class MouseEventHandlerImplTests {
     }
 
     @Test
-    void testPressButtonOnRenderable() {
+    public void testPressButtonOnRenderable() {
         mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
+                ), TIMESTAMP);
 
         verify(mockImageAssetRenderable)
                 .press(LEFT_MOUSE_BUTTON, TIMESTAMP);
     }
 
     @Test
-    void testPressButtonAfterMouseLeaveToNoRenderable() {
+    public void testPressButtonAfterMouseLeaveToNoRenderable() {
         when(mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
         mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
+                ), TIMESTAMP);
 
         verify(mockImageAssetRenderable, never())
                 .press(anyInt(), anyLong());
     }
 
     @Test
-    void testReleaseButtonOnRenderable() {
+    public void testReleaseButtonOnRenderable() {
         mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
+                ), TIMESTAMP);
 
         verify(mockImageAssetRenderable)
                 .release(LEFT_MOUSE_BUTTON, TIMESTAMP);
     }
 
     @Test
-    void testReleaseButtonAfterMouseLeaveToNoRenderable() {
+    public void testReleaseButtonAfterMouseLeaveToNoRenderable() {
         when(mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
         mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
+                ), TIMESTAMP);
 
         verify(mockImageAssetRenderable, never())
                 .release(anyInt(), anyLong());
     }
 
     @Test
-    void testMouseButtonEventsAreTriggeredWhenRenderableUnderMouseDoesNotChange() {
+    public void testMouseButtonEventsAreTriggeredWhenRenderableUnderMouseDoesNotChange() {
         when(mockMouseEventCapturingSpatialIndex
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, new HashMap<>(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
         mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                new HashMap<Integer, MouseEventHandler.EventType>() {{
-                    put(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS);
-                }}, TIMESTAMP);
+                mapOf(
+                    pairOf(LEFT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
+                ), TIMESTAMP);
 
-        verify(mockImageAssetRenderable, times(1)).press(LEFT_MOUSE_BUTTON, TIMESTAMP);
+        verify(mockImageAssetRenderable, once()).press(LEFT_MOUSE_BUTTON, TIMESTAMP);
     }
 
     @Test
-    void testActOnMouseLocationAndEventsWithInvalidInputs() {
+    public void testActOnMouseLocationAndEventsWithInvalidInputs() {
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(-0.0001f, 0),
-                        new HashMap<>(),
+                mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(-0.0001f, 0),
+                        mapOf(),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(0, -0.0001f),
-                        new HashMap<>(),
+                mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(0, -0.0001f),
+                        mapOf(),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(1.0001f, 0),
-                        new HashMap<>(),
+                mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(1.0001f, 0),
+                        mapOf(),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(0, 1.0001f),
-                        new HashMap<>(),
+                mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(0, 1.0001f),
+                        mapOf(),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 mouseEventHandler.actOnMouseLocationAndEvents(POSITION, null, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                        new HashMap<Integer, MouseEventHandler.EventType>() {{
-                            put(0, null);
-                        }}, TIMESTAMP));
+                        mapOf(
+                            pairOf(0, null)
+                        ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
-                        new HashMap<Integer, MouseEventHandler.EventType>() {{
-                            put(null, MouseEventHandler.EventType.PRESS);
-                        }}, TIMESTAMP));
+                        mapOf(
+                            pairOf(null, MouseEventHandler.EventType.PRESS)
+                        ), TIMESTAMP));
     }
 
     @Test
-    void testActOnMouseLocationAndEventsWithOutOfDateTimestamp() {
-        mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(0f, 0f), new HashMap<>(),
+    public void testActOnMouseLocationAndEventsWithOutOfDateTimestamp() {
+        mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(0f, 0f), mapOf(),
                 TIMESTAMP);
 
         assertThrows(IllegalArgumentException.class,
-                () -> mouseEventHandler.actOnMouseLocationAndEvents(Vertex.of(0f, 0f),
-                        new HashMap<>(), TIMESTAMP - 1));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(MouseEventHandler.class.getCanonicalName(),
-                mouseEventHandler.getInterfaceName());
+                () -> mouseEventHandler.actOnMouseLocationAndEvents(vertexOf(0f, 0f),
+                        mapOf(), TIMESTAMP - 1));
     }
 }

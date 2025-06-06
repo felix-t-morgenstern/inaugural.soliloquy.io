@@ -2,14 +2,14 @@ package inaugural.soliloquy.graphics.test.unit.renderables;
 
 import inaugural.soliloquy.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeAction;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.shared.Direction;
-import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Image;
 import soliloquy.specs.graphics.assets.*;
@@ -17,7 +17,6 @@ import soliloquy.specs.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 
@@ -31,11 +30,13 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockWithId;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ImageAssetSetRenderableImplTests {
     private final String TYPE = randomString();
     private final int Z = randomInt();
@@ -48,8 +49,6 @@ public class ImageAssetSetRenderableImplTests {
     private final float RENDERING_AREA_RIGHT_X = randomFloatInRange(RENDERING_AREA_LEFT_X, 1f);
     private final float RENDERING_AREA_TOP_Y = randomFloatInRange(0f, 1f);
     private final float RENDERING_AREA_BOTTOM_Y = randomFloatInRange(RENDERING_AREA_TOP_Y, 1f);
-    private final float RENDERING_AREA_WIDTH = randomFloat();
-    private final float RENDERING_AREA_HEIGHT = randomFloat();
     private final float RENDERING_BOUNDARIES_LEFT_X =
             randomFloatInRange(RENDERING_AREA_LEFT_X, RENDERING_AREA_RIGHT_X);
     private final float RENDERING_BOUNDARIES_RIGHT_X =
@@ -64,7 +63,7 @@ public class ImageAssetSetRenderableImplTests {
     private final float POINT_Y = randomFloatInRange(
             Math.max(RENDERING_AREA_TOP_Y, RENDERING_BOUNDARIES_TOP_Y),
             Math.min(RENDERING_AREA_BOTTOM_Y, RENDERING_BOUNDARIES_BOTTOM_Y));
-    private final Vertex POINT = Vertex.of(POINT_X, POINT_Y);
+    private final Vertex POINT = vertexOf(POINT_X, POINT_Y);
     private final int ANIMATION_MS_DURATION = randomInt();
     private final float ANIMATION_FRAME_SNIPPET_OFFSET_X = randomFloat();
     private final float ANIMATION_FRAME_SNIPPET_OFFSET_Y = randomFloat();
@@ -77,14 +76,19 @@ public class ImageAssetSetRenderableImplTests {
     private Map<Integer, Action<MouseEventInputs>> onPressActions;
     private List<ProviderAtTime<ColorShift>> colorShiftProviders;
 
+    private final FloatBox RENDERING_AREA = floatBoxOf(
+            RENDERING_AREA_LEFT_X, RENDERING_AREA_TOP_Y,
+            RENDERING_AREA_RIGHT_X, RENDERING_AREA_BOTTOM_Y);
+    private final FloatBox CURRENT_RENDERING_BOUNDARIES = floatBoxOf(
+            RENDERING_BOUNDARIES_LEFT_X, RENDERING_BOUNDARIES_TOP_Y,
+            RENDERING_BOUNDARIES_RIGHT_X, RENDERING_BOUNDARIES_BOTTOM_Y);
+
     @Mock private ImageAssetSet mockImageAssetSet;
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
     @Mock private ProviderAtTime<Color> mockBorderColorProvider;
-    @Mock private FloatBox mockRenderingArea;
     @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
     @Mock private RenderableStack mockContainingStack;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
-    @Mock private FloatBox mockCurrentRenderingBoundaries;
     @Mock private Action<MouseEventInputs> mockOnMousePressAction;
     @Mock private Action<MouseEventInputs> mockOnMouseOverAction;
     @Mock private Action<MouseEventInputs> mockOnMouseLeaveAction;
@@ -97,52 +101,45 @@ public class ImageAssetSetRenderableImplTests {
 
     private ImageAssetSetRenderable imageAssetSetRenderable;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        when(mockRenderingArea.leftX()).thenReturn(RENDERING_AREA_LEFT_X);
-        when(mockRenderingArea.rightX()).thenReturn(RENDERING_AREA_RIGHT_X);
-        when(mockRenderingArea.topY()).thenReturn(RENDERING_AREA_TOP_Y);
-        when(mockRenderingArea.bottomY()).thenReturn(RENDERING_AREA_BOTTOM_Y);
-        when(mockRenderingArea.width()).thenReturn(RENDERING_AREA_WIDTH);
-        when(mockRenderingArea.height()).thenReturn(RENDERING_AREA_HEIGHT);
+        lenient().when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(RENDERING_AREA);
 
-        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(mockRenderingArea);
-
-        when(mockCurrentRenderingBoundaries.leftX()).thenReturn(RENDERING_BOUNDARIES_LEFT_X);
-        when(mockCurrentRenderingBoundaries.rightX()).thenReturn(RENDERING_BOUNDARIES_RIGHT_X);
-        when(mockCurrentRenderingBoundaries.topY()).thenReturn(RENDERING_BOUNDARIES_TOP_Y);
-        when(mockCurrentRenderingBoundaries.bottomY()).thenReturn(RENDERING_BOUNDARIES_BOTTOM_Y);
-
-        when(mockRenderingBoundaries.currentBoundaries())
-                .thenReturn(mockCurrentRenderingBoundaries);
+        lenient().when(mockRenderingBoundaries.currentBoundaries())
+                .thenReturn(CURRENT_RENDERING_BOUNDARIES);
 
         onPressActions = mapOf(pairOf(2, mockOnMousePressAction));
         colorShiftProviders = listOf();
 
-        when(mockImage.capturesMouseEventsAtPixel(anyInt(), anyInt()))
+        lenient().when(mockImage.capturesMouseEventsAtPixel(anyInt(), anyInt()))
                 .thenReturn(IMAGE_CAPTURES_EVENTS_AT_PIXEL);
 
-        when(mockSprite.leftX()).thenReturn(SNIPPET_LEFT_X);
-        when(mockSprite.rightX()).thenReturn(SNIPPET_RIGHT_X);
-        when(mockSprite.topY()).thenReturn(SNIPPET_TOP_Y);
-        when(mockSprite.bottomY()).thenReturn(SNIPPET_BOTTOM_Y);
-        when(mockSprite.image()).thenReturn(mockImage);
+        lenient().when(mockSprite.leftX()).thenReturn(SNIPPET_LEFT_X);
+        lenient().when(mockSprite.rightX()).thenReturn(SNIPPET_RIGHT_X);
+        lenient().when(mockSprite.topY()).thenReturn(SNIPPET_TOP_Y);
+        lenient().when(mockSprite.bottomY()).thenReturn(SNIPPET_BOTTOM_Y);
+        lenient().when(mockSprite.image()).thenReturn(mockImage);
 
-        when(mockAnimationFrameSnippet.leftX()).thenReturn(SNIPPET_LEFT_X);
-        when(mockAnimationFrameSnippet.rightX()).thenReturn(SNIPPET_RIGHT_X);
-        when(mockAnimationFrameSnippet.topY()).thenReturn(SNIPPET_TOP_Y);
-        when(mockAnimationFrameSnippet.bottomY()).thenReturn(SNIPPET_BOTTOM_Y);
-        when(mockAnimationFrameSnippet.image()).thenReturn(mockImage);
-        when(mockAnimationFrameSnippet.offsetX()).thenReturn(ANIMATION_FRAME_SNIPPET_OFFSET_X);
-        when(mockAnimationFrameSnippet.offsetY()).thenReturn(ANIMATION_FRAME_SNIPPET_OFFSET_Y);
+        lenient().when(mockAnimationFrameSnippet.leftX()).thenReturn(SNIPPET_LEFT_X);
+        lenient().when(mockAnimationFrameSnippet.rightX()).thenReturn(SNIPPET_RIGHT_X);
+        lenient().when(mockAnimationFrameSnippet.topY()).thenReturn(SNIPPET_TOP_Y);
+        lenient().when(mockAnimationFrameSnippet.bottomY()).thenReturn(SNIPPET_BOTTOM_Y);
+        lenient().when(mockAnimationFrameSnippet.image()).thenReturn(mockImage);
+        lenient().when(mockAnimationFrameSnippet.offsetX())
+                .thenReturn(ANIMATION_FRAME_SNIPPET_OFFSET_X);
+        lenient().when(mockAnimationFrameSnippet.offsetY())
+                .thenReturn(ANIMATION_FRAME_SNIPPET_OFFSET_Y);
 
-        when(mockAnimation.snippetAtFrame(anyInt())).thenReturn(mockAnimationFrameSnippet);
-        when(mockAnimation.msDuration()).thenReturn(ANIMATION_MS_DURATION);
-        when(mockAnimation.snippetAtFrame(anyInt())).thenReturn(mockAnimationFrameSnippet);
+        lenient().when(mockAnimation.snippetAtFrame(anyInt()))
+                .thenReturn(mockAnimationFrameSnippet);
+        lenient().when(mockAnimation.msDuration()).thenReturn(ANIMATION_MS_DURATION);
+        lenient().when(mockAnimation.snippetAtFrame(anyInt()))
+                .thenReturn(mockAnimationFrameSnippet);
 
-        when(mockGlobalLoopingAnimation.provide(anyLong())).thenReturn(mockAnimationFrameSnippet);
+        lenient().when(mockGlobalLoopingAnimation.provide(anyLong()))
+                .thenReturn(mockAnimationFrameSnippet);
 
-        when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
+        lenient().when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
 
         imageAssetSetRenderable =
                 new ImageAssetSetRenderableImpl(mockImageAssetSet, TYPE, DIRECTION,
@@ -153,7 +150,7 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(null, TYPE, DIRECTION, onPressActions,
@@ -259,12 +256,6 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testGetInterfaceName() {
-        assertEquals(ImageAssetSetRenderable.class.getCanonicalName(),
-                imageAssetSetRenderable.getInterfaceName());
-    }
-
-    @Test
     public void testGetAndSetImageAssetSet() {
         assertSame(mockImageAssetSet, imageAssetSetRenderable.getImageAssetSet());
 
@@ -277,7 +268,7 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testSetImageAssetSetWithInvalidParams() {
+    public void testSetImageAssetSetWithInvalidArgs() {
         var imageAssetSetNotSupportingMouseEvents = mock(ImageAssetSet.class);
         when(imageAssetSetNotSupportingMouseEvents.supportsMouseEventCapturing()).thenReturn(false);
 
@@ -320,7 +311,7 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testSetBorderThicknessProviderWithInvalidParams() {
+    public void testSetBorderThicknessProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> imageAssetSetRenderable.setBorderThicknessProvider(null));
     }
@@ -338,7 +329,7 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testSetBorderColorProviderWithInvalidParams() {
+    public void testSetBorderColorProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> imageAssetSetRenderable.setBorderColorProvider(null));
     }
@@ -555,7 +546,7 @@ public class ImageAssetSetRenderableImplTests {
         assertThrows(UnsupportedOperationException.class,
                 () -> imageAssetSetRenderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(UnsupportedOperationException.class,
-                () -> imageAssetSetRenderable.capturesMouseEventAtPoint(Vertex.of(0f, 0f),
+                () -> imageAssetSetRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f),
                         TIMESTAMP + 1));
     }
 
@@ -624,7 +615,7 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testSetRenderingDimensionsProviderWithInvalidParams() {
+    public void testSetRenderingDimensionsProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> imageAssetSetRenderable.setRenderingDimensionsProvider(null));
     }
@@ -647,10 +638,10 @@ public class ImageAssetSetRenderableImplTests {
         when(mockImageAssetSet.getImageAssetForTypeAndDirection(anyString(), any()))
                 .thenReturn(mockSprite);
         var expectedImageX =
-                (int) (((POINT_X - RENDERING_AREA_LEFT_X) / RENDERING_AREA_WIDTH) *
+                (int) (((POINT_X - RENDERING_AREA_LEFT_X) / RENDERING_AREA.width()) *
                         (SNIPPET_RIGHT_X - SNIPPET_LEFT_X)) + SNIPPET_LEFT_X;
         var expectedImageY =
-                (int) (((POINT_Y - RENDERING_AREA_TOP_Y) / RENDERING_AREA_HEIGHT) *
+                (int) (((POINT_Y - RENDERING_AREA_TOP_Y) / RENDERING_AREA.height()) *
                         (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) + SNIPPET_TOP_Y;
 
         var capturesMouseEventAtPoint =
@@ -670,11 +661,11 @@ public class ImageAssetSetRenderableImplTests {
                 .thenReturn(mockAnimation);
         var expectedImageX =
                 (int) ((((POINT_X - ANIMATION_FRAME_SNIPPET_OFFSET_X) - RENDERING_AREA_LEFT_X) /
-                        RENDERING_AREA_WIDTH) * (SNIPPET_RIGHT_X - SNIPPET_LEFT_X)) +
+                        RENDERING_AREA.width()) * (SNIPPET_RIGHT_X - SNIPPET_LEFT_X)) +
                         SNIPPET_LEFT_X;
         var expectedImageY =
                 (int) ((((POINT_Y - ANIMATION_FRAME_SNIPPET_OFFSET_Y) - RENDERING_AREA_TOP_Y) /
-                        RENDERING_AREA_HEIGHT) * (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) +
+                        RENDERING_AREA.height()) * (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) +
                         SNIPPET_TOP_Y;
 
         var capturesMouseEventAtPoint =
@@ -698,11 +689,11 @@ public class ImageAssetSetRenderableImplTests {
                 .thenReturn(mockGlobalLoopingAnimation);
         var expectedImageX =
                 (int) ((((POINT_X - ANIMATION_FRAME_SNIPPET_OFFSET_X) - RENDERING_AREA_LEFT_X) /
-                        RENDERING_AREA_WIDTH) * (SNIPPET_RIGHT_X - SNIPPET_LEFT_X)) +
+                        RENDERING_AREA.width()) * (SNIPPET_RIGHT_X - SNIPPET_LEFT_X)) +
                         SNIPPET_LEFT_X;
         var expectedImageY =
                 (int) ((((POINT_Y - ANIMATION_FRAME_SNIPPET_OFFSET_Y) - RENDERING_AREA_TOP_Y) /
-                        RENDERING_AREA_HEIGHT) * (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) +
+                        RENDERING_AREA.height()) * (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) +
                         SNIPPET_TOP_Y;
 
         var capturesMouseEventAtPoint =
@@ -727,48 +718,42 @@ public class ImageAssetSetRenderableImplTests {
         when(mockImageAssetSet.getImageAssetForTypeAndDirection(anyString(), any()))
                 .thenReturn(mockSprite);
         when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(WHOLE_SCREEN);
-        when(mockCurrentRenderingBoundaries.leftX()).thenReturn(0f);
-        when(mockCurrentRenderingBoundaries.rightX()).thenReturn(distanceWithinWindow);
-        when(mockCurrentRenderingBoundaries.topY()).thenReturn(0f);
-        when(mockCurrentRenderingBoundaries.bottomY()).thenReturn(distanceWithinWindow);
+        when(mockRenderingBoundaries.currentBoundaries())
+                .thenReturn(floatBoxOf(0f, 0f, distanceWithinWindow, distanceWithinWindow));
         when(mockImage.capturesMouseEventsAtPixel(anyInt(), anyInt())).thenReturn(true);
 
         assertTrue(imageAssetSetRenderable.capturesMouseEventAtPoint(
-                Vertex.of(Math.min(1f, distanceWithinWindow - VERY_SMALL_NUMBER), 0f), TIMESTAMP));
+                vertexOf(Math.min(1f, distanceWithinWindow - VERY_SMALL_NUMBER), 0f), TIMESTAMP));
         assertFalse(imageAssetSetRenderable.capturesMouseEventAtPoint(
-                Vertex.of(Math.min(1f, distanceWithinWindow + VERY_SMALL_NUMBER), 0f), TIMESTAMP));
+                vertexOf(Math.min(1f, distanceWithinWindow + VERY_SMALL_NUMBER), 0f), TIMESTAMP));
     }
 
     @Test
-    public void testCapturesMouseEventAtPointWithInvalidParams() {
-        when(mockRenderingArea.leftX()).thenReturn(0.5f);
-        when(mockRenderingArea.rightX()).thenReturn(1.5f);
-        when(mockRenderingArea.topY()).thenReturn(0.5f);
-        when(mockRenderingArea.bottomY()).thenReturn(1.5f);
+    public void testCapturesMouseEventAtPointWithInvalidArgs() {
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(
+                floatBoxOf(0.5f, 1.5f, 0.5f, 1.5f));
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(.5f - VERY_SMALL_NUMBER, .75f), 0L));
+                .capturesMouseEventAtPoint(vertexOf(.5f - VERY_SMALL_NUMBER, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(1f + VERY_SMALL_NUMBER, .75f), 0L));
+                .capturesMouseEventAtPoint(vertexOf(1f + VERY_SMALL_NUMBER, .75f), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(.75f, .5f - VERY_SMALL_NUMBER), 0L));
+                .capturesMouseEventAtPoint(vertexOf(.75f, .5f - VERY_SMALL_NUMBER), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(.75f, 1.5f + VERY_SMALL_NUMBER), 0L));
+                .capturesMouseEventAtPoint(vertexOf(.75f, 1.5f + VERY_SMALL_NUMBER), 0L));
 
-        when(mockRenderingArea.leftX()).thenReturn(-0.5f);
-        when(mockRenderingArea.rightX()).thenReturn(0.5f);
-        when(mockRenderingArea.topY()).thenReturn(-0.5f);
-        when(mockRenderingArea.bottomY()).thenReturn(0.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(
+                floatBoxOf(-0.5f, 0.5f, -0.5f, 0.5f));
 
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(0f - VERY_SMALL_NUMBER, .25f), 0L));
+                .capturesMouseEventAtPoint(vertexOf(0f - VERY_SMALL_NUMBER, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(0.5f + VERY_SMALL_NUMBER, .25f), 0L));
+                .capturesMouseEventAtPoint(vertexOf(0.5f + VERY_SMALL_NUMBER, .25f), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(.25f, 0f - VERY_SMALL_NUMBER), 0L));
+                .capturesMouseEventAtPoint(vertexOf(.25f, 0f - VERY_SMALL_NUMBER), 0L));
         assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable
-                .capturesMouseEventAtPoint(Vertex.of(.25f, 0.5f + VERY_SMALL_NUMBER), 0L));
+                .capturesMouseEventAtPoint(vertexOf(.25f, 0.5f + VERY_SMALL_NUMBER), 0L));
     }
 
     @Test

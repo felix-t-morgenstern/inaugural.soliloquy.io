@@ -12,9 +12,9 @@ import java.util.Map;
 public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
         implements PolygonRenderable {
-    private ProviderAtTime<Integer> _backgroundTextureIdProvider;
-    private float _backgroundTextureTileWidth;
-    private float _backgroundTextureTileHeight;
+    private ProviderAtTime<Integer> backgroundTextureIdProvider;
+    private float backgroundTextureTileWidth;
+    private float backgroundTextureTileHeight;
 
     protected AbstractPolygonRenderable(
             ProviderAtTime<Integer> backgroundTextureIdProvider,
@@ -38,37 +38,37 @@ public abstract class AbstractPolygonRenderable
 
     @Override
     public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
-        return _backgroundTextureIdProvider;
+        return backgroundTextureIdProvider;
     }
 
     @Override
     public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
             throws IllegalArgumentException {
-        _backgroundTextureIdProvider = Check.ifNull(backgroundTextureIdProvider,
+        this.backgroundTextureIdProvider = Check.ifNull(backgroundTextureIdProvider,
                 "backgroundTextureIdProvider");
     }
 
     @Override
     public float getBackgroundTextureTileWidth() {
-        return _backgroundTextureTileWidth;
+        return backgroundTextureTileWidth;
     }
 
     @Override
     public void setBackgroundTextureTileWidth(float backgroundTextureTileWidth)
             throws IllegalArgumentException {
-        _backgroundTextureTileWidth = Check.throwOnLteZero(backgroundTextureTileWidth,
+        this.backgroundTextureTileWidth = Check.throwOnLteZero(backgroundTextureTileWidth,
                 "backgroundTextureTileWidth");
     }
 
     @Override
     public float getBackgroundTextureTileHeight() {
-        return _backgroundTextureTileHeight;
+        return backgroundTextureTileHeight;
     }
 
     @Override
     public void setBackgroundTextureTileHeight(float backgroundTextureTileHeight)
             throws IllegalArgumentException {
-        _backgroundTextureTileHeight = Check.throwOnLteZero(backgroundTextureTileHeight,
+        this.backgroundTextureTileHeight = Check.throwOnLteZero(backgroundTextureTileHeight,
                 "backgroundTextureTileHeight");
     }
 }

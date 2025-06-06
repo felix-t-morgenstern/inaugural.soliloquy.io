@@ -4,11 +4,11 @@ import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.assets.Animation;
 import soliloquy.specs.graphics.assets.AnimationFrameSnippet;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import static inaugural.soliloquy.tools.random.Random.randomIntWithInclusiveFloor;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class FakeAnimation implements Animation {
     public String Id;
@@ -17,7 +17,7 @@ public class FakeAnimation implements Animation {
     public boolean SupportsMouseEventCapturing;
     public FakeAnimationFrameSnippet AnimationFrameSnippet;
     public Map<Integer, AnimationFrameSnippet> AnimationFrameSnippets;
-    public ArrayList<Pair<Integer, AnimationFrameSnippet>> SnippetsProvided = new ArrayList<>();
+    public List<Pair<Integer, AnimationFrameSnippet>> SnippetsProvided = listOf();
 
     public FakeAnimation(String id) {
         Id = id;
@@ -48,11 +48,6 @@ public class FakeAnimation implements Animation {
         SupportsMouseEventCapturing = supportsMouseEventCapturing;
     }
 
-    public FakeAnimation(FakeAnimationFrameSnippet animationFrameSnippet) {
-        MsDuration = randomIntWithInclusiveFloor(1);
-        AnimationFrameSnippet = animationFrameSnippet;
-    }
-
     @Override
     public int msDuration() {
         return MsDuration;
@@ -80,10 +75,5 @@ public class FakeAnimation implements Animation {
     @Override
     public String id() throws IllegalStateException {
         return Id;
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
     }
 }

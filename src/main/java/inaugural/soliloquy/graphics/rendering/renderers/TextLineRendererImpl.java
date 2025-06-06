@@ -1,17 +1,16 @@
 package inaugural.soliloquy.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.assets.Font;
 import soliloquy.specs.graphics.assets.FontStyleInfo;
 import soliloquy.specs.graphics.renderables.TextJustification;
 import soliloquy.specs.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
-import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
 import soliloquy.specs.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
@@ -22,16 +21,17 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
+
 public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         implements TextLineRenderer {
     private final Color DEFAULT_COLOR;
 
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
-                                FloatBoxFactory floatBoxFactory, Color defaultColor,
-                                WindowResolutionManager windowResolutionManager,
+                                Color defaultColor, WindowResolutionManager windowResolutionManager,
                                 Long mostRecentTimestamp) {
-        super(renderingBoundaries, floatBoxFactory, ARCHETYPE, windowResolutionManager,
-                mostRecentTimestamp);
+        super(renderingBoundaries, windowResolutionManager, mostRecentTimestamp);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 
@@ -51,7 +51,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             if (borderThickness != null) {
                 Check.throwOnLtValue(borderThickness, 0f, "provided border thickness");
                 borderColor = Check.ifNull(textLineRenderable.getBorderColorProvider(),
-                        "textLineRenderable.getBorderColorProvider()")
+                                "textLineRenderable.getBorderColorProvider()")
                         .provide(timestamp);
             }
         }
@@ -102,23 +102,28 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
                                   Vertex dropShadowOffset, Color dropShadowColor) {
         if (dropShadowSize != null) {
-            float xOffset = dropShadowOffset.X / _getScreenWidthToHeightRatio.get();
+            float xOffset = dropShadowOffset.X / getScreenWidthToHeightRatio.get();
             float yOffset = dropShadowOffset.Y;
             float sizeAdjustment = dropShadowSize / lineHeight;
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xOffset + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY + yOffset,
-                                leftX + (glyphLength * sizeAdjustment),
-                                startY + yOffset + (lineHeight * sizeAdjustment)
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY + yOffset
+                                ),
+                                vertexOf(
+                                        leftX + (glyphLength * sizeAdjustment),
+                                        startY + yOffset + (lineHeight * sizeAdjustment
+                                        )
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 dropShadowColor);
                     });
@@ -126,21 +131,25 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         if (borderThickness != null) {
             float yThickness = borderThickness;
-            float xThickness = yThickness / _getScreenWidthToHeightRatio.get();
+            float xThickness = yThickness / getScreenWidthToHeightRatio.get();
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY - yThickness,
-                                leftX + glyphLength,
-                                startY - yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY - yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY - yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -148,16 +157,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY - yThickness,
-                                leftX + glyphLength,
-                                startY - yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY - yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY - yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -165,16 +178,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY - yThickness,
-                                leftX + glyphLength,
-                                startY - yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY - yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY - yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -182,16 +199,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY,
-                                leftX + glyphLength,
-                                startY + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -199,16 +220,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY + yThickness,
-                                leftX + glyphLength,
-                                startY + yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY + yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY + yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -216,16 +241,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY + yThickness,
-                                leftX + glyphLength,
-                                startY + yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY + yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY + yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -233,16 +262,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY + yThickness,
-                                leftX + glyphLength,
-                                startY + yThickness + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY + yThickness
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY + yThickness + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -250,16 +283,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
-                        FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                                leftX,
-                                startY,
-                                leftX + glyphLength,
-                                startY + lineHeight
+                        var renderingArea = floatBoxOf(
+                                vertexOf(
+                                        leftX,
+                                        startY
+                                ),
+                                vertexOf(
+                                        leftX + glyphLength,
+                                        startY + lineHeight
+                                )
                         );
 
                         super.render(renderingArea,
-                                glyphBox.leftX(), glyphBox.topY(),
-                                glyphBox.rightX(), glyphBox.bottomY(),
+                                glyphBox.LEFT_X, glyphBox.TOP_Y,
+                                glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                                 textureId,
                                 borderColor);
                     });
@@ -267,16 +304,20 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                     float leftX = startX + textLineLengthThusFar;
-                    FloatBox renderingArea = FLOAT_BOX_FACTORY.make(
-                            leftX,
-                            startY,
-                            leftX + glyphLength,
-                            startY + lineHeight
+                    var renderingArea = floatBoxOf(
+                            vertexOf(
+                                    leftX,
+                                    startY
+                            ),
+                            vertexOf(
+                                    leftX + glyphLength,
+                                    startY + lineHeight
+                            )
                     );
 
                     super.render(renderingArea,
-                            glyphBox.leftX(), glyphBox.topY(),
-                            glyphBox.rightX(), glyphBox.bottomY(),
+                            glyphBox.LEFT_X, glyphBox.TOP_Y,
+                            glyphBox.RIGHT_X, glyphBox.BOTTOM_Y,
                             textureId,
                             color);
                 });
@@ -310,7 +351,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                 textLineRenderable.getPaddingBetweenGlyphs() * lineHeight;
 
         String lineText = textLineRenderable.getLineTextProvider().provide(timestamp);
-        for (int i = 0; i < lineText.length(); i++) {
+        for (var i = 0; i < lineText.length(); i++) {
             if (renderingAction != null) {
                 if (textLineRenderable.colorProviderIndices() != null &&
                         textLineRenderable.colorProviderIndices().containsKey(i)) {
@@ -403,7 +444,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         Check.ifNull(textLineRenderable.italicIndices(), "textLineRenderable.italicIndices()");
         Integer highestIndexThusFar = null;
-        for (Integer index : textLineRenderable.italicIndices()) {
+        for (var index : textLineRenderable.italicIndices()) {
             validateIndex(index, "textLineRenderable.italicIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
@@ -411,7 +452,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
         Check.ifNull(textLineRenderable.boldIndices(), "textLineRenderable.boldIndices()");
         highestIndexThusFar = null;
-        for (Integer index : textLineRenderable.boldIndices()) {
+        for (var index : textLineRenderable.boldIndices()) {
             validateIndex(index, "textLineRenderable.boldIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
@@ -615,11 +656,6 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         public void setDropShadowColorProvider(ProviderAtTime<Color> providerAtTime)
                 throws IllegalArgumentException {
 
-        }
-
-        @Override
-        public String getInterfaceName() {
-            return TextLineRenderable.class.getCanonicalName();
         }
     };
 }

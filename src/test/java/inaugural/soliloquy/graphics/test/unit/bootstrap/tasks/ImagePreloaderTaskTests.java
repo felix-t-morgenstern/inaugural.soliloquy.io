@@ -6,50 +6,45 @@ import inaugural.soliloquy.graphics.test.testdoubles.fakes.FakeImageFactory;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.assets.Image;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImagePreloaderTaskTests {
+public class ImagePreloaderTaskTests {
     private final FakeImageFactory IMAGE_FACTORY = new FakeImageFactory();
     private final String RELATIVE_LOCATION = "relativeLocation";
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-        ArrayList<Image> dummyList = new ArrayList<>();
+        List<Image> dummyList = listOf();
 
         assertThrows(IllegalArgumentException.class,
                 () -> new ImagePreloaderTask(null, IMAGE_FACTORY, dummyList::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImagePreloaderTask(
-                        new ArrayList<ImageDefinitionDTO>() {{
-                            add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
-                        }},
+                        listOf(new ImageDefinitionDTO(RELATIVE_LOCATION, true)),
                         null,
                         dummyList::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImagePreloaderTask(
-                        new ArrayList<ImageDefinitionDTO>() {{
-                            add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
-                        }},
+                        listOf(new ImageDefinitionDTO(RELATIVE_LOCATION, true)),
                         IMAGE_FACTORY, null));
     }
 
     @Test
-    void testRun() {
-        ArrayList<Image> images = new ArrayList<>();
+    public void testRun() {
+        List<Image> images = listOf();
 
         ImagePreloaderTask worker = new ImagePreloaderTask(
-                new ArrayList<ImageDefinitionDTO>() {{
-                    add(new ImageDefinitionDTO(RELATIVE_LOCATION, true));
-                }},
+                listOf(new ImageDefinitionDTO(RELATIVE_LOCATION, true)),
                 IMAGE_FACTORY, images::add);
 
         worker.run();
 
-        assertEquals(IMAGE_FACTORY.RelativeLocations.get(0), RELATIVE_LOCATION);
-        assertTrue(IMAGE_FACTORY.SupportsEventCapturingValues.get(0));
-        assertSame(images.get(0), IMAGE_FACTORY.Outputs.get(0));
+        assertEquals(IMAGE_FACTORY.RelativeLocations.getFirst(), RELATIVE_LOCATION);
+        assertTrue(IMAGE_FACTORY.SupportsEventCapturingValues.getFirst());
+        assertSame(images.getFirst(), IMAGE_FACTORY.Outputs.getFirst());
     }
 }

@@ -12,33 +12,33 @@ import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.*;
 
-class StaticMouseCursorPreloaderFactoryImplTests {
+public class StaticMouseCursorPreloaderFactoryImplTests {
     private final String ID = randomString();
     private final Long PROVIDED_VALUE = randomLong();
 
-    private StaticMouseCursorProviderFactory _staticMouseCursorProviderFactory;
+    private StaticMouseCursorProviderFactory staticMouseCursorProviderFactory;
 
     @BeforeEach
-    void setUp() {
-        _staticMouseCursorProviderFactory = new StaticMouseCursorPreloaderFactoryImpl();
+    public void setUp() {
+        staticMouseCursorProviderFactory = new StaticMouseCursorPreloaderFactoryImpl();
     }
 
     @Test
-    void make() {
-        StaticMouseCursorProvider staticMouseCursorProvider = _staticMouseCursorProviderFactory
+    public void make() {
+        StaticMouseCursorProvider staticMouseCursorProvider = staticMouseCursorProviderFactory
                 .make(new StaticMouseCursorProviderDefinition(ID, PROVIDED_VALUE));
 
         assertNotNull(staticMouseCursorProvider);
-        assertTrue(staticMouseCursorProvider instanceof StaticMouseCursorProviderImpl);
+        assertInstanceOf(StaticMouseCursorProviderImpl.class, staticMouseCursorProvider);
         assertEquals(ID, staticMouseCursorProvider.id());
         assertEquals(PROVIDED_VALUE, staticMouseCursorProvider.provide(randomLong()));
     }
 
     @Test
-    void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _staticMouseCursorProviderFactory
+    public void testMakeWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> staticMouseCursorProviderFactory
                 .make(new StaticMouseCursorProviderDefinition(null, PROVIDED_VALUE)));
-        assertThrows(IllegalArgumentException.class, () -> _staticMouseCursorProviderFactory
+        assertThrows(IllegalArgumentException.class, () -> staticMouseCursorProviderFactory
                 .make(new StaticMouseCursorProviderDefinition("", PROVIDED_VALUE)));
     }
 }

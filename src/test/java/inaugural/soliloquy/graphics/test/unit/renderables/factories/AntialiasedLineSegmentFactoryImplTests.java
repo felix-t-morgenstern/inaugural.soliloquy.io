@@ -7,17 +7,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.graphics.rendering.RenderableStack;
 
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AntialiasedLineSegmentFactoryImplTests {
+public class AntialiasedLineSegmentFactoryImplTests {
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -29,89 +29,81 @@ class AntialiasedLineSegmentFactoryImplTests {
     private final int Z = randomInt();
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private RenderableStack _mockContainingStack;
+    @Mock private RenderableStack mockContainingStack;
 
-    private AntialiasedLineSegmentRenderableFactory _antialiasedLineSegmentRenderableFactory;
+    private AntialiasedLineSegmentRenderableFactory antialiasedLineSegmentRenderableFactory;
 
     @BeforeEach
-    void setUp() {
-        _mockContainingStack = mock(RenderableStack.class);
+    public void setUp() {
+        mockContainingStack = mock(RenderableStack.class);
 
-        _antialiasedLineSegmentRenderableFactory =
+        antialiasedLineSegmentRenderableFactory =
                 new AntialiasedLineSegmentRenderableFactoryImpl();
     }
 
     @Test
-    void testMake() {
-        AntialiasedLineSegmentRenderable antialiasedLineSegmentRenderable =
-                _antialiasedLineSegmentRenderableFactory
-                        .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                                THICKNESS_PROVIDER, COLOR_PROVIDER,
-                                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                                LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack);
+    public void testMake() {
+        var antialiasedLineSegmentRenderable =
+                antialiasedLineSegmentRenderableFactory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
+                        THICKNESS_PROVIDER, COLOR_PROVIDER, THICKNESS_GRADIENT_PERCENT_PROVIDER,
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack);
 
         assertNotNull(antialiasedLineSegmentRenderable);
-        assertTrue(
-                antialiasedLineSegmentRenderable instanceof AntialiasedLineSegmentRenderableImpl);
+        assertInstanceOf(AntialiasedLineSegmentRenderableImpl.class,
+                antialiasedLineSegmentRenderable);
 
-        int newZ = 456;
+        var newZ = 456;
         antialiasedLineSegmentRenderable.setZ(newZ);
 
         assertEquals(newZ, antialiasedLineSegmentRenderable.getZ());
-        verify(_mockContainingStack, times(1)).add(antialiasedLineSegmentRenderable);
+        verify(mockContainingStack, once()).add(antialiasedLineSegmentRenderable);
 
         antialiasedLineSegmentRenderable.delete();
 
-        verify(_mockContainingStack, times(1)).remove(antialiasedLineSegmentRenderable);
+        verify(mockContainingStack, once()).remove(antialiasedLineSegmentRenderable);
     }
 
     @Test
-    void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+    public void testMakeWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(null, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, null,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         null, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, null,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         null,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        null, Z, UUID, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        null, Z, UUID, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, null, _mockContainingStack));
-        assertThrows(IllegalArgumentException.class, () -> _antialiasedLineSegmentRenderableFactory
+                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, null, mockContainingStack));
+        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, null));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(AntialiasedLineSegmentRenderableFactory.class.getCanonicalName(),
-                _antialiasedLineSegmentRenderableFactory.getInterfaceName());
     }
 }

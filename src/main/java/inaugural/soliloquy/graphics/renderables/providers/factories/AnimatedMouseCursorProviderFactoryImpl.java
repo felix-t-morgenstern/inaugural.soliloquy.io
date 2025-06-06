@@ -18,9 +18,4 @@ public class AnimatedMouseCursorProviderFactoryImpl implements AnimatedMouseCurs
                 definition.mostRecentTimestamp()
         );
     }
-
-    @Override
-    public String getInterfaceName() {
-        return AnimatedMouseCursorProviderFactory.class.getCanonicalName();
-    }
 }

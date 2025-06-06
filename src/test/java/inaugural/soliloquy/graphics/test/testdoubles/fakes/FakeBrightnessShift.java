@@ -21,9 +21,4 @@ public class FakeBrightnessShift implements BrightnessShift {
     public boolean overridesPriorShiftsOfSameType() {
         return OverridesPriorShiftsOfSameType;
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

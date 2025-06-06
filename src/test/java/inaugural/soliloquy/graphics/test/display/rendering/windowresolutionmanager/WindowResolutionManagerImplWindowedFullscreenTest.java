@@ -15,11 +15,10 @@ import soliloquy.specs.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.graphics.rendering.timing.GlobalClock;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.mock;
@@ -47,11 +46,11 @@ class WindowResolutionManagerImplWindowedFullscreenTest {
         FakeFrameTimer frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new FakeMesh();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = listOf();
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(generateSimpleArchetype(RenderableStack.class), new FakeStackRenderer(), 100);
+        FrameExecutor frameExecutor = new FrameExecutorImpl(mock(RenderableStack.class), new FakeStackRenderer(), 100);
 
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = new ArrayList<>();
+        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = listOf();
         GraphicsCoreLoop graphicsCoreLoop =
                 new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),
                         frameTimer, 20, windowResolutionManager, mockGlobalClock, frameExecutor,

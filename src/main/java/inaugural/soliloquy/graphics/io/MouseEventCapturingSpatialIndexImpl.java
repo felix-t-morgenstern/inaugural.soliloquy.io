@@ -2,10 +2,10 @@ package inaugural.soliloquy.graphics.io;
 
 import com.conversantmedia.util.collection.spatial.RTreeFacade;
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.io.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.graphics.renderables.RenderableWithMouseEvents;
-import soliloquy.specs.graphics.rendering.FloatBox;
 
 public class MouseEventCapturingSpatialIndexImpl
         implements MouseEventCapturingSpatialIndex {
@@ -23,10 +23,10 @@ public class MouseEventCapturingSpatialIndexImpl
         var highestZThusFar = Integer.MIN_VALUE;
         RenderableWithMouseEvents renderableWithHighestZThusFar = null;
         for (var roughResult : roughResults) {
-            if (roughResult.renderingDimensions.leftX() <= point.X &&
-                    roughResult.renderingDimensions.topY() <= point.Y &&
-                    roughResult.renderingDimensions.rightX() >= point.X &&
-                    roughResult.renderingDimensions.bottomY() >= point.Y &&
+            if (roughResult.renderingDimensions.LEFT_X <= point.X &&
+                    roughResult.renderingDimensions.TOP_Y <= point.Y &&
+                    roughResult.renderingDimensions.RIGHT_X >= point.X &&
+                    roughResult.renderingDimensions.BOTTOM_Y >= point.Y &&
                     roughResult.renderableWithMouseEvents.getZ() > highestZThusFar &&
                     roughResult.renderableWithMouseEvents
                             .capturesMouseEventAtPoint(point, timestamp)) {
@@ -55,10 +55,5 @@ public class MouseEventCapturingSpatialIndexImpl
     public void removeRenderable(RenderableWithMouseEvents renderableWithMouseEvents)
             throws IllegalArgumentException {
         R_TREE.remove(Check.ifNull(renderableWithMouseEvents, "renderableWithMouseEvents"));
-    }
-
-    @Override
-    public String getInterfaceName() {
-        return MouseEventCapturingSpatialIndex.class.getCanonicalName();
     }
 }

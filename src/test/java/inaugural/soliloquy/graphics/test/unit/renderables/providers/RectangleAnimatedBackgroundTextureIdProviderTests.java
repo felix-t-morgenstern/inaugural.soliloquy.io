@@ -5,10 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.LoopingLinearMovingProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
 
 /** @noinspection FieldCanBeLocal */
@@ -36,14 +36,14 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     private final int MS_8_VALUE = 888;
     private final int MS_9 = 3600;
     private final int MS_9_VALUE = 999;
-    private final HashMap<Integer, Integer> VALUES_WITHIN_PERIOD = new HashMap<>();
+    private final Map<Integer, Integer> VALUES_WITHIN_PERIOD = mapOf();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private LoopingLinearMovingProvider<Integer> rectangleAnimatedBackgroundTextureIdProvider;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         VALUES_WITHIN_PERIOD.put(MS_1, MS_1_VALUE);
         VALUES_WITHIN_PERIOD.put(MS_2, MS_2_VALUE);
         VALUES_WITHIN_PERIOD.put(MS_3, MS_3_VALUE);
@@ -61,7 +61,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleAnimatedBackgroundTextureIdProvider(null, PERIOD_DURATION,
                         PERIOD_MODULO_OFFSET, VALUES_WITHIN_PERIOD, PAUSED_TIMESTAMP,
@@ -138,19 +138,12 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(LoopingLinearMovingProvider.class.getCanonicalName() + "<" +
-                        Integer.class.getCanonicalName() + ">",
-                rectangleAnimatedBackgroundTextureIdProvider.getInterfaceName());
-    }
-
-    @Test
-    void testUuid() {
+    public void testUuid() {
         assertSame(UUID, rectangleAnimatedBackgroundTextureIdProvider.uuid());
     }
 
     @Test
-    void testValuesWithinPeriod() {
+    public void testValuesWithinPeriod() {
         Map<Integer, Integer> valuesWithinPeriod =
                 rectangleAnimatedBackgroundTextureIdProvider.valuesWithinPeriod();
 
@@ -161,19 +154,19 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testPeriodDuration() {
+    public void testPeriodDuration() {
         assertEquals(PERIOD_DURATION,
                 rectangleAnimatedBackgroundTextureIdProvider.periodDuration());
     }
 
     @Test
-    void testPeriodModuloOffset() {
+    public void testPeriodModuloOffset() {
         assertEquals(PERIOD_MODULO_OFFSET,
                 rectangleAnimatedBackgroundTextureIdProvider.periodModuloOffset());
     }
 
     @Test
-    void testReset() {
+    public void testReset() {
         long resetTimestamp = 123123L;
 
         rectangleAnimatedBackgroundTextureIdProvider.reset(resetTimestamp);
@@ -183,7 +176,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testReportPauseOrProvideWithOutdatedTimestamp() {
+    public void testReportPauseOrProvideWithOutdatedTimestamp() {
         long timestamp = 123123L;
 
         rectangleAnimatedBackgroundTextureIdProvider.provide(timestamp);
@@ -228,7 +221,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testProvide() {
+    public void testProvide() {
         long timestamp1 = MS_3 - PERIOD_MODULO_OFFSET;
         long timestamp2 = timestamp1 - 1;
 
@@ -240,7 +233,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testProvideWhenPaused() {
+    public void testProvideWhenPaused() {
         long pauseTimestamp = MS_3 - PERIOD_MODULO_OFFSET;
         long provideTimestamp = pauseTimestamp + 123456L;
 
@@ -253,7 +246,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testProvideWhenResumed() {
+    public void testProvideWhenResumed() {
         long pauseTimestamp = MS_3 - PERIOD_MODULO_OFFSET - 1;
         long unpauseTimestamp = pauseTimestamp + 123456L;
 
@@ -270,7 +263,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testReportPauseWhilePausedOrViceVersa() {
+    public void testReportPauseWhilePausedOrViceVersa() {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleAnimatedBackgroundTextureIdProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
 
@@ -281,13 +274,13 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testMostRecentTimestamp() {
+    public void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
                 (long) rectangleAnimatedBackgroundTextureIdProvider.mostRecentTimestamp());
     }
 
     @Test
-    void testPauseTimestamp() {
+    public void testPauseTimestamp() {
         rectangleAnimatedBackgroundTextureIdProvider.reportPause(MOST_RECENT_TIMESTAMP + 1);
 
         assertEquals(MOST_RECENT_TIMESTAMP + 1,
@@ -295,16 +288,10 @@ public class RectangleAnimatedBackgroundTextureIdProviderTests {
     }
 
     @Test
-    void testRepresentation() {
+    public void testRepresentation() {
         assertEquals(VALUES_WITHIN_PERIOD,
                 rectangleAnimatedBackgroundTextureIdProvider.representation());
         assertNotSame(VALUES_WITHIN_PERIOD,
                 rectangleAnimatedBackgroundTextureIdProvider.representation());
-    }
-
-    @Test
-    void testArchetype() {
-        assertEquals(0,
-                (int) rectangleAnimatedBackgroundTextureIdProvider.archetype());
     }
 }

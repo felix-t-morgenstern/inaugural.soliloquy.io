@@ -1,10 +1,9 @@
 package inaugural.soliloquy.graphics.test.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.graphics.assets.FontImpl;
-import inaugural.soliloquy.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -22,6 +21,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
  * Test acceptance criteria:
@@ -41,8 +41,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         runTest(
                 TextLineRendererColorTest::generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    when(TextLineRenderable.getFont()).thenReturn(
-                            new FontImpl(FontDefinition, FLOAT_BOX_FACTORY));
+                    when(TextLineRenderable.getFont()).thenReturn(new FontImpl(FontDefinition));
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 TextLineRendererColorTest::closeAfterSomeTime
@@ -78,7 +77,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                 MAX_LOSSLESS_FONT_SIZE_OSWALD, LEADING_ADJUSTMENT,
                 plain, italic, bold, boldItalic);
 
-        var renderingLocation = Vertex.of(0.1f, 0.475f);
+        var renderingLocation = vertexOf(0.1f, 0.475f);
 
         var colorIndices = rainbowGradient(LINE_TEXT);
 
@@ -87,11 +86,11 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                         staticNullProvider(Color.BLACK), colorIndices, listOf(), listOf(),
                         staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, FLOAT_BOX_FACTORY,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
         FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.class.getCanonicalName(), TextLineRenderer);
+        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

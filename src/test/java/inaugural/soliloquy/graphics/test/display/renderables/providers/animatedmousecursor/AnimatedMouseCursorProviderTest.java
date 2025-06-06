@@ -5,14 +5,13 @@ import inaugural.soliloquy.graphics.bootstrap.assetfactories.MouseCursorImageFac
 import inaugural.soliloquy.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.graphics.test.display.io.mousecursor.MouseCursorImplTest;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.valueobjects.Pair.pairOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 class AnimatedMouseCursorProviderTest extends MouseCursorImplTest {
     private static final String MOUSE_CURSOR_IMAGE_1_RELATIVE_LOCATION =

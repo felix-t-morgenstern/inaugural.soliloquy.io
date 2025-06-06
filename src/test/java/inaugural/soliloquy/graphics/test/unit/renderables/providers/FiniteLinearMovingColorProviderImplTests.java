@@ -6,15 +6,17 @@ import org.junit.jupiter.api.Test;
 import soliloquy.specs.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-class FiniteLinearMovingColorProviderImplTests {
-    private final HashMap<Long, Color> VALUES_AT_TIMES = new HashMap<>();
+public class FiniteLinearMovingColorProviderImplTests {
+    private final Map<Long, Color> VALUES_AT_TIMES = mapOf();
     private final long TIME_1 = 100L;
     private final Color VALUE_1 = new Color(188, 130, 217, 255);
     private final long TIME_2 = 300L;
@@ -33,33 +35,33 @@ class FiniteLinearMovingColorProviderImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private ArrayList<Boolean> hueMovementIsClockwise;
+    private List<Boolean> hueMovementIsClockwise;
 
     private final long MOST_RECENT_TIMESTAMP = 34L;
 
     private FiniteLinearMovingColorProvider finiteLinearMovingColorProvider;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         VALUES_AT_TIMES.put(TIME_1, VALUE_1);
         VALUES_AT_TIMES.put(TIME_2, VALUE_2);
         VALUES_AT_TIMES.put(TIME_3, VALUE_3);
         VALUES_AT_TIMES.put(TIME_4, VALUE_4);
         VALUES_AT_TIMES.put(TIME_5, VALUE_5);
 
-        hueMovementIsClockwise = new ArrayList<Boolean>() {{
-            add(TRANSITION_1_IS_CLOCKWISE);
-            add(TRANSITION_2_IS_CLOCKWISE);
-            add(TRANSITION_3_IS_CLOCKWISE);
-            add(TRANSITION_4_IS_CLOCKWISE);
-        }};
+        hueMovementIsClockwise = listOf(
+            TRANSITION_1_IS_CLOCKWISE,
+            TRANSITION_2_IS_CLOCKWISE,
+            TRANSITION_3_IS_CLOCKWISE,
+            TRANSITION_4_IS_CLOCKWISE
+        );
 
         finiteLinearMovingColorProvider = new FiniteLinearMovingColorProviderImpl(UUID,
                 VALUES_AT_TIMES, hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingColorProviderImpl(null, VALUES_AT_TIMES,
                         hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
@@ -68,17 +70,13 @@ class FiniteLinearMovingColorProviderImplTests {
                 new FiniteLinearMovingColorProviderImpl(UUID, null,
                         hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingColorProviderImpl(UUID, new HashMap<>(),
+                new FiniteLinearMovingColorProviderImpl(UUID, mapOf(),
                         hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingColorProviderImpl(UUID, new HashMap<Long, Color>() {{
-                    put(null, Color.RED);
-                }},
+                new FiniteLinearMovingColorProviderImpl(UUID, mapOf(pairOf(null, Color.RED)),
                         hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingColorProviderImpl(UUID, new HashMap<Long, Color>() {{
-                    put(123L, null);
-                }},
+                new FiniteLinearMovingColorProviderImpl(UUID, mapOf(pairOf(123L, null)),
                         hueMovementIsClockwise, null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -86,28 +84,28 @@ class FiniteLinearMovingColorProviderImplTests {
                         null, null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(null);
-                        }}, null, MOST_RECENT_TIMESTAMP));
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            null
+                        ), null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                        }}, null, MOST_RECENT_TIMESTAMP));
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE
+                        ), null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
-                        new ArrayList<Boolean>() {{
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                            add(TRANSITION_1_IS_CLOCKWISE);
-                        }}, null, MOST_RECENT_TIMESTAMP));
+                        listOf(
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE,
+                            TRANSITION_1_IS_CLOCKWISE
+                        ), null, MOST_RECENT_TIMESTAMP));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
@@ -119,18 +117,18 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testUuid() {
+    public void testUuid() {
         assertSame(UUID, finiteLinearMovingColorProvider.uuid());
     }
 
     @Test
-    void testMostRecentTimestamp() {
+    public void testMostRecentTimestamp() {
         assertEquals(MOST_RECENT_TIMESTAMP,
                 (long) finiteLinearMovingColorProvider.mostRecentTimestamp());
     }
 
     @Test
-    void testValuesAtTimestampsRepresentation() {
+    public void testValuesAtTimestampsRepresentation() {
         assertNotNull(finiteLinearMovingColorProvider.valuesAtTimestampsRepresentation());
         assertEquals(VALUES_AT_TIMES,
                 finiteLinearMovingColorProvider.valuesAtTimestampsRepresentation());
@@ -141,7 +139,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testHueMovementIsClockwise() {
+    public void testHueMovementIsClockwise() {
         assertNotNull(finiteLinearMovingColorProvider.hueMovementIsClockwise());
         assertEquals(hueMovementIsClockwise,
                 finiteLinearMovingColorProvider.hueMovementIsClockwise());
@@ -152,12 +150,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testArchetype() {
-        assertNotNull(finiteLinearMovingColorProvider.archetype());
-    }
-
-    @Test
-    void testProvideAtExtremes() {
+    public void testProvideAtExtremes() {
         assertEquals(VALUE_1, finiteLinearMovingColorProvider.provide(TIME_1 - 1));
         assertEquals(VALUE_1, finiteLinearMovingColorProvider.provide(TIME_1));
         assertEquals(VALUE_5, finiteLinearMovingColorProvider.provide(TIME_5));
@@ -165,7 +158,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testProvideInterpolatedValueCounterclockwiseWithoutOverlappingZeroDegrees() {
+    public void testProvideInterpolatedValueCounterclockwiseWithoutOverlappingZeroDegrees() {
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;
         long distanceBetweenTimes = TIME_2 - TIME_1;
@@ -193,7 +186,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testProvideInterpolatedValueClockwiseWithoutOverlappingZeroDegrees() {
+    public void testProvideInterpolatedValueClockwiseWithoutOverlappingZeroDegrees() {
         long timeAfterTime2 = 50;
         long timestamp = TIME_2 + timeAfterTime2;
         long distanceBetweenTimes = TIME_3 - TIME_2;
@@ -221,7 +214,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testProvideInterpolatedValueClockwiseWithOverlappingZeroDegrees() {
+    public void testProvideInterpolatedValueClockwiseWithOverlappingZeroDegrees() {
         long timeAfterTime3 = 250;
         long timestamp = TIME_3 + timeAfterTime3;
         long distanceBetweenTimes = TIME_4 - TIME_3;
@@ -249,7 +242,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testProvideInterpolatedValueCounterclockwiseWithOverlappingZeroDegrees() {
+    public void testProvideInterpolatedValueCounterclockwiseWithOverlappingZeroDegrees() {
         long timeAfterTime4 = 350;
         long timestamp = TIME_4 + timeAfterTime4;
         long distanceBetweenTimes = TIME_5 - TIME_4;
@@ -281,7 +274,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testPausedTimestamp() {
+    public void testPausedTimestamp() {
         long pausedTimestamp = 12L;
         FiniteLinearMovingColorProvider finiteLinearMovingColorProvider =
                 new FiniteLinearMovingColorProviderImpl(UUID, VALUES_AT_TIMES,
@@ -292,14 +285,14 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testProvideWhenPaused() {
+    public void testProvideWhenPaused() {
         finiteLinearMovingColorProvider.reportPause(TIME_1);
 
         assertEquals(VALUE_1, finiteLinearMovingColorProvider.provide(123123123L));
     }
 
     @Test
-    void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
+    public void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
         assertThrows(IllegalArgumentException.class, () ->
                 finiteLinearMovingColorProvider.provide(MOST_RECENT_TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
@@ -345,7 +338,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testReportPauseWhilePausedOrViceVersa() {
+    public void testReportPauseWhilePausedOrViceVersa() {
         assertThrows(UnsupportedOperationException.class, () ->
                 finiteLinearMovingColorProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
 
@@ -356,13 +349,7 @@ class FiniteLinearMovingColorProviderImplTests {
     }
 
     @Test
-    void testGetInterfaceName() {
-        assertEquals(FiniteLinearMovingColorProvider.class.getCanonicalName(),
-                finiteLinearMovingColorProvider.getInterfaceName());
-    }
-
-    @Test
-    void testReportPauseAndUnpauseUpdatesTimestampsForValues() {
+    public void testReportPauseAndUnpauseUpdatesTimestampsForValues() {
         long pauseDuration = 123123L;
         long timeAfterTime1 = 50;
         long timestamp = TIME_1 + timeAfterTime1;

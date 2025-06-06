@@ -12,9 +12,4 @@ public class FakeGlobalClock implements GlobalClock {
     public long globalTimestamp() throws UnsupportedOperationException {
         return Calendar.getInstance(TimeZone.getTimeZone(GMT)).getTimeInMillis();
     }
-
-    @Override
-    public String getInterfaceName() {
-        return null;
-    }
 }

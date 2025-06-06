@@ -20,11 +20,6 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     }
 
     @Override
-    public T archetype() {
-        return null;
-    }
-
-    @Override
     public void reportPause(long l) throws IllegalArgumentException {
 
     }
@@ -36,11 +31,6 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
 
     @Override
     public Long pausedTimestamp() {
-        return null;
-    }
-
-    @Override
-    public String getInterfaceName() {
         return null;
     }
 

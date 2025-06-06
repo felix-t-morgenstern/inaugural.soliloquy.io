@@ -4,26 +4,20 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.graphics.renderables.colorshifting.NetColorShifts;
-import soliloquy.specs.graphics.rendering.FloatBox;
 import soliloquy.specs.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.graphics.rendering.WindowResolutionManager;
-import soliloquy.specs.graphics.rendering.factories.FloatBoxFactory;
-
-import java.awt.*;
 
 import static inaugural.soliloquy.graphics.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.generic.Archetypes.generateSimpleArchetype;
+import static inaugural.soliloquy.tools.valueobjects.FloatBox.translate;
 
 public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
 
     public SpriteRenderer(RenderingBoundaries renderingBoundaries,
-                          FloatBoxFactory floatBoxFactory,
                           WindowResolutionManager windowResolutionManager,
                           ColorShiftStackAggregator colorShiftStackAggregator,
                           Long mostRecentTimestamp) {
-        super(renderingBoundaries, floatBoxFactory, generateSimpleArchetype(SpriteRenderable.class),
-                windowResolutionManager, mostRecentTimestamp);
+        super(renderingBoundaries, windowResolutionManager, mostRecentTimestamp);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }
@@ -38,13 +32,13 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
 
         // TODO: Throw if rendering area or border thickness or color providers are null
 
-        Float borderThickness = Check.ifNull(spriteRenderable.getBorderThicknessProvider(),
+        var borderThickness = Check.ifNull(spriteRenderable.getBorderThicknessProvider(),
                         "spriteRenderable.getBorderThicknessProvider()")
                 .provide(timestamp);
-        Color borderColor = Check.ifNull(spriteRenderable.getBorderColorProvider(),
+        var borderColor = Check.ifNull(spriteRenderable.getBorderColorProvider(),
                         "spriteRenderable.getBorderColorProvider()")
                 .provide(timestamp);
-        FloatBox renderingArea = Check.ifNull(spriteRenderable.getRenderingDimensionsProvider(),
+        var renderingArea = Check.ifNull(spriteRenderable.getRenderingDimensionsProvider(),
                         "spriteRenderable.getRenderingDimensionsProvider()")
                 .provide(timestamp);
 
@@ -63,45 +57,45 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
             Check.throwOnGtValue(borderThickness, 1f, "spriteRenderable borderThickness");
 
             float yThickness = borderThickness;
-            float xThickness = yThickness / _getScreenWidthToHeightRatio.get();
+            var xThickness = yThickness / getScreenWidthToHeightRatio.get();
 
             // upper-left
-            super.render(renderingArea.translate(-xThickness, -yThickness),
+            super.render(translate(renderingArea, -xThickness, -yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // upper-center
-            super.render(renderingArea.translate(0f, -yThickness),
+            super.render(translate(renderingArea, 0f, -yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // upper-right
-            super.render(renderingArea.translate(xThickness, -yThickness),
+            super.render(translate(renderingArea, xThickness, -yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // center-right
-            super.render(renderingArea.translate(xThickness, 0),
+            super.render(translate(renderingArea, xThickness, 0),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // bottom-right
-            super.render(renderingArea.translate(xThickness, yThickness),
+            super.render(translate(renderingArea, xThickness, yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // bottom-center
-            super.render(renderingArea.translate(0f, yThickness),
+            super.render(translate(renderingArea, 0f, yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // bottom-left
-            super.render(renderingArea.translate(-xThickness, yThickness),
+            super.render(translate(renderingArea, -xThickness, yThickness),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);
             // center-left
-            super.render(renderingArea.translate(-xThickness, 0f),
+            super.render(translate(renderingArea, -xThickness, 0f),
                     spriteRenderable.getSprite(),
                     INTACT_COLOR,
                     borderColor);

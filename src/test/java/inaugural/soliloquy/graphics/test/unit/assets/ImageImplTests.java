@@ -7,7 +7,7 @@ import soliloquy.specs.graphics.assets.Image;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImageImplTests {
+public class ImageImplTests {
     protected final static int BITS_PER_LONG = 64;
 
     private final int TEXTURE_ID = 123;
@@ -15,23 +15,22 @@ class ImageImplTests {
     private final int WIDTH = 456;
     private final int HEIGHT = 789;
 
-    private Image _image;
-    private Image _imageWithMask;
-    private long[][] _capturingMask;
+    private Image image;
+    private Image imageWithMask;
 
     @BeforeEach
-    void setUp() {
-        _capturingMask = new long[1][1];
-        _capturingMask[0][0] = Long.parseUnsignedLong(
+    public void setUp() {
+        var capturingMask = new long[1][1];
+        capturingMask[0][0] = Long.parseUnsignedLong(
                 "1000000000000000000000000000000000000000000000000000000000000000", 2);
 
-        _image = new ImageImpl(TEXTURE_ID, RELATIVE_LOCATION, WIDTH, HEIGHT);
-        _imageWithMask = new ImageImpl(TEXTURE_ID, RELATIVE_LOCATION, WIDTH, HEIGHT,
-                _capturingMask);
+        image = new ImageImpl(TEXTURE_ID, RELATIVE_LOCATION, WIDTH, HEIGHT);
+        imageWithMask = new ImageImpl(TEXTURE_ID, RELATIVE_LOCATION, WIDTH, HEIGHT,
+                capturingMask);
     }
 
     @Test
-    void testConstructorWithInvalidParams() {
+    public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageImpl(0, RELATIVE_LOCATION, WIDTH, HEIGHT));
         assertThrows(IllegalArgumentException.class,
@@ -62,46 +61,41 @@ class ImageImplTests {
     }
 
     @Test
-    void testTextureId() {
-        assertEquals(TEXTURE_ID, _image.textureId());
-        assertEquals(TEXTURE_ID, _imageWithMask.textureId());
+    public void testTextureId() {
+        assertEquals(TEXTURE_ID, image.textureId());
+        assertEquals(TEXTURE_ID, imageWithMask.textureId());
     }
 
     @Test
-    void testRelativeLocation() {
-        assertEquals(RELATIVE_LOCATION, _image.relativeLocation());
-        assertEquals(RELATIVE_LOCATION, _imageWithMask.relativeLocation());
+    public void testRelativeLocation() {
+        assertEquals(RELATIVE_LOCATION, image.relativeLocation());
+        assertEquals(RELATIVE_LOCATION, imageWithMask.relativeLocation());
     }
 
     @Test
-    void testWidth() {
-        assertEquals(WIDTH, _image.width());
-        assertEquals(WIDTH, _imageWithMask.width());
+    public void testWidth() {
+        assertEquals(WIDTH, image.width());
+        assertEquals(WIDTH, imageWithMask.width());
     }
 
     @Test
-    void testHeight() {
-        assertEquals(HEIGHT, _image.height());
-        assertEquals(HEIGHT, _imageWithMask.height());
+    public void testHeight() {
+        assertEquals(HEIGHT, image.height());
+        assertEquals(HEIGHT, imageWithMask.height());
     }
 
     @Test
-    void testSupportsMouseEventCapturing() {
-        assertFalse(_image.supportsMouseEventCapturing());
-        assertTrue(_imageWithMask.supportsMouseEventCapturing());
+    public void testSupportsMouseEventCapturing() {
+        assertFalse(image.supportsMouseEventCapturing());
+        assertTrue(imageWithMask.supportsMouseEventCapturing());
     }
 
     @Test
-    void testCapturesMouseEventsAtPixel() {
+    public void testCapturesMouseEventsAtPixel() {
         assertThrows(UnsupportedOperationException.class,
-                () -> _image.capturesMouseEventsAtPixel(0, 0));
+                () -> image.capturesMouseEventsAtPixel(0, 0));
 
-        assertTrue(_imageWithMask.capturesMouseEventsAtPixel(0, 0));
-        assertFalse(_imageWithMask.capturesMouseEventsAtPixel(1, 0));
-    }
-
-    @Test
-    void testGetInterfaceName() {
-        assertEquals(Image.class.getCanonicalName(), _image.getInterfaceName());
+        assertTrue(imageWithMask.capturesMouseEventsAtPixel(0, 0));
+        assertFalse(imageWithMask.capturesMouseEventsAtPixel(1, 0));
     }
 }
