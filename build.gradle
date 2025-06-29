@@ -7,16 +7,24 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
-description = 'Soliloquy Graphics Module'
+description = 'Soliloquy IO Module'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(24)
     }
+}
+
+javafx {
+    version = "23.0.1"
+    modules = [ 'javafx.media', 'javafx.swing' ]
 }
 
 repositories {
@@ -49,6 +57,8 @@ dependencies {
     implementation("org.javatuples:javatuples:1.2")
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation("org.apache.commons:commons-lang3:3.17.0")
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation("commons-io:commons-io:2.19.0")
     // https://mvnrepository.com/artifact/com.conversantmedia/rtree
     implementation("com.conversantmedia:rtree:1.0.5")
 
