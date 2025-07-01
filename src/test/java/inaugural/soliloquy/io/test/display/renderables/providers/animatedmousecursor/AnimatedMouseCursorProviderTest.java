@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.io.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
-import inaugural.soliloquy.io.test.display.io.mousecursor.MouseCursorImplTest;
+import inaugural.soliloquy.io.test.display.mouse.mousecursor.MouseCursorImplTest;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.test.display.io.mousecursor;
+package inaugural.soliloquy.io.test.display.mouse.mousecursor;
 
 import inaugural.soliloquy.io.api.Constants;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;

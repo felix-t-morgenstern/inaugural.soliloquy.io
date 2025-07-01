@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.test.display.io.mouselistener;
+package inaugural.soliloquy.io.test.display.mouse.mouselistener;
 
 import inaugural.soliloquy.io.test.display.DisplayTest;
 import inaugural.soliloquy.io.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
