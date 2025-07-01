@@ -28,11 +28,11 @@ public enum WindowResolution {
     private static final Map<Integer, Map<Integer, WindowResolution>> BY_WIDTH_AND_HEIGHT = mapOf();
 
     static {
-        for (WindowResolution w : values()) {
-            if (!BY_WIDTH_AND_HEIGHT.containsKey(w.WIDTH)) {
-                BY_WIDTH_AND_HEIGHT.put(w.WIDTH, mapOf());
+        for (var windowRes : values()) {
+            if (!BY_WIDTH_AND_HEIGHT.containsKey(windowRes.WIDTH)) {
+                BY_WIDTH_AND_HEIGHT.put(windowRes.WIDTH, mapOf());
             }
-            BY_WIDTH_AND_HEIGHT.get(w.WIDTH).put(w.HEIGHT, w);
+            BY_WIDTH_AND_HEIGHT.get(windowRes.WIDTH).put(windowRes.HEIGHT, windowRes);
         }
     }
 
@@ -77,6 +77,6 @@ public enum WindowResolution {
                     "Cannot obtain width to height ratio of RES_WINDOWED_FULLSCREEN");
         }
 
-        return (float) WIDTH / (float) HEIGHT;
+        return (float) WIDTH / HEIGHT;
     }
 }
