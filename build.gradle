@@ -33,14 +33,6 @@ repositories {
     }
     mavenLocal()
     maven {
-        url = uri('https://maven.pkg.github.com/felix-t-morgenstern/inaugural.soliloquy.tools')
-    }
-
-    maven {
-        url = uri('https://raw.githubusercontent.com/felix-t-morgenstern/soliloquy.artifacts/master/')
-    }
-
-    maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
 }
@@ -48,7 +40,7 @@ repositories {
 dependencies {
     implementation "disorg.soliloquy:soliloquy.specs:0.0.539"
     implementation "disorg.soliloquy:inaugural.soliloquy.tools:0.0.149"
-    implementation "disorg.soliloquy:inaugural.soliloquy.common:0.0.20"
+    implementation "disorg.soliloquy:inaugural.soliloquy.common:0.0.21"
 
     implementation 'com.google.inject:guice:5.1.0'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
