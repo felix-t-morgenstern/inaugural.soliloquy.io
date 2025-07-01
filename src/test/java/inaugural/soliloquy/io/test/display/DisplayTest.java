@@ -47,7 +47,7 @@ public class DisplayTest {
     protected final static ProviderAtTime<Color> BLACK_PROVIDER =
             new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, null);
 
-    protected final static WindowResolution RESOLUTION = WindowResolution.RES_1920x1080;
+    protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
 
     protected final static TimestampValidator TIMESTAMP_VALIDATOR = new TimestampValidator(null);
