@@ -63,8 +63,7 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
 
         if (windowDisplayMode != WindowDisplayMode.WINDOWED_FULLSCREEN &&
                 windowDisplayMode != WindowDisplayMode.FULLSCREEN) {
-            WindowResolution windowResolutionFromInputs =
-                    WindowResolution.getFromWidthAndHeight(width, height);
+            var windowResolutionFromInputs = WindowResolution.getFromWidthAndHeight(width, height);
 
             if (windowResolutionFromInputs == WindowResolution.RES_INVALID) {
                 throw new IllegalArgumentException(
@@ -125,12 +124,12 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         return renderWindowForMode(windowId, WindowDisplayMode.WINDOWED,
                 currentWindowId -> glfwSetWindowSize(currentWindowId, windowResolution.WIDTH,
                         windowResolution.HEIGHT),
-                monitor -> glfwVidMode -> {
-
+                _ -> glfwVidMode -> {
                     glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 
-                    long newWindowId = glfwCreateWindow(windowResolution.WIDTH,
-                            windowResolution.HEIGHT, titlebar, 0, 0);
+                    var newWindowId =
+                            glfwCreateWindow(windowResolution.WIDTH, windowResolution.HEIGHT,
+                                    titlebar, 0, 0);
                     glfwSetWindowPos(newWindowId,
                             (glfwVidMode.width() - windowResolution.WIDTH) / 2,
                             (glfwVidMode.height() - windowResolution.HEIGHT) / 2);
@@ -143,20 +142,20 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
         return renderWindowForMode(windowId, WindowDisplayMode.FULLSCREEN,
                 currentWindowId -> glfwSetWindowSize(currentWindowId, windowResolution.WIDTH,
                         windowResolution.HEIGHT),
-                monitor -> glfwVidMode -> glfwCreateWindow(windowResolution.WIDTH,
+                monitor -> _ -> glfwCreateWindow(windowResolution.WIDTH,
                         windowResolution.HEIGHT, titlebar, monitor, 0));
     }
 
     private long renderWindowedFullscreen(long windowId, String titlebar) {
         return renderWindowForMode(windowId, WindowDisplayMode.WINDOWED_FULLSCREEN,
-                currentWindowId -> {}, monitor -> glfwVidMode -> {
+                _ -> {}, _ -> glfwVidMode -> {
 
                     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-                    int windowedFullscreenWidth = glfwVidMode.width();
-                    int windowedFullscreenHeight = glfwVidMode.height();
+                    var windowedFullscreenWidth = glfwVidMode.width();
+                    var windowedFullscreenHeight = glfwVidMode.height();
 
-                    long newWindowId = glfwCreateWindow(
+                    var newWindowId = glfwCreateWindow(
                             windowedFullscreenWidth,
                             windowedFullscreenHeight,
                             titlebar,
@@ -180,9 +179,9 @@ public class WindowResolutionManagerImpl implements WindowResolutionManager {
             return windowId;
         }
 
-        long oldWindowId = windowId;
-        long monitor = glfwGetPrimaryMonitor();
-        GLFWVidMode glfwVidMode = glfwGetVideoMode(monitor);
+        var oldWindowId = windowId;
+        var monitor = glfwGetPrimaryMonitor();
+        var glfwVidMode = glfwGetVideoMode(monitor);
         assert glfwVidMode != null;
 
         windowId = createNewWindow.apply(monitor).apply(glfwVidMode);
