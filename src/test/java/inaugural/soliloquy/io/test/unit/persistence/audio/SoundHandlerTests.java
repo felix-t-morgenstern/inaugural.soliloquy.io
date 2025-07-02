@@ -13,6 +13,7 @@ import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.audio.factories.SoundFactory;
 
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
@@ -36,7 +37,7 @@ public class SoundHandlerTests {
 
     @Mock private SoundType mockSoundType;
     @Mock private Sound mockSound;
-    @Mock private SoundFactory mockSoundFactory;
+    @Mock private BiFunction<String, UUID, Sound> mockSoundFactory;
 
     private TypeHandler<Sound> soundHandler;
 
@@ -60,7 +61,7 @@ public class SoundHandlerTests {
         lenient().when(mockSound.getLoopingStopMs()).thenReturn(LOOPING_STOP_MS);
         lenient().when(mockSound.getLoopingRestartMs()).thenReturn(LOOPING_RESTART_MS);
 
-        lenient().when(mockSoundFactory.make(anyString(), any())).thenReturn(mockSound);
+        lenient().when(mockSoundFactory.apply(anyString(), any())).thenReturn(mockSound);
 
         soundHandler = new SoundHandler(mockSoundFactory);
     }
@@ -88,7 +89,7 @@ public class SoundHandlerTests {
 
         assertNotNull(readValue);
         assertSame(mockSound, readValue);
-        verify(mockSoundFactory, once()).make(eq(SOUND_TYPE_ID), eq(UUID));
+        verify(mockSoundFactory, once()).apply(eq(SOUND_TYPE_ID), eq(UUID));
         verify(mockSound, once()).setIsLooping(IS_LOOPING);
         verify(mockSound, once()).setVolume(VOLUME);
         if (IS_MUTED) {

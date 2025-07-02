@@ -19,11 +19,12 @@ public class SoundFactoryImpl implements SoundFactory {
         SOUNDS_PLAYING = Check.ifNull(soundsPlaying, "soundsPlaying");
     }
 
+    @Override
     public Sound make(String soundTypeId) throws IllegalArgumentException {
         return make(soundTypeId, UUID.randomUUID());
     }
 
-    @Override
+    // NB: This method is not exposed on the SoundFactory since it is only intended for SoundHandler
     public Sound make(String soundTypeId, UUID uuid) throws IllegalArgumentException {
         Check.ifNullOrEmpty(soundTypeId, "soundTypeId");
         Check.ifNull(uuid, "uuid");

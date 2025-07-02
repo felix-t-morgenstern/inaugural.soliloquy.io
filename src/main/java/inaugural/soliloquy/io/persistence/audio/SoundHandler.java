@@ -3,14 +3,14 @@ package inaugural.soliloquy.io.persistence.audio;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.io.audio.entities.Sound;
-import soliloquy.specs.io.audio.factories.SoundFactory;
 
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 public class SoundHandler extends AbstractTypeHandler<Sound> {
-    private final SoundFactory SOUND_FACTORY;
+    private final BiFunction<String, UUID, Sound> SOUND_FACTORY;
 
-    public SoundHandler(SoundFactory soundFactory) {
+    public SoundHandler(BiFunction<String, UUID, Sound> soundFactory) {
         SOUND_FACTORY = Check.ifNull(soundFactory, "soundFactory");
     }
 
@@ -20,7 +20,7 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
         Check.ifNullOrEmpty(data, "data");
 
         var dto = JSON.fromJson(data, SoundDTO.class);
-        var sound = SOUND_FACTORY.make(dto.type, UUID.fromString(dto.uuid));
+        var sound = SOUND_FACTORY.apply(dto.type, UUID.fromString(dto.uuid));
         sound.setIsLooping(dto.looping);
         sound.setVolume(dto.vol);
         if (dto.muted) {
