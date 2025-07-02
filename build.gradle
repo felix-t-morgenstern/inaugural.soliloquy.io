@@ -12,8 +12,8 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'disorg.soliloquy'
+version = '0.0.1'
 description = 'Soliloquy IO Module'
 
 java {
