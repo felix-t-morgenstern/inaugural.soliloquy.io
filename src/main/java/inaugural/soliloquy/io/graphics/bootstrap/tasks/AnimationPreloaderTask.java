@@ -50,8 +50,8 @@ public class AnimationPreloaderTask implements Runnable {
                 throw new IllegalArgumentException("animationDefinitionDTO.frames within " +
                         "animationDefinitionDTOs (" + animationDefinitionDTO.id + ") is empty");
             }
-            int maxFrameMs = 0;
-            boolean frameAt0ms = false;
+            var maxFrameMs = 0;
+            var frameAt0ms = false;
             for (AnimationFrameDefinitionDTO frameDTO : animationDefinitionDTO.frames) {
                 maxFrameMs = Math.max(maxFrameMs, frameDTO.ms);
                 frameAt0ms = frameAt0ms || frameDTO.ms == 0;
@@ -81,7 +81,7 @@ public class AnimationPreloaderTask implements Runnable {
 
     private AnimationDefinition makeDefinition(AnimationDefinitionDTO animationDefinitionDTO) {
         Map<Integer, AnimationFrameSnippet> snippetDefinitions = mapOf();
-        for (AnimationFrameDefinitionDTO frameSnippetDTO : animationDefinitionDTO.frames) {
+        for (var frameSnippetDTO : animationDefinitionDTO.frames) {
             snippetDefinitions.put(frameSnippetDTO.ms, new AnimationFrameSnippet() {
                 @Override
                 public Image image() {
