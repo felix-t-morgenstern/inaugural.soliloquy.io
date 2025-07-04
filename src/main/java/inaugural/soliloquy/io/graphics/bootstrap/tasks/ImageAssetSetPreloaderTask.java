@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.bootstrap.tasks;
 import inaugural.soliloquy.io.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
-import soliloquy.specs.io.graphics.assets.ImageAsset;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
@@ -11,6 +10,9 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAss
 
 import java.util.Collection;
 import java.util.function.Consumer;
+
+import static soliloquy.specs.io.graphics.assets.ImageAsset.ImageAssetType;
+import static soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
 
 public class ImageAssetSetPreloaderTask implements Runnable {
     private final AssetFactory<ImageAssetSetDefinition, ImageAssetSet> FACTORY;
@@ -66,11 +68,16 @@ public class ImageAssetSetPreloaderTask implements Runnable {
                                                            imageAssetSetDefinitionDTO) {
         var assetDefinitions = Collections.<ImageAssetSetAssetDefinition>listOf();
         for (var assetDTO : imageAssetSetDefinitionDTO.assets) {
+            var displayParams = new DisplayParam[assetDTO.displayParams.length];
+            for (var i = 0; i < assetDTO.displayParams.length; i++) {
+                displayParams[i] = new DisplayParam(assetDTO.displayParams[i].name,
+                        assetDTO.displayParams[i].val);
+            }
+
             assetDefinitions.add(new ImageAssetSetAssetDefinition(
-                    assetDTO.type,
-                    assetDTO.direction,
-                    ImageAsset.ImageAssetType.getFromValue(assetDTO.assetType),
-                    assetDTO.assetId
+                    ImageAssetType.getFromValue(assetDTO.assetType),
+                    assetDTO.assetId,
+                    displayParams
             ));
         }
 

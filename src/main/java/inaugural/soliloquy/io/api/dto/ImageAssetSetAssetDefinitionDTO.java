@@ -1,16 +1,23 @@
 package inaugural.soliloquy.io.api.dto;
 
 public class ImageAssetSetAssetDefinitionDTO {
-    public String type;
-    public Integer direction;
     public int assetType;
     public String assetId;
+    public DisplayParamDefinitionDTO[] displayParams;
 
-    public ImageAssetSetAssetDefinitionDTO(String type, Integer direction, int assetType,
-                                           String assetId) {
-        this.type = type;
-        this.direction = direction;
+    public ImageAssetSetAssetDefinitionDTO(int assetType, String assetId, DisplayParamDefinitionDTO... displayParams) {
         this.assetType = assetType;
         this.assetId = assetId;
+        this.displayParams = displayParams;
+    }
+
+    public static class DisplayParamDefinitionDTO {
+        public String name;
+        public String val;
+
+        public DisplayParamDefinitionDTO(String name, String val) {
+            this.name = name;
+            this.val = val;
+        }
     }
 }

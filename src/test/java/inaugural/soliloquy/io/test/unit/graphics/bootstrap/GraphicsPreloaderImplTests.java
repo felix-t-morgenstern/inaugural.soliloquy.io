@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageAssetSetFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,8 +32,8 @@ import java.util.function.Supplier;
 
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
-import static java.awt.GridBagConstraints.SOUTHWEST;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
@@ -122,7 +121,7 @@ public class GraphicsPreloaderImplTests {
 
     @BeforeEach
     public void setUp() {
-        assetTypeBatchSizes = Collections.mapOf(
+        assetTypeBatchSizes = mapOf(
             pairOf(IMAGE, BATCH_SIZE),
             pairOf(SPRITE, BATCH_SIZE),
             pairOf(ANIMATION, BATCH_SIZE),
@@ -260,7 +259,9 @@ public class GraphicsPreloaderImplTests {
                     );
                     GlobalLoopingAnimationDefinition definition = invocation.getArgument(0);
                     allDefinitionsProcessedInOrder.add(definition);
-                    return new FakeGlobalLoopingAnimation(definition.id());
+                    var output = mock(GlobalLoopingAnimation.class);
+                    when(output.id()).thenReturn(definition.id());
+                    return output;
                 });
 
         lenient().when(mockImageAssetSetFactory.make(any()))
@@ -272,7 +273,9 @@ public class GraphicsPreloaderImplTests {
                     );
                     ImageAssetSetDefinition definition = invocation.getArgument(0);
                     allDefinitionsProcessedInOrder.add(definition);
-                    return new FakeImageAssetSet(definition.id());
+                    var output = mock(ImageAssetSet.class);
+                    when(output.id()).thenReturn(definition.id());
+                    return output;
                 });
 
         mouseCursorImageFactoryOutputs = new CopyOnWriteArrayList<>();
@@ -1020,8 +1023,7 @@ public class GraphicsPreloaderImplTests {
     }
 
     private ImageAssetSetAssetDefinitionDTO randomImageAssetSetAssetDefinitionDTO() {
-        return new ImageAssetSetAssetDefinitionDTO(randomString(), SOUTHWEST,
-                randomIntInRange(1, 3), randomString());
+        return new ImageAssetSetAssetDefinitionDTO(randomIntInRange(1, 3), randomString());
     }
 
     private MouseCursorImageDefinitionDTO randomMouseCursorImageDefinitionDTO() {

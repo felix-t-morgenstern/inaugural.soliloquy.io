@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Animation;
@@ -20,17 +19,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
-
 public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
+    private final Map<String, String> DISPLAY_PARAMS;
+
     private ImageAssetSet imageAssetSet;
-    private String type;
-    private Direction direction;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
-                                       String type,
-                                       Direction direction,
+                                       Map<String, String> displayParams,
                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
@@ -42,13 +38,11 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
-        setType(type);
-        setDirection(direction);
+        DISPLAY_PARAMS = displayParams;
     }
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
-                                       String type,
-                                       Direction direction,
+                                       Map<String, String> displayParams,
                                        Map<Integer, Action<MouseEventInputs>> onPress,
                                        Map<Integer, Action<MouseEventInputs>> onRelease,
                                        Action<MouseEventInputs> onMouseOver,
@@ -65,8 +59,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                 borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
                 containingStack, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
-        setType(type);
-        setDirection(direction);
+        DISPLAY_PARAMS = displayParams;
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }
 
@@ -87,23 +80,8 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(String type) {
-        this.type = nullIfEmpty(type);
-    }
-
-    @Override
-    public Direction getDirection() {
-        return direction;
-    }
-
-    @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+    public Map<String, String> displayParams() {
+        return DISPLAY_PARAMS;
     }
 
     @Override
@@ -120,7 +98,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         return capturesMouseEventAtPoint(point, timestamp, () -> {
-            var imageAsset = imageAssetSet.getImageAssetForTypeAndDirection(type, direction);
+            var imageAsset = imageAssetSet.getImageAssetWithDisplayParams(DISPLAY_PARAMS);
             return switch (imageAsset) {
                 case Sprite sprite -> sprite;
                 case GlobalLoopingAnimation globalLoopingAnimation ->

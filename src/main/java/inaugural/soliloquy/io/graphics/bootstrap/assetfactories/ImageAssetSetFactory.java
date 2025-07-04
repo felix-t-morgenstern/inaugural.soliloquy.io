@@ -2,26 +2,21 @@ package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
-import soliloquy.specs.common.infrastructure.ImmutableMap;
-import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.Map;
-
-import static inaugural.soliloquy.tools.Tools.emptyIfNull;
-import static inaugural.soliloquy.tools.Tools.nullIfEmpty;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import java.util.function.Function;
 
 public class ImageAssetSetFactory
         extends AbstractAssetFactory<ImageAssetSetDefinition, ImageAssetSet> {
-    private final ImmutableMap<String, Sprite> GET_SPRITE;
-    private final ImmutableMap<String, Animation> GET_ANIMATION;
-    private final ImmutableMap<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION;
+    private final Function<String, Sprite> GET_SPRITE;
+    private final Function<String, Animation> GET_ANIMATION;
+    private final Function<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION;
 
-    public ImageAssetSetFactory(ImmutableMap<String, Sprite> getSprite,
-                                ImmutableMap<String, Animation> getAnimation,
-                                ImmutableMap<String, GlobalLoopingAnimation> getGlobalLoopingAnimation) {
+    public ImageAssetSetFactory(Function<String, Sprite> getSprite,
+                                Function<String, Animation> getAnimation,
+                                Function<String, GlobalLoopingAnimation> getGlobalLoopingAnimation) {
         GET_SPRITE = Check.ifNull(getSprite, "getSprite");
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
         GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation,
@@ -29,107 +24,105 @@ public class ImageAssetSetFactory
     }
 
     @Override
-    public ImageAssetSet make(ImageAssetSetDefinition imageAssetSetDefinition)
+    public ImageAssetSet make(ImageAssetSetDefinition definition)
             throws IllegalArgumentException {
-        Check.ifNull(imageAssetSetDefinition, "imageAssetSetDefinition");
+        Check.ifNull(definition, "definition");
 
-        Check.ifNull(imageAssetSetDefinition.assetDefinitions(),
-                "imageAssetSetDefinition.assetDefinitions()");
-        if (imageAssetSetDefinition.assetDefinitions().isEmpty()) {
-            throw new IllegalArgumentException("ImageAssetSetFactory.create: " +
-                    "imageAssetSetDefinition.assetDefinitions() cannot be empty");
+        Check.ifNull(definition.assetDefinitions(), "definition.assetDefinitions()");
+        if (definition.assetDefinitions().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "ImageAssetSetFactory.create: definition.assetDefinitions() cannot be empty");
         }
 
-        Check.ifNullOrEmpty(imageAssetSetDefinition.id(), "imageAssetSetDefinition.id()");
+        Check.ifNullOrEmpty(definition.id(), "definition.id()");
 
-        var assetsByTypeAndDirection = Collections.<String, Map<Direction, ImageAsset>>mapOf();
-
+        // ImageAssetSets default to supporting mouse event capturing, but if any of the
+        // constituent ImageAssets do not, then the entire ImageAssetSet does not.
         var supportsMouseEventCapturing = true;
 
-        for (var assetDefinition : imageAssetSetDefinition.assetDefinitions()) {
-            Check.ifNullOrEmpty(assetDefinition.assetId(), "assetDefinition.assetId()");
+        var assetsByDisplayParams = Collections.<Map<String, String>, ImageAsset>mapOf();
 
-            var type = nullIfEmpty(assetDefinition.type());
-            var direction = Direction.fromValue(assetDefinition.direction());
+        for (var assetDefinition : definition.assetDefinitions()) {
+            Check.ifNullOrEmpty(assetDefinition.ASSET_ID, "assetDefinition.ASSET_ID");
+
+            var displayParams = Collections.<String, String>mapOf();
+            for (var displayParam : assetDefinition.DISPLAY_PARAMS) {
+                displayParams.put(displayParam.NAME, displayParam.VAL);
+            }
 
             ImageAsset imageAsset;
-            switch (assetDefinition.assetType()) {
+            switch (assetDefinition.ASSET_TYPE) {
                 case SPRITE -> {
-                    if (!GET_SPRITE.containsKey(assetDefinition.assetId())) {
+                    imageAsset = GET_SPRITE.apply(assetDefinition.ASSET_ID);
+                    if (imageAsset == null) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Sprite found with id (" +
-                                        assetDefinition.assetId() + ")");
+                                        assetDefinition.ASSET_ID + ")");
                     }
-                    imageAsset = GET_SPRITE.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
                                 ((Sprite) imageAsset).image().supportsMouseEventCapturing();
                     }
                 }
                 case ANIMATION -> {
-                    if (!GET_ANIMATION.containsKey(assetDefinition.assetId())) {
+                    imageAsset = GET_ANIMATION.apply(assetDefinition.ASSET_ID);
+                    if (imageAsset == null) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no Animation found with id (" +
-                                        assetDefinition.assetId() + ")");
+                                        assetDefinition.ASSET_ID + ")");
                     }
-                    imageAsset = GET_ANIMATION.get(assetDefinition.assetId());
                     if (supportsMouseEventCapturing) {
                         supportsMouseEventCapturing =
                                 ((Animation) imageAsset).supportsMouseEventCapturing();
                     }
                 }
                 case GLOBAL_LOOPING_ANIMATION -> {
-                    if (!GET_GLOBAL_LOOPING_ANIMATION.containsKey(
-                            assetDefinition.assetId())) {
+                    imageAsset = GET_GLOBAL_LOOPING_ANIMATION.apply(assetDefinition.ASSET_ID);
+                    if (imageAsset == null) {
                         throw new IllegalArgumentException(
                                 "ImageAssetSetFactory.make: no GlobalLoopingAnimation found " +
-                                        "with id (" + assetDefinition.assetId() + ")");
+                                        "with id (" + assetDefinition.ASSET_ID + ")");
                     }
-                    imageAsset = GET_GLOBAL_LOOPING_ANIMATION.get(assetDefinition.assetId());
+                    if (supportsMouseEventCapturing) {
+                        supportsMouseEventCapturing =
+                                ((GlobalLoopingAnimation) imageAsset).supportsMouseEvents();
+                    }
                 }
                 default -> throw new IllegalArgumentException(
                         "ImageAssetSetFactory.make: assetDefinition has illegal assetType (" +
-                                assetDefinition.assetType().toString() + ")");
+                                assetDefinition.ASSET_TYPE + ")");
             }
 
-            Map<Direction, ImageAsset> assetsByDirection;
-            if (assetsByTypeAndDirection.containsKey(type)) {
-                assetsByDirection = assetsByTypeAndDirection.get(type);
-            }
-            else {
-                assetsByTypeAndDirection.put(type, assetsByDirection = mapOf());
-            }
-            if (assetsByDirection.containsKey(direction)) {
-                throw new IllegalArgumentException(
-                        "ImageAssetSetFactory: duplicate pair of type and direction (" + type +
-                                "," +
-                                direction + ")");
-            }
-            assetsByDirection.put(direction, imageAsset);
+            assetsByDisplayParams.put(displayParams, imageAsset);
         }
 
-        return new ImageAssetSetImpl(assetsByTypeAndDirection, imageAssetSetDefinition.id(),
+        return new ImageAssetSetImpl(assetsByDisplayParams, definition.id(),
                 supportsMouseEventCapturing);
     }
 
     @SuppressWarnings("InnerClassMayBeStatic")
     class ImageAssetSetImpl implements ImageAssetSet {
-        private final Map<String, Map<Direction, ImageAsset>> ASSETS_BY_TYPE_AND_DIRECTION;
+        private final Map<Map<String, String>, ImageAsset> ASSETS_BY_DISPLAY_PARAMS;
         private final String ID;
         private final boolean SUPPORTS_MOUSE_EVENT_CAPTURING;
 
-        public ImageAssetSetImpl(Map<String, Map<Direction, ImageAsset>> assetsByTypeAndDirection,
+        public ImageAssetSetImpl(Map<Map<String, String>, ImageAsset> assetsByDisplayParams,
                                  String id, boolean supportsMouseEventCapturing) {
-            ASSETS_BY_TYPE_AND_DIRECTION = assetsByTypeAndDirection;
+            ASSETS_BY_DISPLAY_PARAMS = assetsByDisplayParams;
             ID = id;
             SUPPORTS_MOUSE_EVENT_CAPTURING = supportsMouseEventCapturing;
         }
 
         @Override
-        public ImageAsset getImageAssetForTypeAndDirection(String type, Direction direction)
+        public ImageAsset getImageAssetWithDisplayParams(Map<String, String> displayParams)
                 throws IllegalArgumentException {
-            type = emptyIfNull(type);
-            return ASSETS_BY_TYPE_AND_DIRECTION.get(nullIfEmpty(type)).get(direction);
+            var output = ASSETS_BY_DISPLAY_PARAMS.get(Check.ifNull(displayParams, "displayParams"));
+            if (output == null) {
+                throw new IllegalArgumentException(
+                        "ImageAssetSetFactory.ImageAssetSet.getImageAssetWithDisplayParams: no " +
+                                "ImageAsset found for display params... {" + displayParams + "}");
+            }
+            return output;
         }
 
         @Override

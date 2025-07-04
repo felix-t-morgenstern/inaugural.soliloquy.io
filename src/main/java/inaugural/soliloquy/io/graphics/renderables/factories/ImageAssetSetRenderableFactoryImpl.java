@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 import inaugural.soliloquy.io.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.shared.Direction;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
@@ -28,8 +27,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
 
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet,
-                                        String type,
-                                        Direction direction,
+                                        Map<String, String> displayParams,
                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
@@ -38,15 +36,14 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         UUID uuid,
                                         RenderableStack containingStack)
             throws IllegalArgumentException {
-        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, colorShiftProviders,
+        return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, colorShiftProviders,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
                 containingStack, RENDERING_BOUNDARIES);
     }
 
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet,
-                                        String type,
-                                        Direction direction,
+                                        Map<String, String> displayParams,
                                         Map<Integer, Action<MouseEventInputs>> onPress,
                                         Map<Integer, Action<MouseEventInputs>> onRelease,
                                         Action<MouseEventInputs> onMouseOver,
@@ -58,7 +55,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         int z,
                                         UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
-        return new ImageAssetSetRenderableImpl(imageAssetSet, type, direction, onPress, onRelease,
+        return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, onPress, onRelease,
                 onMouseOver, onMouseLeave, colorShiftProviders, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
                 RENDERING_BOUNDARIES);

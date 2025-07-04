@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static org.mockito.Mockito.*;
 
 public class FakeImageAssetSetFactory
         implements AssetFactory<ImageAssetSetDefinition, ImageAssetSet> {
@@ -19,7 +20,8 @@ public class FakeImageAssetSetFactory
     public ImageAssetSet make(ImageAssetSetDefinition imageAssetSetDefinition)
             throws IllegalArgumentException {
         INPUTS.put(imageAssetSetDefinition.id(), imageAssetSetDefinition);
-        ImageAssetSet createdImageAssetSet = new FakeImageAssetSet(imageAssetSetDefinition.id());
+        var createdImageAssetSet = mock(ImageAssetSet.class);
+        lenient().when(createdImageAssetSet.id()).thenReturn(imageAssetSetDefinition.id());
         OUTPUTS.add(createdImageAssetSet);
         return createdImageAssetSet;
     }
