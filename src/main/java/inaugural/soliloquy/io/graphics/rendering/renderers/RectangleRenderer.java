@@ -15,59 +15,51 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
     }
 
     @Override
-    public void render(RectangleRenderable rectangleRenderable, long timestamp)
+    public void render(RectangleRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(rectangleRenderable, "rectangleRenderable");
+        Check.ifNull(renderable, "renderable");
 
-        Check.ifNull(rectangleRenderable.getTopLeftColorProvider(),
-                "rectangleRenderable.getTopLeftColorProvider()");
-        Check.ifNull(rectangleRenderable.getTopRightColorProvider(),
-                "rectangleRenderable.getTopRightColorProvider()");
-        Check.ifNull(rectangleRenderable.getBottomRightColorProvider(),
-                "rectangleRenderable.getBottomRightColorProvider()");
-        Check.ifNull(rectangleRenderable.getBottomLeftColorProvider(),
-                "rectangleRenderable.getBottomLeftColorProvider()");
+        Check.ifNull(renderable.getTopLeftColorProvider(), "renderable.getTopLeftColorProvider()");
+        Check.ifNull(renderable.getTopRightColorProvider(),
+                "renderable.getTopRightColorProvider()");
+        Check.ifNull(renderable.getBottomRightColorProvider(),
+                "renderable.getBottomRightColorProvider()");
+        Check.ifNull(renderable.getBottomLeftColorProvider(),
+                "renderable.getBottomLeftColorProvider()");
 
-        Check.ifNull(rectangleRenderable.getBackgroundTextureIdProvider(),
-                "rectangleRenderable.getBackgroundTextureIdProvider()");
+        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()");
 
-        Check.throwOnLtValue(rectangleRenderable.getBackgroundTextureTileWidth(), 0f,
-                "rectangleRenderable.getBackgroundTextureTileWidth()");
-        Check.throwOnLtValue(rectangleRenderable.getBackgroundTextureTileHeight(), 0f,
-                "rectangleRenderable.getBackgroundTextureTileHeight()");
+        Check.throwOnLtValue(renderable.getTextureTileWidth(), 0f,
+                "renderable.getTextureTileWidth()");
+        Check.throwOnLtValue(renderable.getTextureTileHeight(), 0f,
+                "renderable.getTextureTileHeight()");
 
-        Check.ifNull(rectangleRenderable.getRenderingDimensionsProvider(),
-                "rectangleRenderable.getRenderingDimensionsProvider()");
+        Check.ifNull(renderable.getRenderingDimensionsProvider(),
+                "renderable.getRenderingDimensionsProvider()");
 
-        var renderingDimensions =
-                rectangleRenderable.getRenderingDimensionsProvider().provide(timestamp);
+        var renderingDimensions = renderable.getRenderingDimensionsProvider().provide(timestamp);
 
-        Check.ifNull(renderingDimensions, "renderingDimensions provided by " +
-                "rectangleRenderable.getRenderingDimensionsProvider()");
+        Check.ifNull(renderingDimensions,
+                "renderingDimensions provided by renderable.getRenderingDimensionsProvider()");
 
-        Check.ifNull(rectangleRenderable.uuid(), "rectangleRenderable.uuid()");
+        Check.ifNull(renderable.uuid(), "renderable.uuid()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         unbindMeshAndShader();
 
-        float tilesPerWidth =
-                renderingDimensions.width() / rectangleRenderable.getBackgroundTextureTileWidth();
-        float tilesPerHeight =
-                renderingDimensions.height() /
-                        rectangleRenderable.getBackgroundTextureTileHeight();
+        var tilesPerWidth = renderingDimensions.width() / renderable.getTextureTileWidth();
+        var tilesPerHeight =
+                renderingDimensions.height() / renderable.getTextureTileHeight();
 
-        Color topLeftColor = rectangleRenderable.getTopLeftColorProvider().provide(timestamp);
-        Color topRightColor = rectangleRenderable.getTopRightColorProvider().provide(timestamp);
-        Color bottomRightColor =
-                rectangleRenderable.getBottomRightColorProvider().provide(timestamp);
-        Color bottomLeftColor =
-                rectangleRenderable.getBottomLeftColorProvider().provide(timestamp);
+        var topLeftColor = renderable.getTopLeftColorProvider().provide(timestamp);
+        var topRightColor = renderable.getTopRightColorProvider().provide(timestamp);
+        var bottomRightColor = renderable.getBottomRightColorProvider().provide(timestamp);
+        var bottomLeftColor = renderable.getBottomLeftColorProvider().provide(timestamp);
 
-        Integer backgroundTileTextureId =
-                rectangleRenderable.getBackgroundTextureIdProvider().provide(timestamp);
+        var backgroundTileTextureId = renderable.getTextureIdProvider().provide(timestamp);
 
-        boolean hasTexture = false;
+        var hasTexture = false;
 
         if (backgroundTileTextureId != null) {
             glBindTexture(GL_TEXTURE_2D, backgroundTileTextureId);

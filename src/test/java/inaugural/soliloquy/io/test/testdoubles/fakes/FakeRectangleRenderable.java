@@ -16,9 +16,9 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Color> TopRightColorProvider;
     public ProviderAtTime<Color> BottomRightColorProvider;
     public ProviderAtTime<Color> BottomLeftColorProvider;
-    public ProviderAtTime<Integer> BackgroundTextureIdProvider;
-    public float BackgroundTextureTileWidth;
-    public float BackgroundTextureTileHeight;
+    public ProviderAtTime<Integer> TextureIdProvider;
+    public float TextureTileWidth;
+    public float TextureTileHeight;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public UUID Uuid;
 
@@ -35,9 +35,9 @@ public class FakeRectangleRenderable implements RectangleRenderable {
         TopRightColorProvider = topRightColorProvider;
         BottomRightColorProvider = bottomRightColorProvider;
         BottomLeftColorProvider = bottomLeftColorProvider;
-        BackgroundTextureIdProvider = backgroundTextureIdProvider;
-        BackgroundTextureTileWidth = backgroundTextureTileWidth;
-        BackgroundTextureTileHeight = backgroundTextureTileHeight;
+        TextureIdProvider = backgroundTextureIdProvider;
+        TextureTileWidth = backgroundTextureTileWidth;
+        TextureTileHeight = backgroundTextureTileHeight;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Uuid = uuid;
     }
@@ -87,36 +87,36 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
-        return BackgroundTextureIdProvider;
+    public ProviderAtTime<Integer> getTextureIdProvider() {
+        return TextureIdProvider;
     }
 
     @Override
-    public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
+    public void setTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
             throws IllegalArgumentException {
-        BackgroundTextureIdProvider = backgroundTextureIdProvider;
+        TextureIdProvider = backgroundTextureIdProvider;
     }
 
     @Override
-    public float getBackgroundTextureTileWidth() {
-        return BackgroundTextureTileWidth;
+    public float getTextureTileWidth() {
+        return TextureTileWidth;
     }
 
     @Override
-    public void setBackgroundTextureTileWidth(float backgroundTextureTileWidth)
+    public void setTextureTileWidth(float backgroundTextureTileWidth)
             throws IllegalArgumentException {
-        BackgroundTextureTileWidth = backgroundTextureTileWidth;
+        TextureTileWidth = backgroundTextureTileWidth;
     }
 
     @Override
-    public float getBackgroundTextureTileHeight() {
-        return BackgroundTextureTileHeight;
+    public float getTextureTileHeight() {
+        return TextureTileHeight;
     }
 
     @Override
-    public void setBackgroundTextureTileHeight(float backgroundTextureTileHeight)
+    public void setTextureTileHeight(float backgroundTextureTileHeight)
             throws IllegalArgumentException {
-        BackgroundTextureTileHeight = backgroundTextureTileHeight;
+        TextureTileHeight = backgroundTextureTileHeight;
     }
 
     @Override

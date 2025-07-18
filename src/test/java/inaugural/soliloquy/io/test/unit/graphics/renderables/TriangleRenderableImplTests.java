@@ -232,37 +232,37 @@ public class TriangleRenderableImplTests {
     @Test
     public void testSetAndGetBackgroundTextureIdProvider() {
         assertSame(BACKGROUND_TEXTURE_ID_PROVIDER,
-                triangleRenderable.getBackgroundTextureIdProvider());
+                triangleRenderable.getTextureIdProvider());
 
         FakeProviderAtTime<Integer> newProvider = new FakeProviderAtTime<>();
 
-        triangleRenderable.setBackgroundTextureIdProvider(newProvider);
+        triangleRenderable.setTextureIdProvider(newProvider);
 
-        assertSame(newProvider, triangleRenderable.getBackgroundTextureIdProvider());
+        assertSame(newProvider, triangleRenderable.getTextureIdProvider());
     }
 
     @Test
     public void testSetAndGetBackgroundTextureTileWidth() {
         assertEquals(BACKGROUND_TEXTURE_TILE_WIDTH,
-                triangleRenderable.getBackgroundTextureTileWidth());
+                triangleRenderable.getTextureTileWidth());
 
         var newWidth = 0.1312f;
 
-        triangleRenderable.setBackgroundTextureTileWidth(newWidth);
+        triangleRenderable.setTextureTileWidth(newWidth);
 
-        assertEquals(newWidth, triangleRenderable.getBackgroundTextureTileWidth());
+        assertEquals(newWidth, triangleRenderable.getTextureTileWidth());
     }
 
     @Test
     public void testSetAndGetBackgroundTextureTileHeight() {
         assertEquals(BACKGROUND_TEXTURE_TILE_HEIGHT,
-                triangleRenderable.getBackgroundTextureTileHeight());
+                triangleRenderable.getTextureTileHeight());
 
         var newHeight = 0.1312f;
 
-        triangleRenderable.setBackgroundTextureTileHeight(newHeight);
+        triangleRenderable.setTextureTileHeight(newHeight);
 
-        assertEquals(newHeight, triangleRenderable.getBackgroundTextureTileHeight());
+        assertEquals(newHeight, triangleRenderable.getTextureTileHeight());
     }
 
     @Test

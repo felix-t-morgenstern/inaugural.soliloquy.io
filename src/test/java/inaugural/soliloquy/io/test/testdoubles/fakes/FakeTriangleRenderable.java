@@ -17,9 +17,9 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     public ProviderAtTime<Color> Vertex2ColorProvider;
     public ProviderAtTime<Vertex> Vertex3Provider;
     public ProviderAtTime<Color> Vertex3ColorProvider;
-    public ProviderAtTime<Integer> BackgroundTextureIdProvider;
-    public float BackgroundTextureTileWidth;
-    public float BackgroundTextureTileHeight;
+    public ProviderAtTime<Integer> TextureIdProvider;
+    public float TextureTileWidth;
+    public float TextureTileHeight;
 
     public FakeTriangleRenderable(ProviderAtTime<Vertex> vertex1Provider,
                                   ProviderAtTime<Color> vertex1ColorProvider,
@@ -36,9 +36,9 @@ public class FakeTriangleRenderable implements TriangleRenderable {
         Vertex2ColorProvider = vertex2ColorProvider;
         Vertex3Provider = vertex3Provider;
         Vertex3ColorProvider = vertex3ColorProvider;
-        BackgroundTextureIdProvider = backgroundTextureIdProvider;
-        BackgroundTextureTileWidth = backgroundTextureTileWidth;
-        BackgroundTextureTileHeight = backgroundTextureTileHeight;
+        TextureIdProvider = backgroundTextureIdProvider;
+        TextureTileWidth = backgroundTextureTileWidth;
+        TextureTileHeight = backgroundTextureTileHeight;
     }
 
     @Override
@@ -108,33 +108,33 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
-        return BackgroundTextureIdProvider;
+    public ProviderAtTime<Integer> getTextureIdProvider() {
+        return TextureIdProvider;
     }
 
     @Override
-    public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
+    public void setTextureIdProvider(ProviderAtTime<Integer> providerAtTime)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public float getBackgroundTextureTileWidth() {
-        return BackgroundTextureTileWidth;
+    public float getTextureTileWidth() {
+        return TextureTileWidth;
     }
 
     @Override
-    public void setBackgroundTextureTileWidth(float v) throws IllegalArgumentException {
+    public void setTextureTileWidth(float v) throws IllegalArgumentException {
 
     }
 
     @Override
-    public float getBackgroundTextureTileHeight() {
-        return BackgroundTextureTileHeight;
+    public float getTextureTileHeight() {
+        return TextureTileHeight;
     }
 
     @Override
-    public void setBackgroundTextureTileHeight(float v) throws IllegalArgumentException {
+    public void setTextureTileHeight(float v) throws IllegalArgumentException {
 
     }
 

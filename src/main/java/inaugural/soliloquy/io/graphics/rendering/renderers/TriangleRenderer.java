@@ -35,30 +35,27 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         Check.ifNull(renderable.getVertex2ColorProvider(), "renderable.getVertex2ColorProvider");
         var color2 = renderable.getVertex2ColorProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getVertex3Provider(),
-                "renderable.getVertex3Provider");
+        Check.ifNull(renderable.getVertex3Provider(), "renderable.getVertex3Provider");
         var vertex3 = renderable.getVertex3Provider().provide(timestamp);
         Check.ifNull(vertex3, "provided vertex 3");
 
         Check.ifNull(renderable.getVertex3ColorProvider(), "renderable.getVertex3ColorProvider");
         var color3 = renderable.getVertex3ColorProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getBackgroundTextureIdProvider(),
-                "renderable.getBackgroundTextureIdProvider");
-        Integer backgroundTextureId =
-                renderable.getBackgroundTextureIdProvider().provide(timestamp);
+        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider");
+        var textureId = renderable.getTextureIdProvider().provide(timestamp);
 
-        if (backgroundTextureId != null) {
-            Check.throwOnLteZero(renderable.getBackgroundTextureTileWidth(),
-                    "backgroundTextureTileWidth (with non-null backgroundTextureId)");
-            Check.throwOnLteZero(renderable.getBackgroundTextureTileHeight(),
-                    "backgroundTextureTileHeight (with non-null backgroundTextureId)");
+        if (textureId != null) {
+            Check.throwOnLteZero(renderable.getTextureTileWidth(),
+                    "textureTileWidth (with non-null textureId)");
+            Check.throwOnLteZero(renderable.getTextureTileHeight(),
+                    "textureTileHeight (with non-null textureId)");
         }
         else {
-            Check.throwOnLtValue(renderable.getBackgroundTextureTileWidth(), 0f,
-                    "backgroundTextureTileWidth (with null backgroundTextureId)");
-            Check.throwOnLtValue(renderable.getBackgroundTextureTileHeight(), 0f,
-                    "backgroundTextureTileHeight (with null backgroundTextureId)");
+            Check.throwOnLtValue(renderable.getTextureTileWidth(), 0f,
+                    "textureTileWidth (with null textureId)");
+            Check.throwOnLtValue(renderable.getTextureTileHeight(), 0f,
+                    "textureTileHeight (with null textureId)");
         }
 
         unbindMeshAndShader();
@@ -79,7 +76,7 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         var tilesPerWidth = 0f;
         var tilesPerHeight = 0f;
 
-        if (backgroundTextureId != null) {
+        if (textureId != null) {
             maxX = Math.max(x3, Math.max(x2, x1));
             minX = Math.min(x3, Math.min(x2, x1));
             maxY = Math.max(y3, Math.max(y2, y1));
@@ -88,30 +85,30 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
             width = maxX - minX;
             height = maxY - minY;
 
-            tilesPerWidth = width / renderable.getBackgroundTextureTileWidth();
-            tilesPerHeight = height / renderable.getBackgroundTextureTileHeight();
+            tilesPerWidth = width / renderable.getTextureTileWidth();
+            tilesPerHeight = height / renderable.getTextureTileHeight();
 
-            glBindTexture(GL_TEXTURE_2D, backgroundTextureId);
+            glBindTexture(GL_TEXTURE_2D, textureId);
         }
 
         glBegin(GL_TRIANGLES);
 
         setDrawColor(color1);
-        if (backgroundTextureId != null) {
+        if (textureId != null) {
             glTexCoord2f(((x1 - minX) / width) * tilesPerWidth,
                     ((y1 - minY) / height) * tilesPerHeight);
         }
         drawPoint(x1, y1);
 
         setDrawColor(color2);
-        if (backgroundTextureId != null) {
+        if (textureId != null) {
             glTexCoord2f(((x2 - minX) / width) * tilesPerWidth,
                     ((y2 - minY) / height) * tilesPerHeight);
         }
         drawPoint(x2, y2);
 
         setDrawColor(color3);
-        if (backgroundTextureId != null) {
+        if (textureId != null) {
             glTexCoord2f(((x3 - minX) / width) * tilesPerWidth,
                     ((y3 - minY) / height) * tilesPerHeight);
         }

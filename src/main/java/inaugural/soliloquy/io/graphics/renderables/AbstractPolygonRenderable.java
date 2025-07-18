@@ -13,7 +13,7 @@ public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
         implements PolygonRenderable {
     private ProviderAtTime<Integer> backgroundTextureIdProvider;
-    private float backgroundTextureTileWidth;
+    private float textureTileWidth;
     private float backgroundTextureTileHeight;
 
     protected AbstractPolygonRenderable(
@@ -31,42 +31,42 @@ public abstract class AbstractPolygonRenderable
     ) {
         super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
                 renderingBoundaries);
-        setBackgroundTextureIdProvider(backgroundTextureIdProvider);
-        setBackgroundTextureTileWidth(backgroundTextureTileWidth);
-        setBackgroundTextureTileHeight(backgroundTextureTileHeight);
+        setTextureIdProvider(backgroundTextureIdProvider);
+        setTextureTileWidth(backgroundTextureTileWidth);
+        setTextureTileHeight(backgroundTextureTileHeight);
     }
 
     @Override
-    public ProviderAtTime<Integer> getBackgroundTextureIdProvider() {
+    public ProviderAtTime<Integer> getTextureIdProvider() {
         return backgroundTextureIdProvider;
     }
 
     @Override
-    public void setBackgroundTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
+    public void setTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
             throws IllegalArgumentException {
         this.backgroundTextureIdProvider = Check.ifNull(backgroundTextureIdProvider,
                 "backgroundTextureIdProvider");
     }
 
     @Override
-    public float getBackgroundTextureTileWidth() {
-        return backgroundTextureTileWidth;
+    public float getTextureTileWidth() {
+        return textureTileWidth;
     }
 
     @Override
-    public void setBackgroundTextureTileWidth(float backgroundTextureTileWidth)
+    public void setTextureTileWidth(float backgroundTextureTileWidth)
             throws IllegalArgumentException {
-        this.backgroundTextureTileWidth = Check.throwOnLteZero(backgroundTextureTileWidth,
+        this.textureTileWidth = Check.throwOnLteZero(backgroundTextureTileWidth,
                 "backgroundTextureTileWidth");
     }
 
     @Override
-    public float getBackgroundTextureTileHeight() {
+    public float getTextureTileHeight() {
         return backgroundTextureTileHeight;
     }
 
     @Override
-    public void setBackgroundTextureTileHeight(float backgroundTextureTileHeight)
+    public void setTextureTileHeight(float backgroundTextureTileHeight)
             throws IllegalArgumentException {
         this.backgroundTextureTileHeight = Check.throwOnLteZero(backgroundTextureTileHeight,
                 "backgroundTextureTileHeight");

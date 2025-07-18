@@ -215,37 +215,37 @@ public class RectangleRenderableImplTests {
     @Test
     public void testSetAndGetBackgroundTextureIdProvider() {
         assertSame(BACKGROUND_TEXTURE_ID_PROVIDER,
-                rectangleRenderable.getBackgroundTextureIdProvider());
+                rectangleRenderable.getTextureIdProvider());
 
         FakeProviderAtTime<Integer> newProvider = new FakeProviderAtTime<>();
 
-        rectangleRenderable.setBackgroundTextureIdProvider(newProvider);
+        rectangleRenderable.setTextureIdProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getBackgroundTextureIdProvider());
+        assertSame(newProvider, rectangleRenderable.getTextureIdProvider());
     }
 
     @Test
     public void testSetAndGetBackgroundTextureTileWidth() {
         assertEquals(BACKGROUND_TEXTURE_TILE_WIDTH,
-                rectangleRenderable.getBackgroundTextureTileWidth());
+                rectangleRenderable.getTextureTileWidth());
 
         float newWidth = 0.1312f;
 
-        rectangleRenderable.setBackgroundTextureTileWidth(newWidth);
+        rectangleRenderable.setTextureTileWidth(newWidth);
 
-        assertEquals(newWidth, rectangleRenderable.getBackgroundTextureTileWidth());
+        assertEquals(newWidth, rectangleRenderable.getTextureTileWidth());
     }
 
     @Test
     public void testSetAndGetBackgroundTextureTileHeight() {
         assertEquals(BACKGROUND_TEXTURE_TILE_HEIGHT,
-                rectangleRenderable.getBackgroundTextureTileHeight());
+                rectangleRenderable.getTextureTileHeight());
 
         float newHeight = 0.1312f;
 
-        rectangleRenderable.setBackgroundTextureTileHeight(newHeight);
+        rectangleRenderable.setTextureTileHeight(newHeight);
 
-        assertEquals(newHeight, rectangleRenderable.getBackgroundTextureTileHeight());
+        assertEquals(newHeight, rectangleRenderable.getTextureTileHeight());
     }
 
     @Test
@@ -259,11 +259,11 @@ public class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderable.setBottomLeftColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setBackgroundTextureIdProvider(null));
+                rectangleRenderable.setTextureIdProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setBackgroundTextureTileWidth(0f));
+                rectangleRenderable.setTextureTileWidth(0f));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setBackgroundTextureTileHeight(0f));
+                rectangleRenderable.setTextureTileHeight(0f));
     }
 
     @Test
