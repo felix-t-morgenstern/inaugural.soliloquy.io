@@ -6,7 +6,9 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
@@ -26,14 +28,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class TriangleRenderableImplTests {
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
-    private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
-    private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
     private final Map<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
@@ -42,6 +43,9 @@ public class TriangleRenderableImplTests {
     private final long TIMESTAMP = randomLong();
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
+
+    @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private RenderableStack mockContainingStack;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Action<MouseEventInputs> mockOnPressAction;
@@ -55,7 +59,7 @@ public class TriangleRenderableImplTests {
     public void setUp() {
         mockContainingStack = mock(RenderableStack.class);
         mockRenderingBoundaries = mock(RenderingBoundaries.class);
-        when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+        lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         //noinspection unchecked
         mockOnPressAction = mock(Action.class);
@@ -69,7 +73,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         );
@@ -80,7 +84,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         );
@@ -94,7 +98,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -103,7 +107,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -112,7 +116,7 @@ public class TriangleRenderableImplTests {
                 null, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -121,7 +125,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, null,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -130,7 +134,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 null, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -139,7 +143,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, null,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -148,7 +152,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 null,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -157,7 +161,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                null, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -166,7 +170,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
+                mockTextureTileWidthProvider, null,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, mockRenderingBoundaries
         ));
@@ -175,7 +179,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, null, mockContainingStack, mockRenderingBoundaries
         ));
@@ -184,7 +188,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, null, mockRenderingBoundaries
         ));
@@ -193,7 +197,7 @@ public class TriangleRenderableImplTests {
                 VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                 VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingStack, null
         ));
@@ -242,27 +246,29 @@ public class TriangleRenderableImplTests {
     }
 
     @Test
-    public void testSetAndGetBackgroundTextureTileWidth() {
-        assertEquals(BACKGROUND_TEXTURE_TILE_WIDTH,
-                triangleRenderable.getTextureTileWidth());
+    public void testSetAndGetBackgroundTextureTileWidthProvider() {
+        assertEquals(mockTextureTileWidthProvider,
+                triangleRenderable.getTextureTileWidthProvider());
 
-        var newWidth = 0.1312f;
+        @SuppressWarnings("unchecked") var newProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
-        triangleRenderable.setTextureTileWidth(newWidth);
+        triangleRenderable.setTextureTileWidthProvider(newProvider);
 
-        assertEquals(newWidth, triangleRenderable.getTextureTileWidth());
+        assertEquals(newProvider, triangleRenderable.getTextureTileWidthProvider());
     }
 
     @Test
-    public void testSetAndGetBackgroundTextureTileHeight() {
-        assertEquals(BACKGROUND_TEXTURE_TILE_HEIGHT,
-                triangleRenderable.getTextureTileHeight());
+    public void testSetAndGetBackgroundTextureTileHeightProvider() {
+        assertEquals(mockTextureTileHeightProvider,
+                triangleRenderable.getTextureTileHeightProvider());
 
-        var newHeight = 0.1312f;
+        @SuppressWarnings("unchecked") var newProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
-        triangleRenderable.setTextureTileHeight(newHeight);
+        triangleRenderable.setTextureTileHeightProvider(newProvider);
 
-        assertEquals(newHeight, triangleRenderable.getTextureTileHeight());
+        assertEquals(newProvider, triangleRenderable.getTextureTileHeightProvider());
     }
 
     @Test

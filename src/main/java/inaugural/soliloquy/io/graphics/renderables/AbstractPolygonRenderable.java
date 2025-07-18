@@ -13,13 +13,13 @@ public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
         implements PolygonRenderable {
     private ProviderAtTime<Integer> backgroundTextureIdProvider;
-    private float textureTileWidth;
-    private float backgroundTextureTileHeight;
+    private ProviderAtTime<Float> textureTileWidthProvider;
+    private ProviderAtTime<Float> textureTileHeightProvider;
 
     protected AbstractPolygonRenderable(
-            ProviderAtTime<Integer> backgroundTextureIdProvider,
-            float backgroundTextureTileWidth,
-            float backgroundTextureTileHeight,
+            ProviderAtTime<Integer> textureIdProvider,
+            ProviderAtTime<Float> textureTileWidthProvider,
+            ProviderAtTime<Float> textureTileHeight,
             Map<Integer, Action<MouseEventInputs>> onPress,
             Map<Integer, Action<MouseEventInputs>> onRelease,
             Action<MouseEventInputs> onMouseOver,
@@ -31,9 +31,9 @@ public abstract class AbstractPolygonRenderable
     ) {
         super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
                 renderingBoundaries);
-        setTextureIdProvider(backgroundTextureIdProvider);
-        setTextureTileWidth(backgroundTextureTileWidth);
-        setTextureTileHeight(backgroundTextureTileHeight);
+        setTextureIdProvider(textureIdProvider);
+        setTextureTileWidthProvider(textureTileWidthProvider);
+        setTextureTileHeightProvider(textureTileHeight);
     }
 
     @Override
@@ -49,26 +49,24 @@ public abstract class AbstractPolygonRenderable
     }
 
     @Override
-    public float getTextureTileWidth() {
-        return textureTileWidth;
+    public ProviderAtTime<Float> getTextureTileWidthProvider() {
+        return textureTileWidthProvider;
     }
 
     @Override
-    public void setTextureTileWidth(float backgroundTextureTileWidth)
+    public void setTextureTileWidthProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        this.textureTileWidth = Check.throwOnLteZero(backgroundTextureTileWidth,
-                "backgroundTextureTileWidth");
+        textureTileWidthProvider = Check.ifNull(provider, "provider");
     }
 
     @Override
-    public float getTextureTileHeight() {
-        return backgroundTextureTileHeight;
+    public ProviderAtTime<Float> getTextureTileHeightProvider() {
+        return textureTileHeightProvider;
     }
 
     @Override
-    public void setTextureTileHeight(float backgroundTextureTileHeight)
+    public void setTextureTileHeightProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        this.backgroundTextureTileHeight = Check.throwOnLteZero(backgroundTextureTileHeight,
-                "backgroundTextureTileHeight");
+        textureTileHeightProvider = Check.ifNull(provider, "provider");
     }
 }

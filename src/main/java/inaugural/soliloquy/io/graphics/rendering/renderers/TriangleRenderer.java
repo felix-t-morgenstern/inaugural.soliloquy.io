@@ -45,17 +45,18 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider");
         var textureId = renderable.getTextureIdProvider().provide(timestamp);
 
+        var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
+                "renderable.getTextureTileWidthProvider()").provide(timestamp);
+        var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
+                "renderable.getTextureTileHeightProvider()").provide(timestamp);
+        
         if (textureId != null) {
-            Check.throwOnLteZero(renderable.getTextureTileWidth(),
-                    "textureTileWidth (with non-null textureId)");
-            Check.throwOnLteZero(renderable.getTextureTileHeight(),
-                    "textureTileHeight (with non-null textureId)");
+            Check.throwOnLteZero(textureTileWidth, "textureTileWidth (with non-null textureId)");
+            Check.throwOnLteZero(textureTileHeight, "textureTileHeight (with non-null textureId)");
         }
         else {
-            Check.throwOnLtValue(renderable.getTextureTileWidth(), 0f,
-                    "textureTileWidth (with null textureId)");
-            Check.throwOnLtValue(renderable.getTextureTileHeight(), 0f,
-                    "textureTileHeight (with null textureId)");
+            Check.throwOnLtValue(textureTileWidth, 0f, "textureTileWidth (with null textureId)");
+            Check.throwOnLtValue(textureTileHeight, 0f, "textureTileHeight (with null textureId)");
         }
 
         unbindMeshAndShader();
@@ -85,8 +86,8 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
             width = maxX - minX;
             height = maxY - minY;
 
-            tilesPerWidth = width / renderable.getTextureTileWidth();
-            tilesPerHeight = height / renderable.getTextureTileHeight();
+            tilesPerWidth = width / textureTileWidth;
+            tilesPerHeight = height / textureTileHeight;
 
             glBindTexture(GL_TEXTURE_2D, textureId);
         }

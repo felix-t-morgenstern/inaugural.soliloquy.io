@@ -38,8 +38,6 @@ public class RectangleRenderableImplTests {
     private final ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
-    private final float BACKGROUND_TEXTURE_TILE_WIDTH = 0.123f;
-    private final float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.456f;
     private final Map<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
@@ -48,31 +46,33 @@ public class RectangleRenderableImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
+    @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private RenderableStack mockContainingStack;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Action<MouseEventInputs> mockOnPressAction;
     @Mock private Action<MouseEventInputs> mockOnMouseOverAction;
     @Mock private Action<MouseEventInputs> mockOnMouseLeaveAction;
 
-    private RectangleRenderable rectangleRenderable;
+    private RectangleRenderable renderable;
     private RectangleRenderable rectangleRenderableNotSupportingMouseEvents;
 
     @BeforeEach
     public void setUp() {
         lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        rectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+        renderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                mockTextureTileHeightProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
                 mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                 mockRenderingBoundaries);
-        rectangleRenderable.setCapturesMouseEvents(true);
+        renderable.setCapturesMouseEvents(true);
 
         rectangleRenderableNotSupportingMouseEvents = new RectangleRenderableImpl(
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT, ON_PRESS_ACTIONS,
+                mockTextureTileWidthProvider, mockTextureTileHeightProvider, ON_PRESS_ACTIONS,
                 null, mockOnMouseOverAction, mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
                 mockContainingStack, mockRenderingBoundaries);
         rectangleRenderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
@@ -84,7 +84,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(null,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -92,7 +92,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         null, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -100,7 +100,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, null,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -108,7 +108,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         null, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -116,7 +116,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, null,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -124,7 +124,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        0f, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        null, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -132,7 +132,7 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, 0f,
+                        mockTextureTileWidthProvider, null,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -140,14 +140,14 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         null, Z, UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingStack,
                         mockRenderingBoundaries));
@@ -155,124 +155,122 @@ public class RectangleRenderableImplTests {
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        BACKGROUND_TEXTURE_TILE_WIDTH, BACKGROUND_TEXTURE_TILE_HEIGHT,
+                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, null, mockRenderingBoundaries));
     }
 
     @Test
     public void testSetAndGetTopLeftColorProvider() {
-        assertSame(TOP_LEFT_COLOR_PROVIDER, rectangleRenderable.getTopLeftColorProvider());
+        assertSame(TOP_LEFT_COLOR_PROVIDER, renderable.getTopLeftColorProvider());
 
-        FakeProviderAtTime<Color> newProvider = new FakeProviderAtTime<>();
+        var newProvider = new FakeProviderAtTime<Color>();
 
-        rectangleRenderable.setTopLeftColorProvider(newProvider);
+        renderable.setTopLeftColorProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getTopLeftColorProvider());
+        assertSame(newProvider, renderable.getTopLeftColorProvider());
     }
 
     @Test
     public void testSetAndGetTopRightColorProvider() {
-        assertSame(TOP_RIGHT_COLOR_PROVIDER, rectangleRenderable.getTopRightColorProvider());
+        assertSame(TOP_RIGHT_COLOR_PROVIDER, renderable.getTopRightColorProvider());
 
-        FakeProviderAtTime<Color> newProvider = new FakeProviderAtTime<>();
+        var newProvider = new FakeProviderAtTime<Color>();
 
-        rectangleRenderable.setTopRightColorProvider(newProvider);
+        renderable.setTopRightColorProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getTopRightColorProvider());
+        assertSame(newProvider, renderable.getTopRightColorProvider());
     }
 
     @Test
     public void testSetAndGetBottomRightColorProvider() {
         assertSame(BOTTOM_RIGHT_COLOR_PROVIDER,
-                rectangleRenderable.getBottomRightColorProvider());
+                renderable.getBottomRightColorProvider());
 
         FakeProviderAtTime<Color> newProvider = new FakeProviderAtTime<>();
 
-        rectangleRenderable.setBottomRightColorProvider(newProvider);
+        renderable.setBottomRightColorProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getBottomRightColorProvider());
+        assertSame(newProvider, renderable.getBottomRightColorProvider());
     }
 
     @Test
     public void testSetAndGetBottomLeftColorProvider() {
-        assertSame(BOTTOM_LEFT_COLOR_PROVIDER, rectangleRenderable.getBottomLeftColorProvider());
+        assertSame(BOTTOM_LEFT_COLOR_PROVIDER, renderable.getBottomLeftColorProvider());
 
         FakeProviderAtTime<Color> newProvider = new FakeProviderAtTime<>();
 
-        rectangleRenderable.setBottomLeftColorProvider(newProvider);
+        renderable.setBottomLeftColorProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getBottomLeftColorProvider());
+        assertSame(newProvider, renderable.getBottomLeftColorProvider());
     }
 
     @Test
     public void testSetAndGetBackgroundTextureIdProvider() {
-        assertSame(BACKGROUND_TEXTURE_ID_PROVIDER,
-                rectangleRenderable.getTextureIdProvider());
+        assertSame(BACKGROUND_TEXTURE_ID_PROVIDER, renderable.getTextureIdProvider());
 
-        FakeProviderAtTime<Integer> newProvider = new FakeProviderAtTime<>();
+        var newProvider = new FakeProviderAtTime<Integer>();
 
-        rectangleRenderable.setTextureIdProvider(newProvider);
+        renderable.setTextureIdProvider(newProvider);
 
-        assertSame(newProvider, rectangleRenderable.getTextureIdProvider());
+        assertSame(newProvider, renderable.getTextureIdProvider());
     }
 
     @Test
-    public void testSetAndGetBackgroundTextureTileWidth() {
-        assertEquals(BACKGROUND_TEXTURE_TILE_WIDTH,
-                rectangleRenderable.getTextureTileWidth());
+    public void testSetAndGetBackgroundTextureTileWidthProvider() {
+        assertEquals(mockTextureTileWidthProvider, renderable.getTextureTileWidthProvider());
 
-        float newWidth = 0.1312f;
+        @SuppressWarnings("unchecked") var newProvider = (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
-        rectangleRenderable.setTextureTileWidth(newWidth);
+        renderable.setTextureTileWidthProvider(newProvider);
 
-        assertEquals(newWidth, rectangleRenderable.getTextureTileWidth());
+        assertEquals(newProvider, renderable.getTextureTileWidthProvider());
     }
 
     @Test
-    public void testSetAndGetBackgroundTextureTileHeight() {
-        assertEquals(BACKGROUND_TEXTURE_TILE_HEIGHT,
-                rectangleRenderable.getTextureTileHeight());
+    public void testSetAndGetBackgrogetTextureTileHeightProvider() {
+        assertEquals(mockTextureTileHeightProvider,
+                renderable.getTextureTileHeightProvider());
 
-        float newHeight = 0.1312f;
+        @SuppressWarnings("unchecked") var newProvider = (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
-        rectangleRenderable.setTextureTileHeight(newHeight);
+        renderable.setTextureTileHeightProvider(newProvider);
 
-        assertEquals(newHeight, rectangleRenderable.getTextureTileHeight());
+        assertEquals(newProvider, renderable.getTextureTileHeightProvider());
     }
 
     @Test
     public void testSetProvidersAndTileDimensionsWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setTopLeftColorProvider(null));
+                renderable.setTopLeftColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setTopRightColorProvider(null));
+                renderable.setTopRightColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setBottomRightColorProvider(null));
+                renderable.setBottomRightColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setBottomLeftColorProvider(null));
+                renderable.setBottomLeftColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setTextureIdProvider(null));
+                renderable.setTextureIdProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setTextureTileWidth(0f));
+                renderable.setTextureTileWidthProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setTextureTileHeight(0f));
+                renderable.setTextureTileHeightProvider(null));
     }
 
     @Test
     public void testGetAndSetCapturesMouseEvents() {
-        assertTrue(rectangleRenderable.getCapturesMouseEvents());
+        assertTrue(renderable.getCapturesMouseEvents());
 
-        rectangleRenderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseEvents(false);
 
-        assertFalse(rectangleRenderable.getCapturesMouseEvents());
+        assertFalse(renderable.getCapturesMouseEvents());
     }
 
     @Test
@@ -282,37 +280,37 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.setOnPress(2, new FakeAction<>()));
 
-        rectangleRenderable.setOnPress(2, mockOnPressAction);
+        renderable.setOnPress(2, mockOnPressAction);
 
-        rectangleRenderable.press(2, TIMESTAMP);
+        renderable.press(2, TIMESTAMP);
 
-        verify(mockOnPressAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, rectangleRenderable)));
+        verify(mockOnPressAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnPress = mock(Action.class);
-        rectangleRenderable.setOnPress(2, newOnPress);
+        renderable.setOnPress(2, newOnPress);
 
-        rectangleRenderable.press(2, TIMESTAMP + 1);
+        renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, rectangleRenderable)));
+        verify(newOnPress, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, renderable)));
 
-        rectangleRenderable.press(0, TIMESTAMP + 2);
+        renderable.press(0, TIMESTAMP + 2);
 
         verify(newOnPress, once()).run(any());
     }
 
     @Test
     public void testPressActionIds() {
-        String id1 = "id1";
-        String id2 = "id2";
-        String id3 = "id3";
+        var id1 = "id1";
+        var id2 = "id2";
+        var id3 = "id3";
 
-        rectangleRenderable.setOnPress(0, new FakeAction<>(id1));
-        rectangleRenderable.setOnPress(2, new FakeAction<>(id2));
-        rectangleRenderable.setOnPress(7, new FakeAction<>(id3));
-        rectangleRenderable.setOnPress(2, null);
+        renderable.setOnPress(0, new FakeAction<>(id1));
+        renderable.setOnPress(2, new FakeAction<>(id2));
+        renderable.setOnPress(7, new FakeAction<>(id3));
+        renderable.setOnPress(2, null);
 
-        Map<Integer, String> pressActionIds = rectangleRenderable.pressActionIds();
+        Map<Integer, String> pressActionIds = renderable.pressActionIds();
 
         assertNotNull(pressActionIds);
         assertEquals(2, pressActionIds.size());
@@ -327,15 +325,15 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.setOnRelease(2, new FakeAction<>()));
 
-        rectangleRenderable.release(2, TIMESTAMP);
+        renderable.release(2, TIMESTAMP);
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnRelease = mock(Action.class);
-        rectangleRenderable.setOnRelease(2, newOnRelease);
+        renderable.setOnRelease(2, newOnRelease);
 
-        rectangleRenderable.release(2, TIMESTAMP + 1);
+        renderable.release(2, TIMESTAMP + 1);
 
-        verify(newOnRelease, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, rectangleRenderable)));
+        verify(newOnRelease, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -344,13 +342,13 @@ public class RectangleRenderableImplTests {
         String id2 = randomString();
         String id3 = randomString();
 
-        rectangleRenderable.setOnRelease(0, new FakeAction<>(id1));
-        rectangleRenderable.setOnRelease(2, new FakeAction<>(id2));
-        rectangleRenderable.setOnRelease(7, new FakeAction<>(id3));
-        rectangleRenderable.setOnRelease(2, null);
+        renderable.setOnRelease(0, new FakeAction<>(id1));
+        renderable.setOnRelease(2, new FakeAction<>(id2));
+        renderable.setOnRelease(7, new FakeAction<>(id3));
+        renderable.setOnRelease(2, null);
 
         Map<Integer, String> releaseActionIds =
-                rectangleRenderable.releaseActionIds();
+                renderable.releaseActionIds();
 
         assertNotNull(releaseActionIds);
         assertEquals(2, releaseActionIds.size());
@@ -361,22 +359,22 @@ public class RectangleRenderableImplTests {
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setOnPress(-1, new FakeAction<>()));
+                renderable.setOnPress(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setOnRelease(-1, new FakeAction<>()));
+                renderable.setOnRelease(-1, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(-1, TIMESTAMP));
+                renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(-1, TIMESTAMP + 1));
+                renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setOnPress(8, new FakeAction<>()));
+                renderable.setOnPress(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.setOnRelease(8, new FakeAction<>()));
+                renderable.setOnRelease(8, new FakeAction<>()));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(8, TIMESTAMP + 2));
+                renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(8, TIMESTAMP + 3));
+                renderable.press(8, TIMESTAMP + 3));
     }
 
     @Test
@@ -386,17 +384,17 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.setOnMouseOver(mockOnMouseOverAction));
 
-        rectangleRenderable.mouseOver(TIMESTAMP);
+        renderable.mouseOver(TIMESTAMP);
 
-        verify(mockOnMouseOverAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, rectangleRenderable)));
+        verify(mockOnMouseOverAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnMouseOver = mock(Action.class);
-        rectangleRenderable.setOnMouseOver(newOnMouseOver);
+        renderable.setOnMouseOver(newOnMouseOver);
 
-        rectangleRenderable.mouseOver(TIMESTAMP + 1);
+        renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, rectangleRenderable)));
+        verify(newOnMouseOver, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -406,13 +404,13 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.mouseOverActionId());
 
-        rectangleRenderable.setOnMouseOver(null);
+        renderable.setOnMouseOver(null);
 
-        assertNull(rectangleRenderable.mouseOverActionId());
+        assertNull(renderable.mouseOverActionId());
 
-        rectangleRenderable.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+        renderable.setOnMouseOver(new FakeAction<>(mouseOverActionId));
 
-        assertEquals(mouseOverActionId, rectangleRenderable.mouseOverActionId());
+        assertEquals(mouseOverActionId, renderable.mouseOverActionId());
     }
 
     @Test
@@ -422,17 +420,17 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.setOnMouseLeave(mockOnMouseLeaveAction));
 
-        rectangleRenderable.mouseLeave(TIMESTAMP);
+        renderable.mouseLeave(TIMESTAMP);
 
-        verify(mockOnMouseLeaveAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, rectangleRenderable)));
+        verify(mockOnMouseLeaveAction, once()).run(eq(MouseEventInputs.of(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<MouseEventInputs> newOnMouseLeave = mock(Action.class);
-        rectangleRenderable.setOnMouseLeave(newOnMouseLeave);
+        renderable.setOnMouseLeave(newOnMouseLeave);
 
-        rectangleRenderable.mouseLeave(TIMESTAMP + 1);
+        renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, rectangleRenderable)));
+        verify(newOnMouseLeave, once()).run(eq(MouseEventInputs.of(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -442,165 +440,165 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 rectangleRenderableNotSupportingMouseEvents.mouseLeaveActionId());
 
-        rectangleRenderable.setOnMouseLeave(null);
+        renderable.setOnMouseLeave(null);
 
-        assertNull(rectangleRenderable.mouseLeaveActionId());
+        assertNull(renderable.mouseLeaveActionId());
 
-        rectangleRenderable.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+        renderable.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
 
-        assertEquals(mouseLeaveActionId, rectangleRenderable.mouseLeaveActionId());
+        assertEquals(mouseLeaveActionId, renderable.mouseLeaveActionId());
     }
 
     @Test
     public void testMouseEventCallsToOutdatedTimestamps() {
         RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(0f, 0f, 1f, 1f);
 
-        rectangleRenderable.press(0, TIMESTAMP);
+        renderable.press(0, TIMESTAMP);
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(0, TIMESTAMP - 1));
+                renderable.press(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.release(0, TIMESTAMP - 1));
+                renderable.release(0, TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseOver(TIMESTAMP - 1));
+                renderable.mouseOver(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseLeave(TIMESTAMP - 1));
+                renderable.mouseLeave(TIMESTAMP - 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP - 1));
+                renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP - 1));
 
-        rectangleRenderable.release(0, TIMESTAMP + 1);
+        renderable.release(0, TIMESTAMP + 1);
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(0, TIMESTAMP));
+                renderable.press(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.release(0, TIMESTAMP));
+                renderable.release(0, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseOver(TIMESTAMP));
+                renderable.mouseOver(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseLeave(TIMESTAMP));
+                renderable.mouseLeave(TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP));
+                renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP));
 
-        rectangleRenderable.mouseOver(TIMESTAMP + 2);
+        renderable.mouseOver(TIMESTAMP + 2);
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(0, TIMESTAMP + 1));
+                renderable.press(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.release(0, TIMESTAMP + 1));
+                renderable.release(0, TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseOver(TIMESTAMP + 1));
+                renderable.mouseOver(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseLeave(TIMESTAMP + 1));
+                renderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 1));
+                renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 1));
 
-        rectangleRenderable.mouseLeave(TIMESTAMP + 3);
+        renderable.mouseLeave(TIMESTAMP + 3);
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(0, TIMESTAMP + 2));
+                renderable.press(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.release(0, TIMESTAMP + 2));
+                renderable.release(0, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseOver(TIMESTAMP + 2));
+                renderable.mouseOver(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseLeave(TIMESTAMP + 2));
+                renderable.mouseLeave(TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 2));
+                renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 2));
 
-        rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 4);
+        renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 4);
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.press(0, TIMESTAMP + 3));
+                renderable.press(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.release(0, TIMESTAMP + 3));
+                renderable.release(0, TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseOver(TIMESTAMP + 3));
+                renderable.mouseOver(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.mouseLeave(TIMESTAMP + 3));
+                renderable.mouseLeave(TIMESTAMP + 3));
         assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 3));
+                renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 3));
     }
 
     @Test
     public void testGetAndSetRenderingAreaProvider() {
         assertSame(RENDERING_AREA_PROVIDER,
-                rectangleRenderable.getRenderingDimensionsProvider());
+                renderable.getRenderingDimensionsProvider());
 
         FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
 
-        rectangleRenderable
+        renderable
                 .setRenderingDimensionsProvider(newRenderingDimensionsProvider);
 
         assertSame(newRenderingDimensionsProvider,
-                rectangleRenderable.getRenderingDimensionsProvider());
+                renderable.getRenderingDimensionsProvider());
     }
 
     @Test
     public void testGetAndSetZ() {
-        assertEquals(Z, rectangleRenderable.getZ());
+        assertEquals(Z, renderable.getZ());
 
         int newZ = 456;
 
-        rectangleRenderable.setZ(newZ);
+        renderable.setZ(newZ);
 
-        assertEquals(newZ, rectangleRenderable.getZ());
+        assertEquals(newZ, renderable.getZ());
 
-        verify(mockContainingStack, once()).add(rectangleRenderable);
+        verify(mockContainingStack, once()).add(renderable);
     }
 
     @Test
     public void testCapturesMouseEventsAtPoint() {
         var renderingDimensions = floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f);
-        rectangleRenderable.setRenderingDimensionsProvider(
+        renderable.setRenderingDimensionsProvider(
                 new FakeStaticProvider<>(renderingDimensions));
 
-        assertTrue(rectangleRenderable
+        assertTrue(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.251f, 0.5f), TIMESTAMP));
-        assertFalse(rectangleRenderable
+        assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.249f, 0.5f), TIMESTAMP));
 
-        rectangleRenderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseEvents(false);
 
-        assertFalse(rectangleRenderable
+        assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.251f, 0.5f), TIMESTAMP));
-        assertFalse(rectangleRenderable
+        assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.249f, 0.5f), TIMESTAMP));
     }
 
     @Test
     public void testCapturesMouseEventsAtPointDoesNotExceedRenderingBoundaries() {
         var renderingDimensions = floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f);
-        rectangleRenderable.setRenderingDimensionsProvider(
+        renderable.setRenderingDimensionsProvider(
                 new FakeStaticProvider<>(renderingDimensions));
 
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(floatBoxOf(0f, 0f, 0.5f, 1f));
 
-        assertTrue(rectangleRenderable
+        assertTrue(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.499f, 0.5f), TIMESTAMP));
-        assertFalse(rectangleRenderable
+        assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.501f, 0.5f), TIMESTAMP));
     }
 
     @Test
     public void testCapturesMouseEventsAtPointWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> rectangleRenderable.capturesMouseEventAtPoint(vertexOf(-0.001f, 0f),
+                () -> renderable.capturesMouseEventAtPoint(vertexOf(-0.001f, 0f),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> rectangleRenderable.capturesMouseEventAtPoint(vertexOf(1.001f, 0f),
+                () -> renderable.capturesMouseEventAtPoint(vertexOf(1.001f, 0f),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, -0.001f),
+                () -> renderable.capturesMouseEventAtPoint(vertexOf(0f, -0.001f),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
-                () -> rectangleRenderable.capturesMouseEventAtPoint(vertexOf(0f, 1.001f),
+                () -> renderable.capturesMouseEventAtPoint(vertexOf(0f, 1.001f),
                         TIMESTAMP));
     }
 
     @Test
     public void testDelete() {
-        rectangleRenderable.delete();
+        renderable.delete();
 
-        verify(mockContainingStack, once()).remove(rectangleRenderable);
+        verify(mockContainingStack, once()).remove(renderable);
     }
 
     @Test
     public void testUuid() {
-        assertSame(UUID, rectangleRenderable.uuid());
+        assertSame(UUID, renderable.uuid());
     }
 }

@@ -4,8 +4,6 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRenderable>
@@ -29,10 +27,12 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()");
 
-        Check.throwOnLtValue(renderable.getTextureTileWidth(), 0f,
-                "renderable.getTextureTileWidth()");
-        Check.throwOnLtValue(renderable.getTextureTileHeight(), 0f,
-                "renderable.getTextureTileHeight()");
+        var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
+                "renderable.getTextureTileWidthProvider()").provide(timestamp);
+        var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
+                "renderable.getTextureTileHeightProvider()").provide(timestamp);
+        Check.throwOnLtValue(textureTileWidth, 0f, "provided textureTileWidth in renderable");
+        Check.throwOnLtValue(textureTileHeight, 0f, "provided textureTileHeight in renderable");
 
         Check.ifNull(renderable.getRenderingDimensionsProvider(),
                 "renderable.getRenderingDimensionsProvider()");
@@ -48,9 +48,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         unbindMeshAndShader();
 
-        var tilesPerWidth = renderingDimensions.width() / renderable.getTextureTileWidth();
-        var tilesPerHeight =
-                renderingDimensions.height() / renderable.getTextureTileHeight();
+        var tilesPerWidth = renderingDimensions.width() / textureTileWidth;
+        var tilesPerHeight = renderingDimensions.height() / textureTileHeight;
 
         var topLeftColor = renderable.getTopLeftColorProvider().provide(timestamp);
         var topRightColor = renderable.getTopRightColorProvider().provide(timestamp);

@@ -27,8 +27,8 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<Color> bottomRightColorProvider,
                                    ProviderAtTime<Color> bottomLeftColorProvider,
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                   float backgroundTextureTileWidth,
-                                   float backgroundTextureTileHeight,
+                                   ProviderAtTime<Float> textureTileWidthProvider,
+                                   ProviderAtTime<Float> textureTileHeightProvider,
                                    Map<Integer, Action<MouseEventInputs>> onPress,
                                    Map<Integer, Action<MouseEventInputs>> onRelease,
                                    Action<MouseEventInputs> onMouseOver,
@@ -38,7 +38,7 @@ public class RectangleRenderableImpl
                                    UUID uuid,
                                    RenderableStack containingStack,
                                    RenderingBoundaries renderingBoundaries) {
-        super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
+        super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
                 renderingBoundaries);
         setTopLeftColorProvider(topLeftColorProvider);

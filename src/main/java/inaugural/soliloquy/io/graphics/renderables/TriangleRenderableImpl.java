@@ -28,8 +28,8 @@ public class TriangleRenderableImpl
                                   ProviderAtTime<Vertex> vertex3Provider,
                                   ProviderAtTime<Color> vertex3ColorProvider,
                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                  float backgroundTextureTileWidth,
-                                  float backgroundTextureTileHeight,
+                                  ProviderAtTime<Float> textureTileWidthProvider,
+                                  ProviderAtTime<Float> textureTileHeightProvider,
                                   Map<Integer, Action<MouseEventInputs>> onPress,
                                   Map<Integer, Action<MouseEventInputs>> onRelease,
                                   Action<MouseEventInputs> onMouseOver,
@@ -38,7 +38,7 @@ public class TriangleRenderableImpl
                                   java.util.UUID uuid,
                                   RenderableStack containingStack,
                                   RenderingBoundaries renderingBoundaries) {
-        super(backgroundTextureIdProvider, backgroundTextureTileWidth, backgroundTextureTileHeight,
+        super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
                 renderingBoundaries);
         setVertex1Provider(vertex1Provider);

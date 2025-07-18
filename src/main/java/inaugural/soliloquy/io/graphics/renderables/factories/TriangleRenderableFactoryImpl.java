@@ -30,8 +30,8 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    ProviderAtTime<Vertex> vertex3Provider,
                                    ProviderAtTime<Color> vertex3ColorProvider,
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                   float backgroundTextureTileWidth,
-                                   float backgroundTextureTileHeight,
+                                   ProviderAtTime<Float> textureTileWidthProvider,
+                                   ProviderAtTime<Float> textureTileHeightProvider,
                                    Map<Integer, Action<MouseEventInputs>> onPress,
                                    Map<Integer, Action<MouseEventInputs>> onRelease,
                                    Action<MouseEventInputs> onMouseOver,
@@ -42,8 +42,8 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
             throws IllegalArgumentException {
         return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider,
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
-                vertex3ColorProvider, backgroundTextureIdProvider, backgroundTextureTileWidth,
-                backgroundTextureTileHeight, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
+                vertex3ColorProvider, backgroundTextureIdProvider, textureTileWidthProvider,
+                textureTileHeightProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
                 containingStack, RENDERING_BOUNDARIES);
     }
 }

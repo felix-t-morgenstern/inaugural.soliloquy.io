@@ -28,8 +28,8 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                                     ProviderAtTime<Color> bottomRightColorProvider,
                                     ProviderAtTime<Color> bottomLeftColorProvider,
                                     ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                    float backgroundTextureTileWidth,
-                                    float backgroundTextureTileHeight,
+                                    ProviderAtTime<Float> textureTileWidthProvider,
+                                    ProviderAtTime<Float> textureTileHeightProvider,
                                     Map<Integer, Action<MouseEventInputs>> onPress,
                                     Map<Integer, Action<MouseEventInputs>> onRelease,
                                     Action<MouseEventInputs> onMouseOver,
@@ -41,8 +41,8 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
             throws IllegalArgumentException {
         return new RectangleRenderableImpl(topLeftColorProvider, topRightColorProvider,
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
-                backgroundTextureTileWidth, backgroundTextureTileHeight, onPress, onRelease,
-                onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid,
-                containingStack, RENDERING_BOUNDARIES);
+                textureTileWidthProvider, textureTileHeightProvider, onPress, onRelease,
+                onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid, containingStack,
+                RENDERING_BOUNDARIES);
     }
 }

@@ -5,7 +5,9 @@ import inaugural.soliloquy.io.graphics.renderables.factories.TriangleRenderableF
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
@@ -20,6 +22,7 @@ import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 public class TriangleRenderableFactoryImplTests {
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
@@ -29,11 +32,11 @@ public class TriangleRenderableFactoryImplTests {
     private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
-    private final float BACKGROUND_TEXTURE_TILE_WIDTH = randomFloatWithInclusiveFloor(0f);
-    private final float BACKGROUND_TEXTURE_TILE_HEIGHT = randomFloatWithInclusiveFloor(0f);
     private final int Z = randomInt();
     private final UUID UUID = java.util.UUID.randomUUID();
 
+    @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private RenderableStack mockContainingStack;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
@@ -58,8 +61,8 @@ public class TriangleRenderableFactoryImplTests {
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack);
 
         assertNotNull(triangleRenderable);
@@ -72,77 +75,77 @@ public class TriangleRenderableFactoryImplTests {
                 .make(null, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, null,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         null, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, null,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         null, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, null,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        null, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        null, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, randomFloatWithInclusiveCeiling(-0.001f),
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, null,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        randomFloatWithInclusiveCeiling(-0.001f), null, null, null, null, Z, UUID,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        null, null, null, null, null, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, null,
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, null,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, BACKGROUND_TEXTURE_TILE_WIDTH,
-                        BACKGROUND_TEXTURE_TILE_HEIGHT, null, null, null, null, Z, UUID, null));
+                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID, null));
     }
 }

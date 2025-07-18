@@ -17,8 +17,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     public ProviderAtTime<Color> BottomRightColorProvider;
     public ProviderAtTime<Color> BottomLeftColorProvider;
     public ProviderAtTime<Integer> TextureIdProvider;
-    public float TextureTileWidth;
-    public float TextureTileHeight;
+    public ProviderAtTime<Float> TextureTileWidth;
+    public ProviderAtTime<Float> TextureTileHeight;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public UUID Uuid;
 
@@ -27,8 +27,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
                                    ProviderAtTime<Color> bottomRightColorProvider,
                                    ProviderAtTime<Color> bottomLeftColorProvider,
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                   float backgroundTextureTileWidth,
-                                   float backgroundTextureTileHeight,
+                                   ProviderAtTime<Float> textureTileWidthProvider,
+                                   ProviderAtTime<Float> textureTileHeightProvider,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    UUID uuid) {
         TopLeftColorProvider = topLeftColorProvider;
@@ -36,8 +36,8 @@ public class FakeRectangleRenderable implements RectangleRenderable {
         BottomRightColorProvider = bottomRightColorProvider;
         BottomLeftColorProvider = bottomLeftColorProvider;
         TextureIdProvider = backgroundTextureIdProvider;
-        TextureTileWidth = backgroundTextureTileWidth;
-        TextureTileHeight = backgroundTextureTileHeight;
+        TextureTileWidth = textureTileWidthProvider;
+        TextureTileHeight = textureTileHeightProvider;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Uuid = uuid;
     }
@@ -98,25 +98,25 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public float getTextureTileWidth() {
+    public ProviderAtTime<Float> getTextureTileWidthProvider() {
         return TextureTileWidth;
     }
 
     @Override
-    public void setTextureTileWidth(float backgroundTextureTileWidth)
+    public void setTextureTileWidthProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        TextureTileWidth = backgroundTextureTileWidth;
+        TextureTileWidth = provider;
     }
 
     @Override
-    public float getTextureTileHeight() {
+    public ProviderAtTime<Float> getTextureTileHeightProvider() {
         return TextureTileHeight;
     }
 
     @Override
-    public void setTextureTileHeight(float backgroundTextureTileHeight)
+    public void setTextureTileHeightProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        TextureTileHeight = backgroundTextureTileHeight;
+        TextureTileHeight = provider;
     }
 
     @Override
