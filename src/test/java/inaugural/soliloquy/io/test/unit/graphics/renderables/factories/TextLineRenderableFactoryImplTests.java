@@ -2,13 +2,13 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.TextLineRenderableFactoryImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
@@ -22,58 +22,54 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomFloat;
+import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 public class TextLineRenderableFactoryImplTests {
-    private final FakeFont FONT = new FakeFont();
-    private final float LINE_HEIGHT = 0.123f;
-    private final FakeStaticProvider<Float> LINE_HEIGHT_PROVIDER =
-            new FakeStaticProvider<>(LINE_HEIGHT);
     private final TextJustification JUSTIFICATION = TextJustification.LEFT;
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = mapOf();
     private final List<Integer> ITALIC_INDICES = listOf();
     private final List<Integer> BOLD_INDICES = listOf();
-    private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> RENDERING_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Float> DROP_SHADOW_SIZE_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> DROP_SHADOW_OFFSET_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> DROP_SHADOW_COLOR_PROVIDER =
-            new FakeProviderAtTime<>();
 
     private final UUID UUID = java.util.UUID.randomUUID();
+    @Mock private Font mockFont;
+    @Mock private ProviderAtTime<Float> mockHeightProvider;
     @Mock private ProviderAtTime<String> mockLineTextProvider;
     @Mock private RenderableStack mockContainingStack;
+    @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockBorderColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockLocationProvider;
+    @Mock private ProviderAtTime<Float> mockDropShadowSizeProvider;
+    @Mock private ProviderAtTime<Vertex> mockDropShadowOffsetProvider;
+    @Mock private ProviderAtTime<Color> mockDropShadowColorProvider;
 
     private TextLineRenderableFactory textLineRenderableFactory;
 
     @BeforeEach
     public void setUp() {
-        //noinspection unchecked
-        mockLineTextProvider = mock(ProviderAtTime.class);
-        mockContainingStack = mock(RenderableStack.class);
 
         textLineRenderableFactory = new TextLineRenderableFactoryImpl();
     }
 
     @Test
     public void testMake() {
-        int z = 123;
-        float paddingBetweenGlyphs = 0.456f;
-        TextLineRenderable textLineRenderable = textLineRenderableFactory.make(FONT,
-                mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION, paddingBetweenGlyphs,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, z, UUID,
-                mockContainingStack);
+        var z = randomInt();
+        var paddingBetweenGlyphs = randomFloat();
+        TextLineRenderable textLineRenderable =
+                textLineRenderableFactory.make(mockFont, mockLineTextProvider, mockLocationProvider,
+                        mockHeightProvider, JUSTIFICATION, paddingBetweenGlyphs,
+                        COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
+                        mockBorderThicknessProvider, mockBorderColorProvider,
+                        mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                        mockDropShadowColorProvider, z, UUID, mockContainingStack);
 
         assertNotNull(textLineRenderable);
         assertInstanceOf(TextLineRenderableImpl.class, textLineRenderable);
-        assertSame(FONT, textLineRenderable.getFont());
+        assertSame(mockFont, textLineRenderable.getFont());
         assertSame(mockLineTextProvider, textLineRenderable.getLineTextProvider());
-        assertSame(LINE_HEIGHT_PROVIDER, textLineRenderable.lineHeightProvider());
+        assertSame(mockHeightProvider, textLineRenderable.lineHeightProvider());
         assertEquals(JUSTIFICATION, textLineRenderable.getJustification());
         assertEquals(paddingBetweenGlyphs, textLineRenderable.getPaddingBetweenGlyphs());
         assertEquals(COLOR_PROVIDER_INDICES, textLineRenderable.colorProviderIndices());

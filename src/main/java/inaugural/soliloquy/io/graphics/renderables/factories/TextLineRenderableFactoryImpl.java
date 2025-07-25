@@ -17,13 +17,13 @@ import java.util.UUID;
 public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
     @Override
     public TextLineRenderable make(Font font, ProviderAtTime<String> lineTextProvider,
+                                   ProviderAtTime<Vertex> locationProvider,
                                    ProviderAtTime<Float> lineHeightProvider,
                                    TextJustification justification, float paddingBetweenGlyphs,
                                    Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                    List<Integer> italicIndices, List<Integer> boldIndices,
                                    ProviderAtTime<Float> borderThicknessProvider,
                                    ProviderAtTime<Color> borderColorProvider,
-                                   ProviderAtTime<Vertex> renderingLocationProvider,
                                    ProviderAtTime<Float> dropShadowSizeProvider,
                                    ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                    ProviderAtTime<Color> dropShadowColorProvider,
@@ -33,7 +33,7 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
         return new TextLineRenderableImpl(font, lineTextProvider, lineHeightProvider,
                 justification, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
                 boldIndices, borderThicknessProvider, borderColorProvider,
-                renderingLocationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
+                locationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
                 dropShadowColorProvider, z, uuid, containingStack);
     }
 }
