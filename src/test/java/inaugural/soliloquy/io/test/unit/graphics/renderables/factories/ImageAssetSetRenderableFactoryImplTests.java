@@ -81,10 +81,10 @@ public class ImageAssetSetRenderableFactoryImplTests {
     public void testMake() {
         // TODO: Create proper maps for press and release!
         var imageAssetSetRenderableWithMouseEvents =
-                factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, mapOf(), mapOf(),
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
-                        mockContainingStack);
+                factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, mapOf(), mapOf(),
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER,
+                        Z, UUID, mockContainingStack);
 
         assertNotNull(imageAssetSetRenderableWithMouseEvents);
         assertInstanceOf(ImageAssetSetRenderableImpl.class, imageAssetSetRenderableWithMouseEvents);
@@ -104,39 +104,40 @@ public class ImageAssetSetRenderableFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, DISPLAY_PARAMS, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
+                () -> factory.make(null, DISPLAY_PARAMS, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, null, Z, UUID, mockContainingStack));
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, null, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null, BORDER_COLOR_PROVIDER,
-                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null,
+                        BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, null, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, null, null, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
+                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, null,
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, null,
                         mockContainingStack));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS, null, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, RENDERING_DIMENSIONS_PROVIDER, Z, UUID, null));
+                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                        null));
 
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(null, DISPLAY_PARAMS, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
