@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class FakeSpriteRenderable implements SpriteRenderable {
     public Sprite Sprite;
-    public List<ProviderAtTime<ColorShift>> ColorShiftProviders;
+    public List<ColorShift> ColorShifts;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public ProviderAtTime<Float> BorderThicknessProvider;
     public ProviderAtTime<Color> BorderColorProvider;
@@ -24,12 +24,12 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     public UUID Uuid;
 
     public FakeSpriteRenderable(Sprite sprite,
-                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                 ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider, UUID uuid) {
         Sprite = sprite;
-        ColorShiftProviders = colorShiftProviders;
+        ColorShifts = colorShifts;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         BorderThicknessProvider = borderThicknessProvider;
         BorderColorProvider = borderColorProvider;
@@ -37,11 +37,11 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     public FakeSpriteRenderable(Sprite sprite,
-                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid) {
         Sprite = sprite;
-        ColorShiftProviders = colorShiftProviders;
+        ColorShifts = colorShifts;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Z = z;
         BorderThicknessProvider = new FakeStaticProvider<>(null);
@@ -162,8 +162,8 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-        return ColorShiftProviders;
+    public List<ColorShift> colorShifts() {
+        return ColorShifts;
     }
 
     @Override

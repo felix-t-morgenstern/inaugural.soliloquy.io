@@ -11,32 +11,31 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
             throws IllegalArgumentException {
         Check.ifNull(colorShifts, "colorShifts");
 
-        float netBrightnessShift = 0f;
-        float netRedShift = 0f;
-        float netGreenShift = 0f;
-        float netBlueShift = 0f;
-        float netColorRotationShift = 0f;
+        var netBrightnessShift = 0f;
+        var netRedShift = 0f;
+        var netGreenShift = 0f;
+        var netBlueShift = 0f;
+        var netColorRotationShift = 0f;
 
-        boolean netBrightnessSealed = false;
-        boolean netRedSealed = false;
-        boolean netGreenSealed = false;
-        boolean netBlueSealed = false;
-        boolean netColorRotationSealed = false;
+        var netBrightnessSealed = false;
+        var netRedSealed = false;
+        var netGreenSealed = false;
+        var netBlueSealed = false;
+        var netColorRotationSealed = false;
 
-        for (ColorShift colorShift : colorShifts) {
+        for (var colorShift : colorShifts) {
             Check.ifNull(colorShift, "colorShift in colorShifts");
-            float value = verifyProvidedValue(colorShift.shiftAmountProvider().provide(timestamp));
-            boolean overrides = colorShift.overridesPriorShiftsOfSameType();
+            var value = verifyProvidedValue(colorShift.shiftAmountProvider().provide(timestamp));
+            var overrides = colorShift.overridesPriorShiftsOfSameType();
             if (colorShift instanceof BrightnessShift) {
                 if (!netBrightnessSealed) {
                     netBrightnessShift = getNewValue(netBrightnessShift, value);
                 }
                 netBrightnessSealed = netBrightnessSealed || overrides;
             }
-            if (colorShift instanceof ColorComponentIntensityShift ColorComponentIntensityShift) {
-                var colorComponent = ColorComponentIntensityShift.colorComponent();
-                Check.ifNull(colorComponent,
-                        "ColorComponent provided by ColorComponentIntensityShift");
+            if (colorShift instanceof ColorComponentIntensityShift intensityShift) {
+                var colorComponent = intensityShift.colorComponent();
+                Check.ifNull(colorComponent, "ColorComponent provided by intensityShift");
                 switch (colorComponent) {
                     case RED:
                         if (!netRedSealed) {

@@ -24,13 +24,12 @@ public class GlobalLoopingAnimationRenderableImpl
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                List<ProviderAtTime<ColorShift>>
-                                                        colorShiftProviders,
+                                                List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 RenderableStack containingStack,
                                                 RenderingBoundaries renderingBoundaries) {
-        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
+        super(colorShifts, borderThicknessProvider, borderColorProvider,
                 renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
@@ -42,13 +41,12 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 Map<Integer, Action<MouseEventInputs>> onRelease,
                                                 Action<MouseEventInputs> onMouseOver,
                                                 Action<MouseEventInputs> onMouseLeave,
-                                                List<ProviderAtTime<ColorShift>>
-                                                        colorShiftProviders,
+                                                List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 RenderableStack containingStack,
                                                 RenderingBoundaries renderingBoundaries) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
                 containingStack, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);

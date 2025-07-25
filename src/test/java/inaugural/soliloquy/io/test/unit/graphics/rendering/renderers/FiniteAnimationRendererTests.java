@@ -2,13 +2,13 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.util.List;
@@ -78,7 +78,7 @@ public class FiniteAnimationRendererTests {
     @Test
     public void testRenderWithInvalidArgs() {
         var animation = new FakeAnimation("id", 5000);
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        List<ColorShift> colorShifts = listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -96,14 +96,14 @@ public class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
                         null,
                         START_TIMESTAMP, UUID.randomUUID()),
                 0L
         ));
 
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
                         new FakeStaticProvider<>(
                                 null),
                         START_TIMESTAMP, UUID.randomUUID()),
@@ -111,7 +111,7 @@ public class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
                         new FakeStaticProvider<>(
                                 floatBoxOf(leftX, topY, leftX, bottomY)),
                         START_TIMESTAMP, UUID.randomUUID()),
@@ -119,7 +119,7 @@ public class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
                         new FakeStaticProvider<>(
                                 floatBoxOf(leftX, topY, rightX, topY)),
                         START_TIMESTAMP, UUID.randomUUID()),
@@ -127,7 +127,7 @@ public class FiniteAnimationRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderer.render(
-                new FakeFiniteAnimationRenderable(animation, colorShiftProviders,
+                new FakeFiniteAnimationRenderable(animation, colorShifts,
                         new FakeStaticProvider<>(
                                 floatBoxOf(leftX, topY, rightX, bottomY)),
                         START_TIMESTAMP, null),
@@ -138,7 +138,7 @@ public class FiniteAnimationRendererTests {
     @Test
     public void testRenderOutdatedTimestamp() {
         var animation = new FakeAnimation("id", 5000);
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -161,7 +161,7 @@ public class FiniteAnimationRendererTests {
     @Test
     public void testRenderBeforeStartingTimestamp() {
         var animation = new FakeAnimation("id", 5000);
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -182,7 +182,7 @@ public class FiniteAnimationRendererTests {
     @Test
     public void testRenderPassesTimestampToColorShiftStackAggregator() {
         var animation = new FakeAnimation("id", 5000);
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -203,7 +203,7 @@ public class FiniteAnimationRendererTests {
     public void testRenderAfterAnimationEndDeletes() {
         int animationMsDuration = 456;
         var animation = new FakeAnimation("id", animationMsDuration);
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;

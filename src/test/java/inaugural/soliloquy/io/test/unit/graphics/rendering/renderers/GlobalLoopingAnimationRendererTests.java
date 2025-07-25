@@ -3,19 +3,17 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 import inaugural.soliloquy.io.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.io.test.testdoubles.spies.SpyGlobalLoopingAnimation;
+import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.util.List;
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
@@ -79,7 +77,7 @@ public class GlobalLoopingAnimationRendererTests {
     @Test
     public void testRenderWithInvalidArgs() {
         var renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -146,7 +144,7 @@ public class GlobalLoopingAnimationRendererTests {
     @Test
     public void testRenderOutdatedTimestamp() {
         var renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;
@@ -166,7 +164,7 @@ public class GlobalLoopingAnimationRendererTests {
     @Test
     public void testRenderPassesTimestampToColorShiftStackAggregator() {
         var renderableAnimation = new SpyGlobalLoopingAnimation();
-        List<ProviderAtTime<ColorShift>> colorShiftProviders = listOf();
+        var colorShiftProviders = Collections.<ColorShift>listOf();
         var leftX = 0.11f;
         var topY = 0.22f;
         var rightX = 0.33f;

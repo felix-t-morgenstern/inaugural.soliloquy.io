@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
@@ -43,7 +42,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                 .provide(timestamp);
 
         validateRenderableWithDimensionsMembers(renderingArea,
-                spriteRenderable.colorShiftProviders(),
+                spriteRenderable.colorShifts(),
                 spriteRenderable.uuid(), "spriteRenderable");
 
         if (borderThickness != null) {
@@ -101,7 +100,7 @@ public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
                     borderColor);
         }
 
-        NetColorShifts netColorShifts = netColorShifts(spriteRenderable.colorShiftProviders(),
+        var netColorShifts = netColorShifts(spriteRenderable.colorShifts(),
                 COLOR_SHIFT_STACK_AGGREGATOR, timestamp);
 
         super.render(

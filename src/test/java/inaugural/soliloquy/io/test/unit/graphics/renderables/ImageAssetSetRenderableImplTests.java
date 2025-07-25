@@ -79,7 +79,7 @@ public class ImageAssetSetRenderableImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private Map<Integer, Action<MouseEventInputs>> onPressActions;
-    private List<ProviderAtTime<ColorShift>> colorShiftProviders;
+    private List<ColorShift> colorShifts;
 
     private final FloatBox RENDERING_AREA = floatBoxOf(
             RENDERING_AREA_LEFT_X, RENDERING_AREA_TOP_Y,
@@ -114,7 +114,7 @@ public class ImageAssetSetRenderableImplTests {
                 .thenReturn(CURRENT_RENDERING_BOUNDARIES);
 
         onPressActions = mapOf(pairOf(2, mockOnMousePressAction));
-        colorShiftProviders = listOf();
+        colorShifts = listOf();
 
         lenient().when(mockImage.capturesMouseEventsAtPixel(anyInt(), anyInt()))
                 .thenReturn(IMAGE_CAPTURES_EVENTS_AT_PIXEL);
@@ -147,9 +147,9 @@ public class ImageAssetSetRenderableImplTests {
         lenient().when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
 
         imageAssetSetRenderable =
-                new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS, onPressActions,
+                        null, mockOnMouseOverAction, mockOnMouseLeaveAction, colorShifts,
+                        mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries);
     }
@@ -158,8 +158,8 @@ public class ImageAssetSetRenderableImplTests {
     public void testConstructorWithInvalidArgs() {
         when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableImpl(null, DISPLAY_PARAMS, onPressActions,
-                        null, mockOnMouseOverAction, mockOnMouseLeaveAction, colorShiftProviders,
+                () -> new ImageAssetSetRenderableImpl(null, DISPLAY_PARAMS, onPressActions, null,
+                        mockOnMouseOverAction, mockOnMouseLeaveAction, colorShifts,
                         mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
@@ -167,7 +167,7 @@ public class ImageAssetSetRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
         lenient().when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
@@ -180,45 +180,42 @@ public class ImageAssetSetRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, null, mockBorderColorProvider,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, null, mockBorderColorProvider, mockRenderingAreaProvider, Z,
+                        UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, null,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, null, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, null,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, null, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
-                        null, Z, UUID, mockContainingStack, mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider, null, Z,
+                        UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, null, mockContainingStack,
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, null, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack, null));
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableImpl(null, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                () -> new ImageAssetSetRenderableImpl(null, DISPLAY_PARAMS, colorShifts,
+                        mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack,
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
@@ -228,35 +225,32 @@ public class ImageAssetSetRenderableImplTests {
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, null, mockBorderColorProvider,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, null, mockBorderColorProvider, mockRenderingAreaProvider, Z,
+                        UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, null,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, null, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, null,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingStack,
-                        mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, null, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
-                        null, Z, UUID, mockContainingStack, mockRenderingBoundaries));
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider, null, Z,
+                        UUID, mockContainingStack, mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, null, mockContainingStack,
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingStack, null));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShiftProviders, mockBorderThicknessProvider, mockBorderColorProvider,
+                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, null, mockRenderingBoundaries));
     }
 
@@ -277,10 +271,10 @@ public class ImageAssetSetRenderableImplTests {
         var imageAssetSetNotSupportingMouseEvents = mock(ImageAssetSet.class);
         when(imageAssetSetNotSupportingMouseEvents.supportsMouseEventCapturing()).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () ->
-                imageAssetSetRenderable.setImageAssetSet(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                imageAssetSetRenderable.setImageAssetSet(imageAssetSetNotSupportingMouseEvents));
+        assertThrows(IllegalArgumentException.class,
+                () -> imageAssetSetRenderable.setImageAssetSet(null));
+        assertThrows(IllegalArgumentException.class, () -> imageAssetSetRenderable.setImageAssetSet(
+                imageAssetSetNotSupportingMouseEvents));
     }
 
     @Test
@@ -587,8 +581,8 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testColorShiftProviders() {
-        assertSame(colorShiftProviders,
-                imageAssetSetRenderable.colorShiftProviders());
+        assertSame(colorShifts,
+                imageAssetSetRenderable.colorShifts());
     }
 
     @Test

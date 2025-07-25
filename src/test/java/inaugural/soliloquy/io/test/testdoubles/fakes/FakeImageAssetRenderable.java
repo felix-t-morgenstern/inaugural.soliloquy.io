@@ -99,7 +99,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
+    public List<ColorShift> colorShifts() {
         return null;
     }
 

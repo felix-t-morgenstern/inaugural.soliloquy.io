@@ -3,10 +3,10 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
+
 public class GlobalLoopingAnimationRenderer
         extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
     private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
@@ -31,7 +31,7 @@ public class GlobalLoopingAnimationRenderer
                         .provide(timestamp);
 
         validateRenderableWithDimensionsMembers(renderingArea,
-                globalLoopingAnimationRenderable.colorShiftProviders(),
+                globalLoopingAnimationRenderable.colorShifts(),
                 globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
 
         Check.ifNull(globalLoopingAnimationRenderable.getGlobalLoopingAnimation(),
@@ -39,8 +39,8 @@ public class GlobalLoopingAnimationRenderer
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        NetColorShifts netColorShifts = netColorShifts(
-                globalLoopingAnimationRenderable.colorShiftProviders(),
+        var netColorShifts = netColorShifts(
+                globalLoopingAnimationRenderable.colorShifts(),
                 COLOR_SHIFT_STACK_AGGREGATOR,
                 timestamp);
 

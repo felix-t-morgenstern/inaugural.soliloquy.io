@@ -30,15 +30,15 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
-                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                         List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          UUID uuid,
                                          RenderableStack containingStack,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
-        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
+        super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
+                uuid, containingStack, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
@@ -55,16 +55,16 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          Map<Integer, Action<MouseEventInputs>> onRelease,
                                          Action<MouseEventInputs> onMouseOver,
                                          Action<MouseEventInputs> onMouseLeave,
-                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                         List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
                                          RenderableStack containingStack,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
-                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                containingStack, renderingBoundaries);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
+                renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);

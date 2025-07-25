@@ -20,13 +20,13 @@ import java.util.function.Supplier;
 
 abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseEvents
         implements ImageAssetRenderable {
-    private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS;
+    private final List<ColorShift> COLOR_SHIFTS;
 
     private ProviderAtTime<Float> borderThicknessProvider;
     private ProviderAtTime<Color> borderColorProvider;
     protected ProviderAtTime<FloatBox> renderingAreaProvider;
 
-    protected AbstractImageAssetRenderable(List<ProviderAtTime<ColorShift>> colorShiftProviders,
+    protected AbstractImageAssetRenderable(List<ColorShift> colorShifts,
                                            ProviderAtTime<Float> borderThicknessProvider,
                                            ProviderAtTime<Color> borderColorProvider,
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -34,7 +34,7 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            UUID uuid,
                                            RenderableStack containingStack,
                                            RenderingBoundaries renderingBoundaries) {
-        this(false, null, null, null, null, colorShiftProviders, borderThicknessProvider,
+        this(false, null, null, null, null, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
                 renderingBoundaries);
     }
@@ -44,7 +44,7 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
             Map<Integer, Action<MouseEventInputs>> onRelease,
             Action<MouseEventInputs> onMouseOver,
             Action<MouseEventInputs> onMouseLeave,
-            List<ProviderAtTime<ColorShift>> colorShiftProviders,
+            List<ColorShift> colorShifts,
             ProviderAtTime<Float> borderThicknessProvider,
             ProviderAtTime<Color> borderColorProvider,
             ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -52,9 +52,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
             UUID uuid,
             RenderableStack containingStack,
             RenderingBoundaries renderingBoundaries) {
-        this(true, onPress, onRelease, onMouseOver, onMouseLeave,
-                colorShiftProviders, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
+        this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
+                containingStack, renderingBoundaries);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
@@ -62,7 +62,7 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          Map<Integer, Action<MouseEventInputs>> onRelease,
                                          Action<MouseEventInputs> onMouseOver,
                                          Action<MouseEventInputs> onMouseLeave,
-                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                         List<ColorShift> colorShifts,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
@@ -72,15 +72,15 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          RenderingBoundaries renderingBoundaries) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
                 containingStack, renderingBoundaries);
-        COLOR_SHIFT_PROVIDERS = Check.ifNull(colorShiftProviders, "colorShiftProviders");
+        COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);
         setBorderThicknessProvider(borderThicknessProvider);
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-        return COLOR_SHIFT_PROVIDERS;
+    public List<ColorShift> colorShifts() {
+        return COLOR_SHIFTS;
     }
 
     @Override

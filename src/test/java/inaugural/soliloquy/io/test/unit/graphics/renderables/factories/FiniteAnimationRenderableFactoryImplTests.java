@@ -15,7 +15,6 @@ import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.FiniteAnimationRenderableFactory;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 
@@ -42,7 +41,7 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private final Map<Integer, Action<MouseEventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final FakeAction<MouseEventInputs> ON_MOUSE_OVER = new FakeAction<>();
     private final FakeAction<MouseEventInputs> ON_MOUSE_LEAVE = new FakeAction<>();
-    private final List<ProviderAtTime<ColorShift>> COLOR_SHIFT_PROVIDERS = listOf();
+    private final List<ColorShift> COLOR_SHIFTS = listOf();
     private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(null);
     private final int Z = randomInt();
@@ -76,19 +75,17 @@ public class FiniteAnimationRenderableFactoryImplTests {
     @Test
     public void testMake() {
         FiniteAnimationRenderable finiteAnimationRenderableWithMouseEvents =
-                finiteAnimationRenderableFactory.make(
-                        ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                        ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        UUID, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
                         MOST_RECENT_TIMESTAMP
                 );
         FiniteAnimationRenderable finiteAnimationRenderableWithoutMouseEvents =
-                finiteAnimationRenderableFactory.make(
-                        ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z,
-                        UUID, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
-                        MOST_RECENT_TIMESTAMP
+                finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
                 );
 
         assertNotNull(finiteAnimationRenderableWithMouseEvents);
@@ -101,114 +98,129 @@ public class FiniteAnimationRenderableFactoryImplTests {
 
     @Test
     public void testMakeWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                null, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                null, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, null, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, null, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                null, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, null
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, MOST_RECENT_TIMESTAMP + 1,
-                MOST_RECENT_TIMESTAMP
-        ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(null, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        null, BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        UUID, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS, null, Z,
+                        UUID, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, null, mockContainingStack, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID, null, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP, null
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingStack, START_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP
+                ));
 
 
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                null, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, null, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, null, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, null,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                null, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, null
-        ));
-        assertThrows(IllegalArgumentException.class, () -> finiteAnimationRenderableFactory.make(
-                ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
-                ON_MOUSE_LEAVE, COLOR_SHIFT_PROVIDERS, RENDERING_AREA_PROVIDER, Z, UUID,
-                mockContainingStack, START_TIMESTAMP, MOST_RECENT_TIMESTAMP + 1,
-                MOST_RECENT_TIMESTAMP
-        ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(null, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
+                        null, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
+                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, null, ON_PRESS_ACTIONS, null, ON_MOUSE_OVER,
+                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, null, Z, UUID,
+                        mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        null, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP,
+                        MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        UUID, null, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        UUID, mockContainingStack, START_TIMESTAMP, PAUSED_TIMESTAMP, null
+                ));
+        assertThrows(IllegalArgumentException.class,
+                () -> finiteAnimationRenderableFactory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        UUID, mockContainingStack, START_TIMESTAMP, MOST_RECENT_TIMESTAMP + 1,
+                        MOST_RECENT_TIMESTAMP
+                ));
     }
 }

@@ -30,14 +30,13 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
     public GlobalLoopingAnimationRenderable make(GlobalLoopingAnimation globalLoopingAnimation,
                                                  ProviderAtTime<Float> borderThicknessProvider,
                                                  ProviderAtTime<Color> borderColorProvider,
-                                                 List<ProviderAtTime<ColorShift>>
-                                                         colorShiftProviders,
+                                                 List<ColorShift> colorShifts,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
                                                  RenderableStack containingStack)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
-                borderThicknessProvider, borderColorProvider, colorShiftProviders,
+                borderThicknessProvider, borderColorProvider, colorShifts,
                 renderingAreaProvider, z, uuid, containingStack, RENDERING_BOUNDARIES);
     }
 
@@ -49,15 +48,14 @@ public class GlobalLoopingAnimationRenderableFactoryImpl
                                                  Map<Integer, Action<MouseEventInputs>> onRelease,
                                                  Action<MouseEventInputs> onMouseOver,
                                                  Action<MouseEventInputs> onMouseLeave,
-                                                 List<ProviderAtTime<ColorShift>>
-                                                         colorShiftProviders,
+                                                 List<ColorShift> colorShifts,
                                                  ProviderAtTime<FloatBox> renderingAreaProvider,
                                                  int z, UUID uuid,
                                                  RenderableStack containingStack)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
-                onMouseLeave, colorShiftProviders, renderingAreaProvider, z, uuid,
+                onMouseLeave, colorShifts, renderingAreaProvider, z, uuid,
                 containingStack, RENDERING_BOUNDARIES);
     }
 }

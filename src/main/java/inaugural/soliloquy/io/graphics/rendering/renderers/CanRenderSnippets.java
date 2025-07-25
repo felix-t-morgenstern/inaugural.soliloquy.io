@@ -7,8 +7,8 @@ import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.*;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.valueobjects.FloatBox.intersection;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -43,13 +42,9 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
-    protected NetColorShifts netColorShifts(List<ProviderAtTime<ColorShift>> colorShiftProviders,
+    protected NetColorShifts netColorShifts(List<ColorShift> colorShifts,
                                             ColorShiftStackAggregator colorShiftStackAggregator,
                                             long timestamp) {
-        List<ColorShift> colorShifts = listOf();
-        colorShiftProviders.forEach(provider ->
-                colorShifts.add(provider.provide(timestamp)));
-
         return colorShiftStackAggregator.aggregate(colorShifts, timestamp);
     }
 
@@ -236,13 +231,12 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
     }
 
     protected void validateRenderableWithDimensionsMembers(FloatBox renderingDimensions,
-                                                           List<ProviderAtTime<ColorShift>>
-                                                                   colorShiftProviders,
+                                                           List<ColorShift> colorShifts,
                                                            UUID id,
                                                            String paramName) {
         Check.ifNull(renderingDimensions, paramName + " provided renderingDimensions");
 
-        Check.ifNull(colorShiftProviders, paramName + ".colorShiftProviders()");
+        Check.ifNull(colorShifts, paramName + ".colorShifts()");
 
         Check.throwOnLteZero(renderingDimensions.width(),
                 paramName + " provided renderingDimensions width");

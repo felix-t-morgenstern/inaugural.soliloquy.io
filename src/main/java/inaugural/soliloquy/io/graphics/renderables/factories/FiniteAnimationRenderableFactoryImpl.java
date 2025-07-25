@@ -29,7 +29,7 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
     public FiniteAnimationRenderable make(Animation animation,
                                           ProviderAtTime<Float> borderThicknessProvider,
                                           ProviderAtTime<Color> borderColorProvider,
-                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                          List<ColorShift> colorShifts,
                                           ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                           UUID uuid,
                                           RenderableStack containingStack,
@@ -37,7 +37,7 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           Long mostRecentTimestamp)
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
-                borderColorProvider, colorShiftProviders, renderingAreaProvider, z, uuid,
+                borderColorProvider, colorShifts, renderingAreaProvider, z, uuid,
                 containingStack, RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp,
                 mostRecentTimestamp);
     }
@@ -49,7 +49,7 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           Map<Integer, Action<MouseEventInputs>> onPress,
                                           Map<Integer, Action<MouseEventInputs>> onRelease,
                                           Action<MouseEventInputs> onMouseOver, Action<MouseEventInputs> onMouseLeave,
-                                          List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                          List<ColorShift> colorShifts,
                                           ProviderAtTime<FloatBox> renderingAreaProvider,
                                           int z, UUID uuid,
                                           RenderableStack containingStack,
@@ -58,7 +58,7 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
                 borderColorProvider, onPress, onRelease, onMouseOver, onMouseLeave,
-                colorShiftProviders, renderingAreaProvider, z, uuid, containingStack,
+                colorShifts, renderingAreaProvider, z, uuid, containingStack,
                 RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp, mostRecentTimestamp);
     }
 }

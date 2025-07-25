@@ -30,7 +30,7 @@ public class FiniteAnimationRenderer
                 "finiteAnimationRenderable.getRenderingDimensionsProvider()").provide(timestamp);
 
         validateRenderableWithDimensionsMembers(renderingArea,
-                finiteAnimationRenderable.colorShiftProviders(),
+                finiteAnimationRenderable.colorShifts(),
                 finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
@@ -45,7 +45,7 @@ public class FiniteAnimationRenderer
         }
 
         var netColorShifts = netColorShifts(
-                finiteAnimationRenderable.colorShiftProviders(),
+                finiteAnimationRenderable.colorShifts(),
                 COLOR_SHIFT_STACK_AGGREGATOR,
                 timestamp);
 

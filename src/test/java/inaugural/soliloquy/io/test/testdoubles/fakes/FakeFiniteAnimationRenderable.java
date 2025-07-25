@@ -17,18 +17,18 @@ import java.util.UUID;
 
 public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable {
     public Animation Animation;
-    public List<ProviderAtTime<ColorShift>> ColorShiftProviders;
+    public List<ColorShift> ColorShifts;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public long StartTimestamp;
     public boolean Deleted;
     public UUID Uuid;
 
     public FakeFiniteAnimationRenderable(Animation animation,
-                                         List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                         List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          long startTimestamp, UUID uuid) {
         Animation = animation;
-        ColorShiftProviders = colorShiftProviders;
+        ColorShifts = colorShifts;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         StartTimestamp = startTimestamp;
         Uuid = uuid;
@@ -136,8 +136,8 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-        return ColorShiftProviders;
+    public List<ColorShift> colorShifts() {
+        return ColorShifts;
     }
 
     @Override

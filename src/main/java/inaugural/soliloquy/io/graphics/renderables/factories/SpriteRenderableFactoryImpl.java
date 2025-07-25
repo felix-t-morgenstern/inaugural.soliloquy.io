@@ -28,12 +28,12 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     @Override
     public SpriteRenderable make(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                  ProviderAtTime<Color> borderColorProvider,
-                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                 List<ColorShift> colorShifts,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                colorShiftProviders, renderingDimensionsProvider, z, uuid, containingStack,
+                colorShifts, renderingDimensionsProvider, z, uuid, containingStack,
                 RENDERING_BOUNDARIES);
     }
 
@@ -44,12 +44,12 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  Map<Integer, Action<MouseEventInputs>> onRelease,
                                  Action<MouseEventInputs> onMouseOver,
                                  Action<MouseEventInputs> onMouseLeave,
-                                 List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                 List<ColorShift> colorShifts,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                  UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
+                onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
                 renderingDimensionsProvider, z, uuid, containingStack, RENDERING_BOUNDARIES);
     }
 }

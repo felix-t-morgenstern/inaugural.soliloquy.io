@@ -28,7 +28,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
     @Override
     public ImageAssetSetRenderable make(ImageAssetSet imageAssetSet,
                                         Map<String, String> displayParams,
-                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                        List<ColorShift> colorShifts,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -36,7 +36,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         UUID uuid,
                                         RenderableStack containingStack)
             throws IllegalArgumentException {
-        return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, colorShiftProviders,
+        return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
                 containingStack, RENDERING_BOUNDARIES);
     }
@@ -48,7 +48,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Map<Integer, Action<MouseEventInputs>> onRelease,
                                         Action<MouseEventInputs> onMouseOver,
                                         Action<MouseEventInputs> onMouseLeave,
-                                        List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                        List<ColorShift> colorShifts,
                                         ProviderAtTime<Float> borderThicknessProvider,
                                         ProviderAtTime<Color> borderColorProvider,
                                         ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -56,7 +56,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         UUID uuid, RenderableStack containingStack)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, onPress, onRelease,
-                onMouseOver, onMouseLeave, colorShiftProviders, borderThicknessProvider,
+                onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
                 RENDERING_BOUNDARIES);
     }

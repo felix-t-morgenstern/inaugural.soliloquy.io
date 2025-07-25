@@ -21,11 +21,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
-                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid, RenderableStack containingStack,
                                 RenderingBoundaries renderingBoundaries) {
-        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
+        super(colorShifts, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setSprite(sprite);
     }
@@ -36,13 +36,13 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 Map<Integer, Action<MouseEventInputs>> onRelease,
                                 Action<MouseEventInputs> onMouseOver,
                                 Action<MouseEventInputs> onMouseLeave,
-                                List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid, RenderableStack containingStack,
                                 RenderingBoundaries renderingBoundaries) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
-                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                containingStack, renderingBoundaries);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
+                renderingBoundaries);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

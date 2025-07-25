@@ -16,18 +16,16 @@ import java.util.UUID;
 
 public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimationRenderable {
     public GlobalLoopingAnimation GlobalLoopingAnimation;
-    public List<ProviderAtTime<ColorShift>> ColorShiftProviders;
+    public List<ColorShift> ColorShifts;
     public ProviderAtTime<FloatBox> RenderingDimensionsProvider;
     public UUID Uuid;
 
     public FakeGlobalLoopingAnimationRenderable(GlobalLoopingAnimation globalLoopingAnimation,
-                                                List<ProviderAtTime<ColorShift>>
-                                                        colorShiftProviders,
-                                                ProviderAtTime<FloatBox>
-                                                        renderingDimensionsProvider,
+                                                List<ColorShift> colorShifts,
+                                                ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                                 UUID id) {
         GlobalLoopingAnimation = globalLoopingAnimation;
-        ColorShiftProviders = colorShiftProviders;
+        ColorShifts = colorShifts;
         RenderingDimensionsProvider = renderingDimensionsProvider;
         Uuid = id;
     }
@@ -118,8 +116,8 @@ public class FakeGlobalLoopingAnimationRenderable implements GlobalLoopingAnimat
     }
 
     @Override
-    public List<ProviderAtTime<ColorShift>> colorShiftProviders() {
-        return ColorShiftProviders;
+    public List<ColorShift> colorShifts() {
+        return ColorShifts;
     }
 
     @Override

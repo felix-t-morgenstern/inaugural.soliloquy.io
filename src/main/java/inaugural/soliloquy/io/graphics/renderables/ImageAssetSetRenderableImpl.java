@@ -27,7 +27,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
                                        Map<String, String> displayParams,
-                                       List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                       List<ColorShift> colorShifts,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider,
@@ -35,7 +35,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        UUID uuid,
                                        RenderableStack containingStack,
                                        RenderingBoundaries renderingBoundaries) {
-        super(colorShiftProviders, borderThicknessProvider, borderColorProvider,
+        super(colorShifts, borderThicknessProvider, borderColorProvider,
                 renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
@@ -47,7 +47,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        Map<Integer, Action<MouseEventInputs>> onRelease,
                                        Action<MouseEventInputs> onMouseOver,
                                        Action<MouseEventInputs> onMouseLeave,
-                                       List<ProviderAtTime<ColorShift>> colorShiftProviders,
+                                       List<ColorShift> colorShifts,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider,
@@ -55,9 +55,9 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        UUID uuid,
                                        RenderableStack containingStack,
                                        RenderingBoundaries renderingBoundaries) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShiftProviders,
-                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
-                containingStack, renderingBoundaries);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
+                renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
