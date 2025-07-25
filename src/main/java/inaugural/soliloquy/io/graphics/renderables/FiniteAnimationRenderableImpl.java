@@ -7,15 +7,18 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 // NB: This class contains a lot of redundant code with AbstractFinitePausableAtTime, since Java
 //     does not support multiple inheritance, and it is less hasslesome to reproduce the logic of
@@ -33,12 +36,13 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          UUID uuid,
-                                         RenderableStack containingStack,
+                                         Component component,
+                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, containingStack, renderingBoundaries);
+                uuid, component, removeFromComponent, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
@@ -51,19 +55,20 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     public FiniteAnimationRenderableImpl(Animation animation,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
-                                         Map<Integer, Action<MouseEventInputs>> onPress,
-                                         Map<Integer, Action<MouseEventInputs>> onRelease,
-                                         Action<MouseEventInputs> onMouseOver,
-                                         Action<MouseEventInputs> onMouseLeave,
+                                         Map<Integer, Action<EventInputs>> onPress,
+                                         Map<Integer, Action<EventInputs>> onRelease,
+                                         Action<EventInputs> onMouseOver,
+                                         Action<EventInputs> onMouseLeave,
                                          List<ColorShift> colorShifts,
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
-                                         RenderableStack containingStack,
+                                         Component component,
+                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
+                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
                 renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;

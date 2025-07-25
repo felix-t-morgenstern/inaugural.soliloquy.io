@@ -9,15 +9,18 @@ import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
@@ -33,31 +36,34 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                        int z,
                                        UUID uuid,
-                                       RenderableStack containingStack,
+                                       Component component,
+                                       BiConsumer<Component, Renderable> removeFromComponent,
                                        RenderingBoundaries renderingBoundaries) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
+                renderingDimensionsProvider, z, uuid, component, removeFromComponent,
+                renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
     }
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
                                        Map<String, String> displayParams,
-                                       Map<Integer, Action<MouseEventInputs>> onPress,
-                                       Map<Integer, Action<MouseEventInputs>> onRelease,
-                                       Action<MouseEventInputs> onMouseOver,
-                                       Action<MouseEventInputs> onMouseLeave,
+                                       Map<Integer, Action<EventInputs>> onPress,
+                                       Map<Integer, Action<EventInputs>> onRelease,
+                                       Action<EventInputs> onMouseOver,
+                                       Action<EventInputs> onMouseLeave,
                                        List<ColorShift> colorShifts,
                                        ProviderAtTime<Float> borderThicknessProvider,
                                        ProviderAtTime<Color> borderColorProvider,
                                        ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                        int z,
                                        UUID uuid,
-                                       RenderableStack containingStack,
+                                       Component component,
+                                       BiConsumer<Component, Renderable> removeFromComponent,
                                        RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
-                renderingBoundaries);
+                borderColorProvider, renderingDimensionsProvider, z, uuid, component,
+                removeFromComponent, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();

@@ -56,11 +56,11 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
-                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), FirstChildStack,
-                RENDERING_BOUNDARIES);
+                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
+                DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
-        Renderers.registerRenderer(RectangleRenderableImpl.class, RectangleRenderer);
-        FirstChildStack.add(RectangleRenderable);
+        Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
+        MockFirstChildComponent.add(RectangleRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(RectangleRenderer);

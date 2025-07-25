@@ -7,15 +7,18 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.AssetSnippet;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseEvents
@@ -32,46 +35,49 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           RenderableStack containingStack,
+                                           Component component,
+                                           BiConsumer<Component, Renderable> removeFromComponent,
                                            RenderingBoundaries renderingBoundaries) {
         this(false, null, null, null, null, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, containingStack,
+                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
                 renderingBoundaries);
     }
 
     protected AbstractImageAssetRenderable(
-            Map<Integer, Action<MouseEventInputs>> onPress,
-            Map<Integer, Action<MouseEventInputs>> onRelease,
-            Action<MouseEventInputs> onMouseOver,
-            Action<MouseEventInputs> onMouseLeave,
+            Map<Integer, Action<EventInputs>> onPress,
+            Map<Integer, Action<EventInputs>> onRelease,
+            Action<EventInputs> onMouseOver,
+            Action<EventInputs> onMouseLeave,
             List<ColorShift> colorShifts,
             ProviderAtTime<Float> borderThicknessProvider,
             ProviderAtTime<Color> borderColorProvider,
             ProviderAtTime<FloatBox> renderingAreaProvider,
             int z,
             UUID uuid,
-            RenderableStack containingStack,
+            Component component,
+            BiConsumer<Component, Renderable> removeFromComponent,
             RenderingBoundaries renderingBoundaries) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                containingStack, renderingBoundaries);
+                component, removeFromComponent, renderingBoundaries);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
-                                         Map<Integer, Action<MouseEventInputs>> onPress,
-                                         Map<Integer, Action<MouseEventInputs>> onRelease,
-                                         Action<MouseEventInputs> onMouseOver,
-                                         Action<MouseEventInputs> onMouseLeave,
+                                         Map<Integer, Action<EventInputs>> onPress,
+                                         Map<Integer, Action<EventInputs>> onRelease,
+                                         Action<EventInputs> onMouseOver,
+                                         Action<EventInputs> onMouseLeave,
                                          List<ColorShift> colorShifts,
                                          ProviderAtTime<Float> borderThicknessProvider,
                                          ProviderAtTime<Color> borderColorProvider,
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          int z,
                                          UUID uuid,
-                                         RenderableStack containingStack,
+                                         Component component,
+                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                containingStack, renderingBoundaries);
+                component, removeFromComponent, renderingBoundaries);
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);

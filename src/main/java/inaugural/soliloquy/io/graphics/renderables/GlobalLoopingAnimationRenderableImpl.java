@@ -6,15 +6,18 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class GlobalLoopingAnimationRenderableImpl
         extends AbstractImageAssetRenderable
@@ -27,28 +30,30 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                RenderableStack containingStack,
+                                                Component component,
+                                                BiConsumer<Component, Renderable> removeFromComponent,
                                                 RenderingBoundaries renderingBoundaries) {
-        super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingStack, renderingBoundaries);
+        super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
+                uuid, component, removeFromComponent, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                Map<Integer, Action<MouseEventInputs>> onPress,
-                                                Map<Integer, Action<MouseEventInputs>> onRelease,
-                                                Action<MouseEventInputs> onMouseOver,
-                                                Action<MouseEventInputs> onMouseLeave,
+                                                Map<Integer, Action<EventInputs>> onPress,
+                                                Map<Integer, Action<EventInputs>> onRelease,
+                                                Action<EventInputs> onMouseOver,
+                                                Action<EventInputs> onMouseLeave,
                                                 List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
-                                                RenderableStack containingStack,
+                                                Component component,
+                                                BiConsumer<Component, Renderable> removeFromComponent,
                                                 RenderingBoundaries renderingBoundaries) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                containingStack, renderingBoundaries);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
+                renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 

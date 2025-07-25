@@ -93,8 +93,8 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
+        MockFirstChildComponent.add(TextLineRenderable);
+        Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }
@@ -104,27 +104,27 @@ class TextLineRendererRenderingBoundariesTest extends TextLineRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(
                 floatBoxOf(0.0f, 0.0f, 0.5f, 0.5f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(
                 floatBoxOf(0.5f, 0.0f, 1.0f, 0.5f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(
                 floatBoxOf(0.5f, 0.5f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(
                 floatBoxOf(0.0f, 0.5f, 0.5f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

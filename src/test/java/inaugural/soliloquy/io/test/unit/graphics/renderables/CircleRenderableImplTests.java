@@ -8,14 +8,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.CircleRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -27,42 +31,46 @@ public class CircleRenderableImplTests {
     @Mock private ProviderAtTime<Vertex> mockCenterProvider;
     @Mock private ProviderAtTime<Float> mockWidthProvider;
     @Mock private ProviderAtTime<Color> mockColorProvider;
-    @Mock private RenderableStack mockRenderableStack;
+    @Mock private Component mockComponent;
+    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
 
-    private CircleRenderable circleRenderable;
+    private CircleRenderable renderable;
 
     @BeforeEach
     public void setUp() {
-        circleRenderable =
+        renderable =
                 new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, mockColorProvider,
-                        Z, UUID, mockRenderableStack);
+                        Z, UUID, mockComponent, mockRemoveFromComponent);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(null, mockWidthProvider, mockColorProvider, Z, UUID,
-                        mockRenderableStack));
+                        mockComponent, mockRemoveFromComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, null, mockColorProvider, Z, UUID,
-                        mockRenderableStack));
+                        mockComponent, mockRemoveFromComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, null, Z, UUID,
-                        mockRenderableStack));
+                        mockComponent, mockRemoveFromComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, null, Z, UUID,
-                        mockRenderableStack));
+                        mockComponent, mockRemoveFromComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, null, mockRenderableStack));
+                        mockColorProvider, Z, null, mockComponent, mockRemoveFromComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, UUID, null));
+                        mockColorProvider, Z, UUID, null, mockRemoveFromComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
+                        mockColorProvider, Z, UUID, mockComponent, null));
     }
 
     @Test
     public void testCenterProvider() {
-        assertSame(mockCenterProvider, circleRenderable.getCenterProvider());
+        assertSame(mockCenterProvider, renderable.getCenterProvider());
     }
 
     @Test
@@ -70,20 +78,20 @@ public class CircleRenderableImplTests {
         //noinspection unchecked
         var newCenterProvider = (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
 
-        circleRenderable.setCenterProvider(newCenterProvider);
+        renderable.setCenterProvider(newCenterProvider);
 
-        assertSame(newCenterProvider, circleRenderable.getCenterProvider());
+        assertSame(newCenterProvider, renderable.getCenterProvider());
     }
 
     @Test
     public void testSetCenterProviderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> circleRenderable.setCenterProvider(null));
+                () -> renderable.setCenterProvider(null));
     }
 
     @Test
     public void testWidthProvider() {
-        assertSame(mockWidthProvider, circleRenderable.getWidthProvider());
+        assertSame(mockWidthProvider, renderable.getWidthProvider());
     }
 
     @Test
@@ -91,19 +99,19 @@ public class CircleRenderableImplTests {
         //noinspection unchecked
         var newWidthProvider = (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
-        circleRenderable.setWidthProvider(newWidthProvider);
+        renderable.setWidthProvider(newWidthProvider);
 
-        assertSame(newWidthProvider, circleRenderable.getWidthProvider());
+        assertSame(newWidthProvider, renderable.getWidthProvider());
     }
 
     @Test
     public void testSetWidthProviderWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> circleRenderable.setWidthProvider(null));
+        assertThrows(IllegalArgumentException.class, () -> renderable.setWidthProvider(null));
     }
 
     @Test
     public void testColorProvider() {
-        assertSame(mockColorProvider, circleRenderable.getColorProvider());
+        assertSame(mockColorProvider, renderable.getColorProvider());
     }
 
     @Test
@@ -111,41 +119,41 @@ public class CircleRenderableImplTests {
         //noinspection unchecked
         var newColorProvider = (ProviderAtTime<Color>) mock(ProviderAtTime.class);
 
-        circleRenderable.setColorProvider(newColorProvider);
+        renderable.setColorProvider(newColorProvider);
 
-        assertSame(newColorProvider, circleRenderable.getColorProvider());
+        assertSame(newColorProvider, renderable.getColorProvider());
     }
 
     @Test
     public void testSetColorProviderWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> circleRenderable.setColorProvider(null));
+        assertThrows(IllegalArgumentException.class, () -> renderable.setColorProvider(null));
     }
 
     @Test
     public void testUuid() {
-        assertSame(UUID, circleRenderable.uuid());
+        assertSame(UUID, renderable.uuid());
     }
 
     @Test
     public void testSetAndGetZ() {
-        assertEquals(Z, circleRenderable.getZ());
+        assertEquals(Z, renderable.getZ());
 
         var newZ = randomInt();
 
-        circleRenderable.setZ(newZ);
+        renderable.setZ(newZ);
 
-        assertEquals(newZ, circleRenderable.getZ());
+        assertEquals(newZ, renderable.getZ());
     }
 
     @Test
-    public void testContainingStack() {
-        assertSame(mockRenderableStack, circleRenderable.containingStack());
+    public void testComponent() {
+        assertSame(mockComponent, renderable.component());
     }
 
     @Test
     public void testDelete() {
-        circleRenderable.delete();
+        renderable.delete();
 
-        verify(mockRenderableStack).remove(circleRenderable);
+        verify(mockRemoveFromComponent, once()).accept(same(mockComponent), same(renderable));
     }
 }

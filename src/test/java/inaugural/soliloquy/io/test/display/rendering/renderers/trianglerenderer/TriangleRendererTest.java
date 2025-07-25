@@ -23,9 +23,9 @@ class TriangleRendererTest extends DisplayTest {
 
         TriangleRenderable = renderable;
 
-        Renderers.registerRenderer(TriangleRenderableImpl.class,
+        Renderers.put(TriangleRenderableImpl.class,
                 TriangleRenderer);
-        FirstChildStack.add(TriangleRenderable);
+        MockFirstChildComponent.add(TriangleRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(TriangleRenderer);

@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.display.mouse.mouselistener;
 import inaugural.soliloquy.io.test.display.DisplayTest;
 import inaugural.soliloquy.io.test.display.rendering.renderers.spriterenderer.SpriteRendererTest;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
+import soliloquy.specs.ui.EventInputs;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
@@ -47,10 +47,10 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                 SpriteRenderingDimensions);
     }
 
-    private static Action<MouseEventInputs> messageAction(String message) {
+    private static Action<EventInputs> messageAction(String message) {
         return new Action<>() {
             @Override
-            public void run(MouseEventInputs mouseEventInputs) throws IllegalArgumentException {
+            public void run(EventInputs... mouseEventInputs) throws IllegalArgumentException {
                 System.out.println(message);
             }
 

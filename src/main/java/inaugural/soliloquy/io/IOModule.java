@@ -3,6 +3,10 @@ package inaugural.soliloquy.io;
 import soliloquy.specs.game.Module;
 
 public class IOModule implements Module {
+    public IOModule() {
+
+    }
+
     @Override
     public <T> T provide(Class<T> aClass) throws IllegalArgumentException {
         return null;

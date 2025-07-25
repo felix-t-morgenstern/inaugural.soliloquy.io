@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.keyboard.KeyBinding;
-import soliloquy.specs.io.keyboard.KeyBindingContext;
 import soliloquy.specs.io.keyboard.KeyEventListener;
-
-import java.util.List;
+import soliloquy.specs.ui.keyboard.KeyBinding;
+import soliloquy.specs.ui.keyboard.KeyBindingContext;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.*;
@@ -103,7 +101,6 @@ public class KeyEventListenerImplTests {
         var mockKeyBindingContext1Binding1 = mock(KeyBinding.class);
         lenient().when(mockKeyBindingContext1Binding1.boundCharacters()).thenReturn(listOf(('a')));
         lenient().when(mockKeyBindingContext1Binding1.boundCharacters()).thenReturn(listOf(('b')));
-        lenient().when(mockKeyBindingContext1Binding1.getBlocksLowerBindings()).thenReturn(true);
 
         var mockKeyBindingContext1Binding2 = mock(KeyBinding.class);
         lenient().when(mockKeyBindingContext1Binding2.boundCharacters()).thenReturn(listOf(('c')));
@@ -121,7 +118,7 @@ public class KeyEventListenerImplTests {
         var mockKeyBindingContext2 = mock(KeyBindingContext.class);
         lenient().when(mockKeyBindingContext2.bindings())
                 .thenReturn(listOf(mockKeyBindingContext2Binding1, mockKeyBindingContext2Binding2));
-        lenient().when(mockKeyBindingContext2.getBlocksAllLowerBindings()).thenReturn(true);
+        lenient().when(mockKeyBindingContext2.blocksLowerBindings()).thenReturn(true);
 
         var mockKeyBindingContext3Binding1 = mock(KeyBinding.class);
         lenient().when(mockKeyBindingContext3Binding1.boundCharacters()).thenReturn(listOf(('f')));
@@ -133,8 +130,8 @@ public class KeyEventListenerImplTests {
         keyEventListener.addContext(mockKeyBindingContext2, 2);
         keyEventListener.addContext(mockKeyBindingContext3, 3);
 
-        List<Character> activeKeysRepresentation = keyEventListener.activeKeysRepresentation();
-        List<Character> activeKeysRepresentation2 = keyEventListener.activeKeysRepresentation();
+        var activeKeysRepresentation = keyEventListener.activeKeysRepresentation();
+        var activeKeysRepresentation2 = keyEventListener.activeKeysRepresentation();
 
         assertNotNull(activeKeysRepresentation);
         assertNotSame(activeKeysRepresentation, activeKeysRepresentation2);
@@ -189,7 +186,7 @@ public class KeyEventListenerImplTests {
         var mockUpperKeyBindingContext = mock(KeyBindingContext.class);
         lenient().when(mockUpperKeyBindingContext.bindings()).thenReturn(listOf(upperKeyBinding));
 
-        lenient().when(mockUpperKeyBindingContext.getBlocksAllLowerBindings()).thenReturn(true);
+        lenient().when(mockUpperKeyBindingContext.blocksLowerBindings()).thenReturn(true);
 
         keyEventListener.addContext(mockUpperKeyBindingContext, 0);
         keyEventListener.addContext(mockLowerKeyBindingContext, 1);
@@ -218,8 +215,6 @@ public class KeyEventListenerImplTests {
         var mockUpperKeyBindingContext = mock(KeyBindingContext.class);
         lenient().when(mockUpperKeyBindingContext.bindings())
                 .thenReturn(listOf(mockUpperKeyBinding));
-
-        lenient().when(mockUpperKeyBinding.getBlocksLowerBindings()).thenReturn(true);
 
         keyEventListener.addContext(mockUpperKeyBindingContext, 1);
         keyEventListener.addContext(mockLowerKeyBindingContext, 0);

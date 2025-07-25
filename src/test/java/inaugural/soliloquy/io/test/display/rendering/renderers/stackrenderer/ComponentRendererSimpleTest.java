@@ -15,9 +15,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  * displayed above the fiery axe, and the nature axe above the evil sword.
  * 2. The window will then close.
  */
-class StackRendererSimpleTest extends StackRendererTest {
+class ComponentRendererSimpleTest extends ComponentRendererTest {
     public static void main(String[] args) {
-        runTest(StackRendererSimpleTest::closeAfterSomeTime);
+        runTest(ComponentRendererSimpleTest::closeAfterSomeTime);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

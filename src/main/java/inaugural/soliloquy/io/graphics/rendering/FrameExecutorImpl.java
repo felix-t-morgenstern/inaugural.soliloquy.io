@@ -2,8 +2,8 @@ package inaugural.soliloquy.io.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
-import soliloquy.specs.io.graphics.rendering.renderers.StackRenderer;
+import soliloquy.specs.io.graphics.rendering.renderers.ComponentRenderer;
+import soliloquy.specs.ui.Component;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -12,15 +12,15 @@ import java.util.function.Consumer;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FrameExecutorImpl implements FrameExecutor {
-    private final RenderableStack TOP_LEVEL_STACK;
-    private final StackRenderer STACK_RENDERER;
+    private final Component TOP_LEVEL_COMPONENT;
+    private final ComponentRenderer COMPONENT_RENDERER;
     private final Semaphore SEMAPHORE;
     private final List<Consumer<Long>> FRAME_BLOCKING_EVENTS;
 
-    public FrameExecutorImpl(RenderableStack topLevelStack, StackRenderer stackRenderer,
+    public FrameExecutorImpl(Component topLevelComponent, ComponentRenderer componentRenderer,
                              int semaphorePermissions) {
-        TOP_LEVEL_STACK = Check.ifNull(topLevelStack, "topLevelStack");
-        STACK_RENDERER = Check.ifNull(stackRenderer, "stackRenderer");
+        TOP_LEVEL_COMPONENT = Check.ifNull(topLevelComponent, "topLevelComponent");
+        COMPONENT_RENDERER = Check.ifNull(componentRenderer, "componentRenderer");
         SEMAPHORE = new Semaphore(
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
                 true
@@ -50,6 +50,6 @@ public class FrameExecutorImpl implements FrameExecutor {
         }
         FRAME_BLOCKING_EVENTS.clear();
 
-        STACK_RENDERER.render(TOP_LEVEL_STACK, timestamp);
+        COMPONENT_RENDERER.render(TOP_LEVEL_COMPONENT, timestamp);
     }
 }

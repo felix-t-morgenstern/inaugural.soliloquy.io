@@ -1,20 +1,28 @@
 package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.TextLineRenderableImpl;
+import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
-public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
+public class TextLineRenderableFactoryImpl extends AbstractRenderableFactory
+        implements TextLineRenderableFactory {
+    public TextLineRenderableFactoryImpl(BiConsumer<Component, Renderable> removeFromComponent) {
+        super(removeFromComponent);
+    }
+
     @Override
     public TextLineRenderable make(Font font, ProviderAtTime<String> lineTextProvider,
                                    ProviderAtTime<Vertex> locationProvider,
@@ -28,12 +36,12 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                    ProviderAtTime<Color> dropShadowColorProvider,
                                    int z, UUID uuid,
-                                   RenderableStack containingStack)
+                                   Component component)
             throws IllegalArgumentException {
         return new TextLineRenderableImpl(font, lineTextProvider, lineHeightProvider,
                 justification, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
                 boldIndices, borderThicknessProvider, borderColorProvider,
                 locationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
-                dropShadowColorProvider, z, uuid, containingStack);
+                dropShadowColorProvider, z, uuid, component, REMOVE_FROM_COMPONENT);
     }
 }

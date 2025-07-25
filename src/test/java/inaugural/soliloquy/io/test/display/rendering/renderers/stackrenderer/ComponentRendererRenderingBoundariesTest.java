@@ -26,35 +26,35 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
  * 6. The entirety of the window will be displayed again for 1000ms.
  * 7. The window will then close.
  */
-class StackRendererRenderingBoundariesTest extends StackRendererTest {
+class ComponentRendererRenderingBoundariesTest extends ComponentRendererTest {
     public static void main(String[] args) {
-        runTest(StackRendererRenderingBoundariesTest::closeAfterSomeTime);
+        runTest(ComponentRendererRenderingBoundariesTest::closeAfterSomeTime);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(1000);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.0f, 0.0f, 0.625f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.375f, 0.0f, 1.0f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.375f, 0.375f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.0f, 0.375f, 0.625f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(1000);
 

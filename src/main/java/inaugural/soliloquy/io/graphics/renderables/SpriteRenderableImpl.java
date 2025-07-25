@@ -5,16 +5,19 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Sprite;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class SpriteRenderableImpl extends AbstractImageAssetRenderable implements SpriteRenderable {
     private Sprite sprite;
@@ -23,26 +26,31 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<Color> borderColorProvider,
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, RenderableStack containingStack,
+                                UUID uuid,
+                                Component containingStack,
+                                BiConsumer<Component, Renderable> removeFromComponent,
                                 RenderingBoundaries renderingBoundaries) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
+                renderingDimensionsProvider, z, uuid, containingStack, removeFromComponent,
+                renderingBoundaries);
         setSprite(sprite);
     }
 
     public SpriteRenderableImpl(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                 ProviderAtTime<Color> borderColorProvider,
-                                Map<Integer, Action<MouseEventInputs>> onPress,
-                                Map<Integer, Action<MouseEventInputs>> onRelease,
-                                Action<MouseEventInputs> onMouseOver,
-                                Action<MouseEventInputs> onMouseLeave,
+                                Map<Integer, Action<EventInputs>> onPress,
+                                Map<Integer, Action<EventInputs>> onRelease,
+                                Action<EventInputs> onMouseOver,
+                                Action<EventInputs> onMouseLeave,
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid, RenderableStack containingStack,
+                                UUID uuid,
+                                Component containingStack,
+                                BiConsumer<Component, Renderable> removeFromComponent,
                                 RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
-                renderingBoundaries);
+                removeFromComponent, renderingBoundaries);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

@@ -6,7 +6,6 @@ import inaugural.soliloquy.io.graphics.renderables.providers.FiniteSinusoidMovin
 import inaugural.soliloquy.io.test.display.renderables.providers.finite.linear.FiniteLinearMovingProviderTest;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
-import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 
 import java.util.Map;
 
@@ -42,8 +41,8 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
                         null
                 ));
 
-        FirstChildStack.add(SpriteRenderable);
-        Renderers.registerRenderer(SpriteRenderableImpl.class, SpriteRenderer);
+        MockFirstChildComponent.add(SpriteRenderable);
+        Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
     }

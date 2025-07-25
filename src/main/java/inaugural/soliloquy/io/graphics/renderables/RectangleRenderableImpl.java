@@ -5,13 +5,16 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class RectangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -29,18 +32,19 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    ProviderAtTime<Float> textureTileWidthProvider,
                                    ProviderAtTime<Float> textureTileHeightProvider,
-                                   Map<Integer, Action<MouseEventInputs>> onPress,
-                                   Map<Integer, Action<MouseEventInputs>> onRelease,
-                                   Action<MouseEventInputs> onMouseOver,
-                                   Action<MouseEventInputs> onMouseLeave,
+                                   Map<Integer, Action<EventInputs>> onPress,
+                                   Map<Integer, Action<EventInputs>> onRelease,
+                                   Action<EventInputs> onMouseOver,
+                                   Action<EventInputs> onMouseLeave,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    int z,
                                    UUID uuid,
-                                   RenderableStack containingStack,
+                                   Component component,
+                                   BiConsumer<Component, Renderable> removeFromComponent,
                                    RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
-                renderingBoundaries);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
+                removeFromComponent, renderingBoundaries);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);
@@ -120,13 +124,13 @@ public class RectangleRenderableImpl
             return false;
         }
 
-        FloatBox renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
+        var renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
         if (point.X < renderingBoundaries.LEFT_X || point.X > renderingBoundaries.RIGHT_X ||
                 point.Y < renderingBoundaries.TOP_Y || point.Y > renderingBoundaries.BOTTOM_Y) {
             return false;
         }
 
-        FloatBox renderingDimensions = renderingDimensionsProvider.provide(timestamp);
+        var renderingDimensions = renderingDimensionsProvider.provide(timestamp);
         //noinspection RedundantIfStatement
         if (point.X < renderingDimensions.LEFT_X || point.X > renderingDimensions.RIGHT_X ||
                 point.Y < renderingDimensions.TOP_Y || point.Y > renderingDimensions.BOTTOM_Y) {

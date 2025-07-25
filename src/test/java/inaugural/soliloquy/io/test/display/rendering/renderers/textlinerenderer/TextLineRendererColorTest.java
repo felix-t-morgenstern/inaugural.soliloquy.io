@@ -88,8 +88,8 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
+        MockFirstChildComponent.add(TextLineRenderable);
+        Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

@@ -2,9 +2,9 @@ package inaugural.soliloquy.io.keyboard;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.io.keyboard.KeyBinding;
-import soliloquy.specs.io.keyboard.KeyBindingContext;
 import soliloquy.specs.io.keyboard.KeyEventListener;
+import soliloquy.specs.ui.keyboard.KeyBinding;
+import soliloquy.specs.ui.keyboard.KeyBindingContext;
 
 import java.util.List;
 import java.util.Map;
@@ -105,11 +105,8 @@ public class KeyEventListenerImpl implements KeyEventListener {
                             handleEvent.accept(binding);
                         }
                     }
-                    if (binding.getBlocksLowerBindings()) {
-                        break;
-                    }
                 }
-                if (context.getBlocksAllLowerBindings()) {
+                if (context.blocksLowerBindings()) {
                     return;
                 }
             }

@@ -11,6 +11,7 @@ import soliloquy.specs.io.mouse.MouseListener;
 import soliloquy.specs.io.graphics.rendering.*;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.ui.Component;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -58,9 +59,7 @@ class WindowResolutionManagerImplDisplayChangeTest {
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> null;
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = listOf();
 
-        FrameExecutor frameExecutor =
-                new FrameExecutorImpl(mock(RenderableStack.class),
-                        new FakeStackRenderer(), 100);
+        var frameExecutor = new FrameExecutorImpl(mock(Component.class), new FakeComponentRenderer(), 100);
 
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = listOf();
         GraphicsCoreLoop graphicsCoreLoop =

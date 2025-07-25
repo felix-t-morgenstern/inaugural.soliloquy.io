@@ -3,13 +3,16 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -30,17 +33,18 @@ public class TriangleRenderableImpl
                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
                                   ProviderAtTime<Float> textureTileWidthProvider,
                                   ProviderAtTime<Float> textureTileHeightProvider,
-                                  Map<Integer, Action<MouseEventInputs>> onPress,
-                                  Map<Integer, Action<MouseEventInputs>> onRelease,
-                                  Action<MouseEventInputs> onMouseOver,
-                                  Action<MouseEventInputs> onMouseLeave,
+                                  Map<Integer, Action<EventInputs>> onPress,
+                                  Map<Integer, Action<EventInputs>> onRelease,
+                                  Action<EventInputs> onMouseOver,
+                                  Action<EventInputs> onMouseLeave,
                                   int z,
                                   java.util.UUID uuid,
-                                  RenderableStack containingStack,
+                                  Component component,
+                                  BiConsumer<Component, Renderable> removeFromComponent,
                                   RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingStack,
-                renderingBoundaries);
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
+                removeFromComponent, renderingBoundaries);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
         setVertex2Provider(vertex2Provider);

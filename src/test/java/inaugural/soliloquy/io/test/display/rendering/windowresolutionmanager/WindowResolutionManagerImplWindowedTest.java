@@ -7,13 +7,12 @@ import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.mouse.MouseListener;
-import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.mouse.MouseListener;
+import soliloquy.specs.ui.Component;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -49,7 +48,7 @@ class WindowResolutionManagerImplWindowedTest {
         //noinspection rawtypes
         Collection<Renderer> renderersWithMesh = listOf();
 
-        FrameExecutor frameExecutor = new FrameExecutorImpl(mock(RenderableStack.class), new FakeStackRenderer(), 100);
+        var frameExecutor = new FrameExecutorImpl(mock(Component.class), new FakeComponentRenderer(), 100);
 
         //noinspection rawtypes
         Collection<Renderer> renderersWithShader = listOf();

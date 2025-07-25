@@ -3,11 +3,13 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.LineSegmentRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 abstract class AbstractLineSegmentRenderable
         extends AbstractRenderable
@@ -22,8 +24,9 @@ abstract class AbstractLineSegmentRenderable
                                          ProviderAtTime<Float> thicknessProvider,
                                          ProviderAtTime<Color> colorProvider,
                                          int z, UUID uuid,
-                                         RenderableStack containingStack) {
-        super(z, uuid, containingStack);
+                                         Component component,
+                                         BiConsumer<Component, Renderable> removeFromComponent) {
+        super(z, uuid, component, removeFromComponent);
         setVertex1Provider(vertex1Provider);
         setVertex2Provider(vertex2Provider);
         setThicknessProvider(thicknessProvider);

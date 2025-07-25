@@ -3,11 +3,13 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.CircleRenderable;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class CircleRenderableImpl extends AbstractRenderable implements CircleRenderable {
     private ProviderAtTime<Vertex> centerProvider;
@@ -17,8 +19,11 @@ public class CircleRenderableImpl extends AbstractRenderable implements CircleRe
     public CircleRenderableImpl(ProviderAtTime<Vertex> centerProvider,
                                 ProviderAtTime<Float> widthProvider,
                                 ProviderAtTime<Color> colorProvider,
-                                int z, UUID uuid, RenderableStack containingStack) {
-        super(z, uuid, containingStack);
+                                int z,
+                                UUID uuid,
+                                Component component,
+                                BiConsumer<Component, Renderable> removeFromComponent) {
+        super(z, uuid, component, removeFromComponent);
         setCenterProvider(centerProvider);
         setWidthProvider(widthProvider);
         setColorProvider(colorProvider);

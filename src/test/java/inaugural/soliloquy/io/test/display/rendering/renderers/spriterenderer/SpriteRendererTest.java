@@ -39,9 +39,9 @@ public class SpriteRendererTest extends DisplayTest {
 
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 0,
-                java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
-        FirstChildStack.add(SpriteRenderable);
+        MockFirstChildComponent.add(SpriteRenderable);
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
                 windowResolutionManager,
@@ -49,8 +49,8 @@ public class SpriteRendererTest extends DisplayTest {
                         new FakeColorShiftStackAggregator() :
                         colorShiftStackAggregator,
                 null);
-
-        Renderers.registerRenderer(SpriteRenderableImpl.class, SpriteRenderer);
+        
+        Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         return listOf(SpriteRenderer);
     }

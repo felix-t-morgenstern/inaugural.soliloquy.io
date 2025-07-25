@@ -43,27 +43,27 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.0f, 0.0f, 0.625f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.375f, 0.0f, 1.0f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.375f, 0.375f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(
+        MockFirstChildComponent.setRenderingBoundariesProvider(
                 staticProvider(floatBoxOf(0.0f, 0.375f, 0.625f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 
-        FirstChildStack.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
+        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(msPerPeriod);
 

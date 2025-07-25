@@ -72,8 +72,8 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
                 new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager,
                         null);
 
-        FirstChildStack.add(TextLineRenderable);
-        Renderers.registerRenderer(TextLineRenderable.getClass(), TextLineRenderer);
+        MockFirstChildComponent.add(TextLineRenderable);
+        Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

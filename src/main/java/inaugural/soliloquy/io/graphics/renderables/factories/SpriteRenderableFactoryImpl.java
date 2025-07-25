@@ -5,23 +5,27 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
-public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
+public class SpriteRenderableFactoryImpl extends AbstractRenderableFactory implements SpriteRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public SpriteRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public SpriteRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                       BiConsumer<Component, Renderable> removeFromComponent) {
+        super(removeFromComponent);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -30,26 +34,29 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  ProviderAtTime<Color> borderColorProvider,
                                  List<ColorShift> colorShifts,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                 UUID uuid, RenderableStack containingStack)
+                                 UUID uuid,
+                                 Component component)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                colorShifts, renderingDimensionsProvider, z, uuid, containingStack,
-                RENDERING_BOUNDARIES);
+                colorShifts, renderingDimensionsProvider, z, uuid, component,
+                REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
     }
 
     @Override
     public SpriteRenderable make(Sprite sprite, ProviderAtTime<Float> borderThicknessProvider,
                                  ProviderAtTime<Color> borderColorProvider,
-                                 Map<Integer, Action<MouseEventInputs>> onPress,
-                                 Map<Integer, Action<MouseEventInputs>> onRelease,
-                                 Action<MouseEventInputs> onMouseOver,
-                                 Action<MouseEventInputs> onMouseLeave,
+                                 Map<Integer, Action<EventInputs>> onPress,
+                                 Map<Integer, Action<EventInputs>> onRelease,
+                                 Action<EventInputs> onMouseOver,
+                                 Action<EventInputs> onMouseLeave,
                                  List<ColorShift> colorShifts,
                                  ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                 UUID uuid, RenderableStack containingStack)
+                                 UUID uuid,
+                                 Component component)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                renderingDimensionsProvider, z, uuid, containingStack, RENDERING_BOUNDARIES);
+                renderingDimensionsProvider, z, uuid, component, REMOVE_FROM_COMPONENT,
+                RENDERING_BOUNDARIES);
     }
 }

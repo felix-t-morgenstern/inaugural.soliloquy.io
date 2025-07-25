@@ -8,7 +8,8 @@ import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.List;
@@ -78,7 +79,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void setOnPress(int i, Action<MouseEventInputs> action)
+    public void setOnPress(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -95,7 +96,7 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
-    public void setOnRelease(int i, Action<MouseEventInputs> action)
+    public void setOnRelease(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -175,6 +176,11 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return 0;
     }
@@ -182,11 +188,6 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     @Override
     public void setZ(int z) {
 
-    }
-
-    @Override
-    public RenderableStack containingStack() {
-        return null;
     }
 
     @Override
@@ -198,6 +199,11 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     @Override
     public void delete() {
         Deleted = true;
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

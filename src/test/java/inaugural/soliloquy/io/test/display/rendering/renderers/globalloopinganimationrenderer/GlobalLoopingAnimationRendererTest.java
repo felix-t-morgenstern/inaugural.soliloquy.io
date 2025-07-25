@@ -99,10 +99,11 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
                                 MIDPOINT + (ANIMATION_HEIGHT / 2f))),
-                        0, java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                        0, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                        RENDERING_BOUNDARIES);
 
-        FirstChildStack.add(GlobalLoopingAnimationRenderable);
-        Renderers.registerRenderer(GlobalLoopingAnimationRenderableImpl.class,
+        MockFirstChildComponent.add(GlobalLoopingAnimationRenderable);
+        Renderers.put(GlobalLoopingAnimationRenderableImpl.class,
                 GlobalLoopingAnimationRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

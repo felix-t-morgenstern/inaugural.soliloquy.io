@@ -4,21 +4,25 @@ import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents.MouseEventInputs;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.EventInputs;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
-public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
+public class TriangleRenderableFactoryImpl extends AbstractRenderableFactory implements TriangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                         BiConsumer<Component, Renderable> removeFromComponent) {
+        super(removeFromComponent);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -32,18 +36,18 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
                                    ProviderAtTime<Float> textureTileWidthProvider,
                                    ProviderAtTime<Float> textureTileHeightProvider,
-                                   Map<Integer, Action<MouseEventInputs>> onPress,
-                                   Map<Integer, Action<MouseEventInputs>> onRelease,
-                                   Action<MouseEventInputs> onMouseOver,
-                                   Action<MouseEventInputs> onMouseLeave,
+                                   Map<Integer, Action<EventInputs>> onPress,
+                                   Map<Integer, Action<EventInputs>> onRelease,
+                                   Action<EventInputs> onMouseOver,
+                                   Action<EventInputs> onMouseLeave,
                                    int z,
                                    UUID uuid,
-                                   RenderableStack containingStack)
+                                   Component component)
             throws IllegalArgumentException {
         return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider,
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, textureTileWidthProvider,
                 textureTileHeightProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                containingStack, RENDERING_BOUNDARIES);
+                component, REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
     }
 }

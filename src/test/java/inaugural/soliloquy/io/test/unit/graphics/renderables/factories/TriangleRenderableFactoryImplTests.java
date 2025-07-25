@@ -9,18 +9,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class TriangleRenderableFactoryImplTests {
@@ -37,22 +38,21 @@ public class TriangleRenderableFactoryImplTests {
 
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
-    @Mock private RenderableStack mockContainingStack;
+    @Mock private Component mockContainingComponent;
+    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private TriangleRenderableFactory triangleRenderableFactory;
 
     @BeforeEach
     public void setUp() {
-        mockContainingStack = mock(RenderableStack.class);
-        mockRenderingBoundaries = mock(RenderingBoundaries.class);
-
-        triangleRenderableFactory = new TriangleRenderableFactoryImpl(mockRenderingBoundaries);
+        triangleRenderableFactory = new TriangleRenderableFactoryImpl(mockRenderingBoundaries, mockRemoveFromComponent);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null));
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null, mockRemoveFromComponent));
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(mockRenderingBoundaries, null));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TriangleRenderableFactoryImplTests {
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack);
+                        mockContainingComponent);
 
         assertNotNull(triangleRenderable);
         assertInstanceOf(TriangleRenderableImpl.class, triangleRenderable);
@@ -77,70 +77,70 @@ public class TriangleRenderableFactoryImplTests {
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, null,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         null, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, null,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         null, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, null,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         null, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, null,
                         mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         null, null, null, null, null, Z, UUID,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, null,
-                        mockContainingStack));
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
                 .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,

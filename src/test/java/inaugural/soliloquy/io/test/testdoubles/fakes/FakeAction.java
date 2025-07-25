@@ -21,8 +21,8 @@ public class FakeAction<T> implements Action<T> {
     }
 
     @Override
-    public void run(T t) throws IllegalArgumentException {
-        Inputs.add(t);
+    public void run(T... t) throws IllegalArgumentException {
+        Inputs.add(t[0]);
         NumberOfTimesCalled++;
     }
 

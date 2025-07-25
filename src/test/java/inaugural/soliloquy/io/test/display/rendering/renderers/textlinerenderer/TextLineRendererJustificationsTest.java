@@ -95,12 +95,12 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        FirstChildStack.add(TextLineRenderableLeft);
-        FirstChildStack.add(TextLineRenderableCenter);
-        FirstChildStack.add(TextLineRenderableRight);
-        Renderers.registerRenderer(TextLineRenderableLeft.getClass(), TextLineRenderer);
-        Renderers.registerRenderer(TextLineRenderableCenter.getClass(), TextLineRenderer);
-        Renderers.registerRenderer(TextLineRenderableRight.getClass(), TextLineRenderer);
+        MockFirstChildComponent.add(TextLineRenderableLeft);
+        MockFirstChildComponent.add(TextLineRenderableCenter);
+        MockFirstChildComponent.add(TextLineRenderableRight);
+        Renderers.put(TextLineRenderableLeft.getClass(), TextLineRenderer);
+        Renderers.put(TextLineRenderableCenter.getClass(), TextLineRenderer);
+        Renderers.put(TextLineRenderableRight.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);
     }

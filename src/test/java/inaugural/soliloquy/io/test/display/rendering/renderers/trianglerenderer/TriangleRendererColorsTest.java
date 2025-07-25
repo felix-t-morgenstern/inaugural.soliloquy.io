@@ -56,8 +56,11 @@ class TriangleRendererColorsTest extends TriangleRendererTest {
                 new TriangleRenderableImpl(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
-                        staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null, randomInt(),
-                        java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES));
+                        BACKGROUND_TEXTURE_ID_PROVIDER,
+                        staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
+                        staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
+                        randomInt(),
+                        java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                        RENDERING_BOUNDARIES));
     }
 }

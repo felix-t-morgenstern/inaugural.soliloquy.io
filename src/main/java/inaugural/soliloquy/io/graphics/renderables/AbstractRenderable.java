@@ -2,20 +2,31 @@ package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.renderables.Renderable;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 abstract class AbstractRenderable implements Renderable {
-    private RenderableStack containingStack;
+    private final Component COMPONENT;
+    private final BiConsumer<Component, Renderable> REMOVE_FROM_COMPONENT;
     private final UUID UUID;
 
     private int z;
+    private boolean isDeleted;
 
-    protected AbstractRenderable(int z, UUID uuid, RenderableStack containingStack) {
+    protected AbstractRenderable(int z, UUID uuid,
+                                 Component component,
+                                 BiConsumer<Component, Renderable> removeFromComponent) {
+        COMPONENT = Check.ifNull(component, "component");
+        REMOVE_FROM_COMPONENT = Check.ifNull(removeFromComponent, "removeFromComponent");
         this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
-        this.containingStack = Check.ifNull(containingStack, "containingStack");
+    }
+
+    @Override
+    public Component component() {
+        return isDeleted ? null : COMPONENT;
     }
 
     @Override
@@ -26,12 +37,7 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void setZ(int z) {
         this.z = z;
-        containingStack.add(this);
-    }
-
-    @Override
-    public RenderableStack containingStack() {
-        return containingStack;
+        COMPONENT.add(this);
     }
 
     // NB: deleted SpriteRenderables should NOT_ make other calls unsupported, unlike
@@ -39,9 +45,13 @@ abstract class AbstractRenderable implements Renderable {
     //     contains it, causing a breaking race condition.
     @Override
     public void delete() {
-        RenderableStack stack = containingStack;
-        containingStack = null;
-        stack.remove(this);
+        isDeleted = true;
+        REMOVE_FROM_COMPONENT.accept(COMPONENT, this);
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     @Override

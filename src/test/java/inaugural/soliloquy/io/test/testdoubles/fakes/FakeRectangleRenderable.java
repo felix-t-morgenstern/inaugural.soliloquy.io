@@ -5,7 +5,8 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.Map;
@@ -136,7 +137,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<MouseEventInputs> action)
+    public void setOnPress(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -153,7 +154,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<MouseEventInputs> action)
+    public void setOnRelease(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -206,6 +207,11 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return 0;
     }
@@ -216,13 +222,13 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public RenderableStack containingStack() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
-    public void delete() {
-
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

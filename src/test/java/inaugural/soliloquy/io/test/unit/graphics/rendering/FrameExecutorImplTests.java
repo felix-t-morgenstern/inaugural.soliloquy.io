@@ -8,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
-import soliloquy.specs.io.graphics.rendering.renderers.StackRenderer;
+import soliloquy.specs.io.graphics.rendering.renderers.ComponentRenderer;
+import soliloquy.specs.ui.Component;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -40,8 +40,8 @@ public class FrameExecutorImplTests {
         frameBlockingEvent2FiringTime = firingTime;
     };
 
-    @Mock private RenderableStack mockTopLevelStack;
-    @Mock private StackRenderer mockStackRenderer;
+    @Mock private Component mockTopLevelComponent;
+    @Mock private ComponentRenderer mockComponentRenderer;
 
     private FrameExecutor frameExecutor;
 
@@ -49,20 +49,17 @@ public class FrameExecutorImplTests {
     public void setUp() {
         EVENTS_FIRED.clear();
 
-        mockTopLevelStack = mock(RenderableStack.class);
-        mockStackRenderer = mock(StackRenderer.class);
-
-        frameExecutor = new FrameExecutorImpl(mockTopLevelStack, mockStackRenderer, 100);
+        frameExecutor = new FrameExecutorImpl(mockTopLevelComponent, mockComponentRenderer, 100);
     }
 
     @Test
     public void constructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(null, mockStackRenderer, 1));
+                () -> new FrameExecutorImpl(null, mockComponentRenderer, 1));
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockTopLevelStack, null, 1));
+                () -> new FrameExecutorImpl(mockTopLevelComponent, null, 1));
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockTopLevelStack, mockStackRenderer, 0));
+                () -> new FrameExecutorImpl(mockTopLevelComponent, mockComponentRenderer, 0));
     }
 
     @Test
@@ -80,7 +77,7 @@ public class FrameExecutorImplTests {
                 EVENTS_FIRED.get(1).equals(FRAME_BLOCKING_EVENT_2_NAME));
         assertEquals(GLOBAL_TIMESTAMP, (long) frameBlockingEvent1FiringTime);
         assertEquals(GLOBAL_TIMESTAMP, (long) frameBlockingEvent2FiringTime);
-        verify(mockStackRenderer, once()).render(mockTopLevelStack, GLOBAL_TIMESTAMP);
+        verify(mockComponentRenderer, once()).render(mockTopLevelComponent, GLOBAL_TIMESTAMP);
     }
 
     @Test

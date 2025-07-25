@@ -9,22 +9,25 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
-import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomFloat;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class TextLineRenderableFactoryImplTests {
@@ -37,7 +40,8 @@ public class TextLineRenderableFactoryImplTests {
     @Mock private Font mockFont;
     @Mock private ProviderAtTime<Float> mockHeightProvider;
     @Mock private ProviderAtTime<String> mockLineTextProvider;
-    @Mock private RenderableStack mockContainingStack;
+    @Mock private Component mockContainingComponent;
+    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
     @Mock private ProviderAtTime<Color> mockBorderColorProvider;
     @Mock private ProviderAtTime<Vertex> mockLocationProvider;
@@ -50,30 +54,33 @@ public class TextLineRenderableFactoryImplTests {
     @BeforeEach
     public void setUp() {
 
-        textLineRenderableFactory = new TextLineRenderableFactoryImpl();
+        textLineRenderableFactory = new TextLineRenderableFactoryImpl(mockRemoveFromComponent);
     }
 
     @Test
     public void testMake() {
         var z = randomInt();
         var paddingBetweenGlyphs = randomFloat();
-        TextLineRenderable textLineRenderable =
+        var renderable =
                 textLineRenderableFactory.make(mockFont, mockLineTextProvider, mockLocationProvider,
                         mockHeightProvider, JUSTIFICATION, paddingBetweenGlyphs,
                         COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                         mockBorderThicknessProvider, mockBorderColorProvider,
                         mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
-                        mockDropShadowColorProvider, z, UUID, mockContainingStack);
+                        mockDropShadowColorProvider, z, UUID, mockContainingComponent);
 
-        assertNotNull(textLineRenderable);
-        assertInstanceOf(TextLineRenderableImpl.class, textLineRenderable);
-        assertSame(mockFont, textLineRenderable.getFont());
-        assertSame(mockLineTextProvider, textLineRenderable.getLineTextProvider());
-        assertSame(mockHeightProvider, textLineRenderable.lineHeightProvider());
-        assertEquals(JUSTIFICATION, textLineRenderable.getJustification());
-        assertEquals(paddingBetweenGlyphs, textLineRenderable.getPaddingBetweenGlyphs());
-        assertEquals(COLOR_PROVIDER_INDICES, textLineRenderable.colorProviderIndices());
-        assertSame(mockContainingStack, textLineRenderable.containingStack());
+        assertNotNull(renderable);
+        assertInstanceOf(TextLineRenderableImpl.class, renderable);
+        assertSame(mockFont, renderable.getFont());
+        assertSame(mockLineTextProvider, renderable.getLineTextProvider());
+        assertSame(mockHeightProvider, renderable.lineHeightProvider());
+        assertEquals(JUSTIFICATION, renderable.getJustification());
+        assertEquals(paddingBetweenGlyphs, renderable.getPaddingBetweenGlyphs());
+        assertEquals(COLOR_PROVIDER_INDICES, renderable.colorProviderIndices());
+        assertSame(mockContainingComponent, renderable.component());
+
+        renderable.delete();
+        verify(mockRemoveFromComponent, once()).accept(mockContainingComponent, renderable);
     }
 
     // NB: Not testing make with invalid params, since it tests the same logic of

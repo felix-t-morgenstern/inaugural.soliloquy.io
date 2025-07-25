@@ -5,7 +5,7 @@ import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
@@ -210,6 +210,11 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return 0;
     }
@@ -220,13 +225,13 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     @Override
-    public RenderableStack containingStack() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
-    public void delete() {
-
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

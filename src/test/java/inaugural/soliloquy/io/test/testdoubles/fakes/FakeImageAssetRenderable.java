@@ -6,7 +6,8 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.List;
@@ -41,7 +42,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<MouseEventInputs> action)
+    public void setOnPress(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -58,7 +59,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<MouseEventInputs> action)
+    public void setOnRelease(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -74,7 +75,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public void setOnMouseOver(Action<MouseEventInputs> action) {
+    public void setOnMouseOver(Action<EventInputs> action) {
 
     }
 
@@ -89,7 +90,7 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
-    public void setOnMouseLeave(Action<MouseEventInputs> action) {
+    public void setOnMouseLeave(Action<EventInputs> action) {
 
     }
 
@@ -138,6 +139,11 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return Z;
     }
@@ -145,11 +151,6 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     @Override
     public void setZ(int z) {
         Z = z;
-    }
-
-    @Override
-    public RenderableStack containingStack() {
-        return null;
     }
 
     @Override
@@ -163,6 +164,11 @@ public class FakeImageAssetRenderable implements ImageAssetRenderable {
     @Override
     public void delete() {
 
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

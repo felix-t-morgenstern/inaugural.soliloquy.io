@@ -4,7 +4,8 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.Map;
@@ -161,7 +162,7 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<MouseEventInputs> action)
+    public void setOnPress(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -178,7 +179,7 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<MouseEventInputs> action)
+    public void setOnRelease(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -194,7 +195,7 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnMouseOver(Action<MouseEventInputs> action) {
+    public void setOnMouseOver(Action<EventInputs> action) {
 
     }
 
@@ -209,12 +210,17 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnMouseLeave(Action<MouseEventInputs> action) {
+    public void setOnMouseLeave(Action<EventInputs> action) {
 
     }
 
     @Override
     public String mouseLeaveActionId() {
+        return null;
+    }
+
+    @Override
+    public Component component() {
         return null;
     }
 
@@ -229,13 +235,13 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public RenderableStack containingStack() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
-    public void delete() {
-
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

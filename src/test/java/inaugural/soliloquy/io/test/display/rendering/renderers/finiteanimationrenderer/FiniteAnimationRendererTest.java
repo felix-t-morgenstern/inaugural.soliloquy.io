@@ -90,15 +90,16 @@ class FiniteAnimationRendererTest extends DisplayTest {
                         MIDPOINT + (ANIMATION_HEIGHT / 2f))),
                 123,
                 java.util.UUID.randomUUID(),
-                FirstChildStack,
+                MockFirstChildComponent,
+                DUMMY_REMOVE,
                 RENDERING_BOUNDARIES,
                 timestamp + MS_PADDING,
                 null,
                 null
         );
 
-        FirstChildStack.add(FiniteAnimationRenderable);
-        Renderers.registerRenderer(FiniteAnimationRenderableImpl.class,
+        MockFirstChildComponent.add(FiniteAnimationRenderable);
+        Renderers.put(FiniteAnimationRenderableImpl.class,
                 FiniteAnimationRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

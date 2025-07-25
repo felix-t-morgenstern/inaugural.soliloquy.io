@@ -8,8 +8,8 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.mouse.MouseListener;
 import soliloquy.specs.io.graphics.rendering.Mesh;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.ui.Component;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -34,14 +34,14 @@ class GraphicsCoreLoopImplSimpleTest {
     public static void main(String[] args) {
         var frameTimer = new FakeFrameTimer();
         var frameExecutor =
-                new FrameExecutorImpl(mock(RenderableStack.class), new FakeStackRenderer(), 100);
+                new FrameExecutorImpl(mock(Component.class), new FakeComponentRenderer(), 100);
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = listOf();
         WindowManager = new FakeWindowResolutionManager();
         Function<float[], Function<float[], Mesh>> meshFactory = _ -> _ -> new FakeMesh();
         @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = listOf();
 
 
-        GraphicsCoreLoop graphicsCoreLoop =
+        var graphicsCoreLoop =
                 new GraphicsCoreLoopImpl("New window", new FakeGLFWMouseButtonCallback(),
                         frameTimer, 20, WindowManager, new GlobalClockImpl(), frameExecutor,
                         new FakeShaderFactory(), renderersWithShader, "_", meshFactory,

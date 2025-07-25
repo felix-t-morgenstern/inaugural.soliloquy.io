@@ -43,7 +43,8 @@ class TriangleRendererTileTest extends TriangleRendererTest {
     @SuppressWarnings("unchecked")
     private final static StaticProvider<Color> VERTEX_3_COLOR_PROVIDER = mock(StaticProvider.class);
     @SuppressWarnings("unchecked")
-    private final static StaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER = mock(StaticProvider.class);
+    private final static StaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            mock(StaticProvider.class);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.15f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.2f;
     private final static String TILE_LOCATION =
@@ -71,12 +72,15 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                 new TriangleRenderableImpl(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
-                        staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null, randomInt(),
-                        java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                        BACKGROUND_TEXTURE_ID_PROVIDER,
+                        staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
+                        staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
+                        randomInt(),
+                        java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                        RENDERING_BOUNDARIES);
 
-        Renderers.registerRenderer(TriangleRenderableImpl.class, TriangleRenderer);
-        FirstChildStack.add(TriangleRenderable);
+        Renderers.put(TriangleRenderableImpl.class, TriangleRenderer);
+        MockFirstChildComponent.add(TriangleRenderable);
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(TriangleRenderer);

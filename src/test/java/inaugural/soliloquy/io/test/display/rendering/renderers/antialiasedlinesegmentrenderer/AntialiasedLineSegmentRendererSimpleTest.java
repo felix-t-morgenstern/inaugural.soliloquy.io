@@ -49,7 +49,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         staticProvider(0.01f),
                         randomInt(),
                         java.util.UUID.randomUUID(),
-                        FirstChildStack
+                        MockFirstChildComponent,
+                        DUMMY_REMOVE
                 );
 
         var antialiasedLineSegmentRenderable2 =
@@ -62,12 +63,13 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         staticProvider(0.05f),
                         randomInt(),
                         java.util.UUID.randomUUID(),
-                        FirstChildStack
+                        MockFirstChildComponent,
+                        DUMMY_REMOVE
                 );
 
-        FirstChildStack.add(antialiasedLineSegmentRenderable1);
-        FirstChildStack.add(antialiasedLineSegmentRenderable2);
-        Renderers.registerRenderer(AntialiasedLineSegmentRenderableImpl.class,
+        MockFirstChildComponent.add(antialiasedLineSegmentRenderable1);
+        MockFirstChildComponent.add(antialiasedLineSegmentRenderable2);
+        Renderers.put(AntialiasedLineSegmentRenderableImpl.class,
                 antialiasedLineSegmentRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

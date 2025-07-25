@@ -3,21 +3,17 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -497,165 +493,4 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
                     dataStructureName + " cannot contain an index out of ascending order");
         }
     }
-
-    private static final TextLineRenderable ARCHETYPE = new TextLineRenderable() {
-        @Override
-        public UUID uuid() {
-            return null;
-        }
-
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
-
-        }
-
-        @Override
-        public RenderableStack containingStack() {
-            return null;
-        }
-
-        @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getBorderThicknessProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderThicknessProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getBorderColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setBorderColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Font getFont() {
-            return null;
-        }
-
-        @Override
-        public void setFont(Font font) throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<String> getLineTextProvider() {
-            return null;
-        }
-
-        @Override
-        public void setLineTextProvider(ProviderAtTime<String> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getRenderingLocationProvider() {
-            return null;
-        }
-
-        @Override
-        public void setRenderingLocationProvider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> lineHeightProvider() {
-            return null;
-        }
-
-        @Override
-        public void setLineHeightProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public float getPaddingBetweenGlyphs() {
-            return 0;
-        }
-
-        @Override
-        public void setPaddingBetweenGlyphs(float v) {
-
-        }
-
-        @Override
-        public TextJustification getJustification() {
-            return null;
-        }
-
-        @Override
-        public void setJustification(TextJustification textJustification)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public Map<Integer, ProviderAtTime<Color>> colorProviderIndices() {
-            return null;
-        }
-
-        @Override
-        public List<Integer> italicIndices() {
-            return null;
-        }
-
-        @Override
-        public List<Integer> boldIndices() {
-            return null;
-        }
-
-        @Override
-        public ProviderAtTime<Float> dropShadowSizeProvider() {
-            return null;
-        }
-
-        @Override
-        public void setDropShadowSizeProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> dropShadowOffsetProvider() {
-            return null;
-        }
-
-        @Override
-        public void setDropShadowOffsetProvider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> dropShadowColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setDropShadowColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-    };
 }

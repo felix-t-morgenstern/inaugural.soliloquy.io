@@ -7,12 +7,10 @@ import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
-import inaugural.soliloquy.io.graphics.rendering.RenderableStackImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
-import inaugural.soliloquy.io.graphics.rendering.renderers.RenderersImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
-import inaugural.soliloquy.io.graphics.rendering.renderers.StackRendererImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
 import inaugural.soliloquy.io.test.display.DisplayTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
@@ -23,6 +21,7 @@ import soliloquy.specs.io.mouse.MouseListener;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.ui.Component;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-public class StackRendererTest extends DisplayTest {
+public class ComponentRendererTest extends DisplayTest {
     private final static String AXE_07_LOCATION =
             "./src/test/resources/images/items/Axe_512x512_NoBG_07.png";
     private final static String AXE_09_LOCATION =
@@ -50,15 +49,13 @@ public class StackRendererTest extends DisplayTest {
         var frameTimer = mock(FrameTimer.class);
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
 
-        TopLevelStack = new RenderableStackImpl();
-        FirstChildStack =
-                new RenderableStackImpl(java.util.UUID.randomUUID(), 0, WHOLE_SCREEN_PROVIDER,
-                        TopLevelStack);
+        MockTopLevelComponent = mock(Component.class);
+        when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(WHOLE_SCREEN_PROVIDER);
+        MockFirstChildComponent = mock(Component.class);
+        when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
+        when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(WHOLE_SCREEN_PROVIDER);
 
-        var renderers = new RenderersImpl(TIMESTAMP_VALIDATOR);
-
-        var stackRenderer = new StackRendererImpl(renderers, RENDERING_BOUNDARIES, null);
-        renderers.registerStackRenderer(stackRenderer);
+        var stackRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, null);
 
         var spriteAxe07Width = 512;
         var spriteAxe07Height = 512;
@@ -87,7 +84,7 @@ public class StackRendererTest extends DisplayTest {
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         var spriteAxe09ScreenWidth = (spriteAxe09Width / (float) spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
@@ -103,7 +100,7 @@ public class StackRendererTest extends DisplayTest {
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         var spriteSword06ScreenWidth = 0.3710f;
         var spriteSword06TopY = 0f;
@@ -118,7 +115,7 @@ public class StackRendererTest extends DisplayTest {
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), FirstChildStack, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -129,12 +126,12 @@ public class StackRendererTest extends DisplayTest {
         //noinspection rawtypes
         List<Renderer> renderersWithShader = listOf(spriteRenderer);
 
-        renderers.registerRenderer(SpriteRenderableImpl.class, spriteRenderer);
-        FirstChildStack.add(spriteRenderable1);
-        FirstChildStack.add(spriteRenderable2);
-        FirstChildStack.add(spriteRenderable3);
+        Renderers.put(SpriteRenderableImpl.class, spriteRenderer);
+        MockFirstChildComponent.add(spriteRenderable1);
+        MockFirstChildComponent.add(spriteRenderable2);
+        MockFirstChildComponent.add(spriteRenderable3);
 
-        var frameExecutor = new FrameExecutorImpl(TopLevelStack, stackRenderer, 100);
+        var frameExecutor = new FrameExecutorImpl(MockTopLevelComponent, stackRenderer, 100);
 
         var graphicsCoreLoop =
                 new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),

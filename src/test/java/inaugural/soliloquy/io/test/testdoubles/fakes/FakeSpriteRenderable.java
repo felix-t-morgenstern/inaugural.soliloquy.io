@@ -7,7 +7,8 @@ import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.List;
@@ -91,7 +92,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<MouseEventInputs> action)
+    public void setOnPress(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -108,7 +109,7 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<MouseEventInputs> action)
+    public void setOnRelease(int i, Action<EventInputs> action)
             throws IllegalArgumentException {
 
     }
@@ -166,6 +167,11 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return Z;
     }
@@ -176,13 +182,13 @@ public class FakeSpriteRenderable implements SpriteRenderable {
     }
 
     @Override
-    public RenderableStack containingStack() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
-    public void delete() {
-
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override

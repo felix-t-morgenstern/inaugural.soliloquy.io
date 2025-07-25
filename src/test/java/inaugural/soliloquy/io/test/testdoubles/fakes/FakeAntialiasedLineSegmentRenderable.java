@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.testdoubles.fakes;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
+import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
@@ -98,6 +98,11 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     }
 
     @Override
+    public Component component() {
+        return null;
+    }
+
+    @Override
     public int getZ() {
         return 0;
     }
@@ -108,13 +113,13 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     }
 
     @Override
-    public RenderableStack containingStack() {
-        return null;
+    public void delete() {
+
     }
 
     @Override
-    public void delete() {
-
+    public boolean isDeleted() {
+        return false;
     }
 
     @Override
