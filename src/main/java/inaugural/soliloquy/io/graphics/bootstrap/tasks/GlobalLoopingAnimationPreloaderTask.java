@@ -5,7 +5,6 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
-import soliloquy.specs.io.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -13,7 +12,7 @@ import java.util.function.Function;
 
 public class GlobalLoopingAnimationPreloaderTask implements Runnable {
     private final Function<String, Animation> GET_ANIMATION;
-    private final GlobalLoopingAnimationFactory GLOBAL_LOOPING_ANIMATION_FACTORY;
+    private final Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATION_FACTORY;
     private final Collection<GlobalLoopingAnimationDefinitionDTO>
             GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS;
     private final Consumer<GlobalLoopingAnimation> PROCESS_RESULT;
@@ -22,7 +21,7 @@ public class GlobalLoopingAnimationPreloaderTask implements Runnable {
     public GlobalLoopingAnimationPreloaderTask(Function<String, Animation> getAnimation,
                                                Collection<GlobalLoopingAnimationDefinitionDTO>
                                                        globalLoopingAnimationDefinitionDTOs,
-                                               GlobalLoopingAnimationFactory
+                                               Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation>
                                                        globalLoopingAnimationFactory,
                                                Consumer<GlobalLoopingAnimation> processResult) {
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
@@ -55,7 +54,7 @@ public class GlobalLoopingAnimationPreloaderTask implements Runnable {
 
     public void run() {
         GLOBAL_LOOPING_ANIMATION_DEFINITION_DTOS.forEach(definition -> PROCESS_RESULT
-                .accept(GLOBAL_LOOPING_ANIMATION_FACTORY.make(
+                .accept(GLOBAL_LOOPING_ANIMATION_FACTORY.apply(
                         new GlobalLoopingAnimationDefinition(
                                 definition.id,
                                 GET_ANIMATION.apply(definition.animationId),

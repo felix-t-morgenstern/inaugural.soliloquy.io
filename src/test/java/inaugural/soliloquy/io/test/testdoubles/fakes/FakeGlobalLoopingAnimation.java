@@ -12,10 +12,6 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
     public long StartTimestamp;
     public boolean SupportsMouseEvents;
 
-    public FakeGlobalLoopingAnimation(String id) {
-        Id = id;
-    }
-
     public FakeGlobalLoopingAnimation(boolean supportsMouseEvents) {
         SupportsMouseEvents = supportsMouseEvents;
     }

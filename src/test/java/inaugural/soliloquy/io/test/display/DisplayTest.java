@@ -120,7 +120,7 @@ public class DisplayTest {
         return new StaticProviderImpl<>(java.util.UUID.randomUUID(), value, null);
     }
 
-    protected static <T> StaticProvider<T> staticNullProvider(T archetype) {
+    protected static <T> StaticProvider<T> staticNullProvider() {
         return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, null);
     }
 

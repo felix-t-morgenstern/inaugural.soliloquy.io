@@ -19,7 +19,6 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggr
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -81,8 +80,8 @@ class FiniteAnimationRendererTest extends DisplayTest {
 
         FiniteAnimationRenderable = new FiniteAnimationRenderableImpl(
                 ANIMATION_FACTORY.make(AnimationDefinition),
-                staticNullProvider(0f),
-                staticNullProvider(Color.BLACK),
+                staticNullProvider(),
+                staticNullProvider(),
                 listOf(),
                 staticProvider(floatBoxOf(
                         MIDPOINT - (ANIMATION_WIDTH / 2f),

@@ -15,7 +15,6 @@ import java.util.Map;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class TextLineRendererTest extends DisplayTest {
     protected final static String RELATIVE_LOCATION_TRAJAN =
@@ -80,16 +79,16 @@ public class TextLineRendererTest extends DisplayTest {
                 renderingLocationProvider);
         when(mockTextLineRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
         when(mockTextLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
-        when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(staticNullProvider(0f));
+        when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(staticNullProvider());
         when(mockTextLineRenderable.dropShadowOffsetProvider()).thenReturn(
-                staticNullProvider(vertexOf(0f, 0f)));
+                staticNullProvider());
         when(mockTextLineRenderable.dropShadowColorProvider()).thenReturn(
-                staticNullProvider(Color.BLACK));
+                staticNullProvider());
 
         return mockTextLineRenderable(lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
                 borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
-                boldIndices, renderingLocationProvider, staticNullProvider(0f),
-                staticNullProvider(vertexOf(0f, 0f)), staticNullProvider(Color.BLACK));
+                boldIndices, renderingLocationProvider, staticNullProvider(),
+                staticNullProvider(), staticNullProvider());
     }
 
     protected static TextLineRenderable mockTextLineRenderable(

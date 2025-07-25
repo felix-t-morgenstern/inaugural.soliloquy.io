@@ -3,13 +3,10 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderableStack;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -28,9 +25,6 @@ public class AntialiasedLineSegmentRenderer
     private static final Map<Float, Float> HALVING_MEMOIZATION = mapOf();
     private static final Map<Float, Float> SQUARE_ROOT_MEMOIZATION = mapOf();
     private static final Map<Float, Float> SQUARING_MEMOIZATION = mapOf();
-
-    private static final AntialiasedLineSegmentRenderable ARCHETYPE =
-            new AntialiasedLineSegmentRenderableArchetype();
 
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
                                           Long mostRecentTimestamp) {
@@ -364,99 +358,5 @@ public class AntialiasedLineSegmentRenderer
     @Override
     protected String className() {
         return "AntialiasedLineSegmentRenderer";
-    }
-
-    private static class AntialiasedLineSegmentRenderableArchetype
-            implements AntialiasedLineSegmentRenderable {
-        @Override
-        public ProviderAtTime<Vertex> getVertex1Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex1Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Vertex> getVertex2Provider() {
-            return null;
-        }
-
-        @Override
-        public void setVertex2Provider(ProviderAtTime<Vertex> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getThicknessProvider() {
-            return null;
-        }
-
-        @Override
-        public void setThicknessProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Color> getColorProvider() {
-            return null;
-        }
-
-        @Override
-        public void setColorProvider(ProviderAtTime<Color> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getThicknessGradientPercentProvider() {
-            return null;
-        }
-
-        @Override
-        public void setThicknessGradientPercentProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public ProviderAtTime<Float> getLengthGradientPercentProvider() {
-            return null;
-        }
-
-        @Override
-        public void setLengthGradientPercentProvider(ProviderAtTime<Float> providerAtTime)
-                throws IllegalArgumentException {
-
-        }
-
-        @Override
-        public int getZ() {
-            return 0;
-        }
-
-        @Override
-        public void setZ(int i) {
-
-        }
-
-        @Override
-        public RenderableStack containingStack() {
-            return null;
-        }
-
-        @Override
-        public void delete() {
-
-        }
-
-        @Override
-        public UUID uuid() {
-            return null;
-        }
     }
 }

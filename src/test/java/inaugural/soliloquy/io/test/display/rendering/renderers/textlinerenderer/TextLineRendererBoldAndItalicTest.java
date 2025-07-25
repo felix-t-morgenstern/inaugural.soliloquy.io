@@ -91,8 +91,8 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         var boldIndices = listOf(17);
 
         TextLineRenderable =
-                mockTextLineRenderable(LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT, staticNullProvider(0f),
-                        staticNullProvider(Color.BLACK), null, italicIndices, boldIndices,
+                mockTextLineRenderable(LINE_HEIGHT_PROVIDER, 0f, LINE_TEXT, staticNullProvider(),
+                        staticNullProvider(), null, italicIndices, boldIndices,
                         staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,

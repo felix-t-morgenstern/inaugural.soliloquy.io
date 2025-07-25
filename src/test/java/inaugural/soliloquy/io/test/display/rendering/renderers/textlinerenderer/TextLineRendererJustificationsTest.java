@@ -11,7 +11,6 @@ import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
@@ -79,14 +78,14 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         var renderingLocationRight = vertexOf(0.95f, 0.725f);
 
         TextLineRenderableLeft = mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_LEFT,
-                staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticNullProvider(), staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocationLeft));
         TextLineRenderableCenter =
                 mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_CENTER,
-                        staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(),
+                        staticNullProvider(), staticNullProvider(), null, listOf(),
                         listOf(), staticProvider(renderingLocationCenter));
         TextLineRenderableRight = mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT_RIGHT,
-                staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticNullProvider(), staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocationRight));
 
         when(TextLineRenderableLeft.getJustification()).thenReturn(TextJustification.LEFT);

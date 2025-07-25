@@ -16,7 +16,6 @@ public class GlobalLoopingAnimationImplTests {
     private final int PERIOD_MODULO_OFFSET = 123;
     private final String ANIMATION_ID = "animationId";
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
-    private final long MOST_RECENT_TIMESTAMP = 123L;
 
     private GlobalLoopingAnimation globalLoopingAnimation;
 

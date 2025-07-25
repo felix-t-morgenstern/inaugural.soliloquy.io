@@ -36,19 +36,6 @@ public class FakeSpriteRenderable implements SpriteRenderable {
         Uuid = uuid;
     }
 
-    public FakeSpriteRenderable(Sprite sprite,
-                                List<ColorShift> colorShifts,
-                                ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
-                                UUID uuid) {
-        Sprite = sprite;
-        ColorShifts = colorShifts;
-        RenderingDimensionsProvider = renderingDimensionsProvider;
-        Z = z;
-        BorderThicknessProvider = new FakeStaticProvider<>(null);
-        BorderColorProvider = new FakeStaticProvider<>(null);
-        Uuid = uuid;
-    }
-
     @Override
     public Sprite getSprite() {
         return Sprite;

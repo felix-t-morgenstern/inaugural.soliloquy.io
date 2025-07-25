@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.display.rendering.renderers.antialiasedlines
 import inaugural.soliloquy.io.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.io.test.display.DisplayTest;
-import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -25,9 +24,6 @@ import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
  * 3. The window will then close
  */
 class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
-    private static AntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable1;
-    private static AntialiasedLineSegmentRenderable AntialiasedLineSegmentRenderable2;
-    private static Renderer<AntialiasedLineSegmentRenderable> AntialiasedLineSegmentRenderer;
 
     public static void main(String[] args) {
         runTest(
@@ -41,45 +37,41 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
     /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        AntialiasedLineSegmentRenderer =
-                new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
+        var antialiasedLineSegmentRenderer = new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
-        AntialiasedLineSegmentRenderable1 = new AntialiasedLineSegmentRenderableImpl(
-                staticProvider(vertexOf(0.75f, 0.75f)),
-                staticProvider(vertexOf(0.25f, 0.25f)),
-                staticProvider(0.000625f),
-                staticProvider(Color.RED),
-                staticProvider(0.1f),
-                staticProvider(0.01f),
-                randomInt(),
-                java.util.UUID.randomUUID(),
-                FirstChildStack
-        );
+        var antialiasedLineSegmentRenderable1 =
+                new AntialiasedLineSegmentRenderableImpl(
+                        staticProvider(vertexOf(0.75f, 0.75f)),
+                        staticProvider(vertexOf(0.25f, 0.25f)),
+                        staticProvider(0.000625f),
+                        staticProvider(Color.RED),
+                        staticProvider(0.1f),
+                        staticProvider(0.01f),
+                        randomInt(),
+                        java.util.UUID.randomUUID(),
+                        FirstChildStack
+                );
 
-        AntialiasedLineSegmentRenderable2 = new AntialiasedLineSegmentRenderableImpl(
-                staticProvider(vertexOf(0.5f, 0.75f)),
-                staticProvider(vertexOf(0.5f, 0.25f)),
-                staticProvider(0.1f),
-                staticProvider(new Color(40, 0, 255)),
-                staticProvider(0.05f),
-                staticProvider(0.05f),
-                randomInt(),
-                java.util.UUID.randomUUID(),
-                FirstChildStack
-        );
+        var antialiasedLineSegmentRenderable2 =
+                new AntialiasedLineSegmentRenderableImpl(
+                        staticProvider(vertexOf(0.5f, 0.75f)),
+                        staticProvider(vertexOf(0.5f, 0.25f)),
+                        staticProvider(0.1f),
+                        staticProvider(new Color(40, 0, 255)),
+                        staticProvider(0.05f),
+                        staticProvider(0.05f),
+                        randomInt(),
+                        java.util.UUID.randomUUID(),
+                        FirstChildStack
+                );
 
-        FirstChildStack.add(AntialiasedLineSegmentRenderable1);
-        FirstChildStack.add(AntialiasedLineSegmentRenderable2);
+        FirstChildStack.add(antialiasedLineSegmentRenderable1);
+        FirstChildStack.add(antialiasedLineSegmentRenderable2);
         Renderers.registerRenderer(AntialiasedLineSegmentRenderableImpl.class,
-                AntialiasedLineSegmentRenderer);
+                antialiasedLineSegmentRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return listOf(AntialiasedLineSegmentRenderer);
-    }
-
-    private static void stackRendererAction(long timestamp) {
-        AntialiasedLineSegmentRenderer.render(AntialiasedLineSegmentRenderable2, timestamp);
-        AntialiasedLineSegmentRenderer.render(AntialiasedLineSegmentRenderable1, timestamp);
+        return listOf(antialiasedLineSegmentRenderer);
     }
 }

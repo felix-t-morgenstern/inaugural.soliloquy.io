@@ -10,7 +10,6 @@ import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
@@ -76,7 +75,7 @@ public class TextLineRendererPaddingTest extends TextLineRendererTest {
         var renderingLocation = vertexOf(0.1f, 0.475f);
 
         TextLineRenderable = mockTextLineRenderable(staticProvider(0.05f), 0.1f, LINE_TEXT,
-                staticNullProvider(0f), staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticNullProvider(), staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,

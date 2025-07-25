@@ -8,14 +8,10 @@ import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
+import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.*;
@@ -41,7 +37,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final AssetFactory<FontDefinition, Font> FONT_FACTORY;
     private final AssetFactory<SpriteDefinition, Sprite> SPRITE_FACTORY;
     private final AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY;
-    private final GlobalLoopingAnimationFactory GLOBAL_LOOPING_ANIMATION_FACTORY;
+    private final Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATION_FACTORY;
     private final AssetFactory<ImageAssetSetDefinition, ImageAssetSet> IMAGE_ASSET_SET_FACTORY;
     private final MouseCursorImageFactory MOUSE_CURSOR_IMAGE_FACTORY;
     private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
@@ -87,7 +83,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                                  AssetFactory<FontDefinition, Font> fontFactory,
                                  AssetFactory<SpriteDefinition, Sprite> spriteFactory,
                                  AssetFactory<AnimationDefinition, Animation> animationFactory,
-                                 GlobalLoopingAnimationFactory globalLoopingAnimationFactory,
+                                 Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> globalLoopingAnimationFactory,
                                  AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
                                          imageAssetSetFactory,
                                  MouseCursorImageFactory mouseCursorImageFactory,

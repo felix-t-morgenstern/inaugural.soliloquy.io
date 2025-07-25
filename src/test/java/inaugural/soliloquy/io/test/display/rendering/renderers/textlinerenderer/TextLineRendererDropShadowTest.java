@@ -72,7 +72,7 @@ class TextLineRendererDropShadowTest extends TextLineRendererTest {
 
         TextLineRenderable = mockTextLineRenderable(
                 staticProvider(0.05f), 0f, staticProvider(LINE_TEXT),
-                staticNullProvider(0f), staticNullProvider(Color.BLACK), null,
+                staticNullProvider(), staticNullProvider(), null,
                 listOf(), listOf(),
                 staticProvider(renderingLocation),
                 staticProvider(0.055f),

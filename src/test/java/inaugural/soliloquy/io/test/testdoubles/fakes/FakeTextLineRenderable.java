@@ -80,21 +80,6 @@ public class FakeTextLineRenderable implements TextLineRenderable {
     }
 
     public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
-                                  float paddingBetweenGlyphs,
-                                  ProviderAtTime<String> lineTextProvider,
-                                  ProviderAtTime<Float> borderThicknessProvider,
-                                  ProviderAtTime<Color> borderColorProvider,
-                                  Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
-                                  List<Integer> italicIndices, List<Integer> boldIndices,
-                                  ProviderAtTime<Vertex> renderingLocationProvider,
-                                  UUID uuid) {
-        this(font, lineHeightProvider, paddingBetweenGlyphs, lineTextProvider,
-                borderThicknessProvider, borderColorProvider, colorProviderIndices, italicIndices,
-                boldIndices, uuid);
-        RenderingLocationProvider = renderingLocationProvider;
-    }
-
-    public FakeTextLineRenderable(Font font, ProviderAtTime<Float> lineHeightProvider,
                                   float paddingBetweenGlyphs, String lineText,
                                   ProviderAtTime<Float> borderThicknessProvider,
                                   ProviderAtTime<Color> borderColorProvider,

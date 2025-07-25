@@ -64,8 +64,8 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
                 null, null);
 
         TextLineRenderable =
-                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(0f),
-                        staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(),
+                        staticNullProvider(), null, listOf(), listOf(),
                         RenderingLocationProvider);
 
         TextLineRenderer =

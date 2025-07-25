@@ -23,13 +23,13 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTest {
     private final static StaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
-            staticNullProvider(Color.BLACK);
+            staticNullProvider();
     private final static StaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
-            staticNullProvider(Color.BLACK);
+            staticNullProvider();
     private final static StaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            staticNullProvider(Color.BLACK);
+            staticNullProvider();
     private final static StaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            staticNullProvider(Color.BLACK);
+            staticNullProvider();
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.1f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.075f;
     private final static StaticProvider<FloatBox> RENDERING_AREA_PROVIDER =

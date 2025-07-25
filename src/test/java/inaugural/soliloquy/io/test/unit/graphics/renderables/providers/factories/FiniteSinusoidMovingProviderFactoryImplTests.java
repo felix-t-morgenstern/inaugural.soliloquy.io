@@ -119,6 +119,15 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         assertEquals(mostRecentTimestamp, factory1InputMostRecentTimestamp);
     }
 
+    public List<Float> getFactory2InputTransitionSharpnesses() {
+        return factory2InputTransitionSharpnesses;
+    }
+
+    public void setFactory2InputTransitionSharpnesses(
+            List<Float> factory2InputTransitionSharpnesses) {
+        this.factory2InputTransitionSharpnesses = factory2InputTransitionSharpnesses;
+    }
+
     // NB: No specific test is provided for make with invalid params, since the individual
     //     factories provided to this class should handle those edge cases.
 

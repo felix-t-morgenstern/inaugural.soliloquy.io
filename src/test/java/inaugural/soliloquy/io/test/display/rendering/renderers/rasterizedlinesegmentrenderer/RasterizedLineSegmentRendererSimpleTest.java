@@ -8,6 +8,7 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
+import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -35,7 +36,7 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
     }
 
     /** @noinspection rawtypes */
-    private static java.util.List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 // NB: The coordinates are in this order to ensure that

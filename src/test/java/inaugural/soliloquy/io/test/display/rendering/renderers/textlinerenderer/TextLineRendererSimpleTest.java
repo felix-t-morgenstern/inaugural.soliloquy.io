@@ -69,8 +69,8 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
         var renderingLocation = vertexOf(0.1f, 0.475f);
 
         TextLineRenderable = mockTextLineRenderable(
-                staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(0f),
-                staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(),
+                staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);

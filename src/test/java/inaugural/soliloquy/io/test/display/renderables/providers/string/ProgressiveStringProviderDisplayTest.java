@@ -88,8 +88,8 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 now + startOffset, duration, null, null);
 
         TextLineRenderable = mockTextLineRenderable(
-                staticProvider(0.05f), 0f, LineTextProvider, staticNullProvider(0f),
-                staticNullProvider(Color.BLACK), null, listOf(), listOf(),
+                staticProvider(0.05f), 0f, LineTextProvider, staticNullProvider(),
+                staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
         TextLineRenderer =

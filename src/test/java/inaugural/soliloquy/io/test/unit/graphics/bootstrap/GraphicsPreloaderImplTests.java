@@ -20,7 +20,6 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.GlobalLoopingAnimationFactory;
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class GraphicsPreloaderImplTests {
     @Mock private AssetFactory<FontDefinition, Font> mockFontFactory;
     @Mock private AssetFactory<SpriteDefinition, Sprite> mockSpriteFactory;
     @Mock private AssetFactory<AnimationDefinition, Animation> mockAnimationFactory;
-    @Mock private GlobalLoopingAnimationFactory mockGlobalLoopingAnimationFactory;
+    @Mock private Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> mockGlobalLoopingAnimationFactory;
     @Mock private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> mockImageAssetSetFactory;
     @Mock private MouseCursorImageFactory mockMouseCursorImageFactory;
     @Mock private AnimatedMouseCursorProviderFactory mockAnimatedMouseCursorProviderFactory;
@@ -250,7 +249,7 @@ public class GraphicsPreloaderImplTests {
                     return new FakeAnimation(definition.id(), definition.frameSnippetDefinitions());
                 });
 
-        lenient().when(mockGlobalLoopingAnimationFactory.make(any()))
+        lenient().when(mockGlobalLoopingAnimationFactory.apply(any()))
                 .thenAnswer(invocation -> {
                     updateAssetIndices(
                             () -> firstGlobalLoopingAnimationIndex,

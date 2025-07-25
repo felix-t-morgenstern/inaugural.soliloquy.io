@@ -81,8 +81,8 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         var colorIndices = rainbowGradient(LINE_TEXT);
 
         TextLineRenderable =
-                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(0f),
-                        staticNullProvider(Color.BLACK), colorIndices, listOf(), listOf(),
+                mockTextLineRenderable(staticProvider(0.05f), 0f, LINE_TEXT, staticNullProvider(),
+                        staticNullProvider(), colorIndices, listOf(), listOf(),
                         staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,

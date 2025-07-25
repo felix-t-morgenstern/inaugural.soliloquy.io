@@ -27,7 +27,7 @@ public class FakeWindowResolutionManager implements WindowResolutionManager {
     @Override
     public void setWindowDisplayMode(WindowDisplayMode windowDisplayMode)
             throws IllegalArgumentException {
-        windowDisplayMode = windowDisplayMode;
+        this.windowDisplayMode = windowDisplayMode;
     }
 
     @Override

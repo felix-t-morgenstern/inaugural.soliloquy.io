@@ -21,7 +21,6 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggr
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -92,8 +91,8 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,
-                        staticNullProvider(0f),
-                        staticNullProvider(Color.BLACK),
+                        staticNullProvider(),
+                        staticNullProvider(),
                         listOf(),
                         staticProvider(floatBoxOf(
                                 MIDPOINT - (ANIMATION_WIDTH / 2f),
