@@ -9,6 +9,8 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDef
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
@@ -30,7 +32,7 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
                         null, null
                 ));
 
-        MockFirstChildComponent.add(SpriteRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -88,7 +87,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        MockFirstChildComponent.add(TextLineRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

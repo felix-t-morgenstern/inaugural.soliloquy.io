@@ -2,9 +2,9 @@ package inaugural.soliloquy.io.test.display.rendering.renderers.spriterenderer;
 
 import inaugural.soliloquy.io.test.display.DisplayTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
+import static soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts.netShifts;
 
 /**
  * Test acceptance criteria:
@@ -20,14 +20,9 @@ import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
  */
 public class SpriteRendererColorComponentShiftTest extends SpriteRendererTest {
     public static void main(String[] args) {
-        FakeNetColorShifts netColorShifts = new FakeNetColorShifts();
-        // NB: This should be brought up to 0.5f
-        netColorShifts.BrightnessShift = -1.0f;
-        netColorShifts.RedIntensityShift = 1.0f;
-        netColorShifts.GreenIntensityShift = 0.5f;
-        netColorShifts.BlueIntensityShift = 0.25f;
-        FakeColorShiftStackAggregator colorShiftStackAggregator =
-                new FakeColorShiftStackAggregator(netColorShifts);
+        // NB: Brightness should be brought up to 0.5f
+        var netColorShifts = netShifts(-1.0f, 1.0f, 0.5f, 0.25f, 0);
+        var colorShiftStackAggregator = new FakeColorShiftStackAggregator(netColorShifts);
 
         runTest(
                 windowResolutionManager -> SpriteRendererTest

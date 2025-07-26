@@ -15,6 +15,7 @@ import java.util.List;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -35,8 +36,10 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                         generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
                     when(TextLineRenderableLeft.getFont()).thenReturn(new FontImpl(FontDefinition));
-                    when(TextLineRenderableCenter.getFont()).thenReturn(new FontImpl(FontDefinition));
-                    when(TextLineRenderableRight.getFont()).thenReturn(new FontImpl(FontDefinition));
+                    when(TextLineRenderableCenter.getFont()).thenReturn(
+                            new FontImpl(FontDefinition));
+                    when(TextLineRenderableRight.getFont()).thenReturn(
+                            new FontImpl(FontDefinition));
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
@@ -95,9 +98,8 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        MockFirstChildComponent.add(TextLineRenderableLeft);
-        MockFirstChildComponent.add(TextLineRenderableCenter);
-        MockFirstChildComponent.add(TextLineRenderableRight);
+        when(MockFirstChildComponent.content()).thenReturn(
+                setOf(TextLineRenderableLeft, TextLineRenderableCenter, TextLineRenderableRight));
         Renderers.put(TextLineRenderableLeft.getClass(), TextLineRenderer);
         Renderers.put(TextLineRenderableCenter.getClass(), TextLineRenderer);
         Renderers.put(TextLineRenderableRight.getClass(), TextLineRenderer);

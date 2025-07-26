@@ -8,8 +8,8 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDef
 
 import java.awt.*;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProviderTest {
@@ -30,7 +30,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
                         borderColorProviderValues, hueMovementIsClockwise, null, null);
         SpriteRenderable.setBorderColorProvider(finiteLinearMovingColorProvider);
 
-        MockFirstChildComponent.add(SpriteRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

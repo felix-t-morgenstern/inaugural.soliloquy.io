@@ -11,6 +11,8 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
@@ -48,15 +50,10 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
                 1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE);
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
 
-        Renderers.put(RasterizedLineSegmentRenderableImpl.class,
-                RasterizedLineSegmentRenderer);
-        MockFirstChildComponent.add(RasterizedLineSegmentRenderable);
+        Renderers.put(RasterizedLineSegmentRenderableImpl.class, RasterizedLineSegmentRenderer);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(RasterizedLineSegmentRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(RasterizedLineSegmentRenderer);
-    }
-
-    private static void stackRendererAction(long timestamp) {
-        RasterizedLineSegmentRenderer.render(RasterizedLineSegmentRenderable, timestamp);
     }
 }

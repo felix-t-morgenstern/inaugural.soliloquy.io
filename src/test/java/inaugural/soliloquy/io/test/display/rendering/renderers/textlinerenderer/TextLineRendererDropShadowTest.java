@@ -14,6 +14,7 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -81,7 +82,7 @@ class TextLineRendererDropShadowTest extends TextLineRendererTest {
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
 
-        MockFirstChildComponent.add(TextLineRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

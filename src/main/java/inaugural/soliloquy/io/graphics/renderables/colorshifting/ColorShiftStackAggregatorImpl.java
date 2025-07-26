@@ -5,6 +5,8 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.*;
 
 import java.util.List;
 
+import static soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts.netShifts;
+
 public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator {
     @Override
     public NetColorShifts aggregate(List<ColorShift> colorShifts, long timestamp)
@@ -78,32 +80,8 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
         var finalBlueShift = netBlueShift;
         var finalColorRotationShift = netColorRotationShift;
 
-        return new NetColorShifts() {
-            @Override
-            public float brightnessShift() {
-                return finalBrightnessShift;
-            }
-
-            @Override
-            public float redIntensityShift() {
-                return finalRedShift;
-            }
-
-            @Override
-            public float greenIntensityShift() {
-                return finalGreenShift;
-            }
-
-            @Override
-            public float blueIntensityShift() {
-                return finalBlueShift;
-            }
-
-            @Override
-            public float colorRotationShift() {
-                return finalColorRotationShift;
-            }
-        };
+        return netShifts(finalBrightnessShift, finalRedShift, finalGreenShift, finalBlueShift,
+                finalColorRotationShift);
     }
 
     private float verifyProvidedValue(Float value) {

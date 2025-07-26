@@ -10,7 +10,9 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 /**
@@ -37,7 +39,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
     /** @noinspection rawtypes */
     private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        var antialiasedLineSegmentRenderer = new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
+        var antialiasedLineSegmentRenderer =
+                new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
 
         var antialiasedLineSegmentRenderable1 =
                 new AntialiasedLineSegmentRenderableImpl(
@@ -67,8 +70,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         DUMMY_REMOVE
                 );
 
-        MockFirstChildComponent.add(antialiasedLineSegmentRenderable1);
-        MockFirstChildComponent.add(antialiasedLineSegmentRenderable2);
+        when(MockFirstChildComponent.content()).thenReturn(
+                setOf(antialiasedLineSegmentRenderable1, antialiasedLineSegmentRenderable2));
         Renderers.put(AntialiasedLineSegmentRenderableImpl.class,
                 antialiasedLineSegmentRenderer);
 

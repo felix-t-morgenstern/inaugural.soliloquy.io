@@ -10,6 +10,8 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.when;
 
 class TriangleRendererTest extends DisplayTest {
     protected static TriangleRenderable TriangleRenderable;
@@ -25,7 +27,7 @@ class TriangleRendererTest extends DisplayTest {
 
         Renderers.put(TriangleRenderableImpl.class,
                 TriangleRenderer);
-        MockFirstChildComponent.add(TriangleRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(TriangleRenderer);

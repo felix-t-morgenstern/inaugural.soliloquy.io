@@ -114,6 +114,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
         updateWindow();
 
+
+
         GL.createCapabilities();
 
         glClearColor(0, 0, 0, 0);
@@ -180,6 +182,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private void updateWindow() {
         var prevWindow = window;
         window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(window, TITLEBAR);
+        glfwMakeContextCurrent(window);
         if (window == 0) {
             throw new IllegalStateException("Failed to create window");
         }

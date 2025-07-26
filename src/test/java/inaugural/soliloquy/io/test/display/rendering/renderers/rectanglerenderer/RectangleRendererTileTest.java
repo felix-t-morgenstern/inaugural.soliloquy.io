@@ -4,9 +4,9 @@ import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.io.test.display.DisplayTest;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -14,6 +14,10 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
@@ -26,30 +30,29 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
  * 3. The window will then close
  */
 class RectangleRendererTileTest extends RectangleRendererTest {
-    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(null);
-    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final static ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = staticProvider(null);
+    private final static ProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER = staticProvider(null);
+    private final static ProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER = staticProvider(null);
+    private final static ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER = staticProvider(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.16667f;
-    private final static FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
+    private final static ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
+            staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
     private final static String TILE_LOCATION =
             "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
+
+    @SuppressWarnings("unchecked")
+    private static final ProviderAtTime<Integer> MOCK_BACKGROUND_TEXTURE_ID_PROVIDER =
+            mock(ProviderAtTime.class);
 
     public static void main(String[] args) {
         runTest(
                 RectangleRendererTileTest::generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
-                    BACKGROUND_TEXTURE_ID_PROVIDER.ProvidedValue =
-                            new ImageFactoryImpl(0.5f)
-                                    .make(new ImageDefinition(TILE_LOCATION, false)).textureId();
+                    var image = new ImageFactoryImpl(0.5f)
+                            .make(new ImageDefinition(TILE_LOCATION, false));
+                    when(MOCK_BACKGROUND_TEXTURE_ID_PROVIDER.provide(anyLong()))
+                            .thenReturn(image.textureId());
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
                 DisplayTest::closeAfterSomeTime
@@ -62,13 +65,13 @@ class RectangleRendererTileTest extends RectangleRendererTest {
         RectangleRenderer = new RectangleRenderer(null);
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
+                MOCK_BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
                 DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
-        MockFirstChildComponent.add(RectangleRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(RectangleRenderable));
 
         return listOf(RectangleRenderer);
     }

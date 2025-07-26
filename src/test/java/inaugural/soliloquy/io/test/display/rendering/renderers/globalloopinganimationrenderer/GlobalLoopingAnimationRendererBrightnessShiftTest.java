@@ -1,7 +1,8 @@
 package inaugural.soliloquy.io.test.display.rendering.renderers.globalloopinganimationrenderer;
 
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
+
+import static soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts.netShifts;
 
 /**
  * Test acceptance criteria:
@@ -16,16 +17,15 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
 public class GlobalLoopingAnimationRendererBrightnessShiftTest
         extends GlobalLoopingAnimationRendererTest {
     public static void main(String[] args) {
-        var netColorShifts = new FakeNetColorShifts();
         // NB: This should be brought up to 0.6666667f
-        netColorShifts.BrightnessShift = 0.5f;
+        var netColorShifts = netShifts(0.5f, 0, 0, 0, 0);
         var colorShiftStackAggregator = new FakeColorShiftStackAggregator(netColorShifts);
 
         runTest(
                 windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
-                                windowResolutionManager,
-                                colorShiftStackAggregator
-                        ),
+                        windowResolutionManager,
+                        colorShiftStackAggregator
+                ),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TEST_DURATION_MS)
         );

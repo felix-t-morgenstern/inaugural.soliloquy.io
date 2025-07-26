@@ -12,6 +12,8 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
@@ -60,7 +62,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
                 DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
-        MockFirstChildComponent.add(RectangleRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(RectangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(RectangleRenderer);

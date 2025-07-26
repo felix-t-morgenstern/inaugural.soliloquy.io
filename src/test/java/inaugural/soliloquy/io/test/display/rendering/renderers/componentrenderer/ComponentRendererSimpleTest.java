@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.test.display.rendering.renderers.stackrenderer;
+package inaugural.soliloquy.io.test.display.rendering.renderers.componentrenderer;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;

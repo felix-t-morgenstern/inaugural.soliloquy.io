@@ -1,10 +1,11 @@
-package inaugural.soliloquy.io.test.display.rendering.renderers.stackrenderer;
+package inaugural.soliloquy.io.test.display.rendering.renderers.componentrenderer;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 /**
@@ -34,27 +35,28 @@ class ComponentRendererRenderingBoundariesTest extends ComponentRendererTest {
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
         CheckedExceptionWrapper.sleep(1000);
 
-        MockFirstChildComponent.setRenderingBoundariesProvider(
-                staticProvider(floatBoxOf(0.0f, 0.0f, 0.625f, 0.625f)));
+        when(MockFirstChildComponent.getRenderingBoundariesProvider())
+                .thenReturn(staticProvider(floatBoxOf(0.0f, 0.0f, 0.625f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        MockFirstChildComponent.setRenderingBoundariesProvider(
-                staticProvider(floatBoxOf(0.375f, 0.0f, 1.0f, 0.625f)));
+        when(MockFirstChildComponent.getRenderingBoundariesProvider())
+                .thenReturn(staticProvider(floatBoxOf(0.375f, 0.0f, 1.0f, 0.625f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        MockFirstChildComponent.setRenderingBoundariesProvider(
-                staticProvider(floatBoxOf(0.375f, 0.375f, 1.0f, 1.0f)));
+        when(MockFirstChildComponent.getRenderingBoundariesProvider())
+                .thenReturn(staticProvider(floatBoxOf(0.375f, 0.375f, 1.0f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        MockFirstChildComponent.setRenderingBoundariesProvider(
-                staticProvider(floatBoxOf(0.0f, 0.375f, 0.625f, 1.0f)));
+        when(MockFirstChildComponent.getRenderingBoundariesProvider())
+                .thenReturn(staticProvider(floatBoxOf(0.0f, 0.375f, 0.625f, 1.0f)));
 
         CheckedExceptionWrapper.sleep(1000);
 
-        MockFirstChildComponent.setRenderingBoundariesProvider(staticProvider(WHOLE_SCREEN));
+        when(MockFirstChildComponent.getRenderingBoundariesProvider())
+                .thenReturn(staticProvider(WHOLE_SCREEN));
 
         CheckedExceptionWrapper.sleep(1000);
 

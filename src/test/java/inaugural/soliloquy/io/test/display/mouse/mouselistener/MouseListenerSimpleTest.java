@@ -43,7 +43,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON,
                 messageAction("LEFT MOUSE BUTTON RELEASE"));
 
-        MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.putRenderable(SpriteRenderable,
+        MouseEventCapturingSpatialIndex.putRenderable(SpriteRenderable,
                 SpriteRenderingDimensions);
     }
 

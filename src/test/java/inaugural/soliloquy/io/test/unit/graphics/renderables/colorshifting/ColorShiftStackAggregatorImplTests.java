@@ -71,39 +71,39 @@ public class ColorShiftStackAggregatorImplTests {
                 colorShiftStackAggregator.aggregate(listOf(colorRotationShift), 0L);
 
         assertNotNull(brightnessShiftNetColorShifts);
-        assertEquals(0.123f, brightnessShiftNetColorShifts.brightnessShift());
-        assertEquals(0f, brightnessShiftNetColorShifts.redIntensityShift());
-        assertEquals(0f, brightnessShiftNetColorShifts.greenIntensityShift());
-        assertEquals(0f, brightnessShiftNetColorShifts.blueIntensityShift());
-        assertEquals(0f, brightnessShiftNetColorShifts.colorRotationShift());
+        assertEquals(0.123f, brightnessShiftNetColorShifts.BRIGHTNESS_SHIFT);
+        assertEquals(0f, brightnessShiftNetColorShifts.RED_INTENSITY_SHIFT);
+        assertEquals(0f, brightnessShiftNetColorShifts.GREEN_INTENSITY_SHIFT);
+        assertEquals(0f, brightnessShiftNetColorShifts.BLUE_INTENSITY_SHIFT);
+        assertEquals(0f, brightnessShiftNetColorShifts.COLOR_ROTATION_SHIFT);
 
         assertNotNull(redIntensityShift);
-        assertEquals(0f, redIntensityShift.brightnessShift());
-        assertEquals(0.444f, redIntensityShift.redIntensityShift());
-        assertEquals(0f, redIntensityShift.greenIntensityShift());
-        assertEquals(0f, redIntensityShift.blueIntensityShift());
-        assertEquals(0f, redIntensityShift.colorRotationShift());
+        assertEquals(0f, redIntensityShift.BRIGHTNESS_SHIFT);
+        assertEquals(0.444f, redIntensityShift.RED_INTENSITY_SHIFT);
+        assertEquals(0f, redIntensityShift.GREEN_INTENSITY_SHIFT);
+        assertEquals(0f, redIntensityShift.BLUE_INTENSITY_SHIFT);
+        assertEquals(0f, redIntensityShift.COLOR_ROTATION_SHIFT);
 
         assertNotNull(greenIntensityShift);
-        assertEquals(0f, greenIntensityShift.brightnessShift());
-        assertEquals(0f, greenIntensityShift.redIntensityShift());
-        assertEquals(0.555f, greenIntensityShift.greenIntensityShift());
-        assertEquals(0f, greenIntensityShift.blueIntensityShift());
-        assertEquals(0f, greenIntensityShift.colorRotationShift());
+        assertEquals(0f, greenIntensityShift.BRIGHTNESS_SHIFT);
+        assertEquals(0f, greenIntensityShift.RED_INTENSITY_SHIFT);
+        assertEquals(0.555f, greenIntensityShift.GREEN_INTENSITY_SHIFT);
+        assertEquals(0f, greenIntensityShift.BLUE_INTENSITY_SHIFT);
+        assertEquals(0f, greenIntensityShift.COLOR_ROTATION_SHIFT);
 
         assertNotNull(blueIntensityShift);
-        assertEquals(0f, blueIntensityShift.brightnessShift());
-        assertEquals(0f, blueIntensityShift.redIntensityShift());
-        assertEquals(0f, blueIntensityShift.greenIntensityShift());
-        assertEquals(0.666f, blueIntensityShift.blueIntensityShift());
-        assertEquals(0f, blueIntensityShift.colorRotationShift());
+        assertEquals(0f, blueIntensityShift.BRIGHTNESS_SHIFT);
+        assertEquals(0f, blueIntensityShift.RED_INTENSITY_SHIFT);
+        assertEquals(0f, blueIntensityShift.GREEN_INTENSITY_SHIFT);
+        assertEquals(0.666f, blueIntensityShift.BLUE_INTENSITY_SHIFT);
+        assertEquals(0f, blueIntensityShift.COLOR_ROTATION_SHIFT);
 
         assertNotNull(colorRotationShiftNetColorShifts);
-        assertEquals(0f, colorRotationShiftNetColorShifts.brightnessShift());
-        assertEquals(0f, colorRotationShiftNetColorShifts.redIntensityShift());
-        assertEquals(0f, colorRotationShiftNetColorShifts.greenIntensityShift());
-        assertEquals(0f, colorRotationShiftNetColorShifts.blueIntensityShift());
-        assertEquals(0.789f, colorRotationShiftNetColorShifts.colorRotationShift());
+        assertEquals(0f, colorRotationShiftNetColorShifts.BRIGHTNESS_SHIFT);
+        assertEquals(0f, colorRotationShiftNetColorShifts.RED_INTENSITY_SHIFT);
+        assertEquals(0f, colorRotationShiftNetColorShifts.GREEN_INTENSITY_SHIFT);
+        assertEquals(0f, colorRotationShiftNetColorShifts.BLUE_INTENSITY_SHIFT);
+        assertEquals(0.789f, colorRotationShiftNetColorShifts.COLOR_ROTATION_SHIFT);
     }
 
     @Test
@@ -135,11 +135,11 @@ public class ColorShiftStackAggregatorImplTests {
         Function<Float, Float> getExpectedValue = value -> value - ((1f + value) * value);
 
         assertNotNull(netColorShifts);
-        assertEquals((float) getExpectedValue.apply(0.123f), netColorShifts.brightnessShift());
-        assertEquals(-(float) getExpectedValue.apply(0.444f), netColorShifts.redIntensityShift());
-        assertEquals((float) getExpectedValue.apply(0.555f), netColorShifts.greenIntensityShift());
-        assertEquals(-(float) getExpectedValue.apply(0.666f), netColorShifts.blueIntensityShift());
-        assertEquals((float) getExpectedValue.apply(0.789f), netColorShifts.colorRotationShift());
+        assertEquals((float) getExpectedValue.apply(0.123f), netColorShifts.BRIGHTNESS_SHIFT);
+        assertEquals(-(float) getExpectedValue.apply(0.444f), netColorShifts.RED_INTENSITY_SHIFT);
+        assertEquals((float) getExpectedValue.apply(0.555f), netColorShifts.GREEN_INTENSITY_SHIFT);
+        assertEquals(-(float) getExpectedValue.apply(0.666f), netColorShifts.BLUE_INTENSITY_SHIFT);
+        assertEquals((float) getExpectedValue.apply(0.789f), netColorShifts.COLOR_ROTATION_SHIFT);
     }
 
     @Test
@@ -169,10 +169,10 @@ public class ColorShiftStackAggregatorImplTests {
                 ), 0L);
 
         assertNotNull(netColorShifts);
-        assertEquals(0.123f, netColorShifts.brightnessShift());
-        assertEquals(-0.444f, netColorShifts.redIntensityShift());
-        assertEquals(0.555f, netColorShifts.greenIntensityShift());
-        assertEquals(-0.666f, netColorShifts.blueIntensityShift());
-        assertEquals(0.789f, netColorShifts.colorRotationShift());
+        assertEquals(0.123f, netColorShifts.BRIGHTNESS_SHIFT);
+        assertEquals(-0.444f, netColorShifts.RED_INTENSITY_SHIFT);
+        assertEquals(0.555f, netColorShifts.GREEN_INTENSITY_SHIFT);
+        assertEquals(-0.666f, netColorShifts.BLUE_INTENSITY_SHIFT);
+        assertEquals(0.789f, netColorShifts.COLOR_ROTATION_SHIFT);
     }
 }

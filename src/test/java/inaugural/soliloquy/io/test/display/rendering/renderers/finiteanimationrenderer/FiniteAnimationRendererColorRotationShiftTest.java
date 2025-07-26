@@ -1,7 +1,8 @@
 package inaugural.soliloquy.io.test.display.rendering.renderers.finiteanimationrenderer;
 
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
+
+import static soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts.netShifts;
 
 /**
  * Test acceptance criteria:
@@ -12,9 +13,8 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
  */
 public class FiniteAnimationRendererColorRotationShiftTest extends FiniteAnimationRendererTest {
     public static void main(String[] args) {
-        var netColorShifts = new FakeNetColorShifts();
         // NB: This should be brought up to 0.3333f
-        netColorShifts.ColorRotationShift = 30.3333f;
+        var netColorShifts = netShifts(0, 0, 0, 0, 30.3333f);
         var colorShiftStackAggregator = new FakeColorShiftStackAggregator(netColorShifts);
 
         runTest(

@@ -7,6 +7,8 @@ import inaugural.soliloquy.io.test.display.renderables.providers.finite.linear.F
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
@@ -29,7 +31,7 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
                         renderingDimensionsAtTimes, null, null);
         SpriteRenderable.setRenderingDimensionsProvider(finiteLinearMovingFloatBoxProvider);
 
-        MockFirstChildComponent.add(SpriteRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

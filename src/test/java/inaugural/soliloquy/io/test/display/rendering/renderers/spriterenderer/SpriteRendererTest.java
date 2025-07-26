@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.io.test.display.DisplayTest;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
@@ -17,6 +16,9 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class SpriteRendererTest extends DisplayTest {
@@ -39,17 +41,18 @@ public class SpriteRendererTest extends DisplayTest {
 
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 0,
-                java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockTopLevelComponent, DUMMY_REMOVE,
+                RENDERING_BOUNDARIES);
 
-        MockFirstChildComponent.add(SpriteRenderable);
+        lenient().when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
                 windowResolutionManager,
                 colorShiftStackAggregator == null ?
-                        new FakeColorShiftStackAggregator() :
+                        mock(ColorShiftStackAggregator.class) :
                         colorShiftStackAggregator,
                 null);
-        
+
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         return listOf(SpriteRenderer);

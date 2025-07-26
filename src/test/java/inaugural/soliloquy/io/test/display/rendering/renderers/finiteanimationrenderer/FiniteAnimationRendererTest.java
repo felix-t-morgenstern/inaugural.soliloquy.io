@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 class FiniteAnimationRendererTest extends DisplayTest {
@@ -98,7 +98,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 null
         );
 
-        MockFirstChildComponent.add(FiniteAnimationRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(FiniteAnimationRenderable));
         Renderers.put(FiniteAnimationRenderableImpl.class,
                 FiniteAnimationRenderer);
 

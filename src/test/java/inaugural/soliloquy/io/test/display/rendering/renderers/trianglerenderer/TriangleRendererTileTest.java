@@ -14,6 +14,7 @@ import java.awt.*;
 import java.util.List;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -80,7 +81,7 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                         RENDERING_BOUNDARIES);
 
         Renderers.put(TriangleRenderableImpl.class, TriangleRenderer);
-        MockFirstChildComponent.add(TriangleRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(TriangleRenderer);

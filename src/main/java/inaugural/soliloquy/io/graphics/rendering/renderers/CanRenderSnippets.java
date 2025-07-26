@@ -164,18 +164,18 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         var blueIntensityShift = 0f;
 
         if (netColorShifts != null) {
-            colorRotationShift = netColorShifts.colorRotationShift();
+            colorRotationShift = netColorShifts.COLOR_ROTATION_SHIFT;
 
             colorRotationShift %= 1.0f;
             if (colorRotationShift < 0) {
                 colorRotationShift += 1.0f;
             }
 
-            brightnessShift = netColorShifts.brightnessShift();
+            brightnessShift = netColorShifts.BRIGHTNESS_SHIFT;
 
-            redIntensityShift = netColorShifts.redIntensityShift();
-            greenIntensityShift = netColorShifts.greenIntensityShift();
-            blueIntensityShift = netColorShifts.blueIntensityShift();
+            redIntensityShift = netColorShifts.RED_INTENSITY_SHIFT;
+            greenIntensityShift = netColorShifts.GREEN_INTENSITY_SHIFT;
+            blueIntensityShift = netColorShifts.BLUE_INTENSITY_SHIFT;
         }
 
         glBindTexture(GL_TEXTURE_2D, textureId);

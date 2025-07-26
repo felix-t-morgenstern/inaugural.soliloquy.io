@@ -1,12 +1,11 @@
 package inaugural.soliloquy.io.test.display.rendering.renderers.finiteanimationrenderer;
 
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeNetColorShifts;
+import soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts;
 
 public class FiniteAnimationRendererBrightnessShiftTest extends FiniteAnimationRendererTest {
     public static void main(String[] args) {
-        var netColorShifts = new FakeNetColorShifts();
-        netColorShifts.BrightnessShift = 0.5f;
+        var netColorShifts = NetColorShifts.netShifts(0.5f, 0, 0, 0, 0);
         var colorShiftStackAggregator = new FakeColorShiftStackAggregator(netColorShifts);
 
         runTest(

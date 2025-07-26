@@ -8,8 +8,8 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDef
 
 import java.awt.*;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingProviderTest {
@@ -36,7 +36,7 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
                         null
                 ));
 
-        MockFirstChildComponent.add(SpriteRenderable);
+        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

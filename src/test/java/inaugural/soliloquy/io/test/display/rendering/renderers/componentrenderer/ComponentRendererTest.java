@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.test.display.rendering.renderers.stackrenderer;
+package inaugural.soliloquy.io.test.display.rendering.renderers.componentrenderer;
 
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN_PROVIDER;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
@@ -44,17 +44,22 @@ public class ComponentRendererTest extends DisplayTest {
     public static void runTest(Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
         var resolution = WindowResolution.RES_1920x1080;
 
-        var windowResolutionManager = new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED, resolution);
+        var windowResolutionManager =
+                new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED, resolution);
 
         var frameTimer = mock(FrameTimer.class);
         Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
 
         MockTopLevelComponent = mock(Component.class);
-        when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(WHOLE_SCREEN_PROVIDER);
+        when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
+                WHOLE_SCREEN_PROVIDER);
         MockFirstChildComponent = mock(Component.class);
         when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
-        when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(WHOLE_SCREEN_PROVIDER);
+        when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
+                WHOLE_SCREEN_PROVIDER);
+        when(MockTopLevelComponent.content()).thenReturn(setOf(MockFirstChildComponent));
 
+        Renderers = mapOf();
         var stackRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, null);
 
         var spriteAxe07Width = 512;
@@ -84,7 +89,8 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
                         spriteAxe07TopY + axeScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                RENDERING_BOUNDARIES);
 
         var spriteAxe09ScreenWidth = (spriteAxe09Width / (float) spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
@@ -100,7 +106,8 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
                         spriteAxe09TopY + axeScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                RENDERING_BOUNDARIES);
 
         var spriteSword06ScreenWidth = 0.3710f;
         var spriteSword06TopY = 0f;
@@ -115,11 +122,13 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteSword06LeftX + spriteSword06ScreenWidth,
                         spriteSword06TopY + swordScreenHeight
                 ), null),
-                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                RENDERING_BOUNDARIES);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
-        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, windowResolutionManager, new FakeColorShiftStackAggregator(),
+        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, windowResolutionManager,
+                new FakeColorShiftStackAggregator(),
                 null);
         //noinspection rawtypes
         List<Renderer> renderersWithMesh = listOf(spriteRenderer);
@@ -127,9 +136,8 @@ public class ComponentRendererTest extends DisplayTest {
         List<Renderer> renderersWithShader = listOf(spriteRenderer);
 
         Renderers.put(SpriteRenderableImpl.class, spriteRenderer);
-        MockFirstChildComponent.add(spriteRenderable1);
-        MockFirstChildComponent.add(spriteRenderable2);
-        MockFirstChildComponent.add(spriteRenderable3);
+        when(MockFirstChildComponent.content()).thenReturn(
+                setOf(spriteRenderable1, spriteRenderable2, spriteRenderable3));
 
         var frameExecutor = new FrameExecutorImpl(MockTopLevelComponent, stackRenderer, 100);
 
