@@ -57,7 +57,7 @@ public class ComponentRendererTest extends DisplayTest {
         when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
-        when(MockTopLevelComponent.content()).thenReturn(setOf(MockFirstChildComponent));
+        when(MockTopLevelComponent.contents()).thenReturn(setOf(MockFirstChildComponent));
 
         Renderers = mapOf();
         var stackRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, null);
@@ -136,7 +136,7 @@ public class ComponentRendererTest extends DisplayTest {
         List<Renderer> renderersWithShader = listOf(spriteRenderer);
 
         Renderers.put(SpriteRenderableImpl.class, spriteRenderer);
-        when(MockFirstChildComponent.content()).thenReturn(
+        when(MockFirstChildComponent.contents()).thenReturn(
                 setOf(spriteRenderable1, spriteRenderable2, spriteRenderable3));
 
         var frameExecutor = new FrameExecutorImpl(MockTopLevelComponent, stackRenderer, 100);

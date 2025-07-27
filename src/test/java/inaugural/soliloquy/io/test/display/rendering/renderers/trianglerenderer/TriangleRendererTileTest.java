@@ -81,7 +81,7 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                         RENDERING_BOUNDARIES);
 
         Renderers.put(TriangleRenderableImpl.class, TriangleRenderer);
-        when(MockFirstChildComponent.content()).thenReturn(setOf(TriangleRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return listOf(TriangleRenderer);

@@ -98,7 +98,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 null
         );
 
-        when(MockFirstChildComponent.content()).thenReturn(setOf(FiniteAnimationRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(FiniteAnimationRenderable));
         Renderers.put(FiniteAnimationRenderableImpl.class,
                 FiniteAnimationRenderer);
 

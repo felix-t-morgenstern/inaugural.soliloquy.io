@@ -73,7 +73,7 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
                 DUMMY_REMOVE, RENDERING_BOUNDARIES);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
-        when(MockFirstChildComponent.content()).thenReturn(setOf(RectangleRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));
 
         return listOf(RectangleRenderer);
     }

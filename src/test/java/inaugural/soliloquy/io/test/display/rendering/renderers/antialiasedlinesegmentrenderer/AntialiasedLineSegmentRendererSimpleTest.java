@@ -70,7 +70,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         DUMMY_REMOVE
                 );
 
-        when(MockFirstChildComponent.content()).thenReturn(
+        when(MockFirstChildComponent.contents()).thenReturn(
                 setOf(antialiasedLineSegmentRenderable1, antialiasedLineSegmentRenderable2));
         Renderers.put(AntialiasedLineSegmentRenderableImpl.class,
                 antialiasedLineSegmentRenderer);

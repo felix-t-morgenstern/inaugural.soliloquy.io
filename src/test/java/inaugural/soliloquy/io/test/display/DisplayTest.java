@@ -100,7 +100,7 @@ public class DisplayTest {
         when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
-        when(MockTopLevelComponent.content()).thenReturn(setOf(MockFirstChildComponent));
+        when(MockTopLevelComponent.contents()).thenReturn(setOf(MockFirstChildComponent));
 
         var frameExecutor = new FrameExecutorImpl(MockTopLevelComponent, componentRenderer, 100);
 

@@ -30,7 +30,7 @@ class FiniteLinearMovingColorProviderImplTest extends FiniteLinearMovingProvider
                         borderColorProviderValues, hueMovementIsClockwise, null, null);
         SpriteRenderable.setBorderColorProvider(finiteLinearMovingColorProvider);
 
-        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

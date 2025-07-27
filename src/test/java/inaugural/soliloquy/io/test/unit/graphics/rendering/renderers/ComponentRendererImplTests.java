@@ -70,7 +70,7 @@ public class ComponentRendererImplTests {
         when(mockRenderable1.getZ()).thenReturn(1);
         when(mockRenderable2.getZ()).thenReturn(2);
         when(mockRenderable3.getZ()).thenReturn(3);
-        when(mockComponent.content())
+        when(mockComponent.contents())
                 .thenReturn(setOf(mockRenderable1, mockRenderable2, mockRenderable3));
 
         renderer.render(mockComponent, MOST_RECENT_TIMESTAMP);
@@ -81,7 +81,7 @@ public class ComponentRendererImplTests {
         inOrder.verify(mockComponent, once()).getRenderingBoundariesProvider();
         inOrder.verify(mockBoundariesProvider, once()).provide(MOST_RECENT_TIMESTAMP);
         inOrder.verify(mockRenderingBoundaries, once()).pushNewBoundaries(boundaries);
-        inOrder.verify(mockComponent, once()).content();
+        inOrder.verify(mockComponent, once()).contents();
         inOrder.verify(mockRenderers, once()).get(mockRenderable3.getClass());
         inOrder.verify(mockRenderer, once()).render(mockRenderable3, MOST_RECENT_TIMESTAMP);
         inOrder.verify(mockRenderers, once()).get(mockRenderable2.getClass());

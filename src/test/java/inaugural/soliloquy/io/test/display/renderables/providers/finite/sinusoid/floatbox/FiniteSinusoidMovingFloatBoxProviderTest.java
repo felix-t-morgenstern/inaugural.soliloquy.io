@@ -41,7 +41,7 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
                         null
                 ));
 
-        when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

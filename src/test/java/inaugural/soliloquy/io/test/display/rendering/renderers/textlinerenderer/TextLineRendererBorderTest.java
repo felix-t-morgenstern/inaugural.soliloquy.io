@@ -85,7 +85,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES,
                 INTACT_COLOR, windowResolutionManager, null);
 
-        when(MockFirstChildComponent.content()).thenReturn(setOf(TextLineRenderable));
+        when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return listOf(TextLineRenderer);

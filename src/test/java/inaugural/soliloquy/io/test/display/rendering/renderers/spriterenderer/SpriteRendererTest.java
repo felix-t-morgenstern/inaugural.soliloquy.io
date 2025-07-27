@@ -44,7 +44,7 @@ public class SpriteRendererTest extends DisplayTest {
                 java.util.UUID.randomUUID(), MockTopLevelComponent, DUMMY_REMOVE,
                 RENDERING_BOUNDARIES);
 
-        lenient().when(MockFirstChildComponent.content()).thenReturn(setOf(SpriteRenderable));
+        lenient().when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
                 windowResolutionManager,
