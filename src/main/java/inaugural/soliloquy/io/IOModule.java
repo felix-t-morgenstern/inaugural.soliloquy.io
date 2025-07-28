@@ -27,12 +27,14 @@ import inaugural.soliloquy.io.mouse.MouseCursorImpl;
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
+import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.int4.dirk.api.Injector;
 import org.int4.dirk.di.Injectors;
 import soliloquy.specs.common.persistence.PersistenceHandler;
+import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.game.Module;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
@@ -47,13 +49,11 @@ import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvid
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporterAggregateOutput;
-import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Settings.*;
@@ -217,6 +217,11 @@ public class IOModule implements Module {
                 TriangleRenderableImpl.class,
                 new TriangleRenderer(timestampValidator)
         );
+
+        @SuppressWarnings("rawtypes") var providerSubhandlers =
+                Collections.<String, TypeHandler<ProviderAtTime>>mapOf();
+
+        var providerHandler = new ProviderHandler(providerSubhandlers);
 
         var graphicsLoop = new GraphicsCoreLoopImpl(
                 initialTitlebar,

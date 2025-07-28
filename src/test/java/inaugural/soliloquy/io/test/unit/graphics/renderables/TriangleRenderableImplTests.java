@@ -182,15 +182,6 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, null, mockRenderingBoundaries
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
-                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, null
         ));
     }
@@ -594,5 +585,17 @@ public class TriangleRenderableImplTests {
     @Test
     public void testUuid() {
         assertSame(UUID, renderable.uuid());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((TriangleRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 }

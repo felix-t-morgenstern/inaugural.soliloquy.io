@@ -140,12 +140,6 @@ public class FiniteAnimationRenderableFactoryImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null, START_TIMESTAMP, PAUSED_TIMESTAMP,
-                        MOST_RECENT_TIMESTAMP
-                ));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, START_TIMESTAMP,
                         PAUSED_TIMESTAMP, null
                 ));
@@ -205,12 +199,6 @@ public class FiniteAnimationRenderableFactoryImplTests {
                         ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
                         null, mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP,
                         MOST_RECENT_TIMESTAMP
-                ));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
-                        ON_MOUSE_OVER, ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
-                        UUID, null, START_TIMESTAMP, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,

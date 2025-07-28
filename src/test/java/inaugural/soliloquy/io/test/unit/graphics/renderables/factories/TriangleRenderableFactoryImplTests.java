@@ -137,11 +137,5 @@ public class TriangleRenderableFactoryImplTests {
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, null, null, null, Z, null,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderableFactory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID, null));
     }
 }

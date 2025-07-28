@@ -119,12 +119,6 @@ public class SpriteRenderableImplTests {
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null,
-                        mockRenderingBoundaries));
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
                         null));
 
@@ -155,11 +149,6 @@ public class SpriteRenderableImplTests {
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
-                        mockRenderingBoundaries));
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null,
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
@@ -636,5 +625,17 @@ public class SpriteRenderableImplTests {
     public void testUuid() {
         assertSame(UUID, renderableWithMouseEvents.uuid());
         assertSame(UUID, renderableWithoutMouseEvents.uuid());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderableWithMouseEvents.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((SpriteRenderableImpl) renderableWithMouseEvents).setComponent(null);
+
+        assertNull(renderableWithMouseEvents.component());
     }
 }

@@ -139,11 +139,6 @@ public class ImageAssetSetRenderableFactoryImplTests {
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
                         ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, null,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null, ON_MOUSE_OVER,
-                        ON_MOUSE_LEAVE, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
-                        null));
 
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(null, DISPLAY_PARAMS, COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER,
@@ -173,9 +168,5 @@ public class ImageAssetSetRenderableFactoryImplTests {
                 () -> factory.make(imageAssetSetNotSupportsMouseEvents, DISPLAY_PARAMS,
                         COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
                         RENDERING_DIMENSIONS_PROVIDER, Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(imageAssetSetNotSupportsMouseEvents, DISPLAY_PARAMS,
-                        COLOR_SHIFTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, null));
     }
 }

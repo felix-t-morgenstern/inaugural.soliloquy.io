@@ -8,20 +8,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.CircleRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
-import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class CircleRenderableImplTests {
@@ -59,9 +54,6 @@ public class CircleRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
                         mockColorProvider, Z, null, mockComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, UUID, null));
     }
 
     @Test
@@ -144,6 +136,13 @@ public class CircleRenderableImplTests {
     @Test
     public void testComponent() {
         assertSame(mockComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((CircleRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 
     @Test

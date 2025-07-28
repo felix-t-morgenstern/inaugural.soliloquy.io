@@ -4,10 +4,11 @@ import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingPro
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class FiniteSinusoidMovingFloatProvider extends AbstractFiniteSinusoidMovingProvider<Float>
         implements FiniteSinusoidMovingProvider<Float> {
-    public FiniteSinusoidMovingFloatProvider(java.util.UUID uuid,
+    public FiniteSinusoidMovingFloatProvider(UUID uuid,
                                              Map<Long, Float> valuesAtTimes,
                                              List<Float> transitionSharpnesses,
                                              Long pausedTimestamp,

@@ -16,9 +16,10 @@ import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.ui.Component;
 import soliloquy.specs.ui.EventInputs;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -92,7 +93,7 @@ public class ImageAssetSetRenderableImplTests {
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
     @Mock private ProviderAtTime<Color> mockBorderColorProvider;
     @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
-    @Mock private soliloquy.specs.ui.Component mockContainingComponent;
+    @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Action<EventInputs> mockOnMousePressAction;
     @Mock private Action<EventInputs> mockOnMouseOverAction;
@@ -207,11 +208,6 @@ public class ImageAssetSetRenderableImplTests {
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
-                        mockRenderingAreaProvider, Z, UUID, null, mockRenderingBoundaries));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         null));
         assertThrows(IllegalArgumentException.class,
@@ -250,10 +246,6 @@ public class ImageAssetSetRenderableImplTests {
                         colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         null));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
-                        mockRenderingAreaProvider, Z, UUID, null, mockRenderingBoundaries));
     }
 
     @Test
@@ -718,5 +710,17 @@ public class ImageAssetSetRenderableImplTests {
     @Test
     public void testUuid() {
         assertSame(UUID, renderable.uuid());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((ImageAssetSetRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 }

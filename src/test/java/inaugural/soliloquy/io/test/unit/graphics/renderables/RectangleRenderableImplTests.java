@@ -160,14 +160,6 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
-                        TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null,
-                        mockRenderingBoundaries));
     }
 
     @Test

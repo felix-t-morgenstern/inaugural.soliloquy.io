@@ -19,8 +19,8 @@ public class AntialiasedLineSegmentRenderableImpl
     public AntialiasedLineSegmentRenderableImpl(
             ProviderAtTime<Vertex> vertex1Provider,
             ProviderAtTime<Vertex> vertex2Provider,
-            ProviderAtTime<Float> thicknessProvider,
             ProviderAtTime<Color> colorProvider,
+            ProviderAtTime<Float> thicknessProvider,
             ProviderAtTime<Float> thicknessGradientPercentProvider,
             ProviderAtTime<Float> lengthGradientPercentProvider,
             int z,

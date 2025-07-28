@@ -43,10 +43,9 @@ public class AntialiasedLineSegmentRenderableFactoryImplTests {
 
     @Test
     public void testMake() {
-        var output =
-                factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        COLOR_PROVIDER, THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent);
+        var output = factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, COLOR_PROVIDER,
+                THICKNESS_PROVIDER, THICKNESS_GRADIENT_PERCENT_PROVIDER,
+                LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent);
 
         assertNotNull(output);
         assertInstanceOf(AntialiasedLineSegmentRenderableImpl.class,
@@ -67,43 +66,38 @@ public class AntialiasedLineSegmentRenderableFactoryImplTests {
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(null, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, null,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        null, COLOR_PROVIDER,
+                        null, THICKNESS_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, null,
+                        COLOR_PROVIDER, null,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_PROVIDER,
                         null,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         null, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER,
-                        THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                        LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, null));
     }
 }

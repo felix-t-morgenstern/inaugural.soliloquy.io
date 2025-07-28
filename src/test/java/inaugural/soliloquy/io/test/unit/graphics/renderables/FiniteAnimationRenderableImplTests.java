@@ -118,17 +118,6 @@ public class FiniteAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent, mockRenderingBoundaries, START_TIMESTAMP,
-                        PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableImpl(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null,
-                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableImpl(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, null, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
                         MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
@@ -178,13 +167,6 @@ public class FiniteAnimationRenderableImplTests {
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent, mockRenderingBoundaries, START_TIMESTAMP,
                         PAUSED_TIMESTAMP_1, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null,
-                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
-                        MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
@@ -909,6 +891,13 @@ public class FiniteAnimationRenderableImplTests {
                 renderableWithMouseEvents.component());
         assertSame(mockContainingComponent,
                 renderableWithoutMouseEvents.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((FiniteAnimationRenderableImpl) renderableWithMouseEvents).setComponent(null);
+
+        assertNull(renderableWithMouseEvents.component());
     }
 
     @Test

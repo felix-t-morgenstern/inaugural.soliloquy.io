@@ -123,11 +123,6 @@ public class GlobalLoopingAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID, null,
-                mockRenderingBoundaries));
-        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
                 mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                 mockContainingComponent, null));
 
@@ -159,10 +154,6 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
                 mockContainingComponent, mockRenderingBoundaries));
-        assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
-                GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID, null,
-                mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
@@ -694,5 +685,17 @@ public class GlobalLoopingAnimationRenderableImplTests {
     public void testUuid() {
         assertSame(UUID, renderableWithMouseEvents.uuid());
         assertSame(UUID, renderableWithoutMouseEvents.uuid());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderableWithMouseEvents.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((GlobalLoopingAnimationRenderableImpl) renderableWithMouseEvents).setComponent(null);
+
+        assertNull(renderableWithMouseEvents.component());
     }
 }

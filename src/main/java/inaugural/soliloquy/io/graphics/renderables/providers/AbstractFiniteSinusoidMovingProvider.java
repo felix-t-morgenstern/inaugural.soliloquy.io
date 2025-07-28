@@ -5,6 +5,7 @@ import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingPro
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
@@ -13,7 +14,7 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
         implements FiniteSinusoidMovingProvider<T> {
     private final List<Float> TRANSITION_SHARPNESSES;
 
-    protected AbstractFiniteSinusoidMovingProvider(java.util.UUID uuid,
+    protected AbstractFiniteSinusoidMovingProvider(UUID uuid,
                                                    Map<Long, T> valuesAtTimes,
                                                    List<Float> transitionSharpnesses,
                                                    Long pausedTimestamp,

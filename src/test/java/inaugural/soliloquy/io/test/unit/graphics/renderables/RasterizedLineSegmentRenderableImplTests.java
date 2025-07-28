@@ -18,7 +18,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class RasterizedLineSegmentRenderableImplTests {
@@ -69,9 +69,6 @@ public class RasterizedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, null));
     }
 
     @Test
@@ -187,5 +184,17 @@ public class RasterizedLineSegmentRenderableImplTests {
     @Test
     public void testUuid() {
         assertSame(UUID, renderable.uuid());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((RasterizedLineSegmentRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 }

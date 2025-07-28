@@ -82,8 +82,5 @@ public class RasterizedLineSegmentRenderableFactoryImplTests {
                 () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
                         STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, null));
     }
 }

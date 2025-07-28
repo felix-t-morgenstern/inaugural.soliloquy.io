@@ -45,8 +45,8 @@ public class AntialiasedLineSegmentRenderableImplTests {
         renderable = new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
@@ -60,8 +60,8 @@ public class AntialiasedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 null,
                 VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
@@ -71,8 +71,8 @@ public class AntialiasedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 null,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
@@ -83,7 +83,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
                 null,
-                COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
@@ -93,20 +93,9 @@ public class AntialiasedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
-                null,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
-                Z,
-                UUID,
-                mockComponent
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
                 null,
+                THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
@@ -115,8 +104,19 @@ public class AntialiasedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
+                null,
+                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                Z,
+                UUID,
+                mockComponent
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
+                VERTEX_1_PROVIDER,
+                VERTEX_2_PROVIDER,
+                COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 null,
                 Z,
@@ -126,24 +126,13 @@ public class AntialiasedLineSegmentRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
                 VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
                 COLOR_PROVIDER,
+                THICKNESS_PROVIDER,
                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 null,
                 mockComponent
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
-                Z,
-                UUID,
-                null
         ));
     }
 
@@ -241,6 +230,13 @@ public class AntialiasedLineSegmentRenderableImplTests {
     @Test
     public void testComponent() {
         assertSame(mockComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((AntialiasedLineSegmentRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 
     @Test

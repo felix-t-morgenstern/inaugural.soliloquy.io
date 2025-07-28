@@ -142,12 +142,5 @@ public class RectangleRenderableFactoryImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () ->
-                rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
-                        TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, ON_MOUSE_OVER, ON_MOUSE_LEAVE,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null));
     }
 }

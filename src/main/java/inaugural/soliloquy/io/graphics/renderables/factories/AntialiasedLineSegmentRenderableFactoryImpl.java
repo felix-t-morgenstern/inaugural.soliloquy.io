@@ -14,8 +14,8 @@ public class AntialiasedLineSegmentRenderableFactoryImpl
     @Override
     public AntialiasedLineSegmentRenderable make(ProviderAtTime<Vertex> vertex1Provider,
                                                  ProviderAtTime<Vertex> vertex2Provider,
-                                                 ProviderAtTime<Float> thicknessProvider,
                                                  ProviderAtTime<Color> colorProvider,
+                                                 ProviderAtTime<Float> thicknessProvider,
                                                  ProviderAtTime<Float>
                                                          thicknessGradientPercentProvider,
                                                  ProviderAtTime<Float>
@@ -25,7 +25,7 @@ public class AntialiasedLineSegmentRenderableFactoryImpl
                                                  Component component)
             throws IllegalArgumentException {
         return new AntialiasedLineSegmentRenderableImpl(vertex1Provider, vertex2Provider,
-                thicknessProvider, colorProvider, thicknessGradientPercentProvider,
+                colorProvider, thicknessProvider, thicknessGradientPercentProvider,
                 lengthGradientPercentProvider, z, uuid, component);
     }
 }

@@ -7,22 +7,26 @@ import soliloquy.specs.ui.Component;
 import java.util.UUID;
 
 abstract class AbstractRenderable implements Renderable {
-    private final Component COMPONENT;
     private final UUID UUID;
 
     private int z;
+    private Component component;
     private boolean isDeleted;
 
     protected AbstractRenderable(int z, UUID uuid,
                                  Component component) {
-        COMPONENT = Check.ifNull(component, "component");
+        this.component = component;
         this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
     }
 
     @Override
     public Component component() {
-        return isDeleted ? null : COMPONENT;
+        return isDeleted ? null : component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
     }
 
     @Override
@@ -33,7 +37,7 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void setZ(int z) {
         this.z = z;
-        COMPONENT.add(this);
+        component.add(this);
     }
 
     // NB: deleted SpriteRenderables should NOT_ make other calls unsupported, unlike

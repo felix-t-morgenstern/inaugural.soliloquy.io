@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -160,19 +161,13 @@ public class TextLineRenderableImplTests {
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
-                PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, null));
     }
 
     @Test
     public void testGetAndSetFont() {
         assertSame(FONT, renderable.getFont());
 
-        FakeFont newFont = new FakeFont();
+        var newFont = mock(Font.class);
 
         renderable.setFont(newFont);
 
@@ -379,5 +374,17 @@ public class TextLineRenderableImplTests {
 
         assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+    }
+
+    @Test
+    public void testComponent() {
+        assertSame(mockContainingComponent, renderable.component());
+    }
+
+    @Test
+    public void testSetComponent() {
+        ((TextLineRenderableImpl) renderable).setComponent(null);
+
+        assertNull(renderable.component());
     }
 }

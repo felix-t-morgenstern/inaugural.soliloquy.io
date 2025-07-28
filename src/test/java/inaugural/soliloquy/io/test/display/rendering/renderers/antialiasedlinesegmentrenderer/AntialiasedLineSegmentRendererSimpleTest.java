@@ -45,8 +45,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new AntialiasedLineSegmentRenderableImpl(
                         staticProvider(vertexOf(0.75f, 0.75f)),
                         staticProvider(vertexOf(0.25f, 0.25f)),
-                        staticProvider(0.000625f),
                         staticProvider(Color.RED),
+                        staticProvider(0.000625f),
                         staticProvider(0.1f),
                         staticProvider(0.01f),
                         randomInt(),
@@ -58,8 +58,8 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                 new AntialiasedLineSegmentRenderableImpl(
                         staticProvider(vertexOf(0.5f, 0.75f)),
                         staticProvider(vertexOf(0.5f, 0.25f)),
-                        staticProvider(0.1f),
                         staticProvider(new Color(40, 0, 255)),
+                        staticProvider(0.1f),
                         staticProvider(0.05f),
                         staticProvider(0.05f),
                         randomInt(),
