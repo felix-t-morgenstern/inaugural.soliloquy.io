@@ -6,7 +6,6 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -17,7 +16,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class GlobalLoopingAnimationRenderableImpl
         extends AbstractImageAssetRenderable
@@ -31,10 +29,9 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 Component component,
-                                                BiConsumer<Component, Renderable> removeFromComponent,
                                                 RenderingBoundaries renderingBoundaries) {
         super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, component, removeFromComponent, renderingBoundaries);
+                uuid, component, renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -49,10 +46,9 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 Component component,
-                                                BiConsumer<Component, Renderable> removeFromComponent,
                                                 RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
+                borderColorProvider, renderingAreaProvider, z, uuid, component,
                 renderingBoundaries);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }

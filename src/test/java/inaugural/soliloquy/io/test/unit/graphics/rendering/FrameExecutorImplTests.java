@@ -49,21 +49,35 @@ public class FrameExecutorImplTests {
     public void setUp() {
         EVENTS_FIRED.clear();
 
-        frameExecutor = new FrameExecutorImpl(mockTopLevelComponent, mockComponentRenderer, 100);
+        frameExecutor = new FrameExecutorImpl(mockComponentRenderer, 100);
     }
 
     @Test
     public void constructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(null, mockComponentRenderer, 1));
+                () -> new FrameExecutorImpl(null, 1));
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockTopLevelComponent, null, 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockTopLevelComponent, mockComponentRenderer, 0));
+                () -> new FrameExecutorImpl(mockComponentRenderer, 0));
     }
 
     @Test
-    public void executeFiresFrameBlockingEvents() {
+    public void testSetTopLevelComponentWithInvalidParams() {
+        assertThrows(IllegalArgumentException.class,
+                () -> frameExecutor.setTopLevelComponent(null));
+    }
+
+    @Test
+    public void testSetNewTopLevelComponentDeletesPrev() {
+        frameExecutor.setTopLevelComponent(mockTopLevelComponent);
+
+        frameExecutor.setTopLevelComponent(mock(Component.class));
+
+        verify(mockTopLevelComponent, once()).delete();
+    }
+
+    @Test
+    public void testExecuteFiresFrameBlockingEvents() {
+        frameExecutor.setTopLevelComponent(mockTopLevelComponent);
         frameExecutor.registerFrameBlockingEvent(FRAME_BLOCKING_EVENT_1);
         frameExecutor.registerFrameBlockingEvent(FRAME_BLOCKING_EVENT_2);
 
@@ -81,7 +95,12 @@ public class FrameExecutorImplTests {
     }
 
     @Test
-    public void registerFrameBlockingEventWithInvalidArgs() {
+    public void testExecuteWithoutTopLevelComponent() {
+        assertThrows(IllegalStateException.class, () -> frameExecutor.execute(GLOBAL_TIMESTAMP));
+    }
+
+    @Test
+    public void testRegisterFrameBlockingEventWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 frameExecutor.registerFrameBlockingEvent(null));
     }

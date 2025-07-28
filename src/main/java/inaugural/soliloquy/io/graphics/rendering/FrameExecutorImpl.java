@@ -12,14 +12,14 @@ import java.util.function.Consumer;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class FrameExecutorImpl implements FrameExecutor {
-    private final Component TOP_LEVEL_COMPONENT;
     private final ComponentRenderer COMPONENT_RENDERER;
     private final Semaphore SEMAPHORE;
     private final List<Consumer<Long>> FRAME_BLOCKING_EVENTS;
 
-    public FrameExecutorImpl(Component topLevelComponent, ComponentRenderer componentRenderer,
+    private Component topLevelComponent;
+
+    public FrameExecutorImpl(ComponentRenderer componentRenderer,
                              int semaphorePermissions) {
-        TOP_LEVEL_COMPONENT = Check.ifNull(topLevelComponent, "topLevelComponent");
         COMPONENT_RENDERER = Check.ifNull(componentRenderer, "componentRenderer");
         SEMAPHORE = new Semaphore(
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
@@ -35,7 +35,18 @@ public class FrameExecutorImpl implements FrameExecutor {
     }
 
     @Override
+    public void setTopLevelComponent(Component component) throws IllegalArgumentException {
+        if (topLevelComponent != null) {
+            topLevelComponent.delete();
+        }
+        topLevelComponent = Check.ifNull(component, "component");
+    }
+
+    @Override
     public void execute(long timestamp) {
+        if (topLevelComponent == null) {
+            throw new IllegalStateException("FrameExecutorImpl.execute: no top-level component");
+        }
         for (Consumer<Long> frameBlockingEvent : FRAME_BLOCKING_EVENTS) {
             try {
                 SEMAPHORE.acquire();
@@ -50,6 +61,6 @@ public class FrameExecutorImpl implements FrameExecutor {
         }
         FRAME_BLOCKING_EVENTS.clear();
 
-        COMPONENT_RENDERER.render(TOP_LEVEL_COMPONENT, timestamp);
+        COMPONENT_RENDERER.render(topLevelComponent, timestamp);
     }
 }

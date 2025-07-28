@@ -40,11 +40,10 @@ public class RectangleRenderableImpl
                                    int z,
                                    UUID uuid,
                                    Component component,
-                                   BiConsumer<Component, Renderable> removeFromComponent,
                                    RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
-                removeFromComponent, renderingBoundaries);
+                renderingBoundaries);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);

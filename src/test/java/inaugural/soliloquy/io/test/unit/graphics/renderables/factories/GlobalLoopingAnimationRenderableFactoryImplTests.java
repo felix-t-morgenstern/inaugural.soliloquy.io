@@ -50,7 +50,6 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private GlobalLoopingAnimationRenderableFactory factory;
@@ -58,18 +57,13 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
     @BeforeEach
     public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries,
-                mockRemoveFromComponent);
+        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null,
-                        mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries,
-                        null));
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null));
     }
 
     @Test

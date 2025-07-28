@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -15,14 +14,11 @@ import soliloquy.specs.ui.Component;
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
-public class TriangleRenderableFactoryImpl extends AbstractRenderableFactory implements TriangleRenderableFactory {
+public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                         BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -48,6 +44,6 @@ public class TriangleRenderableFactoryImpl extends AbstractRenderableFactory imp
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, textureTileWidthProvider,
                 textureTileHeightProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                component, REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES);
     }
 }

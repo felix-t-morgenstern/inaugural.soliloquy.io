@@ -4,8 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.mouse.MouseEventHandler;
-import soliloquy.specs.io.mouse.MouseListener;
+import soliloquy.specs.io.input.mouse.MouseEventHandler;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -13,12 +12,12 @@ import java.util.Map;
 import static inaugural.soliloquy.io.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
-public class MouseListenerImpl implements MouseListener {
+public class MouseListener {
     private final MouseEventHandler MOUSE_EVENT_HANDLER;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
-    public MouseListenerImpl(MouseEventHandler mouseEventHandler) {
+    public MouseListener(MouseEventHandler mouseEventHandler) {
         MOUSE_EVENT_HANDLER = Check.ifNull(mouseEventHandler, "mouseEventHandler");
 
         TIMESTAMP_VALIDATOR = new TimestampValidator(null);
@@ -29,7 +28,6 @@ public class MouseListenerImpl implements MouseListener {
         }
     }
 
-    @Override
     public void registerMousePositionAndButtonStates(Vertex position,
                                                      Map<Integer, Boolean> mouseButtonPressStates,
                                                      long timestamp)

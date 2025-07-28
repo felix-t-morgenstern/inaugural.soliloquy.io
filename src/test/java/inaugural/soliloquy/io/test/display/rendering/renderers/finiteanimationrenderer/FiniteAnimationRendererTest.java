@@ -11,7 +11,6 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
@@ -19,8 +18,9 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggr
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
 import static inaugural.soliloquy.tools.collections.Collections.*;
@@ -43,7 +43,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected final static String EXPLOSION_RELATIVE_LOCATION =
             "./src/test/resources/images/effects/Explosion.png";
     protected final static Map<Integer, AnimationFrameSnippet> FRAMES = mapOf();
-    protected final static AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY =
+    protected final static Function<AnimationDefinition, Animation> ANIMATION_FACTORY =
             new AnimationFactory();
 
     protected static AnimationDefinition AnimationDefinition;
@@ -52,7 +52,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
     protected static int TestDurationMs;
 
     /** @noinspection rawtypes */
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    protected static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             @SuppressWarnings("unused") WindowResolutionManager windowResolutionManager,
             ColorShiftStackAggregator colorShiftStackAggregator) {
         TestDurationMs = FRAME_DURATION * NUMBER_OF_FRAMES + (MS_PADDING * 2);
@@ -66,7 +66,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                         colorShiftStackAggregator,
                 null);
 
-        return listOf(FiniteAnimationRenderer);
+        return setOf(FiniteAnimationRenderer);
     }
 
     protected static void graphicsPreloaderLoadAction() {
@@ -79,7 +79,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
         }
 
         FiniteAnimationRenderable = new FiniteAnimationRenderableImpl(
-                ANIMATION_FACTORY.make(AnimationDefinition),
+                ANIMATION_FACTORY.apply(AnimationDefinition),
                 staticNullProvider(),
                 staticNullProvider(),
                 listOf(),
@@ -91,7 +91,6 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 123,
                 java.util.UUID.randomUUID(),
                 MockFirstChildComponent,
-                DUMMY_REMOVE,
                 RENDERING_BOUNDARIES,
                 timestamp + MS_PADDING,
                 null,

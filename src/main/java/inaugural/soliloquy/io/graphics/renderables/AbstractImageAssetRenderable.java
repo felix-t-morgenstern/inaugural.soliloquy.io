@@ -7,7 +7,6 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.AssetSnippet;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -18,7 +17,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseEvents
@@ -36,11 +34,8 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            int z,
                                            UUID uuid,
                                            Component component,
-                                           BiConsumer<Component, Renderable> removeFromComponent,
                                            RenderingBoundaries renderingBoundaries) {
-        this(false, null, null, null, null, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
-                renderingBoundaries);
+        this(false, null, null, null, null, colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries);
     }
 
     protected AbstractImageAssetRenderable(
@@ -55,11 +50,10 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
             int z,
             UUID uuid,
             Component component,
-            BiConsumer<Component, Renderable> removeFromComponent,
             RenderingBoundaries renderingBoundaries) {
         this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                component, removeFromComponent, renderingBoundaries);
+                component, renderingBoundaries);
     }
 
     private AbstractImageAssetRenderable(boolean capturesMouseEvents,
@@ -74,10 +68,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          int z,
                                          UUID uuid,
                                          Component component,
-                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                component, removeFromComponent, renderingBoundaries);
+                component, renderingBoundaries);
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);

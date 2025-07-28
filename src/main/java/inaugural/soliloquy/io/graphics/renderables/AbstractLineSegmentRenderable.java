@@ -24,9 +24,8 @@ abstract class AbstractLineSegmentRenderable
                                          ProviderAtTime<Float> thicknessProvider,
                                          ProviderAtTime<Color> colorProvider,
                                          int z, UUID uuid,
-                                         Component component,
-                                         BiConsumer<Component, Renderable> removeFromComponent) {
-        super(z, uuid, component, removeFromComponent);
+                                         Component component) {
+        super(z, uuid, component);
         setVertex1Provider(vertex1Provider);
         setVertex2Provider(vertex2Provider);
         setThicknessProvider(thicknessProvider);

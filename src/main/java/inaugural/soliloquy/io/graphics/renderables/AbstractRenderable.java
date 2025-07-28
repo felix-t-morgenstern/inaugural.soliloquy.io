@@ -5,21 +5,17 @@ import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.ui.Component;
 
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 abstract class AbstractRenderable implements Renderable {
     private final Component COMPONENT;
-    private final BiConsumer<Component, Renderable> REMOVE_FROM_COMPONENT;
     private final UUID UUID;
 
     private int z;
     private boolean isDeleted;
 
     protected AbstractRenderable(int z, UUID uuid,
-                                 Component component,
-                                 BiConsumer<Component, Renderable> removeFromComponent) {
+                                 Component component) {
         COMPONENT = Check.ifNull(component, "component");
-        REMOVE_FROM_COMPONENT = Check.ifNull(removeFromComponent, "removeFromComponent");
         this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
     }
@@ -46,7 +42,6 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void delete() {
         isDeleted = true;
-        REMOVE_FROM_COMPONENT.accept(COMPONENT, this);
     }
 
     @Override

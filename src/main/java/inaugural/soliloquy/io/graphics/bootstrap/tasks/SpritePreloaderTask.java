@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 import java.util.Collection;
@@ -13,14 +12,14 @@ import java.util.function.Function;
 
 public class SpritePreloaderTask implements Runnable {
     private final Function<String, Image> GET_IMAGE;
-    private final AssetFactory<SpriteDefinition, Sprite> FACTORY;
+    private final Function<SpriteDefinition, Sprite> FACTORY;
     private final Collection<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS;
     private final Consumer<Sprite> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions */
     public SpritePreloaderTask(Function<String, Image> getImage,
                                Collection<SpriteDefinitionDTO> spriteDefinitionDTOs,
-                               AssetFactory<SpriteDefinition, Sprite> factory,
+                               Function<SpriteDefinition, Sprite> factory,
                                Consumer<Sprite> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");
@@ -56,7 +55,7 @@ public class SpritePreloaderTask implements Runnable {
     }
 
     public void run() {
-        SPRITE_DEFINITION_DTOS.forEach(dto -> PROCESS_RESULT.accept(FACTORY.make(
+        SPRITE_DEFINITION_DTOS.forEach(dto -> PROCESS_RESULT.accept(FACTORY.apply(
                 new SpriteDefinition(
                         dto.id,
                         GET_IMAGE.apply(dto.imgLoc),

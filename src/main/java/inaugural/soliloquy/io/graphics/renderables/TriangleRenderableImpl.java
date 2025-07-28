@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -12,7 +11,6 @@ import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -40,11 +38,10 @@ public class TriangleRenderableImpl
                                   int z,
                                   java.util.UUID uuid,
                                   Component component,
-                                  BiConsumer<Component, Renderable> removeFromComponent,
                                   RenderingBoundaries renderingBoundaries) {
         super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
-                removeFromComponent, renderingBoundaries);
+                renderingBoundaries);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
         setVertex2Provider(vertex2Provider);

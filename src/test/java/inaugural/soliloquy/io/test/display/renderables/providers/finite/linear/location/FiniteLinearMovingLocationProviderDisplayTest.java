@@ -12,7 +12,7 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.mockito.Mockito.when;
@@ -26,7 +26,7 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
     protected static TextLineRenderable TextLineRenderable;
 
     /** @noinspection rawtypes */
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    protected static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         var plain = new FontStyleDefinition(
                 ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_TRAJAN,
@@ -75,6 +75,6 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
-        return listOf(TextLineRenderer);
+        return setOf(TextLineRenderer);
     }
 }

@@ -51,12 +51,12 @@ public class RTreeFacade {
     }
 
     public static class RenderableWithMouseEventsSearchObject {
-        public RenderableWithMouseEvents renderableWithMouseEvents;
+        public RenderableWithMouseEvents renderable;
         public FloatBox renderingDimensions;
 
         private RenderableWithMouseEventsSearchObject(RenderableWithMouseEvents renderable,
                                                       FloatBox renderingDimensions) {
-            renderableWithMouseEvents = renderable;
+            this.renderable = renderable;
             this.renderingDimensions = renderingDimensions;
         }
     }

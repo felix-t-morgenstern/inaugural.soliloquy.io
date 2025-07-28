@@ -1,12 +1,11 @@
 package inaugural.soliloquy.io.test.unit.mouse;
 
-import inaugural.soliloquy.io.mouse.MouseListenerImpl;
+import inaugural.soliloquy.io.mouse.MouseListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.mouse.MouseEventHandler;
-import soliloquy.specs.io.mouse.MouseListener;
+import soliloquy.specs.io.input.mouse.MouseEventHandler;
 
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class MouseListenerImplTests {
+public class MouseListenerTests {
     private final float X = randomFloatInRange(0f, 1f);
     private final float Y = randomFloatInRange(0f, 1f);
     private final Vertex POSITION = vertexOf(X, Y);
@@ -31,12 +30,12 @@ public class MouseListenerImplTests {
     public void setUp() {
         mockMouseEventHandler = mock(MouseEventHandler.class);
 
-        mouseListener = new MouseListenerImpl(mockMouseEventHandler);
+        mouseListener = new MouseListener(mockMouseEventHandler);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new MouseListenerImpl(null));
+        assertThrows(IllegalArgumentException.class, () -> new MouseListener(null));
     }
 
     @Test

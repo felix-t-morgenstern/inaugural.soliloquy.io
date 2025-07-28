@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -18,9 +17,8 @@ import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
-import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,20 +37,18 @@ public class TriangleRenderableFactoryImplTests {
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private TriangleRenderableFactory triangleRenderableFactory;
 
     @BeforeEach
     public void setUp() {
-        triangleRenderableFactory = new TriangleRenderableFactoryImpl(mockRenderingBoundaries, mockRemoveFromComponent);
+        triangleRenderableFactory = new TriangleRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(mockRenderingBoundaries, null));
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null));
     }
 
     @Test

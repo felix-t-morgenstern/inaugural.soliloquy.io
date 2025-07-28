@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,18 +13,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,14 +42,15 @@ public class RectangleRendererTests {
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             new FakeStaticProvider<>(floatBoxOf(0f, 0f, 1f, 1f));
     private final UUID UUID = java.util.UUID.randomUUID();
-    private final long MOST_RECENT_TIMESTAMP = 123123L;
-    private final FakeMesh MESH = new FakeMesh();
-    private final FakeShader SHADER = new FakeShader();
+    private final long MOST_RECENT_TIMESTAMP = randomLong();
 
+    @Mock private TimestampValidator mockTimestampValidator;
+    @Mock private Mesh mockMesh;
+    @Mock private Shader mockShader;
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
 
-    private Renderer<RectangleRenderable> rectangleRenderable;
+    private Renderer<RectangleRenderable> renderer;
 
     @BeforeAll
     public static void setUpFixture() {
@@ -64,96 +70,90 @@ public class RectangleRendererTests {
 
     @BeforeEach
     public void setUp() {
-        lenient().when(mockTextureTileWidthProvider.provide(anyLong())).thenReturn(randomFloatInRange(0f, 1f));
-        lenient().when(mockTextureTileHeightProvider.provide(anyLong())).thenReturn(randomFloatInRange(0f, 1f));
+        lenient().when(mockTextureTileWidthProvider.provide(anyLong()))
+                .thenReturn(randomFloatInRange(0f, 1f));
+        lenient().when(mockTextureTileHeightProvider.provide(anyLong()))
+                .thenReturn(randomFloatInRange(0f, 1f));
 
-        rectangleRenderable = new RectangleRenderer(MOST_RECENT_TIMESTAMP);
+        renderer = new RectangleRenderer(mockTimestampValidator);
+    }
+
+    @Test
+    public void testConstructorWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderer(null));
     }
 
     @Test
     public void testSetMeshAndShaderWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.setMesh(null));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.setShader(null));
+        assertThrows(IllegalArgumentException.class, () -> renderer.setMesh(null));
+        assertThrows(IllegalArgumentException.class, () -> renderer.setShader(null));
     }
 
     @Test
     public void testRenderWithInvalidArgs() {
-        rectangleRenderable.setMesh(MESH);
-        rectangleRenderable.setShader(SHADER);
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(null, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, null,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         null, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, null,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         null, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, null,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         null, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, new FakeStaticProvider<>(null), UUID),
                 MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
                         BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, null),
                 MOST_RECENT_TIMESTAMP));
-    }
-
-    @Test
-    public void testRenderWithInvalidTimestamp() {
-        rectangleRenderable.setMesh(MESH);
-        rectangleRenderable.setShader(SHADER);
-
-        assertThrows(IllegalArgumentException.class, () -> rectangleRenderable.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
-                MOST_RECENT_TIMESTAMP - 1L));
     }
 
     @Test
@@ -164,23 +164,43 @@ public class RectangleRendererTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                 mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID);
 
-        Renderer<RectangleRenderable> rectangleRendererWithoutMesh =
-                new RectangleRenderer(MOST_RECENT_TIMESTAMP);
-        rectangleRendererWithoutMesh.setShader(SHADER);
+        var rendererWithoutMesh = new RectangleRenderer(mockTimestampValidator);
+        rendererWithoutMesh.setShader(mockShader);
 
         assertThrows(IllegalStateException.class, () ->
-                rectangleRendererWithoutMesh.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
+                rendererWithoutMesh.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
 
-        Renderer<RectangleRenderable> rectangleRendererWithoutShader =
-                new RectangleRenderer(MOST_RECENT_TIMESTAMP);
-        rectangleRendererWithoutShader.setMesh(MESH);
+        var rendererWithoutShader = new RectangleRenderer(mockTimestampValidator);
+        rendererWithoutShader.setMesh(mockMesh);
 
         assertThrows(IllegalStateException.class, () ->
-                rectangleRendererWithoutShader.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
+                rendererWithoutShader.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
-    public void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) rectangleRenderable.mostRecentTimestamp());
+    public void testGetMostRecentTimestamp() {
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
+        var mostRecentTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
+
+        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
+    }
+
+    @Test
+    public void testRenderUpdatesTimestamp() {
+        RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
+                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
+                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID);
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
+        var timestamp = randomLong();
+
+        renderer.render(rectangleRenderable, timestamp);
+
+        verify(mockTimestampValidator, once()).validateTimestamp(
+                renderer.getClass().getCanonicalName(), timestamp);
     }
 }

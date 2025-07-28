@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -8,8 +9,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
-    public RectangleRenderer(Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+    public RectangleRenderer(TimestampValidator timestampValidator) {
+        super(timestampValidator);
     }
 
     @Override

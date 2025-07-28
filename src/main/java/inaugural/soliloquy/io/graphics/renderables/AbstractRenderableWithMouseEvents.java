@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.ui.Component;
@@ -11,7 +10,6 @@ import soliloquy.specs.ui.EventInputs;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.ui.EventInputs.inputs;
@@ -38,9 +36,8 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 int z,
                                                 UUID uuid,
                                                 Component component,
-                                                BiConsumer<Component, Renderable> removeFromComponent,
                                                 RenderingBoundaries renderingBoundaries) {
-        super(z, uuid, component, removeFromComponent);
+        super(z, uuid, component);
         this.capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? mapOf() : onPress;
         ON_RELEASE = onRelease == null ? mapOf() : onRelease;

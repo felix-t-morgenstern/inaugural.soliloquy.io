@@ -20,13 +20,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class FiniteAnimationRenderableFactoryImpl extends AbstractRenderableFactory
-        implements FiniteAnimationRenderableFactory {
+public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public FiniteAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                                BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public FiniteAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -43,7 +40,7 @@ public class FiniteAnimationRenderableFactoryImpl extends AbstractRenderableFact
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
                 borderColorProvider, colorShifts, renderingAreaProvider, z, uuid, component,
-                REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp,
+                RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp,
                 mostRecentTimestamp);
     }
 
@@ -64,7 +61,7 @@ public class FiniteAnimationRenderableFactoryImpl extends AbstractRenderableFact
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
                 borderColorProvider, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                renderingAreaProvider, z, uuid, component, REMOVE_FROM_COMPONENT,
-                RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp, mostRecentTimestamp);
+                renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES, startTimestamp,
+                pausedTimestamp, mostRecentTimestamp);
     }
 }

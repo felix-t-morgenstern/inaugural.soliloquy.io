@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.AssetSnippet;
 import soliloquy.specs.io.graphics.renderables.Renderable;
@@ -30,15 +31,15 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
                                 WindowResolutionManager windowResolutionManager,
-                                Long mostRecentTimestamp) {
-        this(renderingBoundaries, mostRecentTimestamp);
+                                TimestampValidator timestampValidator) {
+        this(renderingBoundaries, timestampValidator);
         Check.ifNull(windowResolutionManager, "windowResolutionManager");
         getScreenWidthToHeightRatio = windowResolutionManager::windowWidthToHeightRatio;
     }
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
-                                Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+                                TimestampValidator timestampValidator) {
+        super(timestampValidator);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 

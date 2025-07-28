@@ -20,13 +20,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class ImageAssetSetRenderableFactoryImpl extends AbstractRenderableFactory
-        implements ImageAssetSetRenderableFactory {
+public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public ImageAssetSetRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                              BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public ImageAssetSetRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -43,7 +40,7 @@ public class ImageAssetSetRenderableFactoryImpl extends AbstractRenderableFactor
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                component, REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES);
     }
 
     @Override
@@ -63,7 +60,6 @@ public class ImageAssetSetRenderableFactoryImpl extends AbstractRenderableFactor
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, onPress, onRelease,
                 onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component,
-                REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                borderColorProvider, renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES);
     }
 }

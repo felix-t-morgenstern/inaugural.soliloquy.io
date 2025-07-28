@@ -12,8 +12,8 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -54,7 +54,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
     }
 
     /** @noinspection rawtypes */
-    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    private static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('Q', 0.75f);
         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING.put('q', 0.75f);
@@ -100,7 +100,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
-        return listOf(TextLineRenderer);
+        return setOf(TextLineRenderer);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -20,7 +19,6 @@ import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -50,7 +48,6 @@ public class TriangleRenderableImplTests {
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Action<EventInputs> mockOnPressAction;
     @Mock private Action<EventInputs> mockOnMouseOverAction;
@@ -70,7 +67,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         );
         renderable.setCapturesMouseEvents(true);
 
@@ -81,7 +78,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         );
         renderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
     }
@@ -95,7 +92,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, null,
@@ -104,7 +101,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -113,7 +110,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -122,7 +119,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -131,7 +128,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -140,7 +137,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -149,7 +146,7 @@ public class TriangleRenderableImplTests {
                 null,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -158,7 +155,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 null, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -167,7 +164,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, null,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -176,7 +173,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, null, mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, null, mockContainingComponent, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -185,7 +182,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, null, mockRemoveFromComponent, mockRenderingBoundaries
+                Z, UUID, null, mockRenderingBoundaries
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
                 VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -194,16 +191,7 @@ public class TriangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, null, mockRenderingBoundaries
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
-                mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                Z, UUID, mockContainingComponent, mockRemoveFromComponent, null
+                Z, UUID, mockContainingComponent, null
         ));
     }
 
@@ -598,8 +586,9 @@ public class TriangleRenderableImplTests {
     @Test
     public void testDelete() {
         renderable.delete();
-        verify(mockRemoveFromComponent, once())
-                .accept(same(mockContainingComponent), same(renderable));
+
+        assertNull(renderable.component());
+        assertTrue(renderable.isDeleted());
     }
 
     @Test

@@ -24,7 +24,7 @@ public class ImageAssetSetFactory
     }
 
     @Override
-    public ImageAssetSet make(ImageAssetSetDefinition definition)
+    public ImageAssetSet apply(ImageAssetSetDefinition definition)
             throws IllegalArgumentException {
         Check.ifNull(definition, "definition");
 

@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.ui.Component;
@@ -21,7 +20,6 @@ import soliloquy.specs.ui.EventInputs;
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -52,7 +50,6 @@ public class RectangleRenderableImplTests {
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Action<EventInputs> mockOnPressAction;
     @Mock private Action<EventInputs> mockOnMouseOverAction;
@@ -70,7 +67,7 @@ public class RectangleRenderableImplTests {
                 BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
                 mockTextureTileHeightProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
                 mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                mockRemoveFromComponent, mockRenderingBoundaries);
+                mockRenderingBoundaries);
         renderable.setCapturesMouseEvents(true);
 
         rectangleRenderableNotSupportingMouseEvents = new RectangleRenderableImpl(
@@ -78,8 +75,7 @@ public class RectangleRenderableImplTests {
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider, ON_PRESS_ACTIONS,
                 null, mockOnMouseOverAction, mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z,
-                UUID,
-                mockContainingComponent, mockRemoveFromComponent, mockRenderingBoundaries);
+                UUID, mockContainingComponent, mockRenderingBoundaries);
         rectangleRenderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
     }
 
@@ -92,7 +88,7 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         null, BOTTOM_RIGHT_COLOR_PROVIDER,
@@ -100,7 +96,7 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, null,
@@ -108,7 +104,7 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
@@ -116,7 +112,7 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
@@ -124,7 +120,7 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
@@ -132,7 +128,7 @@ public class RectangleRenderableImplTests {
                         null, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
@@ -140,14 +136,14 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, null,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        null, Z, UUID, mockContainingComponent, mockRemoveFromComponent,
+                        null, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
@@ -156,28 +152,21 @@ public class RectangleRenderableImplTests {
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
-                        mockRemoveFromComponent, mockRenderingBoundaries));
+                        mockRenderingBoundaries));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, null, mockRenderingBoundaries));
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, null));
         assertThrows(IllegalArgumentException.class, () ->
                 new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                         ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, mockRemoveFromComponent, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
-                        TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
-                        mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, null, mockRemoveFromComponent,
+                        RENDERING_AREA_PROVIDER, Z, UUID, null,
                         mockRenderingBoundaries));
     }
 
@@ -611,8 +600,8 @@ public class RectangleRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        verify(mockRemoveFromComponent, once())
-                .accept(same(mockContainingComponent), same(renderable));
+        assertNull(renderable.component());
+        assertTrue(renderable.isDeleted());
     }
 
     @Test

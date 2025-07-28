@@ -17,12 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class TextLineRenderableFactoryImpl extends AbstractRenderableFactory
-        implements TextLineRenderableFactory {
-    public TextLineRenderableFactoryImpl(BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
-    }
-
+public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory {
     @Override
     public TextLineRenderable make(Font font, ProviderAtTime<String> lineTextProvider,
                                    ProviderAtTime<Vertex> locationProvider,
@@ -42,6 +37,6 @@ public class TextLineRenderableFactoryImpl extends AbstractRenderableFactory
                 justification, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
                 boldIndices, borderThicknessProvider, borderColorProvider,
                 locationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
-                dropShadowColorProvider, z, uuid, component, REMOVE_FROM_COMPONENT);
+                dropShadowColorProvider, z, uuid, component);
     }
 }

@@ -4,20 +4,27 @@ import inaugural.soliloquy.io.api.dto.FontDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.FontStyleDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.FontStyleDefinitionGlyphPropertyDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.FontPreloaderTask;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFontFactory;
+import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.random.Random;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class FontPreloaderTaskTests {
-    private final FakeFontFactory FONT_FACTORY = new FakeFontFactory();
     private final String ID = "FontId";
     private final String RELATIVE_LOCATION = "./src/test/resources/fonts/Trajan Pro Regular.ttf";
     private final float MAX_LOSSLESS_FONT_SIZE = 12.3f;
@@ -47,6 +54,10 @@ class FontPreloaderTaskTests {
     private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD = 0.789f;
     private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC = 0.890f;
     private final float LEADING_ADJUSTMENT = 0.090f;
+
+    private List<FontDefinition> factoryInputs;
+    @Mock private Font mockFont;
+    @Mock private Function<FontDefinition, Font> mockFontFactory;
 
     @Test
     public void testConstructorWithInvalidParams() {
@@ -91,7 +102,7 @@ class FontPreloaderTaskTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
                         null,
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -126,7 +137,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -161,7 +172,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -196,7 +207,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -231,7 +242,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -266,7 +277,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -296,7 +307,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -331,7 +342,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -366,7 +377,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -401,7 +412,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -436,7 +447,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -471,7 +482,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -501,7 +512,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -536,7 +547,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -571,7 +582,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -606,7 +617,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -641,7 +652,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -676,7 +687,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -706,7 +717,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -741,7 +752,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -776,7 +787,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -811,7 +822,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -846,7 +857,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -881,7 +892,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -911,7 +922,7 @@ class FontPreloaderTaskTests {
                                     ),
                                     null)
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -946,7 +957,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -981,7 +992,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -1016,7 +1027,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -1051,7 +1062,7 @@ class FontPreloaderTaskTests {
                                             -0.0001f
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -1086,7 +1097,7 @@ class FontPreloaderTaskTests {
                                             1f - LEADING_ADJUSTMENT
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -1121,7 +1132,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         fonts::add));
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
@@ -1156,13 +1167,18 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
-                        FONT_FACTORY,
+                        mockFontFactory,
                         null));
     }
 
     @Test
     public void testRun() {
-        ArrayList<Font> fonts = new ArrayList<>();
+        factoryInputs = listOf();
+        when(mockFontFactory.apply(any())).thenAnswer(i -> {
+            factoryInputs.add(i.getArgument(0));
+            return mockFont;
+        });
+        var fonts = Collections.<Font>listOf();
 
         FontDefinitionDTO fontDefinitionDTO = new FontDefinitionDTO(
                 ID,
@@ -1194,19 +1210,18 @@ class FontPreloaderTaskTests {
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                 ));
 
-        FontPreloaderTask fontPreloaderTask = new FontPreloaderTask(
+        var fontPreloaderTask = new FontPreloaderTask(
                 listOf(
                     fontDefinitionDTO
                 ),
-                FONT_FACTORY,
+                mockFontFactory,
                 fonts::add
         );
 
         fontPreloaderTask.run();
 
-        assertEquals(1, FONT_FACTORY.INPUTS.size());
-        assertEquals(1, FONT_FACTORY.OUTPUTS.size());
-        FontDefinition input = FONT_FACTORY.INPUTS.getFirst();
+        assertEquals(1, factoryInputs.size());
+        var input = factoryInputs.getFirst();
         assertNotNull(input);
         assertEquals(ID, input.id());
         assertEquals(RELATIVE_LOCATION, input.relativeLocation());
@@ -1216,7 +1231,7 @@ class FontPreloaderTaskTests {
         assertStyleDefinitionsEqual(fontDefinitionDTO.italic, input.italic());
         assertStyleDefinitionsEqual(fontDefinitionDTO.bold, input.bold());
         assertStyleDefinitionsEqual(fontDefinitionDTO.boldItalic, input.boldItalic());
-        assertSame(FONT_FACTORY.OUTPUTS.getFirst(), fonts.getFirst());
+        assertSame(mockFont, fonts.getFirst());
     }
 
     private void assertStyleDefinitionsEqual(FontStyleDefinitionDTO dto,

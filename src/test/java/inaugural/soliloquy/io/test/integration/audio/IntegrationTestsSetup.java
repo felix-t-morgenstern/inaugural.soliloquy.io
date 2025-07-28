@@ -26,10 +26,11 @@ public class IntegrationTestsSetup {
     public static Audio integrationTestAudio() {
         var audio = new AudioImpl(new SoundsPlayingImpl(), SoundFactoryImpl::new);
 
-        var audioLoader = new AudioLoaderImpl(audio::addSoundType,
-                id -> relPath -> defaultLoopStopMs -> defaultLoopRestartMs -> new SoundTypeImpl(id,
-                        relPath, defaultLoopStopMs, defaultLoopRestartMs),
-                setOf("mp3", "wav"));
+        var audioLoader = new AudioLoaderImpl(
+                audio::addSoundType,
+                SoundTypeImpl::new,
+                setOf("mp3", "wav")
+        );
         audioLoader.loadFromDirectory(
                 RESOURCES_PATH,
                 mapOf(

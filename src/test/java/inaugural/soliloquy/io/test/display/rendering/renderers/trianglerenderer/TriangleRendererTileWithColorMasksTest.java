@@ -10,7 +10,7 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -64,7 +64,7 @@ public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest
     }
 
     /** @noinspection rawtypes */
-    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         return generateRenderersWithMeshAndShader(windowResolutionManager,
                 new TriangleRenderableImpl(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
@@ -74,7 +74,7 @@ public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest
                         staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                         staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                         randomInt(),
-                        java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                        java.util.UUID.randomUUID(), MockFirstChildComponent,
                         RENDERING_BOUNDARIES));
     }
 }

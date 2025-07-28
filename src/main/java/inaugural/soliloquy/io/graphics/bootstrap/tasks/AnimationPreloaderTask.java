@@ -6,7 +6,6 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Collection;
@@ -18,14 +17,14 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class AnimationPreloaderTask implements Runnable {
     private final Function<String, Image> GET_IMAGE;
-    private final AssetFactory<AnimationDefinition, Animation> FACTORY;
+    private final Function<AnimationDefinition, Animation> FACTORY;
     private final Collection<AnimationDefinitionDTO> ANIMATION_DEFINITION_DTOS;
     private final Consumer<Animation> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions */
     public AnimationPreloaderTask(Function<String, Image> getImage,
                                   Collection<AnimationDefinitionDTO> animationDefinitionDTOs,
-                                  AssetFactory<AnimationDefinition, Animation> factory,
+                                  Function<AnimationDefinition, Animation> factory,
                                   Consumer<Animation> processResult) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         FACTORY = Check.ifNull(factory, "factory");
@@ -76,7 +75,7 @@ public class AnimationPreloaderTask implements Runnable {
 
     public void run() {
         ANIMATION_DEFINITION_DTOS.forEach(dto ->
-                PROCESS_RESULT.accept(FACTORY.make(makeDefinition(dto))));
+                PROCESS_RESULT.accept(FACTORY.apply(makeDefinition(dto))));
     }
 
     private AnimationDefinition makeDefinition(AnimationDefinitionDTO animationDefinitionDTO) {

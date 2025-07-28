@@ -3,14 +3,12 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.io.graphics.renderables.PolygonRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.ui.Component;
 import soliloquy.specs.ui.EventInputs;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
@@ -32,11 +30,9 @@ public abstract class AbstractPolygonRenderable
             int z,
             java.util.UUID uuid,
             Component component,
-            BiConsumer<Component, Renderable> removeFromComponent,
             RenderingBoundaries renderingBoundaries
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
-                removeFromComponent, renderingBoundaries);
+        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component, renderingBoundaries);
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
         setTextureIdProvider(textureIdProvider);
         setTextureTileWidthProvider(textureTileWidthProvider);

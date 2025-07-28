@@ -5,25 +5,25 @@ import inaugural.soliloquy.io.api.dto.FontStyleDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.FontStyleDefinitionGlyphPropertyDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FontPreloaderTask implements Runnable {
-    private final AssetFactory<FontDefinition, Font> FACTORY;
+    private final Function<FontDefinition, Font> FACTORY;
     private final Collection<FontDefinition> FONT_DEFINITIONS;
     private final Consumer<Font> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions */
     public FontPreloaderTask(Collection<FontDefinitionDTO> fontDefinitionDTOs,
-                             AssetFactory<FontDefinition, Font> factory,
+                             Function<FontDefinition, Font> factory,
                              Consumer<Font> processResult) {
         FACTORY = Check.ifNull(factory, "factory");
         Check.ifNull(fontDefinitionDTOs, "fontDefinitionDTOs");
@@ -83,7 +83,7 @@ public class FontPreloaderTask implements Runnable {
     @Override
     public void run() {
         FONT_DEFINITIONS.forEach(fontDefinition ->
-                PROCESS_RESULT.accept(FACTORY.make(fontDefinition)));
+                PROCESS_RESULT.accept(FACTORY.apply(fontDefinition)));
     }
 
     private FontDefinition makeFontDefinition(FontDefinitionDTO dto) {

@@ -58,24 +58,21 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private FiniteAnimationRenderableFactory factory;
 
     @BeforeEach
-    public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
+    public void setUp() {
+        mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        factory = new FiniteAnimationRenderableFactoryImpl(mockRenderingBoundaries,
-                mockRemoveFromComponent);
+        factory = new FiniteAnimationRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableFactoryImpl(null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableFactoryImpl(mockRenderingBoundaries, null));
+                () -> new FiniteAnimationRenderableFactoryImpl(null));
     }
 
     @Test

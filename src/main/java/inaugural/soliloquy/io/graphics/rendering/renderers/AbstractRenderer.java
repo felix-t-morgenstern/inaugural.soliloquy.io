@@ -14,8 +14,8 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
 
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    protected AbstractRenderer(Long mostRecentTimestamp) {
-        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
+    protected AbstractRenderer(TimestampValidator timestampValidator) {
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override

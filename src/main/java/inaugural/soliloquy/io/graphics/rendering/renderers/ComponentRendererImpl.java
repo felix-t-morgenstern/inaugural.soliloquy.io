@@ -18,10 +18,10 @@ public class ComponentRendererImpl implements ComponentRenderer {
 
     public ComponentRendererImpl(Map<Class<?>, Renderer<? extends Renderable>> contentRenderers,
                                  RenderingBoundaries renderingBoundaries,
-                                 Long mostRecentTimestamp) {
+                                 TimestampValidator timestampValidator) {
         CONTENT_RENDERERS = Check.ifNull(contentRenderers, "contentRenderers");
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
-        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override

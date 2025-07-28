@@ -1,22 +1,22 @@
 package inaugural.soliloquy.io.mouse;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.io.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 
-import java.util.Map;
+import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetCursor;
 
 public class MouseCursorImpl implements MouseCursor {
-    private final Map<String, ProviderAtTime<Long>> MOUSE_CURSORS;
+    private final Function<String, ProviderAtTime<Long>> MOUSE_CURSORS;
     private final GlobalClock GLOBAL_CLOCK;
 
     private ProviderAtTime<Long> mouseCursorProvider;
     private long mostRecentCursor;
 
-    public MouseCursorImpl(Map<String, ProviderAtTime<Long>> mouseCursors,
+    public MouseCursorImpl(Function<String, ProviderAtTime<Long>> mouseCursors,
                            GlobalClock globalClock) {
         MOUSE_CURSORS = Check.ifNull(mouseCursors, "mouseCursors");
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
@@ -25,7 +25,7 @@ public class MouseCursorImpl implements MouseCursor {
     @Override
     public void setMouseCursor(String mouseCursorId) throws IllegalArgumentException {
         Check.ifNullOrEmpty(mouseCursorId, "mouseCursorId");
-        mouseCursorProvider = Check.ifNull(MOUSE_CURSORS.get(mouseCursorId),
+        mouseCursorProvider = Check.ifNull(MOUSE_CURSORS.apply(mouseCursorId),
                 "mouse cursor provider corresponding to " + mouseCursorId);
     }
 

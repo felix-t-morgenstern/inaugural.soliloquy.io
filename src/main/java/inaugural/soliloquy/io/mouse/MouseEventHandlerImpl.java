@@ -3,8 +3,8 @@ package inaugural.soliloquy.io.mouse;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.mouse.MouseEventCapturingSpatialIndex;
-import soliloquy.specs.io.mouse.MouseEventHandler;
+import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.io.input.mouse.MouseEventHandler;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
 
     private final MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
 
-    private RenderableWithMouseEvents registeredMouseOverRenderable;
+    private RenderableWithMouseEvents prevRegisteredMouseOverRenderable;
 
     public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex) {
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX =
@@ -45,24 +45,24 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
         var renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.getCapturingRenderableAtPoint(location,
                 timestamp);
 
-        if (renderable != registeredMouseOverRenderable) {
-            if (registeredMouseOverRenderable != null) {
-                registeredMouseOverRenderable.mouseLeave(timestamp);
+        if (renderable != prevRegisteredMouseOverRenderable) {
+            if (prevRegisteredMouseOverRenderable != null) {
+                prevRegisteredMouseOverRenderable.mouseLeave(timestamp);
             }
 
-            registeredMouseOverRenderable = renderable;
+            prevRegisteredMouseOverRenderable = renderable;
 
-            if (registeredMouseOverRenderable != null) {
-                registeredMouseOverRenderable.mouseOver(timestamp);
+            if (prevRegisteredMouseOverRenderable != null) {
+                prevRegisteredMouseOverRenderable.mouseOver(timestamp);
             }
         }
-        if (registeredMouseOverRenderable != null) {
+        if (prevRegisteredMouseOverRenderable != null) {
             buttonEvents.forEach((button, event) -> {
                 if (event == EventType.PRESS) {
-                    registeredMouseOverRenderable.press(button, timestamp);
+                    prevRegisteredMouseOverRenderable.press(button, timestamp);
                 }
                 else {
-                    registeredMouseOverRenderable.release(button, timestamp);
+                    prevRegisteredMouseOverRenderable.release(button, timestamp);
                 }
             });
         }

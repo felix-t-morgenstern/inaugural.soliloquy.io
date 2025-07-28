@@ -57,7 +57,6 @@ public class ImageAssetSetRenderableFactoryImplTests {
     @Mock private ImageAssetSet imageAssetSetSupportsMouseEvents;
     @Mock private ImageAssetSet imageAssetSetNotSupportsMouseEvents;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private ImageAssetSetRenderableFactory factory;
@@ -71,16 +70,13 @@ public class ImageAssetSetRenderableFactoryImplTests {
 
         lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        factory = new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries,
-                mockRemoveFromComponent);
+        factory = new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableFactoryImpl(null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries, null));
+                () -> new ImageAssetSetRenderableFactoryImpl(null));
     }
 
     @Test

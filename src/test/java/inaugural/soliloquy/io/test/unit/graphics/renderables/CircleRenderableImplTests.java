@@ -32,7 +32,6 @@ public class CircleRenderableImplTests {
     @Mock private ProviderAtTime<Float> mockWidthProvider;
     @Mock private ProviderAtTime<Color> mockColorProvider;
     @Mock private Component mockComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
 
     private CircleRenderable renderable;
 
@@ -40,32 +39,29 @@ public class CircleRenderableImplTests {
     public void setUp() {
         renderable =
                 new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, mockColorProvider,
-                        Z, UUID, mockComponent, mockRemoveFromComponent);
+                        Z, UUID, mockComponent);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(null, mockWidthProvider, mockColorProvider, Z, UUID,
-                        mockComponent, mockRemoveFromComponent));
+                        mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, null, mockColorProvider, Z, UUID,
-                        mockComponent, mockRemoveFromComponent));
+                        mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, null, Z, UUID,
-                        mockComponent, mockRemoveFromComponent));
+                        mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider, null, Z, UUID,
-                        mockComponent, mockRemoveFromComponent));
+                        mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, null, mockComponent, mockRemoveFromComponent));
+                        mockColorProvider, Z, null, mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, UUID, null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new CircleRenderableImpl(mockCenterProvider, mockWidthProvider,
-                        mockColorProvider, Z, UUID, mockComponent, null));
+                        mockColorProvider, Z, UUID, null));
     }
 
     @Test
@@ -154,6 +150,6 @@ public class CircleRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        verify(mockRemoveFromComponent, once()).accept(same(mockComponent), same(renderable));
+        assertTrue(renderable.isDeleted());
     }
 }

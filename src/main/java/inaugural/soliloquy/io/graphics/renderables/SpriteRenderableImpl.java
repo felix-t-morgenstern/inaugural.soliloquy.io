@@ -5,7 +5,6 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -17,7 +16,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class SpriteRenderableImpl extends AbstractImageAssetRenderable implements SpriteRenderable {
     private Sprite sprite;
@@ -28,11 +26,9 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
                                 Component containingStack,
-                                BiConsumer<Component, Renderable> removeFromComponent,
                                 RenderingBoundaries renderingBoundaries) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack, removeFromComponent,
-                renderingBoundaries);
+                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
         setSprite(sprite);
     }
 
@@ -46,11 +42,10 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
                                 Component containingStack,
-                                BiConsumer<Component, Renderable> removeFromComponent,
                                 RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
-                removeFromComponent, renderingBoundaries);
+                renderingBoundaries);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

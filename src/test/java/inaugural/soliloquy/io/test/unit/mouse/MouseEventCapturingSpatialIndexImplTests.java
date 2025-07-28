@@ -1,153 +1,186 @@
 package inaugural.soliloquy.io.test.unit.mouse;
 
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImageAssetRenderable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.mouse.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.ui.Component;
 
+import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class MouseEventCapturingSpatialIndexImplTests {
-    private final FakeImageAssetRenderable ImageAssetRenderable1 = new FakeImageAssetRenderable();
-    private final FakeImageAssetRenderable ImageAssetRenderable2 = new FakeImageAssetRenderable();
-    private final FakeImageAssetRenderable ImageAssetRenderable3 = new FakeImageAssetRenderable();
-    private final FakeImageAssetRenderable ImageAssetRenderable4 = new FakeImageAssetRenderable();
+    private final int Z_HIGHER = randomInt();
+    private final int Z_LOWER = randomIntWithInclusiveCeiling(Z_HIGHER - 1);
+    private final int COMPONENT_TIER_HIGHER = randomInt();
+    private final int COMPONENT_TIER_LOWER = randomIntWithInclusiveFloor(COMPONENT_TIER_HIGHER + 1);
+    private final FloatBox DIMENSIONS_1 = floatBoxOf(.1f, .1f, .5f, .5f);
+    private final FloatBox DIMENSIONS_2 = floatBoxOf(.2f, .2f, .6f, .6f);
+    private final FloatBox DIMENSIONS_3 = floatBoxOf(.3f, .3f, .7f, .7f);
+    private final FloatBox DIMENSIONS_4 = floatBoxOf(.4f, .4f, .8f, .8f);
 
-    private final FloatBox RenderingDimensions1 = floatBoxOf(.1f, .1f, .5f, .5f);
-    private final FloatBox RenderingDimensions2 = floatBoxOf(.2f, .2f, .6f, .6f);
-    private final FloatBox RenderingDimensions3 = floatBoxOf(.3f, .3f, .7f, .7f);
-    private final FloatBox RenderingDimensions4 = floatBoxOf(.4f, .4f, .8f, .8f);
+    @Mock private Component mockComponentHigher;
+    @Mock private Component mockComponentLower;
+    @Mock private ProviderAtTime<FloatBox> mockDimensionsProvider1;
+    @Mock private ProviderAtTime<FloatBox> mockDimensionsProvider2;
+    @Mock private ProviderAtTime<FloatBox> mockDimensionsProvider3;
+    @Mock private ProviderAtTime<FloatBox> mockDimensionsProvider4;
+    @Mock private ImageAssetRenderable mockRenderable1;
+    @Mock private ImageAssetRenderable mockRenderable2;
+    @Mock private ImageAssetRenderable mockRenderable3;
+    @Mock private ImageAssetRenderable mockRenderable4;
 
-    private MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex;
+    private MouseEventCapturingSpatialIndex capturing;
 
     @BeforeEach
     public void setUp() {
-        ImageAssetRenderable1.RenderingDimensions = RenderingDimensions1;
-        ImageAssetRenderable2.RenderingDimensions = RenderingDimensions2;
-        ImageAssetRenderable3.RenderingDimensions = RenderingDimensions3;
-        ImageAssetRenderable4.RenderingDimensions = RenderingDimensions4;
-        ImageAssetRenderable1.Z = 1;
-        ImageAssetRenderable2.Z = 2;
-        ImageAssetRenderable3.Z = 3;
-        ImageAssetRenderable4.Z = 4;
-        ImageAssetRenderable1.CapturesMouseEvents = true;
-        ImageAssetRenderable2.CapturesMouseEvents = true;
-        ImageAssetRenderable3.CapturesMouseEvents = true;
-        ImageAssetRenderable4.CapturesMouseEvents = true;
+        lenient().when(mockComponentHigher.tier()).thenReturn(COMPONENT_TIER_HIGHER);
+        lenient().when(mockComponentLower.tier()).thenReturn(COMPONENT_TIER_LOWER);
 
-        mouseEventCapturingSpatialIndex = new MouseEventCapturingSpatialIndexImpl();
+        lenient().when(mockDimensionsProvider1.provide(anyLong())).thenReturn(DIMENSIONS_1);
+        lenient().when(mockDimensionsProvider2.provide(anyLong())).thenReturn(DIMENSIONS_2);
+        lenient().when(mockDimensionsProvider3.provide(anyLong())).thenReturn(DIMENSIONS_3);
+        lenient().when(mockDimensionsProvider4.provide(anyLong())).thenReturn(DIMENSIONS_4);
+        lenient().when(mockRenderable1.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider1);
+        lenient().when(mockRenderable2.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider2);
+        lenient().when(mockRenderable3.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider3);
+        lenient().when(mockRenderable4.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider4);
+        lenient().when(mockRenderable1.getZ()).thenReturn(Z_HIGHER);
+        lenient().when(mockRenderable2.getZ()).thenReturn(Z_LOWER);
+        lenient().when(mockRenderable3.getZ()).thenReturn(Z_HIGHER);
+        lenient().when(mockRenderable4.getZ()).thenReturn(Z_LOWER);
+        lenient().when(mockRenderable1.getCapturesMouseEvents()).thenReturn(true);
+        lenient().when(mockRenderable2.getCapturesMouseEvents()).thenReturn(true);
+        lenient().when(mockRenderable3.getCapturesMouseEvents()).thenReturn(true);
+        lenient().when(mockRenderable4.getCapturesMouseEvents()).thenReturn(true);
+        lenient().when(mockRenderable1.capturesMouseEventAtPoint(any(), anyLong()))
+                .thenReturn(true);
+        lenient().when(mockRenderable2.capturesMouseEventAtPoint(any(), anyLong()))
+                .thenReturn(true);
+        lenient().when(mockRenderable3.capturesMouseEventAtPoint(any(), anyLong()))
+                .thenReturn(true);
+        lenient().when(mockRenderable4.capturesMouseEventAtPoint(any(), anyLong()))
+                .thenReturn(true);
+        lenient().when(mockRenderable1.component()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable2.component()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable3.component()).thenReturn(mockComponentLower);
+        lenient().when(mockRenderable4.component()).thenReturn(mockComponentLower);
+
+        capturing = new MouseEventCapturingSpatialIndexImpl();
     }
 
     @Test
     public void testPutRenderableAndGetCapturingRenderableAtPoint() {
-        assertNull(mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
 
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
 
-        assertSame(ImageAssetRenderable1,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
-        assertNull(mouseEventCapturingSpatialIndex
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing
                 .getCapturingRenderableAtPoint(vertexOf(0.09999f, 0.09999f), 0L));
-        assertSame(ImageAssetRenderable1,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.5f, .5f), 0L));
-        assertNull(mouseEventCapturingSpatialIndex
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.5f, .5f), 0L));
+        assertNull(capturing
                 .getCapturingRenderableAtPoint(vertexOf(0.50001f, 0.50001f), 0L));
     }
 
     @Test
     public void testRemoveAbsentRenderableDoesNotThrow() {
-        mouseEventCapturingSpatialIndex.removeRenderable(ImageAssetRenderable1);
+        capturing.removeRenderable(mockRenderable1);
     }
 
     @Test
     public void testPutRenderableWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                mouseEventCapturingSpatialIndex.putRenderable(null, RenderingDimensions1));
-        assertThrows(IllegalArgumentException.class, () ->
-                mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, null));
-        ImageAssetRenderable1.CapturesMouseEvents = false;
-        assertThrows(IllegalArgumentException.class, () ->
-                mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1,
-                        RenderingDimensions1));
+        assertThrows(IllegalArgumentException.class,
+                () -> capturing.putRenderable(null, DIMENSIONS_1));
+        assertThrows(IllegalArgumentException.class,
+                () -> capturing.putRenderable(mockRenderable1, null));
+        when(mockRenderable1.getCapturesMouseEvents()).thenReturn(false);
+        assertThrows(IllegalArgumentException.class,
+                () -> capturing.putRenderable(mockRenderable1, DIMENSIONS_1));
     }
 
     @Test
     public void testRemoveWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventCapturingSpatialIndex.removeRenderable(null));
+                capturing.removeRenderable(null));
     }
 
     @Test
     public void testRemoveRenderable() {
-        assertNull(mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
 
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
 
-        assertSame(ImageAssetRenderable1,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
 
-        mouseEventCapturingSpatialIndex.removeRenderable(ImageAssetRenderable1);
+        capturing.removeRenderable(mockRenderable1);
 
-        assertNull(mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
     }
 
     @Test
     public void testUpdateRenderable() {
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
 
-        assertSame(ImageAssetRenderable1,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
-        assertNull(mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
 
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions2);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_2);
 
-        assertNull(mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
-        assertSame(ImageAssetRenderable1,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
+        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
     }
 
     @Test
     public void testGetCapturingRenderableAtPointWithHighestZIndex() {
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable2, RenderingDimensions2);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable3, RenderingDimensions3);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable4, RenderingDimensions4);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
+        capturing.putRenderable(mockRenderable2, DIMENSIONS_2);
+        capturing.putRenderable(mockRenderable3, DIMENSIONS_3);
+        capturing.putRenderable(mockRenderable4, DIMENSIONS_4);
 
-        assertSame(ImageAssetRenderable4,
-                mouseEventCapturingSpatialIndex.getCapturingRenderableAtPoint(vertexOf(.45f, .45f), 0L));
+        assertSame(mockRenderable1,
+                capturing.getCapturingRenderableAtPoint(vertexOf(.45f, .45f), 0L));
     }
 
     @Test
     public void testGetCapturingRenderableAtPointIgnoresRenderablesNotCapturingAtPoint() {
-        ImageAssetRenderable3.CapturesMouseEventsAtPoint = false;
-        ImageAssetRenderable4.CapturesMouseEventsAtPoint = false;
+        when(mockRenderable1.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
+        when(mockRenderable2.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
 
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable1, RenderingDimensions1);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable2, RenderingDimensions2);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable3, RenderingDimensions3);
-        mouseEventCapturingSpatialIndex.putRenderable(ImageAssetRenderable4, RenderingDimensions4);
+        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
+        capturing.putRenderable(mockRenderable2, DIMENSIONS_2);
+        capturing.putRenderable(mockRenderable3, DIMENSIONS_3);
+        capturing.putRenderable(mockRenderable4, DIMENSIONS_4);
 
-        assertSame(ImageAssetRenderable2, mouseEventCapturingSpatialIndex
+        assertSame(mockRenderable3, capturing
                 .getCapturingRenderableAtPoint(vertexOf(.454f, .456f), 789L));
-        assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.size());
-        assertEquals(1, ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.size());
-        assertEquals(0.454f,
-                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.getFirst().X);
-        assertEquals(0.456f,
-                ImageAssetRenderable4.CapturesMouseEventsAtPointInputLocations.getFirst().Y);
-        assertEquals(789L,
-                (long) ImageAssetRenderable4.CapturesMouseEventsAtPointInputTimestamps.getFirst());
-        assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.size());
-        assertEquals(1, ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.size());
-        assertEquals(0.454f,
-                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.getFirst().X);
-        assertEquals(0.456f,
-                ImageAssetRenderable3.CapturesMouseEventsAtPointInputLocations.getFirst().Y);
-        assertEquals(789L,
-                (long) ImageAssetRenderable3.CapturesMouseEventsAtPointInputTimestamps.getFirst());
+        verify(mockRenderable1, once()).capturesMouseEventAtPoint(any(), anyLong());
+        verify(mockRenderable1, once()).capturesMouseEventAtPoint(
+                eq(vertexOf(0.454f, 0.456f)), eq(789L));
+        verify(mockRenderable2, once()).capturesMouseEventAtPoint(any(), anyLong());
+        verify(mockRenderable2, once()).capturesMouseEventAtPoint(
+                eq(vertexOf(0.454f, 0.456f)), eq(789L));
     }
 }

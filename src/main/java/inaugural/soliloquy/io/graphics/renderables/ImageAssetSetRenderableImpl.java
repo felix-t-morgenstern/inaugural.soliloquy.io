@@ -9,7 +9,6 @@ import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -20,7 +19,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
         implements ImageAssetSetRenderable {
@@ -37,11 +35,9 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        int z,
                                        UUID uuid,
                                        Component component,
-                                       BiConsumer<Component, Renderable> removeFromComponent,
                                        RenderingBoundaries renderingBoundaries) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, component, removeFromComponent,
-                renderingBoundaries);
+                renderingDimensionsProvider, z, uuid, component, renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
     }
@@ -59,11 +55,10 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        int z,
                                        UUID uuid,
                                        Component component,
-                                       BiConsumer<Component, Renderable> removeFromComponent,
                                        RenderingBoundaries renderingBoundaries) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, component,
-                removeFromComponent, renderingBoundaries);
+                renderingBoundaries);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();

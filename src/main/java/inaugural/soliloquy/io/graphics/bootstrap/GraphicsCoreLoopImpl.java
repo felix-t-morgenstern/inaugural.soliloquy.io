@@ -1,17 +1,16 @@
 package inaugural.soliloquy.io.graphics.bootstrap;
 
 import inaugural.soliloquy.io.api.Constants;
+import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.io.mouse.MouseCursor;
-import soliloquy.specs.io.mouse.MouseListener;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -20,9 +19,9 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.io.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
@@ -33,8 +32,6 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
-    private final String TITLEBAR;
-    private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK;
     private final FrameTimer FRAME_TIMER;
     private final int FRAME_TIMER_POLLING_INTERVAL;
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
@@ -42,11 +39,11 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final FrameExecutor FRAME_EXECUTOR;
     private final ShaderFactory SHADER_FACTORY;
     @SuppressWarnings("rawtypes")
-    private final Collection<Renderer> RENDERERS_WITH_SHADER;
+    private final Set<Renderer> RENDERERS_WITH_SHADER;
     private final String SHADER_FILENAME_PREFIX;
-    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY;
+    private final BiFunction<float[], float[], Mesh> MESH_FACTORY;
     @SuppressWarnings("rawtypes")
-    private final Collection<Renderer> RENDERERS_WITH_MESH;
+    private final Set<Renderer> RENDERERS_WITH_MESH;
     private final float[] MESH_VERTICES;
     private final float[] MESH_UV_COORDINATES;
     private final GraphicsPreloader GRAPHICS_PRELOADER;
@@ -56,29 +53,27 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
     private long window = Long.MIN_VALUE;
+    private String titlebar;
     private Vertex screenMouseLocation;
 
-    public GraphicsCoreLoopImpl(String titlebar,
-                                GLFWMouseButtonCallback mouseButtonCallback,
-                                FrameTimer frameTimer,
-                                int frameTimerPollingInterval,
-                                WindowResolutionManager windowResolutionManager,
-                                GlobalClock globalClock,
-                                FrameExecutor frameExecutor,
-                                ShaderFactory shaderFactory,
-                                @SuppressWarnings("rawtypes") Collection<Renderer>
-                                        renderersWithShader,
-                                String shaderFilenamePrefix,
-                                Function<float[], Function<float[], Mesh>> meshFactory,
-                                @SuppressWarnings("rawtypes") Collection<Renderer>
-                                        renderersWithMesh,
-                                float[] meshVertices,
-                                float[] meshUvCoordinates,
-                                GraphicsPreloader graphicsPreloader,
-                                MouseCursor mouseCursor,
-                                MouseListener mouseListener) {
-        TITLEBAR = Check.ifNullOrEmpty(titlebar, "titlebar");
-        MOUSE_BUTTON_CALLBACK = Check.ifNull(mouseButtonCallback, "mouseButtonCallback");
+    public GraphicsCoreLoopImpl(
+            String titlebar,
+            FrameTimer frameTimer,
+            int frameTimerPollingInterval,
+            WindowResolutionManager windowResolutionManager,
+            GlobalClock globalClock,
+            FrameExecutor frameExecutor,
+            ShaderFactory shaderFactory,
+            @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader,
+            String shaderFilenamePrefix,
+            BiFunction<float[], float[], Mesh> meshFactory,
+            @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh,
+            float[] meshVertices,
+            float[] meshUvCoordinates,
+            GraphicsPreloader graphicsPreloader,
+            MouseCursor mouseCursor,
+            MouseListener mouseListener) {
+        this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
         FRAME_TIMER_POLLING_INTERVAL = Check.throwOnLtValue(
                 Check.throwOnGteValue(frameTimerPollingInterval, MS_PER_SECOND,
@@ -128,14 +123,12 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         glDepthMask(false);
         glEnable(GL_TEXTURE_2D);
 
-        glfwSetMouseButtonCallback(window, MOUSE_BUTTON_CALLBACK);
-
         var shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
         shader.bind();
 
         RENDERERS_WITH_SHADER.forEach(renderer -> renderer.setShader(shader));
 
-        var mesh = MESH_FACTORY.apply(MESH_VERTICES).apply(MESH_UV_COORDINATES);
+        var mesh = MESH_FACTORY.apply(MESH_VERTICES, MESH_UV_COORDINATES);
 
         RENDERERS_WITH_MESH.forEach(renderer -> renderer.setMesh(mesh));
 
@@ -181,7 +174,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
     private void updateWindow() {
         var prevWindow = window;
-        window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(window, TITLEBAR);
+        window = WINDOW_RESOLUTION_MANAGER.updateWindowSizeAndLocation(window, titlebar);
         glfwMakeContextCurrent(window);
         if (window == 0) {
             throw new IllegalStateException("Failed to create window");
@@ -236,6 +229,11 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
 
     @Override
     public String getTitlebar() {
-        return TITLEBAR;
+        return titlebar;
+    }
+
+    @Override
+    public void setTitlebar(String titlebar) throws IllegalArgumentException {
+        this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
     }
 }

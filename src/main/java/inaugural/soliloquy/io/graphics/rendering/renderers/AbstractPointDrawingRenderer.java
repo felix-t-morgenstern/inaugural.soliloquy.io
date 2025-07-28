@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 
@@ -11,8 +12,8 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 
 abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
         extends AbstractRenderer<TRenderable> {
-    protected AbstractPointDrawingRenderer(Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+    protected AbstractPointDrawingRenderer(TimestampValidator timestampValidator) {
+        super(timestampValidator);
     }
 
     protected void setDrawColor(Color color) {

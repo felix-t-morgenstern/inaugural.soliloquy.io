@@ -9,18 +9,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AntialiasedLineSegmentRenderableImplTests {
@@ -36,7 +35,6 @@ public class AntialiasedLineSegmentRenderableImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
 
     private AntialiasedLineSegmentRenderable renderable;
 
@@ -53,8 +51,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         );
     }
 
@@ -69,8 +66,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -81,8 +77,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -93,8 +88,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -105,8 +99,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -117,8 +110,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -129,8 +121,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 null,
                 Z,
                 UUID,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -141,8 +132,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 null,
-                mockComponent,
-                mockRemoveFromComponent
+                mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,
@@ -153,19 +143,6 @@ public class AntialiasedLineSegmentRenderableImplTests {
                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                 Z,
                 UUID,
-                null,
-                mockRemoveFromComponent
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                THICKNESS_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
-                Z,
-                UUID,
-                mockComponent,
                 null
         ));
     }
@@ -270,6 +247,6 @@ public class AntialiasedLineSegmentRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        verify(mockRemoveFromComponent, once()).accept(same(mockComponent), same(renderable));
+        assertTrue(renderable.isDeleted());
     }
 }

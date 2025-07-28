@@ -20,12 +20,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class SpriteRenderableFactoryImpl extends AbstractRenderableFactory implements SpriteRenderableFactory {
+public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public SpriteRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                       BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public SpriteRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -38,8 +36,7 @@ public class SpriteRenderableFactoryImpl extends AbstractRenderableFactory imple
                                  Component component)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                colorShifts, renderingDimensionsProvider, z, uuid, component,
-                REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                colorShifts, renderingDimensionsProvider, z, uuid, component, RENDERING_BOUNDARIES);
     }
 
     @Override
@@ -56,7 +53,6 @@ public class SpriteRenderableFactoryImpl extends AbstractRenderableFactory imple
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
                 onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                renderingDimensionsProvider, z, uuid, component, REMOVE_FROM_COMPONENT,
-                RENDERING_BOUNDARIES);
+                renderingDimensionsProvider, z, uuid, component, RENDERING_BOUNDARIES);
     }
 }

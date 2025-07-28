@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.mouse.MouseEventCapturingSpatialIndex;
-import soliloquy.specs.io.mouse.MouseEventHandler;
+import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.io.input.mouse.MouseEventHandler;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
 
 

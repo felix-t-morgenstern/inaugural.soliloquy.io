@@ -25,10 +25,9 @@ public class AntialiasedLineSegmentRenderableImpl
             ProviderAtTime<Float> lengthGradientPercentProvider,
             int z,
             java.util.UUID uuid,
-            Component component,
-            BiConsumer<Component, Renderable> removeFromComponent) {
+            Component component) {
         super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z,
-                uuid, component, removeFromComponent);
+                uuid, component);
         setThicknessGradientPercentProvider(thicknessGradientPercentProvider);
         setLengthGradientPercentProvider(lengthGradientPercentProvider);
     }

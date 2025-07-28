@@ -5,18 +5,19 @@ import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.io.graphics.rendering.*;
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
-import inaugural.soliloquy.io.mouse.MouseListenerImpl;
+import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.mouse.MouseCursor;
-import soliloquy.specs.io.mouse.MouseEventCapturingSpatialIndex;
+import soliloquy.specs.io.input.mouse.MouseCursor;
+import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.io.graphics.rendering.*;
@@ -24,10 +25,9 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -57,18 +57,17 @@ public class DisplayTest {
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
 
-    protected final static BiConsumer<Component, Renderable> DUMMY_REMOVE = (_, _) -> {};
-
     protected static Map<Class<?>, Renderer<? extends Renderable>> Renderers;
     protected static FakeFrameTimer FrameTimer;
     protected static Component MockTopLevelComponent;
     protected static Component MockFirstChildComponent;
-    protected static MouseCursor MouseCursor = new FakeMouseCursor();
+    protected static MouseCursor MouseCursor = mock(MouseCursor.class);
     protected static MouseEventCapturingSpatialIndex MouseEventCapturingSpatialIndex;
     protected static ColorShiftStackAggregator MockShiftAggregator;
+    protected static TimestampValidator TimestampValidator;
 
     /** @noinspection rawtypes */
-    protected static void runTest(Function<WindowResolutionManager, List<Renderer>>
+    protected static void runTest(Function<WindowResolutionManager, Set<Renderer>>
                                           generateRenderablesAndRenderersWithMeshAndShader,
                                   Runnable graphicsPreloaderLoadAction,
                                   Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
@@ -77,10 +76,9 @@ public class DisplayTest {
 
         FrameTimer = new FakeFrameTimer();
 
-        Function<float[], Function<float[], Mesh>> meshFactory = f1 -> f2 -> new MeshImpl(f1, f2);
-
         Renderers = mapOf();
-        var componentRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, null);
+        TimestampValidator = new TimestampValidator(null);
+        var componentRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -91,7 +89,7 @@ public class DisplayTest {
         MockShiftAggregator = mock(ColorShiftStackAggregator.class);
         when(MockShiftAggregator.aggregate(any(), anyLong())).thenReturn(netShifts(0, 0, 0, 0, 0));
 
-        var mouseListener = new MouseListenerImpl(mouseEventHandler);
+        var mouseListener = new MouseListener(mouseEventHandler);
 
         MockTopLevelComponent = mock(Component.class);
         when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
@@ -102,17 +100,18 @@ public class DisplayTest {
                 WHOLE_SCREEN_PROVIDER);
         when(MockTopLevelComponent.contents()).thenReturn(setOf(MockFirstChildComponent));
 
-        var frameExecutor = new FrameExecutorImpl(MockTopLevelComponent, componentRenderer, 100);
+        var frameExecutor = new FrameExecutorImpl(componentRenderer, 100);
+        frameExecutor.setTopLevelComponent(MockTopLevelComponent);
 
         var renderersWithMeshAndShader =
                 generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);
 
         var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("My title bar", new FakeGLFWMouseButtonCallback(),
-                        FrameTimer, 0, windowResolutionManager, GLOBAL_CLOCK, frameExecutor,
-                        new ShaderFactoryImpl(), renderersWithMeshAndShader, SHADER_FILENAME_PREFIX,
-                        meshFactory, renderersWithMeshAndShader, MESH_DATA, MESH_DATA,
-                        graphicsPreloader, MouseCursor, mouseListener);
+                new GraphicsCoreLoopImpl("My title bar", FrameTimer, 0, windowResolutionManager,
+                        GLOBAL_CLOCK, frameExecutor, new ShaderFactoryImpl(),
+                        renderersWithMeshAndShader, SHADER_FILENAME_PREFIX, MeshImpl::new,
+                        renderersWithMeshAndShader, MESH_DATA, MESH_DATA, graphicsPreloader,
+                        MouseCursor, mouseListener);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

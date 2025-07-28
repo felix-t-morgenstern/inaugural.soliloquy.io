@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.keyboard;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.io.keyboard.KeyEventListener;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.ui.keyboard.KeyBinding;
 import soliloquy.specs.ui.keyboard.KeyBindingContext;
 
@@ -18,9 +18,9 @@ public class KeyEventListenerImpl implements KeyEventListener {
     private final TimestampValidator TIMESTAMP_VALIDATOR;
     private final Map<KeyBindingContext, Integer> PRIORITIES_BY_CONTEXTS;
 
-    public KeyEventListenerImpl(Long mostRecentTimestamp) {
+    public KeyEventListenerImpl(TimestampValidator timestampValidator) {
         CONTEXTS = mapOf();
-        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
+        TIMESTAMP_VALIDATOR = timestampValidator;
         PRIORITIES_BY_CONTEXTS = mapOf();
     }
 
@@ -68,13 +68,13 @@ public class KeyEventListenerImpl implements KeyEventListener {
 
     @Override
     public void press(char c, long timestamp) {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
         handleKeyEvent(c, binding -> binding.press(timestamp));
     }
 
     @Override
     public void release(char c, long timestamp) {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
         handleKeyEvent(c, binding -> binding.release(timestamp));
     }
 

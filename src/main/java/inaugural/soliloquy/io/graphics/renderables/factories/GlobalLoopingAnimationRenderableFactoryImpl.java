@@ -20,13 +20,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class GlobalLoopingAnimationRenderableFactoryImpl extends AbstractRenderableFactory
-        implements GlobalLoopingAnimationRenderableFactory {
+public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopingAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public GlobalLoopingAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                                       BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public GlobalLoopingAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -41,7 +38,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl extends AbstractRendera
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, colorShifts,
-                renderingAreaProvider, z, uuid, component, REMOVE_FROM_COMPONENT,
+                renderingAreaProvider, z, uuid, component,
                 RENDERING_BOUNDARIES);
     }
 
@@ -61,6 +58,6 @@ public class GlobalLoopingAnimationRenderableFactoryImpl extends AbstractRendera
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
                 onMouseLeave, colorShifts, renderingAreaProvider, z, uuid,
-                component, REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES);
     }
 }

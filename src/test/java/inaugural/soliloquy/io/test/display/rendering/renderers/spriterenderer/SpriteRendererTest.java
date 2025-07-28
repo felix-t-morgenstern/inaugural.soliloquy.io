@@ -13,7 +13,7 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
@@ -31,7 +31,7 @@ public class SpriteRendererTest extends DisplayTest {
     protected static Renderer<SpriteRenderable> SpriteRenderer;
 
     /** @noinspection rawtypes */
-    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
@@ -41,8 +41,7 @@ public class SpriteRendererTest extends DisplayTest {
 
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 0,
-                java.util.UUID.randomUUID(), MockTopLevelComponent, DUMMY_REMOVE,
-                RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockTopLevelComponent, RENDERING_BOUNDARIES);
 
         lenient().when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
 
@@ -55,7 +54,7 @@ public class SpriteRendererTest extends DisplayTest {
 
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
-        return listOf(SpriteRenderer);
+        return setOf(SpriteRenderer);
     }
 
     protected static void graphicsPreloaderLoadAction() {

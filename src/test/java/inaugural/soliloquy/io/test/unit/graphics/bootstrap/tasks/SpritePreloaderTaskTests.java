@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 import inaugural.soliloquy.io.api.dto.SpriteDefinitionDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.SpritePreloaderTask;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSpriteFactory;
+import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,26 +13,25 @@ import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SpritePreloaderTaskTests {
     private final Map<String, Image> IMAGES = mapOf();
-    private final FakeSpriteFactory FACTORY = new FakeSpriteFactory();
     private final List<SpriteDefinitionDTO> SPRITE_DEFINITION_DTOS = listOf();
-    
-    @Mock private Consumer<Sprite> addSprite;
+
+    @Mock private Function<SpriteDefinition, Sprite> mockFactory;
+    @Mock private Consumer<Sprite> mockAcceptOutput;
 
     private SpritePreloaderTask spritePreloaderTask;
 
@@ -55,111 +54,123 @@ public class SpritePreloaderTaskTests {
         SPRITE_DEFINITION_DTOS.add(spriteDefinitionDTO3);
 
         spritePreloaderTask = new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS,
-                FACTORY, addSprite);
+                mockFactory, mockAcceptOutput);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(null, SPRITE_DEFINITION_DTOS, FACTORY, addSprite));
+                new SpritePreloaderTask(null, SPRITE_DEFINITION_DTOS, mockFactory, mockAcceptOutput));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS, null,
-                        addSprite));
+                        mockAcceptOutput));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, null, FACTORY, addSprite));
+                new SpritePreloaderTask(IMAGES::get, null, mockFactory, mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, listOf(), FACTORY, addSprite));
+                new SpritePreloaderTask(IMAGES::get, listOf(), mockFactory, mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf((SpriteDefinitionDTO) null),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO(null, "relativeLocation1",
                                     12, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("", "relativeLocation1",
                                     12, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", null,
                                     12, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", "",
                                     12, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     -1, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, -1, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     56, 34, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new SpritePreloaderTask(IMAGES::get,
                         listOf(
                             new SpriteDefinitionDTO("sprite1Id", "relativeLocation1",
                                     12, 78, 56, 78)
                         ),
-                        FACTORY,
-                        addSprite));
+                        mockFactory,
+                        mockAcceptOutput));
 
         assertThrows(IllegalArgumentException.class, () ->
-                new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS, FACTORY, null));
+                new SpritePreloaderTask(IMAGES::get, SPRITE_DEFINITION_DTOS, mockFactory, null));
     }
 
     @Test
     public void testRun() {
+        var factoryInputs = Collections.<String, SpriteDefinition>mapOf();
+        var factoryOutputs = Collections.<Sprite>listOf();
+        when(mockFactory.apply(any())).thenAnswer(i -> {
+            SpriteDefinition arg = i.getArgument(0);
+            factoryInputs.put(arg.id(), arg);
+            var mockSprite = mock(Sprite.class);
+            factoryOutputs.add(mockSprite);
+            return mockSprite;
+        });
+
         spritePreloaderTask.run();
 
-        verify(addSprite, times(SPRITE_DEFINITION_DTOS.size())).accept(any());
+        verify(mockAcceptOutput, times(SPRITE_DEFINITION_DTOS.size())).accept(any());
         SPRITE_DEFINITION_DTOS.forEach(dto -> {
-            var createdDefinition = FACTORY.INPUTS.get(dto.id);
+            var createdDefinition = factoryInputs.get(dto.id);
             assertNotNull(createdDefinition);
             assertSame(IMAGES.get(dto.imgLoc), createdDefinition.image());
             assertEquals(dto.leftX, createdDefinition.leftX());
             assertEquals(dto.topY, createdDefinition.topY());
             assertEquals(dto.rightX, createdDefinition.rightX());
             assertEquals(dto.bottomY, createdDefinition.bottomY());
-
-            FACTORY.OUTPUTS.forEach(output -> verify(addSprite, once()).accept(output));
         });
+
+        verify(mockFactory, times(SPRITE_DEFINITION_DTOS.size())).apply(any());
+        verify(mockAcceptOutput, times(SPRITE_DEFINITION_DTOS.size())).accept(any());
+        factoryOutputs.forEach(output -> verify(mockAcceptOutput, once()).accept(output));
     }
 }

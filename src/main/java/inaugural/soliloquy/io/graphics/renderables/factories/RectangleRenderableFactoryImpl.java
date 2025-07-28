@@ -5,7 +5,6 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -15,15 +14,11 @@ import soliloquy.specs.ui.Component;
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
-public class RectangleRenderableFactoryImpl extends AbstractRenderableFactory
-        implements RectangleRenderableFactory {
+public class RectangleRenderableFactoryImpl implements RectangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    public RectangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
-                                          BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
+    public RectangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
@@ -48,6 +43,6 @@ public class RectangleRenderableFactoryImpl extends AbstractRenderableFactory
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
                 textureTileWidthProvider, textureTileHeightProvider, onPress, onRelease,
                 onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid, component,
-                REMOVE_FROM_COMPONENT, RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES);
     }
 }

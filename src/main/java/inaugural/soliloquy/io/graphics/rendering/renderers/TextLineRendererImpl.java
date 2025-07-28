@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
@@ -26,8 +27,8 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
 
     public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
                                 Color defaultColor, WindowResolutionManager windowResolutionManager,
-                                Long mostRecentTimestamp) {
-        super(renderingBoundaries, windowResolutionManager, mostRecentTimestamp);
+                                TimestampValidator timestampValidator) {
+        super(renderingBoundaries, windowResolutionManager, timestampValidator);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 

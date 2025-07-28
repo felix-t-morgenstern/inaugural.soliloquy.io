@@ -7,9 +7,8 @@ import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.util.List;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.mockito.Mockito.when;
 
@@ -18,7 +17,7 @@ class TriangleRendererTest extends DisplayTest {
     protected static Renderer<TriangleRenderable> TriangleRenderer;
 
     /** @noinspection rawtypes */
-    public static List<Renderer> generateRenderersWithMeshAndShader(
+    public static Set<Renderer> generateRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             TriangleRenderable renderable) {
         TriangleRenderer = new TriangleRenderer(null);
@@ -30,6 +29,6 @@ class TriangleRendererTest extends DisplayTest {
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return listOf(TriangleRenderer);
+        return setOf(TriangleRenderer);
     }
 }

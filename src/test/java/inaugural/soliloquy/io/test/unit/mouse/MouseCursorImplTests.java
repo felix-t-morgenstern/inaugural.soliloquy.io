@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.mouse.MouseCursorImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.io.mouse.MouseCursor;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public class MouseCursorImplTests {
 
     @BeforeEach
     public void setUp() {
-        mouseCursor = new MouseCursorImpl(MOUSE_CURSORS, GLOBAL_CLOCK);
+        mouseCursor = new MouseCursorImpl(MOUSE_CURSORS::get, GLOBAL_CLOCK);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class MouseCursorImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new MouseCursorImpl(null, GLOBAL_CLOCK));
         assertThrows(IllegalArgumentException.class, () ->
-                new MouseCursorImpl(MOUSE_CURSORS, null));
+                new MouseCursorImpl(MOUSE_CURSORS::get, null));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -15,8 +16,8 @@ public class FiniteAnimationRenderer
 
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
                                    ColorShiftStackAggregator colorShiftStackAggregator,
-                                   Long mostRecentTimestamp) {
-        super(renderingBoundaries, mostRecentTimestamp);
+                                   TimestampValidator timestampValidator) {
+        super(renderingBoundaries, timestampValidator);
         COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
                 "colorShiftStackAggregator");
     }

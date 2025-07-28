@@ -3,23 +3,15 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 import inaugural.soliloquy.io.graphics.renderables.RasterizedLineSegmentRenderableImpl;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class RasterizedLineSegmentRenderableFactoryImpl
-        extends AbstractRenderableFactory
         implements RasterizedLineSegmentRenderableFactory {
-    public RasterizedLineSegmentRenderableFactoryImpl(
-            BiConsumer<Component, Renderable> removeFromComponent) {
-        super(removeFromComponent);
-    }
-
     @Override
     public RasterizedLineSegmentRenderable make(ProviderAtTime<Vertex> vertex1Provider,
                                                 ProviderAtTime<Vertex> vertex2Provider,
@@ -33,6 +25,6 @@ public class RasterizedLineSegmentRenderableFactoryImpl
             throws IllegalArgumentException {
         return new RasterizedLineSegmentRenderableImpl(vertex1Provider, vertex2Provider,
                 thicknessProvider, stipplePattern, stippleFactor, colorProvider, z, uuid,
-                component, REMOVE_FROM_COMPONENT);
+                component);
     }
 }

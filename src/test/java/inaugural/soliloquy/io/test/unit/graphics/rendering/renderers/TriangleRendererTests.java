@@ -3,11 +3,14 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeTriangleRenderable;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -26,6 +29,7 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class TriangleRendererTests {
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER =
             new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
@@ -53,10 +57,11 @@ public class TriangleRendererTests {
 
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
+    @Mock private TimestampValidator mockTimestampValidator;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
 
-    private Renderer<TriangleRenderable> triangleRenderer;
+    private Renderer<TriangleRenderable> renderer;
 
     @BeforeAll
     public static void setUpFixture() {
@@ -84,29 +89,41 @@ public class TriangleRendererTests {
         mockMesh = mock(Mesh.class);
         mockShader = mock(Shader.class);
 
-        triangleRenderer = new TriangleRenderer(MOST_RECENT_TIMESTAMP);
+        renderer = new TriangleRenderer(mockTimestampValidator);
     }
 
     @Test
-    public void testMostRecentTimestamp() {
-        triangleRenderer.setMesh(mockMesh);
-        triangleRenderer.setShader(mockShader);
+    public void testConstructorWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderer(null));
+    }
 
-        assertEquals(MOST_RECENT_TIMESTAMP, triangleRenderer.mostRecentTimestamp());
+    @Test
+    public void testGetMostRecentTimestamp() {
+        var mostRecentTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
 
-        triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP + 1);
+        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
+    }
 
-        assertEquals(MOST_RECENT_TIMESTAMP + 1, (long) triangleRenderer.mostRecentTimestamp());
+    @Test
+    public void testRenderUpdatesTimestamp() {
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
+        var timestamp = randomLong();
+
+        renderer.render(TRIANGLE_RENDERABLE, timestamp);
+
+        verify(mockTimestampValidator, once()).validateTimestamp(renderer.getClass().getCanonicalName(), timestamp);
     }
 
     @Test
     public void testRenderWithInvalidArgs() {
-        triangleRenderer.setMesh(mockMesh);
-        triangleRenderer.setShader(mockShader);
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
         assertThrows(IllegalArgumentException.class,
-                () -> triangleRenderer.render(null, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+                () -> renderer.render(null, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(null,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -114,7 +131,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(new FakeStaticProvider<>(null),
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -122,7 +139,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 null, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -130,7 +147,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, null,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -138,7 +155,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, new FakeStaticProvider<>(null),
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -146,7 +163,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 null, VERTEX_3_PROVIDER,
@@ -154,7 +171,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, null,
@@ -162,7 +179,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, new FakeStaticProvider<>(null),
@@ -170,7 +187,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -178,7 +195,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -186,7 +203,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -194,7 +211,7 @@ public class TriangleRendererTests {
                                 null,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -202,14 +219,14 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 null),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, new FakeStaticProvider<>(randomInt()),
                                 null, MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> triangleRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
@@ -220,8 +237,8 @@ public class TriangleRendererTests {
 
     @Test
     public void testRenderWithMeshAndShaderUnset() {
-        TriangleRenderer triangleRendererWithoutMesh = new TriangleRenderer(null);
-        TriangleRenderer triangleRendererWithoutShader = new TriangleRenderer(null);
+        TriangleRenderer triangleRendererWithoutMesh = new TriangleRenderer(mockTimestampValidator);
+        TriangleRenderer triangleRendererWithoutShader = new TriangleRenderer(mockTimestampValidator);
 
         triangleRendererWithoutMesh.setShader(mockShader);
         triangleRendererWithoutShader.setMesh(mockMesh);
@@ -234,10 +251,10 @@ public class TriangleRendererTests {
 
     @Test
     public void testRenderUnbindsMeshAndShader() {
-        triangleRenderer.setMesh(mockMesh);
-        triangleRenderer.setShader(mockShader);
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
-        triangleRenderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP);
+        renderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP);
 
         verify(mockMesh, once()).unbind();
         verify(mockShader, once()).unbind();

@@ -10,14 +10,15 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
     /** @noinspection rawtypes */
-    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
@@ -25,7 +26,7 @@ public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(),
                 staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f)), 0,
-                java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockFirstChildComponent, RENDERING_BOUNDARIES);
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
                 windowResolutionManager,
@@ -34,6 +35,6 @@ public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
                         colorShiftStackAggregator,
                 null);
 
-        return listOf(SpriteRenderer);
+        return setOf(SpriteRenderer);
     }
 }

@@ -5,15 +5,17 @@ import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorFrameDefinitionDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 /** @noinspection FieldCanBeLocal */
+@ExtendWith(MockitoExtension.class)
 public class AnimatedMouseCursorPreloaderTaskTests {
     private final String MOUSE_CURSOR_IMG_1 = "mouseCursorImg1";
     private final String MOUSE_CURSOR_IMG_2 = "mouseCursorImg2";
@@ -62,11 +65,10 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                             FRAME_1_DTO, FRAME_2_DTO
                     }, DURATION, OFFSET, PAUSED, TIMESTAMP);
 
-    @Mock
-    private AnimatedMouseCursorProviderFactory animatedMouseCursorProviderFactoryMock;
+    @Mock private Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+            mockAnimatedMouseCursorProviderFactory;
     private AnimatedMouseCursorProviderDefinition animatedMouseCursorProviderFactoryMockInput;
-    @Mock
-    private AnimatedMouseCursorProvider animatedMouseCursorProviderMock;
+    @Mock private AnimatedMouseCursorProvider mockAnimatedMouseCursorProvider;
 
     private ProviderAtTime<Long> resultProvider;
 
@@ -76,18 +78,15 @@ public class AnimatedMouseCursorPreloaderTaskTests {
     public void setUp() {
         ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS.add(ANIMATED_MOUSE_CURSOR_DTO);
 
-        animatedMouseCursorProviderMock = mock(AnimatedMouseCursorProvider.class);
-
         animatedMouseCursorProviderFactoryMockInput = null;
-        animatedMouseCursorProviderFactoryMock = mock(AnimatedMouseCursorProviderFactory.class);
-        when(animatedMouseCursorProviderFactoryMock.make(any()))
+        lenient().when(mockAnimatedMouseCursorProviderFactory.apply(any()))
                 .thenAnswer(invocation -> {
                     animatedMouseCursorProviderFactoryMockInput = invocation.getArgument(0);
-                    return animatedMouseCursorProviderMock;
+                    return mockAnimatedMouseCursorProvider;
                 });
 
         animatedMouseCursorPreloaderTask = new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
-                ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS, animatedMouseCursorProviderFactoryMock,
+                ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS, mockAnimatedMouseCursorProviderFactory,
                 provider -> resultProvider = provider);
     }
 
@@ -96,18 +95,18 @@ public class AnimatedMouseCursorPreloaderTaskTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(null,
                         ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS,
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         null,
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         listOf((AnimatedMouseCursorDefinitionDTO) null),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -116,7 +115,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -125,14 +124,14 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 null, DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -140,7 +139,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{},
                                 DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -148,7 +147,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{FRAME_2_DTO},
                                 DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -157,7 +156,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         new AnimatedMouseCursorFrameDefinitionDTO(0, null)
                                 }, DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -166,7 +165,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         new AnimatedMouseCursorFrameDefinitionDTO(0, "")
                                 }, DURATION, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -175,7 +174,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, MS_2 - 1, OFFSET, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -184,7 +183,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, DURATION, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -193,7 +192,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, -1, PAUSED, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -202,7 +201,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, OFFSET, PAUSED, null)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
@@ -211,7 +210,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                                         FRAME_1_DTO, FRAME_2_DTO
                                 }, DURATION, OFFSET, TIMESTAMP + 1, TIMESTAMP)
                         ),
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -223,7 +222,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         ANIMATED_MOUSE_CURSOR_DEFINITION_DTOS,
-                        animatedMouseCursorProviderFactoryMock,
+                        mockAnimatedMouseCursorProviderFactory,
                         null));
     }
 
@@ -247,6 +246,6 @@ public class AnimatedMouseCursorPreloaderTaskTests {
         assertEquals(TIMESTAMP,
                 animatedMouseCursorProviderFactoryMockInput.mostRecentTimestamp());
 
-        assertSame(animatedMouseCursorProviderMock, resultProvider);
+        assertSame(mockAnimatedMouseCursorProvider, resultProvider);
     }
 }

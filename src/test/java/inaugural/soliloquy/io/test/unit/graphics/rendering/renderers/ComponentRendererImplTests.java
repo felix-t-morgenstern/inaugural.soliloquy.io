@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +28,6 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentRendererImplTests {
-    private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     private Map<Class<?>, Renderer<? extends Renderable>> mockRenderers;
 
@@ -37,6 +37,7 @@ public class ComponentRendererImplTests {
     @Mock private Renderer<Renderable> mockRenderer;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Component mockComponent;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private ComponentRenderer renderer;
 
@@ -48,20 +49,23 @@ public class ComponentRendererImplTests {
                 pairOf(mockRenderable3.getClass(), mockRenderer));
 
         renderer = new ComponentRendererImpl(mockRenderers, mockRenderingBoundaries,
-                MOST_RECENT_TIMESTAMP);
+                mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentRendererImpl(null, mockRenderingBoundaries,
-                        MOST_RECENT_TIMESTAMP));
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentRendererImpl(mockRenderers, null, MOST_RECENT_TIMESTAMP));
+                () -> new ComponentRendererImpl(mockRenderers, null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentRendererImpl(mockRenderers, mockRenderingBoundaries, null));
     }
 
     @Test
     public void testRender() {
+        var timestamp = randomLong();
         var boundaries = randomFloatBox();
         //noinspection unchecked
         var mockBoundariesProvider = (ProviderAtTime<FloatBox>) mock(ProviderAtTime.class);
@@ -73,27 +77,22 @@ public class ComponentRendererImplTests {
         when(mockComponent.contents())
                 .thenReturn(setOf(mockRenderable1, mockRenderable2, mockRenderable3));
 
-        renderer.render(mockComponent, MOST_RECENT_TIMESTAMP);
+        renderer.render(mockComponent, timestamp);
 
         var inOrder =
                 inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockComponent,
-                        mockRenderers, mockRenderer);
+                        mockRenderers, mockRenderer, mockTimestampValidator);
+        inOrder.verify(mockTimestampValidator, once()).validateTimestamp(timestamp);
         inOrder.verify(mockComponent, once()).getRenderingBoundariesProvider();
-        inOrder.verify(mockBoundariesProvider, once()).provide(MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockBoundariesProvider, once()).provide(timestamp);
         inOrder.verify(mockRenderingBoundaries, once()).pushNewBoundaries(boundaries);
         inOrder.verify(mockComponent, once()).contents();
         inOrder.verify(mockRenderers, once()).get(mockRenderable3.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable3, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderer, once()).render(mockRenderable3, timestamp);
         inOrder.verify(mockRenderers, once()).get(mockRenderable2.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable2, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderer, once()).render(mockRenderable2, timestamp);
         inOrder.verify(mockRenderers, once()).get(mockRenderable1.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable1, MOST_RECENT_TIMESTAMP);
+        inOrder.verify(mockRenderer, once()).render(mockRenderable1, timestamp);
         inOrder.verify(mockRenderingBoundaries, once()).popMostRecentBoundaries();
-    }
-
-    @Test
-    public void testRenderOutdatedTimestamp() {
-        assertThrows(IllegalArgumentException.class, () ->
-                renderer.render(mockComponent, MOST_RECENT_TIMESTAMP - 1L));
     }
 }

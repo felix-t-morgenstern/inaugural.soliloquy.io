@@ -3,20 +3,22 @@ package inaugural.soliloquy.io.test.display.bootstrap;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.GlobalClockImpl;
+import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.mouse.MouseListener;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.ui.Component;
 
-import java.util.Collection;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.function.BiFunction;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test acceptance criteria:
@@ -33,20 +35,22 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         var frameTimer = new FakeFrameTimer();
-        var frameExecutor =
-                new FrameExecutorImpl(mock(Component.class), new FakeComponentRenderer(), 100);
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithShader = listOf();
+        var mockTopLevelComponent = mock(Component.class);
+        when(mockTopLevelComponent.contents()).thenReturn(setOf());
+        var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100);
+        frameExecutor.setTopLevelComponent(mockTopLevelComponent);
+        @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader = setOf();
         WindowManager = new FakeWindowResolutionManager();
-        Function<float[], Function<float[], Mesh>> meshFactory = _ -> _ -> new FakeMesh();
-        @SuppressWarnings("rawtypes") Collection<Renderer> renderersWithMesh = listOf();
+        BiFunction<float[], float[], Mesh> meshFactory = (_, _) -> mock(Mesh.class);
+        @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh = setOf();
 
 
         var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("New window", new FakeGLFWMouseButtonCallback(),
+                new GraphicsCoreLoopImpl("New window",
                         frameTimer, 20, WindowManager, new GlobalClockImpl(), frameExecutor,
                         new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                         renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
-                        new FakeMouseCursor(), mock(MouseListener.class));
+                        mock(MouseCursor.class), mock(MouseListener.class));
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {

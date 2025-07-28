@@ -5,7 +5,6 @@ import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorFrameDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -17,17 +16,16 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 public class AnimatedMouseCursorPreloaderTask implements Runnable {
     private final Collection<AnimatedMouseCursorDefinitionDTO> DEFINITION_DTOS;
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
-    private final AnimatedMouseCursorProviderFactory FACTORY;
+    private final Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+            FACTORY;
     private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
 
     /** @noinspection ConstantConditions */
-    public AnimatedMouseCursorPreloaderTask(Function<String, Long>
-                                                    getMouseCursorsByRelativeLocation,
-                                            Collection<AnimatedMouseCursorDefinitionDTO>
-                                                    animatedMouseCursorDefinitionDTOs,
-                                            AnimatedMouseCursorProviderFactory
-                                                    animatedMouseCursorProviderFactory,
-                                            Consumer<AnimatedMouseCursorProvider> processResult) {
+    public AnimatedMouseCursorPreloaderTask(
+            Function<String, Long> getMouseCursorsByRelativeLocation,
+            Collection<AnimatedMouseCursorDefinitionDTO> animatedMouseCursorDefinitionDTOs,
+            Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider> animatedMouseCursorProviderFactory,
+            Consumer<AnimatedMouseCursorProvider> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION = Check.ifNull(getMouseCursorsByRelativeLocation,
                 "getMouseCursorsByRelativeLocation");
         // TODO: Deal with the awful clot of logic here by refactoring out validation
@@ -105,7 +103,7 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
                     animatedMouseCursorDefinitionDTO.Frames) {
                 cursorsAtMs.put(frame.Ms, GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION.apply(frame.Img));
             }
-            PROCESS_RESULT.accept(FACTORY.make(
+            PROCESS_RESULT.accept(FACTORY.apply(
                     new AnimatedMouseCursorProviderDefinition(
                             animatedMouseCursorDefinitionDTO.Id,
                             cursorsAtMs,

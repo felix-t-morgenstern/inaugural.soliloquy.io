@@ -2,10 +2,14 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -16,13 +20,18 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 
 import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class AntialiasedLineSegmentRendererTests {
+    private final long TIMESTAMP = randomLong();
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
 
@@ -42,11 +51,6 @@ public class AntialiasedLineSegmentRendererTests {
     private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER =
             new FakeStaticProvider<>(vertexOf(X2, Y2));
 
-    private final Mesh MESH = new FakeMesh();
-    private final Shader SHADER = new FakeShader();
-
-    private final Long MOST_RECENT_TIMESTAMP = randomLong();
-
     private final FakeAntialiasedLineSegmentRenderable ANTIALIASED_LINE_SEGMENT_RENDERABLE =
             new FakeAntialiasedLineSegmentRenderable(
                     THICKNESS_GRADIENT_PERCENT_PROVIDER,
@@ -56,7 +60,11 @@ public class AntialiasedLineSegmentRendererTests {
                     VERTEX_1_PROVIDER,
                     VERTEX_2_PROVIDER);
 
-    private Renderer<AntialiasedLineSegmentRenderable> antialiasedLineSegmentRenderer;
+    @Mock private Mesh mockMesh;
+    @Mock private Shader mockShader;
+    @Mock private TimestampValidator mockTimestampValidator;
+
+    private Renderer<AntialiasedLineSegmentRenderable> renderer;
 
     @BeforeAll
     public static void setUpFixture() {
@@ -76,46 +84,48 @@ public class AntialiasedLineSegmentRendererTests {
 
     @BeforeEach
     public void setUp() {
-        antialiasedLineSegmentRenderer =
-                new AntialiasedLineSegmentRenderer(WINDOW_RESOLUTION_MANAGER,
-                        MOST_RECENT_TIMESTAMP);
+        renderer = new AntialiasedLineSegmentRenderer(WINDOW_RESOLUTION_MANAGER,
+                mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new AntialiasedLineSegmentRenderer(null, randomLong()));
+                () -> new AntialiasedLineSegmentRenderer(null, mockTimestampValidator));
     }
 
     @Test
     public void testSetAndGetMeshAndShader() {
-        assertThrows(IllegalStateException.class, () -> antialiasedLineSegmentRenderer
-                .render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalStateException.class, () -> renderer
+                .render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, TIMESTAMP));
 
-        antialiasedLineSegmentRenderer.setMesh(MESH);
-        antialiasedLineSegmentRenderer.setShader(SHADER);
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
-        antialiasedLineSegmentRenderer
-                .render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, MOST_RECENT_TIMESTAMP);
+        renderer.render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, TIMESTAMP);
     }
 
     @Test
     public void testGetMostRecentTimestamp() {
-        antialiasedLineSegmentRenderer.setMesh(MESH);
-        antialiasedLineSegmentRenderer.setShader(SHADER);
+        var mostRecentTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
 
-        assertEquals(MOST_RECENT_TIMESTAMP, antialiasedLineSegmentRenderer.mostRecentTimestamp());
+        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
+    }
 
-        antialiasedLineSegmentRenderer
-                .render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, MOST_RECENT_TIMESTAMP + 1);
+    @Test
+    public void testRenderUpdatesTimestamp() {
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
-        assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long) antialiasedLineSegmentRenderer.mostRecentTimestamp());
+        renderer.render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, TIMESTAMP);
+
+        verify(mockTimestampValidator, once()).validateTimestamp(renderer.getClass().getCanonicalName(), TIMESTAMP);
     }
 
     @Test
     public void testRenderWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 null,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -123,8 +133,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 new FakeStaticProvider<>(null),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -132,8 +142,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 new FakeStaticProvider<>(-0.001f),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -141,8 +151,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 new FakeStaticProvider<>(1.001f),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -150,8 +160,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 null,
@@ -159,8 +169,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 new FakeStaticProvider<>(null),
@@ -168,8 +178,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 new FakeStaticProvider<>(-0.001f),
@@ -177,8 +187,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 new FakeStaticProvider<>(1.001f),
@@ -186,8 +196,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -195,8 +205,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -204,8 +214,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -213,8 +223,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -222,8 +232,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 null,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -231,8 +241,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 new FakeStaticProvider<>(null),
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -240,8 +250,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 null,
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -249,8 +259,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 new FakeStaticProvider<>(null),
                                 VERTEX_2_PROVIDER),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -258,8 +268,8 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 null),
-                        MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
+                        TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
@@ -267,20 +277,14 @@ public class AntialiasedLineSegmentRendererTests {
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 new FakeStaticProvider<>(null)),
-                        MOST_RECENT_TIMESTAMP));
-    }
-
-    @Test
-    public void testRenderWithOutOfDateTimestamp() {
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderer
-                .render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, MOST_RECENT_TIMESTAMP - 1));
+                        TIMESTAMP));
     }
 
     @Test
     public void testSetMeshAndShaderWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> antialiasedLineSegmentRenderer.setMesh(null));
+                () -> renderer.setMesh(null));
         assertThrows(IllegalArgumentException.class,
-                () -> antialiasedLineSegmentRenderer.setShader(null));
+                () -> renderer.setShader(null));
     }
 }

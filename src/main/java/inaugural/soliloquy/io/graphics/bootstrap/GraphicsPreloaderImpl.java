@@ -5,14 +5,11 @@ import inaugural.soliloquy.io.graphics.bootstrap.tasks.*;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -34,14 +31,14 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final Map<AssetType, Integer> ASSET_TYPE_BATCH_SIZES;
 
     private final ImageFactory IMAGE_FACTORY;
-    private final AssetFactory<FontDefinition, Font> FONT_FACTORY;
-    private final AssetFactory<SpriteDefinition, Sprite> SPRITE_FACTORY;
-    private final AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY;
+    private final Function<FontDefinition, Font> FONT_FACTORY;
+    private final Function<SpriteDefinition, Sprite> SPRITE_FACTORY;
+    private final Function<AnimationDefinition, Animation> ANIMATION_FACTORY;
     private final Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATION_FACTORY;
-    private final AssetFactory<ImageAssetSetDefinition, ImageAssetSet> IMAGE_ASSET_SET_FACTORY;
+    private final Function<ImageAssetSetDefinition, ImageAssetSet> IMAGE_ASSET_SET_FACTORY;
     private final MouseCursorImageFactory MOUSE_CURSOR_IMAGE_FACTORY;
-    private final AnimatedMouseCursorProviderFactory ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
-    private final StaticMouseCursorProviderFactory STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
+    private final Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider> ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
+    private final Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider> STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
 
     private final Consumer<Sprite> PROCESS_SPRITE;
     private final Consumer<Animation> PROCESS_ANIMATION;
@@ -80,16 +77,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                                  int threadPoolSize,
                                  Map<AssetType, Integer> assetTypeBatchSizes,
                                  ImageFactory imageFactory,
-                                 AssetFactory<FontDefinition, Font> fontFactory,
-                                 AssetFactory<SpriteDefinition, Sprite> spriteFactory,
-                                 AssetFactory<AnimationDefinition, Animation> animationFactory,
+                                 Function<FontDefinition, Font> fontFactory,
+                                 Function<SpriteDefinition, Sprite> spriteFactory,
+                                 Function<AnimationDefinition, Animation> animationFactory,
                                  Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> globalLoopingAnimationFactory,
-                                 AssetFactory<ImageAssetSetDefinition, ImageAssetSet>
+                                 Function<ImageAssetSetDefinition, ImageAssetSet>
                                          imageAssetSetFactory,
                                  MouseCursorImageFactory mouseCursorImageFactory,
-                                 AnimatedMouseCursorProviderFactory
+                                 Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
                                          animatedMouseCursorProviderFactory,
-                                 StaticMouseCursorProviderFactory staticMouseCursorProviderFactory,
+                                 Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider> staticMouseCursorProviderFactory,
                                  Consumer<Sprite> processSprite,
                                  Consumer<Animation> processAnimation,
                                  Consumer<GlobalLoopingAnimation> processGlobalLoopingAnimation,

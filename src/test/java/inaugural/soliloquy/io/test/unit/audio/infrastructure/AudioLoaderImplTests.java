@@ -11,7 +11,6 @@ import soliloquy.specs.io.audio.infrastructure.AudioLoader;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
@@ -40,12 +39,11 @@ public class AudioLoaderImplTests {
     private final Integer DEFAULT_LOOPING_STOP_MS_2 = null;
     private final Integer DEFAULT_LOOPING_RESTART_MS_2 = null;
 
-    @Mock private Consumer<SoundType> mockRegisterSoundType;
-    @Mock private Function<String, Function<String, Function<Integer, Function<Integer, SoundType>>>> mockSoundTypeFactory;
-    @Mock private Function<String, Function<Integer, Function<Integer, SoundType>>> mockSoundTypeFactorySub1;
-    @Mock private Function<Integer, Function<Integer, SoundType>> mockSoundTypeFactorySub2;
-    @Mock private Function<Integer, SoundType> mockSoundTypeFactorySub3;
-    @Mock private SoundType mockSoundType;
+    @Mock private Consumer<SoundType> mockAddSoundType;
+    @Mock private AudioLoaderImpl.QuadFunction<String, String, Integer, Integer, SoundType>
+            mockSoundTypeFactory;
+    @Mock private SoundType mockSoundType1;
+    @Mock private SoundType mockSoundType2;
 
     private AudioLoader audioLoader;
 
@@ -60,12 +58,8 @@ public class AudioLoaderImplTests {
         DEFAULT_LOOPING_STOP_MS_FOR_IDS.put(ID_2, DEFAULT_LOOPING_STOP_MS_2);
         DEFAULT_LOOPING_RESTART_MS_FOR_IDS.put(ID_2, DEFAULT_LOOPING_RESTART_MS_2);
 
-        lenient().when(mockSoundTypeFactory.apply(anyString())).thenReturn(mockSoundTypeFactorySub1);
-        lenient().when(mockSoundTypeFactorySub1.apply(anyString())).thenReturn(mockSoundTypeFactorySub2);
-        lenient().when(mockSoundTypeFactorySub2.apply(any())).thenReturn(mockSoundTypeFactorySub3);
-        lenient().when(mockSoundTypeFactorySub3.apply(any())).thenReturn(mockSoundType);
-
-        audioLoader = new AudioLoaderImpl(mockRegisterSoundType, mockSoundTypeFactory, setOf("mp3", "wav"));
+        audioLoader =
+                new AudioLoaderImpl(mockAddSoundType, mockSoundTypeFactory, setOf("mp3", "wav"));
     }
 
     @Test
@@ -73,40 +67,47 @@ public class AudioLoaderImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new AudioLoaderImpl(null, mockSoundTypeFactory, setOf()));
         assertThrows(IllegalArgumentException.class,
-                () -> new AudioLoaderImpl(mockRegisterSoundType, null, setOf()));
+                () -> new AudioLoaderImpl(mockAddSoundType, null, setOf()));
         assertThrows(IllegalArgumentException.class,
-                () -> new AudioLoaderImpl(mockRegisterSoundType, mockSoundTypeFactory, null));
+                () -> new AudioLoaderImpl(mockAddSoundType, mockSoundTypeFactory, null));
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     public void testLoadFromDirectory() {
-        audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES, DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS);
+        when(mockSoundTypeFactory.apply(anyString(), anyString(), any(), any()))
+                .thenReturn(mockSoundType1)
+                .thenReturn(mockSoundType2);
 
-        verify(mockRegisterSoundType, times(2)).accept(mockSoundType);
+        audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES,
+                DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS);
 
-        verify(mockSoundTypeFactory, once()).apply(ID_1);
-        verify(mockSoundTypeFactorySub1, once()).apply(DIR_RELATIVE_PATH + RELATIVE_PATH_1);
-        verify(mockSoundTypeFactorySub2, once()).apply(DEFAULT_LOOPING_STOP_MS_1);
-        verify(mockSoundTypeFactorySub3, once()).apply(DEFAULT_LOOPING_RESTART_MS_1);
+        verify(mockAddSoundType, times(2)).accept(any());
+        verify(mockAddSoundType, once()).accept(mockSoundType1);
+        verify(mockAddSoundType, once()).accept(mockSoundType2);
 
-        verify(mockSoundTypeFactory, once()).apply(ID_2);
-        verify(mockSoundTypeFactorySub1, once()).apply(DIR_RELATIVE_PATH + RELATIVE_PATH_2);
-        verify(mockSoundTypeFactorySub2, once()).apply(DEFAULT_LOOPING_STOP_MS_2);
-        verify(mockSoundTypeFactorySub3, once()).apply(DEFAULT_LOOPING_RESTART_MS_2);
+        verify(mockSoundTypeFactory, once()).apply(ID_1, DIR_RELATIVE_PATH + RELATIVE_PATH_1,
+                DEFAULT_LOOPING_STOP_MS_1, DEFAULT_LOOPING_RESTART_MS_1);
+        verify(mockSoundTypeFactory, once()).apply(ID_2, DIR_RELATIVE_PATH + RELATIVE_PATH_2,
+                DEFAULT_LOOPING_STOP_MS_2, DEFAULT_LOOPING_RESTART_MS_2);
     }
 
     @Test
     public void testLoadFromDirectoryWithInvalidParams() {
         assertThrows(IllegalArgumentException.class,
-                () -> audioLoader.loadFromDirectory(null, IDS_FOR_FILENAMES, DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
+                () -> audioLoader.loadFromDirectory(null, IDS_FOR_FILENAMES,
+                        DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
         assertThrows(IllegalArgumentException.class,
-                () -> audioLoader.loadFromDirectory("", IDS_FOR_FILENAMES, DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
+                () -> audioLoader.loadFromDirectory("", IDS_FOR_FILENAMES,
+                        DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
         assertThrows(IllegalArgumentException.class,
-                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, null, DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
+                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, null,
+                        DEFAULT_LOOPING_STOP_MS_FOR_IDS, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
         assertThrows(IllegalArgumentException.class,
-                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES, null, DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
+                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES, null,
+                        DEFAULT_LOOPING_RESTART_MS_FOR_IDS));
         assertThrows(IllegalArgumentException.class,
-                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES, DEFAULT_LOOPING_STOP_MS_FOR_IDS, null));
+                () -> audioLoader.loadFromDirectory(DIR_RELATIVE_PATH, IDS_FOR_FILENAMES,
+                        DEFAULT_LOOPING_STOP_MS_FOR_IDS, null));
     }
 }

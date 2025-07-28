@@ -7,18 +7,16 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.ui.EventInputs;
 import soliloquy.specs.ui.Component;
+import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 // NB: This class contains a lot of redundant code with AbstractFinitePausableAtTime, since Java
 //     does not support multiple inheritance, and it is less hasslesome to reproduce the logic of
@@ -37,12 +35,11 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                          UUID uuid,
                                          Component component,
-                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, component, removeFromComponent, renderingBoundaries);
+                uuid, component, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
@@ -63,13 +60,11 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          ProviderAtTime<FloatBox> renderingAreaProvider,
                                          int z, UUID uuid,
                                          Component component,
-                                         BiConsumer<Component, Renderable> removeFromComponent,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          Long mostRecentTimestamp) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, removeFromComponent,
-                renderingBoundaries);
+                borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);

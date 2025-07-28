@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -23,7 +22,6 @@ import soliloquy.specs.ui.EventInputs;
 import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
@@ -50,7 +48,6 @@ public class RectangleRenderableFactoryImplTests {
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private RectangleRenderableFactory rectangleRenderableFactory;
@@ -58,16 +55,13 @@ public class RectangleRenderableFactoryImplTests {
     @BeforeEach
     public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
-        rectangleRenderableFactory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries,
-                mockRemoveFromComponent);
+        rectangleRenderableFactory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableFactoryImpl(null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableFactoryImpl(mockRenderingBoundaries, null));
+                () -> new RectangleRenderableFactoryImpl(null));
     }
 
     @Test

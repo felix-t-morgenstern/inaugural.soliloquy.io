@@ -11,9 +11,8 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
@@ -62,7 +61,7 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
     }
 
     /** @noinspection rawtypes */
-    public static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(null);
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
@@ -70,11 +69,11 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
         when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));
 
-        return listOf(RectangleRenderer);
+        return setOf(RectangleRenderer);
     }
 }

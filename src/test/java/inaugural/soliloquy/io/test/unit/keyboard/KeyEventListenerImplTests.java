@@ -1,12 +1,13 @@
 package inaugural.soliloquy.io.test.unit.keyboard;
 
 import inaugural.soliloquy.io.keyboard.KeyEventListenerImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.keyboard.KeyEventListener;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.ui.keyboard.KeyBinding;
 import soliloquy.specs.ui.keyboard.KeyBindingContext;
 
@@ -23,6 +24,7 @@ public class KeyEventListenerImplTests {
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
     private final char CHAR = randomChar();
 
+    @Mock private TimestampValidator mockTimestampValidator;
     @Mock private KeyBindingContext mockKeyBindingContext1;
     @Mock private KeyBindingContext mockKeyBindingContext2;
     @Mock private KeyBindingContext mockKeyBindingContext3;
@@ -31,7 +33,7 @@ public class KeyEventListenerImplTests {
 
     @BeforeEach
     public void setUp() {
-        keyEventListener = new KeyEventListenerImpl(MOST_RECENT_TIMESTAMP);
+        keyEventListener = new KeyEventListenerImpl(mockTimestampValidator);
     }
 
     @Test
@@ -231,10 +233,18 @@ public class KeyEventListenerImplTests {
     }
 
     @Test
-    public void testPressOrReleaseAtInvalidTimestamp() {
-        assertThrows(IllegalArgumentException.class, () ->
-                keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP - 1));
+    public void testPressValidatesTimestamp() {
+        keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP);
+
+        verify(mockTimestampValidator, once())
+                .validateTimestamp(keyEventListener.getClass().getCanonicalName(), MOST_RECENT_TIMESTAMP);
+    }
+
+    @Test
+    public void testReleaseValidatesTimestamp() {
+        keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP);
+
+        verify(mockTimestampValidator, once())
+                .validateTimestamp(keyEventListener.getClass().getCanonicalName(), MOST_RECENT_TIMESTAMP);
     }
 }

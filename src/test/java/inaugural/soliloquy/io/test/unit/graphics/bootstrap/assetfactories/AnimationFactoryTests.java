@@ -7,10 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,7 +73,7 @@ public class AnimationFactoryTests {
     private final String id = "animationId";
     private final int animationDurationMS = 400;
 
-    private AssetFactory<AnimationDefinition, Animation> animationFactory;
+    private Function<AnimationDefinition, Animation> animationFactory;
 
     @BeforeEach
     public void setUp() {
@@ -87,7 +87,7 @@ public class AnimationFactoryTests {
         animationFrameSnippets.put(SNIPPET_2_MS, animationFrameSnippetDefinition2);
         animationFrameSnippets.put(SNIPPET_3_MS, animationFrameSnippetDefinition3);
 
-        Animation createdAnimation = animationFactory.make(
+        Animation createdAnimation = animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets));
 
         assertNotNull(createdAnimation);
@@ -118,7 +118,7 @@ public class AnimationFactoryTests {
 
         IMAGE_1.SupportsMouseEventCapturing = false;
 
-        Animation createdAnimationNonCapturing = animationFactory.make(
+        var createdAnimationNonCapturing = animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets));
 
         assertFalse(createdAnimationNonCapturing.supportsMouseEventCapturing());
@@ -216,7 +216,7 @@ public class AnimationFactoryTests {
         animationFrameSnippets.put(SNIPPET_1_7MS, SNIPPET_1_7);
 
 
-        Animation createdAnimation = animationFactory.make(
+        Animation createdAnimation = animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets));
 
         for (var ms = 0; ms < animationDurationMS; ms++) {
@@ -281,30 +281,30 @@ public class AnimationFactoryTests {
         animationFrameSnippets.put(SNIPPET_2_MS, animationFrameSnippetDefinition2);
         animationFrameSnippets.put(SNIPPET_3_MS, animationFrameSnippetDefinition3);
 
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(null));
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(null));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         null, animationDurationMS, animationFrameSnippets)));
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         "", animationDurationMS, animationFrameSnippets)));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(id, 0,
+                () -> animationFactory.apply(new AnimationDefinition(id, 0,
                         animationFrameSnippets)));
 
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         id, animationDurationMS, null)));
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         id, animationDurationMS, mapOf())));
 
 
@@ -312,7 +312,7 @@ public class AnimationFactoryTests {
         animationFrameSnippets.remove(SNIPPET_1_MS);
         animationFrameSnippets.put(-1, animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         id, animationDurationMS, animationFrameSnippets)));
         animationFrameSnippets.remove(-1);
         animationFrameSnippets.put(SNIPPET_1_MS, animationFrameSnippetDefinition1);
@@ -320,7 +320,7 @@ public class AnimationFactoryTests {
         animationFrameSnippets.remove(SNIPPET_1_MS);
         animationFrameSnippets.put(animationDurationMS, animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         id, animationDurationMS, animationFrameSnippets)));
         animationFrameSnippets.remove(animationDurationMS);
         animationFrameSnippets.put(SNIPPET_1_MS, animationFrameSnippetDefinition1);
@@ -328,7 +328,7 @@ public class AnimationFactoryTests {
         animationFrameSnippets.remove(SNIPPET_1_MS);
         animationFrameSnippets.put(1, animationFrameSnippetDefinition1);
         assertThrows(IllegalArgumentException.class,
-                () -> animationFactory.make(new AnimationDefinition(
+                () -> animationFactory.apply(new AnimationDefinition(
                         id, animationDurationMS, animationFrameSnippets)));
         animationFrameSnippets.remove(1);
         animationFrameSnippets.put(SNIPPET_1_MS, animationFrameSnippetDefinition1);
@@ -336,7 +336,7 @@ public class AnimationFactoryTests {
 
 
         animationFrameSnippetDefinition1.Image = null;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.Image = IMAGE_1;
@@ -344,13 +344,13 @@ public class AnimationFactoryTests {
 
 
         IMAGE_1.RelativeLocation = null;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         IMAGE_1.RelativeLocation = IMAGE_1_RELATIVE_LOC;
 
         IMAGE_1.RelativeLocation = "";
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         IMAGE_1.RelativeLocation = IMAGE_1_RELATIVE_LOC;
@@ -358,13 +358,13 @@ public class AnimationFactoryTests {
 
 
         IMAGE_1.Width = 0;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         IMAGE_1.Width = IMAGE_1_WIDTH;
 
         IMAGE_1.Height = 0;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         IMAGE_1.Height = IMAGE_1_HEIGHT;
@@ -372,25 +372,25 @@ public class AnimationFactoryTests {
 
 
         animationFrameSnippetDefinition1.LeftX = -1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.LeftX = SNIPPET_1_LEFT_X;
 
         animationFrameSnippetDefinition1.TopY = -1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.TopY = SNIPPET_1_TOP_Y;
 
         animationFrameSnippetDefinition1.RightX = -1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.RightX = SNIPPET_1_RIGHT_X;
 
         animationFrameSnippetDefinition1.BottomY = -1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.BottomY = SNIPPET_1_BottomY;
@@ -398,13 +398,13 @@ public class AnimationFactoryTests {
 
 
         animationFrameSnippetDefinition1.RightX = SNIPPET_1_LEFT_X;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.RightX = SNIPPET_1_RIGHT_X;
 
         animationFrameSnippetDefinition1.BottomY = SNIPPET_1_TOP_Y;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.BottomY = SNIPPET_1_BottomY;
@@ -412,25 +412,25 @@ public class AnimationFactoryTests {
 
 
         animationFrameSnippetDefinition1.LeftX = IMAGE_1_WIDTH + 1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.LeftX = SNIPPET_1_LEFT_X;
 
         animationFrameSnippetDefinition1.TopY = IMAGE_1_HEIGHT + 1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.TopY = SNIPPET_1_TOP_Y;
 
         animationFrameSnippetDefinition1.RightX = IMAGE_1_WIDTH + 1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.RightX = SNIPPET_1_RIGHT_X;
 
         animationFrameSnippetDefinition1.BottomY = IMAGE_1_HEIGHT + 1;
-        assertThrows(IllegalArgumentException.class, () -> animationFactory.make(
+        assertThrows(IllegalArgumentException.class, () -> animationFactory.apply(
                 new AnimationDefinition(id, animationDurationMS, animationFrameSnippets)
         ));
         animationFrameSnippetDefinition1.BottomY = SNIPPET_1_BottomY;

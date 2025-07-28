@@ -13,14 +13,11 @@ import org.mockito.stubbing.Answer;
 import soliloquy.specs.common.shared.HasId;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticMouseCursorProviderFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -44,14 +41,14 @@ public class GraphicsPreloaderImplTests {
     private Map<AssetType, Integer> assetTypeBatchSizes;
 
     @Mock private ImageFactory mockImageFactory;
-    @Mock private AssetFactory<FontDefinition, Font> mockFontFactory;
-    @Mock private AssetFactory<SpriteDefinition, Sprite> mockSpriteFactory;
-    @Mock private AssetFactory<AnimationDefinition, Animation> mockAnimationFactory;
+    @Mock private Function<FontDefinition, Font> mockFontFactory;
+    @Mock private Function<SpriteDefinition, Sprite> mockSpriteFactory;
+    @Mock private Function<AnimationDefinition, Animation> mockAnimationFactory;
     @Mock private Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> mockGlobalLoopingAnimationFactory;
-    @Mock private AssetFactory<ImageAssetSetDefinition, ImageAssetSet> mockImageAssetSetFactory;
+    @Mock private Function<ImageAssetSetDefinition, ImageAssetSet> mockImageAssetSetFactory;
     @Mock private MouseCursorImageFactory mockMouseCursorImageFactory;
-    @Mock private AnimatedMouseCursorProviderFactory mockAnimatedMouseCursorProviderFactory;
-    @Mock private StaticMouseCursorProviderFactory mockStaticMouseCursorProviderFactory;
+    @Mock private Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider> mockAnimatedMouseCursorProviderFactory;
+    @Mock private Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider> mockStaticMouseCursorProviderFactory;
 
     private AssetDefinitionsDTO assetDefinitionsDTO;
 
@@ -211,7 +208,7 @@ public class GraphicsPreloaderImplTests {
                 });
 
         fontFactoryOutputs = new CopyOnWriteArrayList<>();
-        lenient().when(mockFontFactory.make(any()))
+        lenient().when(mockFontFactory.apply(any()))
                 .thenAnswer((Answer<Font>) invocation -> {
                     updateAssetIndices(
                             () -> firstFontIndex,
@@ -225,7 +222,7 @@ public class GraphicsPreloaderImplTests {
                     return output;
                 });
 
-        lenient().when(mockSpriteFactory.make(any()))
+        lenient().when(mockSpriteFactory.apply(any()))
                 .thenAnswer((Answer<Sprite>) invocation -> {
                     updateAssetIndices(
                             () -> firstSpriteIndex,
@@ -237,7 +234,7 @@ public class GraphicsPreloaderImplTests {
                     return new FakeSprite(definition.id(), definition.image());
                 });
 
-        lenient().when(mockAnimationFactory.make(any()))
+        lenient().when(mockAnimationFactory.apply(any()))
                 .thenAnswer((Answer<Animation>) invocation -> {
                     updateAssetIndices(
                             () -> firstAnimationIndex,
@@ -259,11 +256,11 @@ public class GraphicsPreloaderImplTests {
                     GlobalLoopingAnimationDefinition definition = invocation.getArgument(0);
                     allDefinitionsProcessedInOrder.add(definition);
                     var output = mock(GlobalLoopingAnimation.class);
-                    when(output.id()).thenReturn(definition.id());
+                    when(output.id()).thenReturn(definition.ID);
                     return output;
                 });
 
-        lenient().when(mockImageAssetSetFactory.make(any()))
+        lenient().when(mockImageAssetSetFactory.apply(any()))
                 .thenAnswer((Answer<ImageAssetSet>) invocation -> {
                     updateAssetIndices(
                             () -> firstImageAssetSetIndex,
@@ -296,7 +293,7 @@ public class GraphicsPreloaderImplTests {
                     return returnValue;
                 });
 
-        lenient().when(mockAnimatedMouseCursorProviderFactory.make(any()))
+        lenient().when(mockAnimatedMouseCursorProviderFactory.apply(any()))
                 .thenAnswer((Answer<AnimatedMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
                             () -> firstAnimatedMouseCursorIndex,
@@ -311,7 +308,7 @@ public class GraphicsPreloaderImplTests {
                     return animatedMouseCursorProvider;
                 });
 
-        lenient().when(mockStaticMouseCursorProviderFactory.make(any()))
+        lenient().when(mockStaticMouseCursorProviderFactory.apply(any()))
                 .thenAnswer((Answer<StaticMouseCursorProvider>) invocation -> {
                     updateAssetIndices(
                             () -> firstStaticMouseCursorIndex,
@@ -945,7 +942,7 @@ public class GraphicsPreloaderImplTests {
     @Test
     public void testExceptionThrownInSpawnedThreadPropagatesToMain() {
         var brokenImageAssetSetFactory = mock(ImageAssetSetFactory.class);
-        when(brokenImageAssetSetFactory.make(any()))
+        when(brokenImageAssetSetFactory.apply(any()))
                 .thenThrow(new IllegalArgumentException("This is the exception"));
 
         GraphicsPreloader graphicsPreloader = new GraphicsPreloaderImpl(

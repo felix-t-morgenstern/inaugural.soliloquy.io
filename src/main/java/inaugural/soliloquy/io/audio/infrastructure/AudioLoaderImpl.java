@@ -8,6 +8,7 @@ import soliloquy.specs.io.audio.infrastructure.AudioLoader;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -17,15 +18,12 @@ import static inaugural.soliloquy.tools.files.Files.executionDirectory;
 
 public class AudioLoaderImpl implements AudioLoader {
     private final Consumer<SoundType> ADD_SOUND_TYPE;
-    private final Function<String, Function<String, Function<Integer, Function<Integer,
-            SoundType>>>>
-            SOUND_TYPE_FACTORY;
+    private final QuadFunction<String, String, Integer, Integer, SoundType> SOUND_TYPE_FACTORY;
 
     private final Set<String> FILETYPES;
 
     public AudioLoaderImpl(Consumer<SoundType> addSoundType,
-                           Function<String, Function<String, Function<Integer, Function<Integer,
-                                   SoundType>>>> soundTypeFactory,
+                           QuadFunction <String, String, Integer, Integer, SoundType> soundTypeFactory,
                            Set<String> filetypes) {
         ADD_SOUND_TYPE = Check.ifNull(addSoundType, "addSoundType");
         SOUND_TYPE_FACTORY = Check.ifNull(soundTypeFactory, "soundTypeFactory");
@@ -54,10 +52,7 @@ public class AudioLoaderImpl implements AudioLoader {
                 var defaultLoopingStopMs = defaultLoopStopMsById.get(idForFilename);
                 var defaultLoopingRestartMs = defaultLoopRestartByMs.get(idForFilename);
                 var soundType = SOUND_TYPE_FACTORY
-                        .apply(idForFilename)
-                        .apply(fileRelativePath)
-                        .apply(defaultLoopingStopMs)
-                        .apply(defaultLoopingRestartMs);
+                        .apply(idForFilename, fileRelativePath, defaultLoopingStopMs, defaultLoopingRestartMs);
                 ADD_SOUND_TYPE.accept(soundType);
             }
         }
@@ -68,6 +63,17 @@ public class AudioLoaderImpl implements AudioLoader {
         public boolean accept(File file) {
             return !file.isDirectory() &&
                     FILETYPES.contains(FilenameUtils.getExtension(file.getName()));
+        }
+    }
+    @FunctionalInterface
+    public interface QuadFunction<A,B,C,D,R> {
+
+        R apply(A a, B b, C c, D d);
+
+        default <V> QuadFunction<A, B, C, D, V> andThen(
+                Function<? super R, ? extends V> after) {
+            Objects.requireNonNull(after);
+            return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
         }
     }
 }

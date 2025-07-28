@@ -5,26 +5,29 @@ import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.preloading.Anima
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
+import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
+
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 public class AnimatedMouseCursorPreloaderTaskFactoryTests {
-    @Mock
-    private AnimatedMouseCursorProviderFactory mockAnimatedMouseCursorProviderFactory;
+    @Mock private Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+            mockAnimatedMouseCursorProviderFactory;
 
     private AssetPreloaderTaskFactory<AnimatedMouseCursorDefinitionDTO,
             AnimatedMouseCursorPreloaderTask> animatedMouseCursorPreloaderTaskFactory;
 
     @BeforeEach
     public void setUp() {
-        mockAnimatedMouseCursorProviderFactory = mock(AnimatedMouseCursorProviderFactory.class);
-
         animatedMouseCursorPreloaderTaskFactory = new AnimatedMouseCursorPreloaderTaskFactory(
                 _ -> 0L, mockAnimatedMouseCursorProviderFactory, _ -> {}
         );
@@ -48,8 +51,7 @@ public class AnimatedMouseCursorPreloaderTaskFactoryTests {
 
     @Test
     public void testMake() {
-        AnimatedMouseCursorPreloaderTask task =
-                animatedMouseCursorPreloaderTaskFactory.make(listOf());
+        var task = animatedMouseCursorPreloaderTaskFactory.make(listOf());
 
         assertNotNull(task);
     }

@@ -13,7 +13,6 @@ import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
@@ -21,8 +20,9 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggr
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
 import static inaugural.soliloquy.tools.collections.Collections.*;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 class GlobalLoopingAnimationRendererTest extends DisplayTest {
-    protected final static AssetFactory<AnimationDefinition, Animation> ANIMATION_FACTORY =
+    protected final static Function<AnimationDefinition, Animation> ANIMATION_FACTORY =
             new AnimationFactory();
     protected final static Map<Integer, AnimationFrameSnippet> FRAMES = mapOf();
     protected final static String TORCH_RELATIVE_LOCATION =
@@ -55,7 +55,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
     protected static Renderer<GlobalLoopingAnimationRenderable> GlobalLoopingAnimationRenderer;
 
     /** @noinspection rawtypes, unused */
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    protected static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             ColorShiftStackAggregator colorShiftStackAggregator) {
         GlobalLoopingAnimationRenderer =
@@ -66,7 +66,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                                 colorShiftStackAggregator,
                         null);
 
-        return listOf(GlobalLoopingAnimationRenderer);
+        return setOf(GlobalLoopingAnimationRenderer);
     }
 
     protected static void graphicsPreloaderLoadAction() {
@@ -81,7 +81,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
 
         var animationDefinition = new AnimationDefinition("torch", MS_DURATION, FRAMES);
 
-        var animation = ANIMATION_FACTORY.make(animationDefinition);
+        var animation = ANIMATION_FACTORY.apply(animationDefinition);
 
         var periodModuloOffset =
                 MS_DURATION - (int) (globalLoopingAnimationStartTimestamp % (MS_DURATION));
@@ -99,7 +99,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                                 MIDPOINT - (ANIMATION_HEIGHT / 2f),
                                 MIDPOINT + (ANIMATION_WIDTH / 2f),
                                 MIDPOINT + (ANIMATION_HEIGHT / 2f))),
-                        0, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE,
+                        0, java.util.UUID.randomUUID(), MockFirstChildComponent,
                         RENDERING_BOUNDARIES);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(GlobalLoopingAnimationRenderable));

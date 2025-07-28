@@ -7,9 +7,8 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.mockito.Mockito.when;
@@ -37,7 +36,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
     }
 
     /** @noinspection rawtypes */
-    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    private static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         var antialiasedLineSegmentRenderer =
                 new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
@@ -52,8 +51,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         staticProvider(0.01f),
                         randomInt(),
                         java.util.UUID.randomUUID(),
-                        MockFirstChildComponent,
-                        DUMMY_REMOVE
+                        MockFirstChildComponent
                 );
 
         var antialiasedLineSegmentRenderable2 =
@@ -66,8 +64,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         staticProvider(0.05f),
                         randomInt(),
                         java.util.UUID.randomUUID(),
-                        MockFirstChildComponent,
-                        DUMMY_REMOVE
+                        MockFirstChildComponent
                 );
 
         when(MockFirstChildComponent.contents()).thenReturn(
@@ -77,6 +74,6 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
 
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return listOf(antialiasedLineSegmentRenderer);
+        return setOf(antialiasedLineSegmentRenderer);
     }
 }

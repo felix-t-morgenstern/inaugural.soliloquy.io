@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -11,8 +10,8 @@ import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.List;
-import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.Map;
+import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -47,9 +46,8 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
                                   ProviderAtTime<Vertex> dropShadowOffsetProvider,
                                   ProviderAtTime<Color> dropShadowColorProvider,
                                   int z, UUID uuid,
-                                  Component component,
-                                  BiConsumer<Component, Renderable> removeFromComponent) {
-        super(z, uuid, component, removeFromComponent);
+                                  Component component) {
+        super(z, uuid, component);
         setFont(font);
         this.setLineTextProvider(lineTextProvider);
         setJustification(justification);

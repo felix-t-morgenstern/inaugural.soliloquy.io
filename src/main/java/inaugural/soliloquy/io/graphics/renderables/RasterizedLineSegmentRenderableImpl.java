@@ -3,13 +3,11 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RasterizedLineSegmentRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRenderable
         implements RasterizedLineSegmentRenderable {
@@ -23,10 +21,8 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRend
                                                ProviderAtTime<Color> colorProvider,
                                                int z,
                                                UUID uuid,
-                                               Component component,
-                                               BiConsumer<Component, Renderable> removeFromComponent) {
-        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z, uuid,
-                component, removeFromComponent);
+                                               Component component) {
+        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z, uuid, component);
         setStipplePattern(stipplePattern);
         setStippleFactor(stippleFactor);
     }

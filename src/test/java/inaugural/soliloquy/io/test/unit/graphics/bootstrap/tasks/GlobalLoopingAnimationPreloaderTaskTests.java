@@ -147,9 +147,9 @@ public class GlobalLoopingAnimationPreloaderTaskTests {
         verify(MOCK_GET_ANIMATION, once()).apply(ANIMATION_ID);
         verify(mockGlobalLoopingAnimationFactory, once()).apply(isNotNull());
         verify(mockProcessResult, once()).accept(mockGlobalLoopingAnimation);
-        assertEquals(GLOBAL_LOOPING_ANIMATION_ID, factoryCapture.id());
-        assertSame(MOCK_ANIMATION, factoryCapture.animation());
-        assertEquals(PERIOD_MODULO_OFFSET, factoryCapture.periodModuloOffset());
-        assertNull(factoryCapture.pauseTimestamp());
+        assertEquals(GLOBAL_LOOPING_ANIMATION_ID, factoryCapture.ID);
+        assertSame(MOCK_ANIMATION, factoryCapture.ANIMATION);
+        assertEquals(PERIOD_MODULO_OFFSET, factoryCapture.PERIOD_MODULO_OFFSET);
+        assertNull(factoryCapture.PAUSE_TIMESTAMP);
     }
 }

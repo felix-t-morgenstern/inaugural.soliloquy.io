@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -8,14 +9,14 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRenderable>
         implements Renderer<TriangleRenderable> {
-    public TriangleRenderer(Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+    public TriangleRenderer(TimestampValidator timestampValidator) {
+        super(timestampValidator);
     }
 
     @Override
     public void render(TriangleRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         Check.ifNull(renderable, "renderable");
 

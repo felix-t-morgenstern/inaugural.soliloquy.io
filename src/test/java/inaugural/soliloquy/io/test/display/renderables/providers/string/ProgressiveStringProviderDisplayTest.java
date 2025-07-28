@@ -15,10 +15,9 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
-
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
@@ -54,7 +53,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
     }
 
     /** @noinspection rawtypes */
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    protected static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             long startOffset,
             long duration) {
@@ -100,7 +99,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
-        return listOf(TextLineRenderer);
+        return setOf(TextLineRenderer);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

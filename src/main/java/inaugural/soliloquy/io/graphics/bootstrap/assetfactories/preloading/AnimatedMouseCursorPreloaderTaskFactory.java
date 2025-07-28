@@ -4,8 +4,8 @@ import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
+import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.AnimatedMouseCursorProviderFactory;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -15,14 +15,14 @@ public class AnimatedMouseCursorPreloaderTaskFactory
         implements AssetPreloaderTaskFactory<AnimatedMouseCursorDefinitionDTO,
         AnimatedMouseCursorPreloaderTask> {
     private final Function<String, Long> GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION;
-    private final AnimatedMouseCursorProviderFactory FACTORY;
+    private final Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+            FACTORY;
     private final Consumer<AnimatedMouseCursorProvider> PROCESS_RESULT;
 
-    public AnimatedMouseCursorPreloaderTaskFactory(Function<String, Long>
-                                                           getMouseCursorsByRelativeLocation,
-                                                   AnimatedMouseCursorProviderFactory factory,
-                                                   Consumer<AnimatedMouseCursorProvider>
-                                                           processResult) {
+    public AnimatedMouseCursorPreloaderTaskFactory(
+            Function<String, Long> getMouseCursorsByRelativeLocation,
+            Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider> factory,
+            Consumer<AnimatedMouseCursorProvider> processResult) {
         GET_MOUSE_CURSORS_BY_RELATIVE_LOCATION =
                 Check.ifNull(getMouseCursorsByRelativeLocation,
                         "getMouseCursorsByRelativeLocation");

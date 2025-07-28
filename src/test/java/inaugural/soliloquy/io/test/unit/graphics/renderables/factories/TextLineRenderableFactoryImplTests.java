@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -19,15 +18,12 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomFloat;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
-import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class TextLineRenderableFactoryImplTests {
@@ -41,7 +37,6 @@ public class TextLineRenderableFactoryImplTests {
     @Mock private ProviderAtTime<Float> mockHeightProvider;
     @Mock private ProviderAtTime<String> mockLineTextProvider;
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
     @Mock private ProviderAtTime<Color> mockBorderColorProvider;
     @Mock private ProviderAtTime<Vertex> mockLocationProvider;
@@ -53,8 +48,7 @@ public class TextLineRenderableFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-
-        textLineRenderableFactory = new TextLineRenderableFactoryImpl(mockRemoveFromComponent);
+        textLineRenderableFactory = new TextLineRenderableFactoryImpl();
     }
 
     @Test
@@ -80,7 +74,8 @@ public class TextLineRenderableFactoryImplTests {
         assertSame(mockContainingComponent, renderable.component());
 
         renderable.delete();
-        verify(mockRemoveFromComponent, once()).accept(mockContainingComponent, renderable);
+
+        assertTrue(renderable.isDeleted());
     }
 
     // NB: Not testing make with invalid params, since it tests the same logic of

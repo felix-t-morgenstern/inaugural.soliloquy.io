@@ -14,9 +14,10 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
@@ -58,11 +59,11 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
             RectangleAnimatedBackgroundTextureIdProvider;
 
     /** @noinspection rawtypes, unused */
-    protected static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    protected static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
-        return listOf(RectangleRenderer = new RectangleRenderer(null));
+        return setOf(RectangleRenderer = new RectangleRenderer(null));
     }
 
     protected static void graphicsPreloaderLoadAction() {
@@ -115,7 +116,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                 staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                DUMMY_REMOVE, RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);

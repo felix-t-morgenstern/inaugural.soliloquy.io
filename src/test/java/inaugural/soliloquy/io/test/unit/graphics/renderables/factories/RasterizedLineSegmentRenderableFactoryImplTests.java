@@ -9,18 +9,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class RasterizedLineSegmentRenderableFactoryImplTests {
@@ -35,18 +32,12 @@ public class RasterizedLineSegmentRenderableFactoryImplTests {
     private static final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
 
     private RasterizedLineSegmentRenderableFactory factory;
 
     @BeforeEach
-    public void setUp() {        factory = new RasterizedLineSegmentRenderableFactoryImpl(mockRemoveFromComponent);
-    }
-
-    @Test
-    public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new RasterizedLineSegmentRenderableFactoryImpl(null));
+    public void setUp() {
+        factory = new RasterizedLineSegmentRenderableFactoryImpl();
     }
 
     @Test

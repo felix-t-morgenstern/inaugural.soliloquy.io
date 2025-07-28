@@ -6,14 +6,14 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
-import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.tools.collections.Collections.*;
@@ -47,7 +47,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
     }
 
     /** @noinspection rawtypes */
-    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    private static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT.put('j', 0.000625f);
 
@@ -88,7 +88,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
-        return listOf(TextLineRenderer);
+        return setOf(TextLineRenderer);
     }
 
     public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

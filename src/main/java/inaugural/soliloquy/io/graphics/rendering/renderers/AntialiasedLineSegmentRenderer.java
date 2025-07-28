@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -27,8 +28,8 @@ public class AntialiasedLineSegmentRenderer
     private static final Map<Float, Float> SQUARING_MEMOIZATION = mapOf();
 
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
-                                          Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+                                          TimestampValidator timestampValidator) {
+        super(timestampValidator);
         Check.ifNull(windowResolutionManager, "windowResolutionManager");
         WINDOW_WIDTH_TO_HEIGHT_RATIO = windowResolutionManager::windowWidthToHeightRatio;
     }
@@ -37,7 +38,7 @@ public class AntialiasedLineSegmentRenderer
     @Override
     public void render(AntialiasedLineSegmentRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
         Check.ifNull(renderable, "renderable");
 

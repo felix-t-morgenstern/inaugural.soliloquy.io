@@ -8,9 +8,8 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
-import java.util.List;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -38,7 +37,7 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
     }
 
     /** @noinspection rawtypes */
-    private static List<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+    private static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         RasterizedLineSegmentRenderable = new RasterizedLineSegmentRenderableImpl(
                 // NB: The coordinates are in this order to ensure that
@@ -47,13 +46,13 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
                 staticProvider(vertexOf(0.25f, 0.25f)),
                 staticProvider(6f), (short) 0xAAAA, (short) 16,
                 staticProvider(new Color(18, 201, 159)),
-                1, java.util.UUID.randomUUID(), MockFirstChildComponent, DUMMY_REMOVE);
+                1, java.util.UUID.randomUUID(), MockFirstChildComponent);
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
 
         Renderers.put(RasterizedLineSegmentRenderableImpl.class, RasterizedLineSegmentRenderer);
         when(MockFirstChildComponent.contents()).thenReturn(setOf(RasterizedLineSegmentRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
-        return listOf(RasterizedLineSegmentRenderer);
+        return setOf(RasterizedLineSegmentRenderer);
     }
 }

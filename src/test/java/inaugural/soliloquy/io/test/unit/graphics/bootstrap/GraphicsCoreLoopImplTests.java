@@ -1,70 +1,85 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap;
 
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.io.mouse.MouseListener;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.mouse.MouseListener;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GraphicsCoreLoopImplTests {
-    private final String TITLEBAR = "My title bar";
-    private final GLFWMouseButtonCallback MOUSE_BUTTON_CALLBACK =
-            new FakeGLFWMouseButtonCallback();
+    private final String TITLEBAR = randomString();
     private final FakeFrameTimer FRAME_TIMER = new FakeFrameTimer();
     private final int FRAME_TIMER_POLLING_INTERVAL = 20;
     private final long GLOBAL_TIMESTAMP = randomLong();
-    private final FakeShaderFactory SHADER_FACTORY = new FakeShaderFactory();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
     @SuppressWarnings("rawtypes") private final Renderer MOCK_RENDERER = mock(Renderer.class);
     @SuppressWarnings("rawtypes")
-    private final List<Renderer> RENDERERS_WITH_SHADER = listOf(MOCK_RENDERER);
-    private final FakeMesh MESH = new FakeMesh();
-    private final Function<float[], Function<float[], Mesh>> MESH_FACTORY = f1 -> f2 -> MESH;
+    private final Set<Renderer> RENDERERS_WITH_SHADER = setOf(MOCK_RENDERER);
     @SuppressWarnings("rawtypes")
-    private final List<Renderer> RENDERERS_WITH_MESH = listOf(MOCK_RENDERER);
+    private final Set<Renderer> RENDERERS_WITH_MESH = setOf(MOCK_RENDERER);
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
-    private final FakeMouseCursor MOUSE_CURSOR = new FakeMouseCursor();
 
-    private Long windowId;
+    private BiFunction<float[], float[], Mesh> meshFactory;
+    @Mock private Shader mockShader;
+    @Mock private ShaderFactory mockShaderFactory;
+    @Mock private Mesh mockMesh;
     @Mock private GlobalClock mockGlobalClock;
     @Mock private FrameExecutor mockFrameExecutor;
     @Mock private WindowResolutionManager mockWindowResolutionManager;
+    @Mock private MouseCursor mockMouseCursor;
     @Mock private MouseListener mockMouseListener;
+
+    private Long windowId;
 
     private GraphicsCoreLoop graphicsCoreLoop;
 
     @BeforeEach
     public void setUp() {
+        lenient().when(mockShaderFactory.make(anyString())).thenReturn(mockShader);
+
+        meshFactory = (_, _) -> mockMesh;
+
         mockGlobalClock = mock(GlobalClock.class);
-        when(mockGlobalClock.globalTimestamp()).thenReturn(GLOBAL_TIMESTAMP);
+        lenient().when(mockGlobalClock.globalTimestamp()).thenReturn(GLOBAL_TIMESTAMP);
 
         mockFrameExecutor = mock(FrameExecutor.class);
 
         mockWindowResolutionManager = mock(WindowResolutionManager.class);
-        when(mockWindowResolutionManager.updateWindowSizeAndLocation(anyLong(), anyString()))
-                .thenAnswer((Answer<Long>) invocationOnMock -> {
+        lenient().when(
+                        mockWindowResolutionManager.updateWindowSizeAndLocation(anyLong(),
+                                anyString()))
+                .thenAnswer((Answer<Long>) _ -> {
                     if (windowId != null) {
                         return windowId;
                     }
@@ -77,21 +92,20 @@ public class GraphicsCoreLoopImplTests {
 
         graphicsCoreLoop = new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         );
     }
@@ -100,178 +114,150 @@ public class GraphicsCoreLoopImplTests {
     public void testInvalidConstructorParams() {
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 null,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 "",
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
                 null,
-                FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
-                null,
-                FRAME_TIMER_POLLING_INTERVAL,
-                mockWindowResolutionManager,
-                mockGlobalClock,
-                mockFrameExecutor,
-                SHADER_FACTORY,
-                RENDERERS_WITH_SHADER,
-                SHADER_FILE_PREFIX,
-                MESH_FACTORY,
-                RENDERERS_WITH_MESH,
-                MESH_VERTICES,
-                MESH_UV_COORDINATES,
-                GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
-                mockMouseListener
-        ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
-                TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 -1,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 1000,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 null,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 null,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 null,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
@@ -280,80 +266,76 @@ public class GraphicsCoreLoopImplTests {
                 null,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 null,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 null,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 "",
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
                 null,
@@ -361,97 +343,92 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 null,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 null,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 null,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 null,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
@@ -461,21 +438,20 @@ public class GraphicsCoreLoopImplTests {
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
                 TITLEBAR,
-                MOUSE_BUTTON_CALLBACK,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
                 mockWindowResolutionManager,
                 mockGlobalClock,
                 mockFrameExecutor,
-                SHADER_FACTORY,
+                mockShaderFactory,
                 RENDERERS_WITH_SHADER,
                 SHADER_FILE_PREFIX,
-                MESH_FACTORY,
+                meshFactory,
                 RENDERERS_WITH_MESH,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
-                MOUSE_CURSOR,
+                mockMouseCursor,
                 null
         ));
     }
@@ -483,6 +459,21 @@ public class GraphicsCoreLoopImplTests {
     @Test
     public void testGetTitlebar() {
         assertEquals(TITLEBAR, graphicsCoreLoop.getTitlebar());
+    }
+
+    @Test
+    public void testSetTitlebar() {
+        var newTitlebar = randomString();
+
+        graphicsCoreLoop.setTitlebar(newTitlebar);
+
+        assertEquals(newTitlebar, graphicsCoreLoop.getTitlebar());
+    }
+
+    @Test
+    public void testSetTitlebarWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> graphicsCoreLoop.setTitlebar(null));
+        assertThrows(IllegalArgumentException.class, () -> graphicsCoreLoop.setTitlebar(""));
     }
 
     @Test
@@ -554,10 +545,11 @@ public class GraphicsCoreLoopImplTests {
 
         graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
 
-        verify(MOCK_RENDERER).setMesh(MESH);
-        verify(MOCK_RENDERER).setShader(SHADER_FACTORY.MostRecentlyCreated);
+        verify(MOCK_RENDERER, once()).setMesh(mockMesh);
+        verify(mockShaderFactory, once()).make(SHADER_FILE_PREFIX);
+        verify(MOCK_RENDERER, once()).setShader(mockShader);
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
-        assertTrue(MOUSE_CURSOR.NumberOfTimesUpdateCursorCalled > 0);
+        verify(mockMouseCursor, atLeastOnce()).updateCursor(anyLong());
     }
 
     // NB: It is impossible to directly test the calls to MouseListener, since even

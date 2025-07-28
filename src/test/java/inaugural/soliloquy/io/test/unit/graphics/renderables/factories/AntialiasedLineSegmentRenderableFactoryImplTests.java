@@ -9,12 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AntialiasedLineSegmentFactoryImplTests {
+public class AntialiasedLineSegmentRenderableFactoryImplTests {
     private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
@@ -34,78 +32,75 @@ public class AntialiasedLineSegmentFactoryImplTests {
     private final int Z = randomInt();
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private Component mockContainingComponent;
 
-    private AntialiasedLineSegmentRenderableFactory antialiasedLineSegmentRenderableFactory;
+    private AntialiasedLineSegmentRenderableFactory factory;
 
     @BeforeEach
     public void setUp() {
-        antialiasedLineSegmentRenderableFactory =
-                new AntialiasedLineSegmentRenderableFactoryImpl(mockRemoveFromComponent);
+        factory = new AntialiasedLineSegmentRenderableFactoryImpl();
     }
 
     @Test
     public void testMake() {
-        var antialiasedLineSegmentRenderable =
-                antialiasedLineSegmentRenderableFactory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
-                        THICKNESS_PROVIDER, COLOR_PROVIDER, THICKNESS_GRADIENT_PERCENT_PROVIDER,
+        var output =
+                factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
+                        COLOR_PROVIDER, THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent);
 
-        assertNotNull(antialiasedLineSegmentRenderable);
+        assertNotNull(output);
         assertInstanceOf(AntialiasedLineSegmentRenderableImpl.class,
-                antialiasedLineSegmentRenderable);
+                output);
 
         var newZ = 456;
-        antialiasedLineSegmentRenderable.setZ(newZ);
+        output.setZ(newZ);
 
-        assertEquals(newZ, antialiasedLineSegmentRenderable.getZ());
-        verify(mockContainingComponent, once()).add(antialiasedLineSegmentRenderable);
+        assertEquals(newZ, output.getZ());
+        verify(mockContainingComponent, once()).add(output);
 
-        antialiasedLineSegmentRenderable.delete();
+        output.delete();
 
-        verify(mockRemoveFromComponent, once())
-                .accept(same(mockContainingComponent), same(antialiasedLineSegmentRenderable));
+        assertTrue(output.isDeleted());
     }
 
     @Test
     public void testMakeWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(null, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, null,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         null, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, null,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         null,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         null, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,
                         LENGTH_GRADIENT_PERCENT_PROVIDER, Z, null, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> antialiasedLineSegmentRenderableFactory
+        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER,
                         THICKNESS_PROVIDER, COLOR_PROVIDER,
                         THICKNESS_GRADIENT_PERCENT_PROVIDER,

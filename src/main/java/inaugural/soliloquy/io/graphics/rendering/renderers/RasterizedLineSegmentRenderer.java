@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.RasterizedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -11,8 +12,8 @@ public class RasterizedLineSegmentRenderer
         extends AbstractPointDrawingRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
 
-    public RasterizedLineSegmentRenderer(Long mostRecentTimestamp) {
-        super(mostRecentTimestamp);
+    public RasterizedLineSegmentRenderer(TimestampValidator timestampValidator) {
+        super(timestampValidator);
     }
 
     @SuppressWarnings("ConstantConditions")

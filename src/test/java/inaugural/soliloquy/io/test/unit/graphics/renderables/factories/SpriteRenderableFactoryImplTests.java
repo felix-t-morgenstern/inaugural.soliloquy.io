@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
@@ -23,7 +22,6 @@ import soliloquy.specs.ui.EventInputs;
 import java.awt.*;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
@@ -48,7 +46,6 @@ public class SpriteRenderableFactoryImplTests {
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
-    @Mock private BiConsumer<Component, Renderable> mockRemoveFromComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private SpriteRenderableFactory spriteRenderableFactory;
@@ -57,15 +54,13 @@ public class SpriteRenderableFactoryImplTests {
     public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
 
         spriteRenderableFactory =
-                new SpriteRenderableFactoryImpl(mockRenderingBoundaries, mockRemoveFromComponent);
+                new SpriteRenderableFactoryImpl(mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderableFactoryImpl(null, mockRemoveFromComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> new SpriteRenderableFactoryImpl(mockRenderingBoundaries, null));
+                () -> new SpriteRenderableFactoryImpl(null));
     }
 
     @Test
