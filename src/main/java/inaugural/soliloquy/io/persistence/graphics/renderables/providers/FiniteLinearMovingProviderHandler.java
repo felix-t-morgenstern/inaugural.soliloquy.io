@@ -40,11 +40,6 @@ public class FiniteLinearMovingProviderHandler extends
     }
 
     @Override
-    public String typeHandled() {
-        return null;
-    }
-
-    @Override
     public String write(FiniteLinearMovingProvider finiteLinearMovingProvider) {
         Check.ifNull(finiteLinearMovingProvider, "finiteLinearMovingProvider");
 

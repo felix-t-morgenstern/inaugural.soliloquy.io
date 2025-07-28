@@ -31,11 +31,6 @@ public class SoundsPlayingHandler extends AbstractTypeHandler<SoundsPlaying> {
     }
 
     @Override
-    public String typeHandled() {
-        return null;
-    }
-
-    @Override
     public String write(SoundsPlaying soundsPlaying) {
         var dto = new SoundsPlayingDTO();
         var listOfSoundsPlaying = SOUNDS_PLAYING.representation();

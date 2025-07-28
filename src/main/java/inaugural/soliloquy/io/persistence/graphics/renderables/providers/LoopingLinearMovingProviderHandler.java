@@ -25,11 +25,6 @@ public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<Loop
                 "loopingLinearMovingProviderFactory");
     }
 
-    @Override
-    public String typeHandled() {
-        return null;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public LoopingLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {

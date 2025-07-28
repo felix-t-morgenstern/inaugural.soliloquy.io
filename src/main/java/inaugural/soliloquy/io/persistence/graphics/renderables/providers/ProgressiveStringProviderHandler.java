@@ -15,11 +15,6 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         FACTORY = Check.ifNull(factory, "factory");
     }
 
-    @Override
-    public String typeHandled() {
-        return "";
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public ProviderAtTime<String> read(String data) throws IllegalArgumentException {

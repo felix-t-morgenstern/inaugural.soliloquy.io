@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables.providers;
 
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.PersistenceHandler;
@@ -18,11 +17,6 @@ public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
                                  StaticProviderFactory factory) {
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
-    }
-
-    @Override
-    public String typeHandled() {
-        return StaticProviderImpl.class.getCanonicalName();
     }
 
     @SuppressWarnings("unchecked")

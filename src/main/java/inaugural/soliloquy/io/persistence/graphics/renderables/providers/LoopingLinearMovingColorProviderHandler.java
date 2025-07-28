@@ -24,11 +24,6 @@ public class LoopingLinearMovingColorProviderHandler
                         "factory");
     }
 
-    @Override
-    public String typeHandled() {
-        return null;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public LoopingLinearMovingColorProvider read(String data) throws IllegalArgumentException {

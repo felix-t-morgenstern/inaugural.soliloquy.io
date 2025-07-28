@@ -19,13 +19,6 @@ public class ProviderHandler extends AbstractTypeHandler<ProviderAtTime> {
         SUBHANDLERS = mapOf(Check.ifNull(subhandlers, "subhandlers"));
     }
 
-    // NB: I could just splinter the JSON dependency out of the abstract class in tools, but this
-    // is also fine, especially since it allows a looser coupling between this and its dependents
-    @Override
-    public String typeHandled() {
-        throw new UnsupportedOperationException("");
-    }
-
     public <TInstance extends ProviderAtTime> TInstance read(String writtenVal)
             throws IllegalArgumentException {
         var dto = JSON.fromJson(writtenVal, ProviderDTO.class);

@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables;
+package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,11 +63,6 @@ public class ProviderHandlerTests {
         var readProvider = providerHandler.read(writtenValueWithExtraneousFields);
 
         assertSame(mockProvider, readProvider);
-    }
-
-    @Test
-    public void testTypeHandled() {
-        assertThrows(UnsupportedOperationException.class, providerHandler::typeHandled);
     }
 
     @Test

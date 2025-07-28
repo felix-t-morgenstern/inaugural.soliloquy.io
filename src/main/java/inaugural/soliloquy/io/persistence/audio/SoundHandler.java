@@ -40,11 +40,6 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
     }
 
     @Override
-    public String typeHandled() {
-        return null;
-    }
-
-    @Override
     public String write(Sound sound) {
         Check.ifNull(sound, "sound");
 

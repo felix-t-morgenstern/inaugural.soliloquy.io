@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables.providers;
 
-import inaugural.soliloquy.io.graphics.renderables.providers.FiniteLinearMovingColorProviderImpl;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
@@ -27,11 +26,6 @@ public class FiniteLinearMovingColorProviderHandler
         FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY =
                 Check.ifNull(finiteLinearMovingColorProviderFactory,
                         "finiteLinearMovingColorProviderFactory");
-    }
-
-    @Override
-    public String typeHandled() {
-        return FiniteLinearMovingColorProviderImpl.class.getCanonicalName();
     }
 
     @SuppressWarnings("unchecked")

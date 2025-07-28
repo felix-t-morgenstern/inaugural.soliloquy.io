@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables;
 
-import inaugural.soliloquy.io.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.io.persistence.graphics.renderables.AntialiasedLineSegmentRenderableHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -158,11 +157,5 @@ public class AntialiasedLineSegmentRenderableHandlerTests {
                 eq(UUID),
                 isNull()
         );
-    }
-
-    @Test
-    public void testTypeHandled() {
-        assertEquals(AntialiasedLineSegmentRenderableImpl.class.getCanonicalName(),
-                handler.typeHandled());
     }
 }

@@ -23,11 +23,6 @@ public class AntialiasedLineSegmentRenderableHandler extends
         FACTORY = Check.ifNull(factory, "factory");
     }
 
-    @Override
-    public String typeHandled() {
-        return AntialiasedLineSegmentRenderableImpl.class.getCanonicalName();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public AntialiasedLineSegmentRenderable read(String writtenVal)
