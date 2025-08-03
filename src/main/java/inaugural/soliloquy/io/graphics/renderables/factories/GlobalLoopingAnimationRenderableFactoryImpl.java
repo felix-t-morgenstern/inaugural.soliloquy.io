@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
@@ -22,9 +23,12 @@ import java.util.function.BiConsumer;
 
 public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopingAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public GlobalLoopingAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public GlobalLoopingAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                                       TimestampValidator timestampValidator) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -39,7 +43,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopin
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, colorShifts,
                 renderingAreaProvider, z, uuid, component,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 
     @Override
@@ -58,6 +62,6 @@ public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopin
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
                 borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
                 onMouseLeave, colorShifts, renderingAreaProvider, z, uuid,
-                component, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

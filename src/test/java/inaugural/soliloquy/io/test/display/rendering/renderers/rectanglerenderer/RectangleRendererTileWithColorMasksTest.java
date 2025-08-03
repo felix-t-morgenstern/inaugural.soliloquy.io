@@ -69,7 +69,7 @@ class RectangleRendererTileWithColorMasksTest extends RectangleRendererTest {
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TimestampValidator);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
         when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));

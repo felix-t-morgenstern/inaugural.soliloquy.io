@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
@@ -26,9 +27,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
                                 Component containingStack,
-                                RenderingBoundaries renderingBoundaries) {
+                                RenderingBoundaries renderingBoundaries,
+                                TimestampValidator timestampValidator) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries);
+                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries,
+                timestampValidator);
         setSprite(sprite);
     }
 
@@ -42,10 +45,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
                                 Component containingStack,
-                                RenderingBoundaries renderingBoundaries) {
+                                RenderingBoundaries renderingBoundaries,
+                                TimestampValidator timestampValidator) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
-                renderingBoundaries);
+                renderingBoundaries, timestampValidator);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }

@@ -13,25 +13,21 @@ import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentR
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
-import java.util.UUID;
 
-import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AntialiasedLineSegmentRenderableHandlerTests {
+public class AntialiasedLineSegmentRenderableHandlerTests
+        extends AbstractLineSegmentRenderableHandlerTests {
     private final String VERTEX_1_PROVIDER_WRITTEN = randomString();
     private final String VERTEX_2_PROVIDER_WRITTEN = randomString();
     private final String COLOR_PROVIDER_WRITTEN = randomString();
     private final String THICKNESS_PROVIDER_WRITTEN = randomString();
     private final String THICKNESS_GRADIENT_PERCENT_PROVIDER_WRITTEN = randomString();
     private final String LENGTH_GRADIENT_PERCENT_PROVIDER_WRITTEN = randomString();
-    private final int Z = randomInt();
-    private final UUID UUID = randomUUID();
 
     @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
     @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
@@ -39,7 +35,6 @@ public class AntialiasedLineSegmentRenderableHandlerTests {
     @Mock private ProviderAtTime<Float> mockThicknessProvider;
     @Mock private ProviderAtTime<Float> mockThicknessGradientPercentProvider;
     @Mock private ProviderAtTime<Float> mockLengthGradientPercentProvider;
-    @SuppressWarnings("rawtypes") @Mock private TypeHandler<ProviderAtTime> mockProviderHandler;
 
     @Mock private AntialiasedLineSegmentRenderable mockRenderable;
     @Mock private AntialiasedLineSegmentRenderableFactory mockFactory;

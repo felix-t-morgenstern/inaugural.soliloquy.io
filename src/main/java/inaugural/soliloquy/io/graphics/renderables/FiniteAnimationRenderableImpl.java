@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
@@ -37,16 +38,12 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          Component component,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
-                                         Long mostRecentTimestamp) {
+                                         TimestampValidator timestampValidator) {
         super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, component, renderingBoundaries);
+                uuid, component, renderingBoundaries, timestampValidator);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
-        checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
         this.pausedTimestamp = pausedTimestamp;
-        if (mostRecentTimestamp != null) {
-            TIMESTAMP_VALIDATOR.validateTimestamp(mostRecentTimestamp);
-        }
     }
 
     public FiniteAnimationRenderableImpl(Animation animation,
@@ -62,30 +59,13 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          Component component,
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
-                                         Long mostRecentTimestamp) {
+                                         TimestampValidator timestampValidator) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries);
+                borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries,
+                timestampValidator);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
-        checkPausedTimestampAndMostRecentTimestamp(pausedTimestamp, mostRecentTimestamp);
         this.pausedTimestamp = pausedTimestamp;
-        if (mostRecentTimestamp != null) {
-            TIMESTAMP_VALIDATOR.validateTimestamp(mostRecentTimestamp);
-        }
-    }
-
-    private void checkPausedTimestampAndMostRecentTimestamp(Long pausedTimestamp,
-                                                            Long mostRecentTimestamp) {
-        if (pausedTimestamp != null) {
-            if (mostRecentTimestamp == null) {
-                throw new IllegalArgumentException("FiniteAnimationRenderableImpl: " +
-                        "pausedTimestamp cannot be non-null if mostRecentTimestamp is null");
-            }
-            else {
-                Check.throwOnSecondGt(mostRecentTimestamp, pausedTimestamp,
-                        "mostRecentTimestamp", "pausedTimestamp");
-            }
-        }
     }
 
     @Override

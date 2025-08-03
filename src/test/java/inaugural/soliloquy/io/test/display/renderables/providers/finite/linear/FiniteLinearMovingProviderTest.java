@@ -26,7 +26,8 @@ public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(),
                 staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f)), 0,
-                java.util.UUID.randomUUID(), MockFirstChildComponent, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockFirstChildComponent, RENDERING_BOUNDARIES,
+                TimestampValidator);
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
                 windowResolutionManager,

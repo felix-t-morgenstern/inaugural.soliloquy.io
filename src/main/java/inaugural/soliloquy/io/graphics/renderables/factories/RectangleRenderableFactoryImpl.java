@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
@@ -17,9 +18,12 @@ import java.util.UUID;
 
 public class RectangleRenderableFactoryImpl implements RectangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public RectangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public RectangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                          TimestampValidator timestampValidator) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -43,6 +47,6 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                 bottomRightColorProvider, bottomLeftColorProvider, backgroundTextureIdProvider,
                 textureTileWidthProvider, textureTileHeightProvider, onPress, onRelease,
                 onMouseOver, onMouseLeave, renderingAreaProvider, z, uuid, component,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

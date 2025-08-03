@@ -94,7 +94,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 RENDERING_BOUNDARIES,
                 timestamp + MS_PADDING,
                 null,
-                null
+                TimestampValidator
         );
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(FiniteAnimationRenderable));

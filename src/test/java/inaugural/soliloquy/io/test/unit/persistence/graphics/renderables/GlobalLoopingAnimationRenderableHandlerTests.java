@@ -1,74 +1,72 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables;
 
-import inaugural.soliloquy.io.persistence.graphics.renderables.FiniteAnimationRenderableHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.GlobalLoopingAnimationRenderableHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.io.graphics.assets.Animation;
-import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
-import soliloquy.specs.io.graphics.renderables.factories.FiniteAnimationRenderableFactory;
+import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
+import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
+import soliloquy.specs.io.graphics.renderables.factories.GlobalLoopingAnimationRenderableFactory;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
-public class FiniteAnimationRenderableHandlerTests
-        extends AbstractRenderableWithMouseEventsTests<Animation> {
-    protected final long START = randomLong();
-    protected final long PAUSE = randomLong();
-
-    @Mock private FiniteAnimationRenderable mockRenderable;
-    @Mock private FiniteAnimationRenderableFactory mockFactory;
+public class GlobalLoopingAnimationRenderableHandlerTests
+        extends AbstractRenderableWithMouseEventsTests<GlobalLoopingAnimation> {
+    @Mock private GlobalLoopingAnimationRenderable mockRenderable;
+    @Mock private GlobalLoopingAnimationRenderableFactory mockFactory;
 
     private String writtenValue;
 
-    private TypeHandler<FiniteAnimationRenderable> handler;
+    private TypeHandler<GlobalLoopingAnimationRenderable> handler;
 
     @BeforeEach
     public void setUp() {
         super.setUpMouseEventsTests();
-        super.setUpImageAssetRenderableTests(Animation.class);
+        super.setUpImageAssetRenderableTests(GlobalLoopingAnimation.class);
 
         writtenValue = String.format(
-                "{\"start\":%d,\"pause\":%d,\"assetId\":\"%s\",\"borderThickness\":\"%s\"," +
-                        "\"borderColor\":\"%s\",\"onPress\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
-                        "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"z\":%d,\"uuid\":\"%s\"," +
-                        "\"type\":\"%s\"}",
-                START, PAUSE, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, ON_PRESS_BUTTON,
-                ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
-                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, COLOR_SHIFT, AREA, Z, UUID,
+                "{\"assetId\":\"%s\",\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
+                        "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
+                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
+                        "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"colorShifts\":[\"%s\"]," +
+                        "\"area\":\"%s\",\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
+                ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, ON_PRESS_BUTTON, ON_PRESS_ACTION_ID,
+                ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID, ON_MOUSE_OVER_ACTION_ID,
+                ON_MOUSE_LEAVE_ACTION_ID, COLOR_SHIFT, AREA, Z, UUID,
                 mockRenderable.getClass().getCanonicalName());
 
-        handler = new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
+        handler = new GlobalLoopingAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
                 mockProviderHandler, mockShiftHandler, mockFactory);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableHandler(null, MOCK_GET_ACTION,
+                () -> new GlobalLoopingAnimationRenderableHandler(null, MOCK_GET_ACTION,
                         mockProviderHandler, mockShiftHandler, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableHandler(mockGetAsset, null,
+                () -> new GlobalLoopingAnimationRenderableHandler(mockGetAsset, null,
                         mockProviderHandler, mockShiftHandler, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
+                () -> new GlobalLoopingAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
                         null, mockShiftHandler, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
+                () -> new GlobalLoopingAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
                         mockProviderHandler, null, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
+                () -> new GlobalLoopingAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
                         mockProviderHandler, mockShiftHandler, null));
     }
 
@@ -77,19 +75,16 @@ public class FiniteAnimationRenderableHandlerTests
         setUpMockRenderable(mockRenderable);
         setUpMockImageAssetRenderable(mockRenderable);
         setupMockRenderableWithMouseEvents(mockRenderable);
-        when(mockRenderable.animationId()).thenReturn(ASSET_ID);
-        when(mockRenderable.startTimestamp()).thenReturn(START);
-        when(mockRenderable.pausedTimestamp()).thenReturn(PAUSE);
+        when(mockRenderable.getGlobalLoopingAnimation()).thenReturn(mockAsset);
 
         var output = handler.write(mockRenderable);
 
         assertEquals(writtenValue, output);
-        verify(mockRenderable, once()).animationId();
+        verify(mockRenderable, once()).getGlobalLoopingAnimation();
+        verify(mockAsset, once()).id();
         verifyMockRenderableWritten(mockRenderable);
         verifyMockImageAssetRenderableWritten(mockRenderable);
         verifyMockRenderableWithMouseEventsWritten(mockRenderable);
-        verify(mockRenderable, once()).startTimestamp();
-        verify(mockRenderable, once()).pausedTimestamp();
     }
 
     @Test
@@ -111,8 +106,6 @@ public class FiniteAnimationRenderableHandlerTests
                 any(),
                 anyInt(),
                 any(),
-                any(),
-                anyLong(),
                 any()
         )).thenReturn(mockRenderable);
 
@@ -133,9 +126,7 @@ public class FiniteAnimationRenderableHandlerTests
                 same(mockAreaProvider),
                 eq(Z),
                 eq(UUID),
-                isNull(),
-                eq(START),
-                eq(PAUSE)
+                isNull()
         );
     }
 

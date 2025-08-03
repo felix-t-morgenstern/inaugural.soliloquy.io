@@ -75,6 +75,6 @@ public class TriangleRendererTileWithColorMasksTest extends TriangleRendererTest
                         staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                         randomInt(),
                         java.util.UUID.randomUUID(), MockFirstChildComponent,
-                        RENDERING_BOUNDARIES));
+                        RENDERING_BOUNDARIES, TimestampValidator));
     }
 }

@@ -36,14 +36,15 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 int z,
                                                 UUID uuid,
                                                 Component component,
-                                                RenderingBoundaries renderingBoundaries) {
+                                                RenderingBoundaries renderingBoundaries,
+                                                TimestampValidator  timestampValidator) {
         super(z, uuid, component);
         this.capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? mapOf() : onPress;
         ON_RELEASE = onRelease == null ? mapOf() : onRelease;
         this.onMouseOver = onMouseOver;
         this.onMouseLeave = onMouseLeave;
-        TIMESTAMP_VALIDATOR = new TimestampValidator(null);
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 

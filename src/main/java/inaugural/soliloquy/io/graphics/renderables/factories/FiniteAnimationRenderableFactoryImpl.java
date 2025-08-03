@@ -2,11 +2,11 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.FiniteAnimationRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -18,13 +18,15 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public FiniteAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public FiniteAnimationRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                                TimestampValidator timestampValidator) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -35,13 +37,12 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           ProviderAtTime<FloatBox> renderingAreaProvider, int z,
                                           UUID uuid,
                                           Component component,
-                                          long startTimestamp, Long pausedTimestamp,
-                                          Long mostRecentTimestamp)
+                                          long startTimestamp,
+                                          Long pausedTimestamp)
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
                 borderColorProvider, colorShifts, renderingAreaProvider, z, uuid, component,
-                RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp,
-                mostRecentTimestamp);
+                RENDERING_BOUNDARIES, startTimestamp, pausedTimestamp, TIMESTAMP_VALIDATOR);
     }
 
     @Override
@@ -56,12 +57,12 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           ProviderAtTime<FloatBox> renderingAreaProvider,
                                           int z, UUID uuid,
                                           Component component,
-                                          long startTimestamp, Long pausedTimestamp,
-                                          Long mostRecentTimestamp)
+                                          long startTimestamp,
+                                          Long pausedTimestamp)
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
                 borderColorProvider, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
                 renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES, startTimestamp,
-                pausedTimestamp, mostRecentTimestamp);
+                pausedTimestamp, TIMESTAMP_VALIDATOR);
     }
 }

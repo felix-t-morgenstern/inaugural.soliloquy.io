@@ -5,6 +5,7 @@ import inaugural.soliloquy.io.graphics.renderables.factories.RectangleRenderable
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +27,6 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class RectangleRenderableFactoryImplTests {
@@ -49,19 +49,21 @@ public class RectangleRenderableFactoryImplTests {
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private RectangleRenderableFactory rectangleRenderableFactory;
 
     @BeforeEach
-    public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
-
-        rectangleRenderableFactory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries);
+    public void setUp() {
+        rectangleRenderableFactory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableFactoryImpl(null));
+                () -> new RectangleRenderableFactoryImpl(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RectangleRenderableFactoryImpl(mockRenderingBoundaries, null));
     }
 
     @Test

@@ -2,11 +2,11 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -18,13 +18,15 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public ImageAssetSetRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public ImageAssetSetRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                              TimestampValidator timestampValidator) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -40,7 +42,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, colorShifts,
                 borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                component, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 
     @Override
@@ -60,6 +62,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, onPress, onRelease,
                 onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES);
+                borderColorProvider, renderingAreaProvider, z, uuid, component,
+                RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

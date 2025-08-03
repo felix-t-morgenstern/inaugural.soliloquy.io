@@ -3,35 +3,36 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.io.graphics.assets.Animation;
-import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
+import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
+import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
-import soliloquy.specs.io.graphics.renderables.factories.FiniteAnimationRenderableFactory;
+import soliloquy.specs.io.graphics.renderables.factories.GlobalLoopingAnimationRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 import java.util.function.Function;
 
-public class FiniteAnimationRenderableHandler
-        extends AbstractImageAssetRenderableHandler<Animation, FiniteAnimationRenderable> {
-    private final FiniteAnimationRenderableFactory FACTORY;
+public class GlobalLoopingAnimationRenderableHandler extends
+        AbstractImageAssetRenderableHandler<GlobalLoopingAnimation,
+                GlobalLoopingAnimationRenderable> {
+    private final GlobalLoopingAnimationRenderableFactory FACTORY;
 
-    public FiniteAnimationRenderableHandler(
-            Function<String, Animation> getAnimation,
+    public GlobalLoopingAnimationRenderableHandler(
+            Function<String, GlobalLoopingAnimation> getGlobalLoopingAnimation,
             @SuppressWarnings("rawtypes") Function<String, Action> getAction,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler,
-            FiniteAnimationRenderableFactory factory
-    ) {
-        super(getAnimation, getAction, providerHandler, shiftHandler);
+            GlobalLoopingAnimationRenderableFactory factory) {
+        super(getGlobalLoopingAnimation, getAction, providerHandler, shiftHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public FiniteAnimationRenderable read(String writtenVal) throws IllegalArgumentException {
+    public GlobalLoopingAnimationRenderable read(String writtenVal)
+            throws IllegalArgumentException {
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenVal, "writtenVal"),
-                FiniteAnimationRenderableDto.class);
+                AbstractImageAssetRenderableHandler.ImageAssetRenderableDto.class);
 
         var readProps = readFromDto(dto);
 
@@ -47,29 +48,18 @@ public class FiniteAnimationRenderableHandler
                 readProps.area,
                 dto.z,
                 UUID.fromString(dto.uuid),
-                null,
-                dto.start,
-                dto.pause
+                null
         );
     }
 
     @Override
-    public String write(FiniteAnimationRenderable renderable) {
+    public String write(GlobalLoopingAnimationRenderable renderable) {
         Check.ifNull(renderable, "renderable");
 
-        var dto = new FiniteAnimationRenderableDto();
+        var dto = new AbstractImageAssetRenderableHandler.ImageAssetRenderableDto();
 
-        hydrateDto(dto, renderable, renderable.animationId());
-
-        dto.start = renderable.startTimestamp();
-        dto.pause = renderable.pausedTimestamp();
+        hydrateDto(dto, renderable, renderable.getGlobalLoopingAnimation().id());
 
         return JSON.toJson(dto);
-    }
-
-    public static class FiniteAnimationRenderableDto
-            extends AbstractImageAssetRenderableHandler.ImageAssetRenderableDto {
-        public long start;
-        public Long pause;
     }
 }

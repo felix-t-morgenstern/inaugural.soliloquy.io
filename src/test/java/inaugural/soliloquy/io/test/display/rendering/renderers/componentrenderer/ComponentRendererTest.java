@@ -9,24 +9,23 @@ import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
-import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.display.DisplayTest;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
-import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
-import soliloquy.specs.io.input.mouse.MouseCursor;
-import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.ui.Component;
 
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
@@ -91,7 +90,7 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteAxe07TopY + axeScreenHeight
                 ), null),
                 1, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TimestampValidator);
 
         var spriteAxe09ScreenWidth = (spriteAxe09Width / (float) spriteAxe09Height) *
                 axeScreenHeight / resolution.widthToHeightRatio();
@@ -108,7 +107,7 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteAxe09TopY + axeScreenHeight
                 ), null),
                 1, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TimestampValidator);
 
         var spriteSword06ScreenWidth = 0.3710f;
         var spriteSword06TopY = 0f;
@@ -124,7 +123,7 @@ public class ComponentRendererTest extends DisplayTest {
                         spriteSword06TopY + swordScreenHeight
                 ), null),
                 1, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TimestampValidator);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 

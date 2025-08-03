@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
@@ -29,9 +30,10 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 Component component,
-                                                RenderingBoundaries renderingBoundaries) {
+                                                RenderingBoundaries renderingBoundaries,
+                                                TimestampValidator timestampValidator) {
         super(colorShifts, borderThicknessProvider, borderColorProvider, renderingAreaProvider, z,
-                uuid, component, renderingBoundaries);
+                uuid, component, renderingBoundaries, timestampValidator);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -46,10 +48,11 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,
                                                 Component component,
-                                                RenderingBoundaries renderingBoundaries) {
+                                                RenderingBoundaries renderingBoundaries,
+                                                TimestampValidator timestampValidator) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, component,
-                renderingBoundaries);
+                renderingBoundaries, timestampValidator);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 

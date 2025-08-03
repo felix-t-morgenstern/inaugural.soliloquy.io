@@ -4,6 +4,7 @@ import inaugural.soliloquy.io.graphics.renderables.ImageAssetSetRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.ImageAssetSetRenderableFactoryImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -22,7 +22,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
@@ -58,6 +57,7 @@ public class ImageAssetSetRenderableFactoryImplTests {
     @Mock private ImageAssetSet imageAssetSetNotSupportsMouseEvents;
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private ImageAssetSetRenderableFactory factory;
 
@@ -70,13 +70,16 @@ public class ImageAssetSetRenderableFactoryImplTests {
 
         lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
-        factory = new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries);
+        factory = new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries,
+                mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableFactoryImpl(null));
+                () -> new ImageAssetSetRenderableFactoryImpl(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ImageAssetSetRenderableFactoryImpl(mockRenderingBoundaries, null));
     }
 
     @Test

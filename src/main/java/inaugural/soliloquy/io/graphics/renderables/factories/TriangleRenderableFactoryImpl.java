@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
@@ -17,9 +18,12 @@ import java.util.UUID;
 
 public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries) {
+    public TriangleRenderableFactoryImpl(RenderingBoundaries renderingBoundaries,
+                                         TimestampValidator timestampValidator) {
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -44,6 +48,6 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                 vertex2Provider, vertex2ColorProvider, vertex3Provider,
                 vertex3ColorProvider, backgroundTextureIdProvider, textureTileWidthProvider,
                 textureTileHeightProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                component, RENDERING_BOUNDARIES);
+                component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

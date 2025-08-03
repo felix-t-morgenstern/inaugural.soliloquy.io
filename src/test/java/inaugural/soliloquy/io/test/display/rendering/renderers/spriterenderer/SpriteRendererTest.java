@@ -41,7 +41,8 @@ public class SpriteRendererTest extends DisplayTest {
 
         SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
                 staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 0,
-                java.util.UUID.randomUUID(), MockTopLevelComponent, RENDERING_BOUNDARIES);
+                java.util.UUID.randomUUID(), MockTopLevelComponent, RENDERING_BOUNDARIES,
+                TimestampValidator);
 
         lenient().when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
 

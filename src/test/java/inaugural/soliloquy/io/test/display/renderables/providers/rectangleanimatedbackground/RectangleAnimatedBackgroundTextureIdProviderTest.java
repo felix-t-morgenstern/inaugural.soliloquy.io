@@ -116,7 +116,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                 staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES);
+                RENDERING_BOUNDARIES, TimestampValidator);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);

@@ -5,6 +5,7 @@ import inaugural.soliloquy.io.graphics.renderables.factories.GlobalLoopingAnimat
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalLoopingAnimation;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.factories.GlobalLoopingAnimationRenderableFactory;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -23,13 +23,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class GlobalLoopingAnimationRenderableFactoryImplTests {
@@ -51,19 +49,21 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
 
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private GlobalLoopingAnimationRenderableFactory factory;
 
     @BeforeEach
-    public void setUp() {        mockRenderingBoundaries = mock(RenderingBoundaries.class);
-
-        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries);
+    public void setUp() {
+        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null));
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries, null));
     }
 
     @Test
