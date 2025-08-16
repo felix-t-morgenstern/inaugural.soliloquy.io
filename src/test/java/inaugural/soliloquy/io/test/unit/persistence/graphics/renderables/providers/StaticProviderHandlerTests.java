@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.StaticProviderHandler;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,38 +35,42 @@ public class StaticProviderHandlerTests {
                     "\"mostRecentTimestamp\":%d}",
             UUID, WRITTEN_INT, MOST_RECENT_TIMESTAMP);
 
-    @Mock private StaticProvider<Integer> mockStaticProvider;
+    @Mock private StaticProvider<Integer> mockProvider;
     @Mock private StaticProviderFactory mockFactory;
     @Mock private PersistenceHandler mockPersistenceHandler;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     /** @noinspection rawtypes */
-    private TypeHandler<StaticProvider> staticProviderHandler;
+    private TypeHandler<StaticProvider> handler;
 
     @BeforeEach
     public void setUp() {
         //noinspection unchecked,rawtypes
         lenient().when(mockPersistenceHandler
-                .getTypeHandler(Integer.class.getCanonicalName()))
+                        .getTypeHandler(Integer.class.getCanonicalName()))
                 .thenReturn((TypeHandler) INT_HANDLER);
 
-        staticProviderHandler = new StaticProviderHandler(mockPersistenceHandler, mockFactory);
+        handler = new StaticProviderHandler(mockPersistenceHandler, mockFactory,
+                mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderHandler(null, mockFactory));
+                () -> new StaticProviderHandler(null, mockFactory, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderHandler(mockPersistenceHandler, null));
+                () -> new StaticProviderHandler(mockPersistenceHandler, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new StaticProviderHandler(mockPersistenceHandler, mockFactory, null));
     }
 
     @Test
     public void testWrite() {
-        when(mockStaticProvider.uuid()).thenReturn(UUID);
-        when(mockStaticProvider.provide(anyLong())).thenReturn(INT_VALUE);
-        when(mockStaticProvider.mostRecentTimestamp()).thenReturn(MOST_RECENT_TIMESTAMP);
+        when(mockProvider.uuid()).thenReturn(UUID);
+        when(mockProvider.provide(anyLong())).thenReturn(INT_VALUE);
 
-        var writtenValue = staticProviderHandler.write(mockStaticProvider);
+        var writtenValue = handler.write(mockProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
         verify(INT_HANDLER, once()).write(INT_VALUE);
@@ -73,26 +78,26 @@ public class StaticProviderHandlerTests {
 
     @Test
     public void testWriteWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> staticProviderHandler.write(null));
+        assertThrows(IllegalArgumentException.class, () -> handler.write(null));
     }
 
     @Test
     public void testRead() {
         //noinspection unchecked,rawtypes
-        when(mockFactory.make(any(), any(), anyLong())).thenReturn(
-                (StaticProvider) mockStaticProvider);
+        when(mockFactory.make(any(), any())).thenReturn((StaticProvider) mockProvider);
 
         //noinspection unchecked
-        var staticProvider = (StaticProvider<Integer>) staticProviderHandler.read(WRITTEN_VALUE);
+        var staticProvider = (StaticProvider<Integer>) handler.read(WRITTEN_VALUE);
 
         assertNotNull(staticProvider);
+        assertSame(mockProvider, staticProvider);
         verify(INT_HANDLER, once()).read(WRITTEN_INT);
-        verify(mockFactory, once()).make(eq(UUID), eq(INT_VALUE), eq(MOST_RECENT_TIMESTAMP));
+        verify(mockFactory, once()).make(eq(UUID), eq(INT_VALUE));
     }
 
     @Test
     public void testReadWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> staticProviderHandler.read(null));
-        assertThrows(IllegalArgumentException.class, () -> staticProviderHandler.read(""));
+        assertThrows(IllegalArgumentException.class, () -> handler.read(null));
+        assertThrows(IllegalArgumentException.class, () -> handler.read(""));
     }
 }

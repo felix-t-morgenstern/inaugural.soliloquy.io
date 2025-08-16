@@ -225,9 +225,4 @@ public class FakeFiniteAnimationRenderable implements FiniteAnimationRenderable 
     public String animationId() {
         return Animation.id();
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return null;
-    }
 }

@@ -1,91 +1,64 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
 
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 public class StaticProviderImplTests {
     private final Object PROVIDED_VALUE = new Object();
-    private final long MOST_RECENT_TIMESTAMP = 111L;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private StaticProvider<Object> staticProvider;
+    @Mock private TimestampValidator mockTimestampValidator;
+
+    private StaticProvider<Object> provider;
 
     @BeforeEach
     public void setUp() {
-        staticProvider = new StaticProviderImpl<>(UUID, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP);
+        provider = new StaticProviderImpl<>(UUID, PROVIDED_VALUE, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                new StaticProviderImpl<>(null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP));
+                new StaticProviderImpl<>(null, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticProviderImpl<>(null, PROVIDED_VALUE, MOST_RECENT_TIMESTAMP));
+                () -> new StaticProviderImpl<>(UUID, null, null));
     }
 
     @Test
     public void testUuid() {
-        assertSame(UUID, staticProvider.uuid());
+        assertSame(UUID, provider.uuid());
     }
 
     @Test
     public void testProvide() {
-        assertSame(PROVIDED_VALUE, staticProvider.provide(MOST_RECENT_TIMESTAMP));
-    }
+        var timestamp = randomLong();
 
-    @Test
-    public void testCallsMadeToPriorTimestamps() {
-        long timestamp1 = 123L;
-        long timestamp2 = 456L;
-        long timestamp3 = 789L;
-
-        staticProvider.provide(timestamp1);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.provide(timestamp1 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportPause(timestamp1 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportUnpause(timestamp1 - 1));
-
-        staticProvider.reportPause(timestamp2);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.provide(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportPause(timestamp2 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportUnpause(timestamp2 - 1));
-
-        staticProvider.reportUnpause(timestamp3);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.provide(timestamp3 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportPause(timestamp3 - 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> staticProvider.reportUnpause(timestamp3 - 1));
+        assertSame(PROVIDED_VALUE, provider.provide(timestamp));
+        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(timestamp);
     }
 
     @Test
     public void testPausedTimestamp() {
-        assertThrows(UnsupportedOperationException.class, staticProvider::pausedTimestamp);
-    }
-
-    @Test
-    public void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP, (long) staticProvider.mostRecentTimestamp());
+        assertThrows(UnsupportedOperationException.class, provider::pausedTimestamp);
     }
 
     @Test
     public void testRepresentation() {
-        assertEquals(PROVIDED_VALUE, staticProvider.representation());
+        assertEquals(PROVIDED_VALUE, provider.representation());
     }
 }

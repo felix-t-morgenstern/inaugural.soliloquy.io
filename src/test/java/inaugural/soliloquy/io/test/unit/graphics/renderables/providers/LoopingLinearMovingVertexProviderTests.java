@@ -1,8 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.LoopingLinearMovingVertexProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 
@@ -10,10 +14,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class LoopingLinearMovingVertexProviderTests {
     private final int TIME_1 = 0;
     private final float LOCATION_1_X = 0.1f;
@@ -41,82 +48,75 @@ public class LoopingLinearMovingVertexProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private LoopingLinearMovingProvider<Vertex> loopingLinearMovingLocationProvider;
+    @Mock private TimestampValidator mockTimestampValidator;
+
+    private LoopingLinearMovingProvider<Vertex> provider;
 
     @BeforeEach
     public void setUp() {
-        loopingLinearMovingLocationProvider = new LoopingLinearMovingVertexProvider(UUID,
-                VALUES_AT_TIMES, PERIOD_DURATION, MODULO_OFFSET, null, null);
+        provider = new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
+                MODULO_OFFSET, null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingVertexProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingVertexProvider(UUID, null, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingVertexProvider(UUID, mapOf(), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new LoopingLinearMovingVertexProvider(UUID, mapOf(pairOf(null, LOCATION_1)),
-                        PERIOD_DURATION, MODULO_OFFSET, null, null));
+                        PERIOD_DURATION, MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new LoopingLinearMovingVertexProvider(UUID, mapOf(pairOf(TIME_1, null)),
-                        PERIOD_DURATION, MODULO_OFFSET, null, null));
+                        PERIOD_DURATION, MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new LoopingLinearMovingVertexProvider(UUID, mapOf(pairOf(TIME_2, LOCATION_2)),
-                        PERIOD_DURATION, MODULO_OFFSET, null, null));
+                        PERIOD_DURATION, MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new LoopingLinearMovingVertexProvider(UUID,
                         mapOf(pairOf(PERIOD_DURATION + 1, LOCATION_1)), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        -1, null, null));
+                        -1, null, mockTimestampValidator));
+
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         PERIOD_DURATION, null, null));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 123123L, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 1L, 0L));
     }
 
     @Test
     public void testUuid() {
-        assertEquals(UUID, loopingLinearMovingLocationProvider.uuid());
+        assertEquals(UUID, provider.uuid());
     }
 
     @Test
-    public void testMostRecentTimestampAndPausedTimestamp() {
-        long pausedTimestamp = 123123L;
-        long mostRecentTimestamp = 456456L;
+    public void testPausedTimestamp() {
+        var pausedTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(pausedTimestamp);
 
-        LoopingLinearMovingProvider<Vertex> loopingLinearMovingLocationProvider =
+        var provider =
                 new LoopingLinearMovingVertexProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
+                        MODULO_OFFSET, pausedTimestamp, mockTimestampValidator);
 
-        assertEquals(pausedTimestamp,
-                (long) loopingLinearMovingLocationProvider.pausedTimestamp());
-        assertEquals(mostRecentTimestamp,
-                (long) loopingLinearMovingLocationProvider.mostRecentTimestamp());
+        assertEquals(pausedTimestamp, (long) provider.pausedTimestamp());
     }
 
     @Test
     public void testValuesWithinPeriod() {
         Map<Integer, Vertex> valuesWithinPeriod =
-                loopingLinearMovingLocationProvider.valuesWithinPeriod();
+                provider.valuesWithinPeriod();
 
         assertNotNull(valuesWithinPeriod);
-        assertNotSame(loopingLinearMovingLocationProvider.valuesWithinPeriod(),
+        assertNotSame(provider.valuesWithinPeriod(),
                 valuesWithinPeriod);
         assertEquals(VALUES_AT_TIMES.size(), valuesWithinPeriod.size());
         VALUES_AT_TIMES.keySet().forEach(key ->
@@ -125,17 +125,17 @@ public class LoopingLinearMovingVertexProviderTests {
 
     @Test
     public void testPeriodDuration() {
-        assertEquals(PERIOD_DURATION, loopingLinearMovingLocationProvider.periodDuration());
+        assertEquals(PERIOD_DURATION, provider.periodDuration());
     }
 
     @Test
     public void testProvideAtKey() {
         assertEquals(LOCATION_1,
-                loopingLinearMovingLocationProvider.provide(TIME_1 - MODULO_OFFSET));
+                provider.provide(TIME_1 - MODULO_OFFSET));
         assertEquals(LOCATION_2,
-                loopingLinearMovingLocationProvider.provide(TIME_2 - MODULO_OFFSET));
+                provider.provide(TIME_2 - MODULO_OFFSET));
         assertEquals(LOCATION_3,
-                loopingLinearMovingLocationProvider.provide(TIME_3 - MODULO_OFFSET));
+                provider.provide(TIME_3 - MODULO_OFFSET));
     }
 
     @Test
@@ -149,9 +149,9 @@ public class LoopingLinearMovingVertexProviderTests {
         float expectedX = (LOCATION_1_X * value1Weight) + (LOCATION_2_X * value2Weight);
         float expectedY = (LOCATION_1_Y * value1Weight) + (LOCATION_2_Y * value2Weight);
 
-        Vertex expected = vertexOf(expectedX, expectedY);
+        var expected = vertexOf(expectedX, expectedY);
 
-        Vertex provided = loopingLinearMovingLocationProvider.provide(timestamp);
+        var provided = provider.provide(timestamp);
 
         assertEquals(expected.X, provided.X);
         assertEquals(expected.Y, provided.Y);
@@ -159,18 +159,18 @@ public class LoopingLinearMovingVertexProviderTests {
 
     @Test
     public void testProvidePastProvidedValues() {
-        long timeAfterValue3 = 50L;
-        long timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
-        long timeInterval = PERIOD_DURATION - TIME_3;
-        float value3Weight = (timeInterval - timeAfterValue3) / (float) timeInterval;
-        float value1Weight = 1f - value3Weight;
+        var timeAfterValue3 = 50L;
+        var timestamp = TIME_3 - MODULO_OFFSET + timeAfterValue3;
+        var timeInterval = PERIOD_DURATION - TIME_3;
+        var value3Weight = (timeInterval - timeAfterValue3) / (float) timeInterval;
+        var value1Weight = 1f - value3Weight;
 
-        float expectedX = (LOCATION_3_X * value3Weight) + (LOCATION_1_X * value1Weight);
-        float expectedY = (LOCATION_3_Y * value3Weight) + (LOCATION_1_Y * value1Weight);
+        var expectedX = (LOCATION_3_X * value3Weight) + (LOCATION_1_X * value1Weight);
+        var expectedY = (LOCATION_3_Y * value3Weight) + (LOCATION_1_Y * value1Weight);
 
-        Vertex expected = vertexOf(expectedX, expectedY);
+        var expected = vertexOf(expectedX, expectedY);
 
-        Vertex provided = loopingLinearMovingLocationProvider.provide(timestamp);
+        var provided = provider.provide(timestamp);
 
         assertEquals(expected.X, provided.X);
         assertEquals(expected.Y, provided.Y);
@@ -178,74 +178,31 @@ public class LoopingLinearMovingVertexProviderTests {
 
     @Test
     public void testProvideWhenPaused() {
-        loopingLinearMovingLocationProvider.reportPause(TIME_1 - MODULO_OFFSET);
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn((long) TIME_1 - MODULO_OFFSET);
 
-        assertEquals(LOCATION_1, loopingLinearMovingLocationProvider.provide(123123123L));
+        provider.reportPause(TIME_1 - MODULO_OFFSET);
+
+        assertEquals(LOCATION_1, provider.provide(123123123L));
     }
 
     @Test
     public void testReset() {
         long resetTimestamp = 123123L;
 
-        loopingLinearMovingLocationProvider.reset(resetTimestamp);
+        provider.reset(resetTimestamp);
 
-        assertEquals(LOCATION_1, loopingLinearMovingLocationProvider.provide(resetTimestamp));
-    }
-
-    @Test
-    public void testReportPauseOrProvideWithOutdatedTimestamp() {
-        long timestamp = 123123L;
-
-        loopingLinearMovingLocationProvider.provide(timestamp);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.provide(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportPause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reset(timestamp - 1));
-
-        loopingLinearMovingLocationProvider.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reset(timestamp));
-
-        loopingLinearMovingLocationProvider.reportUnpause(timestamp + 2);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.provide(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportPause(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reset(timestamp + 1));
-
-        loopingLinearMovingLocationProvider.provide(timestamp + 3);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.provide(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportPause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reportUnpause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                loopingLinearMovingLocationProvider.reset(timestamp + 2));
+        assertEquals(LOCATION_1, provider.provide(resetTimestamp));
     }
 
     @Test
     public void testReportPauseWhilePausedOrViceVersa() {
         assertThrows(UnsupportedOperationException.class, () ->
-                loopingLinearMovingLocationProvider.reportUnpause(0L));
+                provider.reportUnpause(0L));
 
-        loopingLinearMovingLocationProvider.reportPause(0L);
+        provider.reportPause(0L);
 
         assertThrows(UnsupportedOperationException.class, () ->
-                loopingLinearMovingLocationProvider.reportPause(0L));
+                provider.reportPause(0L));
     }
 
     @Test
@@ -263,11 +220,11 @@ public class LoopingLinearMovingVertexProviderTests {
 
         Vertex expected = vertexOf(expectedX, expectedY);
 
-        loopingLinearMovingLocationProvider.reportPause(0L);
-        loopingLinearMovingLocationProvider.reportUnpause(pauseDuration);
+        provider.reportPause(0L);
+        provider.reportUnpause(pauseDuration);
 
         Vertex provided =
-                loopingLinearMovingLocationProvider.provide(timestamp + pauseDuration);
+                provider.provide(timestamp + pauseDuration);
 
         assertEquals(expected.X, provided.X);
         assertEquals(expected.Y, provided.Y);
@@ -275,7 +232,7 @@ public class LoopingLinearMovingVertexProviderTests {
 
     @Test
     public void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, loopingLinearMovingLocationProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, loopingLinearMovingLocationProvider.representation());
+        assertEquals(VALUES_AT_TIMES, provider.representation());
+        assertNotSame(VALUES_AT_TIMES, provider.representation());
     }
 }

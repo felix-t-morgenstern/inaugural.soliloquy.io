@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
@@ -17,8 +18,8 @@ public class ProgressiveStringProvider
 
     public ProgressiveStringProvider(UUID uuid, String string, long startTimestamp,
                                      long timeToComplete, Long pausedTimestamp,
-                                     Long mostRecentTimestamp) {
-        super(startTimestamp, pausedTimestamp, mostRecentTimestamp);
+                                     TimestampValidator timestampValidator) {
+        super(startTimestamp, pausedTimestamp, timestampValidator);
         UUID = Check.ifNull(uuid, "uuid");
         STRING = Check.ifNull(string, "string");
         TIME_TO_COMPLETE = Check.throwOnLteZero(timeToComplete, "timeToComplete");
@@ -55,10 +56,5 @@ public class ProgressiveStringProvider
     @Override
     public UUID uuid() {
         return UUID;
-    }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 }

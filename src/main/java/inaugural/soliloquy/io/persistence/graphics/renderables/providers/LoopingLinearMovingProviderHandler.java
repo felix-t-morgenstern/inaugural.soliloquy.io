@@ -39,7 +39,7 @@ public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<Loop
         }
 
         return LOOPING_LINEAR_MOVING_PROVIDER_FACTORY.make(UUID.fromString(dto.id), dto.duration,
-                dto.offset, valuesWithinPeriod, dto.pausedTimestamp, dto.mostRecentTimestamp);
+                dto.offset, valuesWithinPeriod, dto.pausedTimestamp);
     }
 
     @Override
@@ -73,8 +73,6 @@ public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<Loop
 
         dto.pausedTimestamp = loopingLinearMovingProvider.pausedTimestamp();
 
-        dto.mostRecentTimestamp = loopingLinearMovingProvider.mostRecentTimestamp();
-
         return JSON.toJson(dto);
     }
 
@@ -84,7 +82,6 @@ public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<Loop
         int offset;
         LoopingLinearMovingProviderValueAtTimeDto[] valueAtTimes;
         Long pausedTimestamp;
-        Long mostRecentTimestamp;
         String type;
     }
 

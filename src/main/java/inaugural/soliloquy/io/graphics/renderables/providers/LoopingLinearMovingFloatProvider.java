@@ -1,14 +1,19 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
+
 import java.util.Map;
 import java.util.UUID;
 
 public class LoopingLinearMovingFloatProvider extends AbstractLoopingLinearMovingProvider<Float> {
-    public LoopingLinearMovingFloatProvider(UUID uuid, Map<Integer, Float> valuesAtTimes,
-                                            int periodDuration, int periodModuloOffset,
-                                            Long pausedTimestamp, Long mostRecentTimestamp) {
+    public LoopingLinearMovingFloatProvider(UUID uuid,
+                                            Map<Integer, Float> valuesAtTimes,
+                                            int periodDuration,
+                                            int periodModuloOffset,
+                                            Long pausedTimestamp,
+                                            TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp);
+                timestampValidator);
     }
 
     @Override

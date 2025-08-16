@@ -238,14 +238,6 @@ public class SpriteRendererTests {
     }
 
     @Test
-    public void testGetMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
-    }
-
-    @Test
     public void testRenderUpdatesTimestamp() {
         renderer.setMesh(mock(Mesh.class));
         renderer.setShader(mock(Shader.class));

@@ -820,14 +820,6 @@ public class TextLineRendererImplTests {
     }
 
     @Test
-    public void testGetMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
-    }
-
-    @Test
     public void testRenderUpdatesTimestamp() {
         var lineHeightProvider = new FakeStaticProvider<>(0.25f);
         String textLine = "Text line";

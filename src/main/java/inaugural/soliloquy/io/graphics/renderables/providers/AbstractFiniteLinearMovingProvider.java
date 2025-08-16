@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
 import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.Map;
@@ -18,9 +19,11 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     private final Map<Long, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
 
-    protected AbstractFiniteLinearMovingProvider(UUID uuid, Map<Long, T> valuesAtTimes,
-                                                 Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(pausedTimestamp, mostRecentTimestamp);
+    protected AbstractFiniteLinearMovingProvider(UUID uuid,
+                                                 Map<Long, T> valuesAtTimes,
+                                                 Long pausedTimestamp,
+                                                 TimestampValidator timestampValidator) {
+        super(pausedTimestamp, timestampValidator);
         UUID = Check.ifNull(uuid, "uuid");
 
         VALUES_AT_TIMES = mapOf();
@@ -58,15 +61,15 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
         if (timestamp > NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue) {
             return VALUES_AT_TIMES.get(NEAREST_FLOOR_AND_CEILING_TREE.MaximumValue);
         }
-        long time1 = NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(timestamp);
-        int transitionNumber = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1);
-        long time2 = NEAREST_FLOOR_AND_CEILING_TREE
+        var time1 = NEAREST_FLOOR_AND_CEILING_TREE.getNearestFloor(timestamp);
+        var transitionNumber = NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1);
+        var time2 = NEAREST_FLOOR_AND_CEILING_TREE
                 .OrderedValues[NEAREST_FLOOR_AND_CEILING_TREE.ValueIndices.get(time1) + 1];
-        long distanceBetweenTimes = time2 - time1;
-        float weight2 = (timestamp - time1) / (float) distanceBetweenTimes;
-        float weight1 = 1f - weight2;
-        T value1 = VALUES_AT_TIMES.get(time1);
-        T value2 = VALUES_AT_TIMES.get(time2);
+        var distanceBetweenTimes = time2 - time1;
+        var weight2 = (timestamp - time1) / (float) distanceBetweenTimes;
+        var weight1 = 1f - weight2;
+        var value1 = VALUES_AT_TIMES.get(time1);
+        var value2 = VALUES_AT_TIMES.get(time2);
 
         return interpolate(value1, weight1, value2, weight2, transitionNumber);
     }
@@ -80,13 +83,8 @@ public abstract class AbstractFiniteLinearMovingProvider<T> extends AbstractFini
     }
 
     @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
-
-    @Override
     protected void updateInternalValuesOnUnpause(long timestamp) {
-        long pauseDuration = timestamp - pausedTimestamp;
+        var pauseDuration = timestamp - pausedTimestamp;
         for (var i = 0; i < NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues.length; i++) {
             T value = VALUES_AT_TIMES.get(NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues[i]);
             VALUES_AT_TIMES.remove(NEAREST_FLOOR_AND_CEILING_TREE.OrderedValues[i]);

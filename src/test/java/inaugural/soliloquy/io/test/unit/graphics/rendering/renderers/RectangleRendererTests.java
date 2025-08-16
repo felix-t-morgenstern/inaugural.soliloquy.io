@@ -178,16 +178,6 @@ public class RectangleRendererTests {
     }
 
     @Test
-    public void testGetMostRecentTimestamp() {
-        renderer.setMesh(mockMesh);
-        renderer.setShader(mockShader);
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
-    }
-
-    @Test
     public void testRenderUpdatesTimestamp() {
         RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,

@@ -1,17 +1,24 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.FiniteLinearMovingFloatProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingProvider;
 
 import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class FiniteLinearMovingFloatProviderTests {
     private final long TIME_1 = 100L;
     private final float VALUE_1 = 0.2f;
@@ -25,65 +32,61 @@ public class FiniteLinearMovingFloatProviderTests {
             pairOf(TIME_3, VALUE_3)
     );
 
-    private final long MOST_RECENT_TIMESTAMP = 34L;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private FiniteLinearMovingProvider<Float> finiteLinearMovingFloatProvider;
+    private FiniteLinearMovingProvider<Float> provider;
 
     @BeforeEach
     public void setUp() {
-        finiteLinearMovingFloatProvider = new FiniteLinearMovingFloatProvider(UUID,
-                VALUES_AT_TIMES, null, MOST_RECENT_TIMESTAMP);
+        provider = new FiniteLinearMovingFloatProvider(UUID,
+                VALUES_AT_TIMES, null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(null, VALUES_AT_TIMES, null, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(null, VALUES_AT_TIMES, null,
+                        mockTimestampValidator));
 
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, null, null, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, mapOf(), null, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, mapOf(pairOf(null, VALUE_1)), null,
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(UUID, null, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(UUID, mapOf(), null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(UUID, mapOf(pairOf(null, VALUE_1)), null,
                         null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, mapOf(pairOf(TIME_1, null)), null, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(UUID, mapOf(pairOf(TIME_1, null)), null,
+                        mockTimestampValidator));
 
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, 2L, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, 2L, 1L));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, null, null));
     }
 
     @Test
     public void testUuid() {
-        assertSame(UUID, finiteLinearMovingFloatProvider.uuid());
-    }
-
-    @Test
-    public void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
+        assertSame(UUID, provider.uuid());
     }
 
     @Test
     public void testValuesAtTimestampsRepresentation() {
-        assertNotNull(finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+        assertNotNull(provider.valuesAtTimestampsRepresentation());
         assertEquals(VALUES_AT_TIMES,
-                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+                provider.valuesAtTimestampsRepresentation());
         assertNotSame(VALUES_AT_TIMES,
-                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation());
+                provider.valuesAtTimestampsRepresentation());
     }
 
     @Test
     public void testProvideAtExtremes() {
-        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(TIME_1 - 1));
-        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(TIME_1));
-        assertEquals(VALUE_3, (float) finiteLinearMovingFloatProvider.provide(TIME_3));
-        assertEquals(VALUE_3, (float) finiteLinearMovingFloatProvider.provide(TIME_3 + 1));
+        assertEquals(VALUE_1, (float) provider.provide(TIME_1 - 1));
+        assertEquals(VALUE_1, (float) provider.provide(TIME_1));
+        assertEquals(VALUE_3, (float) provider.provide(TIME_3));
+        assertEquals(VALUE_3, (float) provider.provide(TIME_3 + 1));
     }
 
     @Test
@@ -97,82 +100,36 @@ public class FiniteLinearMovingFloatProviderTests {
         float weightedValue2 = VALUE_2 * time2Weight;
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float) finiteLinearMovingFloatProvider.provide(timestamp));
+                (float) provider.provide(timestamp));
     }
 
     @Test
     public void testPausedTimestamp() {
-        long pausedTimestamp = 12L;
-        FiniteLinearMovingProvider<Float> pausedFiniteLinearMovingFloatProvider =
-                new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, pausedTimestamp,
-                        MOST_RECENT_TIMESTAMP);
+        var pausedTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(pausedTimestamp);
 
-        assertEquals(pausedTimestamp,
-                (long) pausedFiniteLinearMovingFloatProvider.pausedTimestamp());
+        var pausedProvider = new FiniteLinearMovingFloatProvider(UUID, VALUES_AT_TIMES, pausedTimestamp, mockTimestampValidator);
+
+        assertEquals(pausedTimestamp, (long) pausedProvider.pausedTimestamp());
     }
 
     @Test
     public void testProvideWhenPaused() {
-        finiteLinearMovingFloatProvider.reportPause(TIME_1);
+        provider.reportPause(TIME_1);
 
-        assertEquals(VALUE_1, (float) finiteLinearMovingFloatProvider.provide(123123123L));
-    }
-
-    @Test
-    public void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
-
-        finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
-        assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
-
-        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
-        assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
-        assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) finiteLinearMovingFloatProvider.pausedTimestamp());
-
-        finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
-        assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long) finiteLinearMovingFloatProvider.mostRecentTimestamp());
-        assertNull(finiteLinearMovingFloatProvider.pausedTimestamp());
+        assertEquals(VALUE_1, (float) provider.provide(123123123L));
     }
 
     @Test
     public void testReportPauseWhilePausedOrViceVersa() {
-        assertThrows(UnsupportedOperationException.class, () ->
-                finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
+        var timestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(timestamp);
 
-        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
+        assertThrows(UnsupportedOperationException.class, () -> provider.reportUnpause(timestamp));
 
-        assertThrows(UnsupportedOperationException.class, () ->
-                finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
+        provider.reportPause(timestamp);
+
+        assertThrows(UnsupportedOperationException.class, () -> provider.reportPause(timestamp));
     }
 
     @Test
@@ -186,23 +143,23 @@ public class FiniteLinearMovingFloatProviderTests {
         var weightedValue1 = VALUE_1 * time1Weight;
         var weightedValue2 = VALUE_2 * time2Weight;
 
-        finiteLinearMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
-        finiteLinearMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
+        provider.reportPause(timestamp);
+        provider.reportUnpause(timestamp + pauseDuration);
 
         var valuesAtTimestampsRepresentation =
-                finiteLinearMovingFloatProvider.valuesAtTimestampsRepresentation();
+                provider.valuesAtTimestampsRepresentation();
 
         assertEquals(VALUE_1, (float) valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
         assertEquals(VALUE_2, (float) valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
         assertEquals(VALUE_3, (float) valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
 
         assertEquals(weightedValue1 + weightedValue2,
-                (float) finiteLinearMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) provider.provide(timestamp + pauseDuration));
     }
 
     @Test
     public void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, finiteLinearMovingFloatProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, finiteLinearMovingFloatProvider.representation());
+        assertEquals(VALUES_AT_TIMES, provider.representation());
+        assertNotSame(VALUES_AT_TIMES, provider.representation());
     }
 }

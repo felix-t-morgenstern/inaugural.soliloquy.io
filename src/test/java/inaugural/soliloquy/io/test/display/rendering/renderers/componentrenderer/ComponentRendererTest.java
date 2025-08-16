@@ -27,7 +27,6 @@ import soliloquy.specs.ui.Component;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

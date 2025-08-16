@@ -141,9 +141,4 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
     public Object representation() {
         return null;
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
 }

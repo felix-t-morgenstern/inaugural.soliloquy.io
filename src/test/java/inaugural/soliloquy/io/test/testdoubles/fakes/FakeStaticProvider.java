@@ -53,9 +53,4 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     public UUID uuid() {
         return Uuid;
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return MostRecentTimestamp;
-    }
 }

@@ -1,8 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.FiniteSinusoidMovingFloatProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
 import java.util.List;
@@ -10,9 +14,12 @@ import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class FiniteSinusoidMovingFloatProviderTests {
     private final long TIME_1 = 100L;
     private final float VALUE_1 = 0.2f;
@@ -38,92 +45,83 @@ public class FiniteSinusoidMovingFloatProviderTests {
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
 
-    private final long MOST_RECENT_TIMESTAMP = 34L;
+    @Mock private TimestampValidator mockTimestampValidator;
 
-    private FiniteSinusoidMovingProvider<Float> finiteSinusoidMovingFloatProvider;
+    private FiniteSinusoidMovingProvider<Float> provider;
 
     @BeforeEach
     public void setUp() {
-        finiteSinusoidMovingFloatProvider =
+        provider =
                 new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES, TRANSITION_SHARPNESSES,
-                        null, MOST_RECENT_TIMESTAMP);
+                        null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(null, VALUES_AT_TIMES,
-                        TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, null,
-                        TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, mapOf(),
-                        TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, mapOf(
                         pairOf(null, VALUE_1)
                 ),
-                        TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, mapOf(
                         pairOf(TIME_1, null)
                 ),
-                        TRANSITION_SHARPNESSES, null, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES,
-                        null, null, MOST_RECENT_TIMESTAMP));
+                        null, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES,
-                        listOf(), null, MOST_RECENT_TIMESTAMP));
+                        listOf(), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES,
-                        listOf(-0.001f), null, MOST_RECENT_TIMESTAMP));
+                        listOf(-0.001f), null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES,
-                        TRANSITION_SHARPNESSES, MOST_RECENT_TIMESTAMP, null));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES,
-                        TRANSITION_SHARPNESSES, MOST_RECENT_TIMESTAMP + 1, MOST_RECENT_TIMESTAMP));
+                        TRANSITION_SHARPNESSES, null, null));
     }
 
     @Test
     public void testUuid() {
-        assertSame(UUID, finiteSinusoidMovingFloatProvider.uuid());
-    }
-
-    @Test
-    public void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) finiteSinusoidMovingFloatProvider.mostRecentTimestamp());
+        assertSame(UUID, provider.uuid());
     }
 
     @Test
     public void testValuesAtTimestampsRepresentation() {
-        assertNotNull(finiteSinusoidMovingFloatProvider.valuesAtTimestampsRepresentation());
+        assertNotNull(provider.valuesAtTimestampsRepresentation());
         assertEquals(VALUES_AT_TIMES,
-                finiteSinusoidMovingFloatProvider.valuesAtTimestampsRepresentation());
+                provider.valuesAtTimestampsRepresentation());
         assertNotSame(VALUES_AT_TIMES,
-                finiteSinusoidMovingFloatProvider.valuesAtTimestampsRepresentation());
+                provider.valuesAtTimestampsRepresentation());
     }
 
     @Test
     public void testTransitionSharpnesses() {
         assertEquals(TRANSITION_SHARPNESSES,
-                finiteSinusoidMovingFloatProvider.transitionSharpnesses());
+                provider.transitionSharpnesses());
         assertNotSame(TRANSITION_SHARPNESSES,
-                finiteSinusoidMovingFloatProvider.transitionSharpnesses());
+                provider.transitionSharpnesses());
     }
 
     @Test
     public void testProvideAtExtremes() {
-        assertEquals(VALUE_1, (float) finiteSinusoidMovingFloatProvider.provide(TIME_1 - 1));
-        assertEquals(VALUE_1, (float) finiteSinusoidMovingFloatProvider.provide(TIME_1));
-        assertEquals(VALUE_3, (float) finiteSinusoidMovingFloatProvider.provide(TIME_3));
-        assertEquals(VALUE_3, (float) finiteSinusoidMovingFloatProvider.provide(TIME_3 + 1));
+        assertEquals(VALUE_1, (float) provider.provide(TIME_1 - 1));
+        assertEquals(VALUE_1, (float) provider.provide(TIME_1));
+        assertEquals(VALUE_3, (float) provider.provide(TIME_3));
+        assertEquals(VALUE_3, (float) provider.provide(TIME_3 + 1));
     }
 
     @Test
@@ -138,7 +136,7 @@ public class FiniteSinusoidMovingFloatProviderTests {
         float percentToAdd = (float) ((sineValue + 1f) / 2f);
         float expectedValue = VALUE_1 + (distanceBetweenValues * percentToAdd);
 
-        assertEquals(expectedValue, (float) finiteSinusoidMovingFloatProvider.provide(timestamp));
+        assertEquals(expectedValue, (float) provider.provide(timestamp));
     }
 
     @Test
@@ -155,82 +153,26 @@ public class FiniteSinusoidMovingFloatProviderTests {
         float percentToAdd = (float) ((sharpenedSineValue + 1f) / 2f);
         float expectedValue = VALUE_2 + (distanceBetweenValues * percentToAdd);
 
-        assertEquals(expectedValue, (float) finiteSinusoidMovingFloatProvider.provide(timestamp));
+        assertEquals(expectedValue, (float) provider.provide(timestamp));
     }
 
     @Test
     public void testPausedTimestamp() {
-        long pausedTimestamp = 12L;
-        FiniteSinusoidMovingProvider<Float> pausedFiniteSinusoidMovingFloatProvider =
-                new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES, TRANSITION_SHARPNESSES,
-                        pausedTimestamp, MOST_RECENT_TIMESTAMP);
+        var pausedTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(pausedTimestamp);
 
-        assertEquals(pausedTimestamp,
-                (long) pausedFiniteSinusoidMovingFloatProvider.pausedTimestamp());
+        var pausedProvider =
+                new FiniteSinusoidMovingFloatProvider(UUID, VALUES_AT_TIMES, TRANSITION_SHARPNESSES,
+                        pausedTimestamp, mockTimestampValidator);
+
+        assertEquals(pausedTimestamp, (long) pausedProvider.pausedTimestamp());
     }
 
     @Test
     public void testProvideWhenPaused() {
-        finiteSinusoidMovingFloatProvider.reportPause(TIME_1);
+        provider.reportPause(TIME_1);
 
-        assertEquals(VALUE_1, (float) finiteSinusoidMovingFloatProvider.provide(123123123L));
-    }
-
-    @Test
-    public void testProvideOrReportPauseOrUnpauseWithInvalidTimestampAndMostRecentTimestamp() {
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP - 1));
-
-        finiteSinusoidMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
-        assertEquals(MOST_RECENT_TIMESTAMP + 1,
-                (long) finiteSinusoidMovingFloatProvider.mostRecentTimestamp());
-
-        finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 1));
-        assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) finiteSinusoidMovingFloatProvider.mostRecentTimestamp());
-        assertEquals(MOST_RECENT_TIMESTAMP + 2,
-                (long) finiteSinusoidMovingFloatProvider.pausedTimestamp());
-
-        finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 3);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.provide(MOST_RECENT_TIMESTAMP + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + 2));
-        assertEquals(MOST_RECENT_TIMESTAMP + 3,
-                (long) finiteSinusoidMovingFloatProvider.mostRecentTimestamp());
-        assertNull(finiteSinusoidMovingFloatProvider.pausedTimestamp());
-    }
-
-    @Test
-    public void testReportPauseWhilePausedOrViceVersa() {
-        assertThrows(UnsupportedOperationException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP));
-
-        finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
-
-        assertThrows(UnsupportedOperationException.class, () ->
-                finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP));
+        assertEquals(VALUE_1, (float) provider.provide(123123123L));
     }
 
     @Test
@@ -246,23 +188,23 @@ public class FiniteSinusoidMovingFloatProviderTests {
         float percentToAdd = (float) ((sineValue + 1f) / 2f);
         float expectedValue = VALUE_1 + (distanceBetweenValues * percentToAdd);
 
-        finiteSinusoidMovingFloatProvider.reportPause(MOST_RECENT_TIMESTAMP);
-        finiteSinusoidMovingFloatProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
+        provider.reportPause(timestamp);
+        provider.reportUnpause(timestamp + pauseDuration);
 
         Map<Long, Float> valuesAtTimestampsRepresentation =
-                finiteSinusoidMovingFloatProvider.valuesAtTimestampsRepresentation();
+                provider.valuesAtTimestampsRepresentation();
 
         assertEquals(VALUE_1, (float) valuesAtTimestampsRepresentation.get(TIME_1 + pauseDuration));
         assertEquals(VALUE_2, (float) valuesAtTimestampsRepresentation.get(TIME_2 + pauseDuration));
         assertEquals(VALUE_3, (float) valuesAtTimestampsRepresentation.get(TIME_3 + pauseDuration));
 
         assertEquals(expectedValue,
-                (float) finiteSinusoidMovingFloatProvider.provide(timestamp + pauseDuration));
+                (float) provider.provide(timestamp + pauseDuration));
     }
 
     @Test
     public void testRepresentation() {
-        assertEquals(VALUES_AT_TIMES, finiteSinusoidMovingFloatProvider.representation());
-        assertNotSame(VALUES_AT_TIMES, finiteSinusoidMovingFloatProvider.representation());
+        assertEquals(VALUES_AT_TIMES, provider.representation());
+        assertNotSame(VALUES_AT_TIMES, provider.representation());
     }
 }

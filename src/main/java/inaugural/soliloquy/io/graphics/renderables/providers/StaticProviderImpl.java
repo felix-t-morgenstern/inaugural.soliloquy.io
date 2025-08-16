@@ -11,10 +11,10 @@ public class StaticProviderImpl<T> implements StaticProvider<T> {
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StaticProviderImpl(UUID uuid, T value, Long mostRecentTimestamp) {
+    public StaticProviderImpl(UUID uuid, T value, TimestampValidator timestampValidator) {
         UUID = Check.ifNull(uuid, "uuid");
         VALUE = value;
-        TIMESTAMP_VALIDATOR = new TimestampValidator(mostRecentTimestamp);
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
@@ -46,10 +46,5 @@ public class StaticProviderImpl<T> implements StaticProvider<T> {
     @Override
     public UUID uuid() {
         return UUID;
-    }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 }

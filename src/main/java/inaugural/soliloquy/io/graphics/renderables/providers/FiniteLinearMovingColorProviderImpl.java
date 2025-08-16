@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 
 import java.awt.*;
@@ -14,10 +15,12 @@ public class FiniteLinearMovingColorProviderImpl extends AbstractFiniteLinearMov
         implements FiniteLinearMovingColorProvider {
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE;
 
-    public FiniteLinearMovingColorProviderImpl(UUID uuid, Map<Long, Color> valuesAtTimes,
+    public FiniteLinearMovingColorProviderImpl(UUID uuid,
+                                               Map<Long, Color> valuesAtTimes,
                                                List<Boolean> hueMovementIsClockwise,
-                                               Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+                                               Long pausedTimestamp,
+                                               TimestampValidator timestampValidator) {
+        super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
         HUE_MOVEMENT_IS_CLOCKWISE = listOf();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");
         if (hueMovementIsClockwise.size() != valuesAtTimes.size() - 1) {

@@ -2,8 +2,12 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.providers.factorie
 
 import inaugural.soliloquy.io.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactoryImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeLoopingLinearMovingProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.LoopingLinearMovingProviderFactory;
@@ -16,13 +20,14 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static org.junit.jupiter.api.Assertions.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class LoopingLinearMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map,
-            Function<Long, Function<Long, LoopingLinearMovingProvider>>>>>>
+            Function<Long, Function<TimestampValidator, LoopingLinearMovingProvider>>>>>>
             FACTORY_1 =
             uuid -> periodDuration -> periodModuloOffset -> valuesAtTime -> pausedTimestamp ->
                     mostRecentTimestamp -> {
@@ -31,7 +36,7 @@ public class LoopingLinearMovingProviderFactoryImplTests {
                         factory1InputPeriodModuloOffset = periodModuloOffset;
                         factory1InputValuesAtTimes = valuesAtTime;
                         factory1InputPausedTimestamp = pausedTimestamp;
-                        factory1InputMostRecentTimestamp = mostRecentTimestamp;
+                        factory1InputValidator = mostRecentTimestamp;
                         return FACTORY_1_OUTPUT;
                     };
 
@@ -40,8 +45,10 @@ public class LoopingLinearMovingProviderFactoryImplTests {
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Integer, Function<Integer, Function<Map, Function<Long,
-            Function<Long, LoopingLinearMovingProvider>>>>>> FACTORY_2 =
+            Function<TimestampValidator, LoopingLinearMovingProvider>>>>>> FACTORY_2 =
             _ -> _ -> _ -> _ -> _ -> _ -> FACTORY_2_OUTPUT;
+
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private UUID factory1InputUuid;
     private int factory1InputPeriodDuration;
@@ -49,7 +56,7 @@ public class LoopingLinearMovingProviderFactoryImplTests {
     /** @noinspection rawtypes */
     private Map factory1InputValuesAtTimes;
     private Long factory1InputPausedTimestamp;
-    private Long factory1InputMostRecentTimestamp;
+    private TimestampValidator factory1InputValidator;
 
     private LoopingLinearMovingProviderFactory loopingLinearMovingProviderFactory;
 
@@ -59,21 +66,28 @@ public class LoopingLinearMovingProviderFactoryImplTests {
                 mapOf(
                         pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
                         pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
-                )
+                ),
+                mockTimestampValidator
         );
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1))));
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1))));
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null))));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoopingLinearMovingProviderFactoryImpl(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1)),
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1)),
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoopingLinearMovingProviderFactoryImpl(
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null)), mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new LoopingLinearMovingProviderFactoryImpl(
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
+                                pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)), null));
     }
 
     @Test
@@ -87,11 +101,10 @@ public class LoopingLinearMovingProviderFactoryImplTests {
                 pairOf(2, 789f)
         );
         var pausedTimestamp = 123123L;
-        var mostRecentTimestamp = 456456L;
 
-        var provider = loopingLinearMovingProviderFactory
-                .make(uuid, periodDuration, periodModuloOffset, valuesAtTimestamps,
-                        pausedTimestamp, mostRecentTimestamp);
+        var provider =
+                loopingLinearMovingProviderFactory.make(uuid, periodDuration, periodModuloOffset,
+                        valuesAtTimestamps, pausedTimestamp);
 
         assertSame(FACTORY_1_OUTPUT, provider);
         assertSame(uuid, factory1InputUuid);
@@ -99,7 +112,7 @@ public class LoopingLinearMovingProviderFactoryImplTests {
         assertEquals(periodModuloOffset, factory1InputPeriodModuloOffset);
         assertSame(valuesAtTimestamps, factory1InputValuesAtTimes);
         assertEquals(pausedTimestamp, factory1InputPausedTimestamp);
-        assertEquals(mostRecentTimestamp, factory1InputMostRecentTimestamp);
+        assertSame(mockTimestampValidator, factory1InputValidator);
     }
 
     // NB: No specific test is provided for make with invalid params, since the individual

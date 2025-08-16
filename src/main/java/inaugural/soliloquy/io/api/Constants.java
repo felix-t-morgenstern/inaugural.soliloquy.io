@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.api;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -38,13 +39,11 @@ public class Constants {
     public final static String STANDARD_V_RESIZE_CURSOR_ID = "standardVResizeCursor";
 
     public final static FloatBox WHOLE_SCREEN = floatBoxOf(0f, 0f, 1f, 1f);
-    public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
-            new StaticProviderImpl<>(UUID.randomUUID(), WHOLE_SCREEN, null);
 
     public final static int LEFT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_1;
     public final static int RIGHT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_2;
     public final static int MIDDLE_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_3;
-    public final static int[] ALL_SUPPORTED_MOUSE_BUTTONS = new int[] {
+    public final static int[] ALL_SUPPORTED_MOUSE_BUTTONS = new int[]{
             LEFT_MOUSE_BUTTON,
             RIGHT_MOUSE_BUTTON,
             MIDDLE_MOUSE_BUTTON

@@ -2,8 +2,10 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.AbstractLoopingPausableAtTime;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingProvider;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausableAtTime
@@ -14,29 +16,26 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     private int periodModuloOffsetAtMostRecentProvision;
     private T mostRecentlyProvidedValue;
 
-    protected AbstractLoopingProvider(UUID uuid, int periodDuration, int periodModuloOffset,
-                                      Long pauseTimestamp, Long mostRecentTimestamp) {
-        super(periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
+    protected AbstractLoopingProvider(UUID uuid,
+                                      int periodDuration,
+                                      int periodModuloOffset,
+                                      Long pauseTimestamp,
+                                      TimestampValidator timestampValidator) {
+        super(periodDuration, periodModuloOffset, pauseTimestamp, timestampValidator);
         UUID = Check.ifNull(uuid, "uuid");
     }
 
     @Override
     public T provide(long timestamp) throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
-        long timestampForProvider;
-        if (pausedTimestamp == null) {
-            timestampForProvider = timestamp;
-        }
-        else {
-            timestampForProvider = pausedTimestamp;
-        }
+        long timestampForProvider = Objects.requireNonNullElse(pausedTimestamp, timestamp);
         if (timestampSentToProviderMostRecently == timestampForProvider &&
                 periodModuloOffset == periodModuloOffsetAtMostRecentProvision) {
             return mostRecentlyProvidedValue;
         }
         timestampSentToProviderMostRecently = timestampForProvider;
         periodModuloOffsetAtMostRecentProvision = periodModuloOffset;
-        int msForProvider = (int) ((timestampForProvider + periodModuloOffset) % PERIOD_DURATION);
+        var msForProvider = (int) ((timestampForProvider + periodModuloOffset) % PERIOD_DURATION);
 
         return mostRecentlyProvidedValue = provideValueAtMsWithinPeriod(msForProvider);
     }
@@ -46,11 +45,6 @@ public abstract class AbstractLoopingProvider<T> extends AbstractLoopingPausable
     @Override
     public UUID uuid() {
         return UUID;
-    }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
     }
 
     @Override

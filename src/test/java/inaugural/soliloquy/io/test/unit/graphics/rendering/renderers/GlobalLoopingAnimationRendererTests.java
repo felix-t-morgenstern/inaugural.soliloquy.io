@@ -177,14 +177,6 @@ public class GlobalLoopingAnimationRendererTests {
     }
 
     @Test
-    public void testGetMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
-    }
-
-    @Test
     public void testRenderUpdatesTimestamp() {
         var renderableAnimation = new SpyGlobalLoopingAnimation();
         var colorShiftProviders = Collections.<ColorShift>listOf();

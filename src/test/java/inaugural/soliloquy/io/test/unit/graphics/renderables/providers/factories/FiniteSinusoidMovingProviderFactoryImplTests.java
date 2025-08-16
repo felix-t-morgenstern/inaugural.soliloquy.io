@@ -1,9 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.factories.FiniteSinusoidMovingProviderFactoryImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteSinusoidMovingProviderFactory;
@@ -19,19 +22,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class FiniteSinusoidMovingProviderFactoryImplTests {
     private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     /** @noinspection rawtypes */
     @Mock private FiniteSinusoidMovingProvider factory1Output;
     /** @noinspection rawtypes */
-    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<Long,
-            FiniteSinusoidMovingProvider>>>>> FACTORY_1 =
+    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_1 =
             uuid -> valuesAtTime -> sharpnesses -> pausedTimestamp -> mostRecentTimestamp -> {
                 factory1InputUuid = uuid;
                 factory1InputValuesAtTimes = valuesAtTime;
                 factory1InputTransitionSharpnesses = sharpnesses;
                 factory1InputPausedTimestamp = pausedTimestamp;
-                factory1InputMostRecentTimestamp = mostRecentTimestamp;
+                factory1InputValidator = mostRecentTimestamp;
                 factory1Output = mock(FiniteSinusoidMovingProvider.class);
                 return factory1Output;
             };
@@ -40,14 +43,13 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     /** @noinspection rawtypes */
     @Mock private FiniteSinusoidMovingProvider factory2Output;
     /** @noinspection rawtypes */
-    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<Long,
-            FiniteSinusoidMovingProvider>>>>> FACTORY_2 =
+    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_2 =
             uuid -> valuesAtTime -> sharpnesses -> pausedTimestamp -> mostRecentTimestamp -> {
                 factory2InputUuid = uuid;
                 factory2InputValuesAtTimes = valuesAtTime;
                 factory2InputTransitionSharpnesses = sharpnesses;
                 factory2InputPausedTimestamp = pausedTimestamp;
-                factory2InputMostRecentTimestamp = mostRecentTimestamp;
+                factory2InputValidator = mostRecentTimestamp;
                 factory2Output = mock(FiniteSinusoidMovingProvider.class);
                 return factory2Output;
             };
@@ -57,7 +59,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     private Map factory1InputValuesAtTimes;
     private List<Float> factory1InputTransitionSharpnesses;
     private Long factory1InputPausedTimestamp;
-    private Long factory1InputMostRecentTimestamp;
+    private TimestampValidator factory1InputValidator;
 
     @SuppressWarnings("unused")
     private UUID factory2InputUuid;
@@ -67,32 +69,37 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     @SuppressWarnings("unused")
     private Long factory2InputPausedTimestamp;
     @SuppressWarnings("unused")
-    private Long factory2InputMostRecentTimestamp;
+    private TimestampValidator factory2InputValidator;
 
-    private FiniteSinusoidMovingProviderFactory finiteSinusoidMovingProviderFactory;
+    @Mock private TimestampValidator mockTimestampValidator;
+
+    private FiniteSinusoidMovingProviderFactory factory;
 
     @BeforeEach
     public void setUp() {
-        finiteSinusoidMovingProviderFactory = new FiniteSinusoidMovingProviderFactoryImpl(
+        factory = new FiniteSinusoidMovingProviderFactoryImpl(
                 mapOf(
                         pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
                         pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
-                ));
+                ), mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(null));
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf()));
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1))));
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1))));
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null))));
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null)), mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(
+                        mapOf(pairOf(FACTORY_1_TYPE_NAME, FACTORY_1)), null));
     }
 
     @Test
@@ -105,10 +112,8 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         );
         var transitionSharpnesses = listOf(randomFloat(), randomFloat());
         var pausedTimestamp = randomLong();
-        var mostRecentTimestamp = pausedTimestamp + 1;
 
-        var provider = finiteSinusoidMovingProviderFactory.make(uuid, valuesAtTimestamps,
-                transitionSharpnesses, pausedTimestamp, mostRecentTimestamp);
+        var provider = factory.make(uuid, valuesAtTimestamps, transitionSharpnesses, pausedTimestamp);
 
         assertNotNull(provider);
         assertSame(factory1Output, provider);
@@ -116,7 +121,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         assertSame(valuesAtTimestamps, factory1InputValuesAtTimes);
         assertSame(transitionSharpnesses, factory1InputTransitionSharpnesses);
         assertEquals(pausedTimestamp, factory1InputPausedTimestamp);
-        assertEquals(mostRecentTimestamp, factory1InputMostRecentTimestamp);
+        assertSame(mockTimestampValidator, factory1InputValidator);
     }
 
     public List<Float> getFactory2InputTransitionSharpnesses() {

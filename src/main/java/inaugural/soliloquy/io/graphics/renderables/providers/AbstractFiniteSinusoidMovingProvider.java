@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
 import java.util.List;
@@ -18,8 +19,8 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
                                                    Map<Long, T> valuesAtTimes,
                                                    List<Float> transitionSharpnesses,
                                                    Long pausedTimestamp,
-                                                   Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+                                                   TimestampValidator timestampValidator) {
+        super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
         Check.ifNull(transitionSharpnesses, "transitionSharpnesses");
         if (transitionSharpnesses.size() != valuesAtTimes.size() - 1) {
             throw new IllegalArgumentException(

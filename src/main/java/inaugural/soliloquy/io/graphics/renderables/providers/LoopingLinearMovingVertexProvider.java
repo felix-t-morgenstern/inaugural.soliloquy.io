@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 
@@ -11,10 +12,12 @@ public class LoopingLinearMovingVertexProvider
         implements LoopingLinearMovingProvider<Vertex> {
     public LoopingLinearMovingVertexProvider(UUID uuid,
                                              Map<Integer, Vertex> valuesAtTimes,
-                                             int periodDuration, int periodModuloOffset,
-                                             Long pausedTimestamp, Long mostRecentTimestamp) {
+                                             int periodDuration,
+                                             int periodModuloOffset,
+                                             Long pausedTimestamp,
+                                             TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp);
+                timestampValidator);
     }
 
     @Override

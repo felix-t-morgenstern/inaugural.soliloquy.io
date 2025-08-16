@@ -47,9 +47,4 @@ public class FakeStaticMouseCursorProvider implements StaticMouseCursorProvider 
     public Long pausedTimestamp() {
         return null;
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return null;
-    }
 }

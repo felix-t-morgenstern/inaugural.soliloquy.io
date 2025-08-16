@@ -2,41 +2,55 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.GlobalLoopingAnimationImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAnimation;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 
+import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GlobalLoopingAnimationImplTests {
-    private final String ID = "globalLoopingAnimationId";
+    private final String ID = randomString();
     private final int MS_DURATION = 456;
     private final int PERIOD_MODULO_OFFSET = 123;
-    private final String ANIMATION_ID = "animationId";
+    private final String ANIMATION_ID = randomString();
     private final FakeAnimation ANIMATION = new FakeAnimation(ANIMATION_ID, MS_DURATION, true);
+
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private GlobalLoopingAnimation globalLoopingAnimation;
 
     @BeforeEach
     public void setUp() {
         globalLoopingAnimation = new GlobalLoopingAnimationImpl(ID, ANIMATION,
-                PERIOD_MODULO_OFFSET, null);
+                PERIOD_MODULO_OFFSET, null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl("", ANIMATION, PERIOD_MODULO_OFFSET, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, -1, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationImpl(null, ANIMATION, PERIOD_MODULO_OFFSET, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationImpl("", ANIMATION, PERIOD_MODULO_OFFSET, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationImpl(ID, null, PERIOD_MODULO_OFFSET, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationImpl(ID, ANIMATION, -1, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new GlobalLoopingAnimationImpl(ID, ANIMATION, MS_DURATION, null, null));
     }
 
     @Test
@@ -70,9 +84,14 @@ public class GlobalLoopingAnimationImplTests {
 
     @Test
     public void testPauseTimestamp() {
-        long pauseTimestamp = 111L;
-        assertEquals(pauseTimestamp, (long) new GlobalLoopingAnimationImpl(ID, ANIMATION,
-                PERIOD_MODULO_OFFSET, pauseTimestamp).pausedTimestamp());
+        var pausedTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(pausedTimestamp);
+
+        var animation =
+                new GlobalLoopingAnimationImpl(ID, ANIMATION, PERIOD_MODULO_OFFSET, pausedTimestamp,
+                        mockTimestampValidator);
+
+        assertEquals(pausedTimestamp, animation.pausedTimestamp());
     }
 
     @Test
@@ -82,12 +101,12 @@ public class GlobalLoopingAnimationImplTests {
 
         AnimationFrameSnippet providedSnippet = globalLoopingAnimation.provide(timestamp);
 
-        assertEquals(timestamp, (long) globalLoopingAnimation.mostRecentTimestamp());
         assertEquals(1, ANIMATION.SnippetsProvided.size());
         Pair<Integer, AnimationFrameSnippet> providedSnippetWithFrame =
                 ANIMATION.SnippetsProvided.getFirst();
         assertEquals(expectedFrame, (int) providedSnippetWithFrame.FIRST);
         assertSame(providedSnippetWithFrame.SECOND, providedSnippet);
+        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(timestamp);
     }
 
     @Test
@@ -174,51 +193,6 @@ public class GlobalLoopingAnimationImplTests {
 
         assertEquals(MS_DURATION - (resetTimestamp % MS_DURATION),
                 globalLoopingAnimation.periodModuloOffset());
-    }
-
-    @Test
-    public void testReportPauseOrProvideWithOutdatedTimestamp() {
-        long timestamp = 123123L;
-
-        globalLoopingAnimation.provide(timestamp);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.provide(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportPause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reset(timestamp - 1));
-
-        globalLoopingAnimation.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reset(timestamp));
-
-        globalLoopingAnimation.reportUnpause(timestamp + 2);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.provide(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportPause(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reset(timestamp + 1));
-
-        globalLoopingAnimation.provide(timestamp + 3);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.provide(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportPause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reportUnpause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                globalLoopingAnimation.reset(timestamp + 2));
     }
 
     @Test

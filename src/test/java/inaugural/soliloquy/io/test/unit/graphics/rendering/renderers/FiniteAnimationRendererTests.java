@@ -32,10 +32,9 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 @ExtendWith(MockitoExtension.class)
 public class FiniteAnimationRendererTests {
     private final FakeRenderingBoundaries RENDERING_BOUNDARIES = new FakeRenderingBoundaries();
-    private final FakeColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR =
+    private final FakeColorShiftStackAggregator SHIFT_AGGREGATOR =
             new FakeColorShiftStackAggregator();
     private final long START_TIMESTAMP = randomLong();
-    private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private TimestampValidator mockTimestampValidator;
 
@@ -61,14 +60,19 @@ public class FiniteAnimationRendererTests {
     public void setUp() {
         RENDERING_BOUNDARIES.CurrentBoundaries = floatBoxOf(0f, 0f, 1f, 1f);
         renderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
-                COLOR_SHIFT_STACK_AGGREGATOR, mockTimestampValidator);
+                SHIFT_AGGREGATOR, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderer(null, COLOR_SHIFT_STACK_AGGREGATOR, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderer(RENDERING_BOUNDARIES, null, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderer(RENDERING_BOUNDARIES, COLOR_SHIFT_STACK_AGGREGATOR, null));
+        assertThrows(IllegalArgumentException.class, () -> new FiniteAnimationRenderer(null,
+                SHIFT_AGGREGATOR, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteAnimationRenderer(RENDERING_BOUNDARIES, null,
+                        mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
+                        SHIFT_AGGREGATOR, null));
     }
 
     @Test
@@ -181,7 +185,7 @@ public class FiniteAnimationRendererTests {
         renderer.setMesh(mock(Mesh.class));
         renderer.render(finiteAnimationRenderable, START_TIMESTAMP);
 
-        assertEquals(START_TIMESTAMP, (long) COLOR_SHIFT_STACK_AGGREGATOR.Input);
+        assertEquals(START_TIMESTAMP, (long) SHIFT_AGGREGATOR.Input);
     }
 
     @Test
@@ -208,14 +212,6 @@ public class FiniteAnimationRendererTests {
         renderer.render(finiteAnimationRenderable, START_TIMESTAMP + animationMsDuration);
 
         assertTrue(finiteAnimationRenderable.Deleted);
-    }
-
-    @Test
-    public void testGetMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
     }
 
     @Test

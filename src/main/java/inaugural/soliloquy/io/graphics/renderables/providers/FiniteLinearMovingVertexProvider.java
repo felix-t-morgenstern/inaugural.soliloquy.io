@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 
 import java.util.Map;
@@ -9,8 +10,9 @@ public class FiniteLinearMovingVertexProvider
         extends AbstractFiniteLinearMovingProvider<Vertex> {
     public FiniteLinearMovingVertexProvider(UUID uuid,
                                             Map<Long, Vertex> valuesAtTimes,
-                                            Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+                                            Long pausedTimestamp,
+                                            TimestampValidator timestampValidator) {
+        super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
     }
 
     @Override

@@ -38,9 +38,4 @@ public class FakeProviderAtTime<T> implements ProviderAtTime<T> {
     public UUID uuid() {
         return null;
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return null;
-    }
 }

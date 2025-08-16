@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;
@@ -19,9 +20,10 @@ public class LoopingLinearMovingColorProviderImpl
                                                 Map<Integer, Color> valuesWithinPeriod,
                                                 List<Boolean> hueMovementIsClockwise,
                                                 int periodDuration, int periodModuloOffset,
-                                                Long pausedTimestamp, Long mostRecentTimestamp) {
+                                                Long pausedTimestamp,
+                                                TimestampValidator timestampValidator) {
         super(uuid, valuesWithinPeriod, periodDuration, periodModuloOffset, pausedTimestamp,
-                mostRecentTimestamp);
+                timestampValidator);
 
         HUE_MOVEMENT_IS_CLOCKWISE = listOf();
         Check.ifNull(hueMovementIsClockwise, "hueMovementIsClockwise");

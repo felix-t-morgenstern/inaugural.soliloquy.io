@@ -2,26 +2,34 @@ package inaugural.soliloquy.io.test.display;
 
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.io.graphics.rendering.*;
+import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
+import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
+import inaugural.soliloquy.io.graphics.rendering.RenderingBoundariesImpl;
+import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
+import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
-import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
-import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.input.mouse.MouseCursor;
-import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.io.graphics.rendering.*;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
+import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.io.input.mouse.MouseCursor;
+import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.ui.Component;
 
 import java.awt.*;
@@ -31,7 +39,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN_PROVIDER;
+import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -53,6 +61,9 @@ public class DisplayTest {
             new StaticProviderImpl<>(java.util.UUID.randomUUID(), 0f, null);
     protected final static ProviderAtTime<Color> BLACK_PROVIDER =
             new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, null);
+
+    public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
+            new StaticProviderImpl<>(java.util.UUID.randomUUID(), WHOLE_SCREEN, mock(TimestampValidator.class));
 
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();

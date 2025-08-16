@@ -76,18 +76,6 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
                     "animatedMouseCursorDefinitionDTO.Offset within " +
                             "animatedMouseCursorDefinitionDTOs (" +
                             animatedMouseCursorDefinitionDTO.Id + ")");
-            if (animatedMouseCursorDefinitionDTO.Paused != null &&
-                    animatedMouseCursorDefinitionDTO.Timestamp == null) {
-                throw new IllegalArgumentException("animatedMouseCursorDefinitionDTO.Paused is " +
-                        "non-null while animatedMouseCursorDefinitionDTO.Timestamp is null (id = "
-                        + animatedMouseCursorDefinitionDTO.Id + ")");
-            }
-            Check.throwOnSecondLte(animatedMouseCursorDefinitionDTO.Paused,
-                    animatedMouseCursorDefinitionDTO.Timestamp,
-                    "animatedMouseCursorDefinitionDTO.Paused",
-                    "animatedMouseCursorDefinitionDTO.Timestamp within " +
-                            "animatedMouseCursorDefinitionDTOs (" +
-                            animatedMouseCursorDefinitionDTO.Id + ")");
         });
         DEFINITION_DTOS = animatedMouseCursorDefinitionDTOs;
         FACTORY = Check.ifNull(animatedMouseCursorProviderFactory,
@@ -109,8 +97,7 @@ public class AnimatedMouseCursorPreloaderTask implements Runnable {
                             cursorsAtMs,
                             animatedMouseCursorDefinitionDTO.Duration,
                             animatedMouseCursorDefinitionDTO.Offset,
-                            animatedMouseCursorDefinitionDTO.Paused,
-                            animatedMouseCursorDefinitionDTO.Timestamp
+                            animatedMouseCursorDefinitionDTO.Paused
                     )
             ));
         });

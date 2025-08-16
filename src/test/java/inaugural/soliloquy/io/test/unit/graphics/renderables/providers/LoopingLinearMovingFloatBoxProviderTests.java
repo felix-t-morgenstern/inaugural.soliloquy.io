@@ -1,8 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.LoopingLinearMovingFloatBoxProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 
@@ -10,10 +14,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class LoopingLinearMovingFloatBoxProviderTests {
     private final int TIME_1 = 0;
     private final float BOX_1_LEFT_X = 0.1f;
@@ -50,61 +57,55 @@ public class LoopingLinearMovingFloatBoxProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private LoopingLinearMovingProvider<FloatBox> provider;
 
     @BeforeEach
     public void setUp() {
         provider = new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                MODULO_OFFSET, null, null);
+                MODULO_OFFSET, null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(null, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, null, PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
                         pairOf(null, BOX_1)
                 ), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
                         pairOf(TIME_1, null)
                 ), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
                         pairOf(TIME_2, BOX_2)
                 ), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, mapOf(
                         pairOf(PERIOD_DURATION + 1, BOX_1)
                 ), PERIOD_DURATION,
-                        MODULO_OFFSET, null, null));
+                        MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        -1, null, null));
+                        -1, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
                         PERIOD_DURATION, null, null));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 123123L, null));
-        assertThrows(IllegalArgumentException.class, () ->
-                new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, 1L, 0L));
     }
 
     @Test
@@ -113,18 +114,15 @@ public class LoopingLinearMovingFloatBoxProviderTests {
     }
 
     @Test
-    public void testMostRecentTimestampAndPausedTimestamp() {
-        long pausedTimestamp = 123123L;
-        long mostRecentTimestamp = 456456L;
+    public void testPausedTimestamp() {
+        var pausedTimestamp = randomLong();
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(pausedTimestamp);
 
-        LoopingLinearMovingProvider<FloatBox> loopingLinearMovingFloatBoxProvider =
+        var provider =
                 new LoopingLinearMovingFloatBoxProvider(UUID, VALUES_AT_TIMES, PERIOD_DURATION,
-                        MODULO_OFFSET, pausedTimestamp, mostRecentTimestamp);
+                        MODULO_OFFSET, pausedTimestamp, mockTimestampValidator);
 
-        assertEquals(pausedTimestamp,
-                (long) loopingLinearMovingFloatBoxProvider.pausedTimestamp());
-        assertEquals(mostRecentTimestamp,
-                (long) loopingLinearMovingFloatBoxProvider.mostRecentTimestamp());
+        assertEquals(pausedTimestamp, (long) provider.pausedTimestamp());
     }
 
     @Test
@@ -189,6 +187,9 @@ public class LoopingLinearMovingFloatBoxProviderTests {
 
     @Test
     public void testProvideWhenPaused() {
+        when(mockTimestampValidator.mostRecentTimestamp())
+                .thenReturn((long) TIME_1 - MODULO_OFFSET);
+
         provider.reportPause(TIME_1 - MODULO_OFFSET);
 
         assertEquals(BOX_1, provider.provide(123123123L));
@@ -201,37 +202,6 @@ public class LoopingLinearMovingFloatBoxProviderTests {
         provider.reset(resetTimestamp);
 
         assertEquals(BOX_1, provider.provide(resetTimestamp));
-    }
-
-    @Test
-    public void testReportPauseOrProvideWithOutdatedTimestamp() {
-        long timestamp = 123123L;
-
-        provider.provide(timestamp);
-
-        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp - 1));
-
-        provider.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp));
-
-        provider.reportUnpause(timestamp + 2);
-
-        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp + 1));
-
-        provider.provide(timestamp + 3);
-
-        assertThrows(IllegalArgumentException.class, () -> provider.provide(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportPause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () -> provider.reportUnpause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () -> provider.reset(timestamp + 2));
     }
 
     @Test

@@ -87,7 +87,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                 MS_DURATION - (int) (globalLoopingAnimationStartTimestamp % (MS_DURATION));
 
         GlobalLoopingAnimation = new GlobalLoopingAnimationImpl("globalLoopingAnimationId",
-                animation, periodModuloOffset, null);
+                animation, periodModuloOffset, null, TimestampValidator);
 
         GlobalLoopingAnimationRenderable =
                 new GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation,

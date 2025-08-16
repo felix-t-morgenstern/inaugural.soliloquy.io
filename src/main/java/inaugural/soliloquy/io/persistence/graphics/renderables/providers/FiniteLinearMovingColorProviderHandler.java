@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.persistence.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
-import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactory;
 
@@ -15,27 +14,20 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FiniteLinearMovingColorProviderHandler
         extends AbstractTypeHandler<FiniteLinearMovingColorProvider> {
-    private final TypeHandler<UUID> UUID_HANDLER;
     private final FiniteLinearMovingColorProviderFactory
-            FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY;
+            FACTORY;
 
-    public FiniteLinearMovingColorProviderHandler(TypeHandler<UUID> uuidHandler,
-                                                  FiniteLinearMovingColorProviderFactory
-                                                          finiteLinearMovingColorProviderFactory) {
-        UUID_HANDLER = Check.ifNull(uuidHandler, "uuidHandler");
-        FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY =
-                Check.ifNull(finiteLinearMovingColorProviderFactory,
-                        "finiteLinearMovingColorProviderFactory");
+    public FiniteLinearMovingColorProviderHandler(FiniteLinearMovingColorProviderFactory factory) {
+        FACTORY = Check.ifNull(factory, "factory");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public FiniteLinearMovingColorProvider read(String writtenValue)
             throws IllegalArgumentException {
-        var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
-                FiniteLinearMovingColorProviderDTO.class);
+        var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"), DTO.class);
 
-        var uuid = UUID_HANDLER.read(dto.uuid);
+        var uuid = UUID.fromString(dto.uuid);
 
         Map<Long, Color> colorsAtTimestamps = mapOf();
         List<Boolean> hueMovementIsClockwise = listOf();
@@ -46,22 +38,21 @@ public class FiniteLinearMovingColorProviderHandler
             hueMovementIsClockwise.add(dto.movementIsClockwise[i]);
         }
 
-        return FINITE_LINEAR_MOVING_COLOR_PROVIDER_FACTORY.make(uuid, colorsAtTimestamps,
-                hueMovementIsClockwise, dto.pausedTimestamp, dto.mostRecentTimestamp);
+        return FACTORY.make(uuid, colorsAtTimestamps, hueMovementIsClockwise, dto.pausedTimestamp);
     }
 
     @Override
-    public String write(FiniteLinearMovingColorProvider finiteLinearMovingColorProvider) {
-        Check.ifNull(finiteLinearMovingColorProvider, "finiteLinearMovingColorProvider");
+    public String write(FiniteLinearMovingColorProvider provider) {
+        Check.ifNull(provider, "provider");
 
-        var dto = new FiniteLinearMovingColorProviderDTO();
+        var dto = new DTO();
 
-        dto.uuid = UUID_HANDLER.write(finiteLinearMovingColorProvider.uuid());
+        dto.uuid = provider.uuid().toString();
 
-        var colorsAtTimestamps = finiteLinearMovingColorProvider.valuesAtTimestampsRepresentation();
+        var colorsAtTimestamps = provider.valuesAtTimestampsRepresentation();
         int colorsAtTimestampsSize = colorsAtTimestamps.size();
-        dto.colors = new FiniteLinearMovingColorProviderColorAtTimestampDTO[colorsAtTimestampsSize];
-        var hueMovementIsClockwise = finiteLinearMovingColorProvider.hueMovementIsClockwise();
+        dto.colors = new ColorAtTimestampDTO[colorsAtTimestampsSize];
+        var hueMovementIsClockwise = provider.hueMovementIsClockwise();
         // NB: I am assuming here that colorsAtTimestamps and hueMovementIsClockwise have the same
         //     cardinality, since any implementation should enforce this.
         dto.movementIsClockwise = new boolean[colorsAtTimestampsSize];
@@ -69,7 +60,7 @@ public class FiniteLinearMovingColorProviderHandler
         var timestamps = listOf(colorsAtTimestamps.keySet());
         Collections.sort(timestamps);
         for (var timestamp : timestamps) {
-            var colorAtTimestampDto = new FiniteLinearMovingColorProviderColorAtTimestampDTO();
+            var colorAtTimestampDto = new ColorAtTimestampDTO();
             var color = colorsAtTimestamps.get(timestamp);
             colorAtTimestampDto.timestamp = timestamp;
             colorAtTimestampDto.r = color.getRed();
@@ -81,22 +72,19 @@ public class FiniteLinearMovingColorProviderHandler
             index++;
         }
 
-        dto.pausedTimestamp = finiteLinearMovingColorProvider.pausedTimestamp();
-
-        dto.mostRecentTimestamp = finiteLinearMovingColorProvider.mostRecentTimestamp();
+        dto.pausedTimestamp = provider.pausedTimestamp();
 
         return JSON.toJson(dto);
     }
 
-    private static class FiniteLinearMovingColorProviderDTO {
+    private static class DTO {
         String uuid;
-        FiniteLinearMovingColorProviderColorAtTimestampDTO[] colors;
+        ColorAtTimestampDTO[] colors;
         boolean[] movementIsClockwise;
         Long pausedTimestamp;
-        Long mostRecentTimestamp;
     }
 
-    private static class FiniteLinearMovingColorProviderColorAtTimestampDTO {
+    private static class ColorAtTimestampDTO {
         long timestamp;
         int r;
         int g;

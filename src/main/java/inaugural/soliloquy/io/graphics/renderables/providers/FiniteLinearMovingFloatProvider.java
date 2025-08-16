@@ -1,12 +1,16 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
+
 import java.util.Map;
 import java.util.UUID;
 
 public class FiniteLinearMovingFloatProvider extends AbstractFiniteLinearMovingProvider<Float> {
-    public FiniteLinearMovingFloatProvider(UUID uuid, Map<Long, Float> valuesAtTimes,
-                                           Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, pausedTimestamp, mostRecentTimestamp);
+    public FiniteLinearMovingFloatProvider(UUID uuid,
+                                           Map<Long, Float> valuesAtTimes,
+                                           Long pausedTimestamp,
+                                           TimestampValidator timestampValidator) {
+        super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
     }
 
     @Override

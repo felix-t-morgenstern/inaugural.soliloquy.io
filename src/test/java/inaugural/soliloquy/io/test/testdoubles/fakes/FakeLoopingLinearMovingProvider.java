@@ -55,9 +55,4 @@ public class FakeLoopingLinearMovingProvider<T> implements LoopingLinearMovingPr
     public Long pausedTimestamp() {
         return null;
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return null;
-    }
 }

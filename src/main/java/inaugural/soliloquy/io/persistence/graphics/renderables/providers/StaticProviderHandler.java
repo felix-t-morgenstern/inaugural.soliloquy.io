@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
@@ -12,11 +13,14 @@ import java.util.UUID;
 public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
     private final StaticProviderFactory FACTORY;
     private final PersistenceHandler PERSISTENCE_HANDLER;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     public StaticProviderHandler(PersistenceHandler persistenceHandler,
-                                 StaticProviderFactory factory) {
+                                 StaticProviderFactory factory,
+                                 TimestampValidator timestampValidator) {
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @SuppressWarnings("unchecked")
@@ -26,9 +30,7 @@ public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
         var dto = JSON.fromJson(writtenValue, StaticProviderDTO.class);
         var uuid = UUID.fromString(dto.uuid);
         var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.innerType);
-        return FACTORY.make(uuid,
-                typeHandler.read(dto.val),
-                dto.mostRecentTimestamp);
+        return FACTORY.make(uuid, typeHandler.read(dto.val));
     }
 
     @Override
@@ -37,17 +39,17 @@ public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
 
         var staticProviderDTO = new StaticProviderDTO();
 
-        var staticValue = staticProvider.provide(staticProvider.mostRecentTimestamp());
+        var mostRecentTimestamp = TIMESTAMP_VALIDATOR.mostRecentTimestamp();
+        var staticValue = staticProvider.provide(mostRecentTimestamp);
         if (staticValue != null) {
             var type = staticValue.getClass().getCanonicalName();
             var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(type);
             staticProviderDTO.uuid = staticProvider.uuid().toString();
             staticProviderDTO.innerType = type;
             staticProviderDTO.val = typeHandler
-                    .write(staticProvider.provide(staticProvider.mostRecentTimestamp()));
+                    .write(staticProvider.provide(mostRecentTimestamp));
         }
 
-        staticProviderDTO.mostRecentTimestamp = staticProvider.mostRecentTimestamp();
         return JSON.toJson(staticProviderDTO);
     }
 
@@ -55,6 +57,5 @@ public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
         String uuid;
         String innerType;
         String val;
-        Long mostRecentTimestamp;
     }
 }

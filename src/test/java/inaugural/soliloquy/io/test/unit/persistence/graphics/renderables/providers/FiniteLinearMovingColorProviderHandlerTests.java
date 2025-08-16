@@ -3,8 +3,9 @@ package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables.provid
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.FiniteLinearMovingColorProviderHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingColorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactory;
@@ -16,44 +17,39 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class FiniteLinearMovingColorProviderHandlerTests {
-    private static final Long TIMESTAMP_1 = 123L;
-    private static final Long TIMESTAMP_2 = 456L;
-    private static final Long TIMESTAMP_3 = 789L;
-    private static final Color VALUE_1 = Color.MAGENTA;
-    private static final Color VALUE_2 = Color.RED;
-    private static final Color VALUE_3 = Color.BLACK;
-    private static final Map<Long, Color> COLORS_AT_TIMESTAMPS = mapOf(
+    private final UUID UUID = java.util.UUID.randomUUID();
+    private final Long TIMESTAMP_1 = randomLong();
+    private final Long TIMESTAMP_2 = randomLongWithInclusiveFloor(TIMESTAMP_1 + 1);
+    private final Long TIMESTAMP_3 = randomLongWithInclusiveFloor(TIMESTAMP_2 + 1);
+    private final Color VALUE_1 = randomColor();
+    private final Color VALUE_2 = randomColor();
+    private final Color VALUE_3 = randomColor();
+    private final Map<Long, Color> VALUES_AT_TIMESTAMPS = mapOf(
         pairOf(TIMESTAMP_1, VALUE_1),
         pairOf(TIMESTAMP_2, VALUE_2),
         pairOf(TIMESTAMP_3, VALUE_3)
     );
-    private static final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE = listOf(
-        true,
-        false,
-        false
+    private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE = listOf(
+        randomBoolean(),
+        randomBoolean(),
+        randomBoolean()
     );
-    private static final Long PAUSED_TIMESTAMP = 123L;
-    private static final Long MOST_RECENT_TIMESTAMP = 456L;
+    private final Long PAUSED_TIMESTAMP = randomLong();
 
-    private static final String UUID_WRITE_OUTPUT = "uuidWriteOutput";
+    @Mock private FiniteLinearMovingColorProvider mockProvider;
+    @Mock private FiniteLinearMovingColorProviderFactory mockFactory;
 
-    @Mock private FiniteLinearMovingColorProvider mockFiniteLinearMovingColorProvider;
-    @Mock private FiniteLinearMovingColorProviderFactory
-            mockFiniteLinearMovingColorProviderFactory;
-    @Mock private FiniteLinearMovingColorProvider mockFiniteLinearMovingColorProviderFactoryOutput;
-    @Mock private static UUID finiteLinearMovingColorProviderInputUuid;
-    @Mock private static UUID uuidReadOutput;
-    @Mock private TypeHandler<UUID> uuidHandler;
+    private TypeHandler<FiniteLinearMovingColorProvider> handler;
 
-    private TypeHandler<FiniteLinearMovingColorProvider> finiteLinearMovingColorProviderHandler;
-
-    private static final String WRITTEN_VALUE =
+    private final String WRITTEN_VALUE =
             "{\"uuid\":\"uuidWriteOutput\",\"colors\":[{\"timestamp\":123,\"r\":255,\"g\":0," +
                     "\"b\":255,\"a\":255},{\"timestamp\":456,\"r\":255,\"g\":0,\"b\":0," +
                     "\"a\":255},{\"timestamp\":789,\"r\":0,\"g\":0,\"b\":0,\"a\":255}]," +
@@ -62,74 +58,57 @@ public class FiniteLinearMovingColorProviderHandlerTests {
 
     @BeforeEach
     public void setUp() {
-        mockFiniteLinearMovingColorProvider = mock(FiniteLinearMovingColorProvider.class);
-        when(mockFiniteLinearMovingColorProvider.uuid())
-                .thenReturn(finiteLinearMovingColorProviderInputUuid);
-        when(mockFiniteLinearMovingColorProvider.valuesAtTimestampsRepresentation())
-                .thenReturn(COLORS_AT_TIMESTAMPS);
-        when(mockFiniteLinearMovingColorProvider.hueMovementIsClockwise())
-                .thenReturn(HUE_MOVEMENT_IS_CLOCKWISE);
-        when(mockFiniteLinearMovingColorProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
-        when(mockFiniteLinearMovingColorProvider.mostRecentTimestamp())
-                .thenReturn(MOST_RECENT_TIMESTAMP);
-
-        //noinspection unchecked
-        uuidHandler = Mockito.mock(TypeHandler.class);
-        when(uuidHandler.read(Mockito.anyString())).thenReturn(uuidReadOutput);
-        when(uuidHandler.write(Mockito.any())).thenReturn(UUID_WRITE_OUTPUT);
-
-        mockFiniteLinearMovingColorProviderFactoryOutput =
-                mock(FiniteLinearMovingColorProvider.class);
-
-        mockFiniteLinearMovingColorProviderFactory =
+        mockFactory =
                 mock(FiniteLinearMovingColorProviderFactory.class);
-        when(mockFiniteLinearMovingColorProviderFactory
-                .make(any(), anyMap(), anyList(), anyLong(), anyLong()))
-                .thenReturn(mockFiniteLinearMovingColorProviderFactoryOutput);
 
-        finiteLinearMovingColorProviderHandler = new FiniteLinearMovingColorProviderHandler(
-                uuidHandler, mockFiniteLinearMovingColorProviderFactory);
+        handler = new FiniteLinearMovingColorProviderHandler(mockFactory);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingColorProviderHandler(null,
-                        mockFiniteLinearMovingColorProviderFactory));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingColorProviderHandler(uuidHandler,
-                        null));
+                new FiniteLinearMovingColorProviderHandler(null));
     }
 
     @Test
     public void testWrite() {
-        assertEquals(WRITTEN_VALUE, finiteLinearMovingColorProviderHandler
-                .write(mockFiniteLinearMovingColorProvider));
+        when(mockProvider.uuid()).thenReturn(UUID);
+        when(mockProvider.valuesAtTimestampsRepresentation()).thenReturn(VALUES_AT_TIMESTAMPS);
+        when(mockProvider.hueMovementIsClockwise()).thenReturn(HUE_MOVEMENT_IS_CLOCKWISE);
+        when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
+
+        assertEquals(WRITTEN_VALUE, handler.write(mockProvider));
+
+        verify(mockProvider, once()).uuid();
+        verify(mockProvider, once()).valuesAtTimestampsRepresentation();
+        verify(mockProvider, once()).hueMovementIsClockwise();
+        verify(mockProvider, once()).pausedTimestamp();
     }
 
     @Test
     public void testWriteWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingColorProviderHandler.write(null));
+        assertThrows(IllegalArgumentException.class, () -> handler.write(null));
     }
 
     @Test
     public void testRead() {
-        FiniteLinearMovingColorProvider readValue =
-                finiteLinearMovingColorProviderHandler.read(WRITTEN_VALUE);
+        when(mockFactory.make(any(), anyMap(), anyList(), anyLong())).thenReturn(mockProvider);
 
-        assertSame(mockFiniteLinearMovingColorProviderFactoryOutput, readValue);
-        verify(uuidHandler, once()).read(UUID_WRITE_OUTPUT);
-        verify(mockFiniteLinearMovingColorProviderFactory, once())
-                .make(uuidReadOutput, COLORS_AT_TIMESTAMPS, HUE_MOVEMENT_IS_CLOCKWISE,
-                        PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+        var provider = handler.read(WRITTEN_VALUE);
+
+        assertSame(mockProvider, provider);
+        verify(mockFactory, once()).make(any(), anyMap(), anyList(), any());
+        verify(mockFactory, once()).make(
+                eq(UUID),
+                eq(VALUES_AT_TIMESTAMPS),
+                eq(HUE_MOVEMENT_IS_CLOCKWISE),
+                eq(PAUSED_TIMESTAMP)
+        );
     }
 
     @Test
     public void testReadWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingColorProviderHandler.read(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                finiteLinearMovingColorProviderHandler.read(""));
+        assertThrows(IllegalArgumentException.class, () -> handler.read(null));
+        assertThrows(IllegalArgumentException.class, () -> handler.read(""));
     }
 }

@@ -98,14 +98,6 @@ public class TriangleRendererTests {
     }
 
     @Test
-    public void testGetMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderer.mostRecentTimestamp());
-    }
-
-    @Test
     public void testRenderUpdatesTimestamp() {
         renderer.setMesh(mockMesh);
         renderer.setShader(mockShader);

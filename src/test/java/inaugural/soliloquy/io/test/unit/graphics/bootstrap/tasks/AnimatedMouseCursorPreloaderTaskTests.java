@@ -63,7 +63,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
             new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                     new AnimatedMouseCursorFrameDefinitionDTO[]{
                             FRAME_1_DTO, FRAME_2_DTO
-                    }, DURATION, OFFSET, PAUSED, TIMESTAMP);
+                    }, DURATION, OFFSET, PAUSED);
 
     @Mock private Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
             mockAnimatedMouseCursorProviderFactory;
@@ -113,7 +113,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(null,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                }, DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -122,14 +122,14 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO("",
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                }, DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
         assertThrows(IllegalArgumentException.class, () ->
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                null, DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                null, DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -137,7 +137,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{},
-                                DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -145,7 +145,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                 new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{FRAME_2_DTO},
-                                DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -154,7 +154,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         new AnimatedMouseCursorFrameDefinitionDTO(0, null)
-                                }, DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                }, DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -163,7 +163,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         new AnimatedMouseCursorFrameDefinitionDTO(0, "")
-                                }, DURATION, OFFSET, PAUSED, TIMESTAMP)
+                                }, DURATION, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -172,7 +172,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         FRAME_1_DTO, FRAME_2_DTO
-                                }, MS_2 - 1, OFFSET, PAUSED, TIMESTAMP)
+                                }, MS_2 - 1, OFFSET, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -181,7 +181,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, DURATION, PAUSED, TIMESTAMP)
+                                }, DURATION, DURATION, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -190,25 +190,7 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                         listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
                                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                                         FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, -1, PAUSED, TIMESTAMP)
-                        ),
-                        mockAnimatedMouseCursorProviderFactory,
-                        provider -> resultProvider = provider));
-        assertThrows(IllegalArgumentException.class, () ->
-                new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
-                        listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                new AnimatedMouseCursorFrameDefinitionDTO[]{
-                                        FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, OFFSET, PAUSED, null)
-                        ),
-                        mockAnimatedMouseCursorProviderFactory,
-                        provider -> resultProvider = provider));
-        assertThrows(IllegalArgumentException.class, () ->
-                new AnimatedMouseCursorPreloaderTask(MOUSE_CURSORS::get,
-                        listOf(new AnimatedMouseCursorDefinitionDTO(ANIMATED_MOUSE_CURSOR_ID,
-                                new AnimatedMouseCursorFrameDefinitionDTO[]{
-                                        FRAME_1_DTO, FRAME_2_DTO
-                                }, DURATION, OFFSET, TIMESTAMP + 1, TIMESTAMP)
+                                }, DURATION, -1, PAUSED)
                         ),
                         mockAnimatedMouseCursorProviderFactory,
                         provider -> resultProvider = provider));
@@ -243,8 +225,6 @@ public class AnimatedMouseCursorPreloaderTaskTests {
                 animatedMouseCursorProviderFactoryMockInput.periodModuloOffset());
         assertEquals(PAUSED,
                 animatedMouseCursorProviderFactoryMockInput.pausedTimestamp());
-        assertEquals(TIMESTAMP,
-                animatedMouseCursorProviderFactoryMockInput.mostRecentTimestamp());
 
         assertSame(mockAnimatedMouseCursorProvider, resultProvider);
     }

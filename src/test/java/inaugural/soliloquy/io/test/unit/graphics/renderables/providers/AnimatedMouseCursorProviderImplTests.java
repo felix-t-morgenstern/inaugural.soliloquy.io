@@ -1,8 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -14,6 +18,7 @@ import static inaugural.soliloquy.tools.random.Random.randomString;
 import static org.junit.jupiter.api.Assertions.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+@ExtendWith(MockitoExtension.class)
 public class AnimatedMouseCursorProviderImplTests {
     private final int MS_1 = 0;
     private final long MOUSE_CURSOR_1 = 123L;
@@ -29,6 +34,8 @@ public class AnimatedMouseCursorProviderImplTests {
     private final int PERIOD_MODULO_OFFSET = 321;
     private final long MOST_RECENT_TIMESTAMP = 12L;
 
+    @Mock private TimestampValidator mockTimestampValidator;
+
     private AnimatedMouseCursorProvider animatedMouseCursorProvider;
 
     @BeforeEach
@@ -38,46 +45,43 @@ public class AnimatedMouseCursorProviderImplTests {
         CURSORS_AT_MS.put(MS_3, MOUSE_CURSOR_3);
 
         animatedMouseCursorProvider = new AnimatedMouseCursorProviderImpl(ID, CURSORS_AT_MS,
-                MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP);
+                MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(null,
-                CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl("",
-                CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                null, MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                null, MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                mapOf(), MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                mapOf(), MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(null, MOUSE_CURSOR_1)),
-                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(-1, MOUSE_CURSOR_1)),
-                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(MS_1, null)),
-                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new AnimatedMouseCursorProviderImpl(ID, mapOf(pairOf(1, MOUSE_CURSOR_1)),
-                        MS_DURATION, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                        MS_DURATION, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, 0, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, 0, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, MS_3, PERIOD_MODULO_OFFSET, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_3, PERIOD_MODULO_OFFSET, null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, MS_DURATION, MS_DURATION, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_DURATION, MS_DURATION, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, MS_DURATION, -1, null, MOST_RECENT_TIMESTAMP));
+                CURSORS_AT_MS, MS_DURATION, -1, null, mockTimestampValidator));
 
-        assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
-                CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP + 1,
-                MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> new AnimatedMouseCursorProviderImpl(ID,
                 CURSORS_AT_MS, MS_DURATION, PERIOD_MODULO_OFFSET, MOST_RECENT_TIMESTAMP, null));
     }
@@ -93,18 +97,12 @@ public class AnimatedMouseCursorProviderImplTests {
     }
 
     @Test
-    public void testMostRecentTimestamp() {
-        assertEquals(MOST_RECENT_TIMESTAMP,
-                (long) animatedMouseCursorProvider.mostRecentTimestamp());
-    }
-
-    @Test
     public void testPausedTimestamp() {
-        long pausedTimestamp = -234L;
+        var pausedTimestamp = -234L;
 
         ProviderAtTime<Long> animatedMouseCursorProvider =
                 new AnimatedMouseCursorProviderImpl(ID, CURSORS_AT_MS, MS_DURATION,
-                        PERIOD_MODULO_OFFSET, pausedTimestamp, MOST_RECENT_TIMESTAMP);
+                        PERIOD_MODULO_OFFSET, pausedTimestamp, mockTimestampValidator);
 
         assertEquals(pausedTimestamp, (long) animatedMouseCursorProvider.pausedTimestamp());
     }
@@ -127,8 +125,8 @@ public class AnimatedMouseCursorProviderImplTests {
 
     @Test
     public void testReportPauseAndUnpause() {
-        long pauseTimestamp = 10000L;
-        long unpauseTimestamp = 10001L;
+        var pauseTimestamp = 10000L;
+        var unpauseTimestamp = 10001L;
 
         assertNull(animatedMouseCursorProvider.pausedTimestamp());
 
@@ -162,7 +160,7 @@ public class AnimatedMouseCursorProviderImplTests {
 
     @Test
     public void testUnpauseUpdatesPeriodModuloOffset() {
-        long pauseDuration = 123123L;
+        var pauseDuration = 123123L;
 
         animatedMouseCursorProvider.reportPause(MOST_RECENT_TIMESTAMP);
         animatedMouseCursorProvider.reportUnpause(MOST_RECENT_TIMESTAMP + pauseDuration);
@@ -175,7 +173,7 @@ public class AnimatedMouseCursorProviderImplTests {
 
     @Test
     public void testReset() {
-        long resetTimestamp = 123123L;
+        var resetTimestamp = 123123L;
 
         animatedMouseCursorProvider.reset(resetTimestamp);
 
@@ -183,51 +181,6 @@ public class AnimatedMouseCursorProviderImplTests {
                 (long) animatedMouseCursorProvider.provide(resetTimestamp + MS_2 - 1));
         assertEquals(MOUSE_CURSOR_2,
                 (long) animatedMouseCursorProvider.provide(resetTimestamp + MS_2));
-    }
-
-    @Test
-    public void testReportPauseOrProvideWithOutdatedTimestamp() {
-        long timestamp = 123123L;
-
-        animatedMouseCursorProvider.provide(timestamp);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.provide(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportPause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportUnpause(timestamp - 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reset(timestamp - 1));
-
-        animatedMouseCursorProvider.reportPause(timestamp + 1);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.provide(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportUnpause(timestamp));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reset(timestamp));
-
-        animatedMouseCursorProvider.reportUnpause(timestamp + 2);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.provide(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportPause(timestamp + 1));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reset(timestamp + 1));
-
-        animatedMouseCursorProvider.provide(timestamp + 3);
-
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.provide(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportPause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reportUnpause(timestamp + 2));
-        assertThrows(IllegalArgumentException.class, () ->
-                animatedMouseCursorProvider.reset(timestamp + 2));
     }
 
     @Test

@@ -124,7 +124,8 @@ public class IOModule implements Module {
         Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation>
                 globalLoopingAnimationFactory =
                 definition -> new GlobalLoopingAnimationImpl(definition.ID, definition.ANIMATION,
-                        definition.PERIOD_MODULO_OFFSET, definition.PAUSE_TIMESTAMP);
+                        definition.PERIOD_MODULO_OFFSET, definition.PAUSE_TIMESTAMP,
+                        timestampValidator);
         var imageAssetSetFactory = new ImageAssetSetFactory(
                 sprites::get, animations::get, globalLoopingAnimations::get);
         var mouseCursorImageFactory = new MouseCursorImageFactoryImpl();
@@ -133,7 +134,7 @@ public class IOModule implements Module {
                 definition -> new AnimatedMouseCursorProviderImpl(definition.id(),
                         definition.cursorsAtMs(), definition.msDuration(),
                         definition.periodModuloOffset(), definition.pausedTimestamp(),
-                        definition.mostRecentTimestamp());
+                        timestampValidator);
         Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider>
                 staticMouseCursorFactory =
                 definition -> new StaticMouseCursorProviderImpl(definition.id(),

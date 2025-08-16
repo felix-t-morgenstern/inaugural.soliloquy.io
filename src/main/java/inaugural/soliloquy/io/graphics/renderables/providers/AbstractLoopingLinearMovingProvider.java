@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.Map;
@@ -16,10 +17,13 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
     protected final Map<Integer, T> VALUES_AT_TIMES;
     protected final NearestFloorAndCeilingTree NEAREST_FLOOR_AND_CEILING_TREE;
 
-    protected AbstractLoopingLinearMovingProvider(UUID uuid, Map<Integer, T> valuesAtTimes,
-                                                  int periodDuration, int periodModuloOffset,
-                                                  Long pausedTimestamp, Long mostRecentTimestamp) {
-        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, mostRecentTimestamp);
+    protected AbstractLoopingLinearMovingProvider(UUID uuid,
+                                                  Map<Integer, T> valuesAtTimes,
+                                                  int periodDuration,
+                                                  int periodModuloOffset,
+                                                  Long pausedTimestamp,
+                                                  TimestampValidator timestampValidator) {
+        super(uuid, periodDuration, periodModuloOffset, pausedTimestamp, timestampValidator);
 
         VALUES_AT_TIMES = mapOf();
         Check.ifNull(valuesAtTimes, "valuesAtTimes");
@@ -72,7 +76,7 @@ public abstract class AbstractLoopingLinearMovingProvider<T> extends AbstractLoo
         }
         value1 = VALUES_AT_TIMES.get(periodStartMs);
 
-        long interval = periodEndMs - periodStartMs;
+        var interval = periodEndMs - periodStartMs;
 
         weight1 = (periodEndMs - msWithinPeriod) / (float) interval;
         weight2 = 1f - weight1;

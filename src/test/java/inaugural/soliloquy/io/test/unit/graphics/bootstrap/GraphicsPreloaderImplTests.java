@@ -1031,8 +1031,7 @@ public class GraphicsPreloaderImplTests {
         return new AnimatedMouseCursorDefinitionDTO(randomString(),
                 new AnimatedMouseCursorFrameDefinitionDTO[]{
                         randomAnimatedMouseCursorFrameDefinitionDTO()
-                }, randomIntWithInclusiveFloor(0), 0, randomLongWithInclusiveCeiling(0),
-                randomLongWithInclusiveFloor(0));
+                }, randomIntWithInclusiveFloor(0), 0, randomLongWithInclusiveCeiling(0));
     }
 
     private AnimatedMouseCursorFrameDefinitionDTO randomAnimatedMouseCursorFrameDefinitionDTO() {

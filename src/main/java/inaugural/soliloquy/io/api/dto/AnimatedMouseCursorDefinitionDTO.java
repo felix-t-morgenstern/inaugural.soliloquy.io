@@ -6,17 +6,16 @@ public class AnimatedMouseCursorDefinitionDTO {
     public int Duration;
     public int Offset;
     public Long Paused;
-    public Long Timestamp;
 
     public AnimatedMouseCursorDefinitionDTO(String id,
                                             AnimatedMouseCursorFrameDefinitionDTO[] frames,
                                             int duration,
-                                            int offset, Long paused, Long timestamp) {
+                                            int offset,
+                                            Long paused) {
         Id = id;
         Frames = frames;
         Duration = duration;
         Offset = offset;
         Paused = paused;
-        Timestamp = timestamp;
     }
 }

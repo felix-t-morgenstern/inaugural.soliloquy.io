@@ -55,8 +55,7 @@ public class LoopingLinearMovingColorProviderHandler
                 hueMovementIsClockwise,
                 dto.periodDuration,
                 dto.periodModuloOffset,
-                dto.pausedTimestamp,
-                dto.mostRecentTimestamp
+                dto.pausedTimestamp
         );
     }
 
@@ -68,11 +67,11 @@ public class LoopingLinearMovingColorProviderHandler
 
         dto.uuid = provider.uuid().toString();
 
-        Map<Integer, Color> valuesWithinPeriod = provider.valuesWithinPeriod();
+        var valuesWithinPeriod = provider.valuesWithinPeriod();
         dto.periodTimestamps = new int[valuesWithinPeriod.size()];
         dto.periodValues = new ColorDTO[valuesWithinPeriod.size()];
         var index = 0;
-        for (Map.Entry<Integer, Color> valueWithinPeriod : valuesWithinPeriod.entrySet()) {
+        for (var valueWithinPeriod : valuesWithinPeriod.entrySet()) {
             dto.periodTimestamps[index] = valueWithinPeriod.getKey();
             Color value = valueWithinPeriod.getValue();
             dto.periodValues[index] = new ColorDTO(value.getRed(), value.getGreen(),
@@ -80,7 +79,7 @@ public class LoopingLinearMovingColorProviderHandler
             index++;
         }
 
-        List<Boolean> hueMovementIsClockwise = provider.hueMovementIsClockwise();
+        var hueMovementIsClockwise = provider.hueMovementIsClockwise();
         dto.hueMovementIsClockwise = new boolean[hueMovementIsClockwise.size()];
         for (var i = 0; i < hueMovementIsClockwise.size(); i++) {
             dto.hueMovementIsClockwise[i] = hueMovementIsClockwise.get(i);
@@ -89,7 +88,6 @@ public class LoopingLinearMovingColorProviderHandler
         dto.periodDuration = provider.periodDuration();
         dto.periodModuloOffset = provider.periodModuloOffset();
         dto.pausedTimestamp = provider.pausedTimestamp();
-        dto.mostRecentTimestamp = provider.mostRecentTimestamp();
 
         return JSON.toJson(dto);
     }

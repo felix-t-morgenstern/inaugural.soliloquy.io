@@ -242,16 +242,6 @@ public class FiniteAnimationRenderableImplTests {
     }
 
     @Test
-    public void testMostRecentTimestamp() {
-        var mostRecentTimestamp = randomLong();
-
-        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(mostRecentTimestamp);
-
-        assertEquals(mostRecentTimestamp, renderableWithMouseEvents.mostRecentTimestamp());
-        assertEquals(mostRecentTimestamp, renderableWithoutMouseEvents.mostRecentTimestamp());
-    }
-
-    @Test
     public void testStartAndEndTimestamp() {
         assertEquals(START_TIMESTAMP,
                 renderableWithMouseEvents.startTimestamp());

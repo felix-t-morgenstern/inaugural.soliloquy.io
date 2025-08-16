@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -24,22 +25,29 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class LoopingLinearMovingColorProviderHandlerTests {
+    private final UUID UUID = java.util.UUID.randomUUID();
+    private final int TIMESTAMP_1 = randomInt();
+    private final int TIMESTAMP_2 = randomIntWithInclusiveFloor(TIMESTAMP_1 + 1);
+    private final int TIMESTAMP_3 = randomIntWithInclusiveFloor(TIMESTAMP_2 + 1);
+    private final Color VALUE_1 = randomColor();
+    private final Color VALUE_2 = randomColor();
+    private final Color VALUE_3 = randomColor();
     private final Map<Integer, Color> VALUES_WITHIN_PERIOD = mapOf(
-            pairOf(111, Color.RED),
-            pairOf(222, Color.GREEN),
-            pairOf(333, Color.BLUE)
+            pairOf(TIMESTAMP_1, VALUE_1),
+            pairOf(TIMESTAMP_2, VALUE_2),
+            pairOf(TIMESTAMP_3, VALUE_3)
     );
-    private final int PERIOD_DURATION = 444;
-    private final int PERIOD_MODULO_OFFSET = 555;
-    private final Long PAUSED_TIMESTAMP = 666L;
-    private final long MOST_RECENT_TIMESTAMP = 777L;
-    private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE = listOf(true, false, false);
+    private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE = listOf(
+            randomBoolean(),
+            randomBoolean(),
+            randomBoolean()
+    );
+    private final int PERIOD_DURATION = randomInt();
+    private final int PERIOD_MODULO_OFFSET = randomInt();
+    private final Long PAUSED_TIMESTAMP = randomLong();
 
-    private static final UUID UUID = java.util.UUID.randomUUID();
-
-    @Mock private LoopingLinearMovingColorProvider mockLoopingLinearMovingColorProvider;
-    @Mock private LoopingLinearMovingColorProviderFactory
-            mockLoopingLinearMovingColorProviderFactory;
+    @Mock private LoopingLinearMovingColorProvider mockProvider;
+    @Mock private LoopingLinearMovingColorProviderFactory mockFactory;
 
     private TypeHandler<LoopingLinearMovingColorProvider> handler;
 
@@ -54,8 +62,7 @@ public class LoopingLinearMovingColorProviderHandlerTests {
 
     @BeforeEach
     void setUp() {
-        handler = new LoopingLinearMovingColorProviderHandler(
-                mockLoopingLinearMovingColorProviderFactory);
+        handler = new LoopingLinearMovingColorProviderHandler(mockFactory);
     }
 
     @Test
@@ -66,22 +73,20 @@ public class LoopingLinearMovingColorProviderHandlerTests {
 
     @Test
     public void testWrite() {
-        when(mockLoopingLinearMovingColorProvider.uuid())
+        when(mockProvider.uuid())
                 .thenReturn(UUID);
-        when(mockLoopingLinearMovingColorProvider.valuesWithinPeriod())
+        when(mockProvider.valuesWithinPeriod())
                 .thenReturn(VALUES_WITHIN_PERIOD);
-        when(mockLoopingLinearMovingColorProvider.periodDuration())
+        when(mockProvider.periodDuration())
                 .thenReturn(PERIOD_DURATION);
-        when(mockLoopingLinearMovingColorProvider.periodModuloOffset())
+        when(mockProvider.periodModuloOffset())
                 .thenReturn(PERIOD_MODULO_OFFSET);
-        when(mockLoopingLinearMovingColorProvider.pausedTimestamp())
+        when(mockProvider.pausedTimestamp())
                 .thenReturn(PAUSED_TIMESTAMP);
-        when(mockLoopingLinearMovingColorProvider.mostRecentTimestamp())
-                .thenReturn(MOST_RECENT_TIMESTAMP);
-        when(mockLoopingLinearMovingColorProvider.hueMovementIsClockwise())
+        when(mockProvider.hueMovementIsClockwise())
                 .thenReturn(HUE_MOVEMENT_IS_CLOCKWISE);
 
-        var output = handler.write(mockLoopingLinearMovingColorProvider);
+        var output = handler.write(mockProvider);
 
         assertEquals(WRITTEN_DATA, output);
     }
@@ -93,16 +98,15 @@ public class LoopingLinearMovingColorProviderHandlerTests {
 
     @Test
     public void testRead() {
-        when(mockLoopingLinearMovingColorProviderFactory
-                .make(any(), anyMap(), anyList(), anyInt(), anyInt(), anyLong(), anyLong()))
-                .thenReturn(mockLoopingLinearMovingColorProvider);
+        when(mockFactory.make(any(), anyMap(), anyList(), anyInt(), anyInt(), anyLong()))
+                .thenReturn(mockProvider);
 
         var output = handler.read(WRITTEN_DATA);
 
-        assertSame(mockLoopingLinearMovingColorProvider, output);
-        verify(mockLoopingLinearMovingColorProviderFactory)
+        assertSame(mockProvider, output);
+        verify(mockFactory)
                 .make(UUID, VALUES_WITHIN_PERIOD, HUE_MOVEMENT_IS_CLOCKWISE, PERIOD_DURATION,
-                        PERIOD_MODULO_OFFSET, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+                        PERIOD_MODULO_OFFSET, PAUSED_TIMESTAMP);
     }
 
     @Test

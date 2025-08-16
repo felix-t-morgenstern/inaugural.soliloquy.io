@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
@@ -16,8 +17,8 @@ public class FiniteSinusoidMovingFloatBoxProvider
                                                 Map<Long, FloatBox> valuesAtTimes,
                                                 List<Float> transitionSharpnesses,
                                                 Long pausedTimestamp,
-                                                Long mostRecentTimestamp) {
-        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, mostRecentTimestamp);
+                                                TimestampValidator timestampValidator) {
+        super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, timestampValidator);
     }
 
     @Override

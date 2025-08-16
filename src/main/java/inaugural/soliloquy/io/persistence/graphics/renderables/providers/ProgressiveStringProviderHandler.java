@@ -23,7 +23,7 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         ProgressiveStringProviderDTO dto = JSON.fromJson(data, ProgressiveStringProviderDTO.class);
 
         return FACTORY.make(UUID.fromString(dto.uuid), dto.string, dto.timeToComplete,
-                dto.startTimestamp, dto.pausedTimestamp, dto.mostRecentTimestamp);
+                dto.startTimestamp, dto.pausedTimestamp);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class ProgressiveStringProviderHandler extends AbstractTypeHandler<Provid
         dto.timeToComplete = representation.SECOND.FIRST;
         dto.startTimestamp = representation.SECOND.SECOND;
         dto.pausedTimestamp = provider.pausedTimestamp();
-        dto.mostRecentTimestamp = provider.mostRecentTimestamp();
 
         return JSON.toJson(dto);
     }

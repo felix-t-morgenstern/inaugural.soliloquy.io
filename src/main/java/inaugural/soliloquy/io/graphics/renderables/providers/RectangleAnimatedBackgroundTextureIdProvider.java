@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.shared.FloorFrameProvider;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingProvider;
 
 import java.util.Map;
@@ -17,8 +18,8 @@ public class RectangleAnimatedBackgroundTextureIdProvider
                                                         int periodModuloOffset,
                                                         Map<Integer, Integer> valuesWithinPeriod,
                                                         Long pauseTimestamp,
-                                                        Long mostRecentTimestamp) {
-        super(uuid, periodDuration, periodModuloOffset, pauseTimestamp, mostRecentTimestamp);
+                                                        TimestampValidator timestampValidator) {
+        super(uuid, periodDuration, periodModuloOffset, pauseTimestamp, timestampValidator);
         FLOOR_FRAME_PROVIDER = new FloorFrameProvider<>(periodDuration, valuesWithinPeriod, null,
                 null);
     }

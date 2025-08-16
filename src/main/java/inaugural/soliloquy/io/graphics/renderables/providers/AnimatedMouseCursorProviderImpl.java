@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.NearestFloorAndCeilingTree;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.Map;
@@ -17,11 +18,14 @@ public class AnimatedMouseCursorProviderImpl extends AbstractLoopingProvider<Lon
 
     private final static UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
-    public AnimatedMouseCursorProviderImpl(String id, Map<Integer, Long> cursorsAtMs,
-                                           int periodDuration, int periodModuloOffset,
-                                           Long pauseTimestamp, Long mostRecentTimestamp) {
+    public AnimatedMouseCursorProviderImpl(String id,
+                                           Map<Integer, Long> cursorsAtMs,
+                                           int periodDuration,
+                                           int periodModuloOffset,
+                                           Long pauseTimestamp,
+                                           TimestampValidator timestampValidator) {
         super(PLACEHOLDER_UUID, periodDuration, periodModuloOffset, pauseTimestamp,
-                mostRecentTimestamp);
+                timestampValidator);
         ID = Check.ifNullOrEmpty(id, "id");
         Check.ifNull(cursorsAtMs, "cursorsAtMs");
         if (cursorsAtMs.isEmpty()) {

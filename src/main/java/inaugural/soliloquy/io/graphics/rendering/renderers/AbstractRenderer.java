@@ -27,9 +27,4 @@ public abstract class AbstractRenderer<TRenderable extends Renderable>
     public void setShader(Shader shader) throws IllegalArgumentException {
         this.shader = Check.ifNull(shader, "shader");
     }
-
-    @Override
-    public Long mostRecentTimestamp() {
-        return TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-    }
 }

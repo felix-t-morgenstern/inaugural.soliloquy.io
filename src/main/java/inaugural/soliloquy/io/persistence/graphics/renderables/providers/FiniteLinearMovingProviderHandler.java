@@ -35,8 +35,7 @@ public class FiniteLinearMovingProviderHandler extends
         for (var valueDto : dto.values) {
             valuesAtTimestamps.put(valueDto.timestamp, typeHandler.read(valueDto.value));
         }
-        return FACTORY.make(UUID.fromString(dto.uuid), valuesAtTimestamps, dto.pausedTimestamp,
-                dto.mostRecentTimestamp);
+        return FACTORY.make(UUID.fromString(dto.uuid), valuesAtTimestamps, dto.pausedTimestamp);
     }
 
     @Override
@@ -78,8 +77,6 @@ public class FiniteLinearMovingProviderHandler extends
 
         dto.pausedTimestamp = finiteLinearMovingProvider.pausedTimestamp();
 
-        dto.mostRecentTimestamp = finiteLinearMovingProvider.mostRecentTimestamp();
-
         return JSON.toJson(dto);
     }
 
@@ -88,7 +85,6 @@ public class FiniteLinearMovingProviderHandler extends
         String valueType;
         FiniteLinearMovingProviderValueAtTimestampDTO[] values;
         Long pausedTimestamp;
-        Long mostRecentTimestamp;
     }
 
     private static class FiniteLinearMovingProviderValueAtTimestampDTO {

@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
@@ -16,12 +17,9 @@ public class GlobalLoopingAnimationImpl
     private static final UUID PLACEHOLDER_UUID = new UUID(0, 0);
 
     public GlobalLoopingAnimationImpl(String id, Animation animation, int periodModuloOffset,
-                                      Long pausedTimestamp) {
-        // NB: pausedTimestamp is used for both pausedTimestamp and mostRecentTimestamp in parent
-        //     constructor since mostRecentTimestamp must be non-null if pausedTimestamp is
-        //     non-null
+                                      Long pause, TimestampValidator timestampValidator) {
         super(PLACEHOLDER_UUID, Check.ifNull(animation, "animation").msDuration(),
-                periodModuloOffset, pausedTimestamp, pausedTimestamp);
+                periodModuloOffset, pause, timestampValidator);
         ID = Check.ifNullOrEmpty(id, "id");
         ANIMATION = animation;
     }
