@@ -6,7 +6,7 @@ import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.assets.ImageAsset;
+import soliloquy.specs.io.graphics.assets.Asset;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -22,7 +22,7 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 abstract class AbstractImageAssetRenderableHandler<
-        TAsset extends ImageAsset,
+        TAsset extends Asset,
         TRenderable extends ImageAssetRenderable> extends AbstractTypeHandler<TRenderable> {
     protected final Function<String, TAsset> GET_ASSET;
     @SuppressWarnings("rawtypes") protected final Function<String, Action> GET_ACTION;
