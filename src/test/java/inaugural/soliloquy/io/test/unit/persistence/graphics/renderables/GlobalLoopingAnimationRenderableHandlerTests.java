@@ -23,7 +23,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class GlobalLoopingAnimationRenderableHandlerTests
-        extends AbstractRenderableWithMouseEventsTests<GlobalLoopingAnimation> {
+        extends AbstractImageAssetRenderableHandlerTests<GlobalLoopingAnimation> {
     @Mock private GlobalLoopingAnimationRenderable mockRenderable;
     @Mock private GlobalLoopingAnimationRenderableFactory mockFactory;
 
@@ -33,18 +33,17 @@ public class GlobalLoopingAnimationRenderableHandlerTests
 
     @BeforeEach
     public void setUp() {
-        super.setUpMouseEventsTests();
-        super.setUpImageAssetRenderableTests(GlobalLoopingAnimation.class);
+        super.setUp(GlobalLoopingAnimation.class);
 
         writtenValue = String.format(
                 "{\"assetId\":\"%s\",\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
-                        "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"colorShifts\":[\"%s\"]," +
-                        "\"area\":\"%s\",\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
-                ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, ON_PRESS_BUTTON, ON_PRESS_ACTION_ID,
-                ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID, ON_MOUSE_OVER_ACTION_ID,
-                ON_MOUSE_LEAVE_ACTION_ID, COLOR_SHIFT, AREA, Z, UUID,
+                        "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"onPress\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
+                        "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
+                ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, COLOR_SHIFT, AREA, ON_PRESS_BUTTON,
+                ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
+                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, Z, UUID,
                 mockRenderable.getClass().getCanonicalName());
 
         handler = new GlobalLoopingAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
@@ -72,9 +71,7 @@ public class GlobalLoopingAnimationRenderableHandlerTests
 
     @Test
     public void testWrite() {
-        setUpMockRenderable(mockRenderable);
-        setUpMockImageAssetRenderable(mockRenderable);
-        setupMockRenderableWithMouseEvents(mockRenderable);
+        this.setUpMockRenderable(mockRenderable);
         when(mockRenderable.getGlobalLoopingAnimation()).thenReturn(mockAsset);
 
         var output = handler.write(mockRenderable);
@@ -82,9 +79,7 @@ public class GlobalLoopingAnimationRenderableHandlerTests
         assertEquals(writtenValue, output);
         verify(mockRenderable, once()).getGlobalLoopingAnimation();
         verify(mockAsset, once()).id();
-        verifyMockRenderableWritten(mockRenderable);
-        verifyMockImageAssetRenderableWritten(mockRenderable);
-        verifyMockRenderableWithMouseEventsWritten(mockRenderable);
+        verifyWritten(mockRenderable);
     }
 
     @Test
@@ -112,8 +107,7 @@ public class GlobalLoopingAnimationRenderableHandlerTests
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyMockImageAssetRenderableRead();
-        verifyMockRenderableWithMouseEventsRead();
+        verifyRead();
         verify(mockFactory, once()).make(
                 same(mockAsset),
                 same(mockBorderThicknessProvider),

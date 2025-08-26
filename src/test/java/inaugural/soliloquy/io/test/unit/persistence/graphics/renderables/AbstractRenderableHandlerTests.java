@@ -24,7 +24,7 @@ abstract class AbstractRenderableHandlerTests {
         when(mockRenderable.uuid()).thenReturn(UUID);
     }
 
-    protected void verifyMockRenderableWritten(Renderable mockRenderable) {
+    protected void verifyWritten(Renderable mockRenderable) {
         verify(mockRenderable, once()).getZ();
         verify(mockRenderable, once()).uuid();
     }

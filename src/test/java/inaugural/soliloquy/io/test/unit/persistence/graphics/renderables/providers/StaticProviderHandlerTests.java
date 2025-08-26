@@ -27,13 +27,11 @@ public class StaticProviderHandlerTests {
     private final String WRITTEN_INT = randomString();
     private final TypeHandler<Integer> INT_HANDLER =
             generateSimpleMockTypeHandler(pairOf(WRITTEN_INT, INT_VALUE));
-    private final long MOST_RECENT_TIMESTAMP = randomLong();
     private final UUID UUID = java.util.UUID.randomUUID();
 
     private final String WRITTEN_VALUE = String.format(
-            "{\"uuid\":\"%s\",\"innerType\":\"java.lang.Integer\",\"val\":\"%s\"," +
-                    "\"mostRecentTimestamp\":%d}",
-            UUID, WRITTEN_INT, MOST_RECENT_TIMESTAMP);
+            "{\"uuid\":\"%s\",\"innerType\":\"java.lang.Integer\",\"val\":\"%s\"}",
+            UUID, WRITTEN_INT);
 
     @Mock private StaticProvider<Integer> mockProvider;
     @Mock private StaticProviderFactory mockFactory;

@@ -14,8 +14,7 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProgressiveStringProviderFactoryTests {
@@ -43,6 +42,8 @@ public class ProgressiveStringProviderFactoryTests {
     @Test
     public void testMake() {
         var provider = factory.make(UUID, STRING, START_TIMESTAMP, TIME_TO_COMPLETE, null);
+        when(mockTimestampValidator.mostRecentTimestamp()).thenReturn(PAUSED_TIMESTAMP);
+
         provider.reportPause(PAUSED_TIMESTAMP);
 
         assertNotNull(provider);

@@ -32,9 +32,10 @@ public class GlobalLoopingAnimationRenderableHandler extends
     public GlobalLoopingAnimationRenderable read(String writtenVal)
             throws IllegalArgumentException {
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenVal, "writtenVal"),
-                AbstractImageAssetRenderableHandler.ImageAssetRenderableDto.class);
+                Dto.class);
 
-        var readProps = readFromDto(dto);
+        var readProps = new ReadProps<GlobalLoopingAnimation>();
+        hydrateReadProps(readProps, dto);
 
         return FACTORY.make(
                 readProps.asset,
@@ -56,7 +57,7 @@ public class GlobalLoopingAnimationRenderableHandler extends
     public String write(GlobalLoopingAnimationRenderable renderable) {
         Check.ifNull(renderable, "renderable");
 
-        var dto = new AbstractImageAssetRenderableHandler.ImageAssetRenderableDto();
+        var dto = new Dto();
 
         hydrateDto(dto, renderable, renderable.getGlobalLoopingAnimation().id());
 

@@ -52,13 +52,16 @@ public class LoopingLinearMovingColorProviderHandlerTests {
     private TypeHandler<LoopingLinearMovingColorProvider> handler;
 
     private final String WRITTEN_DATA = String.format(
-            "{\"uuid\":\"%s\",\"periodTimestamps\":[333,222,111]," +
-                    "\"periodValues\":[{\"r\":0,\"g\":0,\"b\":255,\"a\":255},{\"r\":0,\"g\":255," +
-                    "\"b\":0,\"a\":255},{\"r\":255,\"g\":0,\"b\":0,\"a\":255}]," +
-                    "\"hueMovementIsClockwise\":[true,false,false],\"periodDuration\":444," +
-                    "\"periodModuloOffset\":555,\"pausedTimestamp\":666," +
-                    "\"mostRecentTimestamp\":777}",
-            UUID);
+            "{\"uuid\":\"%s\",\"periodTimestamps\":[%d,%d,%d],\"periodValues\":[{\"r\":%d," +
+                    "\"g\":%d,\"b\":%d,\"a\":%d},{\"r\":%d,\"g\":%d,\"b\":%d,\"a\":%d},{\"r\":%d," +
+                    "\"g\":%d,\"b\":%d,\"a\":%d}],\"hueMovementIsClockwise\":[%b,%b,%b]," +
+                    "\"periodDuration\":%d,\"periodModuloOffset\":%d,\"pausedTimestamp\":%d}",
+            UUID, TIMESTAMP_1, TIMESTAMP_2, TIMESTAMP_3, VALUE_1.getRed(), VALUE_1.getGreen(),
+            VALUE_1.getBlue(), VALUE_1.getAlpha(), VALUE_2.getRed(), VALUE_2.getGreen(),
+            VALUE_2.getBlue(), VALUE_2.getAlpha(), VALUE_3.getRed(), VALUE_3.getGreen(),
+            VALUE_3.getBlue(), VALUE_3.getAlpha(), HUE_MOVEMENT_IS_CLOCKWISE.getFirst(),
+            HUE_MOVEMENT_IS_CLOCKWISE.get(1), HUE_MOVEMENT_IS_CLOCKWISE.get(2), PERIOD_DURATION,
+            PERIOD_MODULO_OFFSET, PAUSED_TIMESTAMP);
 
     @BeforeEach
     void setUp() {

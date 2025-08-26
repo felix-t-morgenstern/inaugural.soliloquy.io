@@ -21,7 +21,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class FiniteAnimationRenderableHandlerTests
-        extends AbstractRenderableWithMouseEventsTests<Animation> {
+        extends AbstractImageAssetRenderableHandlerTests<Animation> {
     protected final long START = randomLong();
     protected final long PAUSE = randomLong();
 
@@ -34,19 +34,18 @@ public class FiniteAnimationRenderableHandlerTests
 
     @BeforeEach
     public void setUp() {
-        super.setUpMouseEventsTests();
-        super.setUpImageAssetRenderableTests(Animation.class);
+        super.setUp(Animation.class);
 
         writtenValue = String.format(
                 "{\"start\":%d,\"pause\":%d,\"assetId\":\"%s\",\"borderThickness\":\"%s\"," +
-                        "\"borderColor\":\"%s\",\"onPress\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
-                        "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"z\":%d,\"uuid\":\"%s\"," +
+                        "\"borderColor\":\"%s\",\"colorShifts\":[\"%s\"],\"area\":\"%s\"," +
+                        "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
+                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
+                        "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"z\":%d,\"uuid\":\"%s\"," +
                         "\"type\":\"%s\"}",
-                START, PAUSE, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, ON_PRESS_BUTTON,
-                ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
-                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, COLOR_SHIFT, AREA, Z, UUID,
+                START, PAUSE, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, COLOR_SHIFT, AREA,
+                ON_PRESS_BUTTON, ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
+                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, Z, UUID,
                 mockRenderable.getClass().getCanonicalName());
 
         handler = new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
@@ -75,8 +74,6 @@ public class FiniteAnimationRenderableHandlerTests
     @Test
     public void testWrite() {
         setUpMockRenderable(mockRenderable);
-        setUpMockImageAssetRenderable(mockRenderable);
-        setupMockRenderableWithMouseEvents(mockRenderable);
         when(mockRenderable.animationId()).thenReturn(ASSET_ID);
         when(mockRenderable.startTimestamp()).thenReturn(START);
         when(mockRenderable.pausedTimestamp()).thenReturn(PAUSE);
@@ -85,9 +82,7 @@ public class FiniteAnimationRenderableHandlerTests
 
         assertEquals(writtenValue, output);
         verify(mockRenderable, once()).animationId();
-        verifyMockRenderableWritten(mockRenderable);
-        verifyMockImageAssetRenderableWritten(mockRenderable);
-        verifyMockRenderableWithMouseEventsWritten(mockRenderable);
+        verifyWritten(mockRenderable);
         verify(mockRenderable, once()).startTimestamp();
         verify(mockRenderable, once()).pausedTimestamp();
     }
@@ -119,8 +114,7 @@ public class FiniteAnimationRenderableHandlerTests
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyMockImageAssetRenderableRead();
-        verifyMockRenderableWithMouseEventsRead();
+        verifyRead();
         verify(mockFactory, once()).make(
                 same(mockAsset),
                 same(mockBorderThicknessProvider),

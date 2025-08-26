@@ -33,14 +33,14 @@ public class FiniteLinearMovingColorProviderHandlerTests {
     private final Color VALUE_2 = randomColor();
     private final Color VALUE_3 = randomColor();
     private final Map<Long, Color> VALUES_AT_TIMESTAMPS = mapOf(
-        pairOf(TIMESTAMP_1, VALUE_1),
-        pairOf(TIMESTAMP_2, VALUE_2),
-        pairOf(TIMESTAMP_3, VALUE_3)
+            pairOf(TIMESTAMP_1, VALUE_1),
+            pairOf(TIMESTAMP_2, VALUE_2),
+            pairOf(TIMESTAMP_3, VALUE_3)
     );
     private final List<Boolean> HUE_MOVEMENT_IS_CLOCKWISE = listOf(
-        randomBoolean(),
-        randomBoolean(),
-        randomBoolean()
+            randomBoolean(),
+            randomBoolean(),
+            randomBoolean()
     );
     private final Long PAUSED_TIMESTAMP = randomLong();
 
@@ -49,12 +49,17 @@ public class FiniteLinearMovingColorProviderHandlerTests {
 
     private TypeHandler<FiniteLinearMovingColorProvider> handler;
 
-    private final String WRITTEN_VALUE =
-            "{\"uuid\":\"uuidWriteOutput\",\"colors\":[{\"timestamp\":123,\"r\":255,\"g\":0," +
-                    "\"b\":255,\"a\":255},{\"timestamp\":456,\"r\":255,\"g\":0,\"b\":0," +
-                    "\"a\":255},{\"timestamp\":789,\"r\":0,\"g\":0,\"b\":0,\"a\":255}]," +
-                    "\"movementIsClockwise\":[true,false,false],\"pausedTimestamp\":123," +
-                    "\"mostRecentTimestamp\":456}";
+    private final String WRITTEN_VALUE = String.format(
+            "{\"uuid\":\"%s\",\"colors\":[{\"timestamp\":%d,\"r\":%d,\"g\":%d,\"b\":%d,\"a\":%d}," +
+                    "{\"timestamp\":%d,\"r\":%d,\"g\":%d,\"b\":%d,\"a\":%d},{\"timestamp\":%d," +
+                    "\"r\":%d,\"g\":%d,\"b\":%d,\"a\":%d}],\"movementIsClockwise\":[%b,%b,%b]," +
+                    "\"pausedTimestamp\":%d}",
+            UUID, TIMESTAMP_1, VALUE_1.getRed(), VALUE_1.getGreen(), VALUE_1.getBlue(),
+            VALUE_1.getAlpha(), TIMESTAMP_2, VALUE_2.getRed(), VALUE_2.getGreen(),
+            VALUE_2.getBlue(), VALUE_2.getAlpha(), TIMESTAMP_3, VALUE_3.getRed(),
+            VALUE_3.getGreen(), VALUE_3.getBlue(), VALUE_3.getAlpha(),
+            HUE_MOVEMENT_IS_CLOCKWISE.getFirst(), HUE_MOVEMENT_IS_CLOCKWISE.get(1),
+            HUE_MOVEMENT_IS_CLOCKWISE.get(2), PAUSED_TIMESTAMP);
 
     @BeforeEach
     public void setUp() {

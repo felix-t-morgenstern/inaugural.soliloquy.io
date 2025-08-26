@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
@@ -38,7 +37,6 @@ public class LoopingLinearMovingProviderHandlerTests {
     private final int PERIOD_DURATION = randomInt();
     private final int PERIOD_MODULO_OFFSET = randomInt();
     private final Long PAUSED_TIMESTAMP = randomLong();
-    private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
     private final TypeHandler<Float> MOCK_FLOAT_HANDLER =
             generateSimpleMockTypeHandler(pairOf(VALUE_1_WRITTEN, VALUE_1),
@@ -47,10 +45,9 @@ public class LoopingLinearMovingProviderHandlerTests {
     private final String WRITTEN_VALUE = String.format(
             "{\"id\":\"%s\",\"duration\":%d,\"offset\":%d,\"valueAtTimes\":[{\"time\":%d," +
                     "\"value\":\"%s\"},{\"time\":%d,\"value\":\"%s\"},{\"time\":%d," +
-                    "\"value\":\"%s\"}],\"pausedTimestamp\":%d,\"mostRecentTimestamp\":%d," +
-                    "\"type\":\"java.lang.Float\"}",
+                    "\"value\":\"%s\"}],\"pausedTimestamp\":%d,\"type\":\"java.lang.Float\"}",
             UUID, PERIOD_DURATION, PERIOD_MODULO_OFFSET, TIMESTAMP_1, VALUE_1_WRITTEN, TIMESTAMP_2,
-            VALUE_2_WRITTEN, TIMESTAMP_3, VALUE_3_WRITTEN, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+            VALUE_2_WRITTEN, TIMESTAMP_3, VALUE_3_WRITTEN, PAUSED_TIMESTAMP);
 
     @Mock private PersistenceHandler mockPersistenceHandler;
 
@@ -64,31 +61,17 @@ public class LoopingLinearMovingProviderHandlerTests {
 
     @BeforeEach
     public void setUp() {
-        //noinspection unchecked
-        when(mockFactory.make(any(), anyInt(), anyInt(), anyMap(), anyLong()))
-                .thenReturn(mockProvider);
-
         mockValuesWithinPeriod = generateMockMap(
                 pairOf(TIMESTAMP_1, VALUE_1),
                 pairOf(TIMESTAMP_2, VALUE_2),
                 pairOf(TIMESTAMP_3, VALUE_3)
         );
 
-        when(mockProvider.uuid()).thenReturn(UUID);
-        when(mockProvider.periodDuration()).thenReturn(PERIOD_DURATION);
-        when(mockProvider.periodModuloOffset()).thenReturn(PERIOD_MODULO_OFFSET);
-        when(mockProvider.valuesWithinPeriod()).thenReturn(mockValuesWithinPeriod);
-        when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
-
-        mockPersistenceHandler = Mockito.mock(PersistenceHandler.class);
-
         //noinspection unchecked,rawtypes
-        when(mockPersistenceHandler
-                .getTypeHandler(Float.class.getCanonicalName()))
+        lenient().when(mockPersistenceHandler.getTypeHandler(Float.class.getCanonicalName()))
                 .thenReturn((TypeHandler) MOCK_FLOAT_HANDLER);
 
-        handler =
-                new LoopingLinearMovingProviderHandler(mockPersistenceHandler, mockFactory);
+        handler = new LoopingLinearMovingProviderHandler(mockPersistenceHandler, mockFactory);
     }
 
     @Test
@@ -101,8 +84,13 @@ public class LoopingLinearMovingProviderHandlerTests {
 
     @Test
     public void testWrite() {
-        var writtenValue =
-                handler.write(mockProvider);
+        when(mockProvider.uuid()).thenReturn(UUID);
+        when(mockProvider.periodDuration()).thenReturn(PERIOD_DURATION);
+        when(mockProvider.periodModuloOffset()).thenReturn(PERIOD_MODULO_OFFSET);
+        when(mockProvider.valuesWithinPeriod()).thenReturn(mockValuesWithinPeriod);
+        when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
+
+        var writtenValue = handler.write(mockProvider);
 
         assertEquals(WRITTEN_VALUE, writtenValue);
         var inOrder = inOrder(mockProvider, mockPersistenceHandler,
@@ -128,6 +116,10 @@ public class LoopingLinearMovingProviderHandlerTests {
 
     @Test
     public void testRead() {
+        //noinspection unchecked
+        when(mockFactory.make(any(), anyInt(), anyInt(), anyMap(), anyLong()))
+                .thenReturn(mockProvider);
+
         var output = handler.read(WRITTEN_VALUE);
 
         assertSame(mockProvider, output);

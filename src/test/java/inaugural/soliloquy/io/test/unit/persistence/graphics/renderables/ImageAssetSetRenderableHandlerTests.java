@@ -24,7 +24,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageAssetSetRenderableHandlerTests
-        extends AbstractRenderableWithMouseEventsTests<ImageAssetSet> {
+        extends AbstractImageAssetRenderableHandlerTests<ImageAssetSet> {
     private final String DISPLAY_PARAM_KEY = randomString();
     private final String DISPLAY_PARAM_VAL = randomString();
 
@@ -37,19 +37,18 @@ public class ImageAssetSetRenderableHandlerTests
 
     @BeforeEach
     public void setUp() {
-        super.setUpMouseEventsTests();
-        super.setUpImageAssetRenderableTests(ImageAssetSet.class);
+        super.setUp(ImageAssetSet.class);
 
         writtenValue = String.format(
                 "{\"displayParams\":[{\"key\":\"%s\",\"val\":\"%s\"}],\"assetId\":\"%s\"," +
                         "\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
-                        "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"colorShifts\":[\"%s\"]," +
-                        "\"area\":\"%s\",\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
+                        "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"onPress\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
+                        "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
                 DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR,
-                ON_PRESS_BUTTON, ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
-                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, COLOR_SHIFT, AREA, Z, UUID,
+                COLOR_SHIFT, AREA, ON_PRESS_BUTTON, ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON,
+                ON_RELEASE_ACTION_ID, ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, Z, UUID,
                 mockRenderable.getClass().getCanonicalName());
 
         handler = new ImageAssetSetRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
@@ -78,8 +77,6 @@ public class ImageAssetSetRenderableHandlerTests
     @Test
     public void testWrite() {
         setUpMockRenderable(mockRenderable);
-        setUpMockImageAssetRenderable(mockRenderable);
-        setupMockRenderableWithMouseEvents(mockRenderable);
         when(mockRenderable.getImageAssetSet()).thenReturn(mockAsset);
         var mockDisplayParams = generateMockMap(pairOf(DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL));
         when(mockRenderable.displayParams()).thenReturn(mockDisplayParams);
@@ -90,9 +87,7 @@ public class ImageAssetSetRenderableHandlerTests
         verify(mockRenderable, once()).getImageAssetSet();
         verify(mockRenderable, once()).displayParams();
         verify(mockAsset, once()).id();
-        verifyMockRenderableWritten(mockRenderable);
-        verifyMockImageAssetRenderableWritten(mockRenderable);
-        verifyMockRenderableWithMouseEventsWritten(mockRenderable);
+        verifyWritten(mockRenderable);
     }
 
     @Test
@@ -121,8 +116,7 @@ public class ImageAssetSetRenderableHandlerTests
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyMockImageAssetRenderableRead();
-        verifyMockRenderableWithMouseEventsRead();
+        verifyRead();
         verify(mockFactory, once()).make(
                 same(mockAsset),
                 eq(mapOf(pairOf(DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL))),

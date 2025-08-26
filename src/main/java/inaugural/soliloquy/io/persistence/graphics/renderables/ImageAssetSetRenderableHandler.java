@@ -41,7 +41,8 @@ public class ImageAssetSetRenderableHandler
                 Arrays.stream(dto.displayParams).map(p -> pairOf(p.key, p.val))
                         .toArray(Pair[]::new));
 
-        var readProps = readFromDto(dto);
+        var readProps = new ReadProps<ImageAssetSet>();
+        hydrateReadProps(readProps, dto);
 
         return FACTORY.make(
                 readProps.asset,
@@ -81,7 +82,7 @@ public class ImageAssetSetRenderableHandler
         return JSON.toJson(dto);
     }
 
-    private static class Dto extends ImageAssetRenderableDto {
+    private static class Dto extends AbstractImageAssetRenderableHandler.Dto {
         DisplayParam[] displayParams;
 
         private static class DisplayParam {

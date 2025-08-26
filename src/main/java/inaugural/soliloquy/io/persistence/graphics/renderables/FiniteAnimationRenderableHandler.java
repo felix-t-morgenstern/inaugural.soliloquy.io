@@ -33,7 +33,8 @@ public class FiniteAnimationRenderableHandler
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenVal, "writtenVal"),
                 FiniteAnimationRenderableDto.class);
 
-        var readProps = readFromDto(dto);
+        var readProps = new ReadProps<Animation>();
+        hydrateReadProps(readProps, dto);
 
         return FACTORY.make(
                 readProps.asset,
@@ -68,7 +69,7 @@ public class FiniteAnimationRenderableHandler
     }
 
     public static class FiniteAnimationRenderableDto
-            extends AbstractImageAssetRenderableHandler.ImageAssetRenderableDto {
+            extends Dto {
         public long start;
         public Long pause;
     }

@@ -71,7 +71,10 @@ public class LoopingLinearMovingColorProviderHandler
         dto.periodTimestamps = new int[valuesWithinPeriod.size()];
         dto.periodValues = new ColorDTO[valuesWithinPeriod.size()];
         var index = 0;
-        for (var valueWithinPeriod : valuesWithinPeriod.entrySet()) {
+        var valsSorted = valuesWithinPeriod.entrySet().stream()
+                .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .toList();
+        for (var valueWithinPeriod : valsSorted) {
             dto.periodTimestamps[index] = valueWithinPeriod.getKey();
             Color value = valueWithinPeriod.getValue();
             dto.periodValues[index] = new ColorDTO(value.getRed(), value.getGreen(),
@@ -100,7 +103,6 @@ public class LoopingLinearMovingColorProviderHandler
         int periodDuration;
         int periodModuloOffset;
         Long pausedTimestamp;
-        long mostRecentTimestamp;
     }
 
     private static class ColorDTO {

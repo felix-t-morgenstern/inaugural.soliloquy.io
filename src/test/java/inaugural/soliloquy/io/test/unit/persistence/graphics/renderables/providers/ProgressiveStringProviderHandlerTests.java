@@ -32,20 +32,13 @@ public class ProgressiveStringProviderHandlerTests {
 
     private TypeHandler<ProviderAtTime<String>> handler;
 
-    private final String WRITTEN_VALUE = "{\"uuid\":\"819f5a14-466a-4c3b-af43-11d39cd0c9c9\"," +
-            "\"string\":\"string\",\"timeToComplete\":111,\"startTimestamp\":222," +
-            "\"pausedTimestamp\":333,\"mostRecentTimestamp\":444}";
+    private final String WRITTEN_VALUE = String.format(
+            "{\"uuid\":\"%s\",\"string\":\"%s\",\"timeToComplete\":%d,\"startTimestamp\":%d," +
+                    "\"pausedTimestamp\":%d}",
+            UUID, STRING, TIME_TO_COMPLETE, START_TIMESTAMP, PAUSED_TIMESTAMP);
 
     @BeforeEach
     public void setUp() {
-        when(mockProvider.uuid()).thenReturn(UUID);
-        when(mockProvider.representation()).thenReturn(
-                pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)));
-        when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
-
-        when(mockFactory.make(any(), anyString(), anyLong(), anyLong(), anyLong()))
-                .thenReturn(mockProvider);
-
         handler = new ProgressiveStringProviderHandler(mockFactory);
     }
 
@@ -57,7 +50,12 @@ public class ProgressiveStringProviderHandlerTests {
 
     @Test
     public void testWrite() {
-        String output = handler.write(mockProvider);
+        when(mockProvider.uuid()).thenReturn(UUID);
+        when(mockProvider.representation()).thenReturn(
+                pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)));
+        when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
+
+        var output = handler.write(mockProvider);
 
         assertEquals(WRITTEN_VALUE, output);
     }
@@ -69,6 +67,9 @@ public class ProgressiveStringProviderHandlerTests {
 
     @Test
     public void testRead() {
+        when(mockFactory.make(any(), anyString(), anyLong(), anyLong(), anyLong()))
+                .thenReturn(mockProvider);
+
         var output = handler.read(WRITTEN_VALUE);
 
         assertNotNull(output);

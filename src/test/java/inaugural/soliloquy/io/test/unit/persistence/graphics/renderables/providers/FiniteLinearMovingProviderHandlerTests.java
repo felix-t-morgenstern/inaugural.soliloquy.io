@@ -32,7 +32,6 @@ public class FiniteLinearMovingProviderHandlerTests {
     private final Float VALUE_2 = randomFloat();
     private final Float VALUE_3 = randomFloat();
     private final Long PAUSED_TIMESTAMP = randomLong();
-    private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
@@ -48,9 +47,9 @@ public class FiniteLinearMovingProviderHandlerTests {
     private final String WRITTEN_VALUE = String.format(
             "{\"uuid\":\"%s\",\"valueType\":\"java.lang.Float\",\"values\":[{\"timestamp\":%d," +
                     "\"value\":\"%s\"},{\"timestamp\":%d,\"value\":\"%s\"},{\"timestamp\":%d," +
-                    "\"value\":\"%s\"}],\"pausedTimestamp\":%d,\"mostRecentTimestamp\":%d}",
+                    "\"value\":\"%s\"}],\"pausedTimestamp\":%d}",
             UUID, TIMESTAMP_1, FLOAT_WRITE_OUTPUT_1, TIMESTAMP_2, FLOAT_WRITE_OUTPUT_2, TIMESTAMP_3,
-            FLOAT_WRITE_OUTPUT_3, PAUSED_TIMESTAMP, MOST_RECENT_TIMESTAMP);
+            FLOAT_WRITE_OUTPUT_3, PAUSED_TIMESTAMP);
 
     private Map<Long, Float> mockValuesAtTimestamps;
 
