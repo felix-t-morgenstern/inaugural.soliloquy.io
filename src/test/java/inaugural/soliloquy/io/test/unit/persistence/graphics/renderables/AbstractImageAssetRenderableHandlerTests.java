@@ -77,6 +77,8 @@ public class AbstractImageAssetRenderableHandlerTests<TAsset extends HasId>
         verify(mockShiftHandler, once()).write(mockShift);
         verify(mockRenderable, once()).getRenderingDimensionsProvider();
         verify(mockProviderHandler, once()).write(mockAreaProvider);
+
+        verify(mockAsset, once()).id();
     }
 
     protected void verifyRead() {
