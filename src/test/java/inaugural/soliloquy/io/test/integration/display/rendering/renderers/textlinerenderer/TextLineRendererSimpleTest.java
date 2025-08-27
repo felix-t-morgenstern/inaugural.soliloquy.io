@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
@@ -74,7 +74,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
                 staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.Tools;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
@@ -15,7 +15,6 @@ import soliloquy.specs.io.graphics.assets.FontStyleInfo;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
 import java.util.List;
@@ -34,7 +33,7 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 @ExtendWith(MockitoExtension.class)
-public class TextLineRendererImplTests {
+public class TextLineRendererTests {
     private final Color DEFAULT_COLOR = Color.BLACK;
     private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
             new FakeWindowResolutionManager();
@@ -46,7 +45,7 @@ public class TextLineRendererImplTests {
     @Mock private Font mockFont;
     @Mock private FontStyleInfo mockFontInfo;
 
-    private TextLineRenderer renderer;
+    private soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer renderer;
 
     @BeforeEach
     public void setUp() {
@@ -58,23 +57,23 @@ public class TextLineRendererImplTests {
         lenient().when(mockFont.boldItalic()).thenReturn(mockFontInfo);
         lenient().when(mockFontInfo.getUvCoordinatesForGlyph(anyChar())).thenReturn(randomFloatBox());
 
-        renderer = new TextLineRendererImpl(mockRenderingBoundaries,
+        renderer = new TextLineRenderer(mockRenderingBoundaries,
                 DEFAULT_COLOR, WINDOW_RESOLUTION_MANAGER, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(null, DEFAULT_COLOR,
+                () -> new TextLineRenderer(null, DEFAULT_COLOR,
                         WINDOW_RESOLUTION_MANAGER, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(mockRenderingBoundaries, null,
+                () -> new TextLineRenderer(mockRenderingBoundaries, null,
                         WINDOW_RESOLUTION_MANAGER, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(mockRenderingBoundaries, DEFAULT_COLOR,
+                () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRendererImpl(mockRenderingBoundaries, DEFAULT_COLOR,
+                () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
                         WINDOW_RESOLUTION_MANAGER, null));
     }
 

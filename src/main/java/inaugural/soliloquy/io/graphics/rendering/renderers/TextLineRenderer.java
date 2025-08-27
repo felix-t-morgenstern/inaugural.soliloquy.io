@@ -10,7 +10,6 @@ import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
-import soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
 import java.util.Map;
@@ -21,13 +20,13 @@ import java.util.function.Function;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
-        implements TextLineRenderer {
+public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
+        implements soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer {
     private final Color DEFAULT_COLOR;
 
-    public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
-                                Color defaultColor, WindowResolutionManager windowResolutionManager,
-                                TimestampValidator timestampValidator) {
+    public TextLineRenderer(RenderingBoundaries renderingBoundaries,
+                            Color defaultColor, WindowResolutionManager windowResolutionManager,
+                            TimestampValidator timestampValidator) {
         super(renderingBoundaries, windowResolutionManager, timestampValidator);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }

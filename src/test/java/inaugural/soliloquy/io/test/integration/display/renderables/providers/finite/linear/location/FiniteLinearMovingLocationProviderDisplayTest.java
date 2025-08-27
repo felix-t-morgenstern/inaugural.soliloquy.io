@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.renderables.providers.finite.linear.location;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.FiniteLinearMovingVertexProvider;
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.io.test.integration.display.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
@@ -69,7 +69,7 @@ class FiniteLinearMovingLocationProviderDisplayTest extends TextLineRendererTest
                         RenderingLocationProvider);
 
         TextLineRenderer =
-                new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager,
+                new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager,
                         null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
