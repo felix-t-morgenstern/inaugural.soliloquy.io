@@ -9,15 +9,13 @@ import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFact
 import java.util.UUID;
 import java.util.function.Function;
 
-public class RectangleRenderableHandler extends AbstractMouseEventsRenderableHandler<RectangleRenderable> {
-    private final ProviderHandler PROVIDER_HANDLER;
+public class RectangleRenderableHandler extends AbstractPolygonRenderableHandler<RectangleRenderable> {
     private final RectangleRenderableFactory FACTORY;
 
     public RectangleRenderableHandler(
             @SuppressWarnings("rawtypes") Function<String, Action> getAction,
             ProviderHandler providerHandler, RectangleRenderableFactory factory) {
-        super(getAction);
-        PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
+        super(getAction, providerHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 
@@ -36,10 +34,6 @@ public class RectangleRenderableHandler extends AbstractMouseEventsRenderableHan
         var bottomLeftColor = PROVIDER_HANDLER.read(dto.bottomLeftColor);
         var bottomRightColor = PROVIDER_HANDLER.read(dto.bottomRightColor);
 
-        var texId = PROVIDER_HANDLER.read(dto.texId);
-        var texWidth = PROVIDER_HANDLER.read(dto.texWidth);
-        var texHeight = PROVIDER_HANDLER.read(dto.texHeight);
-
         var area = PROVIDER_HANDLER.read(dto.area);
 
         return FACTORY.make(
@@ -47,9 +41,9 @@ public class RectangleRenderableHandler extends AbstractMouseEventsRenderableHan
                 topRightColor,
                 bottomLeftColor,
                 bottomRightColor,
-                texId,
-                texWidth,
-                texHeight,
+                readProps.texId,
+                readProps.texWidth,
+                readProps.texHeight,
                 readProps.onPress,
                 readProps.onRelease,
                 readProps.onMouseOver,
@@ -76,21 +70,14 @@ public class RectangleRenderableHandler extends AbstractMouseEventsRenderableHan
 
         dto.area = PROVIDER_HANDLER.write(renderable.getRenderingDimensionsProvider());
 
-        dto.texId = PROVIDER_HANDLER.write(renderable.getTextureIdProvider());
-        dto.texWidth = PROVIDER_HANDLER.write(renderable.getTextureTileWidthProvider());
-        dto.texHeight = PROVIDER_HANDLER.write(renderable.getTextureTileHeightProvider());
-
         return JSON.toJson(dto);
     }
 
-    protected static class Dto extends AbstractMouseEventsRenderableHandler.Dto {
+    protected static class Dto extends AbstractPolygonRenderableHandler.Dto {
         String topLeftColor;
         String topRightColor;
         String bottomLeftColor;
         String bottomRightColor;
         String area;
-        String texId;
-        String texWidth;
-        String texHeight;
     }
 }

@@ -13,7 +13,7 @@ import java.util.function.Function;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-public abstract class AbstractMouseEventsRenderableHandler<TRenderable extends RenderableWithMouseEvents>
+abstract class AbstractMouseEventsRenderableHandler<TRenderable extends RenderableWithMouseEvents>
         extends AbstractTypeHandler<TRenderable> {
     @SuppressWarnings("rawtypes") protected final Function<String, Action> GET_ACTION;
 

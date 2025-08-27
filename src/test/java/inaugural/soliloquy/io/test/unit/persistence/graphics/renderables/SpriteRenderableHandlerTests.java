@@ -78,6 +78,7 @@ public class SpriteRenderableHandlerTests extends AbstractImageAssetRenderableHa
         assertEquals(writtenValue, output);
         verify(mockRenderable, once()).getSprite();
         verifyWritten(mockRenderable);
+        verify(mockAsset, once()).id();
     }
 
     @Test

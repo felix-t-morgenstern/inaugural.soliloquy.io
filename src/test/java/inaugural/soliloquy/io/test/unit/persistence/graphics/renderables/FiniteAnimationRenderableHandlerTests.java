@@ -83,6 +83,7 @@ public class FiniteAnimationRenderableHandlerTests
         assertEquals(writtenValue, output);
         verify(mockRenderable, once()).animationId();
         verifyWritten(mockRenderable);
+        verify(mockRenderable, once()).animationId();
         verify(mockRenderable, once()).startTimestamp();
         verify(mockRenderable, once()).pausedTimestamp();
     }

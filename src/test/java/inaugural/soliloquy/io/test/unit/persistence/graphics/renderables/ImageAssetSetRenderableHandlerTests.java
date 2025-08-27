@@ -87,6 +87,7 @@ public class ImageAssetSetRenderableHandlerTests
         verify(mockRenderable, once()).getImageAssetSet();
         verify(mockRenderable, once()).displayParams();
         verifyWritten(mockRenderable);
+        verify(mockAsset, once()).id();
     }
 
     @Test
