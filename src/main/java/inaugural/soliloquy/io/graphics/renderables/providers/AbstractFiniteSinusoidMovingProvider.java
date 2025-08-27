@@ -6,6 +6,7 @@ import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingPro
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
@@ -22,6 +23,10 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
                                                    TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
         Check.ifNull(transitionSharpnesses, "transitionSharpnesses");
+        if (transitionSharpnesses.stream().anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException(
+                    className() + ": cannot have null value in transitionSharpnesses");
+        }
         if (transitionSharpnesses.size() != valuesAtTimes.size() - 1) {
             throw new IllegalArgumentException(
                     className() + ": transitionSharpnesses must have number of" +
@@ -39,8 +44,8 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
     @Override
     protected T interpolate(T value1, float weight1, T value2, float weight2,
                             int transitionNumber) {
-        double weightSine = (-Math.PI / 2f) + (Math.PI * weight2);
-        double sineValue = Math.sin(weightSine);
+        var weightSine = (-Math.PI / 2f) + (Math.PI * weight2);
+        var sineValue = Math.sin(weightSine);
         float sharpness = TRANSITION_SHARPNESSES.get(transitionNumber);
         double sharpenedSineValue;
         if (sharpness == 1f) {
@@ -51,7 +56,7 @@ abstract class AbstractFiniteSinusoidMovingProvider<T>
                     (sineValue < 0f ? -1f : 1f) * Math.pow(Math.abs(sineValue), sharpness);
         }
 
-        float sineAdjustedWeight2 = (float) ((sharpenedSineValue + 1f) / 2f);
+        var sineAdjustedWeight2 = (float) ((sharpenedSineValue + 1f) / 2f);
 
         return interpolateFromSineWeights(value1, value2, sineAdjustedWeight2);
     }
