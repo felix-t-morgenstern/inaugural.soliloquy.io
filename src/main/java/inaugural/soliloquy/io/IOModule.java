@@ -17,9 +17,10 @@ import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.*;
 import inaugural.soliloquy.io.graphics.renderables.*;
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
+import inaugural.soliloquy.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.factories.FiniteAnimationRenderableFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.*;
-import inaugural.soliloquy.io.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactoryImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.factories.*;
 import inaugural.soliloquy.io.graphics.rendering.*;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.*;
@@ -30,8 +31,8 @@ import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.persistence.audio.SoundHandler;
 import inaugural.soliloquy.io.persistence.audio.SoundsPlayingHandler;
-import inaugural.soliloquy.io.persistence.graphics.renderables.providers.FiniteLinearMovingColorProviderHandler;
-import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.AntialiasedLineSegmentRenderableHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.providers.*;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
@@ -62,6 +63,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Settings.*;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
@@ -76,8 +78,12 @@ public class IOModule implements Module {
                     AssetDefinitionsDTO assetDefinitionsDTO) {
         var persistenceHandler = common.provide(PersistenceHandler.class);
 
+
+
         var globalClock = new GlobalClockImpl();
         var timestampValidator = new TimestampValidator(null);
+
+
 
         var keyEventListener = new KeyEventListenerImpl(timestampValidator);
 
@@ -194,7 +200,7 @@ public class IOModule implements Module {
         var mouseEventHandler = new MouseEventHandlerImpl(mouseCapturing);
         var mouseListener = new MouseListener(mouseEventHandler);
 
-        var colorShiftAggregator = new ColorShiftStackAggregatorImpl();
+        var shiftAggregator = new ColorShiftStackAggregatorImpl();
         contentRenderers.put(
                 AntialiasedLineSegmentRenderableImpl.class,
                 new AntialiasedLineSegmentRenderer(resManager, timestampValidator)
@@ -202,16 +208,19 @@ public class IOModule implements Module {
         contentRenderers.put(
                 FiniteAnimationRenderer.class,
                 new FiniteAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, colorShiftAggregator,
-                        timestampValidator)
+                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
         );
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
                 new GlobalLoopingAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, colorShiftAggregator,
+                        resManager::windowWidthToHeightRatio, shiftAggregator,
                         timestampValidator)
         );
-        // TODO: Add ImageAssetSetRenderer once completed!!! _Oops._
+        contentRenderers.put(
+                ImageAssetSetRenderableImpl.class,
+                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator)
+        );
         contentRenderers.put(
                 RasterizedLineSegmentRenderableImpl.class,
                 new RasterizedLineSegmentRenderer(timestampValidator)
@@ -223,7 +232,7 @@ public class IOModule implements Module {
         contentRenderers.put(
                 SpriteRenderableImpl.class,
                 new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        colorShiftAggregator, timestampValidator)
+                        shiftAggregator, timestampValidator)
         );
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID);
         contentRenderers.put(
@@ -240,6 +249,8 @@ public class IOModule implements Module {
 
         var soundHandler = new SoundHandler(soundFactory::make);
         var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
+
+
 
         persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
         persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
@@ -277,6 +288,83 @@ public class IOModule implements Module {
                 ),
                         timestampValidator
                 );
+        var finiteLinearProviderHandler = new FiniteLinearMovingProviderHandler(persistenceHandler,
+                finiteLinearMovingProviderFactory);
+        listOf(
+                FiniteLinearMovingFloatBoxProvider.class,
+                FiniteLinearMovingFloatProvider.class,
+                FiniteLinearMovingVertexProvider.class
+        ).forEach(c ->
+                providerHandler.add(c.getCanonicalName(), finiteLinearProviderHandler));
+
+        var loopingLinearMovingColorProviderFactory =
+                new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator);
+        providerHandler.add(LoopingLinearMovingColorProviderImpl.class.getCanonicalName(),
+                new LoopingLinearMovingColorProviderHandler(
+                        loopingLinearMovingColorProviderFactory));
+
+        @SuppressWarnings({"unused", "unchecked"})
+        var loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(mapOf(
+                pairOf(
+                        LoopingLinearMovingFloatBoxProvider.class.getCanonicalName(),
+                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                new LoopingLinearMovingFloatBoxProvider(uuid, valuesWithinPeriod,
+                                        periodDuration, periodModuloOffset, pausedTimestamp, timeVal
+                                )
+                ),
+                pairOf(
+                        LoopingLinearMovingFloatProvider.class.getCanonicalName(),
+                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                new LoopingLinearMovingFloatProvider(
+                                        uuid, valuesWithinPeriod, periodDuration,
+                                        periodModuloOffset, pausedTimestamp, timeVal
+                                )
+                ),
+                pairOf(
+                        LoopingLinearMovingVertexProvider.class.getCanonicalName(),
+                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                new LoopingLinearMovingVertexProvider(
+                                        uuid, valuesWithinPeriod, periodDuration,
+                                        periodModuloOffset, pausedTimestamp, timeVal
+                                )
+                )
+        ), timestampValidator);
+        var loopingLinearProviderHandler =
+                new LoopingLinearMovingProviderHandler(persistenceHandler,
+                        loopingLinearMovingProviderFactory);
+        listOf(
+                LoopingLinearMovingFloatBoxProvider.class,
+                LoopingLinearMovingFloatProvider.class,
+                LoopingLinearMovingVertexProvider.class
+        ).forEach(c ->
+                providerHandler.add(c.getCanonicalName(), loopingLinearProviderHandler));
+
+        var progressiveStringProviderFactory =
+                new ProgressiveStringProviderFactoryImpl(timestampValidator);
+        providerHandler.add(ProgressiveStringProvider.class.getCanonicalName(),
+                new ProgressiveStringProviderHandler(progressiveStringProviderFactory));
+
+        var staticProviderFactory = new StaticProviderFactoryImpl(timestampValidator);
+        providerHandler.add(StaticProviderImpl.class.getCanonicalName(),
+                new StaticProviderHandler(persistenceHandler, staticProviderFactory,
+                        timestampValidator));
+
+
+
+        //var shiftHandler = new
+
+
+
+        var antialiasedLineSegmentRenderableFactory =
+                new AntialiasedLineSegmentRenderableFactoryImpl();
+        persistenceHandler.addTypeHandler(AntialiasedLineSegmentRenderableImpl.class,
+                new AntialiasedLineSegmentRenderableHandler(providerHandler,
+                        antialiasedLineSegmentRenderableFactory));
+
+        var finiteAnimationRenderableFactory = new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator);
+        //persistenceHandler.addTypeHandler(FiniteAnimationRenderableImpl.class, new FiniteAnimationRenderableHandler(animations::get, getAction, providerHandler));
+
+
 
         var graphicsLoop = new GraphicsCoreLoopImpl(
                 initialTitlebar,
@@ -318,6 +406,14 @@ public class IOModule implements Module {
         INJECTOR.registerInstance(resManager);
         INJECTOR.registerInstance(graphicsLoop);
         INJECTOR.registerInstance(graphics);
+        INJECTOR.registerInstance(finiteLinearMovingColorProviderFactory);
+        INJECTOR.registerInstance(finiteLinearProviderHandler);
+        INJECTOR.registerInstance(loopingLinearMovingColorProviderFactory);
+        INJECTOR.registerInstance(loopingLinearMovingProviderFactory);
+        INJECTOR.registerInstance(progressiveStringProviderFactory);
+        INJECTOR.registerInstance(staticProviderFactory);
+        INJECTOR.registerInstance(antialiasedLineSegmentRenderableFactory);
+        INJECTOR.registerInstance(finiteAnimationRenderableFactory);
     }
 
     @Override

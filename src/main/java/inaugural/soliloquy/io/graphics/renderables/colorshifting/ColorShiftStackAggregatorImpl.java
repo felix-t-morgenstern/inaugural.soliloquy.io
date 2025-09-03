@@ -27,35 +27,39 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
 
         for (var colorShift : colorShifts) {
             Check.ifNull(colorShift, "colorShift in colorShifts");
-            var value = verifyProvidedValue(colorShift.shiftAmountProvider().provide(timestamp));
-            var overrides = colorShift.overridesPriorShiftsOfSameType();
+            Check.ifNull(colorShift.AMOUNT_PROVIDER, "amount provider within colorShift");
+            var value = verifyProvidedValue(colorShift.AMOUNT_PROVIDER.provide(timestamp));
             if (colorShift instanceof BrightnessShift) {
                 if (!netBrightnessSealed) {
                     netBrightnessShift = getNewValue(netBrightnessShift, value);
                 }
-                netBrightnessSealed = netBrightnessSealed || overrides;
+                netBrightnessSealed =
+                        netBrightnessSealed || colorShift.OVERRIDES_PRIOR_SHIFTS_OF_SAME_TYPE;
             }
             if (colorShift instanceof ColorComponentIntensityShift intensityShift) {
-                var colorComponent = intensityShift.colorComponent();
+                var colorComponent = intensityShift.COLOR_COMPONENT;
                 Check.ifNull(colorComponent, "ColorComponent provided by intensityShift");
                 switch (colorComponent) {
                     case RED:
                         if (!netRedSealed) {
                             netRedShift = getNewValue(netRedShift, value);
                         }
-                        netRedSealed = netRedSealed || overrides;
+                        netRedSealed =
+                                netRedSealed || colorShift.OVERRIDES_PRIOR_SHIFTS_OF_SAME_TYPE;
                         break;
                     case GREEN:
                         if (!netGreenSealed) {
                             netGreenShift = getNewValue(netGreenShift, value);
                         }
-                        netGreenSealed = netGreenSealed || overrides;
+                        netGreenSealed =
+                                netGreenSealed || colorShift.OVERRIDES_PRIOR_SHIFTS_OF_SAME_TYPE;
                         break;
                     case BLUE:
                         if (!netBlueSealed) {
                             netBlueShift = getNewValue(netBlueShift, value);
                         }
-                        netBlueSealed = netBlueSealed || overrides;
+                        netBlueSealed =
+                                netBlueSealed || colorShift.OVERRIDES_PRIOR_SHIFTS_OF_SAME_TYPE;
                         break;
                 }
             }
@@ -63,7 +67,8 @@ public class ColorShiftStackAggregatorImpl implements ColorShiftStackAggregator 
                 if (!netColorRotationSealed) {
                     netColorRotationShift = getNewValue(netColorRotationShift, value);
                 }
-                netColorRotationSealed = netColorRotationSealed || overrides;
+                netColorRotationSealed =
+                        netColorRotationSealed || colorShift.OVERRIDES_PRIOR_SHIFTS_OF_SAME_TYPE;
             }
 
             if (netBrightnessSealed && netRedSealed && netGreenSealed && netBlueSealed &&

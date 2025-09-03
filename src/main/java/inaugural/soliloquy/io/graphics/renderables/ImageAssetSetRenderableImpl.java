@@ -26,7 +26,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     private final Map<String, String> DISPLAY_PARAMS;
 
     private ImageAssetSet imageAssetSet;
-    private long animationStart;
+    private Long animationStart;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
                                        Map<String, String> displayParams,
@@ -86,12 +86,12 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     }
 
     @Override
-    public long getAnimationStart() {
+    public Long getAnimationStart() {
         return animationStart;
     }
 
     @Override
-    public void setAnimationStart(long animationStart) {
+    public void setAnimationStart(Long animationStart) {
         this.animationStart = animationStart;
     }
 

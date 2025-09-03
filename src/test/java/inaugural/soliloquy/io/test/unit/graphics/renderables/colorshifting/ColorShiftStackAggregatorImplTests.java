@@ -1,74 +1,75 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.colorshifting;
 
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeBrightnessShift;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorComponentIntensityShift;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorRotationShift;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.io.graphics.renderables.colorshifting.*;
+import soliloquy.specs.io.graphics.renderables.colorshifting.BrightnessShift;
+import soliloquy.specs.io.graphics.renderables.colorshifting.ColorComponent;
+import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 
 import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
+import static soliloquy.specs.io.graphics.renderables.colorshifting.BrightnessShift.brightnessShift;
+import static soliloquy.specs.io.graphics.renderables.colorshifting.ColorComponentIntensityShift.colorComponentShift;
+import static soliloquy.specs.io.graphics.renderables.colorshifting.ColorRotationShift.rotationShift;
 
 public class ColorShiftStackAggregatorImplTests {
-    private ColorShiftStackAggregator colorShiftStackAggregator;
+    private ColorShiftStackAggregator aggregator;
 
     @BeforeEach
     public void setUp() {
-        colorShiftStackAggregator = new ColorShiftStackAggregatorImpl();
+        aggregator = new ColorShiftStackAggregatorImpl();
     }
 
     @Test
     public void testAggregateWithInvalidArgs() {
-        var belowNegativeOne = -1.00001f;
-        var aboveOne = 1.00001f;
+        var belowNegativeOne = generateMockStaticProvider(-1.00001f);
+        var aboveOne = generateMockStaticProvider(1.00001f);
 
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(null, 0L));
         assertThrows(IllegalArgumentException.class,
-                () -> colorShiftStackAggregator.aggregate(null, 0L));
+                () -> aggregator.aggregate(listOf((BrightnessShift) null), 0L));
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(
+                listOf(brightnessShift(generateMockStaticProvider(null), true)), 0L));
         assertThrows(IllegalArgumentException.class,
-                () -> colorShiftStackAggregator.aggregate(listOf((BrightnessShift) null), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeBrightnessShift(null, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeBrightnessShift(belowNegativeOne, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeBrightnessShift(aboveOne, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorComponentIntensityShift(null, 0f, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, null, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, belowNegativeOne,
-                        true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorComponentIntensityShift(ColorComponent.RED, aboveOne, true)),
-                0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorRotationShift(null, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorRotationShift(belowNegativeOne, true)), 0L));
-        assertThrows(IllegalArgumentException.class, () -> colorShiftStackAggregator.aggregate(
-                listOf(new FakeColorRotationShift(aboveOne, true)), 0L));
+                () -> aggregator.aggregate(listOf(brightnessShift(belowNegativeOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class,
+                () -> aggregator.aggregate(listOf(brightnessShift(aboveOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(
+                listOf(colorComponentShift(generateMockStaticProvider(0f), true, null)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(
+                listOf(colorComponentShift(null, true, ColorComponent.RED)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(
+                listOf(colorComponentShift(belowNegativeOne, true, ColorComponent.RED)), 0L));
+        assertThrows(IllegalArgumentException.class, () -> aggregator.aggregate(
+                listOf(colorComponentShift(aboveOne, true, ColorComponent.RED)), 0L));
+        assertThrows(IllegalArgumentException.class,
+                () -> aggregator.aggregate(listOf(rotationShift(null, true)), 0L));
+        assertThrows(IllegalArgumentException.class,
+                () -> aggregator.aggregate(listOf(rotationShift(belowNegativeOne, true)), 0L));
+        assertThrows(IllegalArgumentException.class,
+                () -> aggregator.aggregate(listOf(rotationShift(aboveOne, true)), 0L));
     }
 
     @Test
     public void testAggregateSingleColorShift() {
-        var brightnessShift = new FakeBrightnessShift(0.123f, false);
-        var redShift = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        var greenShift = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
-        var blueShift = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        var colorRotationShift = new FakeColorRotationShift(0.789f, false);
+        var brightnessShift = brightnessShift(generateMockStaticProvider(0.123f), false);
+        var redShift =
+                colorComponentShift(generateMockStaticProvider(0.444f), false, ColorComponent.RED);
+        var greenShift = colorComponentShift(generateMockStaticProvider(0.555f), false,
+                ColorComponent.GREEN);
+        var blueShift =
+                colorComponentShift(generateMockStaticProvider(0.666f), false, ColorComponent.BLUE);
+        var colorRotationShift = rotationShift(generateMockStaticProvider(0.789f), false);
 
-        var brightnessShiftNetColorShifts =
-                colorShiftStackAggregator.aggregate(listOf(brightnessShift), 0L);
-        var redIntensityShift = colorShiftStackAggregator.aggregate(listOf(redShift), 0L);
-        var greenIntensityShift = colorShiftStackAggregator.aggregate(listOf(greenShift), 0L);
-        var blueIntensityShift = colorShiftStackAggregator.aggregate(listOf(blueShift), 0L);
-        var colorRotationShiftNetColorShifts =
-                colorShiftStackAggregator.aggregate(listOf(colorRotationShift), 0L);
+        var brightnessShiftNetColorShifts = aggregator.aggregate(listOf(brightnessShift), 0L);
+        var redIntensityShift = aggregator.aggregate(listOf(redShift), 0L);
+        var greenIntensityShift = aggregator.aggregate(listOf(greenShift), 0L);
+        var blueIntensityShift = aggregator.aggregate(listOf(blueShift), 0L);
+        var colorRotationShiftNetColorShifts = aggregator.aggregate(listOf(colorRotationShift), 0L);
 
         assertNotNull(brightnessShiftNetColorShifts);
         assertEquals(0.123f, brightnessShiftNetColorShifts.BRIGHTNESS_SHIFT);
@@ -108,20 +109,25 @@ public class ColorShiftStackAggregatorImplTests {
 
     @Test
     public void testAggregateMultipleValuesOfEachType() {
-        var brightnessShift1 = new FakeBrightnessShift(0.123f, false);
-        var brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
-        var redShift1 = new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, false);
-        var redShift2 = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        var greenShift1 = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, false);
-        var greenShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.GREEN, -0.555f, false);
-        var blueShift1 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, false);
-        var blueShift2 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        var colorRotationShift1 = new FakeColorRotationShift(0.789f, false);
-        var colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
+        var brightnessShift1 = brightnessShift(generateMockStaticProvider(0.123f), false);
+        var brightnessShift2 = brightnessShift(generateMockStaticProvider(-0.123f), false);
+        var redShift1 =
+                colorComponentShift(generateMockStaticProvider(-0.444f), false, ColorComponent.RED);
+        var redShift2 =
+                colorComponentShift(generateMockStaticProvider(0.444f), false, ColorComponent.RED);
+        var greenShift1 = colorComponentShift(generateMockStaticProvider(0.555f), false,
+                ColorComponent.GREEN);
+        var greenShift2 = colorComponentShift(generateMockStaticProvider(-0.555f), false,
+                ColorComponent.GREEN);
+        var blueShift1 = colorComponentShift(generateMockStaticProvider(-0.666f), false,
+                ColorComponent.BLUE);
+        var blueShift2 =
+                colorComponentShift(generateMockStaticProvider(0.666f), false, ColorComponent.BLUE);
+        var colorRotationShift1 = rotationShift(generateMockStaticProvider(0.789f), false);
+        var colorRotationShift2 = rotationShift(generateMockStaticProvider(-0.789f), false);
 
         var netColorShifts =
-                colorShiftStackAggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
+                aggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
                         redShift1,
                         redShift2,
                         greenShift1,
@@ -144,20 +150,25 @@ public class ColorShiftStackAggregatorImplTests {
 
     @Test
     public void testAggregateWithOverridesPriorShiftsOfSameType() {
-        var brightnessShift1 = new FakeBrightnessShift(0.123f, true);
-        var brightnessShift2 = new FakeBrightnessShift(-0.123f, false);
-        var redShift1 = new FakeColorComponentIntensityShift(ColorComponent.RED, -0.444f, true);
-        var redShift2 = new FakeColorComponentIntensityShift(ColorComponent.RED, 0.444f, false);
-        var greenShift1 = new FakeColorComponentIntensityShift(ColorComponent.GREEN, 0.555f, true);
-        var greenShift2 =
-                new FakeColorComponentIntensityShift(ColorComponent.GREEN, -0.555f, false);
-        var blueShift1 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, -0.666f, true);
-        var blueShift2 = new FakeColorComponentIntensityShift(ColorComponent.BLUE, 0.666f, false);
-        var colorRotationShift1 = new FakeColorRotationShift(0.789f, true);
-        var colorRotationShift2 = new FakeColorRotationShift(-0.789f, false);
+        var brightnessShift1 = brightnessShift(generateMockStaticProvider(0.123f), true);
+        var brightnessShift2 = brightnessShift(generateMockStaticProvider(-0.123f), false);
+        var redShift1 =
+                colorComponentShift(generateMockStaticProvider(-0.444f), true, ColorComponent.RED);
+        var redShift2 =
+                colorComponentShift(generateMockStaticProvider(0.444f), false, ColorComponent.RED);
+        var greenShift1 =
+                colorComponentShift(generateMockStaticProvider(0.555f), true, ColorComponent.GREEN);
+        var greenShift2 = colorComponentShift(generateMockStaticProvider(-0.555f), false,
+                ColorComponent.GREEN);
+        var blueShift1 =
+                colorComponentShift(generateMockStaticProvider(-0.666f), true, ColorComponent.BLUE);
+        var blueShift2 =
+                colorComponentShift(generateMockStaticProvider(0.666f), false, ColorComponent.BLUE);
+        var colorRotationShift1 = rotationShift(generateMockStaticProvider(0.789f), true);
+        var colorRotationShift2 = rotationShift(generateMockStaticProvider(-0.789f), false);
 
         var netColorShifts =
-                colorShiftStackAggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
+                aggregator.aggregate(listOf(brightnessShift1, brightnessShift2,
                         redShift1,
                         redShift2,
                         greenShift1,
