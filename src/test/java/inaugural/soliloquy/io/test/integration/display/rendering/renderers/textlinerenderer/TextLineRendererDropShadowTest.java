@@ -80,7 +80,8 @@ class TextLineRendererDropShadowTest extends TextLineRendererTest {
                 staticProvider(vertexOf(0.00125f, 0.00125f)),
                 staticProvider(Color.RED));
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
+                windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

@@ -44,7 +44,7 @@ public class ImageAssetSetRenderableHandler
         var readProps = new ReadProps<ImageAssetSet>();
         hydrateReadProps(readProps, dto);
 
-        return FACTORY.make(
+        var renderable = FACTORY.make(
                 readProps.asset,
                 displayParams,
                 readProps.borderThickness,
@@ -59,6 +59,8 @@ public class ImageAssetSetRenderableHandler
                 UUID.fromString(dto.uuid),
                 null
         );
+        renderable.setAnimationStart(dto.animationStart);
+        return renderable;
     }
 
     @Override
@@ -69,6 +71,7 @@ public class ImageAssetSetRenderableHandler
 
         hydrateDto(dto, renderable, renderable.getImageAssetSet().id());
 
+        dto.animationStart = renderable.getAnimationStart();
         var displayParams = renderable.displayParams();
         dto.displayParams = new Dto.DisplayParam[displayParams.size()];
         var index = 0;
@@ -84,6 +87,7 @@ public class ImageAssetSetRenderableHandler
 
     private static class Dto extends AbstractImageAssetRenderableHandler.Dto {
         DisplayParam[] displayParams;
+        Long animationStart;
 
         private static class DisplayParam {
             String key;

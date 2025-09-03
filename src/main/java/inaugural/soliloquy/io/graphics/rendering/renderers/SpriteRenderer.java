@@ -1,114 +1,25 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
-import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
-import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.valueobjects.FloatBox.translate;
+import java.util.function.Supplier;
 
-public class SpriteRenderer extends CanRenderSnippets<SpriteRenderable> {
-    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
-
+public class SpriteRenderer extends AbstractImageAssetRenderer<Sprite, SpriteRenderable> {
     public SpriteRenderer(RenderingBoundaries renderingBoundaries,
-                          WindowResolutionManager windowResolutionManager,
-                          ColorShiftStackAggregator colorShiftStackAggregator,
+                          Supplier<Float> getScreenWToHRatio,
+                          ColorShiftStackAggregator shiftAggregator,
                           TimestampValidator timestampValidator) {
-        super(renderingBoundaries, windowResolutionManager, timestampValidator);
-        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
-                "colorShiftStackAggregator");
+        super(renderingBoundaries, getScreenWToHRatio, shiftAggregator, timestampValidator);
     }
 
     @Override
-    public void render(SpriteRenderable spriteRenderable, long timestamp)
+    public void render(SpriteRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(spriteRenderable, "spriteRenderable");
-        Check.ifNull(spriteRenderable.getSprite(), "spriteRenderable.getSprite()");
-
-        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-
-        // TODO: Throw if rendering area or border thickness or color providers are null
-
-        var borderThickness = Check.ifNull(spriteRenderable.getBorderThicknessProvider(),
-                        "spriteRenderable.getBorderThicknessProvider()")
-                .provide(timestamp);
-        var borderColor = Check.ifNull(spriteRenderable.getBorderColorProvider(),
-                        "spriteRenderable.getBorderColorProvider()")
-                .provide(timestamp);
-        var renderingArea = Check.ifNull(spriteRenderable.getRenderingDimensionsProvider(),
-                        "spriteRenderable.getRenderingDimensionsProvider()")
-                .provide(timestamp);
-
-        validateRenderableWithDimensionsMembers(renderingArea,
-                spriteRenderable.colorShifts(),
-                spriteRenderable.uuid(), "spriteRenderable");
-
-        if (borderThickness != null) {
-            if (borderColor == null) {
-                throw new IllegalArgumentException("SpriteRenderable.render: spriteRenderable " +
-                        "cannot have non-null thickness, and null color");
-            }
-
-            Check.throwOnLtValue(borderThickness, 0f, "spriteRenderable borderThickness");
-
-            Check.throwOnGtValue(borderThickness, 1f, "spriteRenderable borderThickness");
-
-            float yThickness = borderThickness;
-            var xThickness = yThickness / getScreenWidthToHeightRatio.get();
-
-            // upper-left
-            super.render(translate(renderingArea, -xThickness, -yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // upper-center
-            super.render(translate(renderingArea, 0f, -yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // upper-right
-            super.render(translate(renderingArea, xThickness, -yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // center-right
-            super.render(translate(renderingArea, xThickness, 0),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // bottom-right
-            super.render(translate(renderingArea, xThickness, yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // bottom-center
-            super.render(translate(renderingArea, 0f, yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // bottom-left
-            super.render(translate(renderingArea, -xThickness, yThickness),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-            // center-left
-            super.render(translate(renderingArea, -xThickness, 0f),
-                    spriteRenderable.getSprite(),
-                    INTACT_COLOR,
-                    borderColor);
-        }
-
-        var netColorShifts = netColorShifts(spriteRenderable.colorShifts(),
-                COLOR_SHIFT_STACK_AGGREGATOR, timestamp);
-
-        super.render(
-                renderingArea,
-                spriteRenderable.getSprite(),
-                INTACT_COLOR,
-                netColorShifts
-        );
+        super.render(renderable, (r, _) -> r.getSprite(), timestamp);
     }
 }

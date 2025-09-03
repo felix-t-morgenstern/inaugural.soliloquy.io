@@ -25,7 +25,7 @@ public class SpriteRendererBorderTest extends SpriteRendererTest {
                                 BORDER_THICKNESS,
                                 BORDER_COLOR,
                                 null,
-                                windowResolutionManager),
+                                windowResolutionManager::windowWidthToHeightRatio),
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

@@ -33,7 +33,7 @@ public class SpriteRendererRenderingBoundariesTest extends SpriteRendererTest {
                         0f,
                         INTACT_COLOR,
                         null,
-                        windowResolutionManager),
+                        windowResolutionManager::windowWidthToHeightRatio),
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 SpriteRendererRenderingBoundariesTest::closeAfterSomeTime);
     }

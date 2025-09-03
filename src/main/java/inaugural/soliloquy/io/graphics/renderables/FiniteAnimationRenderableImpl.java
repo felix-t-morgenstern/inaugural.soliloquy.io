@@ -131,10 +131,12 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
         if (pausedTimestamp != null) {
             timestamp = pausedTimestamp;
         }
-        return ANIMATION.snippetAtFrame(
-                (int) (Math.min(startTimestamp + ANIMATION.msDuration(),
-                        Math.max(startTimestamp, timestamp))
-                        - startTimestamp));
+
+        var matchingFrameOrFirst = Math.max(startTimestamp, timestamp);
+        var matchingFrameOrLast =
+                Math.min(startTimestamp + ANIMATION.msDuration(), matchingFrameOrFirst);
+
+        return ANIMATION.snippetAtFrame((int) (matchingFrameOrLast - startTimestamp));
     }
 
     @Override

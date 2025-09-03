@@ -79,8 +79,8 @@ public class TextLineRendererPaddingTest extends TextLineRendererTest {
                 staticNullProvider(), staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES,
-                INTACT_COLOR, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, INTACT_COLOR,
+                windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

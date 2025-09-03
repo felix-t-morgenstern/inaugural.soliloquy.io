@@ -9,7 +9,6 @@ import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.renderables.colorshifting.NetColorShifts;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
@@ -27,14 +26,14 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         implements Renderer<TRenderable> {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
 
-    protected Supplier<Float> getScreenWidthToHeightRatio;
+    protected Supplier<Float> getScreenWToHRatio;
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
-                                WindowResolutionManager windowResolutionManager,
+                                Supplier<Float> getScreenWToHRatio,
                                 TimestampValidator timestampValidator) {
         this(renderingBoundaries, timestampValidator);
-        Check.ifNull(windowResolutionManager, "windowResolutionManager");
-        getScreenWidthToHeightRatio = windowResolutionManager::windowWidthToHeightRatio;
+        Check.ifNull(getScreenWToHRatio, "getScreenWToHRatio");
+        this.getScreenWToHRatio = getScreenWToHRatio;
     }
 
     protected CanRenderSnippets(RenderingBoundaries renderingBoundaries,
@@ -197,7 +196,6 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         //     The position to render the snippet, where the upper-left corner of the window is
         //     (0f,0f), and the lower-right corner of the window is (1f,1f).
         shader.setUniform("windowPosition", windowPosition.LEFT_X, windowPosition.TOP_Y);
-//        // NB: This will almost undoubtedly change when ColorShifts are implemented
         // matColor:
         //     These values are the percentage of each channel (RGBA) to render, where 1f is 100%
         //     of that channel rendered, and 0f is 0% of that channel rendered

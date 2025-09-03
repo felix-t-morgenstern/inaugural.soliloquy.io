@@ -26,7 +26,7 @@ public class ProviderHandlerTests {
 
     private String writtenValue = null;
     private String writtenValueWithExtraneousFields = null;
-    @SuppressWarnings("rawtypes") private Map<String, TypeHandler<ProviderAtTime>> subhandlers;
+    @SuppressWarnings("rawtypes") private Map<String, TypeHandler> subhandlers;
 
     private ProviderHandler providerHandler;
 

@@ -94,8 +94,8 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
                         staticNullProvider(), null, italicIndices, boldIndices,
                         staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES,
-                Color.WHITE, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
+                windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

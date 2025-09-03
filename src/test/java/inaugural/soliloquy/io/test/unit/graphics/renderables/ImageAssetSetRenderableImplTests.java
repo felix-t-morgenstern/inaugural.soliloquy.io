@@ -567,6 +567,15 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
+    public void testGetAndSetAnimationStart() {
+        var animationStart = randomLong();
+
+        renderable.setAnimationStart(animationStart);
+
+        assertEquals(animationStart, renderable.getAnimationStart());
+    }
+
+    @Test
     public void testCapturesMouseEventAtPointForSprite() {
         when(mockImageAssetSet.getImageAssetWithDisplayParams(any())).thenReturn(mockSprite);
         var expectedImageX = (int) (((POINT_X - RENDERING_AREA_LEFT_X) / RENDERING_AREA.width()) *

@@ -1,7 +1,10 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFontStyleInfo;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.Tools;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +23,12 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.random.Random.randomFloatBox;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,11 +38,10 @@ import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 @ExtendWith(MockitoExtension.class)
 public class TextLineRendererTests {
     private final Color DEFAULT_COLOR = Color.BLACK;
-    private final FakeWindowResolutionManager WINDOW_RESOLUTION_MANAGER =
-            new FakeWindowResolutionManager();
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private Supplier<Float> mockGetScreenWToHRatio;
     @Mock private TimestampValidator mockTimestampValidator;
 
     @Mock private Font mockFont;
@@ -49,6 +51,8 @@ public class TextLineRendererTests {
 
     @BeforeEach
     public void setUp() {
+        lenient().when(mockGetScreenWToHRatio.get()).thenReturn(randomFloat());
+
         lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         lenient().when(mockFont.plain()).thenReturn(mockFontInfo);
@@ -58,23 +62,23 @@ public class TextLineRendererTests {
         lenient().when(mockFontInfo.getUvCoordinatesForGlyph(anyChar())).thenReturn(randomFloatBox());
 
         renderer = new TextLineRenderer(mockRenderingBoundaries,
-                DEFAULT_COLOR, WINDOW_RESOLUTION_MANAGER, mockTimestampValidator);
+                DEFAULT_COLOR, mockGetScreenWToHRatio, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRenderer(null, DEFAULT_COLOR,
-                        WINDOW_RESOLUTION_MANAGER, mockTimestampValidator));
+                        mockGetScreenWToHRatio, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRenderer(mockRenderingBoundaries, null,
-                        WINDOW_RESOLUTION_MANAGER, mockTimestampValidator));
+                        mockGetScreenWToHRatio, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
-                        WINDOW_RESOLUTION_MANAGER, null));
+                        mockGetScreenWToHRatio, null));
     }
 
     @Test
@@ -90,7 +94,7 @@ public class TextLineRendererTests {
     @Test
     public void testRenderWithInvalidArgs() {
         var lineHeightProvider = new FakeStaticProvider<>(0.25f);
-        String textLine = "Text line";
+        var textLine = "Text line";
         Map<Integer, ProviderAtTime<Color>> colorProviderIndices = mapOf();
         colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
         List<Integer> italicIndices = listOf();
@@ -99,17 +103,16 @@ public class TextLineRendererTests {
         List<Integer> boldIndices = listOf();
         boldIndices.add(3);
         boldIndices.add(5);
-        ProviderAtTime<Vertex> renderingAreaProvider = new FakeStaticProvider<>(vertexOf(0f, 0f));
+        var renderingAreaProvider = new FakeStaticProvider<>(vertexOf(0f, 0f));
         var uuid = UUID.randomUUID();
         var textLineRenderable = new FakeTextLineRenderable(mockFont,
                 lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
                 new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, uuid);
-        long timestamp = MOST_RECENT_TIMESTAMP;
+        var timestamp = MOST_RECENT_TIMESTAMP;
 
 
 
-        textLineRenderable.RenderingLocationProvider = null;
         textLineRenderable.RenderingLocationProvider = renderingAreaProvider;
         try {
             renderer.render(textLineRenderable, timestamp++);

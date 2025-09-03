@@ -57,10 +57,12 @@ public class DisplayTest {
             "./src/main/resources/shaders/defaultShader";
     protected final static UUID UUID = java.util.UUID.randomUUID();
 
+    protected static TimestampValidator TimestampValidator = new TimestampValidator(null);
+
     protected final static ProviderAtTime<Float> ZERO_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), 0f, null);
+            new StaticProviderImpl<>(java.util.UUID.randomUUID(), 0f, TimestampValidator);
     protected final static ProviderAtTime<Color> BLACK_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, null);
+            new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, TimestampValidator);
 
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
             new StaticProviderImpl<>(java.util.UUID.randomUUID(), WHOLE_SCREEN, mock(TimestampValidator.class));
@@ -75,7 +77,6 @@ public class DisplayTest {
     protected static MouseCursor MouseCursor = mock(MouseCursor.class);
     protected static MouseEventCapturingSpatialIndex MouseEventCapturingSpatialIndex;
     protected static ColorShiftStackAggregator MockShiftAggregator;
-    protected static TimestampValidator TimestampValidator;
 
     /** @noinspection rawtypes */
     protected static void runTest(Function<WindowResolutionManager, Set<Renderer>>
@@ -88,7 +89,6 @@ public class DisplayTest {
         FrameTimer = new FakeFrameTimer();
 
         Renderers = mapOf();
-        TimestampValidator = new TimestampValidator(null);
         var componentRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
@@ -140,7 +140,7 @@ public class DisplayTest {
     }
 
     protected static <T> StaticProvider<T> staticProvider(T value) {
-        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), value, null);
+        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), value, TimestampValidator);
     }
 
     protected static <T> StaticProvider<T> staticNullProvider() {

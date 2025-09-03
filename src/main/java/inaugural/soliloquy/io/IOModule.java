@@ -5,6 +5,7 @@ import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
 import inaugural.soliloquy.io.api.dto.AssetType;
 import inaugural.soliloquy.io.audio.AudioImpl;
+import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import inaugural.soliloquy.io.audio.entities.SoundTypeImpl;
 import inaugural.soliloquy.io.audio.entities.SoundsPlayingImpl;
 import inaugural.soliloquy.io.audio.factories.SoundFactoryImpl;
@@ -16,9 +17,9 @@ import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.*;
 import inaugural.soliloquy.io.graphics.renderables.*;
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.GlobalLoopingAnimationImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticMouseCursorProviderImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.*;
+import inaugural.soliloquy.io.graphics.renderables.providers.factories.FiniteLinearMovingColorProviderFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.*;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.*;
@@ -27,12 +28,16 @@ import inaugural.soliloquy.io.mouse.MouseCursorImpl;
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
 import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
+import inaugural.soliloquy.io.persistence.audio.SoundHandler;
+import inaugural.soliloquy.io.persistence.audio.SoundsPlayingHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.providers.FiniteLinearMovingColorProviderHandler;
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.int4.dirk.api.Injector;
 import org.int4.dirk.di.Injectors;
+import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.game.Module;
@@ -58,12 +63,14 @@ import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class IOModule implements Module {
     private final Injector INJECTOR;
 
     public IOModule(CommonModule common,
                     Function<String, Object> getSetting,
+                    @SuppressWarnings("rawtypes") Function<String, Action> getAction,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
                     AssetDefinitionsDTO assetDefinitionsDTO) {
@@ -73,6 +80,8 @@ public class IOModule implements Module {
         var timestampValidator = new TimestampValidator(null);
 
         var keyEventListener = new KeyEventListenerImpl(timestampValidator);
+
+
 
         var soundTypes = Collections.<String, SoundType>mapOf();
         var soundsPlaying = new SoundsPlayingImpl();
@@ -85,6 +94,8 @@ public class IOModule implements Module {
                 audioFiletypes
         );
         var audio = new AudioImpl(soundsPlaying, SoundFactoryImpl::new);
+
+
 
         var renderingBoundaries = new RenderingBoundariesImpl();
 
@@ -110,12 +121,16 @@ public class IOModule implements Module {
         var meshVertices = (float[]) getSetting.apply(MESH_VERTICES_ID);
         var meshUvCoords = (float[]) getSetting.apply(MESH_UV_COORDS_ID);
 
+
+
         var sprites = Collections.<String, Sprite>mapOf();
         var animations = Collections.<String, Animation>mapOf();
         var globalLoopingAnimations = Collections.<String, GlobalLoopingAnimation>mapOf();
         var imageAssetSets = Collections.<String, ImageAssetSet>mapOf();
         var fonts = Collections.<String, Font>mapOf();
         var mouseCursors = Collections.<String, ProviderAtTime<Long>>mapOf();
+
+
 
         var alphaThreshold = (float) getSetting.apply(MOUSE_CAPTURE_ALPHA_THRESHOLD_ID);
         var imageFactory = new ImageFactoryImpl(alphaThreshold);
@@ -186,12 +201,14 @@ public class IOModule implements Module {
         );
         contentRenderers.put(
                 FiniteAnimationRenderer.class,
-                new FiniteAnimationRenderer(renderingBoundaries, colorShiftAggregator,
+                new FiniteAnimationRenderer(renderingBoundaries,
+                        resManager::windowWidthToHeightRatio, colorShiftAggregator,
                         timestampValidator)
         );
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
-                new GlobalLoopingAnimationRenderer(renderingBoundaries, colorShiftAggregator,
+                new GlobalLoopingAnimationRenderer(renderingBoundaries,
+                        resManager::windowWidthToHeightRatio, colorShiftAggregator,
                         timestampValidator)
         );
         // TODO: Add ImageAssetSetRenderer once completed!!! _Oops._
@@ -205,24 +222,61 @@ public class IOModule implements Module {
         );
         contentRenderers.put(
                 SpriteRenderableImpl.class,
-                new SpriteRenderer(renderingBoundaries, resManager, colorShiftAggregator,
-                        timestampValidator)
+                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        colorShiftAggregator, timestampValidator)
         );
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID);
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                new TextLineRendererImpl(renderingBoundaries, defaultFontColor, resManager,
-                        timestampValidator)
+                new TextLineRenderer(renderingBoundaries, defaultFontColor,
+                        resManager::windowWidthToHeightRatio, timestampValidator)
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
                 new TriangleRenderer(timestampValidator)
         );
 
+
+
+        var soundHandler = new SoundHandler(soundFactory::make);
+        var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
+
+        persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
+        persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
+
         @SuppressWarnings("rawtypes") var providerSubhandlers =
-                Collections.<String, TypeHandler<ProviderAtTime>>mapOf();
+                Collections.<String, TypeHandler>mapOf();
 
         var providerHandler = new ProviderHandler(providerSubhandlers);
+
+        var finiteLinearMovingColorProviderFactory =
+                new FiniteLinearMovingColorProviderFactoryImpl(timestampValidator);
+        providerHandler.add(FiniteLinearMovingColorProviderImpl.class.getCanonicalName(),
+                new FiniteLinearMovingColorProviderHandler(finiteLinearMovingColorProviderFactory));
+
+        @SuppressWarnings("unchecked") var finiteLinearMovingProviderFactory =
+                new FiniteLinearMovingProviderFactoryImpl(mapOf(
+                        pairOf(
+                                FiniteLinearMovingFloatBoxProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
+                                        new FiniteLinearMovingFloatBoxProvider(uuid,
+                                                valuesAtTimestamps, pausedTimestamp, timeVal)
+                        ),
+                        pairOf(
+                                FiniteLinearMovingFloatProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
+                                        new FiniteLinearMovingFloatProvider(uuid,
+                                                valuesAtTimestamps, pausedTimestamp, timeVal)
+                        ),
+                        pairOf(
+                                FiniteLinearMovingVertexProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
+                                        new FiniteLinearMovingVertexProvider(uuid,
+                                                valuesAtTimestamps, pausedTimestamp, timeVal)
+                        )
+                ),
+                        timestampValidator
+                );
 
         var graphicsLoop = new GraphicsCoreLoopImpl(
                 initialTitlebar,

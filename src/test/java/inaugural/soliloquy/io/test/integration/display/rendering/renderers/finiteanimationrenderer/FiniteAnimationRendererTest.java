@@ -61,6 +61,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 FRAME_DURATION * NUMBER_OF_FRAMES, FRAMES);
 
         FiniteAnimationRenderer = new FiniteAnimationRenderer(RENDERING_BOUNDARIES,
+                windowResolutionManager::windowWidthToHeightRatio,
                 colorShiftStackAggregator == null ?
                         new FakeColorShiftStackAggregator() :
                         colorShiftStackAggregator,

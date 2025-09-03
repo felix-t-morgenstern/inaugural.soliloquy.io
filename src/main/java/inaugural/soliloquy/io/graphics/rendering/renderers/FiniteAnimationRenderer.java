@@ -1,62 +1,39 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
-import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
+import java.util.function.Supplier;
 
 public class FiniteAnimationRenderer
-        extends CanRenderSnippets<FiniteAnimationRenderable>
+        extends AbstractImageAssetRenderer<AnimationFrameSnippet, FiniteAnimationRenderable>
         implements Renderer<FiniteAnimationRenderable> {
-    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
-
     public FiniteAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                   ColorShiftStackAggregator colorShiftStackAggregator,
+                                   Supplier<Float> getScreenWToHRatio,
+                                   ColorShiftStackAggregator shiftAggregator,
                                    TimestampValidator timestampValidator) {
-        super(renderingBoundaries, timestampValidator);
-        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
-                "colorShiftStackAggregator");
+        super(renderingBoundaries, getScreenWToHRatio, shiftAggregator, timestampValidator);
     }
 
     @Override
-    public void render(FiniteAnimationRenderable finiteAnimationRenderable, long timestamp)
+    public void render(FiniteAnimationRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(finiteAnimationRenderable, "finiteAnimationRenderable");
+        checkRenderableAndTimestamp(renderable, timestamp);
 
-        var renderingArea = Check.ifNull(finiteAnimationRenderable.getRenderingDimensionsProvider(),
-                "finiteAnimationRenderable.getRenderingDimensionsProvider()").provide(timestamp);
-
-        validateRenderableWithDimensionsMembers(renderingArea,
-                finiteAnimationRenderable.colorShifts(),
-                finiteAnimationRenderable.uuid(), "finiteAnimationRenderable");
-
-        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-
-        if (timestamp < finiteAnimationRenderable.startTimestamp()) {
+        if (timestamp < renderable.startTimestamp()) {
             return;
         }
 
-        if (timestamp >= finiteAnimationRenderable.endTimestamp()) {
-            finiteAnimationRenderable.delete();
-            return;
+        super.render(renderable, ProviderAtTime::provide, timestamp, false);
+
+        if (timestamp >= renderable.endTimestamp()) {
+            renderable.delete();
         }
-
-        var netColorShifts = netColorShifts(
-                finiteAnimationRenderable.colorShifts(),
-                COLOR_SHIFT_STACK_AGGREGATOR,
-                timestamp);
-
-        var snippet = finiteAnimationRenderable.provide(timestamp);
-
-        super.render(
-                renderingArea,
-                snippet,
-                INTACT_COLOR,
-                netColorShifts
-        );
     }
 }

@@ -77,7 +77,8 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
                         staticNullProvider(), null, listOf(), listOf(),
                         LoopingLinearMovingLocationProvider);
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
+                windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

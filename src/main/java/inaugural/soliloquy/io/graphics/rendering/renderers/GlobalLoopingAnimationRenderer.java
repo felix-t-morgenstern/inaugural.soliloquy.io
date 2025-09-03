@@ -2,54 +2,37 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
-import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
+import java.util.function.Supplier;
 
 public class GlobalLoopingAnimationRenderer
-        extends CanRenderSnippets<GlobalLoopingAnimationRenderable> {
-    private final ColorShiftStackAggregator COLOR_SHIFT_STACK_AGGREGATOR;
-
-    public GlobalLoopingAnimationRenderer(RenderingBoundaries renderingBoundaries,
-                                          ColorShiftStackAggregator colorShiftStackAggregator,
-                                          TimestampValidator timestampValidator) {
-        super(renderingBoundaries, timestampValidator);
-        COLOR_SHIFT_STACK_AGGREGATOR = Check.ifNull(colorShiftStackAggregator,
-                "colorShiftStackAggregator");
+        extends
+        AbstractImageAssetRenderer<AnimationFrameSnippet, GlobalLoopingAnimationRenderable> {
+    public GlobalLoopingAnimationRenderer(
+            RenderingBoundaries renderingBoundaries,
+            Supplier<Float> getScreenWToHRatio,
+            ColorShiftStackAggregator shiftAggregator,
+            TimestampValidator timestampValidator
+    ) {
+        super(renderingBoundaries, getScreenWToHRatio, shiftAggregator, timestampValidator);
     }
 
     @Override
-    public void render(GlobalLoopingAnimationRenderable globalLoopingAnimationRenderable,
-                       long timestamp)
+    public void render(GlobalLoopingAnimationRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(globalLoopingAnimationRenderable, "globalLoopingAnimationRenderable");
+        checkRenderableAndTimestamp(renderable, timestamp);
 
-        var renderingArea =
-                Check.ifNull(globalLoopingAnimationRenderable.getRenderingDimensionsProvider(),
-                                "globalLoopingAnimationRenderable.getRenderingDimensionsProvider()")
-                        .provide(timestamp);
-
-        validateRenderableWithDimensionsMembers(renderingArea,
-                globalLoopingAnimationRenderable.colorShifts(),
-                globalLoopingAnimationRenderable.uuid(), "globalLoopingAnimationRenderable");
-
-        Check.ifNull(globalLoopingAnimationRenderable.getGlobalLoopingAnimation(),
-                "globalLoopingAnimationRenderable.getGlobalLoopingAnimation()");
-
-        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-
-        var netColorShifts = netColorShifts(
-                globalLoopingAnimationRenderable.colorShifts(),
-                COLOR_SHIFT_STACK_AGGREGATOR,
-                timestamp);
-
-        super.render(
-                renderingArea,
-                globalLoopingAnimationRenderable.getGlobalLoopingAnimation().provide(timestamp),
-                INTACT_COLOR,
-                netColorShifts
-        );
+        super.render(renderable, (r, t) -> {
+                    var animation = r.getGlobalLoopingAnimation();
+                    return Check.ifNull(animation,
+                                    "animation within GlobalLoopingAnimationRenderableImpl.render")
+                            .provide(t);
+                }, timestamp,
+                false);
     }
 }

@@ -9,11 +9,11 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
@@ -34,7 +34,7 @@ public class SpriteRendererTest extends DisplayTest {
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
-            WindowResolutionManager windowResolutionManager) {
+            Supplier<Float> getScreenWToHRatio) {
         Sprite = new FakeSprite(null, 266, 271, 313, 343);
 
         SpriteRenderingDimensions = floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f);
@@ -47,11 +47,11 @@ public class SpriteRendererTest extends DisplayTest {
         lenient().when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                windowResolutionManager,
+                getScreenWToHRatio,
                 colorShiftStackAggregator == null ?
                         mock(ColorShiftStackAggregator.class) :
                         colorShiftStackAggregator,
-                null);
+                TimestampValidator);
 
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 

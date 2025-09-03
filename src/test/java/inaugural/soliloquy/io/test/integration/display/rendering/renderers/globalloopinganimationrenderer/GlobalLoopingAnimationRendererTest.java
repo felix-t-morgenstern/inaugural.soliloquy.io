@@ -61,6 +61,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         GlobalLoopingAnimationRenderer =
                 new GlobalLoopingAnimationRenderer(
                         RENDERING_BOUNDARIES,
+                        windowResolutionManager::windowWidthToHeightRatio,
                         colorShiftStackAggregator == null ?
                                 new FakeColorShiftStackAggregator() :
                                 colorShiftStackAggregator,

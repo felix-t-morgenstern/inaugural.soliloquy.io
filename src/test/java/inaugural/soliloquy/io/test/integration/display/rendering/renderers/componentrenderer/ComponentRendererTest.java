@@ -59,7 +59,8 @@ public class ComponentRendererTest extends DisplayTest {
 
         Renderers = mapOf();
         TimestampValidator = new TimestampValidator(null);
-        var componentRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
+        var componentRenderer =
+                new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
 
         var spriteAxe07Width = 512;
         var spriteAxe07Height = 512;
@@ -126,9 +127,9 @@ public class ComponentRendererTest extends DisplayTest {
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
-        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES, windowResolutionManager,
-                new FakeColorShiftStackAggregator(),
-                null);
+        var spriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
+                windowResolutionManager::windowWidthToHeightRatio,
+                new FakeColorShiftStackAggregator(), null);
         //noinspection rawtypes
         Set<Renderer> renderersWithMesh = setOf(spriteRenderer);
         //noinspection rawtypes

@@ -17,9 +17,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  */
 class LoopingLinearMovingFloatProviderSimpleTest extends LoopingLinearMovingFloatProviderTest {
     public static void main(String[] args) {
-        runTest(windowResolutionManager ->
-                        generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
-                                BORDER_COLOR, null, windowResolutionManager),
+        runTest(windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
+                        BORDER_THICKNESS, BORDER_COLOR, null,
+                        windowResolutionManager::windowWidthToHeightRatio),
                 LoopingLinearMovingFloatProviderTest::graphicsPreloaderLoadAction,
                 LoopingLinearMovingFloatProviderSimpleTest::closeAfterSomeTime);
     }

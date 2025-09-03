@@ -29,7 +29,7 @@ public class SpriteRendererColorRotationShiftTest extends SpriteRendererTest {
                         0f,
                         INTACT_COLOR,
                         colorShiftStackAggregator,
-                        windowResolutionManager),
+                        windowResolutionManager::windowWidthToHeightRatio),
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

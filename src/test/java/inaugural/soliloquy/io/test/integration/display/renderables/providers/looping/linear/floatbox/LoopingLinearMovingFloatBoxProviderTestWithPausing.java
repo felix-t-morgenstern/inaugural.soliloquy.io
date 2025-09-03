@@ -22,9 +22,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 class LoopingLinearMovingFloatBoxProviderTestWithPausing
         extends LoopingLinearMovingFloatBoxProviderTest {
     public static void main(String[] args) {
-        runTest(windowResolutionManager ->
-                        generateRenderablesAndRenderersWithMeshAndShader(0f,
-                                Color.WHITE, null, windowResolutionManager),
+        runTest(windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(0f,
+                        Color.WHITE, null, windowResolutionManager::windowWidthToHeightRatio),
                 LoopingLinearMovingFloatBoxProviderTest::graphicsPreloaderLoadAction,
                 LoopingLinearMovingFloatBoxProviderTestWithPausing::closeAfterSomeTime);
     }

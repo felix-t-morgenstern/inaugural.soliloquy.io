@@ -22,9 +22,9 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
  */
 class LoopingMovingColorProviderImplResetTest extends LoopingMovingColorProviderImplTest {
     public static void main(String[] args) {
-        runTest(windowResolutionManager ->
-                        generateRenderablesAndRenderersWithMeshAndShader(BORDER_THICKNESS,
-                                Color.WHITE, null, windowResolutionManager),
+        runTest(windowResolutionManager -> generateRenderablesAndRenderersWithMeshAndShader(
+                        BORDER_THICKNESS, Color.WHITE, null,
+                        windowResolutionManager::windowWidthToHeightRatio),
                 LoopingMovingColorProviderImplTest::graphicsPreloaderLoadAction,
                 LoopingMovingColorProviderImplResetTest::closeAfterSomeTime);
     }

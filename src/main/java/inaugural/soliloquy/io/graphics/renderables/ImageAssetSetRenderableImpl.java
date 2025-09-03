@@ -26,6 +26,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     private final Map<String, String> DISPLAY_PARAMS;
 
     private ImageAssetSet imageAssetSet;
+    private long animationStart;
 
     public ImageAssetSetRenderableImpl(ImageAssetSet imageAssetSet,
                                        Map<String, String> displayParams,
@@ -82,6 +83,16 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                     "ImageAssetSetRenderable which does support mouse events");
         }
         this.imageAssetSet = imageAssetSet;
+    }
+
+    @Override
+    public long getAnimationStart() {
+        return animationStart;
+    }
+
+    @Override
+    public void setAnimationStart(long animationStart) {
+        this.animationStart = animationStart;
     }
 
     @Override

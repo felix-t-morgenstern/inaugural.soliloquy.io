@@ -20,7 +20,7 @@ class SpriteRendererSimpleTest extends SpriteRendererTest {
                                 0f,
                                 INTACT_COLOR,
                                 null,
-                                windowResolutionManager),
+                                windowResolutionManager::windowWidthToHeightRatio),
                 SpriteRendererTest::graphicsPreloaderLoadAction,
                 DisplayTest::closeAfterSomeTime);
     }

@@ -13,15 +13,10 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 public class FakeAnimation implements Animation {
     public String Id;
     public int MsDuration;
-    public boolean SnippetAtFrameCalled = false;
     public boolean SupportsMouseEventCapturing;
     public FakeAnimationFrameSnippet AnimationFrameSnippet;
     public Map<Integer, AnimationFrameSnippet> AnimationFrameSnippets;
     public List<Pair<Integer, AnimationFrameSnippet>> SnippetsProvided = listOf();
-
-    public FakeAnimation(String id) {
-        Id = id;
-    }
 
     public FakeAnimation(String id, Map<Integer, AnimationFrameSnippet> snippets) {
         Id = id;
@@ -29,11 +24,6 @@ public class FakeAnimation implements Animation {
     }
 
     public FakeAnimation(int msDuration) {
-        MsDuration = msDuration;
-    }
-
-    public FakeAnimation(String id, int msDuration) {
-        Id = id;
         MsDuration = msDuration;
     }
 
@@ -59,7 +49,6 @@ public class FakeAnimation implements Animation {
             return AnimationFrameSnippets.get(i);
         }
 
-        SnippetAtFrameCalled = true;
         AnimationFrameSnippet snippetProvided = AnimationFrameSnippet != null ?
                 AnimationFrameSnippet :
                 new FakeAnimationFrameSnippet();

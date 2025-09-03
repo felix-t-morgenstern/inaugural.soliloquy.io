@@ -95,8 +95,8 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         when(TextLineRenderableCenter.getJustification()).thenReturn(TextJustification.CENTER);
         when(TextLineRenderableRight.getJustification()).thenReturn(TextJustification.RIGHT);
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES,
-                INTACT_COLOR, windowResolutionManager, null);
+        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, INTACT_COLOR,
+                windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contents()).thenReturn(
                 setOf(TextLineRenderableLeft, TextLineRenderableCenter, TextLineRenderableRight));

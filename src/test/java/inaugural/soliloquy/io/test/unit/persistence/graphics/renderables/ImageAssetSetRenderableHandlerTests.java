@@ -13,6 +13,7 @@ import soliloquy.specs.io.graphics.renderables.factories.ImageAssetSetRenderable
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
@@ -25,6 +26,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 @ExtendWith(MockitoExtension.class)
 public class ImageAssetSetRenderableHandlerTests
         extends AbstractImageAssetRenderableHandlerTests<ImageAssetSet> {
+    private final long ANIMATION_START = randomLong();
     private final String DISPLAY_PARAM_KEY = randomString();
     private final String DISPLAY_PARAM_VAL = randomString();
 
@@ -40,16 +42,16 @@ public class ImageAssetSetRenderableHandlerTests
         super.setUp(ImageAssetSet.class);
 
         writtenValue = String.format(
-                "{\"displayParams\":[{\"key\":\"%s\",\"val\":\"%s\"}],\"assetId\":\"%s\"," +
-                        "\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
+                "{\"displayParams\":[{\"key\":\"%s\",\"val\":\"%s\"}],\"animationStart\":%d," +
+                        "\"assetId\":\"%s\",\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
                         "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"onPress\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
                         "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
-                DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR,
-                COLOR_SHIFT, AREA, ON_PRESS_BUTTON, ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON,
-                ON_RELEASE_ACTION_ID, ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, Z, UUID,
-                mockRenderable.getClass().getCanonicalName());
+                DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL, ANIMATION_START, ASSET_ID, BORDER_THICKNESS,
+                BORDER_COLOR, COLOR_SHIFT, AREA, ON_PRESS_BUTTON, ON_PRESS_ACTION_ID,
+                ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID, ON_MOUSE_OVER_ACTION_ID,
+                ON_MOUSE_LEAVE_ACTION_ID, Z, UUID, mockRenderable.getClass().getCanonicalName());
 
         handler = new ImageAssetSetRenderableHandler(mockGetAsset, MOCK_GET_ACTION,
                 mockProviderHandler, mockShiftHandler, mockFactory);
@@ -80,6 +82,7 @@ public class ImageAssetSetRenderableHandlerTests
         when(mockRenderable.getImageAssetSet()).thenReturn(mockAsset);
         var mockDisplayParams = generateMockMap(pairOf(DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL));
         when(mockRenderable.displayParams()).thenReturn(mockDisplayParams);
+        when(mockRenderable.getAnimationStart()).thenReturn(ANIMATION_START);
 
         var output = handler.write(mockRenderable);
 
@@ -132,6 +135,7 @@ public class ImageAssetSetRenderableHandlerTests
                 eq(UUID),
                 isNull()
         );
+        verify(mockRenderable, once()).setAnimationStart(ANIMATION_START);
     }
 
     @Test

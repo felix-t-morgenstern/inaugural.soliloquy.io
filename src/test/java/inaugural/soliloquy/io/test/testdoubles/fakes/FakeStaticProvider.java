@@ -11,15 +11,9 @@ public class FakeStaticProvider<T> implements StaticProvider<T> {
     public T ProvidedValue;
     public UUID Uuid;
     public List<Long> TimestampInputs = listOf();
-    public Long MostRecentTimestamp;
 
     public FakeStaticProvider(T providedValue) {
         ProvidedValue = providedValue;
-    }
-
-    public FakeStaticProvider(T providedValue, UUID uuid) {
-        ProvidedValue = providedValue;
-        Uuid = uuid;
     }
 
     // TODO: Ensure in unit tests that Renderers are providing timestamps

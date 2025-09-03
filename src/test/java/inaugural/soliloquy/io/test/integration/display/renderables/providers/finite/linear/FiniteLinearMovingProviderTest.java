@@ -30,7 +30,7 @@ public class FiniteLinearMovingProviderTest extends SpriteRendererTest {
                 TimestampValidator);
 
         SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
-                windowResolutionManager,
+                windowResolutionManager::windowWidthToHeightRatio,
                 colorShiftStackAggregator == null ?
                         new FakeColorShiftStackAggregator() :
                         colorShiftStackAggregator,

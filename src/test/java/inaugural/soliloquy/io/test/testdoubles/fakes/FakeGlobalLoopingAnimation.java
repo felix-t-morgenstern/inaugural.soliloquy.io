@@ -7,9 +7,7 @@ import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import java.util.UUID;
 
 public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
-    public String Id;
     public Animation Animation;
-    public long StartTimestamp;
     public boolean SupportsMouseEvents;
 
     public FakeGlobalLoopingAnimation(boolean supportsMouseEvents) {
@@ -18,7 +16,7 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
 
     @Override
     public AnimationFrameSnippet provide(long l) throws IllegalArgumentException {
-        return Animation.snippetAtFrame((int) (l - StartTimestamp) % Animation.msDuration());
+        return Animation.snippetAtFrame((int) (l) % Animation.msDuration());
     }
 
     @Override
@@ -63,7 +61,7 @@ public class FakeGlobalLoopingAnimation implements GlobalLoopingAnimation {
 
     @Override
     public String id() throws IllegalStateException {
-        return Id;
+        return null;
     }
 
     @Override

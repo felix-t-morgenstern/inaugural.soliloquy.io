@@ -9,13 +9,13 @@ import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -25,9 +25,10 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
     private final Color DEFAULT_COLOR;
 
     public TextLineRenderer(RenderingBoundaries renderingBoundaries,
-                            Color defaultColor, WindowResolutionManager windowResolutionManager,
+                            Color defaultColor,
+                            Supplier<Float> getScreenWToHRatio,
                             TimestampValidator timestampValidator) {
-        super(renderingBoundaries, windowResolutionManager, timestampValidator);
+        super(renderingBoundaries, getScreenWToHRatio, timestampValidator);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
 
@@ -98,7 +99,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
                                   Vertex dropShadowOffset, Color dropShadowColor) {
         if (dropShadowSize != null) {
-            float xOffset = dropShadowOffset.X / getScreenWidthToHeightRatio.get();
+            float xOffset = dropShadowOffset.X / getScreenWToHRatio.get();
             float yOffset = dropShadowOffset.Y;
             float sizeAdjustment = dropShadowSize / lineHeight;
 
@@ -127,7 +128,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
 
         if (borderThickness != null) {
             float yThickness = borderThickness;
-            float xThickness = yThickness / getScreenWidthToHeightRatio.get();
+            float xThickness = yThickness / getScreenWToHRatio.get();
 
             iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {

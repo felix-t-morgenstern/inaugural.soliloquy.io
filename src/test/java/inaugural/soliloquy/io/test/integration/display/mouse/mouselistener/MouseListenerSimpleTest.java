@@ -28,7 +28,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                         0f,
                         INTACT_COLOR,
                         null,
-                        windowResolutionManager),
+                        windowResolutionManager::windowWidthToHeightRatio),
                 MouseListenerSimpleTest::graphicsPreloaderLoadAction,
                 graphicsCoreLoop -> DisplayTest.closeAfterSomeTime(graphicsCoreLoop, 24000));
     }
