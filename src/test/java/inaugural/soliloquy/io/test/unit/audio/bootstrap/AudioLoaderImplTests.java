@@ -1,6 +1,6 @@
-package inaugural.soliloquy.io.test.unit.audio.infrastructure;
+package inaugural.soliloquy.io.test.unit.audio.bootstrap;
 
-import inaugural.soliloquy.io.audio.infrastructure.AudioLoaderImpl;
+import inaugural.soliloquy.io.audio.bootstrap.AudioLoaderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

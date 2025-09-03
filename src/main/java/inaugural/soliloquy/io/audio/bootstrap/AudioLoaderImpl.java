@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.audio.infrastructure;
+package inaugural.soliloquy.io.audio.bootstrap;
 
 import inaugural.soliloquy.tools.Check;
 import org.apache.commons.io.FilenameUtils;
