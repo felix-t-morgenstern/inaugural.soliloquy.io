@@ -2,76 +2,59 @@ package com.conversantmedia.util.collection.spatial;
 
 import com.conversantmedia.util.collection.geometry.Point2d;
 import com.conversantmedia.util.collection.geometry.Rect2d;
-import soliloquy.specs.common.valueobjects.FloatBox;
+import inaugural.soliloquy.tools.collections.Collections;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class RTreeFacade {
-    private final RTree<RenderableWithMouseEventsSearchObject> R_TREE;
-    private final Map<RenderableWithMouseEvents, RenderableWithMouseEventsSearchObject> ITEMS;
+    private final Set<RenderableWithMouseEvents> ITEMS;
     /** @noinspection FieldCanBeLocal */
     private final float TOLERANCE = 0.001f;
 
     public RTreeFacade() {
-        R_TREE = new RTree<>(new RenderableWithMouseEventsSearchObjectRectBuilder(), 2, 8,
-                RTree.Split.AXIAL);
-        ITEMS = mapOf();
+        ITEMS = setOf();
     }
 
-    public void put(RenderableWithMouseEvents renderableWithMouseEvents,
-                    FloatBox renderingDimensions) {
-        if (ITEMS.containsKey(renderableWithMouseEvents)) {
-            remove(renderableWithMouseEvents);
-        }
-
-        RenderableWithMouseEventsSearchObject searchObject =
-                new RenderableWithMouseEventsSearchObject(
-                        renderableWithMouseEvents,
-                        renderingDimensions
-                );
-        ITEMS.put(renderableWithMouseEvents, searchObject);
-        R_TREE.add(searchObject);
+    public void put(RenderableWithMouseEvents renderable) {
+        ITEMS.add(renderable);
     }
 
-    public List<RenderableWithMouseEventsSearchObject> search(float x, float y) {
-        List<RenderableWithMouseEventsSearchObject> results = listOf();
+    public List<RenderableWithMouseEvents> search(float x, float y, long timestamp) {
+        var rTree = new RTree<>(new RTreeFacadeRectBuilder(), 2, 8, RTree.Split.AXIAL);
+        ITEMS.stream()
+                .filter(RenderableWithMouseEvents::getCapturesMouseEvents)
+                .forEach(item -> rTree.add(pairOf(item, timestamp)));
+        var results = Collections.<RenderableWithMouseEvents>listOf();
         var searchRect = new Rect2d(x - TOLERANCE, y - TOLERANCE, x + TOLERANCE, y + TOLERANCE);
-        R_TREE.intersects(searchRect, results::add);
+        rTree.intersects(
+                searchRect,
+                renderableAndTimestamp -> results.add(renderableAndTimestamp.FIRST)
+        );
         return results;
     }
 
     public void remove(RenderableWithMouseEvents renderable) {
-        R_TREE.remove(ITEMS.get(renderable));
         ITEMS.remove(renderable);
     }
 
-    public static class RenderableWithMouseEventsSearchObject {
-        public RenderableWithMouseEvents renderable;
-        public FloatBox renderingDimensions;
-
-        private RenderableWithMouseEventsSearchObject(RenderableWithMouseEvents renderable,
-                                                      FloatBox renderingDimensions) {
-            this.renderable = renderable;
-            this.renderingDimensions = renderingDimensions;
-        }
-    }
-
-    private static class RenderableWithMouseEventsSearchObjectRectBuilder
-            implements RectBuilder<RenderableWithMouseEventsSearchObject> {
+    private static class RTreeFacadeRectBuilder
+            implements RectBuilder<Pair<RenderableWithMouseEvents, Long>> {
 
         @Override
-        public Rect2d getBBox(RenderableWithMouseEventsSearchObject
-                                      renderableWithMouseEventsSearchObject) {
+        public Rect2d getBBox(Pair<RenderableWithMouseEvents, Long> renderableAndTimestamp) {
+            var dimens = renderableAndTimestamp.FIRST.getRenderingDimensionsProvider()
+                    .provide(renderableAndTimestamp.SECOND);
             return new Rect2d(
-                    renderableWithMouseEventsSearchObject.renderingDimensions.LEFT_X,
-                    renderableWithMouseEventsSearchObject.renderingDimensions.TOP_Y,
-                    renderableWithMouseEventsSearchObject.renderingDimensions.RIGHT_X,
-                    renderableWithMouseEventsSearchObject.renderingDimensions.BOTTOM_Y
+                    dimens.LEFT_X,
+                    dimens.TOP_Y,
+                    dimens.RIGHT_X,
+                    dimens.BOTTOM_Y
             );
         }
 

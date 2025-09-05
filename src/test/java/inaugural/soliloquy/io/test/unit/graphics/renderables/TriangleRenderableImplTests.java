@@ -1,9 +1,8 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
+import com.google.common.primitives.Floats;
 import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,27 +24,28 @@ import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 import static soliloquy.specs.ui.EventInputs.inputs;
 
 @ExtendWith(MockitoExtension.class)
 public class TriangleRenderableImplTests {
-    private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeProviderAtTime<>();
     private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
-    private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> VERTEX_3_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
 
+    @Mock private ProviderAtTime<Integer> mockBackgroundTextureIdProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
+    @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
+    @Mock private ProviderAtTime<Vertex> mockVertex3Provider;
+    @Mock private ProviderAtTime<Color> mockVertex1ColorProvider;
+    @Mock private ProviderAtTime<Color> mockVertex2ColorProvider;
+    @Mock private ProviderAtTime<Color> mockVertex3ColorProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
@@ -63,10 +63,10 @@ public class TriangleRenderableImplTests {
         lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         renderable = new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
@@ -74,10 +74,10 @@ public class TriangleRenderableImplTests {
         renderable.setCapturesMouseEvents(true);
 
         renderableNotSupportingMouseEvents = new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
@@ -88,109 +88,109 @@ public class TriangleRenderableImplTests {
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                null, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                null, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, null,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, null,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                null, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                null, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, null,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, null,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                null, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                null, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, null,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, null,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
                 null,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 null, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, null,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, null, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, null, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER,
+                mockVertex1Provider, mockVertex1ColorProvider,
+                mockVertex2Provider, mockVertex2ColorProvider,
+                mockVertex3Provider, mockVertex3ColorProvider,
+                mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, null
@@ -199,9 +199,9 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testSetAndGetVertexProviders() {
-        var provider1 = new FakeStaticProvider<>(vertexOf(0f, 0f));
-        var provider2 = new FakeStaticProvider<>(vertexOf(0f, 0f));
-        var provider3 = new FakeStaticProvider<>(vertexOf(0f, 0f));
+        var provider1 = generateMockStaticProvider(vertexOf(0f, 0f));
+        var provider2 = generateMockStaticProvider(vertexOf(0f, 0f));
+        var provider3 = generateMockStaticProvider(vertexOf(0f, 0f));
 
         renderable.setVertex1Provider(provider1);
         renderable.setVertex2Provider(provider2);
@@ -214,9 +214,9 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testSetAndGetVertexColorProviders() {
-        var provider1 = new FakeStaticProvider<>(Color.BLACK);
-        var provider2 = new FakeStaticProvider<>(Color.BLACK);
-        var provider3 = new FakeStaticProvider<>(Color.BLACK);
+        var provider1 = generateMockStaticProvider(Color.BLACK);
+        var provider2 = generateMockStaticProvider(Color.BLACK);
+        var provider3 = generateMockStaticProvider(Color.BLACK);
 
         renderable.setVertex1ColorProvider(provider1);
         renderable.setVertex2ColorProvider(provider2);
@@ -229,10 +229,11 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testSetAndGetBackgroundTextureIdProvider() {
-        assertSame(BACKGROUND_TEXTURE_ID_PROVIDER,
+        assertSame(mockBackgroundTextureIdProvider,
                 renderable.getTextureIdProvider());
 
-        FakeProviderAtTime<Integer> newProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked")
+        var newProvider = (ProviderAtTime<Integer>) mock(ProviderAtTime.class);
 
         renderable.setTextureIdProvider(newProvider);
 
@@ -485,13 +486,13 @@ public class TriangleRenderableImplTests {
     @Test
     public void testCapturesMouseEventsAtPoint() {
         renderable.setVertex1Provider(
-                new FakeStaticProvider<>(vertexOf(0.5f, 0f))
+                generateMockStaticProvider(vertexOf(0.5f, 0f))
         );
         renderable.setVertex2Provider(
-                new FakeStaticProvider<>(vertexOf(0f, .5f))
+                generateMockStaticProvider(vertexOf(0f, .5f))
         );
         renderable.setVertex3Provider(
-                new FakeStaticProvider<>(vertexOf(1f, .5f))
+                generateMockStaticProvider(vertexOf(1f, .5f))
         );
 
         assertFalse(renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP));
@@ -504,6 +505,27 @@ public class TriangleRenderableImplTests {
         assertTrue(renderable.capturesMouseEventAtPoint(vertexOf(0.74f, 0.25f), TIMESTAMP));
         assertFalse(
                 renderable.capturesMouseEventAtPoint(vertexOf(0.76f, 0.25f), TIMESTAMP));
+    }
+
+    @Test
+    public void testGetRenderingBoundariesProvider() {
+        var vertex1 = randomVertex();
+        when(mockVertex1Provider.provide(anyLong())).thenReturn(vertex1);
+        var vertex2 = randomVertex();
+        when(mockVertex2Provider.provide(anyLong())).thenReturn(vertex2);
+        var vertex3 = randomVertex();
+        when(mockVertex3Provider.provide(anyLong())).thenReturn(vertex3);
+        var leftX = Floats.min(vertex1.X, vertex2.X, vertex3.X);
+        var topY = Floats.min(vertex1.Y, vertex2.Y, vertex3.Y);
+        var rightX = Floats.max(vertex1.X, vertex2.X, vertex3.X);
+        var bottomY = Floats.max(vertex1.Y, vertex2.Y, vertex3.Y);
+        var expected = floatBoxOf(leftX, topY, rightX, bottomY);
+
+        var provider = renderable.getRenderingDimensionsProvider();
+        var provided = provider.provide(randomLong());
+
+        assertNotNull(provided);
+        assertEquals(expected, provided);
     }
 
     @Test

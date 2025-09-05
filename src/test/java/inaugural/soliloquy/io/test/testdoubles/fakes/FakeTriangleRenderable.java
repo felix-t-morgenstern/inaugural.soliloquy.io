@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
@@ -246,6 +247,11 @@ public class FakeTriangleRenderable implements TriangleRenderable {
 
     @Override
     public UUID uuid() {
+        return null;
+    }
+
+    @Override
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
         return null;
     }
 }

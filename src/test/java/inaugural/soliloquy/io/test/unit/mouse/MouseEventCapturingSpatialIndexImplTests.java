@@ -14,6 +14,7 @@ import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -54,6 +55,16 @@ public class MouseEventCapturingSpatialIndexImplTests {
         lenient().when(mockDimensionsProvider2.provide(anyLong())).thenReturn(DIMENSIONS_2);
         lenient().when(mockDimensionsProvider3.provide(anyLong())).thenReturn(DIMENSIONS_3);
         lenient().when(mockDimensionsProvider4.provide(anyLong())).thenReturn(DIMENSIONS_4);
+
+        lenient().when(mockRenderable1.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider1);
+        lenient().when(mockRenderable2.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider2);
+        lenient().when(mockRenderable3.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider3);
+        lenient().when(mockRenderable4.getRenderingDimensionsProvider())
+                .thenReturn(mockDimensionsProvider4);
+
         lenient().when(mockRenderable1.getRenderingDimensionsProvider())
                 .thenReturn(mockDimensionsProvider1);
         lenient().when(mockRenderable2.getRenderingDimensionsProvider())
@@ -90,7 +101,7 @@ public class MouseEventCapturingSpatialIndexImplTests {
     public void testPutRenderableAndGetCapturingRenderableAtPoint() {
         assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
 
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
+        capturing.putRenderable(mockRenderable1);
 
         assertSame(mockRenderable1,
                 capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
@@ -109,13 +120,7 @@ public class MouseEventCapturingSpatialIndexImplTests {
 
     @Test
     public void testPutRenderableWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class,
-                () -> capturing.putRenderable(null, DIMENSIONS_1));
-        assertThrows(IllegalArgumentException.class,
-                () -> capturing.putRenderable(mockRenderable1, null));
-        when(mockRenderable1.getCapturesMouseEvents()).thenReturn(false);
-        assertThrows(IllegalArgumentException.class,
-                () -> capturing.putRenderable(mockRenderable1, DIMENSIONS_1));
+        assertThrows(IllegalArgumentException.class, () -> capturing.putRenderable(null));
     }
 
     @Test
@@ -128,7 +133,7 @@ public class MouseEventCapturingSpatialIndexImplTests {
     public void testRemoveRenderable() {
         assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
 
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
+        capturing.putRenderable(mockRenderable1);
 
         assertSame(mockRenderable1,
                 capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
@@ -139,26 +144,11 @@ public class MouseEventCapturingSpatialIndexImplTests {
     }
 
     @Test
-    public void testUpdateRenderable() {
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
-
-        assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
-        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
-
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_2);
-
-        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
-        assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.6f, .6f), 0L));
-    }
-
-    @Test
     public void testGetCapturingRenderableAtPointWithHighestZIndex() {
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
-        capturing.putRenderable(mockRenderable2, DIMENSIONS_2);
-        capturing.putRenderable(mockRenderable3, DIMENSIONS_3);
-        capturing.putRenderable(mockRenderable4, DIMENSIONS_4);
+        capturing.putRenderable(mockRenderable1);
+        capturing.putRenderable(mockRenderable2);
+        capturing.putRenderable(mockRenderable3);
+        capturing.putRenderable(mockRenderable4);
 
         assertSame(mockRenderable1,
                 capturing.getCapturingRenderableAtPoint(vertexOf(.45f, .45f), 0L));
@@ -169,10 +159,10 @@ public class MouseEventCapturingSpatialIndexImplTests {
         when(mockRenderable1.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
         when(mockRenderable2.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
 
-        capturing.putRenderable(mockRenderable1, DIMENSIONS_1);
-        capturing.putRenderable(mockRenderable2, DIMENSIONS_2);
-        capturing.putRenderable(mockRenderable3, DIMENSIONS_3);
-        capturing.putRenderable(mockRenderable4, DIMENSIONS_4);
+        capturing.putRenderable(mockRenderable1);
+        capturing.putRenderable(mockRenderable2);
+        capturing.putRenderable(mockRenderable3);
+        capturing.putRenderable(mockRenderable4);
 
         assertSame(mockRenderable3, capturing
                 .getCapturingRenderableAtPoint(vertexOf(.454f, .456f), 789L));

@@ -42,9 +42,9 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         SpriteRenderable.setOnPress(LEFT_MOUSE_BUTTON, messageAction("LEFT MOUSE BUTTON PRESS"));
         SpriteRenderable.setOnRelease(LEFT_MOUSE_BUTTON,
                 messageAction("LEFT MOUSE BUTTON RELEASE"));
+        SpriteRenderable.setRenderingDimensionsProvider(staticProvider(SpriteRenderingDimensions));
 
-        MouseEventCapturingSpatialIndex.putRenderable(SpriteRenderable,
-                SpriteRenderingDimensions);
+        MouseEventCapturingSpatialIndex.putRenderable(SpriteRenderable);
     }
 
     private static Action<EventInputs> messageAction(String message) {

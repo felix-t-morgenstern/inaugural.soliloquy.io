@@ -1,8 +1,10 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
+import com.google.common.primitives.Floats;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
@@ -12,6 +14,9 @@ import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.UUID;
+
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class TriangleRenderableImpl
         extends AbstractPolygonRenderable
@@ -137,15 +142,15 @@ public class TriangleRenderableImpl
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Vertex v1 = vertex1Provider.provide(timestamp);
-        Vertex v2 = vertex2Provider.provide(timestamp);
-        Vertex v3 = vertex3Provider.provide(timestamp);
+        var v1 = vertex1Provider.provide(timestamp);
+        var v2 = vertex2Provider.provide(timestamp);
+        var v3 = vertex3Provider.provide(timestamp);
 
-        float renderableArea = area(v1, v2, v3);
+        var renderableArea = area(v1, v2, v3);
 
-        float area1 = area(point, v1, v2);
-        float area2 = area(point, v2, v3);
-        float area3 = area(point, v3, v1);
+        var area1 = area(point, v1, v2);
+        var area2 = area(point, v2, v3);
+        var area3 = area(point, v3, v1);
 
         return renderableArea == (area1 + area2 + area3);
     }
@@ -154,4 +159,52 @@ public class TriangleRenderableImpl
         return Math.abs(
                 ((v1.X * (v2.Y - v3.Y)) + (v2.X * (v3.Y - v1.Y)) + (v3.X * (v1.Y - v2.Y))) / 2.0f);
     }
+
+    @Override
+    public ProviderAtTime<FloatBox> getRenderingDimensionsProvider() {
+        return DIMENS_PROVIDER;
+    }
+
+    private final ProviderAtTime<FloatBox> DIMENS_PROVIDER = new ProviderAtTime<>() {
+        @Override
+        public FloatBox provide(long timestamp) throws IllegalArgumentException {
+            var vertex1 = getVertex1Provider().provide(timestamp);
+            var vertex2 = getVertex2Provider().provide(timestamp);
+            var vertex3 = getVertex3Provider().provide(timestamp);
+
+            var leftX = Floats.min(vertex1.X, vertex2.X, vertex3.X);
+            var topY = Floats.min(vertex1.Y, vertex2.Y, vertex3.Y);
+            var rightX = Floats.max(vertex1.X, vertex2.X, vertex3.X);
+            var bottomY = Floats.max(vertex1.Y, vertex2.Y, vertex3.Y);
+
+            return floatBoxOf(leftX, topY, rightX, bottomY);
+        }
+
+        @Override
+        public Object representation() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public UUID uuid() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void reportPause(long l)
+                throws IllegalArgumentException, UnsupportedOperationException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void reportUnpause(long l)
+                throws IllegalArgumentException, UnsupportedOperationException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Long pausedTimestamp() {
+            throw new UnsupportedOperationException();
+        }
+    };
 }

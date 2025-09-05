@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -33,19 +32,15 @@ public class ComponentFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-        factory = new ComponentFactoryImpl(mockRenderingBoundaries, mockAddToCapturing,
-                mockRemoveFromCapturing);
+        factory = new ComponentFactoryImpl(mockAddToCapturing, mockRemoveFromCapturing);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(null, mockAddToCapturing, mockRemoveFromCapturing));
+                () -> new ComponentFactoryImpl(null, mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockRenderingBoundaries, null,
-                        mockRemoveFromCapturing));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockRenderingBoundaries, mockAddToCapturing, null));
+                () -> new ComponentFactoryImpl(mockAddToCapturing, null));
     }
 
     @Test
@@ -56,7 +51,7 @@ public class ComponentFactoryImplTests {
         when(mockComponent.tier()).thenReturn(tier);
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
-        var output = factory.make(uuid, z, mockComponent);
+        var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.component()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);
@@ -77,8 +72,10 @@ public class ComponentFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, randomInt(), mockComponent));
+                () -> factory.make(null, randomInt(), mockRenderingBoundaries, mockComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), null));
+                () -> factory.make(randomUUID(), randomInt(), null, mockComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(randomUUID(), randomInt(), mockRenderingBoundaries, null));
     }
 }

@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.mouse;
 
 import com.conversantmedia.util.collection.spatial.RTreeFacade;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
@@ -22,33 +21,28 @@ public class MouseEventCapturingSpatialIndexImpl
     @Override
     public RenderableWithMouseEvents getCapturingRenderableAtPoint(Vertex point, long timestamp)
             throws IllegalArgumentException {
-        var roughResults = R_TREE.search(point.X, point.Y);
+        var roughResults = R_TREE.search(point.X, point.Y, timestamp);
         var capturingResults = roughResults.stream()
-                .filter(result -> result.renderingDimensions.LEFT_X <= point.X &&
-                        result.renderingDimensions.TOP_Y <= point.Y &&
-                        result.renderingDimensions.RIGHT_X >= point.X &&
-                        result.renderingDimensions.BOTTOM_Y >= point.Y &&
-                        result.renderable.capturesMouseEventAtPoint(point,
-                                timestamp))
-                .map(result -> result.renderable);
-        var sortedByZ = capturingResults.sorted(Comparator.comparingInt(Renderable::getZ).reversed());
+                .filter(result -> {
+                    var dimens = result.getRenderingDimensionsProvider().provide(timestamp);
+                    return dimens.LEFT_X <= point.X &&
+                            dimens.TOP_Y <= point.Y &&
+                            dimens.RIGHT_X >= point.X &&
+                            dimens.BOTTOM_Y >= point.Y &&
+                            result.capturesMouseEventAtPoint(point, timestamp);
+                });
+        var sortedByZ =
+                capturingResults.sorted(Comparator.comparingInt(Renderable::getZ).reversed());
         var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.component().tier()));
 
         return sortedByTierAndZ.findFirst().orElse(null);
     }
 
     @Override
-    public void putRenderable(RenderableWithMouseEvents renderableWithMouseEvents,
-                              FloatBox renderingDimensions)
+    public void putRenderable(RenderableWithMouseEvents renderable)
             throws IllegalArgumentException {
-        Check.ifNull(renderableWithMouseEvents, "renderableWithMouseEvents");
-        Check.ifNull(renderingDimensions, "renderingDimensions");
-        if (!renderableWithMouseEvents.getCapturesMouseEvents()) {
-            throw new IllegalArgumentException(
-                    "MouseEventCapturingSpatialIndexImpl.putRenderable: renderable must capture " +
-                            "mouse events");
-        }
-        R_TREE.put(renderableWithMouseEvents, renderingDimensions);
+        Check.ifNull(renderable, "renderable");
+        R_TREE.put(renderable);
     }
 
     @Override

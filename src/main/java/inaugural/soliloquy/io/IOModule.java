@@ -283,6 +283,8 @@ public class IOModule implements Module {
 
         var antialiasedLineSegmentRenderableFactory =
                 andRegister(new AntialiasedLineSegmentRenderableFactoryImpl());
+        andRegister(new ComponentFactoryImpl(mouseCapturing::putRenderable,
+                mouseCapturing::removeRenderable));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));
         var globalLoopingAnimationRenderableFactory = andRegister(

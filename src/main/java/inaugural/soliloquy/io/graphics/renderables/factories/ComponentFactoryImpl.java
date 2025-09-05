@@ -15,15 +15,11 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static soliloquy.specs.io.input.keyboard.entities.KeyBindingContext.bindingContext;
 
 public class ComponentFactoryImpl implements ComponentFactory {
-    private final ProviderAtTime<FloatBox> RENDERING_BOUNDARIES_PROVIDER;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
 
-    public ComponentFactoryImpl(ProviderAtTime<FloatBox> renderingBoundariesProvider,
-                                Consumer<RenderableWithMouseEvents> addToCapturing,
+    public ComponentFactoryImpl(Consumer<RenderableWithMouseEvents> addToCapturing,
                                 Consumer<RenderableWithMouseEvents> removeFromCapturing) {
-        RENDERING_BOUNDARIES_PROVIDER =
-                Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         ADD_TO_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
         REMOVE_FROM_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
     }
@@ -32,6 +28,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
     public Component make(
             UUID uuid,
             int z,
+            ProviderAtTime<FloatBox> renderingBoundariesProvider,
             Component containingComponent
     ) throws IllegalArgumentException {
         return new ComponentImpl(
@@ -39,7 +36,9 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 z,
                 bindingContext(listOf(), false),
                 Check.ifNull(containingComponent, "containingComponent"),
-                RENDERING_BOUNDARIES_PROVIDER, ADD_TO_CAPTURING, REMOVE_FROM_CAPTURING
+                renderingBoundariesProvider,
+                ADD_TO_CAPTURING,
+                REMOVE_FROM_CAPTURING
         );
     }
 }
