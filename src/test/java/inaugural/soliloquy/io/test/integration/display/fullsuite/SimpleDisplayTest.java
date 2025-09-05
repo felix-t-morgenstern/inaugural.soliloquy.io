@@ -20,7 +20,9 @@ public class SimpleDisplayTest {
                 ),
                 () -> {
                     try {
+                        System.out.println("Display test started");
                         Thread.sleep(4000);
+                        System.out.println("Display test ended");
                     }
                     catch (InterruptedException e) {
                         throw new RuntimeException(e);

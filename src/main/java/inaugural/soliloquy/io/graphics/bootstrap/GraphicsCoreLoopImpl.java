@@ -102,7 +102,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     }
 
     @Override
-    public void startup(Runnable gameThread) throws IllegalArgumentException {
+    public void startup(Runnable game) throws IllegalArgumentException {
         if (!glfwInit()) {
             throw new RuntimeException("GLFW failed to initialize");
         }
@@ -138,11 +138,12 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
 
-        FRAME_TIMER.start();
+        new Thread(FRAME_TIMER::start).start();
 
-        new Thread(gameThread).start();
+        var gameThread = new Thread(game);
+        gameThread.start();
 
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window) && gameThread.isAlive()) {
             MOUSE_CURSOR.updateCursor(window);
 
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
@@ -170,6 +171,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
                 CheckedExceptionWrapper.sleep(FRAME_TIMER_POLLING_INTERVAL);
             }
         }
+
+        FRAME_TIMER.stop();
 
         glfwTerminate();
     }

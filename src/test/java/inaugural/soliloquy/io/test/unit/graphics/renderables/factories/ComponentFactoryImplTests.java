@@ -75,7 +75,5 @@ public class ComponentFactoryImplTests {
                 () -> factory.make(null, randomInt(), mockRenderingBoundaries, mockComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), null, mockComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), mockRenderingBoundaries, null));
     }
 }

@@ -35,7 +35,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 Check.ifNull(uuid, "uuid"),
                 z,
                 bindingContext(listOf(), false),
-                Check.ifNull(containingComponent, "containingComponent"),
+                containingComponent,
                 renderingBoundariesProvider,
                 ADD_TO_CAPTURING,
                 REMOVE_FROM_CAPTURING

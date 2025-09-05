@@ -9,6 +9,8 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Component;
+import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
+import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
@@ -16,29 +18,36 @@ import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import java.awt.*;
 import java.util.function.BiConsumer;
 
+import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.io.api.Settings.*;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.io.api.dto.AssetType.*;
+import static inaugural.soliloquy.tools.collections.Collections.*;
+import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class DisplayTest {
     private final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
 
+    public IOModule ioModule;
+    public Component topLevelComponent;
+
     protected void runTest(
             String titlebar,
             AssetDefinitionsDTO assetDefinitionsDTO,
-            Runnable displayTestThread,
+            Runnable displayTest,
             BiConsumer<IOModule, Component> populateTopLevelComponent
     ) {
         var commonModule = new CommonModule();
-        //var gamestateModule = new GameStateModule();
 
         var meshVerticesAndUvCoords = new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
+        // Many of these are dummy values which should be tweaked for performance
         @SuppressWarnings("rawtypes") var settings = Collections.<String, Setting>mapOf(
                 AUDIO_FILETYPES_ID,
-                listOf(),
+                setOf(),
                 PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID,
                 generateMockSetting(10),
                 FRAME_TIMER_POLLING_INTERVAL_ID,
@@ -56,7 +65,17 @@ public class DisplayTest {
                 GRAPHICS_PRELOADER_THREAD_POOL_SIZE_ID,
                 generateMockSetting(4),
                 GRAPHICS_PRELOADER_ASSET_TYPE_BATCH_SIZES_ID,
-                generateMockSetting(20),
+                generateMockSetting(mapOf(setOf(
+                        IMAGE,
+                        SPRITE,
+                        ANIMATION,
+                        GLOBAL_LOOPING_ANIMATION,
+                        IMAGE_ASSET_SET,
+                        FONT,
+                        MOUSE_CURSOR_IMAGE,
+                        ANIMATED_MOUSE_CURSOR_PROVIDER,
+                        STATIC_MOUSE_CURSOR_PROVIDER
+                ).stream().map(assetType -> pairOf(assetType, 10)))),
                 STARTING_WINDOW_DISPLAY_MODE_ID,
                 generateMockSetting(WindowDisplayMode.WINDOWED),
                 STARTING_WINDOW_RESOLUTION_ID,
@@ -66,7 +85,7 @@ public class DisplayTest {
         );
         @SuppressWarnings("rawtypes") var actions = Collections.<String, Action>mapOf();
 
-        var ioModule = new IOModule(
+        ioModule = new IOModule(
                 commonModule,
                 settings::get,
                 actions::get,
@@ -81,10 +100,17 @@ public class DisplayTest {
         frameTimer.setTargetFps(null);
 
         var frameExecutor = ioModule.provide(FrameExecutor.class);
-//        var componentFactory = ioModule.provide(ComponentFactory)
-//        frameExecutor.setTopLevelComponent(topLevelComponent);
+        var componentFactory = ioModule.provide(ComponentFactory.class);
+        var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+        var wholeScreenProvider = staticProviderFactory.make(randomUUID(), WHOLE_SCREEN);
+        topLevelComponent = componentFactory.make(randomUUID(), 0, wholeScreenProvider, null);
+        frameExecutor.setTopLevelComponent(topLevelComponent);
 
-        coreLoop.startup(displayTestThread);
+        if (populateTopLevelComponent != null) {
+            populateTopLevelComponent.accept(ioModule, topLevelComponent);
+        }
+
+        coreLoop.startup(displayTest);
     }
 
     private <T> Setting<T> generateMockSetting(T val) {

@@ -42,6 +42,7 @@ import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.game.Module;
+import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.assets.Font;
@@ -71,7 +72,7 @@ public class IOModule implements Module {
     private final Injector INJECTOR;
 
     public IOModule(CommonModule common,
-                    Function<String, Object> getSetting,
+                    @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
                     @SuppressWarnings("rawtypes") Function<String, Action> getAction,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
@@ -125,22 +126,24 @@ public class IOModule implements Module {
                 timestampValidator);
 
         var periodsPerFrameRateReportAggregate =
-                (int) getSetting.apply(PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID);
+                (int) getSetting.apply(PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID).getValue();
         var frameRateReporter = andRegister(
                 new FrameRateReporterImpl(periodsPerFrameRateReportAggregate, aggregateOutputs));
-        var frameTimer = new FrameTimerImpl(globalClock, frameRateReporter);
-        var frameTimerPollingInterval = (int) getSetting.apply(FRAME_TIMER_POLLING_INTERVAL_ID);
-        var semaphorePermissions = (int) getSetting.apply(FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID);
+        var frameTimer = andRegister(new FrameTimerImpl(globalClock, frameRateReporter));
+        var frameTimerPollingInterval =
+                (int) getSetting.apply(FRAME_TIMER_POLLING_INTERVAL_ID).getValue();
+        var semaphorePermissions =
+                (int) getSetting.apply(FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID).getValue();
         var frameExecutor =
                 andRegister(new FrameExecutorImpl(componentRenderer, semaphorePermissions));
 
         var shaderFactory = new ShaderFactoryImpl();
         @SuppressWarnings("rawtypes") var renderersWithShader = Collections.<Renderer>setOf();
-        var shaderFilenamePrefix = (String) getSetting.apply(SHADER_FILENAME_PREFIX_ID);
+        var shaderFilenamePrefix = (String) getSetting.apply(SHADER_FILENAME_PREFIX_ID).getValue();
 
         @SuppressWarnings("rawtypes") var renderersWithMesh = Collections.<Renderer>setOf();
-        var meshVertices = (float[]) getSetting.apply(MESH_VERTICES_ID);
-        var meshUvCoords = (float[]) getSetting.apply(MESH_UV_COORDS_ID);
+        var meshVertices = (float[]) getSetting.apply(MESH_VERTICES_ID).getValue();
+        var meshUvCoords = (float[]) getSetting.apply(MESH_UV_COORDS_ID).getValue();
 
         // ======
         // Assets
@@ -157,7 +160,7 @@ public class IOModule implements Module {
         // Graphics Preloading
         // ===================
 
-        var alphaThreshold = (float) getSetting.apply(MOUSE_CAPTURE_ALPHA_THRESHOLD_ID);
+        var alphaThreshold = (float) getSetting.apply(MOUSE_CAPTURE_ALPHA_THRESHOLD_ID).getValue();
         var imageFactory = new ImageFactoryImpl(alphaThreshold);
         var spriteFactory = new SpriteFactory();
         var animationFactory = new AnimationFactory();
@@ -181,10 +184,10 @@ public class IOModule implements Module {
                         definition.mouseCursorImageId(), null);
 
         var graphicsPreloaderThreadPoolSize =
-                (int) getSetting.apply(GRAPHICS_PRELOADER_THREAD_POOL_SIZE_ID);
+                (int) getSetting.apply(GRAPHICS_PRELOADER_THREAD_POOL_SIZE_ID).getValue();
         @SuppressWarnings("unchecked") var assetTypeBatchSizes =
                 (Map<AssetType, Integer>) getSetting.apply(
-                        GRAPHICS_PRELOADER_ASSET_TYPE_BATCH_SIZES_ID);
+                        GRAPHICS_PRELOADER_ASSET_TYPE_BATCH_SIZES_ID).getValue();
         var graphicsPreloader = new GraphicsPreloaderImpl(
                 assetDefinitionsDTO,
                 graphicsPreloaderThreadPoolSize,
@@ -213,11 +216,11 @@ public class IOModule implements Module {
         // ======
 
         var startingWindowDisplayMode =
-                (WindowDisplayMode) getSetting.apply(STARTING_WINDOW_DISPLAY_MODE_ID);
+                (WindowDisplayMode) getSetting.apply(STARTING_WINDOW_DISPLAY_MODE_ID).getValue();
         var startingWindowResolution =
-                (WindowResolution) getSetting.apply(STARTING_WINDOW_RESOLUTION_ID);
-        var resManager = andRegister(new WindowResolutionManagerImpl(
-                startingWindowDisplayMode, startingWindowResolution));
+                (WindowResolution) getSetting.apply(STARTING_WINDOW_RESOLUTION_ID).getValue();
+        var resManager = andRegister(new WindowResolutionManagerImpl(startingWindowDisplayMode,
+                startingWindowResolution));
 
         // =====
         // Mouse
@@ -266,7 +269,7 @@ public class IOModule implements Module {
                 new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
                         shiftAggregator, timestampValidator)
         );
-        var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID);
+        var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
         contentRenderers.put(
                 TextLineRenderableImpl.class,
                 new TextLineRenderer(renderingBoundaries, defaultFontColor,

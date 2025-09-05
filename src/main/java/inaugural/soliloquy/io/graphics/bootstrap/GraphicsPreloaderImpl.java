@@ -34,11 +34,14 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final Function<FontDefinition, Font> FONT_FACTORY;
     private final Function<SpriteDefinition, Sprite> SPRITE_FACTORY;
     private final Function<AnimationDefinition, Animation> ANIMATION_FACTORY;
-    private final Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> GLOBAL_LOOPING_ANIMATION_FACTORY;
+    private final Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation>
+            GLOBAL_LOOPING_ANIMATION_FACTORY;
     private final Function<ImageAssetSetDefinition, ImageAssetSet> IMAGE_ASSET_SET_FACTORY;
     private final MouseCursorImageFactory MOUSE_CURSOR_IMAGE_FACTORY;
-    private final Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider> ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
-    private final Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider> STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
+    private final Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+            ANIMATED_MOUSE_CURSOR_PROVIDER_FACTORY;
+    private final Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider>
+            STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
 
     private final Consumer<Sprite> PROCESS_SPRITE;
     private final Consumer<Animation> PROCESS_ANIMATION;
@@ -80,13 +83,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                                  Function<FontDefinition, Font> fontFactory,
                                  Function<SpriteDefinition, Sprite> spriteFactory,
                                  Function<AnimationDefinition, Animation> animationFactory,
-                                 Function<GlobalLoopingAnimationDefinition, GlobalLoopingAnimation> globalLoopingAnimationFactory,
+                                 Function<GlobalLoopingAnimationDefinition,
+                                         GlobalLoopingAnimation> globalLoopingAnimationFactory,
                                  Function<ImageAssetSetDefinition, ImageAssetSet>
                                          imageAssetSetFactory,
                                  MouseCursorImageFactory mouseCursorImageFactory,
-                                 Function<AnimatedMouseCursorProviderDefinition, AnimatedMouseCursorProvider>
+                                 Function<AnimatedMouseCursorProviderDefinition,
+                                         AnimatedMouseCursorProvider>
                                          animatedMouseCursorProviderFactory,
-                                 Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider> staticMouseCursorProviderFactory,
+                                 Function<StaticMouseCursorProviderDefinition,
+                                         StaticMouseCursorProvider> staticMouseCursorProviderFactory,
                                  Consumer<Sprite> processSprite,
                                  Consumer<Animation> processAnimation,
                                  Consumer<GlobalLoopingAnimation> processGlobalLoopingAnimation,
@@ -321,8 +327,12 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
             LinkedBlockingQueue<TDefinitionDTO> definitionDTOs,
             int batchSize,
             Function<List<TDefinitionDTO>, Runnable> taskFactory,
-            Object lockObject,
+            Object batchIncreaseLockObject,
             Runnable increaseCompletedBatchesCount) {
+        if (definitionDTOs.isEmpty()) {
+            return runTaskAsync(() -> {}, this::handleThrowable, EXECUTOR);
+        }
+
         // NB: This magic works, since int division always rounds down
         int batchTasksToExecute = ((definitionDTOs.size() - 1) / batchSize) + 1;
 
@@ -331,8 +341,8 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         return runTaskAsync(() -> {
             for (var i = 0; i < batchTasksToExecute; i++) {
                 tasks.add(runTaskAsync(
-                        () -> loadBatch(definitionDTOs, batchSize, taskFactory, lockObject,
-                                increaseCompletedBatchesCount),
+                        () -> loadBatch(definitionDTOs, batchSize, taskFactory,
+                                batchIncreaseLockObject, increaseCompletedBatchesCount),
                         this::handleThrowable,
                         EXECUTOR
                 ));
@@ -345,14 +355,16 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private <TDefinitionDTO> void loadBatch(LinkedBlockingQueue<TDefinitionDTO> definitionDTOs,
                                             int batchSize,
                                             Function<List<TDefinitionDTO>, Runnable> taskFactory,
-                                            Object lockObject,
+                                            Object batchIncreaseLockObject,
                                             Runnable increaseCompletedBatchesCount) {
         List<TDefinitionDTO> batch = listOf();
         definitionDTOs.drainTo(batch, batchSize);
-        taskFactory.apply(batch).run();
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (lockObject) {
-            increaseCompletedBatchesCount.run();
+        if (!batch.isEmpty()) {
+            taskFactory.apply(batch).run();
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
+            synchronized (batchIncreaseLockObject) {
+                increaseCompletedBatchesCount.run();
+            }
         }
     }
 
