@@ -9,7 +9,7 @@ import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import inaugural.soliloquy.io.audio.entities.SoundTypeImpl;
 import inaugural.soliloquy.io.audio.entities.SoundsPlayingImpl;
 import inaugural.soliloquy.io.audio.factories.SoundFactoryImpl;
-import inaugural.soliloquy.io.audio.infrastructure.AudioLoaderImpl;
+import inaugural.soliloquy.io.audio.bootstrap.AudioLoaderImpl;
 import inaugural.soliloquy.io.graphics.GraphicsImpl;
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
@@ -17,8 +17,7 @@ import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.*;
 import inaugural.soliloquy.io.graphics.renderables.*;
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
-import inaugural.soliloquy.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactoryImpl;
-import inaugural.soliloquy.io.graphics.renderables.factories.FiniteAnimationRenderableFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.factories.*;
 import inaugural.soliloquy.io.graphics.renderables.providers.*;
 import inaugural.soliloquy.io.graphics.renderables.providers.factories.*;
 import inaugural.soliloquy.io.graphics.rendering.*;
@@ -31,7 +30,8 @@ import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.persistence.audio.SoundHandler;
 import inaugural.soliloquy.io.persistence.audio.SoundsPlayingHandler;
-import inaugural.soliloquy.io.persistence.graphics.renderables.AntialiasedLineSegmentRenderableHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.*;
+import inaugural.soliloquy.io.persistence.graphics.renderables.colorshifting.ColorShiftHandler;
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.*;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
@@ -76,32 +76,46 @@ public class IOModule implements Module {
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
                     AssetDefinitionsDTO assetDefinitionsDTO) {
+        // ====
+        // Prep
+        // ====
+
+        INJECTOR = Injectors.manual();
+
         var persistenceHandler = common.provide(PersistenceHandler.class);
 
+        // ======
+        // Basics
+        // ======
 
-
-        var globalClock = new GlobalClockImpl();
+        var globalClock = andRegister(new GlobalClockImpl());
         var timestampValidator = new TimestampValidator(null);
 
+        // ========
+        // Keyboard
+        // ========
 
+        andRegister(new KeyEventListenerImpl(timestampValidator));
 
-        var keyEventListener = new KeyEventListenerImpl(timestampValidator);
-
-
+        // =====
+        // Audio
+        // =====
 
         var soundTypes = Collections.<String, SoundType>mapOf();
-        var soundsPlaying = new SoundsPlayingImpl();
-        var soundFactory = new SoundFactoryImpl(soundTypes::get, soundsPlaying);
+        var soundsPlaying = andRegister(new SoundsPlayingImpl());
+        var soundFactory = andRegister(new SoundFactoryImpl(soundTypes::get, soundsPlaying));
         @SuppressWarnings("unchecked") var audioFiletypes =
                 (Set<String>) getSetting.apply(AUDIO_FILETYPES_ID);
-        var audioLoader = new AudioLoaderImpl(
+        andRegister(new AudioLoaderImpl(
                 s -> soundTypes.put(s.id(), s),
                 SoundTypeImpl::new,
                 audioFiletypes
-        );
-        var audio = new AudioImpl(soundsPlaying, SoundFactoryImpl::new);
+        ));
+        andRegister(new AudioImpl(soundsPlaying, SoundFactoryImpl::new));
 
-
+        // =========
+        // Rendering
+        // =========
 
         var renderingBoundaries = new RenderingBoundariesImpl();
 
@@ -112,12 +126,13 @@ public class IOModule implements Module {
 
         var periodsPerFrameRateReportAggregate =
                 (int) getSetting.apply(PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID);
-        var frameRateReporter =
-                new FrameRateReporterImpl(periodsPerFrameRateReportAggregate, aggregateOutputs);
+        var frameRateReporter = andRegister(
+                new FrameRateReporterImpl(periodsPerFrameRateReportAggregate, aggregateOutputs));
         var frameTimer = new FrameTimerImpl(globalClock, frameRateReporter);
         var frameTimerPollingInterval = (int) getSetting.apply(FRAME_TIMER_POLLING_INTERVAL_ID);
         var semaphorePermissions = (int) getSetting.apply(FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID);
-        var frameExecutor = new FrameExecutorImpl(componentRenderer, semaphorePermissions);
+        var frameExecutor =
+                andRegister(new FrameExecutorImpl(componentRenderer, semaphorePermissions));
 
         var shaderFactory = new ShaderFactoryImpl();
         @SuppressWarnings("rawtypes") var renderersWithShader = Collections.<Renderer>setOf();
@@ -127,7 +142,9 @@ public class IOModule implements Module {
         var meshVertices = (float[]) getSetting.apply(MESH_VERTICES_ID);
         var meshUvCoords = (float[]) getSetting.apply(MESH_UV_COORDS_ID);
 
-
+        // ======
+        // Assets
+        // ======
 
         var sprites = Collections.<String, Sprite>mapOf();
         var animations = Collections.<String, Animation>mapOf();
@@ -136,7 +153,9 @@ public class IOModule implements Module {
         var fonts = Collections.<String, Font>mapOf();
         var mouseCursors = Collections.<String, ProviderAtTime<Long>>mapOf();
 
-
+        // ===================
+        // Graphics Preloading
+        // ===================
 
         var alphaThreshold = (float) getSetting.apply(MOUSE_CAPTURE_ALPHA_THRESHOLD_ID);
         var imageFactory = new ImageFactoryImpl(alphaThreshold);
@@ -189,16 +208,29 @@ public class IOModule implements Module {
                 staticCursor -> mouseCursors.put(staticCursor.id(), staticCursor)
         );
 
+        // ======
+        // Window
+        // ======
+
         var startingWindowDisplayMode =
                 (WindowDisplayMode) getSetting.apply(STARTING_WINDOW_DISPLAY_MODE_ID);
         var startingWindowResolution =
                 (WindowResolution) getSetting.apply(STARTING_WINDOW_RESOLUTION_ID);
-        var resManager = new WindowResolutionManagerImpl(
-                startingWindowDisplayMode, startingWindowResolution);
-        var mouseCursor = new MouseCursorImpl(mouseCursors::get, globalClock);
+        var resManager = andRegister(new WindowResolutionManagerImpl(
+                startingWindowDisplayMode, startingWindowResolution));
+
+        // =====
+        // Mouse
+        // =====
+
+        var mouseCursor = andRegister(new MouseCursorImpl(mouseCursors::get, globalClock));
         var mouseCapturing = new MouseEventCapturingSpatialIndexImpl();
         var mouseEventHandler = new MouseEventHandlerImpl(mouseCapturing);
         var mouseListener = new MouseListener(mouseEventHandler);
+
+        // =========
+        // Renderers
+        // =========
 
         var shiftAggregator = new ColorShiftStackAggregatorImpl();
         contentRenderers.put(
@@ -245,26 +277,35 @@ public class IOModule implements Module {
                 new TriangleRenderer(timestampValidator)
         );
 
+        // ===========
+        // Renderables
+        // ===========
 
+        var antialiasedLineSegmentRenderableFactory =
+                andRegister(new AntialiasedLineSegmentRenderableFactoryImpl());
+        var finiteAnimationRenderableFactory = andRegister(
+                new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));
+        var globalLoopingAnimationRenderableFactory = andRegister(
+                new GlobalLoopingAnimationRenderableFactoryImpl(renderingBoundaries,
+                        timestampValidator));
+        var imageAssetSetRenderableFactory = andRegister(
+                new ImageAssetSetRenderableFactoryImpl(renderingBoundaries, timestampValidator));
+        var rasterizedLineSegmentRenderableFactory =
+                andRegister(new RasterizedLineSegmentRenderableFactoryImpl());
+        var rectangleRenderableFactory = andRegister(
+                new RectangleRenderableFactoryImpl(renderingBoundaries, timestampValidator));
+        var spriteRenderableFactory = andRegister(
+                new SpriteRenderableFactoryImpl(renderingBoundaries, timestampValidator));
+        var textLineRenderableFactory = andRegister(new TextLineRenderableFactoryImpl());
+        var triangleRenderableFactory = andRegister(
+                new TriangleRenderableFactoryImpl(renderingBoundaries, timestampValidator));
 
-        var soundHandler = new SoundHandler(soundFactory::make);
-        var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
-
-
-
-        persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
-        persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
-
-        @SuppressWarnings("rawtypes") var providerSubhandlers =
-                Collections.<String, TypeHandler>mapOf();
-
-        var providerHandler = new ProviderHandler(providerSubhandlers);
+        // =========
+        // Providers
+        // =========
 
         var finiteLinearMovingColorProviderFactory =
-                new FiniteLinearMovingColorProviderFactoryImpl(timestampValidator);
-        providerHandler.add(FiniteLinearMovingColorProviderImpl.class.getCanonicalName(),
-                new FiniteLinearMovingColorProviderHandler(finiteLinearMovingColorProviderFactory));
-
+                andRegister(new FiniteLinearMovingColorProviderFactoryImpl(timestampValidator));
         @SuppressWarnings("unchecked") var finiteLinearMovingProviderFactory =
                 new FiniteLinearMovingProviderFactoryImpl(mapOf(
                         pairOf(
@@ -288,8 +329,66 @@ public class IOModule implements Module {
                 ),
                         timestampValidator
                 );
-        var finiteLinearProviderHandler = new FiniteLinearMovingProviderHandler(persistenceHandler,
-                finiteLinearMovingProviderFactory);
+        var loopingLinearMovingColorProviderFactory =
+                andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
+        @SuppressWarnings({"unused", "unchecked"})
+        var loopingLinearMovingProviderFactory =
+                andRegister(new LoopingLinearMovingProviderFactoryImpl(mapOf(
+                        pairOf(
+                                LoopingLinearMovingFloatBoxProvider.class.getCanonicalName(),
+                                uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                        new LoopingLinearMovingFloatBoxProvider(uuid,
+                                                valuesWithinPeriod,
+                                                periodDuration, periodModuloOffset, pausedTimestamp,
+                                                timeVal
+                                        )
+                        ),
+                        pairOf(
+                                LoopingLinearMovingFloatProvider.class.getCanonicalName(),
+                                uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                        new LoopingLinearMovingFloatProvider(
+                                                uuid, valuesWithinPeriod, periodDuration,
+                                                periodModuloOffset, pausedTimestamp, timeVal
+                                        )
+                        ),
+                        pairOf(
+                                LoopingLinearMovingVertexProvider.class.getCanonicalName(),
+                                uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
+                                        new LoopingLinearMovingVertexProvider(
+                                                uuid, valuesWithinPeriod, periodDuration,
+                                                periodModuloOffset, pausedTimestamp, timeVal
+                                        )
+                        )
+                ), timestampValidator));
+        var progressiveStringProviderFactory =
+                andRegister(new ProgressiveStringProviderFactoryImpl(timestampValidator));
+        var staticProviderFactory = andRegister(new StaticProviderFactoryImpl(timestampValidator));
+
+        // ========
+        // Handlers
+        // ========
+
+        // Audio
+
+        var soundHandler = new SoundHandler(soundFactory::make);
+        var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
+
+        persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
+        persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
+
+        // Providers
+
+        @SuppressWarnings("rawtypes") var providerSubhandlers =
+                Collections.<String, TypeHandler>mapOf();
+
+        var providerHandler = new ProviderHandler(providerSubhandlers);
+
+        providerHandler.add(FiniteLinearMovingColorProviderImpl.class.getCanonicalName(),
+                new FiniteLinearMovingColorProviderHandler(finiteLinearMovingColorProviderFactory));
+
+        var finiteLinearProviderHandler = andRegister(
+                new FiniteLinearMovingProviderHandler(persistenceHandler,
+                        finiteLinearMovingProviderFactory));
         listOf(
                 FiniteLinearMovingFloatBoxProvider.class,
                 FiniteLinearMovingFloatProvider.class,
@@ -297,38 +396,10 @@ public class IOModule implements Module {
         ).forEach(c ->
                 providerHandler.add(c.getCanonicalName(), finiteLinearProviderHandler));
 
-        var loopingLinearMovingColorProviderFactory =
-                new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator);
         providerHandler.add(LoopingLinearMovingColorProviderImpl.class.getCanonicalName(),
                 new LoopingLinearMovingColorProviderHandler(
                         loopingLinearMovingColorProviderFactory));
 
-        @SuppressWarnings({"unused", "unchecked"})
-        var loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(mapOf(
-                pairOf(
-                        LoopingLinearMovingFloatBoxProvider.class.getCanonicalName(),
-                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
-                                new LoopingLinearMovingFloatBoxProvider(uuid, valuesWithinPeriod,
-                                        periodDuration, periodModuloOffset, pausedTimestamp, timeVal
-                                )
-                ),
-                pairOf(
-                        LoopingLinearMovingFloatProvider.class.getCanonicalName(),
-                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
-                                new LoopingLinearMovingFloatProvider(
-                                        uuid, valuesWithinPeriod, periodDuration,
-                                        periodModuloOffset, pausedTimestamp, timeVal
-                                )
-                ),
-                pairOf(
-                        LoopingLinearMovingVertexProvider.class.getCanonicalName(),
-                        uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
-                                new LoopingLinearMovingVertexProvider(
-                                        uuid, valuesWithinPeriod, periodDuration,
-                                        periodModuloOffset, pausedTimestamp, timeVal
-                                )
-                )
-        ), timestampValidator);
         var loopingLinearProviderHandler =
                 new LoopingLinearMovingProviderHandler(persistenceHandler,
                         loopingLinearMovingProviderFactory);
@@ -339,34 +410,52 @@ public class IOModule implements Module {
         ).forEach(c ->
                 providerHandler.add(c.getCanonicalName(), loopingLinearProviderHandler));
 
-        var progressiveStringProviderFactory =
-                new ProgressiveStringProviderFactoryImpl(timestampValidator);
         providerHandler.add(ProgressiveStringProvider.class.getCanonicalName(),
                 new ProgressiveStringProviderHandler(progressiveStringProviderFactory));
 
-        var staticProviderFactory = new StaticProviderFactoryImpl(timestampValidator);
         providerHandler.add(StaticProviderImpl.class.getCanonicalName(),
                 new StaticProviderHandler(persistenceHandler, staticProviderFactory,
                         timestampValidator));
 
+        // Shifts
 
+        var shiftHandler = new ColorShiftHandler(providerHandler);
 
-        //var shiftHandler = new
+        // Renderables
 
-
-
-        var antialiasedLineSegmentRenderableFactory =
-                new AntialiasedLineSegmentRenderableFactoryImpl();
         persistenceHandler.addTypeHandler(AntialiasedLineSegmentRenderableImpl.class,
                 new AntialiasedLineSegmentRenderableHandler(providerHandler,
                         antialiasedLineSegmentRenderableFactory));
+        persistenceHandler.addTypeHandler(FiniteAnimationRenderableImpl.class,
+                new FiniteAnimationRenderableHandler(animations::get, getAction, providerHandler,
+                        shiftHandler, finiteAnimationRenderableFactory));
+        persistenceHandler.addTypeHandler(GlobalLoopingAnimationRenderableImpl.class,
+                new GlobalLoopingAnimationRenderableHandler(globalLoopingAnimations::get, getAction,
+                        providerHandler, shiftHandler, globalLoopingAnimationRenderableFactory));
+        persistenceHandler.addTypeHandler(ImageAssetSetRenderableImpl.class,
+                new ImageAssetSetRenderableHandler(imageAssetSets::get, getAction, providerHandler,
+                        shiftHandler, imageAssetSetRenderableFactory));
+        persistenceHandler.addTypeHandler(RasterizedLineSegmentRenderableImpl.class,
+                new RasterizedLineSegmentRenderableHandler(providerHandler,
+                        rasterizedLineSegmentRenderableFactory));
+        persistenceHandler.addTypeHandler(RectangleRenderableImpl.class,
+                new RectangleRenderableHandler(getAction, providerHandler,
+                        rectangleRenderableFactory));
+        persistenceHandler.addTypeHandler(SpriteRenderableImpl.class,
+                new SpriteRenderableHandler(sprites::get, getAction, providerHandler, shiftHandler,
+                        spriteRenderableFactory));
+        persistenceHandler.addTypeHandler(TextLineRenderableImpl.class,
+                new TextLineRenderableHandler(fonts::get, providerHandler,
+                        textLineRenderableFactory));
+        persistenceHandler.addTypeHandler(TriangleRenderableImpl.class,
+                new TriangleRenderableHandler(getAction, providerHandler,
+                        triangleRenderableFactory));
 
-        var finiteAnimationRenderableFactory = new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator);
-        //persistenceHandler.addTypeHandler(FiniteAnimationRenderableImpl.class, new FiniteAnimationRenderableHandler(animations::get, getAction, providerHandler));
+        // ========
+        // Graphics
+        // ========
 
-
-
-        var graphicsLoop = new GraphicsCoreLoopImpl(
+        andRegister(new GraphicsCoreLoopImpl(
                 initialTitlebar,
                 frameTimer,
                 frameTimerPollingInterval,
@@ -383,37 +472,15 @@ public class IOModule implements Module {
                 graphicsPreloader,
                 mouseCursor,
                 mouseListener
-        );
+        ));
 
-        var graphics = new GraphicsImpl(
+        andRegister(new GraphicsImpl(
                 sprites::get,
                 animations::get,
                 globalLoopingAnimations::get,
                 imageAssetSets::get,
                 fonts::get
-        );
-
-        INJECTOR = Injectors.manual();
-
-        INJECTOR.registerInstance(keyEventListener);
-        INJECTOR.registerInstance(soundFactory);
-        INJECTOR.registerInstance(audioLoader);
-        INJECTOR.registerInstance(audio);
-        INJECTOR.registerInstance(mouseCursor);
-        INJECTOR.registerInstance(globalClock);
-        INJECTOR.registerInstance(frameExecutor);
-        INJECTOR.registerInstance(frameRateReporter);
-        INJECTOR.registerInstance(resManager);
-        INJECTOR.registerInstance(graphicsLoop);
-        INJECTOR.registerInstance(graphics);
-        INJECTOR.registerInstance(finiteLinearMovingColorProviderFactory);
-        INJECTOR.registerInstance(finiteLinearProviderHandler);
-        INJECTOR.registerInstance(loopingLinearMovingColorProviderFactory);
-        INJECTOR.registerInstance(loopingLinearMovingProviderFactory);
-        INJECTOR.registerInstance(progressiveStringProviderFactory);
-        INJECTOR.registerInstance(staticProviderFactory);
-        INJECTOR.registerInstance(antialiasedLineSegmentRenderableFactory);
-        INJECTOR.registerInstance(finiteAnimationRenderableFactory);
+        ));
     }
 
     @Override
@@ -424,5 +491,11 @@ public class IOModule implements Module {
     public <T> T provide(String instance) throws IllegalArgumentException {
         Check.ifNullOrEmpty(instance, "instance");
         throw new IllegalArgumentException("No named instances within CommonModule");
+    }
+
+    private <T> T andRegister(T registrant) {
+        INJECTOR.registerInstance(registrant);
+
+        return registrant;
     }
 }

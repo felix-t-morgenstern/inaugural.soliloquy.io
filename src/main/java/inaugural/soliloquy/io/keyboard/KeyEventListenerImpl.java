@@ -2,16 +2,20 @@ package inaugural.soliloquy.io.keyboard;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.ui.keyboard.KeyBinding;
-import soliloquy.specs.ui.keyboard.KeyBindingContext;
+import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.io.input.keyboard.entities.KeyBinding;
+import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
+import soliloquy.specs.io.input.keyboard.infrastructure.KeyEventListener;
+import soliloquy.specs.ui.definitions.keyboard.KeyEventInfo;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static soliloquy.specs.ui.definitions.keyboard.KeyEventInfo.keyEventInfo;
 
 public class KeyEventListenerImpl implements KeyEventListener {
     private final Map<Integer, List<KeyBindingContext>> CONTEXTS;
@@ -67,15 +71,26 @@ public class KeyEventListenerImpl implements KeyEventListener {
     }
 
     @Override
-    public void press(char c, long timestamp) {
-        TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-        handleKeyEvent(c, binding -> binding.press(timestamp));
+    public void press(char key, long timestamp) {
+        runKeyAction(key, timestamp, b -> b.ON_PRESS);
     }
 
     @Override
-    public void release(char c, long timestamp) {
+    public void release(char key, long timestamp) {
+        runKeyAction(key, timestamp, b -> b.ON_RELEASE);
+    }
+
+    private void runKeyAction(char key, long timestamp,
+                              Function<KeyBinding, Action<KeyEventInfo>> getKeyAction) {
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-        handleKeyEvent(c, binding -> binding.release(timestamp));
+        handleKeyEvent(key, binding -> {
+            var keyAction = getKeyAction.apply(binding);
+            if (keyAction != null) {
+                keyAction.run(keyEventInfo()
+                        .withKey(key)
+                        .withTimestamp(timestamp));
+            }
+        });
     }
 
     // TODO: Ensure that the values in CONTEXT are also deeply cloned in KeyEventListenerImpl
@@ -89,24 +104,24 @@ public class KeyEventListenerImpl implements KeyEventListener {
         loopOverBindings(c, onEvent, null);
     }
 
-    private void loopOverBindings(Character c, Consumer<KeyBinding> handleEvent,
-                                  Consumer<Character> handleCharacter) {
+    private void loopOverBindings(Character pressedKey,
+                                  Consumer<KeyBinding> handleEvent,
+                                  Consumer<Character> handleKey) {
         var orderedPriorities = CONTEXTS.keySet().stream().sorted((i1, i2) -> i2 - i1).toList();
         for (var priority : orderedPriorities) {
             var contexts = CONTEXTS.get(priority);
             for (var context : contexts) {
-                var bindings = context.bindings();
-                for (var binding : bindings) {
-                    if (handleCharacter != null) {
-                        binding.boundCharacters().forEach(handleCharacter);
-                    }
-                    if (handleEvent != null) {
-                        if (binding.boundCharacters().contains(c)) {
+                for (var binding : context.BINDINGS) {
+                    for (var boundKey : binding.BOUND_KEYS) {
+                        if (handleKey != null) {
+                            handleKey.accept(boundKey);
+                        }
+                        if (handleEvent != null && boundKey == pressedKey) {
                             handleEvent.accept(binding);
                         }
                     }
                 }
-                if (context.blocksLowerBindings()) {
+                if (context.BLOCKS_LOWER_BINDINGS) {
                     return;
                 }
             }

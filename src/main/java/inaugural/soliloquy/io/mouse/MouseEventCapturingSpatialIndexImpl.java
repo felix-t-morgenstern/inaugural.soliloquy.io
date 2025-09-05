@@ -7,10 +7,8 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
-import soliloquy.specs.ui.Component;
 
 import java.util.Comparator;
-import java.util.function.Function;
 
 public class MouseEventCapturingSpatialIndexImpl
         implements MouseEventCapturingSpatialIndex {

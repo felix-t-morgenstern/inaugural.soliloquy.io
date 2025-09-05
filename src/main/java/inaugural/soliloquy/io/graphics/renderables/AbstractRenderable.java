@@ -1,8 +1,8 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
-import soliloquy.specs.ui.Component;
 
 import java.util.UUID;
 

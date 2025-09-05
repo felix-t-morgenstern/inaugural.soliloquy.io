@@ -1,9 +1,9 @@
 package inaugural.soliloquy.io.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.renderers.ComponentRenderer;
-import soliloquy.specs.ui.Component;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;

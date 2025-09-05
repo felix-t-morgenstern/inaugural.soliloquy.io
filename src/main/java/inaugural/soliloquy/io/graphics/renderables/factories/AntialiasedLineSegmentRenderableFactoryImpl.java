@@ -3,9 +3,9 @@ package inaugural.soliloquy.io.graphics.renderables.factories;
 import inaugural.soliloquy.io.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
+import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.ui.Component;
 
 import java.awt.*;
 

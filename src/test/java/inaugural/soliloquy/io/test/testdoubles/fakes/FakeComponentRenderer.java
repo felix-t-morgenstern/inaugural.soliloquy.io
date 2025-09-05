@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
+import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.renderers.ComponentRenderer;
-import soliloquy.specs.ui.Component;
 
 import java.util.List;
 import java.util.function.Consumer;

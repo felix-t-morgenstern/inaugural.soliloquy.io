@@ -5,24 +5,28 @@ import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.ui.keyboard.KeyBinding;
-import soliloquy.specs.ui.keyboard.KeyBindingContext;
+import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
+import soliloquy.specs.io.input.keyboard.infrastructure.KeyEventListener;
+import soliloquy.specs.ui.definitions.keyboard.KeyEventInfo;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.io.input.keyboard.entities.KeyBinding.keyBinding;
+import static soliloquy.specs.io.input.keyboard.entities.KeyBindingContext.bindingContext;
 
 @ExtendWith(MockitoExtension.class)
 public class KeyEventListenerImplTests {
     private final int priority1 = randomIntWithInclusiveCeiling(Integer.MAX_VALUE - 2);
     private final int priority2 = randomIntWithInclusiveFloor(priority1 + 1);
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
-    private final char CHAR = randomChar();
+    private final char KEY = randomChar();
 
     @Mock private TimestampValidator mockTimestampValidator;
     @Mock private KeyBindingContext mockKeyBindingContext1;
@@ -100,37 +104,24 @@ public class KeyEventListenerImplTests {
 
     @Test
     public void testActiveKeysRepresentation() {
-        var mockKeyBindingContext1Binding1 = mock(KeyBinding.class);
-        lenient().when(mockKeyBindingContext1Binding1.boundCharacters()).thenReturn(listOf(('a')));
-        lenient().when(mockKeyBindingContext1Binding1.boundCharacters()).thenReturn(listOf(('b')));
+        var context1Binding1 = keyBinding(arrayChars('a', 'b'), null, null);
 
-        var mockKeyBindingContext1Binding2 = mock(KeyBinding.class);
-        lenient().when(mockKeyBindingContext1Binding2.boundCharacters()).thenReturn(listOf(('c')));
+        var context1Binding2 = keyBinding(arrayChars('c'), null, null);
 
-        var mockKeyBindingContext1 = mock(KeyBindingContext.class);
-        lenient().when(mockKeyBindingContext1.bindings())
-                .thenReturn(listOf(mockKeyBindingContext1Binding1, mockKeyBindingContext1Binding2));
+        var keyBindingContext1 = bindingContext(listOf(context1Binding1, context1Binding2), false);
 
-        var mockKeyBindingContext2Binding1 = mock(KeyBinding.class);
-        lenient().when(mockKeyBindingContext2Binding1.boundCharacters()).thenReturn(listOf(('d')));
+        var context2Binding1 = keyBinding(arrayChars('d'), null, null);
 
-        var mockKeyBindingContext2Binding2 = mock(KeyBinding.class);
-        lenient().when(mockKeyBindingContext2Binding2.boundCharacters()).thenReturn(listOf(('e')));
+        var context2Binding2 = keyBinding(arrayChars('e'), null, null);
 
-        var mockKeyBindingContext2 = mock(KeyBindingContext.class);
-        lenient().when(mockKeyBindingContext2.bindings())
-                .thenReturn(listOf(mockKeyBindingContext2Binding1, mockKeyBindingContext2Binding2));
-        lenient().when(mockKeyBindingContext2.blocksLowerBindings()).thenReturn(true);
+        var keyBindingContext2 = bindingContext(listOf(context2Binding1, context2Binding2), true);
 
-        var mockKeyBindingContext3Binding1 = mock(KeyBinding.class);
-        lenient().when(mockKeyBindingContext3Binding1.boundCharacters()).thenReturn(listOf(('f')));
-        var mockKeyBindingContext3 = mock(KeyBindingContext.class);
-        lenient().when(mockKeyBindingContext3.bindings())
-                .thenReturn(listOf(mockKeyBindingContext3Binding1));
+        var context3Binding1 = keyBinding(arrayChars('f'), null, null);
+        var keyBindingContext3 = bindingContext(listOf(context3Binding1), false);
 
-        keyEventListener.addContext(mockKeyBindingContext1, 1);
-        keyEventListener.addContext(mockKeyBindingContext2, 2);
-        keyEventListener.addContext(mockKeyBindingContext3, 3);
+        keyEventListener.addContext(keyBindingContext1, 1);
+        keyEventListener.addContext(keyBindingContext2, 2);
+        keyEventListener.addContext(keyBindingContext3, 3);
 
         var activeKeysRepresentation = keyEventListener.activeKeysRepresentation();
         var activeKeysRepresentation2 = keyEventListener.activeKeysRepresentation();
@@ -145,106 +136,83 @@ public class KeyEventListenerImplTests {
 
     @Test
     public void testKeyPressed() {
-        var mockKeyBinding = mock(KeyBinding.class);
-        lenient().when(mockKeyBinding.boundCharacters()).thenReturn(listOf((CHAR)));
+        @SuppressWarnings("unchecked") var onPress = (Action<KeyEventInfo>) mock(Action.class);
+        var binding = keyBinding(arrayChars(KEY), onPress, null);
 
-        var mockKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockKeyBindingContext.bindings()).thenReturn(listOf(mockKeyBinding));
+        var keyBindingContext = bindingContext(listOf(binding), false);
 
-        keyEventListener.addContext(mockKeyBindingContext, 0);
+        keyEventListener.addContext(keyBindingContext, 0);
 
-        keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP);
+        keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
-        verify(mockKeyBinding, once()).press(MOST_RECENT_TIMESTAMP);
+        var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
+        verify(onPress, once()).run(keyEventInfoCaptor.capture());
+        var eventInfoProvided = keyEventInfoCaptor.getValue();
+        assertEquals(KEY, eventInfoProvided.key);
+        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
     }
 
     @Test
     public void testKeyReleased() {
-        var mockKeyBinding = mock(KeyBinding.class);
-        lenient().when(mockKeyBinding.boundCharacters()).thenReturn(listOf((CHAR)));
+        @SuppressWarnings("unchecked") var onRelease = (Action<KeyEventInfo>) mock(Action.class);
+        var binding = keyBinding(arrayChars(KEY), null, onRelease);
 
-        var mockKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockKeyBindingContext.bindings()).thenReturn(listOf(mockKeyBinding));
+        var keyBindingContext = bindingContext(listOf(binding), false);
 
-        keyEventListener.addContext(mockKeyBindingContext, 0);
+        keyEventListener.addContext(keyBindingContext, 0);
 
-        keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP);
+        keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
-        verify(mockKeyBinding, once()).release(MOST_RECENT_TIMESTAMP);
+        var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
+        verify(onRelease, once()).run(keyEventInfoCaptor.capture());
+        var eventInfoProvided = keyEventInfoCaptor.getValue();
+        assertEquals(KEY, eventInfoProvided.key);
+        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
     }
 
     @Test
-    public void testContextBlocksLowerContextEvents() {
-        var mockLowerKeyBinding = mock(KeyBinding.class);
-        lenient().when(mockLowerKeyBinding.boundCharacters()).thenReturn(listOf((CHAR)));
+    public void testContextCanBlockLowerContexts() {
+        @SuppressWarnings("unchecked") var lowerBindingOnPress =
+                (Action<KeyEventInfo>) mock(Action.class);
+        var lowerBinding = keyBinding(arrayChars('a'), lowerBindingOnPress, null);
 
-        var mockLowerKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockLowerKeyBindingContext.bindings())
-                .thenReturn(listOf(mockLowerKeyBinding));
+        var lowerBindingContext = bindingContext(listOf(lowerBinding), false);
 
-        var upperKeyBinding = mock(KeyBinding.class);
-        lenient().when(upperKeyBinding.boundCharacters()).thenReturn(listOf((CHAR)));
+        @SuppressWarnings("unchecked") var upperBindingOnPress =
+                (Action<KeyEventInfo>) mock(Action.class);
+        var upperBinding = keyBinding(arrayChars(KEY), upperBindingOnPress, null);
 
-        var mockUpperKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockUpperKeyBindingContext.bindings()).thenReturn(listOf(upperKeyBinding));
+        var upperBindingContext = bindingContext(listOf(upperBinding), true);
 
-        lenient().when(mockUpperKeyBindingContext.blocksLowerBindings()).thenReturn(true);
+        keyEventListener.addContext(upperBindingContext, 1);
+        keyEventListener.addContext(lowerBindingContext, 0);
 
-        keyEventListener.addContext(mockUpperKeyBindingContext, 0);
-        keyEventListener.addContext(mockLowerKeyBindingContext, 1);
+        keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
-        keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP);
+        verify(upperBindingOnPress, once()).run(any());
+        verify(lowerBindingOnPress, never()).run(any());
 
-        verify(upperKeyBinding, once()).press(MOST_RECENT_TIMESTAMP);
+        keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
-        keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP);
-
-        verify(upperKeyBinding, once()).release(MOST_RECENT_TIMESTAMP);
-    }
-
-    @Test
-    public void testBindingBlocksLowerBindingEvents() {
-        var mockLowerKeyBinding = mock(KeyBinding.class);
-        lenient().when(mockLowerKeyBinding.boundCharacters()).thenReturn(listOf('a'));
-
-        var mockLowerKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockLowerKeyBindingContext.bindings())
-                .thenReturn(listOf(mockLowerKeyBinding));
-
-        var mockUpperKeyBinding = mock(KeyBinding.class);
-        lenient().when(mockUpperKeyBinding.boundCharacters()).thenReturn(listOf((CHAR)));
-
-        var mockUpperKeyBindingContext = mock(KeyBindingContext.class);
-        lenient().when(mockUpperKeyBindingContext.bindings())
-                .thenReturn(listOf(mockUpperKeyBinding));
-
-        keyEventListener.addContext(mockUpperKeyBindingContext, 1);
-        keyEventListener.addContext(mockLowerKeyBindingContext, 0);
-
-        keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP);
-
-        verify(mockUpperKeyBinding, once()).press(MOST_RECENT_TIMESTAMP);
-        verify(mockLowerKeyBinding, never()).press(MOST_RECENT_TIMESTAMP);
-
-        keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP);
-
-        verify(mockUpperKeyBinding, once()).release(MOST_RECENT_TIMESTAMP);
-        verify(mockLowerKeyBinding, never()).release(MOST_RECENT_TIMESTAMP);
+        verify(upperBindingOnPress, once()).run(any());
+        verify(lowerBindingOnPress, never()).run(any());
     }
 
     @Test
     public void testPressValidatesTimestamp() {
-        keyEventListener.press(CHAR, MOST_RECENT_TIMESTAMP);
+        keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
         verify(mockTimestampValidator, once())
-                .validateTimestamp(keyEventListener.getClass().getCanonicalName(), MOST_RECENT_TIMESTAMP);
+                .validateTimestamp(keyEventListener.getClass().getCanonicalName(),
+                        MOST_RECENT_TIMESTAMP);
     }
 
     @Test
     public void testReleaseValidatesTimestamp() {
-        keyEventListener.release(CHAR, MOST_RECENT_TIMESTAMP);
+        keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
         verify(mockTimestampValidator, once())
-                .validateTimestamp(keyEventListener.getClass().getCanonicalName(), MOST_RECENT_TIMESTAMP);
+                .validateTimestamp(keyEventListener.getClass().getCanonicalName(),
+                        MOST_RECENT_TIMESTAMP);
     }
 }

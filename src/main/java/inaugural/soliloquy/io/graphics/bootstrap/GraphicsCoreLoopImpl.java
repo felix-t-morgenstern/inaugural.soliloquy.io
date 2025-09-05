@@ -138,6 +138,8 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
 
+        FRAME_TIMER.start();
+
         new Thread(gameThread).start();
 
         while (!glfwWindowShouldClose(window)) {
