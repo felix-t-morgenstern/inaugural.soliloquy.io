@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.integration.display.fullsuite.sprite;
 
 import inaugural.soliloquy.io.IOModule;
-import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
@@ -9,38 +8,19 @@ import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.random.Random.randomColor;
+import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-public class SpriteSimpleDisplayTest extends DisplayTest {
-    protected final static String SPRITE_ID = "spriteId";
-    protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
-            "./src/test/resources/images/items/RPG_Weapons.png";
-
-    protected final static AssetDefinitionsDTO ASSET_DTOS = new AssetDefinitionsDTO(
-            new ImageDefinitionDTO[]{
-                    new ImageDefinitionDTO(RPG_WEAPONS_RELATIVE_LOCATION, true)
-            },
-            new FontDefinitionDTO[]{},
-            new SpriteDefinitionDTO[]{
-                    new SpriteDefinitionDTO(SPRITE_ID, RPG_WEAPONS_RELATIVE_LOCATION,
-                            266, 271, 313, 343)
-            },
-            new AnimationDefinitionDTO[]{},
-            new GlobalLoopingAnimationDefinitionDTO[]{},
-            new ImageAssetSetDefinitionDTO[]{},
-            new MouseCursorImageDefinitionDTO[]{},
-            new AnimatedMouseCursorDefinitionDTO[]{},
-            new StaticMouseCursorDefinitionDTO[]{}
-    );
-
+public class SpriteBorderDisplayTest extends SpriteSimpleDisplayTest {
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
-                "Simple Sprite display test",
+                "Border Sprite display test",
                 ASSET_DTOS,
-                () -> DisplayTest.runThenClose("Simple Sprite", 4000),
-                SpriteSimpleDisplayTest::populateTopLevelComponent
+                () -> DisplayTest.runThenClose("Border Sprite", 4000),
+                SpriteBorderDisplayTest::populateTopLevelComponent
         );
     }
 
@@ -54,8 +34,8 @@ public class SpriteSimpleDisplayTest extends DisplayTest {
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         spriteRenderableFactory.make(
                 sprite,
-                staticProviderFactory.make(randomUUID(), null),
-                staticProviderFactory.make(randomUUID(), null),
+                staticProviderFactory.make(randomUUID(), randomFloatInRange(0.01f, 0.1f)),
+                staticProviderFactory.make(randomUUID(), randomColor()),
                 listOf(),
                 dimensProvider,
                 0,

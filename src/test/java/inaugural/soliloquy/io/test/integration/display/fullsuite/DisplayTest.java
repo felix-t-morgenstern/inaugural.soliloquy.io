@@ -21,6 +21,7 @@ import java.util.function.BiConsumer;
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
+import static inaugural.soliloquy.tools.CheckedExceptionWrapper.sleep;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
@@ -35,7 +36,7 @@ public class DisplayTest {
     public Component topLevelComponent;
 
     public void runTest(
-            String titlebar,
+            String testName,
             AssetDefinitionsDTO assetDefinitionsDTO,
             Runnable displayTest,
             BiConsumer<IOModule, Component> populateTopLevelComponent
@@ -90,7 +91,7 @@ public class DisplayTest {
                 settings::get,
                 actions::get,
                 listOf(),
-                titlebar,
+                testName,
                 assetDefinitionsDTO
         );
 
@@ -113,6 +114,12 @@ public class DisplayTest {
 
             displayTest.run();
         });
+    }
+
+    protected static void runThenClose(String testName, int ms) {
+        System.out.println(testName + " display test started");
+        sleep(ms);
+        System.out.println(testName + " display test ended");
     }
 
     private <T> Setting<T> generateMockSetting(T val) {
