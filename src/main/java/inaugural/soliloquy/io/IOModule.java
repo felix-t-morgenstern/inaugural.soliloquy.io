@@ -258,9 +258,10 @@ public class IOModule implements Module {
                 RasterizedLineSegmentRenderableImpl.class,
                 new RasterizedLineSegmentRenderer(timestampValidator)
         );
+        var rectangleRenderer = new RectangleRenderer(timestampValidator);
         contentRenderers.put(
                 RectangleRenderableImpl.class,
-                new RectangleRenderer(timestampValidator)
+                rectangleRenderer
         );
         var spriteRenderer = new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
@@ -282,6 +283,7 @@ public class IOModule implements Module {
                 finiteAnimationRenderer,
                 globalLoopingAnimationRenderer,
                 imageAssetSetRenderer,
+                rectangleRenderer,
                 spriteRenderer,
                 textLineRenderer
         );

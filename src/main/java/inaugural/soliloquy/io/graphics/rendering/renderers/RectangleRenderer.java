@@ -18,7 +18,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
             throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
 
-        Check.ifNull(renderable.getTopLeftColorProvider(), "renderable.getTopLeftColorProvider()");
+        Check.ifNull(renderable.getTopLeftColorProvider(),
+                "renderable.getTopLeftColorProvider()");
         Check.ifNull(renderable.getTopRightColorProvider(),
                 "renderable.getTopRightColorProvider()");
         Check.ifNull(renderable.getBottomRightColorProvider(),
@@ -26,19 +27,34 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         Check.ifNull(renderable.getBottomLeftColorProvider(),
                 "renderable.getBottomLeftColorProvider()");
 
-        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()");
-
-        var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
-                "renderable.getTextureTileWidthProvider()").provide(timestamp);
-        var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
-                "renderable.getTextureTileHeightProvider()").provide(timestamp);
-        Check.throwOnLtValue(textureTileWidth, 0f, "provided textureTileWidth in renderable");
-        Check.throwOnLtValue(textureTileHeight, 0f, "provided textureTileHeight in renderable");
-
         Check.ifNull(renderable.getRenderingDimensionsProvider(),
                 "renderable.getRenderingDimensionsProvider()");
 
-        var renderingDimensions = renderable.getRenderingDimensionsProvider().provide(timestamp);
+        var renderingDimensions =
+                renderable.getRenderingDimensionsProvider().provide(timestamp);
+
+        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()");
+
+        var backgroundTileTextureId = renderable.getTextureIdProvider().provide(timestamp);
+
+        var hasTexture = false;
+
+        float tilesPerWidth = 0f;
+        float tilesPerHeight = 0f;
+        if (backgroundTileTextureId != null) {
+            glBindTexture(GL_TEXTURE_2D, backgroundTileTextureId);
+            hasTexture = true;
+
+            var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
+                    "renderable.getTextureTileWidthProvider()").provide(timestamp);
+            var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
+                    "renderable.getTextureTileHeightProvider()").provide(timestamp);
+            Check.throwOnLtValue(textureTileWidth, 0f, "provided textureTileWidth in renderable");
+            Check.throwOnLtValue(textureTileHeight, 0f, "provided textureTileHeight in renderable");
+
+            tilesPerWidth = renderingDimensions.width() / textureTileWidth;
+            tilesPerHeight = renderingDimensions.height() / textureTileHeight;
+        }
 
         Check.ifNull(renderingDimensions,
                 "renderingDimensions provided by renderable.getRenderingDimensionsProvider()");
@@ -49,22 +65,10 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         unbindMeshAndShader();
 
-        var tilesPerWidth = renderingDimensions.width() / textureTileWidth;
-        var tilesPerHeight = renderingDimensions.height() / textureTileHeight;
-
         var topLeftColor = renderable.getTopLeftColorProvider().provide(timestamp);
         var topRightColor = renderable.getTopRightColorProvider().provide(timestamp);
         var bottomRightColor = renderable.getBottomRightColorProvider().provide(timestamp);
         var bottomLeftColor = renderable.getBottomLeftColorProvider().provide(timestamp);
-
-        var backgroundTileTextureId = renderable.getTextureIdProvider().provide(timestamp);
-
-        var hasTexture = false;
-
-        if (backgroundTileTextureId != null) {
-            glBindTexture(GL_TEXTURE_2D, backgroundTileTextureId);
-            hasTexture = true;
-        }
 
         glBegin(GL_QUADS);
 

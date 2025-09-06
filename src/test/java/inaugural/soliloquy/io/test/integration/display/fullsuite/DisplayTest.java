@@ -10,6 +10,7 @@ import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
+import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
@@ -31,6 +32,8 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 public class DisplayTest {
     private final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
+
+    private static StaticProviderFactory StaticProviderFactory;
 
     public IOModule ioModule;
     public Component topLevelComponent;
@@ -102,8 +105,8 @@ public class DisplayTest {
 
         var frameExecutor = ioModule.provide(FrameExecutor.class);
         var componentFactory = ioModule.provide(ComponentFactory.class);
-        var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
-        var wholeScreenProvider = staticProviderFactory.make(randomUUID(), WHOLE_SCREEN);
+        StaticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+        var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
         topLevelComponent = componentFactory.make(randomUUID(), 0, wholeScreenProvider, null);
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
@@ -114,6 +117,14 @@ public class DisplayTest {
 
             displayTest.run();
         });
+    }
+
+    protected static <T> StaticProvider<T> staticProvider(T val) {
+        return StaticProviderFactory.make(randomUUID(), val);
+    }
+
+    protected static <T> StaticProvider<T> nullProvider() {
+        return staticProvider(null);
     }
 
     protected static void runThenClose(String testName, int ms) {

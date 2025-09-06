@@ -7,7 +7,6 @@ import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorComponent;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static java.util.UUID.randomUUID;
@@ -29,17 +28,15 @@ public class ColorComponentIntensityShiftTest extends SpriteSimpleDisplayTest {
                                                     Component topLevelComponent) {
         var graphics = ioModule.provide(Graphics.class);
         var sprite = graphics.getSprite(SPRITE_ID);
-        var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
-        var dimensProvider = staticProviderFactory.make(randomUUID(),
-                floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
+        var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         spriteRenderableFactory.make(
                 sprite,
-                staticProviderFactory.make(randomUUID(), null),
-                staticProviderFactory.make(randomUUID(), null),
+                staticProvider(null),
+                staticProvider(null),
                 listOf(
                         colorComponentShift(
-                                staticProviderFactory.make(randomUUID(), 0.5f),
+                                staticProvider(0.5f),
                                 false,
                                 ColorComponent.RED
                         )
