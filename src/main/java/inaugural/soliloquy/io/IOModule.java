@@ -244,12 +244,15 @@ public class IOModule implements Module {
                 FiniteAnimationRenderer.class,
                 finiteAnimationRenderer
         );
-        var globalLoopingAnimationRenderer = new GlobalLoopingAnimationRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
+        var globalLoopingAnimationRenderer = new GlobalLoopingAnimationRenderer(renderingBoundaries,
+                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
                 globalLoopingAnimationRenderer
         );
-        var imageAssetSetRenderer = new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
+        var imageAssetSetRenderer =
+                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 ImageAssetSetRenderableImpl.class,
                 imageAssetSetRenderer
@@ -263,13 +266,16 @@ public class IOModule implements Module {
                 RectangleRenderableImpl.class,
                 rectangleRenderer
         );
-        var spriteRenderer = new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
+        var spriteRenderer =
+                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 SpriteRenderableImpl.class,
                 spriteRenderer
         );
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
-        var textLineRenderer = new TextLineRenderer(renderingBoundaries, defaultFontColor, resManager::windowWidthToHeightRatio, timestampValidator);
+        var textLineRenderer = new TextLineRenderer(renderingBoundaries, defaultFontColor,
+                resManager::windowWidthToHeightRatio, timestampValidator);
         contentRenderers.put(
                 TextLineRenderableImpl.class,
                 textLineRenderer
@@ -319,7 +325,7 @@ public class IOModule implements Module {
 
         var finiteLinearMovingColorProviderFactory =
                 andRegister(new FiniteLinearMovingColorProviderFactoryImpl(timestampValidator));
-        @SuppressWarnings("unchecked") var finiteLinearMovingProviderFactory =
+        @SuppressWarnings("unchecked") var finiteLinearMovingProviderFactory = andRegister(
                 new FiniteLinearMovingProviderFactoryImpl(mapOf(
                         pairOf(
                                 FiniteLinearMovingFloatBoxProvider.class.getCanonicalName(),
@@ -341,7 +347,32 @@ public class IOModule implements Module {
                         )
                 ),
                         timestampValidator
-                );
+                )
+        );
+        @SuppressWarnings("unchecked") var finiteSinusoidMovingProviderFactory = andRegister(
+                new FiniteSinusoidMovingProviderFactoryImpl(mapOf(
+                        pairOf(
+                                FiniteSinusoidMovingFloatBoxProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingFloatBoxProvider(
+                                        uuid, valuesAtTimestamps, transitionSharpnesses,
+                                        pausedTimestamp, timeVal)
+                        ),
+                        pairOf(
+                                FiniteSinusoidMovingFloatProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingFloatProvider(
+                                        uuid, valuesAtTimestamps, transitionSharpnesses,
+                                        pausedTimestamp, timeVal)
+                        ),
+                        pairOf(
+                                FiniteSinusoidMovingVertexProvider.class.getCanonicalName(),
+                                uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingVertexProvider(
+                                        uuid, valuesAtTimestamps, transitionSharpnesses,
+                                        pausedTimestamp, timeVal)
+                        )
+                ),
+                        timestampValidator
+                )
+        );
         var loopingLinearMovingColorProviderFactory =
                 andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"unused", "unchecked"})
@@ -408,6 +439,8 @@ public class IOModule implements Module {
                 FiniteLinearMovingVertexProvider.class
         ).forEach(c ->
                 providerHandler.add(c.getCanonicalName(), finiteLinearProviderHandler));
+
+        // TODO: Add sinusoid provider handler!!!
 
         providerHandler.add(LoopingLinearMovingColorProviderImpl.class.getCanonicalName(),
                 new LoopingLinearMovingColorProviderHandler(

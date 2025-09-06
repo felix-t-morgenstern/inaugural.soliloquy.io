@@ -51,11 +51,10 @@ public class AntialiasedLineSegmentRenderableFactoryImplTests {
         assertInstanceOf(AntialiasedLineSegmentRenderableImpl.class,
                 output);
 
-        var newZ = 456;
+        var newZ = randomInt();
         output.setZ(newZ);
 
         assertEquals(newZ, output.getZ());
-        verify(mockContainingComponent, once()).add(output);
 
         output.delete();
 

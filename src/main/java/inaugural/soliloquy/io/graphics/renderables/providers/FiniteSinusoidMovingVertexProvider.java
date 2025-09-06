@@ -4,7 +4,6 @@ import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,7 +14,7 @@ public class FiniteSinusoidMovingVertexProvider
         implements FiniteSinusoidMovingProvider<Vertex> {
     public FiniteSinusoidMovingVertexProvider(UUID uuid,
                                               Map<Long, Vertex> valuesAtTimes,
-                                              List<Float> transitionSharpnesses,
+                                              float[] transitionSharpnesses,
                                               Long pausedTimestamp,
                                               TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, timestampValidator);

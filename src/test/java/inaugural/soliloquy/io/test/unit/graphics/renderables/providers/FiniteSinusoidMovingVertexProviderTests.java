@@ -12,8 +12,7 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static java.util.UUID.randomUUID;
@@ -47,7 +46,7 @@ public class FiniteSinusoidMovingVertexProviderTests {
                 mapOf(
                         pairOf(TIME_1, VERTEX_1),
                         pairOf(TIME_2, VERTEX_2)
-                ), listOf(TRANSITION_SHARPNESS), null, mockTimestampValidator);
+                ), arrayFloats(TRANSITION_SHARPNESS), null, mockTimestampValidator);
     }
 
     @Test
@@ -55,19 +54,19 @@ public class FiniteSinusoidMovingVertexProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(null,
                         mapOf(pairOf(TIME_1, VERTEX_1), pairOf(TIME_2, VERTEX_2)),
-                        listOf(TRANSITION_SHARPNESS), null, mockTimestampValidator));
+                        arrayFloats(TRANSITION_SHARPNESS), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(UUID,
                         null,
-                        listOf(TRANSITION_SHARPNESS), null, mockTimestampValidator));
+                        arrayFloats(TRANSITION_SHARPNESS), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(UUID,
                         mapOf(pairOf(null, VERTEX_1), pairOf(TIME_2, VERTEX_2)),
-                        listOf(TRANSITION_SHARPNESS), null, mockTimestampValidator));
+                        arrayFloats(TRANSITION_SHARPNESS), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(UUID,
                         mapOf(pairOf(TIME_1, null), pairOf(TIME_2, VERTEX_2)),
-                        listOf(TRANSITION_SHARPNESS), null, mockTimestampValidator));
+                        arrayFloats(TRANSITION_SHARPNESS), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(UUID,
                         mapOf(pairOf(TIME_1, VERTEX_1), pairOf(TIME_2, VERTEX_2)),
@@ -75,11 +74,7 @@ public class FiniteSinusoidMovingVertexProviderTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteSinusoidMovingVertexProvider(UUID,
                         mapOf(pairOf(TIME_1, VERTEX_1), pairOf(TIME_2, VERTEX_2)),
-                        listOf((Float) null), null, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteSinusoidMovingVertexProvider(UUID,
-                        mapOf(pairOf(TIME_1, VERTEX_1), pairOf(TIME_2, VERTEX_2)),
-                        listOf(TRANSITION_SHARPNESS), null, null));
+                        arrayFloats(TRANSITION_SHARPNESS), null, null));
     }
 
     @Test

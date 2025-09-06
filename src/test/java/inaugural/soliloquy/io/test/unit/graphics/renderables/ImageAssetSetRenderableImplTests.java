@@ -568,8 +568,6 @@ public class ImageAssetSetRenderableImplTests {
         renderable.setZ(newZ);
 
         assertEquals(newZ, renderable.getZ());
-
-        verify(mockContainingComponent).add(renderable);
     }
 
     @Test

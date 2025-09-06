@@ -36,7 +36,7 @@ public class FiniteSinusoidMovingFloatBoxProviderTest extends FiniteLinearMoving
                 FiniteSinusoidMovingFloatBoxProvider = new FiniteSinusoidMovingFloatBoxProvider(
                         java.util.UUID.randomUUID(),
                         renderingDimensionsAtTimes,
-                        listOf(1f, 0.75f),
+                        arrayFloats(1f, 0.75f),
                         null,
                         null
                 ));

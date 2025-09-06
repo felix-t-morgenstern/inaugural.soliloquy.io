@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,7 +10,7 @@ public class FiniteSinusoidMovingFloatProvider extends AbstractFiniteSinusoidMov
         implements FiniteSinusoidMovingProvider<Float> {
     public FiniteSinusoidMovingFloatProvider(UUID uuid,
                                              Map<Long, Float> valuesAtTimes,
-                                             List<Float> transitionSharpnesses,
+                                             float[] transitionSharpnesses,
                                              Long pausedTimestamp,
                                              TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, timestampValidator);

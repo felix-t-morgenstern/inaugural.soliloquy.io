@@ -38,7 +38,6 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void setZ(int z) {
         this.z = z;
-        component.add(this);
     }
 
     // NB: deleted SpriteRenderables should NOT_ make other calls unsupported, unlike

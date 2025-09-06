@@ -137,6 +137,11 @@ public class AntialiasedLineSegmentRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockComponent, once()).add(renderable);
+    }
+
+    @Test
     public void testSetAndGetVertexProviders() {
         assertSame(VERTEX_1_PROVIDER, renderable.getVertex1Provider());
         assertSame(VERTEX_2_PROVIDER, renderable.getVertex2Provider());
@@ -220,11 +225,10 @@ public class AntialiasedLineSegmentRenderableImplTests {
     public void testGetAndSetZ() {
         assertEquals(Z, renderable.getZ());
 
-        int newZ = 456;
+        int newZ = randomInt();
         renderable.setZ(newZ);
 
         assertEquals(newZ, renderable.getZ());
-        verify(mockComponent, once()).add(renderable);
     }
 
     @Test

@@ -632,7 +632,7 @@ public class FiniteAnimationRenderableImplTests {
         assertEquals(Z, renderableWithMouseEvents.getZ());
         assertEquals(Z, renderableWithoutMouseEvents.getZ());
 
-        int newZ = 456;
+        int newZ = randomInt();
 
         renderableWithMouseEvents.setZ(newZ);
 
@@ -640,9 +640,6 @@ public class FiniteAnimationRenderableImplTests {
 
         assertEquals(newZ, renderableWithMouseEvents.getZ());
         assertEquals(newZ, renderableWithoutMouseEvents.getZ());
-
-        verify(mockContainingComponent, once()).add(renderableWithMouseEvents);
-        verify(mockContainingComponent, once()).add(renderableWithoutMouseEvents);
     }
 
     @Test

@@ -1,7 +1,8 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeRectangleRenderable;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,10 +21,9 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
@@ -33,17 +33,16 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 @ExtendWith(MockitoExtension.class)
 public class RectangleRendererTests {
-    private final ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeProviderAtTime<>();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(floatBoxOf(0f, 0f, 1f, 1f));
+            generateMockStaticProvider(floatBoxOf(0f, 0f, 1f, 1f));
     private final UUID UUID = java.util.UUID.randomUUID();
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
+    @Mock private ProviderAtTime<Color> mockTopLeftColorProvider;
+    @Mock private ProviderAtTime<Color> mockTopRightColorProvider;
+    @Mock private ProviderAtTime<Color> mockBottomRightColorProvider;
+    @Mock private ProviderAtTime<Color> mockBottomLeftColorProvider;
+    @Mock private ProviderAtTime<Integer> mockBackgroundTextureIdProvider;
     @Mock private TimestampValidator mockTimestampValidator;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
@@ -95,63 +94,57 @@ public class RectangleRendererTests {
         renderer.setShader(mockShader);
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(null, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(null, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, null,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, null,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        null, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        null, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, null,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, null,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         null, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, null,
-                        mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
-                MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         null, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, null, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, new FakeStaticProvider<>(null), UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRectangleRenderable(TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                        BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, null),
                 MOST_RECENT_TIMESTAMP));
     }
@@ -159,9 +152,9 @@ public class RectangleRendererTests {
     @Test
     public void testRenderWithoutMeshOrShader() {
         RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
-                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                mockTopLeftColorProvider, mockTopRightColorProvider,
+                mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                 mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID);
 
         var rendererWithoutMesh = new RectangleRenderer(mockTimestampValidator);
@@ -180,9 +173,9 @@ public class RectangleRendererTests {
     @Test
     public void testRenderUpdatesTimestamp() {
         RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
-                TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER,
-                BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
+                mockTopLeftColorProvider, mockTopRightColorProvider,
+                mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                 mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID);
         renderer.setMesh(mockMesh);
         renderer.setShader(mockShader);

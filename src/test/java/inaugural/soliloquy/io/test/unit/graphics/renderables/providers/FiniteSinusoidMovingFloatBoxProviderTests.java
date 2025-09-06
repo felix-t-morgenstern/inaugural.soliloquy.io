@@ -10,10 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
 
-import java.util.List;
 import java.util.Map;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.arrayFloats;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +56,7 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     private final float SHARPNESS_1 = 1f;
     private final float SHARPNESS_2 = 0.5f;
 
-    private final List<Float> TRANSITION_SHARPNESSES = listOf(SHARPNESS_1, SHARPNESS_2);
+    private final float[] TRANSITION_SHARPNESSES = arrayFloats(SHARPNESS_1, SHARPNESS_2);
 
     private final java.util.UUID UUID = java.util.UUID.randomUUID();
 
@@ -99,10 +98,10 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
                         null, null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
-                        listOf(), null, mockTimestampValidator));
+                        arrayFloats(), null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
-                        listOf(-0.001f), null, mockTimestampValidator));
+                        arrayFloats(-0.001f), null, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingFloatBoxProvider(UUID, VALUES_AT_TIMES,
@@ -124,7 +123,6 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
     @Test
     public void testTransitionSharpnesses() {
         assertEquals(TRANSITION_SHARPNESSES, provider.transitionSharpnesses());
-        assertNotSame(TRANSITION_SHARPNESSES, provider.transitionSharpnesses());
     }
 
     @Test

@@ -33,27 +33,27 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         var renderingDimensions =
                 renderable.getRenderingDimensionsProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()");
-
-        var backgroundTileTextureId = renderable.getTextureIdProvider().provide(timestamp);
+        var texId =
+                Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()")
+                        .provide(timestamp);
+        var texTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
+                "renderable.getTextureTileWidthProvider()").provide(timestamp);
+        var texTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
+                "renderable.getTextureTileHeightProvider()").provide(timestamp);
 
         var hasTexture = false;
 
-        float tilesPerWidth = 0f;
-        float tilesPerHeight = 0f;
-        if (backgroundTileTextureId != null) {
-            glBindTexture(GL_TEXTURE_2D, backgroundTileTextureId);
+        var tilesPerWidth = 0f;
+        var tilesPerHeight = 0f;
+        if (texId != null) {
+            glBindTexture(GL_TEXTURE_2D, texId);
             hasTexture = true;
 
-            var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
-                    "renderable.getTextureTileWidthProvider()").provide(timestamp);
-            var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
-                    "renderable.getTextureTileHeightProvider()").provide(timestamp);
-            Check.throwOnLtValue(textureTileWidth, 0f, "provided textureTileWidth in renderable");
-            Check.throwOnLtValue(textureTileHeight, 0f, "provided textureTileHeight in renderable");
+            Check.throwOnLtValue(texTileWidth, 0f, "provided texTileWidth in renderable");
+            Check.throwOnLtValue(texTileHeight, 0f, "provided texTileHeight in renderable");
 
-            tilesPerWidth = renderingDimensions.width() / textureTileWidth;
-            tilesPerHeight = renderingDimensions.height() / textureTileHeight;
+            tilesPerWidth = renderingDimensions.width() / texTileWidth;
+            tilesPerHeight = renderingDimensions.height() / texTileHeight;
         }
 
         Check.ifNull(renderingDimensions,

@@ -31,7 +31,7 @@ public class FiniteSinusoidMovingFloatProviderTest extends FiniteLinearMovingPro
                 FiniteSinusoidMovingFloatProvider = new FiniteSinusoidMovingFloatProvider(
                         java.util.UUID.randomUUID(),
                         borderThicknessValues,
-                        listOf(1f, 0.5f),
+                        arrayFloats(1f, 0.5f),
                         null,
                         null
                 ));

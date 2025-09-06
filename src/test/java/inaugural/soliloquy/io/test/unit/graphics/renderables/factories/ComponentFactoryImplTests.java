@@ -52,6 +52,7 @@ public class ComponentFactoryImplTests {
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
         var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent);
+        when(mockRenderableWithMouseEvents.component()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.component()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);

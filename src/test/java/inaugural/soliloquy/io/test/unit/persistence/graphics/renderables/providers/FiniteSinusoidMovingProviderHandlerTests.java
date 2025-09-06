@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables.providers;
 
-import inaugural.soliloquy.io.persistence.graphics.renderables.providers.FiniteLinearMovingProviderHandler;
+import inaugural.soliloquy.io.persistence.graphics.renderables.providers.FiniteSinusoidMovingProviderHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,25 +9,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
+import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteSinusoidMovingProviderFactory;
 
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.collections.Collections.arrayFloats;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
 import static inaugural.soliloquy.tools.testing.Mock.generateSimpleMockTypeHandler;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
-public class FiniteLinearMovingProviderHandlerTests {
+public class FiniteSinusoidMovingProviderHandlerTests {
     private final Long TIMESTAMP_1 = randomLong();
     private final Long TIMESTAMP_2 = randomLong();
     private final Long TIMESTAMP_3 = randomLong();
+    private final float SHARPNESS = randomFloat();
     private final Float VALUE_1 = randomFloat();
     private final Float VALUE_2 = randomFloat();
     private final Float VALUE_3 = randomFloat();
@@ -47,18 +50,18 @@ public class FiniteLinearMovingProviderHandlerTests {
     private final String WRITTEN_VALUE = String.format(
             "{\"uuid\":\"%s\",\"type\":\"java.lang.Float\",\"vals\":[{\"time\":%d," +
                     "\"val\":\"%s\"},{\"time\":%d,\"val\":\"%s\"},{\"time\":%d,\"val\":\"%s\"}]," +
-                    "\"pausedTimestamp\":%d}",
+                    "\"sharpnesses\":[%s],\"pausedTimestamp\":%d}",
             UUID, TIMESTAMP_1, FLOAT_WRITE_OUTPUT_1, TIMESTAMP_2, FLOAT_WRITE_OUTPUT_2, TIMESTAMP_3,
-            FLOAT_WRITE_OUTPUT_3, PAUSED_TIMESTAMP);
+            FLOAT_WRITE_OUTPUT_3, SHARPNESS, PAUSED_TIMESTAMP);
 
     private Map<Long, Float> mockValuesAtTimestamps;
 
-    @Mock private FiniteLinearMovingProviderFactory mockFactory;
-    @Mock private FiniteLinearMovingProvider<Float> mockProvider;
+    @Mock private FiniteSinusoidMovingProviderFactory mockFactory;
+    @Mock private FiniteSinusoidMovingProvider<Float> mockProvider;
     @Mock private PersistenceHandler mockPersistenceHandler;
 
     @SuppressWarnings("rawtypes")
-    private TypeHandler<FiniteLinearMovingProvider> handler;
+    private TypeHandler<FiniteSinusoidMovingProvider> handler;
 
     @BeforeEach
     public void setUp() {
@@ -72,21 +75,22 @@ public class FiniteLinearMovingProviderHandlerTests {
                 pairOf(TIMESTAMP_3, VALUE_3)
         );
 
-        handler = new FiniteLinearMovingProviderHandler(mockPersistenceHandler, mockFactory);
+        handler = new FiniteSinusoidMovingProviderHandler(mockPersistenceHandler, mockFactory);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteLinearMovingProviderHandler(null, mockFactory));
+                () -> new FiniteSinusoidMovingProviderHandler(null, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteLinearMovingProviderHandler(mockPersistenceHandler, null));
+                () -> new FiniteSinusoidMovingProviderHandler(mockPersistenceHandler, null));
     }
 
     @Test
     public void testWrite() {
         when(mockProvider.uuid()).thenReturn(UUID);
         when(mockProvider.valuesAtTimestampsRepresentation()).thenReturn(mockValuesAtTimestamps);
+        when(mockProvider.transitionSharpnesses()).thenReturn(arrayFloats(SHARPNESS));
         when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
 
         var writtenValue = handler.write(mockProvider);
@@ -115,8 +119,8 @@ public class FiniteLinearMovingProviderHandlerTests {
     @Test
     public void testRead() {
         //noinspection unchecked,rawtypes
-        when(mockFactory.make(any(), anyMap(), anyLong()))
-                .thenReturn((FiniteLinearMovingProvider) mockProvider);
+        when(mockFactory.make(any(), anyMap(), any(), anyLong()))
+                .thenReturn((FiniteSinusoidMovingProvider) mockProvider);
 
         var output = handler.read(WRITTEN_VALUE);
 
@@ -132,6 +136,7 @@ public class FiniteLinearMovingProviderHandlerTests {
         inOrder.verify(mockFactory, once()).make(
                 eq(UUID),
                 (Map<Long, Float>) factoryCaptor.capture(),
+                eq(arrayFloats(SHARPNESS)),
                 eq(PAUSED_TIMESTAMP)
         );
         //noinspection unchecked

@@ -14,8 +14,7 @@ import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteSinusoi
 import java.util.*;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomFloat;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +27,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     /** @noinspection rawtypes */
     @Mock private FiniteSinusoidMovingProvider factory1Output;
     /** @noinspection rawtypes */
-    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_1 =
+    private final Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_1 =
             uuid -> valuesAtTime -> sharpnesses -> pausedTimestamp -> mostRecentTimestamp -> {
                 factory1InputUuid = uuid;
                 factory1InputValuesAtTimes = valuesAtTime;
@@ -43,7 +42,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     /** @noinspection rawtypes */
     @Mock private FiniteSinusoidMovingProvider factory2Output;
     /** @noinspection rawtypes */
-    private final Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_2 =
+    private final Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>> FACTORY_2 =
             uuid -> valuesAtTime -> sharpnesses -> pausedTimestamp -> mostRecentTimestamp -> {
                 factory2InputUuid = uuid;
                 factory2InputValuesAtTimes = valuesAtTime;
@@ -57,7 +56,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     private UUID factory1InputUuid;
     /** @noinspection rawtypes */
     private Map factory1InputValuesAtTimes;
-    private List<Float> factory1InputTransitionSharpnesses;
+    private float[] factory1InputTransitionSharpnesses;
     private Long factory1InputPausedTimestamp;
     private TimestampValidator factory1InputValidator;
 
@@ -65,7 +64,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     private UUID factory2InputUuid;
     /** @noinspection rawtypes, unused */
     private Map factory2InputValuesAtTimes;
-    private List<Float> factory2InputTransitionSharpnesses;
+    private float[] factory2InputTransitionSharpnesses;
     @SuppressWarnings("unused")
     private Long factory2InputPausedTimestamp;
     @SuppressWarnings("unused")
@@ -110,7 +109,7 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
                 pairOf(1L, randomFloat()),
                 pairOf(2L, randomFloat())
         );
-        var transitionSharpnesses = listOf(randomFloat(), randomFloat());
+        var transitionSharpnesses = arrayFloats(randomFloat(), randomFloat());
         var pausedTimestamp = randomLong();
 
         var provider = factory.make(uuid, valuesAtTimestamps, transitionSharpnesses, pausedTimestamp);
@@ -124,12 +123,12 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         assertSame(mockTimestampValidator, factory1InputValidator);
     }
 
-    public List<Float> getFactory2InputTransitionSharpnesses() {
+    public float[] getFactory2InputTransitionSharpnesses() {
         return factory2InputTransitionSharpnesses;
     }
 
     public void setFactory2InputTransitionSharpnesses(
-            List<Float> factory2InputTransitionSharpnesses) {
+            float[] factory2InputTransitionSharpnesses) {
         this.factory2InputTransitionSharpnesses = factory2InputTransitionSharpnesses;
     }
 

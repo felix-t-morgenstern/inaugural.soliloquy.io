@@ -4,8 +4,8 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.io.graphics.renderables.providers.FiniteLinearMovingProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.FiniteSinusoidMovingProvider;
+import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteSinusoidMovingProviderFactory;
 
 import java.util.Map;
 import java.util.Objects;
@@ -13,21 +13,21 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
-/** @noinspection rawtypes */
-public class FiniteLinearMovingProviderHandler extends
-        AbstractTypeHandler<FiniteLinearMovingProvider> {
+@SuppressWarnings("rawtypes")
+public class FiniteSinusoidMovingProviderHandler extends
+        AbstractTypeHandler<FiniteSinusoidMovingProvider> {
     private final PersistenceHandler PERSISTENCE_HANDLER;
-    private final FiniteLinearMovingProviderFactory FACTORY;
+    private final FiniteSinusoidMovingProviderFactory FACTORY;
 
-    public FiniteLinearMovingProviderHandler(PersistenceHandler persistenceHandler,
-                                             FiniteLinearMovingProviderFactory factory) {
+    public FiniteSinusoidMovingProviderHandler(PersistenceHandler persistenceHandler,
+                                               FiniteSinusoidMovingProviderFactory factory) {
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public FiniteLinearMovingProvider read(String writtenValue) throws IllegalArgumentException {
+    public FiniteSinusoidMovingProvider read(String writtenValue) throws IllegalArgumentException {
         var dto = JSON.fromJson(Check.ifNullOrEmpty(writtenValue, "writtenValue"),
                 Dto.class);
         var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.type);
@@ -35,24 +35,22 @@ public class FiniteLinearMovingProviderHandler extends
         for (var valueDto : dto.vals) {
             valuesAtTimestamps.put(valueDto.time, typeHandler.read(valueDto.val));
         }
-        return FACTORY.make(UUID.fromString(dto.uuid), valuesAtTimestamps, dto.pausedTimestamp);
+        return FACTORY.make(UUID.fromString(dto.uuid), valuesAtTimestamps, dto.sharpnesses, dto.pausedTimestamp);
     }
 
     @Override
-    public String write(FiniteLinearMovingProvider finiteLinearMovingProvider) {
-        Check.ifNull(finiteLinearMovingProvider, "finiteLinearMovingProvider");
+    public String write(FiniteSinusoidMovingProvider provider) {
+        Check.ifNull(provider, "provider");
 
         var dto = new Dto();
 
-        dto.uuid = finiteLinearMovingProvider.uuid().toString();
+        dto.uuid = provider.uuid().toString();
 
         //noinspection unchecked
-        Map<Long, Object> valuesAtTimestamps =
-                finiteLinearMovingProvider.valuesAtTimestampsRepresentation();
-        var firstNonNullValue =
-                valuesAtTimestamps.values().stream().filter(Objects::nonNull).findFirst();
+        Map<Long, Object> valuesAtTimestamps = provider.valuesAtTimestampsRepresentation();
+        var firstNonNullValue = valuesAtTimestamps.values().stream().filter(Objects::nonNull).findFirst();
 
-        TypeHandler typeHandler = null;
+        @SuppressWarnings("rawtypes") TypeHandler typeHandler = null;
         if (firstNonNullValue.isPresent()) {
             var valueType = dto.type = firstNonNullValue.get().getClass().getCanonicalName();
             typeHandler = PERSISTENCE_HANDLER.getTypeHandler(valueType);
@@ -75,7 +73,9 @@ public class FiniteLinearMovingProviderHandler extends
             dto.vals[index++] = valueDto;
         }
 
-        dto.pausedTimestamp = finiteLinearMovingProvider.pausedTimestamp();
+        dto.sharpnesses = provider.transitionSharpnesses();
+
+        dto.pausedTimestamp = provider.pausedTimestamp();
 
         return JSON.toJson(dto);
     }
@@ -84,6 +84,7 @@ public class FiniteLinearMovingProviderHandler extends
         String uuid;
         String type;
         ValueAtTimestampDTO[] vals;
+        float[] sharpnesses;
         Long pausedTimestamp;
     }
 

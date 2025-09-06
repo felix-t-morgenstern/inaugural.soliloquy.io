@@ -171,11 +171,10 @@ public class RasterizedLineSegmentRenderableImplTests {
     public void testGetAndSetZ() {
         assertEquals(Z, renderable.getZ());
 
-        int newZ = 456;
+        var newZ = randomInt();
         renderable.setZ(newZ);
 
         assertEquals(newZ, renderable.getZ());
-        verify(mockContainingComponent, once()).add(renderable);
     }
 
     @Test

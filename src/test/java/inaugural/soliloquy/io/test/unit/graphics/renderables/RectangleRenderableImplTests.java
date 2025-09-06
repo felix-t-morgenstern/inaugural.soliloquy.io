@@ -488,8 +488,6 @@ public class RectangleRenderableImplTests {
         renderable.setZ(newZ);
 
         assertEquals(newZ, renderable.getZ());
-
-        verify(mockContainingComponent, once()).add(renderable);
     }
 
     @Test

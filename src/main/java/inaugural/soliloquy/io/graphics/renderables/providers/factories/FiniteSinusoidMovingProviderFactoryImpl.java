@@ -15,12 +15,12 @@ public class FiniteSinusoidMovingProviderFactoryImpl
         extends ValuesAtTimestampType
         implements FiniteSinusoidMovingProviderFactory {
     /** @noinspection rawtypes */
-    private final Map<String, Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> FACTORIES;
+    private final Map<String, Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> FACTORIES;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     /** @noinspection rawtypes, ConstantConditions */
     public FiniteSinusoidMovingProviderFactoryImpl(
-            Map<String, Function<UUID, Function<Map, Function<List<Float>, Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> factories,
+            Map<String, Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> factories,
             TimestampValidator timestampValidator) {
         Check.ifMapIsNonEmptyWithRealKeysAndValues(factories, "factories");
         FACTORIES = mapOf(factories);
@@ -30,7 +30,7 @@ public class FiniteSinusoidMovingProviderFactoryImpl
 
     @Override
     public <T> FiniteSinusoidMovingProvider<T> make(UUID uuid, Map<Long, T> valuesAtTimestamps,
-                                                    List<Float> transitionSharpnesses,
+                                                    float[] transitionSharpnesses,
                                                     Long pausedTimestamp)
             throws IllegalArgumentException {
         var type = get(valuesAtTimestamps);

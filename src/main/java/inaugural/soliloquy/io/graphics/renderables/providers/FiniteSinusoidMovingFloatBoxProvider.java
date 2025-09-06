@@ -15,7 +15,7 @@ public class FiniteSinusoidMovingFloatBoxProvider
         implements FiniteSinusoidMovingProvider<FloatBox> {
     public FiniteSinusoidMovingFloatBoxProvider(UUID uuid,
                                                 Map<Long, FloatBox> valuesAtTimes,
-                                                List<Float> transitionSharpnesses,
+                                                float[] transitionSharpnesses,
                                                 Long pausedTimestamp,
                                                 TimestampValidator timestampValidator) {
         super(uuid, valuesAtTimes, transitionSharpnesses, pausedTimestamp, timestampValidator);
