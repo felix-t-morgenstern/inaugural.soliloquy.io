@@ -91,7 +91,12 @@ public class ComponentImpl implements Component {
     }
 
     @Override
-    public Set<Renderable> contents() {
+    public void clear() {
+        RENDERABLES.clear();
+    }
+
+    @Override
+    public Set<Renderable> contentsRepresentation() {
         return setOf(RENDERABLES);
     }
 
@@ -101,14 +106,14 @@ public class ComponentImpl implements Component {
     }
 
     @Override
-    public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> providerAtTime)
+    public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> provider)
             throws IllegalArgumentException, UnsupportedOperationException {
         if (CONTAINING_COMPONENT == null) {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setRenderingBoundariesProvider: cannot assign new " +
                             "rendering boundaries for top-level Component");
         }
-        renderingBoundariesProvider = Check.ifNull(providerAtTime, "providerAtTime");
+        renderingBoundariesProvider = Check.ifNull(provider, "provider");
     }
 
     @Override

@@ -65,7 +65,8 @@ public class DisplayTest {
             new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, TimestampValidator);
 
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), WHOLE_SCREEN, mock(TimestampValidator.class));
+            new StaticProviderImpl<>(java.util.UUID.randomUUID(), WHOLE_SCREEN,
+                    mock(TimestampValidator.class));
 
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
@@ -89,7 +90,8 @@ public class DisplayTest {
         FrameTimer = new FakeFrameTimer();
 
         Renderers = mapOf();
-        var componentRenderer = new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
+        var componentRenderer =
+                new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
@@ -109,7 +111,8 @@ public class DisplayTest {
         when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
-        when(MockTopLevelComponent.contents()).thenReturn(setOf(MockFirstChildComponent));
+        when(MockTopLevelComponent.contentsRepresentation()).thenReturn(
+                setOf(MockFirstChildComponent));
 
         var frameExecutor = new FrameExecutorImpl(componentRenderer, 100);
         frameExecutor.setTopLevelComponent(MockTopLevelComponent);

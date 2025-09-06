@@ -26,7 +26,7 @@ class TriangleRendererTest extends DisplayTest {
 
         Renderers.put(TriangleRenderableImpl.class,
                 TriangleRenderer);
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(TriangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(TriangleRenderer);

@@ -77,7 +77,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
                 windowResolutionManager::windowWidthToHeightRatio, null);
 
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(TextLineRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
 
         return setOf(TextLineRenderer);

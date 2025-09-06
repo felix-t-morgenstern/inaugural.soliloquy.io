@@ -7,6 +7,7 @@ import soliloquy.specs.io.graphics.assets.*;
 import java.util.function.Function;
 
 public class GraphicsImpl implements Graphics {
+    private final Function<String, Image> GET_IMAGE;
     private final Function<String, Sprite> GET_SPRITE;
     private final Function<String, Animation> GET_ANIMATION;
     private final Function<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION;
@@ -14,17 +15,24 @@ public class GraphicsImpl implements Graphics {
     private final Function<String, Font> GET_FONT;
 
     public GraphicsImpl(
+            Function<String, Image> getImage,
             Function<String, Sprite> getSprite,
             Function<String, Animation> getAnimation,
             Function<String, GlobalLoopingAnimation> getGlobalLoopingAnimation,
             Function<String, ImageAssetSet> getImageAssetSet,
             Function<String, Font> getFont
     ) {
+        GET_IMAGE = getImage;
         GET_SPRITE = Check.ifNull(getSprite, "getSprite");
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
         GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation, "getGlobalLoopingAnimation");
         GET_IMAGE_ASSET_SET = Check.ifNull(getImageAssetSet, "getImageAssetSet");
         GET_FONT = Check.ifNull(getFont, "getFont");
+    }
+
+    @Override
+    public Image getImage(String relLoc) throws IllegalArgumentException {
+        return GET_IMAGE.apply(relLoc);
     }
 
     @Override

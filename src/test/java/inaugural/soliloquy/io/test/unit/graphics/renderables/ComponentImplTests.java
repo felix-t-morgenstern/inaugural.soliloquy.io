@@ -91,9 +91,9 @@ public class ComponentImplTests {
     }
 
     @Test
-    public void testAddAndContents() {
+    public void testAddAndContentsRepresentation() {
         component.add(mockRenderable);
-        var content = component.contents();
+        var content = component.contentsRepresentation();
 
         assertNotNull(content);
         assertEquals(setOf(mockRenderable), content);
@@ -104,7 +104,7 @@ public class ComponentImplTests {
         when(mockRenderable.component()).thenReturn(component);
 
         component.add(mockRenderable);
-        var content = component.contents();
+        var content = component.contentsRepresentation();
 
         assertNotNull(content);
         assertEquals(setOf(mockRenderable), content);
@@ -152,7 +152,22 @@ public class ComponentImplTests {
 
         component.remove(mockRenderable);
 
-        assertTrue(component.contents().isEmpty());
+        assertTrue(component.contentsRepresentation().isEmpty());
+    }
+
+    @Test
+    public void testClear() {
+        var mockRenderable2 = mock(Renderable.class);
+        when(mockRenderable2.component()).thenReturn(component);
+        var mockRenderable3 = mock(Renderable.class);
+        when(mockRenderable3.component()).thenReturn(component);
+        component.add(mockRenderable);
+        component.add(mockRenderable2);
+        component.add(mockRenderable3);
+
+        component.clear();
+
+        assertTrue(component.contentsRepresentation().isEmpty());
     }
 
     @Test

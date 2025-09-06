@@ -43,6 +43,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
     private final Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider>
             STATIC_MOUSE_CURSOR_PROVIDER_FACTORY;
 
+    private final Consumer<Image> PROCESS_IMAGE;
     private final Consumer<Sprite> PROCESS_SPRITE;
     private final Consumer<Animation> PROCESS_ANIMATION;
     private final Consumer<GlobalLoopingAnimation> PROCESS_GLOBAL_LOOPING_ANIMATION;
@@ -93,6 +94,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
                                          animatedMouseCursorProviderFactory,
                                  Function<StaticMouseCursorProviderDefinition,
                                          StaticMouseCursorProvider> staticMouseCursorProviderFactory,
+                                 Consumer<Image> processImage,
                                  Consumer<Sprite> processSprite,
                                  Consumer<Animation> processAnimation,
                                  Consumer<GlobalLoopingAnimation> processGlobalLoopingAnimation,
@@ -126,6 +128,11 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         ANIMATIONS = mapOf();
         MOUSE_CURSOR_IMAGES = mapOf();
 
+        Check.ifNull(processImage, "processImage");
+        PROCESS_IMAGE = image -> {
+            IMAGES.put(image.relativeLocation(), image);
+            blockedConsumer(image, processImage);
+        };
         Check.ifNull(processSprite, "processSprite");
         PROCESS_SPRITE = sprite -> blockedConsumer(sprite, processSprite);
         Check.ifNull(processAnimation, "processAnimation");
@@ -182,8 +189,7 @@ public class GraphicsPreloaderImpl implements GraphicsPreloader {
         // Load Images serially
 
         loadAllSerially(ASSET_DEFINITIONS_DTO.imageDefinitionDTOs, batch ->
-                new ImagePreloaderTask(batch, IMAGE_FACTORY,
-                        image -> IMAGES.put(image.relativeLocation(), image)));
+                new ImagePreloaderTask(batch, IMAGE_FACTORY, PROCESS_IMAGE));
 
         // Load MouseCursorImages serially, while loading other assets parallelly:
         //     * Sprites

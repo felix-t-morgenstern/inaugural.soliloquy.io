@@ -98,7 +98,7 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
         TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, INTACT_COLOR,
                 windowResolutionManager::windowWidthToHeightRatio, null);
 
-        when(MockFirstChildComponent.contents()).thenReturn(
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
                 setOf(TextLineRenderableLeft, TextLineRenderableCenter, TextLineRenderableRight));
         Renderers.put(TextLineRenderableLeft.getClass(), TextLineRenderer);
         Renderers.put(TextLineRenderableCenter.getClass(), TextLineRenderer);

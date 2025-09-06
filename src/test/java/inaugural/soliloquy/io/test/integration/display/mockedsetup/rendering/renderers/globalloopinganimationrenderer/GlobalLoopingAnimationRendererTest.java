@@ -103,7 +103,7 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
                         0, java.util.UUID.randomUUID(), MockFirstChildComponent,
                         RENDERING_BOUNDARIES, TimestampValidator);
 
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(GlobalLoopingAnimationRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(GlobalLoopingAnimationRenderable));
         Renderers.put(GlobalLoopingAnimationRenderableImpl.class,
                 GlobalLoopingAnimationRenderer);
 

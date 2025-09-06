@@ -46,6 +46,7 @@ import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.assets.Font;
+import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
@@ -147,6 +148,7 @@ public class IOModule implements Module {
         // Assets
         // ======
 
+        var images = Collections.<String, Image>mapOf();
         var sprites = Collections.<String, Sprite>mapOf();
         var animations = Collections.<String, Animation>mapOf();
         var globalLoopingAnimations = Collections.<String, GlobalLoopingAnimation>mapOf();
@@ -199,6 +201,7 @@ public class IOModule implements Module {
                 mouseCursorImageFactory,
                 animatedMouseCursorFactory,
                 staticMouseCursorFactory,
+                image -> images.put(image.relativeLocation(), image),
                 sprite -> sprites.put(sprite.id(), sprite),
                 animation -> animations.put(animation.id(), animation),
                 globalLoopingAnimation -> globalLoopingAnimations
@@ -440,7 +443,14 @@ public class IOModule implements Module {
         ).forEach(c ->
                 providerHandler.add(c.getCanonicalName(), finiteLinearProviderHandler));
 
-        // TODO: Add sinusoid provider handler!!!
+        var finiteSinusoidProviderHandler = andRegister(
+                new FiniteSinusoidMovingProviderHandler(persistenceHandler,
+                        finiteSinusoidMovingProviderFactory));
+        listOf(
+                FiniteSinusoidMovingFloatBoxProvider.class,
+                FiniteSinusoidMovingFloatProvider.class,
+                FiniteSinusoidMovingVertexProvider.class
+        ).forEach(c -> providerHandler.add(c.getCanonicalName(), finiteSinusoidProviderHandler));
 
         providerHandler.add(LoopingLinearMovingColorProviderImpl.class.getCanonicalName(),
                 new LoopingLinearMovingColorProviderHandler(
@@ -521,6 +531,7 @@ public class IOModule implements Module {
         ));
 
         andRegister(new GraphicsImpl(
+                images::get,
                 sprites::get,
                 animations::get,
                 globalLoopingAnimations::get,
@@ -536,7 +547,7 @@ public class IOModule implements Module {
 
     public <T> T provide(String instance) throws IllegalArgumentException {
         Check.ifNullOrEmpty(instance, "instance");
-        throw new IllegalArgumentException("No named instances within CommonModule");
+        throw new IllegalArgumentException("No named instances within IOModule");
     }
 
     private <T> T andRegister(T registrant) {

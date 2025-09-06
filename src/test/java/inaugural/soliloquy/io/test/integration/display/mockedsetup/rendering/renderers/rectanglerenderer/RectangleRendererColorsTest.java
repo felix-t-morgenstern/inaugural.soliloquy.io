@@ -61,7 +61,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
                 RENDERING_BOUNDARIES, TimestampValidator);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(RectangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(RectangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(RectangleRenderer);

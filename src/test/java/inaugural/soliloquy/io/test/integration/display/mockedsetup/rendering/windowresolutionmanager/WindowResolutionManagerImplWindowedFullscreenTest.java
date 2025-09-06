@@ -48,7 +48,7 @@ class WindowResolutionManagerImplWindowedFullscreenTest {
 
 
         var mockTopLevelComponent = mock(Component.class);
-        when(mockTopLevelComponent.contents()).thenReturn(setOf());
+        when(mockTopLevelComponent.contentsRepresentation()).thenReturn(setOf());
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100);
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 

@@ -31,7 +31,7 @@ class FiniteLinearMovingFloatBoxProviderTest extends FiniteLinearMovingProviderT
                         renderingDimensionsAtTimes, null, null);
         SpriteRenderable.setRenderingDimensionsProvider(finiteLinearMovingFloatBoxProvider);
 
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

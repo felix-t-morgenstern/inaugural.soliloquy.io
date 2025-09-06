@@ -98,7 +98,7 @@ class FiniteAnimationRendererTest extends DisplayTest {
                 TimestampValidator
         );
 
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(FiniteAnimationRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(FiniteAnimationRenderable));
         Renderers.put(FiniteAnimationRenderableImpl.class,
                 FiniteAnimationRenderer);
 

@@ -66,6 +66,7 @@ public class GraphicsPreloaderImplTests {
     private CopyOnWriteArrayList<Font> fontFactoryOutputs;
     private CopyOnWriteArrayList<MouseCursorImageFactory.Output> mouseCursorImageFactoryOutputs;
 
+    private List<Image> processedImages;
     private List<Sprite> processedSprites;
     private List<Animation> processedAnimations;
     private List<GlobalLoopingAnimation> processedGlobalLoopingAnimations;
@@ -321,6 +322,7 @@ public class GraphicsPreloaderImplTests {
                             definition.mouseCursorImageId());
                 });
 
+        processedImages = listOf();
         processedSprites = listOf();
         processedAnimations = listOf();
         processedGlobalLoopingAnimations = listOf();
@@ -342,6 +344,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -377,6 +380,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -398,6 +402,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -419,6 +424,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -440,6 +446,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -461,6 +468,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -482,6 +490,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -503,6 +512,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -524,6 +534,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -545,6 +556,7 @@ public class GraphicsPreloaderImplTests {
                 null,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -566,6 +578,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 null,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -587,6 +600,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 null,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -609,6 +623,7 @@ public class GraphicsPreloaderImplTests {
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
                 null,
+                processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
                 processedImageAssetSets::add,
@@ -629,6 +644,29 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
+                null,
+                processedAnimations::add,
+                processedGlobalLoopingAnimations::add,
+                processedImageAssetSets::add,
+                processedFonts::add,
+                processedAnimatedMouseCursorProviders::add,
+                processedStaticMouseCursors::add
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsPreloaderImpl(
+                assetDefinitionsDTO,
+                THREAD_POOL_SIZE,
+                assetTypeBatchSizes,
+                mockImageFactory,
+                mockFontFactory,
+                mockSpriteFactory,
+                mockAnimationFactory,
+                mockGlobalLoopingAnimationFactory,
+                mockImageAssetSetFactory,
+                mockMouseCursorImageFactory,
+                mockAnimatedMouseCursorProviderFactory,
+                mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 null,
                 processedGlobalLoopingAnimations::add,
@@ -650,6 +688,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 null,
@@ -671,6 +710,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -692,6 +732,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -713,6 +754,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -734,6 +776,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,
@@ -751,7 +794,7 @@ public class GraphicsPreloaderImplTests {
         assertAssetsProcessed(
                 ImageDefinition.class,
                 NUMBER_OF_IMAGES,
-                imageFactoryOutputs,
+                processedImages,
                 imageDefinitionDTOs,
                 Image::relativeLocation,
                 imageDefinitionDTO -> imageDefinitionDTO.RelativeLocation,
@@ -958,6 +1001,7 @@ public class GraphicsPreloaderImplTests {
                 mockMouseCursorImageFactory,
                 mockAnimatedMouseCursorProviderFactory,
                 mockStaticMouseCursorProviderFactory,
+                processedImages::add,
                 processedSprites::add,
                 processedAnimations::add,
                 processedGlobalLoopingAnimations::add,

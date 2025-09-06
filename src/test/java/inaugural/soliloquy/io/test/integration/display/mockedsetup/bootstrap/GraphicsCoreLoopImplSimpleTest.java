@@ -36,7 +36,7 @@ class GraphicsCoreLoopImplSimpleTest {
     public static void main(String[] args) {
         var frameTimer = new FakeFrameTimer();
         var mockTopLevelComponent = mock(Component.class);
-        when(mockTopLevelComponent.contents()).thenReturn(setOf());
+        when(mockTopLevelComponent.contentsRepresentation()).thenReturn(setOf());
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100);
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
         @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader = setOf();

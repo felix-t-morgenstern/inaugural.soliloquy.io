@@ -31,7 +31,7 @@ public class ComponentRendererImpl implements ComponentRenderer {
         var boundaries = component.getRenderingBoundariesProvider().provide(timestamp);
         RENDERING_BOUNDARIES.pushNewBoundaries(boundaries);
 
-        var toRender = component.contents().stream()
+        var toRender = component.contentsRepresentation().stream()
                 .sorted(Comparator.comparingInt(Renderable::getZ).reversed());
 
         toRender.forEach(r -> {

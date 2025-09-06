@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle;
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
+import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 
@@ -12,13 +13,18 @@ import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-public class RectangleSimpleDisplayTest extends DisplayTest {
+public class RectangleTextureDisplayTest extends DisplayTest {
+    private final static String TILE_LOCATION_RELATIVE_LOCATION =
+            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
+
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
-                "Simple Rectangle display test",
+                "Texture Rectangle display test",
                 new AssetDefinitionsDTO(
-                        new ImageDefinitionDTO[]{},
+                        new ImageDefinitionDTO[]{
+                                new ImageDefinitionDTO(TILE_LOCATION_RELATIVE_LOCATION, false)
+                        },
                         new FontDefinitionDTO[]{},
                         new SpriteDefinitionDTO[]{},
                         new AnimationDefinitionDTO[]{},
@@ -28,13 +34,15 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                         new AnimatedMouseCursorDefinitionDTO[]{},
                         new StaticMouseCursorDefinitionDTO[]{}
                 ),
-                () -> DisplayTest.runThenClose("Simple Rectangle", 4000),
-                RectangleSimpleDisplayTest::populateTopLevelComponent
+                () -> DisplayTest.runThenClose("Texture Rectangle", 4000),
+                RectangleTextureDisplayTest::populateTopLevelComponent
         );
     }
 
     protected static void populateTopLevelComponent(IOModule ioModule,
                                                     Component topLevelComponent) {
+        var graphics = ioModule.provide(Graphics.class);
+        var backgroundTex = graphics.getImage(TILE_LOCATION_RELATIVE_LOCATION).textureId();
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
         rectangleRenderableFactory.make(
@@ -42,9 +50,9 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                 staticProvider(randomColor()),
                 staticProvider(randomColor()),
                 staticProvider(randomColor()),
-                nullProvider(),
-                nullProvider(),
-                nullProvider(),
+                staticProvider(backgroundTex),
+                staticProvider(0.5f),
+                staticProvider(0.5f),
                 mapOf(),
                 mapOf(),
                 null,

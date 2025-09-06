@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.arrayFloats;
 
-abstract class AbstractFiniteSinusoidMovingProvider<T>
+public abstract class AbstractFiniteSinusoidMovingProvider<T>
         extends AbstractFiniteLinearMovingProvider<T>
         implements FiniteSinusoidMovingProvider<T> {
     private final float[] TRANSITION_SHARPNESSES;

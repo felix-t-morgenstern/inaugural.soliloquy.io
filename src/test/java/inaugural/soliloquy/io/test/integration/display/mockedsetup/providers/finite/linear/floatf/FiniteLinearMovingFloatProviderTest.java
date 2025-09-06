@@ -32,7 +32,7 @@ class FiniteLinearMovingFloatProviderTest extends FiniteLinearMovingProviderTest
                         null, null
                 ));
 
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(SpriteRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(SpriteRenderable));
         Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

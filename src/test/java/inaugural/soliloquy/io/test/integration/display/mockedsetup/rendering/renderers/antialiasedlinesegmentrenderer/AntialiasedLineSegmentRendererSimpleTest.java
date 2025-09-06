@@ -67,7 +67,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
                         MockFirstChildComponent
                 );
 
-        when(MockFirstChildComponent.contents()).thenReturn(
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
                 setOf(antialiasedLineSegmentRenderable1, antialiasedLineSegmentRenderable2));
         Renderers.put(AntialiasedLineSegmentRenderableImpl.class,
                 antialiasedLineSegmentRenderer);

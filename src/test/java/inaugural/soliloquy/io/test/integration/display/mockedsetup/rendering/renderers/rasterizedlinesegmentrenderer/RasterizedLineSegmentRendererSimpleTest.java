@@ -50,7 +50,7 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
         RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
 
         Renderers.put(RasterizedLineSegmentRenderableImpl.class, RasterizedLineSegmentRenderer);
-        when(MockFirstChildComponent.contents()).thenReturn(setOf(RasterizedLineSegmentRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(RasterizedLineSegmentRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(RasterizedLineSegmentRenderer);
