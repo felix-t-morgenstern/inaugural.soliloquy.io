@@ -7,6 +7,8 @@ import soliloquy.specs.ui.EventInputs;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
+import static inaugural.soliloquy.tools.random.Random.randomString;
+import static soliloquy.specs.common.entities.Action.action;
 
 /**
  * Test acceptance criteria:
@@ -48,16 +50,6 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
     }
 
     private static Action<EventInputs> messageAction(String message) {
-        return new Action<>() {
-            @Override
-            public void run(EventInputs... mouseEventInputs) throws IllegalArgumentException {
-                System.out.println(message);
-            }
-
-            @Override
-            public String id() throws IllegalStateException {
-                return null;
-            }
-        };
+        return action(randomString(), _ -> System.out.println(message));
     }
 }

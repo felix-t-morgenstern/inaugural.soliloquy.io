@@ -22,7 +22,7 @@ public class GraphicsImpl implements Graphics {
             Function<String, ImageAssetSet> getImageAssetSet,
             Function<String, Font> getFont
     ) {
-        GET_IMAGE = getImage;
+        GET_IMAGE = Check.ifNull(getImage, "getImage");
         GET_SPRITE = Check.ifNull(getSprite, "getSprite");
         GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
         GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation, "getGlobalLoopingAnimation");

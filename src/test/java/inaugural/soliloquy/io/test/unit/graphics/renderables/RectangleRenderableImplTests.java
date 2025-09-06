@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
@@ -28,6 +27,7 @@ import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 import static soliloquy.specs.ui.EventInputs.inputs;
@@ -291,7 +291,7 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.press(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.setOnPress(2, new FakeAction<>()));
+                renderableNotSupportingMouseEvents.setOnPress(2, action(randomString(), _ -> {})));
 
         renderable.setOnPress(2, mockOnPressAction);
 
@@ -319,9 +319,9 @@ public class RectangleRenderableImplTests {
         var id2 = "id2";
         var id3 = "id3";
 
-        renderable.setOnPress(0, new FakeAction<>(id1));
-        renderable.setOnPress(2, new FakeAction<>(id2));
-        renderable.setOnPress(7, new FakeAction<>(id3));
+        renderable.setOnPress(0, action(id1, _ -> {}));
+        renderable.setOnPress(2, action(id2, _ -> {}));
+        renderable.setOnPress(7, action(id3, _ -> {}));
         renderable.setOnPress(2, null);
 
         Map<Integer, String> pressActionIds = renderable.pressActionIds();
@@ -337,7 +337,7 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.setOnRelease(2, new FakeAction<>()));
+                renderableNotSupportingMouseEvents.setOnRelease(2, action(randomString(), _ -> {})));
 
         renderable.release(2, TIMESTAMP);
 
@@ -357,9 +357,9 @@ public class RectangleRenderableImplTests {
         String id2 = randomString();
         String id3 = randomString();
 
-        renderable.setOnRelease(0, new FakeAction<>(id1));
-        renderable.setOnRelease(2, new FakeAction<>(id2));
-        renderable.setOnRelease(7, new FakeAction<>(id3));
+        renderable.setOnRelease(0, action(id1, _ -> {}));
+        renderable.setOnRelease(2, action(id2, _ -> {}));
+        renderable.setOnRelease(7, action(id3, _ -> {}));
         renderable.setOnRelease(2, null);
 
         Map<Integer, String> releaseActionIds =
@@ -374,18 +374,18 @@ public class RectangleRenderableImplTests {
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnPress(-1, new FakeAction<>()));
+                renderable.setOnPress(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnRelease(-1, new FakeAction<>()));
+                renderable.setOnRelease(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnPress(8, new FakeAction<>()));
+                renderable.setOnPress(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnRelease(8, new FakeAction<>()));
+                renderable.setOnRelease(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
@@ -424,7 +424,7 @@ public class RectangleRenderableImplTests {
 
         assertNull(renderable.mouseOverActionId());
 
-        renderable.setOnMouseOver(new FakeAction<>(mouseOverActionId));
+        renderable.setOnMouseOver(action(mouseOverActionId, _ -> {}));
 
         assertEquals(mouseOverActionId, renderable.mouseOverActionId());
     }
@@ -462,7 +462,7 @@ public class RectangleRenderableImplTests {
 
         assertNull(renderable.mouseLeaveActionId());
 
-        renderable.setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+        renderable.setOnMouseLeave(action(mouseLeaveActionId, _ -> {}));
 
         assertEquals(mouseLeaveActionId, renderable.mouseLeaveActionId());
     }

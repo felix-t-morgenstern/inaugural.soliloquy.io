@@ -37,7 +37,7 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 UUID uuid,
                                                 Component containingComponent,
                                                 RenderingBoundaries renderingBoundaries,
-                                                TimestampValidator  timestampValidator) {
+                                                TimestampValidator timestampValidator) {
         super(z, uuid, containingComponent);
         this.capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? mapOf() : onPress;

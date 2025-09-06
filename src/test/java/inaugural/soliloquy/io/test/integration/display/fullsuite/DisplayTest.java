@@ -4,6 +4,7 @@ import inaugural.soliloquy.common.CommonModule;
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
+import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.gamestate.entities.Setting;
@@ -17,6 +18,8 @@ import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 
 import java.awt.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
@@ -33,10 +36,21 @@ public class DisplayTest {
     private final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
 
+    @SuppressWarnings("rawtypes") private final Map<String, Action> ACTIONS;
+
     private static StaticProviderFactory StaticProviderFactory;
 
     public IOModule ioModule;
     public Component topLevelComponent;
+
+    public DisplayTest() {
+        this(setOf());
+    }
+
+    public DisplayTest(@SuppressWarnings("rawtypes") Set<Action> actions) {
+        ACTIONS = mapOf();
+        Check.ifNull(actions, "actions").forEach(action -> ACTIONS.put(action.id(), action));
+    }
 
     public void runTest(
             String testName,
@@ -87,12 +101,11 @@ public class DisplayTest {
                 DEFAULT_FONT_COLOR_ID,
                 generateMockSetting(Color.WHITE)
         );
-        @SuppressWarnings("rawtypes") var actions = Collections.<String, Action>mapOf();
 
         ioModule = new IOModule(
                 commonModule,
                 settings::get,
-                actions::get,
+                ACTIONS::get,
                 listOf(),
                 testName,
                 assetDefinitionsDTO

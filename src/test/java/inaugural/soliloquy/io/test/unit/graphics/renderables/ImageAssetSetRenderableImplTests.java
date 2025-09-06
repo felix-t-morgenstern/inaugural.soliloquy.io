@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.ImageAssetSetRenderableImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAction;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockWithId;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -431,16 +431,16 @@ public class ImageAssetSetRenderableImplTests {
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(-1, new FakeAction<>()));
+                () -> renderable.setOnPress(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(-1, new FakeAction<>()));
+                () -> renderable.setOnRelease(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(8, new FakeAction<>()));
+                () -> renderable.setOnPress(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(8, new FakeAction<>()));
+                () -> renderable.setOnRelease(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 3));
     }

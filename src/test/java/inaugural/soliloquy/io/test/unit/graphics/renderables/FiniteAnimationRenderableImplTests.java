@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
-import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
@@ -30,6 +29,7 @@ import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 import static soliloquy.specs.ui.EventInputs.inputs;
@@ -334,7 +334,7 @@ public class FiniteAnimationRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableWithoutMouseEvents.press(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableWithoutMouseEvents.setOnPress(2, new FakeAction<>()));
+                renderableWithoutMouseEvents.setOnPress(2, action(randomString(), _ -> {})));
 
         renderableWithMouseEvents.setOnPress(2, mockOnPressAction);
 
@@ -362,9 +362,9 @@ public class FiniteAnimationRenderableImplTests {
         String id2 = "id2";
         String id3 = "id3";
 
-        renderableWithMouseEvents.setOnPress(0, new FakeAction<>(id1));
-        renderableWithMouseEvents.setOnPress(2, new FakeAction<>(id2));
-        renderableWithMouseEvents.setOnPress(7, new FakeAction<>(id3));
+        renderableWithMouseEvents.setOnPress(0, action(id1, _ -> {}));
+        renderableWithMouseEvents.setOnPress(2, action(id2, _ -> {}));
+        renderableWithMouseEvents.setOnPress(7, action(id3, _ -> {}));
         renderableWithMouseEvents.setOnPress(2, null);
 
         Map<Integer, String> pressActionIds =
@@ -381,7 +381,7 @@ public class FiniteAnimationRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableWithoutMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableWithoutMouseEvents.setOnRelease(2, new FakeAction<>()));
+                renderableWithoutMouseEvents.setOnRelease(2, action(randomString(), _ -> {})));
 
         renderableWithMouseEvents.release(2, TIMESTAMP);
 
@@ -400,9 +400,9 @@ public class FiniteAnimationRenderableImplTests {
         String id2 = "id2";
         String id3 = "id3";
 
-        renderableWithMouseEvents.setOnRelease(0, new FakeAction<>(id1));
-        renderableWithMouseEvents.setOnRelease(2, new FakeAction<>(id2));
-        renderableWithMouseEvents.setOnRelease(7, new FakeAction<>(id3));
+        renderableWithMouseEvents.setOnRelease(0, action(id1, _ -> {}));
+        renderableWithMouseEvents.setOnRelease(2, action(id2, _ -> {}));
+        renderableWithMouseEvents.setOnRelease(7, action(id3, _ -> {}));
         renderableWithMouseEvents.setOnRelease(2, null);
 
         Map<Integer, String> releaseActionIds =
@@ -419,18 +419,18 @@ public class FiniteAnimationRenderableImplTests {
         long timestamp = 456456L;
 
         assertThrows(IllegalArgumentException.class, () ->
-                renderableWithMouseEvents.setOnPress(-1, new FakeAction<>()));
+                renderableWithMouseEvents.setOnPress(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderableWithMouseEvents.setOnRelease(-1, new FakeAction<>()));
+                renderableWithMouseEvents.setOnRelease(-1, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderableWithMouseEvents.press(-1, timestamp));
         assertThrows(IllegalArgumentException.class, () ->
                 renderableWithMouseEvents.press(-1, timestamp + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
-                renderableWithMouseEvents.setOnPress(8, new FakeAction<>()));
+                renderableWithMouseEvents.setOnPress(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderableWithMouseEvents.setOnRelease(8, new FakeAction<>()));
+                renderableWithMouseEvents.setOnRelease(8, action(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderableWithMouseEvents.press(8, timestamp + 2));
         assertThrows(IllegalArgumentException.class, () ->
@@ -469,8 +469,7 @@ public class FiniteAnimationRenderableImplTests {
 
         assertNull(renderableWithMouseEvents.mouseOverActionId());
 
-        renderableWithMouseEvents
-                .setOnMouseOver(new FakeAction<>(mouseOverActionId));
+        renderableWithMouseEvents.setOnMouseOver(action(mouseOverActionId, _ -> {}));
 
         assertEquals(mouseOverActionId,
                 renderableWithMouseEvents.mouseOverActionId());
@@ -500,7 +499,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testMouseLeaveActionId() {
-        String mouseLeaveActionId = "mouseLeaveActionId";
+        var mouseLeaveActionId = "mouseLeaveActionId";
 
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableWithoutMouseEvents.mouseLeaveActionId());
@@ -509,8 +508,7 @@ public class FiniteAnimationRenderableImplTests {
 
         assertNull(renderableWithMouseEvents.mouseLeaveActionId());
 
-        renderableWithMouseEvents
-                .setOnMouseLeave(new FakeAction<>(mouseLeaveActionId));
+        renderableWithMouseEvents.setOnMouseLeave(action(mouseLeaveActionId, _ -> {}));
 
         assertEquals(mouseLeaveActionId,
                 renderableWithMouseEvents.mouseLeaveActionId());
