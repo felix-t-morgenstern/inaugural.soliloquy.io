@@ -164,6 +164,11 @@ public class TextLineRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderable);
+    }
+
+    @Test
     public void testGetAndSetFont() {
         assertSame(FONT, renderable.getFont());
 

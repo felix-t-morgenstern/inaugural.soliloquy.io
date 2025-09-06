@@ -26,11 +26,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
-                                Component containingStack,
+                                Component containingComponent,
                                 RenderingBoundaries renderingBoundaries,
                                 TimestampValidator timestampValidator) {
         super(colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingDimensionsProvider, z, uuid, containingStack, renderingBoundaries,
+                renderingDimensionsProvider, z, uuid, containingComponent, renderingBoundaries,
                 timestampValidator);
         setSprite(sprite);
     }
@@ -44,11 +44,11 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 List<ColorShift> colorShifts,
                                 ProviderAtTime<FloatBox> renderingDimensionsProvider, int z,
                                 UUID uuid,
-                                Component containingStack,
+                                Component containingComponent,
                                 RenderingBoundaries renderingBoundaries,
                                 TimestampValidator timestampValidator) {
         super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, containingStack,
+                borderColorProvider, renderingDimensionsProvider, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setSprite(sprite);
         throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();

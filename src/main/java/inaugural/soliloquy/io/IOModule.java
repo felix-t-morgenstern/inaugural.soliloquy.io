@@ -138,10 +138,8 @@ public class IOModule implements Module {
                 andRegister(new FrameExecutorImpl(componentRenderer, semaphorePermissions));
 
         var shaderFactory = new ShaderFactoryImpl();
-        @SuppressWarnings("rawtypes") var renderersWithShader = Collections.<Renderer>setOf();
         var shaderFilenamePrefix = (String) getSetting.apply(SHADER_FILENAME_PREFIX_ID).getValue();
 
-        @SuppressWarnings("rawtypes") var renderersWithMesh = Collections.<Renderer>setOf();
         var meshVertices = (float[]) getSetting.apply(MESH_VERTICES_ID).getValue();
         var meshUvCoords = (float[]) getSetting.apply(MESH_UV_COORDS_ID).getValue();
 
@@ -240,21 +238,21 @@ public class IOModule implements Module {
                 AntialiasedLineSegmentRenderableImpl.class,
                 new AntialiasedLineSegmentRenderer(resManager, timestampValidator)
         );
+        var finiteAnimationRenderer = new FiniteAnimationRenderer(renderingBoundaries,
+                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 FiniteAnimationRenderer.class,
-                new FiniteAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
+                finiteAnimationRenderer
         );
+        var globalLoopingAnimationRenderer = new GlobalLoopingAnimationRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
-                new GlobalLoopingAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, shiftAggregator,
-                        timestampValidator)
+                globalLoopingAnimationRenderer
         );
+        var imageAssetSetRenderer = new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 ImageAssetSetRenderableImpl.class,
-                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator)
+                imageAssetSetRenderer
         );
         contentRenderers.put(
                 RasterizedLineSegmentRenderableImpl.class,
@@ -264,20 +262,28 @@ public class IOModule implements Module {
                 RectangleRenderableImpl.class,
                 new RectangleRenderer(timestampValidator)
         );
+        var spriteRenderer = new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 SpriteRenderableImpl.class,
-                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator)
+                spriteRenderer
         );
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
+        var textLineRenderer = new TextLineRenderer(renderingBoundaries, defaultFontColor, resManager::windowWidthToHeightRatio, timestampValidator);
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                new TextLineRenderer(renderingBoundaries, defaultFontColor,
-                        resManager::windowWidthToHeightRatio, timestampValidator)
+                textLineRenderer
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
                 new TriangleRenderer(timestampValidator)
+        );
+
+        @SuppressWarnings("rawtypes") var renderersWithShaderAndMesh = Collections.<Renderer>setOf(
+                finiteAnimationRenderer,
+                globalLoopingAnimationRenderer,
+                imageAssetSetRenderer,
+                spriteRenderer,
+                textLineRenderer
         );
 
         // ===========
@@ -468,10 +474,10 @@ public class IOModule implements Module {
                 globalClock,
                 frameExecutor,
                 shaderFactory,
-                renderersWithShader,
+                renderersWithShaderAndMesh,
                 shaderFilenamePrefix,
                 MeshImpl::new,
-                renderersWithMesh,
+                renderersWithShaderAndMesh,
                 meshVertices,
                 meshUvCoords,
                 graphicsPreloader,

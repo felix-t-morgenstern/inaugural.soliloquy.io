@@ -122,8 +122,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         if (windowPosition.TOP_Y > renderingArea.TOP_Y) {
             var percentageOfSnippetToCutOnTop =
                     ((windowPosition.TOP_Y - renderingArea.TOP_Y) / renderingArea.height());
-            snippetTopYWithinBounds = snippetTopY +
-                    (percentageOfSnippetToCutOnTop * (snippetBottomY - snippetTopY));
+            snippetTopYWithinBounds =
+                    snippetTopY + (percentageOfSnippetToCutOnTop * (snippetBottomY - snippetTopY));
         }
         else {
             snippetTopYWithinBounds = snippetTopY;
@@ -141,8 +141,7 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
 
         if (windowPosition.BOTTOM_Y < renderingArea.BOTTOM_Y) {
             var percentageOfSnippetToCutOnBottom =
-                    ((renderingArea.BOTTOM_Y - windowPosition.BOTTOM_Y)
-                            / renderingArea.height());
+                    ((renderingArea.BOTTOM_Y - windowPosition.BOTTOM_Y) / renderingArea.height());
             snippetBottomYWithinBounds = snippetBottomY -
                     (percentageOfSnippetToCutOnBottom * (snippetBottomY - snippetTopY));
         }
@@ -186,8 +185,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         //     is (1f,1f).
         //     The second two values are the width and height of the snippet to take from the
         //     image, where the total width and height of the image are 1f.
-        shader.setUniform("offset", snippetBox.LEFT_X, snippetBox.BOTTOM_Y,
-                snippetBox.width(), -snippetBox.height());
+        shader.setUniform("offset", snippetBox.LEFT_X, snippetBox.BOTTOM_Y, snippetBox.width(),
+                -snippetBox.height());
         // dimensionsInWindow:
         //     The percentage of the window's total width and height taken up by the snippet, where
         //     the total width and height of the window are both 1f.

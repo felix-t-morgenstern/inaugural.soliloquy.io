@@ -29,6 +29,7 @@ import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockWithId;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -259,6 +260,11 @@ public class ImageAssetSetRenderableImplTests {
                         colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, null));
+    }
+
+    @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderable);
     }
 
     @Test

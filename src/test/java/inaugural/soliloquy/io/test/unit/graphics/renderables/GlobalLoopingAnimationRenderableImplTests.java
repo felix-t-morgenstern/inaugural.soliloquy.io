@@ -155,6 +155,11 @@ public class GlobalLoopingAnimationRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderableWithMouseEvents);
+    }
+
+    @Test
     public void testGetAndSetGlobalLoopingAnimation() {
         assertSame(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS,
                 renderableWithMouseEvents.getGlobalLoopingAnimation());

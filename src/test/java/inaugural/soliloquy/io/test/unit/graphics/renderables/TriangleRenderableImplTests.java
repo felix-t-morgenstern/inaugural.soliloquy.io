@@ -198,6 +198,11 @@ public class TriangleRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderable);
+    }
+
+    @Test
     public void testSetAndGetVertexProviders() {
         var provider1 = generateMockStaticProvider(vertexOf(0f, 0f));
         var provider2 = generateMockStaticProvider(vertexOf(0f, 0f));

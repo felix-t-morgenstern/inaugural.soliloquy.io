@@ -72,6 +72,11 @@ public class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderable);
+    }
+
+    @Test
     public void testGetAndSetThicknessProvider() {
         assertSame(THICKNESS_PROVIDER, renderable.getThicknessProvider());
 

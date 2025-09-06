@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
@@ -182,6 +183,11 @@ public class FiniteAnimationRenderableImplTests {
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, START_TIMESTAMP,
                         PAUSED_TIMESTAMP_1, null));
+    }
+
+    @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderableWithMouseEvents);
     }
 
     @Test

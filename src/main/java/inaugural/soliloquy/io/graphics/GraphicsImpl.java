@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.graphics;
 
+import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.assets.*;
 
@@ -19,36 +20,36 @@ public class GraphicsImpl implements Graphics {
             Function<String, ImageAssetSet> getImageAssetSet,
             Function<String, Font> getFont
     ) {
-        GET_SPRITE = getSprite;
-        GET_ANIMATION = getAnimation;
-        GET_GLOBAL_LOOPING_ANIMATION = getGlobalLoopingAnimation;
-        GET_IMAGE_ASSET_SET = getImageAssetSet;
-        GET_FONT = getFont;
+        GET_SPRITE = Check.ifNull(getSprite, "getSprite");
+        GET_ANIMATION = Check.ifNull(getAnimation, "getAnimation");
+        GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation, "getGlobalLoopingAnimation");
+        GET_IMAGE_ASSET_SET = Check.ifNull(getImageAssetSet, "getImageAssetSet");
+        GET_FONT = Check.ifNull(getFont, "getFont");
     }
 
     @Override
-    public Sprite getSprite(String s) throws IllegalArgumentException {
-        return null;
+    public Sprite getSprite(String spriteId) throws IllegalArgumentException {
+        return GET_SPRITE.apply(spriteId);
     }
 
     @Override
-    public Animation getAnimation(String s) throws IllegalArgumentException {
-        return null;
+    public Animation getAnimation(String animationId) throws IllegalArgumentException {
+        return GET_ANIMATION.apply(animationId);
     }
 
     @Override
-    public GlobalLoopingAnimation getGlobalLoopingAnimation(String s)
+    public GlobalLoopingAnimation getGlobalLoopingAnimation(String globalLoopingAnimationId)
             throws IllegalArgumentException {
-        return null;
+        return GET_GLOBAL_LOOPING_ANIMATION.apply(globalLoopingAnimationId);
     }
 
     @Override
-    public ImageAssetSet getImageAssetSet(String s) throws IllegalArgumentException {
-        return null;
+    public ImageAssetSet getImageAssetSet(String imageAssetSetId) throws IllegalArgumentException {
+        return GET_IMAGE_ASSET_SET.apply(imageAssetSetId);
     }
 
     @Override
-    public Font getFont(String s) throws IllegalArgumentException {
-        return null;
+    public Font getFont(String fontId) throws IllegalArgumentException {
+        return GET_FONT.apply(fontId);
     }
 }

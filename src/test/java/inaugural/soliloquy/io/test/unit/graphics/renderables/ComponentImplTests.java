@@ -50,6 +50,10 @@ public class ComponentImplTests {
 
         component = new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
                 mockAddToCapturing, mockRemoveFromCapturing);
+
+        lenient().when(mockRenderable.component()).thenReturn(component);
+        lenient().when(mockRenderableWithMouseEvents.component()).thenReturn(component);
+        lenient().when(mockComponent.component()).thenReturn(component);
     }
 
     @Test
@@ -123,6 +127,13 @@ public class ComponentImplTests {
         assertThrows(IllegalArgumentException.class, () -> component.add(mockComponent));
         when(mockComponent.tier()).thenReturn(component.tier() + 2);
         assertThrows(IllegalArgumentException.class, () -> component.add(mockComponent));
+    }
+
+    @Test
+    public void testAddRenderableNotInComponent() {
+        when(mockRenderable.component()).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> component.add(mockRenderable));
     }
 
     @Test

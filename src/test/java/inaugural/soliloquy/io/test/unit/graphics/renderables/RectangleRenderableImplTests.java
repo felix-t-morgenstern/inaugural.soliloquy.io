@@ -174,6 +174,11 @@ public class RectangleRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderable);
+    }
+
+    @Test
     public void testSetAndGetTopLeftColorProvider() {
         assertSame(TOP_LEFT_COLOR_PROVIDER, renderable.getTopLeftColorProvider());
 

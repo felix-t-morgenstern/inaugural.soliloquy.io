@@ -35,10 +35,10 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 Action<EventInputs> onMouseLeave,
                                                 int z,
                                                 UUID uuid,
-                                                Component component,
+                                                Component containingComponent,
                                                 RenderingBoundaries renderingBoundaries,
                                                 TimestampValidator  timestampValidator) {
-        super(z, uuid, component);
+        super(z, uuid, containingComponent);
         this.capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? mapOf() : onPress;
         ON_RELEASE = onRelease == null ? mapOf() : onRelease;

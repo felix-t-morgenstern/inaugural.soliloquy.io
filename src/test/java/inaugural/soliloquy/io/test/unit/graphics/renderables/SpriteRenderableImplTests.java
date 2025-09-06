@@ -170,6 +170,11 @@ public class SpriteRenderableImplTests {
     }
 
     @Test
+    public void testConstructorAddsSelfToContainingComponent() {
+        verify(mockContainingComponent, once()).add(renderableWithMouseEvents);
+    }
+
+    @Test
     public void testGetAndSetSprite() {
         assertSame(SPRITE_SUPPORTING_MOUSE_EVENTS, renderableWithMouseEvents.getSprite());
         assertSame(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,

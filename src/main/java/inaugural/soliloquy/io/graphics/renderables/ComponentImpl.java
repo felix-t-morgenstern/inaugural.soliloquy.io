@@ -58,9 +58,9 @@ public class ComponentImpl implements Component {
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (renderable.component() != null && renderable.component() != this) {
+        if (renderable.component() != this) {
             throw new IllegalArgumentException(
-                    "ComponentImpl.add: renderable already in another Component");
+                    "ComponentImpl.add: renderable must have this stored as its Component");
         }
         if (renderable instanceof Component) {
             var newComponentTier = ((Component) renderable).tier();

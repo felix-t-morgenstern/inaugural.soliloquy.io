@@ -34,12 +34,12 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            ProviderAtTime<FloatBox> renderingAreaProvider,
                                            int z,
                                            UUID uuid,
-                                           Component component,
+                                           Component containingComponent,
                                            RenderingBoundaries renderingBoundaries,
                                            TimestampValidator timestampValidator) {
         this(false, null, null, null, null, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries,
-                timestampValidator);
+                borderColorProvider, renderingAreaProvider, z, uuid, containingComponent,
+                renderingBoundaries, timestampValidator);
     }
 
     protected AbstractImageAssetRenderable(
@@ -72,11 +72,11 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                          ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                          int z,
                                          UUID uuid,
-                                         Component component,
+                                         Component containingComponent,
                                          RenderingBoundaries renderingBoundaries,
                                          TimestampValidator timestampValidator) {
         super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                component, renderingBoundaries, timestampValidator);
+                containingComponent, renderingBoundaries, timestampValidator);
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);

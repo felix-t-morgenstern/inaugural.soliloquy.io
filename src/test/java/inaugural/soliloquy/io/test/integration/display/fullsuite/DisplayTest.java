@@ -34,7 +34,7 @@ public class DisplayTest {
     public IOModule ioModule;
     public Component topLevelComponent;
 
-    protected void runTest(
+    public void runTest(
             String titlebar,
             AssetDefinitionsDTO assetDefinitionsDTO,
             Runnable displayTest,
@@ -106,11 +106,13 @@ public class DisplayTest {
         topLevelComponent = componentFactory.make(randomUUID(), 0, wholeScreenProvider, null);
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
-        if (populateTopLevelComponent != null) {
-            populateTopLevelComponent.accept(ioModule, topLevelComponent);
-        }
+        coreLoop.startup(() -> {
+            if (populateTopLevelComponent != null) {
+                populateTopLevelComponent.accept(ioModule, topLevelComponent);
+            }
 
-        coreLoop.startup(displayTest);
+            displayTest.run();
+        });
     }
 
     private <T> Setting<T> generateMockSetting(T val) {
