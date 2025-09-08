@@ -51,12 +51,12 @@ public class AntialiasedLineSegmentRenderer
         Check.ifNull(renderable.getVertex1Provider(), "renderable.getVertex1Provider()");
         Check.ifNull(renderable.getVertex2Provider(), "renderable.getVertex2Provider()");
 
-        Float thicknessGradientPercent =
+        var thicknessGradientPercent =
                 renderable.getThicknessGradientPercentProvider().provide(timestamp);
         Check.ifNull(thicknessGradientPercent, "provided thicknessGradientPercent");
         Check.isBetweenZeroAndOne(thicknessGradientPercent, "provided thicknessGradientPercent");
 
-        Float lengthGradientPercent =
+        var lengthGradientPercent =
                 renderable.getLengthGradientPercentProvider().provide(timestamp);
         Check.ifNull(lengthGradientPercent, "provided lengthGradientPercent");
         Check.isBetweenZeroAndOne(lengthGradientPercent, "provided lengthGradientPercent");
@@ -68,17 +68,17 @@ public class AntialiasedLineSegmentRenderer
         Color color = renderable.getColorProvider().provide(timestamp);
         Check.ifNull(color, "color");
 
-        Vertex vertex1 = renderable.getVertex1Provider().provide(timestamp);
+        var vertex1 = renderable.getVertex1Provider().provide(timestamp);
         Check.ifNull(vertex1, "provided vertex1");
-        Vertex vertex2 = renderable.getVertex2Provider().provide(timestamp);
+        var vertex2 = renderable.getVertex2Provider().provide(timestamp);
         Check.ifNull(vertex2, "provided vertex2");
 
         unbindMeshAndShader();
 
-        float x1 = vertex1.X;
-        float y1 = vertex1.Y;
-        float x2 = vertex2.X;
-        float y2 = vertex2.Y;
+        var x1 = vertex1.X;
+        var y1 = vertex1.Y;
+        var x2 = vertex2.X;
+        var y2 = vertex2.Y;
 
         Vertex v1OuterCcw;
         Vertex v1ProximalCcw;
@@ -104,8 +104,8 @@ public class AntialiasedLineSegmentRenderer
             y2 = vertex1.Y;
         }
 
-        float rise = (y2 - y1);
-        float run = (x2 - x1);
+        var rise = (y2 - y1);
+        var run = (x2 - x1);
 
         if (run == 0) {
             // Logic for vertical line segments should be MUCH_ simpler.
@@ -118,14 +118,14 @@ public class AntialiasedLineSegmentRenderer
 
             // y2 will always be beneath y1.
             if (y2 < y1) {
-                float placeholder = y2;
+                var placeholder = y2;
                 y2 = y1;
                 y1 = placeholder;
             }
 
-            float vertexToOuter = halve(thickness);
-            float vertexToProximal = halve(thickness) * (1f - thicknessGradientPercent);
-            float outerToDistal = halve(y2 - y1) * lengthGradientPercent;
+            var vertexToOuter = halve(thickness);
+            var vertexToProximal = halve(thickness) * (1f - thicknessGradientPercent);
+            var outerToDistal = halve(y2 - y1) * lengthGradientPercent;
 
             v1OuterCcw = vertexOf(x1 + vertexToOuter, y1);
             v1ProximalCcw = vertexOf(x1 + vertexToProximal, y1);
@@ -147,19 +147,19 @@ public class AntialiasedLineSegmentRenderer
         else {
             // NB: Slopes are reversed, since Y values go from 0.0 at the top to 1.0 at the bottom
 
-            float length = sqRoot(square(rise) + square(run));
+            var length = sqRoot(square(rise) + square(run));
 
-            float providedSlope = rise / run;
-            float reciprocalSlope = -1.0f / providedSlope;
-            float reciprocalSlopeAbs = abs(reciprocalSlope);
+            var providedSlope = rise / run;
+            var reciprocalSlope = -1.0f / providedSlope;
+            var reciprocalSlopeAbs = abs(reciprocalSlope);
 
             // NB: This is the % to which the providedSlope is vertical
-            float reciprocalSlopeVerticalComponent =
+            var reciprocalSlopeVerticalComponent =
                     (reciprocalSlopeAbs) / (reciprocalSlopeAbs + 1.0f);
 
             if (reciprocalSlopeVerticalComponent > 0) {
-                float distentionFactor = 1f;
-                float widthToHeightRatio = WINDOW_WIDTH_TO_HEIGHT_RATIO.get();
+                var distentionFactor = 1f;
+                var widthToHeightRatio = WINDOW_WIDTH_TO_HEIGHT_RATIO.get();
 
                 if (widthToHeightRatio > 1f) {
                     distentionFactor =
@@ -173,20 +173,20 @@ public class AntialiasedLineSegmentRenderer
                 thickness *= distentionFactor;
             }
 
-            float halfThickness = halve(thickness);
+            var halfThickness = halve(thickness);
 
-            Vertex outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
-            float outerCcwXAdjustment = outerCcwAdjustments.X;
-            float outerCcwYAdjustment = outerCcwAdjustments.Y;
+            var outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
+            var outerCcwXAdjustment = outerCcwAdjustments.X;
+            var outerCcwYAdjustment = outerCcwAdjustments.Y;
 
-            float proximalCcwXAdjustment = outerCcwXAdjustment * (1f - thicknessGradientPercent);
-            float proximalCcwYAdjustment = proximalCcwXAdjustment * reciprocalSlope;
+            var proximalCcwXAdjustment = outerCcwXAdjustment * (1f - thicknessGradientPercent);
+            var proximalCcwYAdjustment = proximalCcwXAdjustment * reciprocalSlope;
 
-            Vertex lengthGradientAdjustments =
+            var lengthGradientAdjustments =
                     getAdjustments(halve(length) * lengthGradientPercent, providedSlope);
 
-            float lengthGradientXAdjust = lengthGradientAdjustments.X;
-            float lengthGradientYAdjust = lengthGradientAdjustments.Y;
+            var lengthGradientXAdjust = lengthGradientAdjustments.X;
+            var lengthGradientYAdjust = lengthGradientAdjustments.Y;
 
             v1OuterCcw = vertexOf(x1 + outerCcwXAdjustment, y1 + outerCcwYAdjustment);
             v1ProximalCcw = vertexOf(x1 + proximalCcwXAdjustment, y1 + proximalCcwYAdjustment);
@@ -313,20 +313,18 @@ public class AntialiasedLineSegmentRenderer
     }
 
     private static Vertex getAdjustments(float lineSegment,
-                                                     float slope) {
+                                         float slope) {
         if (!GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.containsKey(lineSegment)) {
             GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.put(lineSegment, mapOf());
         }
-        Map<Float, Vertex> memosForSegmentLength =
-                GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.get(lineSegment);
+        var memosForSegmentLength = GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION.get(lineSegment);
         if (memosForSegmentLength.containsKey(slope)) {
             return memosForSegmentLength.get(slope);
         }
         else {
-            float result1 =
-                    sqRoot(square(lineSegment) / (1 + square(slope)));
-            float result2 = result1 * slope;
-            Vertex result = vertexOf(result1, result2);
+            var result1 = sqRoot(square(lineSegment) / (1 + square(slope)));
+            var result2 = result1 * slope;
+            var result = vertexOf(result1, result2);
             memosForSegmentLength.put(slope, result);
             return result;
         }
@@ -351,7 +349,7 @@ public class AntialiasedLineSegmentRenderer
             return memoization.get(value);
         }
 
-        float result = operation.apply(value);
+        var result = operation.apply(value);
         memoization.put(value, result);
         return result;
     }

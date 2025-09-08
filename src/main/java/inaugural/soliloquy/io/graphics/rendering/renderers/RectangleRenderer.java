@@ -16,6 +16,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
     @Override
     public void render(RectangleRenderable renderable, long timestamp)
             throws IllegalArgumentException {
+        unbindMeshAndShader();
+
         Check.ifNull(renderable, "renderable");
 
         Check.ifNull(renderable.getTopLeftColorProvider(),
@@ -30,8 +32,9 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         Check.ifNull(renderable.getRenderingDimensionsProvider(),
                 "renderable.getRenderingDimensionsProvider()");
 
-        var renderingDimensions =
-                renderable.getRenderingDimensionsProvider().provide(timestamp);
+        var renderingDimensions = renderable.getRenderingDimensionsProvider().provide(timestamp);
+
+        glEnable(GL_TEXTURE_2D);
 
         var texId =
                 Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()")
@@ -62,8 +65,6 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         Check.ifNull(renderable.uuid(), "renderable.uuid()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
-
-        unbindMeshAndShader();
 
         var topLeftColor = renderable.getTopLeftColorProvider().provide(timestamp);
         var topRightColor = renderable.getTopRightColorProvider().provide(timestamp);
@@ -97,6 +98,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         drawPoint(renderingDimensions.LEFT_X, renderingDimensions.BOTTOM_Y);
 
         glEnd();
+
+        glDisable(GL_TEXTURE_2D);
     }
 
     @Override

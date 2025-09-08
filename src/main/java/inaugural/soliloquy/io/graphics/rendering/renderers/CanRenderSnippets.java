@@ -98,6 +98,8 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
                 Color matColor,
                 Color overrideColor,
                 NetColorShifts netColorShifts) {
+        bindMeshAndShader();
+
         var windowPosition = intersection(renderingArea, RENDERING_BOUNDARIES.currentBoundaries());
 
         if (windowPosition == null) {
@@ -226,6 +228,32 @@ abstract class CanRenderSnippets<TRenderable extends Renderable>
         }
 
         mesh.render();
+
+        unbindMeshAndShader();
+    }
+
+    protected void unbindMeshAndShader() {
+        if (mesh == null) {
+            throw new IllegalStateException("CanRenderSnippets.render: mesh cannot be null");
+        }
+        if (shader == null) {
+            throw new IllegalStateException("CanRenderSnippets.render: shader cannot be null");
+        }
+
+        mesh.unbind();
+        shader.unbind();
+    }
+
+    protected void bindMeshAndShader() {
+        if (mesh == null) {
+            throw new IllegalStateException("CanRenderSnippets.render: mesh cannot be null");
+        }
+        if (shader == null) {
+            throw new IllegalStateException("CanRenderSnippets.render: shader cannot be null");
+        }
+
+        mesh.bind();
+        shader.bind();
     }
 
     protected void validateRenderableWithDimensionsMembers(FloatBox renderingDimensions,

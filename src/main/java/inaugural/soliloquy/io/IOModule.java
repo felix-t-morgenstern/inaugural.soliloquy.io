@@ -65,8 +65,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Settings.*;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class IOModule implements Module {
@@ -237,64 +236,49 @@ public class IOModule implements Module {
         // =========
 
         var shiftAggregator = new ColorShiftStackAggregatorImpl();
+
         contentRenderers.put(
                 AntialiasedLineSegmentRenderableImpl.class,
                 new AntialiasedLineSegmentRenderer(resManager, timestampValidator)
         );
-        var finiteAnimationRenderer = new FiniteAnimationRenderer(renderingBoundaries,
-                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 FiniteAnimationRenderer.class,
-                finiteAnimationRenderer
+                new FiniteAnimationRenderer(renderingBoundaries,
+                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
         );
-        var globalLoopingAnimationRenderer = new GlobalLoopingAnimationRenderer(renderingBoundaries,
-                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
+
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
-                globalLoopingAnimationRenderer
+                new GlobalLoopingAnimationRenderer(renderingBoundaries,
+                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
         );
-        var imageAssetSetRenderer =
-                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 ImageAssetSetRenderableImpl.class,
-                imageAssetSetRenderer
+                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator)
         );
         contentRenderers.put(
                 RasterizedLineSegmentRenderableImpl.class,
                 new RasterizedLineSegmentRenderer(timestampValidator)
         );
-        var rectangleRenderer = new RectangleRenderer(timestampValidator);
         contentRenderers.put(
                 RectangleRenderableImpl.class,
-                rectangleRenderer
+                new RectangleRenderer(timestampValidator)
         );
-        var spriteRenderer =
-                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 SpriteRenderableImpl.class,
-                spriteRenderer
+                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator)
         );
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
-        var textLineRenderer = new TextLineRenderer(renderingBoundaries, defaultFontColor,
-                resManager::windowWidthToHeightRatio, timestampValidator);
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                textLineRenderer
+                new TextLineRenderer(renderingBoundaries, defaultFontColor,
+                        resManager::windowWidthToHeightRatio, timestampValidator)
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
                 new TriangleRenderer(timestampValidator)
-        );
-
-        @SuppressWarnings("rawtypes") var renderersWithShaderAndMesh = Collections.<Renderer>setOf(
-                finiteAnimationRenderer,
-                globalLoopingAnimationRenderer,
-                imageAssetSetRenderer,
-                rectangleRenderer,
-                spriteRenderer,
-                textLineRenderer
         );
 
         // ===========
@@ -511,6 +495,7 @@ public class IOModule implements Module {
         // Graphics
         // ========
 
+        var renderersSet = setOf(contentRenderers.values().toArray(Renderer[]::new));
         andRegister(new GraphicsCoreLoopImpl(
                 initialTitlebar,
                 frameTimer,
@@ -519,10 +504,10 @@ public class IOModule implements Module {
                 globalClock,
                 frameExecutor,
                 shaderFactory,
-                renderersWithShaderAndMesh,
+                renderersSet,
                 shaderFilenamePrefix,
                 MeshImpl::new,
-                renderersWithShaderAndMesh,
+                renderersSet,
                 meshVertices,
                 meshUvCoords,
                 graphicsPreloader,

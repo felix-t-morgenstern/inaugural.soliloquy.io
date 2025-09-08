@@ -9,7 +9,6 @@ import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
@@ -32,7 +31,7 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
     @Override
     public Image make(ImageDefinition definition)
             throws IllegalArgumentException {
-        ImageData imageData = loadImageData(definition.relativeLocation(),
+        var imageData = loadImageData(definition.relativeLocation(),
                 definition.supportsMouseEventCapturing(), ALPHA_THRESHOLD);
         if (imageData.CapturingMask != null) {
             return new ImageImpl(imageData.TextureId, definition.relativeLocation(),
@@ -47,18 +46,18 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
     private static ImageData loadImageData(String relativeLocation,
                                            boolean supportsEventCapturing,
                                            float alphaThreshold) {
-        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
+        var widthBuffer = BufferUtils.createIntBuffer(1);
+        var heightBuffer = BufferUtils.createIntBuffer(1);
+        var channelsBuffer = BufferUtils.createIntBuffer(1);
 
-        ByteBuffer imageBytes = stbi_load(relativeLocation, widthBuffer, heightBuffer,
-                channelsBuffer, DESIRED_CHANNELS);
+        var imageBytes = stbi_load(relativeLocation, widthBuffer, heightBuffer, channelsBuffer,
+                DESIRED_CHANNELS);
         assert imageBytes != null;
 
-        int width = widthBuffer.get();
-        int height = heightBuffer.get();
+        var width = widthBuffer.get();
+        var height = heightBuffer.get();
 
-        int textureId = glGenTextures();
+        var textureId = glGenTextures();
 
         glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -68,7 +67,7 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
         glTexImage2D(GL_TEXTURE_2D, LEVEL_OF_DETAIL, GL_RGBA, width, height, BORDER, GL_RGBA,
                 GL_UNSIGNED_BYTE, imageBytes);
 
-        ImageData imageData = new ImageData(textureId, width, height);
+        var imageData = new ImageData(textureId, width, height);
 
         if (supportsEventCapturing) {
             imageData.CapturingMask = loadCapturingMask(imageBytes, width, height, alphaThreshold);
@@ -76,12 +75,14 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
 
         stbi_image_free(imageBytes);
 
+        glDisable(GL_TEXTURE_2D);
+
         return imageData;
     }
 
     private static long[][] loadCapturingMask(ByteBuffer imageBytes, int width, int height,
                                               float alphaThreshold) {
-        long[][] capturingMask = new long[(width / BITS_PER_LONG) + 1][height];
+        var capturingMask = new long[(width / BITS_PER_LONG) + 1][height];
         StringBuilder binaryBase;
         int captureMaskXIndex;
         for (var y = 0; y < height; y++) {
@@ -96,9 +97,9 @@ public class ImageFactoryImpl extends ReadsCapturingMasks implements ImageFactor
                 }
 
                 var index = (DESIRED_CHANNELS * (x + (height * y))) + 3;
-                byte value = imageBytes.get(index);
-                int valueEquivalent = value & 0xFF;
-                float alpha = (float) valueEquivalent / MAX_ALPHA_VALUE;
+                var value = imageBytes.get(index);
+                var valueEquivalent = value & 0xFF;
+                var alpha = (float) valueEquivalent / MAX_ALPHA_VALUE;
                 if (alpha >= alphaThreshold) {
                     binaryBase.setCharAt(x % BITS_PER_LONG, '1');
                 }

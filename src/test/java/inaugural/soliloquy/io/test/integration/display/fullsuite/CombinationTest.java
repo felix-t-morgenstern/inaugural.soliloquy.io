@@ -1,16 +1,19 @@
-package inaugural.soliloquy.io.test.integration.display.fullsuite.mouse;
+package inaugural.soliloquy.io.test.integration.display.fullsuite;
 
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.*;
-import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
-import inaugural.soliloquy.io.test.integration.display.fullsuite.sprite.SpriteSimpleDisplayTest;
 import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
+import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
+import soliloquy.specs.io.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
 import soliloquy.specs.ui.EventInputs;
+
+import java.awt.*;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
@@ -18,8 +21,9 @@ import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
+public class CombinationTest extends DisplayTest {
     private static final String ON_MOUSE_OVER_ACTION_ID = "onMouseOver";
     private static final String ON_MOUSE_LEAVE_ACTION_ID = "onMouseLeave";
     private static final String ON_MOUSE_PRESS_ACTION_ID = "onMousePress";
@@ -34,6 +38,9 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
     private final static Action<EventInputs> ON_MOUSE_RELEASE_ACTION =
             action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"));
 
+    protected final static String SPRITE_ID = "spriteId";
+    protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
+            "./src/test/resources/images/items/RPG_Weapons.png";
     private final static String TILE_LOCATION_RELATIVE_LOCATION =
             "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
@@ -47,7 +54,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 )
         );
         displayTest.runTest(
-                "Mouse event display test",
+                "Combination display test",
                 new AssetDefinitionsDTO(
                         new ImageDefinitionDTO[]{
                                 new ImageDefinitionDTO(RPG_WEAPONS_RELATIVE_LOCATION, true),
@@ -65,16 +72,44 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                         new AnimatedMouseCursorDefinitionDTO[]{},
                         new StaticMouseCursorDefinitionDTO[]{}
                 ),
-                () -> DisplayTest.runThenClose("Mouse event", 4000),
-                MouseEventDisplayTest::populateTopLevelComponent
+                () -> DisplayTest.runThenClose("Combination", 4000),
+                CombinationTest::populateTopLevelComponent
         );
     }
 
     protected static void populateTopLevelComponent(IOModule ioModule,
                                                     Component topLevelComponent) {
+        var rasterizedLineSegmentFactory =
+                ioModule.provide(RasterizedLineSegmentRenderableFactory.class);
+        rasterizedLineSegmentFactory.make(
+                staticProvider(vertexOf(.1f, .4f)),
+                staticProvider(vertexOf(.9f, .4f)),
+                staticProvider(6f),
+                (short) 0xAAAA,
+                (short) 16,
+                staticProvider(Color.RED),
+                -1,
+                randomUUID(),
+                topLevelComponent
+        );
+
+        var antialiasedLineSegmentFactory =
+                ioModule.provide(AntialiasedLineSegmentRenderableFactory.class);
+        antialiasedLineSegmentFactory.make(
+                staticProvider(vertexOf(.1f, .69f)),
+                staticProvider(vertexOf(.9f, .71f)),
+                staticProvider(Color.RED),
+                staticProvider(.005f),
+                staticProvider(0.75f),
+                staticProvider(0.01f),
+                -1,
+                randomUUID(),
+                topLevelComponent
+        );
+
         var graphics = ioModule.provide(Graphics.class);
 
-        var rectDimensProvider = staticProvider(floatBoxOf(0f, 0f, 1f, 1f));
+        var rectDimensProvider = staticProvider(floatBoxOf(0.1f, 0.1f, 0.3f, 0.3f));
         var backgroundTex = graphics.getImage(TILE_LOCATION_RELATIVE_LOCATION).textureId();
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
         var rectRenderer = rectangleRenderableFactory.make(
@@ -100,7 +135,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
 
         var sprite = graphics.getSprite(SPRITE_ID);
         var dimensProvider = staticProviderFactory.make(randomUUID(),
-                floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
+                floatBoxOf(0.7f, 0.1f, 0.9f, 0.3f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         spriteRenderableFactory.make(
                 sprite,

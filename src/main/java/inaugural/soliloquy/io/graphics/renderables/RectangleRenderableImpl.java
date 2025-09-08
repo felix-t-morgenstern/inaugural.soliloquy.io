@@ -38,11 +38,11 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
                                    int z,
                                    UUID uuid,
-                                   Component component,
+                                   Component containingComponent,
                                    RenderingBoundaries renderingBoundaries,
                                    TimestampValidator timestampValidator) {
         super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
+                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);

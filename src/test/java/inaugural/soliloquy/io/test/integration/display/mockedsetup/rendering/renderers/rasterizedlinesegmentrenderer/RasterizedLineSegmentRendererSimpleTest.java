@@ -47,7 +47,7 @@ class RasterizedLineSegmentRendererSimpleTest extends DisplayTest {
                 staticProvider(6f), (short) 0xAAAA, (short) 16,
                 staticProvider(new Color(18, 201, 159)),
                 1, java.util.UUID.randomUUID(), MockFirstChildComponent);
-        RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(null);
+        RasterizedLineSegmentRenderer = new RasterizedLineSegmentRenderer(TimestampValidator);
 
         Renderers.put(RasterizedLineSegmentRenderableImpl.class, RasterizedLineSegmentRenderer);
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(RasterizedLineSegmentRenderable));

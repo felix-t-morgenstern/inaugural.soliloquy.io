@@ -1,0 +1,113 @@
+package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers;
+
+import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
+import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
+import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
+import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer.SpriteRendererTest;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
+import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
+import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+
+import java.awt.*;
+import java.util.Set;
+import java.util.function.Supplier;
+
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static org.mockito.Mockito.*;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+
+public class CombinationTest extends SpriteRendererTest {
+    protected static RectangleRenderable RectangleRenderable;
+    protected static Renderer<RectangleRenderable> RectangleRenderer;
+
+    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.RED);
+    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.GREEN);
+    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.BLUE);
+    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+            new FakeStaticProvider<>(Color.WHITE);
+    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            new FakeStaticProvider<>(null);
+    private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
+    private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
+    private final static ProviderAtTime<FloatBox> RECT_RENDERING_AREA_PROVIDER = WHOLE_SCREEN_PROVIDER;
+    private final static String TILE_LOCATION =
+            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
+
+    public static void main(String[] args) {
+        runTest(
+                resManager -> generateRenderablesAndRenderersWithMeshAndShader(
+                        0,
+                        Color.BLACK,
+                        null,
+                        resManager::windowWidthToHeightRatio
+                ),
+                CombinationTest::graphicsPreloaderLoadAction,
+                DisplayTest::closeAfterSomeTime
+        );
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
+            float borderThickness, Color borderColor,
+            ColorShiftStackAggregator colorShiftStackAggregator,
+            Supplier<Float> getScreenWToHRatio) {
+        Sprite = new FakeSprite(null, 266, 271, 313, 343);
+
+        SpriteRenderingDimensions = floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f);
+
+        SpriteRenderable = new SpriteRenderableImpl(Sprite, staticProvider(borderThickness),
+                staticProvider(borderColor), listOf(), staticProvider(SpriteRenderingDimensions), 1,
+                java.util.UUID.randomUUID(), MockTopLevelComponent, RENDERING_BOUNDARIES,
+                TimestampValidator);
+
+        SpriteRenderer = new SpriteRenderer(RENDERING_BOUNDARIES,
+                getScreenWToHRatio,
+                colorShiftStackAggregator == null ?
+                        mock(ColorShiftStackAggregator.class) :
+                        colorShiftStackAggregator,
+                TimestampValidator);
+
+        Renderers.put(SpriteRenderableImpl.class, SpriteRenderer);
+
+
+
+        RectangleRenderer = new RectangleRenderer(TimestampValidator);
+        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
+                staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
+                RECT_RENDERING_AREA_PROVIDER, 0, java.util.UUID.randomUUID(), MockFirstChildComponent,
+                RENDERING_BOUNDARIES, TimestampValidator);
+
+        Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
+
+
+
+        lenient().when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
+                setOf(RectangleRenderable, SpriteRenderable));
+
+        return setOf(SpriteRenderer, RectangleRenderer);
+    }
+
+    protected static void graphicsPreloaderLoadAction() {
+        var imageFactory = new ImageFactoryImpl(0.5f);
+        var rectTileImage = imageFactory.make(new ImageDefinition(TILE_LOCATION, false));
+        RectangleRenderable.setTextureIdProvider(staticProvider(rectTileImage.textureId()));
+        RectangleRenderable.setTextureTileWidthProvider(staticProvider(1f));
+        RectangleRenderable.setTextureTileHeightProvider(staticProvider(1f));
+        Sprite.Image = imageFactory.make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, true));
+        FrameTimer.ShouldExecuteNextFrame = true;
+    }
+}

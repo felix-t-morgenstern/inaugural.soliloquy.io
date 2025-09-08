@@ -35,7 +35,7 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
 
     protected static void populateTopLevelComponent(IOModule ioModule,
                                                     Component topLevelComponent) {
-        var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
+        var rectDimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
         rectangleRenderableFactory.make(
                 staticProvider(randomColor()),
@@ -49,7 +49,7 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
-                dimensProvider,
+                rectDimensProvider,
                 randomInt(),
                 randomUUID(),
                 topLevelComponent

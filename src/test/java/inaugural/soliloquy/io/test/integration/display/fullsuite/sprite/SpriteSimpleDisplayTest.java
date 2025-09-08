@@ -47,8 +47,9 @@ public class SpriteSimpleDisplayTest extends DisplayTest {
     protected static void populateTopLevelComponent(IOModule ioModule,
                                                     Component topLevelComponent) {
         var graphics = ioModule.provide(Graphics.class);
-        var sprite = graphics.getSprite(SPRITE_ID);
         var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+
+        var sprite = graphics.getSprite(SPRITE_ID);
         var dimensProvider = staticProviderFactory.make(randomUUID(),
                 floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);

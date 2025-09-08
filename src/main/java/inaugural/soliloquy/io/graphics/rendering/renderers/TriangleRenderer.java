@@ -78,6 +78,8 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         var tilesPerWidth = 0f;
         var tilesPerHeight = 0f;
 
+        glEnable(GL_TEXTURE_2D);
+
         if (textureId != null) {
             maxX = Math.max(x3, Math.max(x2, x1));
             minX = Math.min(x3, Math.min(x2, x1));
@@ -117,6 +119,8 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         drawPoint(x3, y3);
 
         glEnd();
+
+        glDisable(GL_TEXTURE_2D);
     }
 
     @Override

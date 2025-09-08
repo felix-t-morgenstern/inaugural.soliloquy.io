@@ -52,7 +52,7 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
     @SuppressWarnings("rawtypes")
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        RectangleRenderer = new RectangleRenderer(null);
+        RectangleRenderer = new RectangleRenderer(TimestampValidator);
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),

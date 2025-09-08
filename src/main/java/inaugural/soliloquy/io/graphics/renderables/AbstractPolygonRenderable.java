@@ -28,11 +28,11 @@ public abstract class AbstractPolygonRenderable
             Action<EventInputs> onMouseLeave,
             int z,
             java.util.UUID uuid,
-            Component component,
+            Component containingComponent,
             RenderingBoundaries renderingBoundaries,
             TimestampValidator timestampValidator
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
+        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setTextureIdProvider(textureIdProvider);
         setTextureTileWidthProvider(textureTileWidthProvider);

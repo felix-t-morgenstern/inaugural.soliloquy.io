@@ -32,7 +32,7 @@ public class ComponentRendererImpl implements ComponentRenderer {
         RENDERING_BOUNDARIES.pushNewBoundaries(boundaries);
 
         var toRender = component.contentsRepresentation().stream()
-                .sorted(Comparator.comparingInt(Renderable::getZ).reversed());
+                .sorted(Comparator.comparingInt(Renderable::getZ));
 
         toRender.forEach(r -> {
             if (r instanceof Component) {
