@@ -708,8 +708,8 @@ public class ImageAssetSetRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderable);
     }
 
     @Test
@@ -724,7 +724,7 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((ImageAssetSetRenderableImpl) renderable).setComponent(null);
+        ((ImageAssetSetRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }

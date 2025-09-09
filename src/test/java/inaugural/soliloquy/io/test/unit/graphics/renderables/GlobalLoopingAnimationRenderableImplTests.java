@@ -604,6 +604,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         assertTrue(renderableWithMouseEvents.isDeleted());
         assertTrue(renderableWithoutMouseEvents.isDeleted());
+
+        verify(mockContainingComponent, once()).remove(renderableWithMouseEvents);
+        verify(mockContainingComponent, once()).remove(renderableWithoutMouseEvents);
     }
 
     @Test
@@ -619,7 +622,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((GlobalLoopingAnimationRenderableImpl) renderableWithMouseEvents).setComponent(null);
+        ((GlobalLoopingAnimationRenderableImpl) renderableWithMouseEvents).setContainingComponent(null);
 
         assertNull(renderableWithMouseEvents.component());
     }

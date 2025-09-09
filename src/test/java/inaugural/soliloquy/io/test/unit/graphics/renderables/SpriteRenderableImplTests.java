@@ -567,8 +567,12 @@ public class SpriteRenderableImplTests {
 
         assertNull(renderableWithMouseEvents.component());
         assertNull(renderableWithoutMouseEvents.component());
+
         assertTrue(renderableWithMouseEvents.isDeleted());
         assertTrue(renderableWithoutMouseEvents.isDeleted());
+
+        verify(mockContainingComponent, once()).remove(renderableWithMouseEvents);
+        verify(mockContainingComponent, once()).remove(renderableWithoutMouseEvents);
     }
 
     @Test
@@ -584,7 +588,7 @@ public class SpriteRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((SpriteRenderableImpl) renderableWithMouseEvents).setComponent(null);
+        ((SpriteRenderableImpl) renderableWithMouseEvents).setContainingComponent(null);
 
         assertNull(renderableWithMouseEvents.component());
     }

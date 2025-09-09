@@ -181,8 +181,8 @@ public class RasterizedLineSegmentRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderable);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class RasterizedLineSegmentRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((RasterizedLineSegmentRenderableImpl) renderable).setComponent(null);
+        ((RasterizedLineSegmentRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }

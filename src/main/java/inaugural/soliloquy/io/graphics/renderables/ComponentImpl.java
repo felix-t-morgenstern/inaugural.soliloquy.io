@@ -80,7 +80,7 @@ public class ComponentImpl implements Component {
     @Override
     public void remove(Renderable renderable) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (renderable.component() != this) {
+        if (!renderable.isDeleted() && renderable.component() != this) {
             throw new IllegalArgumentException(
                     "ComponentImpl.remove: renderable not in this Component");
         }
@@ -145,6 +145,7 @@ public class ComponentImpl implements Component {
     public void delete() {
         RENDERABLES.forEach(Renderable::delete);
         isDeleted = true;
+        CONTAINING_COMPONENT.remove(this);
     }
 
     @Override

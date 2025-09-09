@@ -140,7 +140,7 @@ public class CircleRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((CircleRenderableImpl) renderable).setComponent(null);
+        ((CircleRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }

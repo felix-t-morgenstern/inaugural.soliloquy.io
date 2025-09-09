@@ -376,8 +376,8 @@ public class TextLineRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderable);
     }
 
     @Test
@@ -387,7 +387,7 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((TextLineRenderableImpl) renderable).setComponent(null);
+        ((TextLineRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }

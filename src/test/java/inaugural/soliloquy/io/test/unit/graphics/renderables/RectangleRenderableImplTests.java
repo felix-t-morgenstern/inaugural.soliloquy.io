@@ -544,8 +544,8 @@ public class RectangleRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderable);
     }
 
     @Test

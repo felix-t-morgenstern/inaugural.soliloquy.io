@@ -242,7 +242,7 @@ public class IOModule implements Module {
                 new AntialiasedLineSegmentRenderer(resManager, timestampValidator)
         );
         contentRenderers.put(
-                FiniteAnimationRenderer.class,
+                FiniteAnimationRenderableImpl.class,
                 new FiniteAnimationRenderer(renderingBoundaries,
                         resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
         );

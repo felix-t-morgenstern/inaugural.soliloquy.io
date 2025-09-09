@@ -238,7 +238,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((AntialiasedLineSegmentRenderableImpl) renderable).setComponent(null);
+        ((AntialiasedLineSegmentRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }
@@ -248,5 +248,6 @@ public class AntialiasedLineSegmentRenderableImplTests {
         renderable.delete();
 
         assertTrue(renderable.isDeleted());
+        verify(mockComponent, once()).remove(renderable);
     }
 }

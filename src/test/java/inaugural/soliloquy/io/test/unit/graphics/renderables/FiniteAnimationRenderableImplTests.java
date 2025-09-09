@@ -725,7 +725,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((FiniteAnimationRenderableImpl) renderableWithMouseEvents).setComponent(null);
+        ((FiniteAnimationRenderableImpl) renderableWithMouseEvents).setContainingComponent(null);
 
         assertNull(renderableWithMouseEvents.component());
     }
@@ -735,10 +735,12 @@ public class FiniteAnimationRenderableImplTests {
         renderableWithMouseEvents.delete();
         assertNull(renderableWithMouseEvents.component());
         assertTrue(renderableWithMouseEvents.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderableWithMouseEvents);
 
         renderableWithoutMouseEvents.delete();
         assertNull(renderableWithoutMouseEvents.component());
         assertTrue(renderableWithoutMouseEvents.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderableWithoutMouseEvents);
     }
 
     @Test

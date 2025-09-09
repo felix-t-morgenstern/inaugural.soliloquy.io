@@ -536,8 +536,8 @@ public class TriangleRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.component());
         assertTrue(renderable.isDeleted());
+        verify(mockContainingComponent, once()).remove(renderable);
     }
 
     @Test
@@ -552,7 +552,7 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testSetComponent() {
-        ((TriangleRenderableImpl) renderable).setComponent(null);
+        ((TriangleRenderableImpl) renderable).setContainingComponent(null);
 
         assertNull(renderable.component());
     }

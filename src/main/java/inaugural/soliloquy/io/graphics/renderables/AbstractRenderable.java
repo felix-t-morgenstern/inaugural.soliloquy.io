@@ -10,12 +10,12 @@ abstract class AbstractRenderable implements Renderable {
     private final UUID UUID;
 
     private int z;
-    private Component component;
+    private Component containingComponent;
     private boolean isDeleted;
 
     protected AbstractRenderable(int z, UUID uuid,
                                  Component containingComponent) {
-        this.component = containingComponent;
+        this.containingComponent = containingComponent;
         containingComponent.add(this);
         this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
@@ -23,11 +23,11 @@ abstract class AbstractRenderable implements Renderable {
 
     @Override
     public Component component() {
-        return isDeleted ? null : component;
+        return isDeleted ? null : containingComponent;
     }
 
-    public void setComponent(Component component) {
-        this.component = component;
+    public void setContainingComponent(Component containingComponent) {
+        this.containingComponent = containingComponent;
     }
 
     @Override
@@ -46,6 +46,7 @@ abstract class AbstractRenderable implements Renderable {
     @Override
     public void delete() {
         isDeleted = true;
+        containingComponent.remove(this);
     }
 
     @Override

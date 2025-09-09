@@ -191,6 +191,8 @@ public class ComponentImplTests {
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
         when(mockRenderable.component()).thenReturn(mock(Component.class));
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
+        when(mockRenderable.isDeleted()).thenReturn(true);
+        assertDoesNotThrow(() -> component.remove(mockRenderable));
     }
 
     @Test
@@ -207,5 +209,15 @@ public class ComponentImplTests {
 
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
+    }
+
+    @Test
+    public void testDelete() {
+        var containedComponent = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent, mockRenderingBoundaries, mockAddToCapturing, mockRemoveFromCapturing);
+
+        containedComponent.delete();
+
+        assertTrue(containedComponent.isDeleted());
+        verify(mockComponent, once()).remove(containedComponent);
     }
 }

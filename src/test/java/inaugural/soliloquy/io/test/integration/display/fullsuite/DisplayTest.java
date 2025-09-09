@@ -16,6 +16,7 @@ import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProvide
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 
 import java.awt.*;
 import java.util.Map;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class DisplayTest {
+    protected final static WindowResolution DEFAULT_RES = WindowResolution.RES_1680x1050;
     private final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
 
@@ -97,7 +99,7 @@ public class DisplayTest {
                 STARTING_WINDOW_DISPLAY_MODE_ID,
                 generateMockSetting(WindowDisplayMode.WINDOWED),
                 STARTING_WINDOW_RESOLUTION_ID,
-                generateMockSetting(WindowResolution.RES_1680x1050),
+                generateMockSetting(DEFAULT_RES),
                 DEFAULT_FONT_COLOR_ID,
                 generateMockSetting(Color.WHITE)
         );
@@ -152,5 +154,10 @@ public class DisplayTest {
         when(mockSetting.getValue()).thenReturn(val);
 
         return mockSetting;
+    }
+
+    protected static long timestamp(IOModule ioModule) {
+        var globalClock = ioModule.provide(GlobalClock.class);
+        return globalClock.globalTimestamp();
     }
 }
