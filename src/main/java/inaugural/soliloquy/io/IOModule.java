@@ -287,7 +287,7 @@ public class IOModule implements Module {
 
         var antialiasedLineSegmentRenderableFactory =
                 andRegister(new AntialiasedLineSegmentRenderableFactoryImpl());
-        andRegister(new ComponentFactoryImpl(mouseCapturing::putRenderable,
+        var componentFactory = andRegister(new ComponentFactoryImpl(mouseCapturing::putRenderable,
                 mouseCapturing::removeRenderable));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));
@@ -490,6 +490,10 @@ public class IOModule implements Module {
         persistenceHandler.addTypeHandler(TriangleRenderableImpl.class,
                 new TriangleRenderableHandler(getAction, providerHandler,
                         triangleRenderableFactory));
+        persistenceHandler.addTypeHandler(ComponentImpl.class,
+                new ComponentHandler(providerHandler,
+                        persistenceHandler.getTypeHandler(Map.class.getCanonicalName()),
+                        persistenceHandler, getAction, componentFactory));
 
         // ========
         // Graphics

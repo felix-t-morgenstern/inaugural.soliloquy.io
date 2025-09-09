@@ -33,7 +33,7 @@ public class MouseEventCapturingSpatialIndexImpl
                 });
         var sortedByZ =
                 capturingResults.sorted(Comparator.comparingInt(Renderable::getZ).reversed());
-        var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.component().tier()));
+        var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.containingComponent().tier()));
 
         return sortedByTierAndZ.findFirst().orElse(null);
     }

@@ -10,19 +10,25 @@ abstract class AbstractRenderable implements Renderable {
     private final UUID UUID;
 
     private int z;
-    private Component containingComponent;
+    protected Component containingComponent;
     private boolean isDeleted;
 
     protected AbstractRenderable(int z, UUID uuid,
                                  Component containingComponent) {
+        this(z, uuid);
         this.containingComponent = containingComponent;
-        containingComponent.add(this);
+        if (containingComponent != null) {
+            containingComponent.add(this);
+        }
+    }
+
+    protected AbstractRenderable(int z, UUID uuid) {
         this.z = z;
         UUID = Check.ifNull(uuid, "uuid");
     }
 
     @Override
-    public Component component() {
+    public Component containingComponent() {
         return isDeleted ? null : containingComponent;
     }
 

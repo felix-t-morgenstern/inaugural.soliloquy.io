@@ -16,18 +16,14 @@ import java.util.function.Consumer;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 
-public class ComponentImpl implements Component {
-    private final UUID UUID;
-    private final Component CONTAINING_COMPONENT;
+public class ComponentImpl  extends AbstractRenderable implements Component {
     private final KeyBindingContext BINDING_CONTEXT;
     private final Set<Renderable> RENDERABLES;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
-    private final int TIER;
     private final Map<String, Object> DATA;
 
-    private int z;
-    private boolean isDeleted;
+    private int tier;
     private ProviderAtTime<FloatBox> renderingBoundariesProvider;
 
     @SuppressWarnings("ConstantConditions")
@@ -39,15 +35,14 @@ public class ComponentImpl implements Component {
                          Map<String, Object> data,
                          Consumer<RenderableWithMouseEvents> addToCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromCapturing) {
-        UUID = Check.ifNull(uuid, "uuid");
-        this.z = z;
-        TIER = containingComponent == null ? 0 : (containingComponent.tier() + 1);
+        super(z, uuid);
+        this.containingComponent = containingComponent;
+        if (containingComponent != null) {
+            this.tier = containingComponent.tier() + 1;
+            containingComponent.add(this);
+        }
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
-        CONTAINING_COMPONENT = containingComponent;
-        if (CONTAINING_COMPONENT != null) {
-            CONTAINING_COMPONENT.add(this);
-        }
         BINDING_CONTEXT = Check.ifNull(bindingContext, "bindingContext");
         RENDERABLES = setOf();
         DATA = mapOf(Check.ifNull(data, "data"));
@@ -63,17 +58,17 @@ public class ComponentImpl implements Component {
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (renderable.component() != this) {
+        if (renderable.containingComponent() != this) {
             throw new IllegalArgumentException(
                     "ComponentImpl.add: renderable must have this stored as its Component");
         }
         if (renderable instanceof Component) {
             var newComponentTier = ((Component) renderable).tier();
-            if (newComponentTier != TIER + 1) {
+            if (newComponentTier != tier + 1) {
                 throw new IllegalArgumentException(
                         "ComponentImpl.add: renderable is Component whose tier (" +
                                 newComponentTier +
-                                ") is not one greater than this Component's tier (" + TIER + ")");
+                                ") is not one greater than this Component's tier (" + tier + ")");
             }
         }
         RENDERABLES.add(renderable);
@@ -85,7 +80,7 @@ public class ComponentImpl implements Component {
     @Override
     public void remove(Renderable renderable) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (!renderable.isDeleted() && renderable.component() != this) {
+        if (!renderable.isDeleted() && renderable.containingComponent() != this) {
             throw new IllegalArgumentException(
                     "ComponentImpl.remove: renderable not in this Component");
         }
@@ -113,7 +108,7 @@ public class ComponentImpl implements Component {
     @Override
     public void setRenderingBoundariesProvider(ProviderAtTime<FloatBox> provider)
             throws IllegalArgumentException, UnsupportedOperationException {
-        if (CONTAINING_COMPONENT == null) {
+        if (containingComponent == null) {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setRenderingBoundariesProvider: cannot assign new " +
                             "rendering boundaries for top-level Component");
@@ -123,44 +118,37 @@ public class ComponentImpl implements Component {
 
     @Override
     public int tier() {
-        return TIER;
-    }
-
-    @Override
-    public int getZ() {
-        return z;
+        return tier;
     }
 
     @Override
     public void setZ(int z) {
-        if (CONTAINING_COMPONENT == null) {
+        if (containingComponent == null) {
             throw new UnsupportedOperationException(
                     "RenderableStackImpl.setZ: cannot set z value on top-level Component");
         }
-        this.z = z;
-        CONTAINING_COMPONENT.add(this);
+        super.setZ(z);
     }
 
     @Override
-    public Component component() {
-        return CONTAINING_COMPONENT;
+    public Component containingComponent() {
+        return containingComponent;
+    }
+
+    public void setContainingComponent(Component containingComponent) {
+        this.containingComponent = containingComponent;
+        if (containingComponent == null) {
+            this.tier = 0;
+        }
+        else {
+            this.tier = containingComponent.tier() + 1;
+        }
     }
 
     @Override
     public void delete() {
         RENDERABLES.forEach(Renderable::delete);
-        isDeleted = true;
-        CONTAINING_COMPONENT.remove(this);
-    }
-
-    @Override
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    @Override
-    public UUID uuid() {
-        return UUID;
+        super.delete();
     }
 
     @Override

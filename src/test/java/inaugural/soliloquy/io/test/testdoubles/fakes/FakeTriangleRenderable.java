@@ -221,7 +221,7 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public Component component() {
+    public Component containingComponent() {
         return null;
     }
 

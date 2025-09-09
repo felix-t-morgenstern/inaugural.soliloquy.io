@@ -547,13 +547,13 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.component());
+        assertSame(mockContainingComponent, renderable.containingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((TriangleRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.component());
+        assertNull(renderable.containingComponent());
     }
 }

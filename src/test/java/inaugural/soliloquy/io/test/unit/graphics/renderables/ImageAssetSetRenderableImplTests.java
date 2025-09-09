@@ -719,13 +719,13 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.component());
+        assertSame(mockContainingComponent, renderable.containingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((ImageAssetSetRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.component());
+        assertNull(renderable.containingComponent());
     }
 }

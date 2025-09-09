@@ -718,27 +718,27 @@ public class FiniteAnimationRenderableImplTests {
     @Test
     public void testComponent() {
         assertSame(mockContainingComponent,
-                renderableWithMouseEvents.component());
+                renderableWithMouseEvents.containingComponent());
         assertSame(mockContainingComponent,
-                renderableWithoutMouseEvents.component());
+                renderableWithoutMouseEvents.containingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((FiniteAnimationRenderableImpl) renderableWithMouseEvents).setContainingComponent(null);
 
-        assertNull(renderableWithMouseEvents.component());
+        assertNull(renderableWithMouseEvents.containingComponent());
     }
 
     @Test
     public void testDelete() {
         renderableWithMouseEvents.delete();
-        assertNull(renderableWithMouseEvents.component());
+        assertNull(renderableWithMouseEvents.containingComponent());
         assertTrue(renderableWithMouseEvents.isDeleted());
         verify(mockContainingComponent, once()).remove(renderableWithMouseEvents);
 
         renderableWithoutMouseEvents.delete();
-        assertNull(renderableWithoutMouseEvents.component());
+        assertNull(renderableWithoutMouseEvents.containingComponent());
         assertTrue(renderableWithoutMouseEvents.isDeleted());
         verify(mockContainingComponent, once()).remove(renderableWithoutMouseEvents);
     }

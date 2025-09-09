@@ -98,7 +98,7 @@ public class FakeAntialiasedLineSegmentRenderable implements AntialiasedLineSegm
     }
 
     @Override
-    public Component component() {
+    public Component containingComponent() {
         return null;
     }
 

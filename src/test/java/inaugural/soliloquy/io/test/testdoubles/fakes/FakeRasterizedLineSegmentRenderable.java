@@ -100,7 +100,7 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public Component component() {
+    public Component containingComponent() {
         return null;
     }
 

@@ -207,7 +207,7 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public Component component() {
+    public Component containingComponent() {
         return null;
     }
 

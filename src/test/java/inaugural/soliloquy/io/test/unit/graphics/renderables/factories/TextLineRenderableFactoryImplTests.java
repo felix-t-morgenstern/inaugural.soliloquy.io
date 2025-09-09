@@ -71,7 +71,7 @@ public class TextLineRenderableFactoryImplTests {
         assertEquals(JUSTIFICATION, renderable.getJustification());
         assertEquals(paddingBetweenGlyphs, renderable.getPaddingBetweenGlyphs());
         assertEquals(COLOR_PROVIDER_INDICES, renderable.colorProviderIndices());
-        assertSame(mockContainingComponent, renderable.component());
+        assertSame(mockContainingComponent, renderable.containingComponent());
 
         renderable.delete();
 

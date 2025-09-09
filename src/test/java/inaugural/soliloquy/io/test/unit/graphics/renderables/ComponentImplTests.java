@@ -58,9 +58,9 @@ public class ComponentImplTests {
         component = new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
                 DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
-        lenient().when(mockRenderable.component()).thenReturn(component);
-        lenient().when(mockRenderableWithMouseEvents.component()).thenReturn(component);
-        lenient().when(mockComponent.component()).thenReturn(component);
+        lenient().when(mockRenderable.containingComponent()).thenReturn(component);
+        lenient().when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(component);
+        lenient().when(mockComponent.containingComponent()).thenReturn(component);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ComponentImplTests {
 
     @Test
     public void testAddToSameComponent() {
-        when(mockRenderable.component()).thenReturn(component);
+        when(mockRenderable.containingComponent()).thenReturn(component);
 
         component.add(mockRenderable);
         var content = component.contentsRepresentation();
@@ -127,7 +127,7 @@ public class ComponentImplTests {
 
     @Test
     public void testAddRenderableInDifferentComponent() {
-        when(mockRenderable.component()).thenReturn(mock(Component.class));
+        when(mockRenderable.containingComponent()).thenReturn(mock(Component.class));
         assertThrows(IllegalArgumentException.class, () -> component.add(mockRenderable));
     }
 
@@ -141,7 +141,7 @@ public class ComponentImplTests {
 
     @Test
     public void testAddRenderableNotInComponent() {
-        when(mockRenderable.component()).thenReturn(null);
+        when(mockRenderable.containingComponent()).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> component.add(mockRenderable));
     }
@@ -157,7 +157,7 @@ public class ComponentImplTests {
 
     @Test
     public void testRemove() {
-        when(mockRenderable.component()).thenReturn(component);
+        when(mockRenderable.containingComponent()).thenReturn(component);
         component.add(mockRenderable);
 
         component.remove(mockRenderable);
@@ -168,9 +168,9 @@ public class ComponentImplTests {
     @Test
     public void testClear() {
         var mockRenderable2 = mock(Renderable.class);
-        when(mockRenderable2.component()).thenReturn(component);
+        when(mockRenderable2.containingComponent()).thenReturn(component);
         var mockRenderable3 = mock(Renderable.class);
-        when(mockRenderable3.component()).thenReturn(component);
+        when(mockRenderable3.containingComponent()).thenReturn(component);
         component.add(mockRenderable);
         component.add(mockRenderable2);
         component.add(mockRenderable3);
@@ -182,8 +182,8 @@ public class ComponentImplTests {
 
     @Test
     public void testRemoveRemovesFromMouseCapturing() {
-        when(mockRenderable.component()).thenReturn(component);
-        when(mockRenderableWithMouseEvents.component()).thenReturn(component);
+        when(mockRenderable.containingComponent()).thenReturn(component);
+        when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(component);
         component.add(mockRenderable);
         component.add(mockRenderableWithMouseEvents);
 
@@ -197,9 +197,9 @@ public class ComponentImplTests {
     @Test
     public void testRemoveWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> component.remove(null));
-        when(mockRenderable.component()).thenReturn(null);
+        when(mockRenderable.containingComponent()).thenReturn(null);
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
-        when(mockRenderable.component()).thenReturn(mock(Component.class));
+        when(mockRenderable.containingComponent()).thenReturn(mock(Component.class));
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
         when(mockRenderable.isDeleted()).thenReturn(true);
         assertDoesNotThrow(() -> component.remove(mockRenderable));
@@ -219,6 +219,23 @@ public class ComponentImplTests {
 
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
+    }
+
+    @Test
+    public void testSetContainingComponent() {
+        var mockContainingComponent = mock(Component.class);
+        var containingComponentTier = randomInt();
+        when(mockContainingComponent.tier()).thenReturn(containingComponentTier);
+
+        ((ComponentImpl)component).setContainingComponent(mockContainingComponent);
+
+        assertSame(mockContainingComponent, component.containingComponent());
+        assertEquals(containingComponentTier + 1, component.tier());
+
+        ((ComponentImpl)component).setContainingComponent(null);
+
+        assertNull(component.containingComponent());
+        assertEquals(0, component.tier());
     }
 
     @Test

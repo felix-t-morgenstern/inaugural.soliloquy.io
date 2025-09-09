@@ -52,7 +52,7 @@ public class ComponentRendererTest extends DisplayTest {
         when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
         MockFirstChildComponent = mock(Component.class);
-        when(MockFirstChildComponent.component()).thenReturn(MockTopLevelComponent);
+        when(MockFirstChildComponent.containingComponent()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
         when(MockTopLevelComponent.contentsRepresentation()).thenReturn(setOf(MockFirstChildComponent));

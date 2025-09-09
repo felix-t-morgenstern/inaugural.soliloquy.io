@@ -59,9 +59,9 @@ public class ComponentFactoryImplTests {
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
         var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent, DATA);
-        when(mockRenderableWithMouseEvents.component()).thenReturn(output);
+        when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
-        when(mockRenderableWithMouseEvents.component()).thenReturn(output);
+        when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);
 
         assertNotNull(output);
@@ -71,7 +71,7 @@ public class ComponentFactoryImplTests {
         assertEquals(uuid, output.uuid());
         assertEquals(z, output.getZ());
         assertEquals(tier + 1, output.tier());
-        assertSame(mockComponent, output.component());
+        assertSame(mockComponent, output.containingComponent());
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
         assertEquals(DATA, output.data());
         assertNotSame(DATA, output.data());

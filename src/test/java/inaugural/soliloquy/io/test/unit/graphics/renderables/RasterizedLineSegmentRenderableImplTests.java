@@ -192,13 +192,13 @@ public class RasterizedLineSegmentRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.component());
+        assertSame(mockContainingComponent, renderable.containingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((RasterizedLineSegmentRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.component());
+        assertNull(renderable.containingComponent());
     }
 }

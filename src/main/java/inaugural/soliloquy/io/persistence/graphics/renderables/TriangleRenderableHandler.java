@@ -3,12 +3,9 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
-import java.awt.*;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -85,14 +82,5 @@ public class TriangleRenderableHandler extends AbstractPolygonRenderableHandler<
         String vertex2Color;
         String vertex3;
         String vertex3Color;
-    }
-
-    private static class ReadProps extends AbstractPolygonRenderableHandler.ReadProps {
-        ProviderAtTime<Vertex> vertex1;
-        ProviderAtTime<Color> vertex1Color;
-        ProviderAtTime<Vertex> vertex2;
-        ProviderAtTime<Color> vertex2Color;
-        ProviderAtTime<Vertex> vertex3;
-        ProviderAtTime<Color> vertex3Color;
     }
 }

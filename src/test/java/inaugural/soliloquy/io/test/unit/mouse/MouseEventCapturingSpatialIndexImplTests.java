@@ -89,10 +89,10 @@ public class MouseEventCapturingSpatialIndexImplTests {
                 .thenReturn(true);
         lenient().when(mockRenderable4.capturesMouseEventAtPoint(any(), anyLong()))
                 .thenReturn(true);
-        lenient().when(mockRenderable1.component()).thenReturn(mockComponentHigher);
-        lenient().when(mockRenderable2.component()).thenReturn(mockComponentHigher);
-        lenient().when(mockRenderable3.component()).thenReturn(mockComponentLower);
-        lenient().when(mockRenderable4.component()).thenReturn(mockComponentLower);
+        lenient().when(mockRenderable1.containingComponent()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable2.containingComponent()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable3.containingComponent()).thenReturn(mockComponentLower);
+        lenient().when(mockRenderable4.containingComponent()).thenReturn(mockComponentLower);
 
         capturing = new MouseEventCapturingSpatialIndexImpl();
     }
