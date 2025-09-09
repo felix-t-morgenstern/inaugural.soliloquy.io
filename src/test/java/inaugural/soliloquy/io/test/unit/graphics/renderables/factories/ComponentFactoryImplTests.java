@@ -12,10 +12,13 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +26,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentFactoryImplTests {
+    private final String DATA_KEY = randomString();
+    private final int DATA_VAL = randomInt();
+    private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
+
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromCapturing;
@@ -51,7 +58,7 @@ public class ComponentFactoryImplTests {
         when(mockComponent.tier()).thenReturn(tier);
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
-        var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent);
+        var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent, DATA);
         when(mockRenderableWithMouseEvents.component()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.component()).thenReturn(output);
@@ -66,6 +73,8 @@ public class ComponentFactoryImplTests {
         assertEquals(tier + 1, output.tier());
         assertSame(mockComponent, output.component());
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
+        assertEquals(DATA, output.data());
+        assertNotSame(DATA, output.data());
         verify(mockAddToCapturing, once()).accept(mockRenderableWithMouseEvents);
         verify(mockRemoveFromCapturing, once()).accept(mockRenderableWithMouseEvents);
     }
@@ -73,8 +82,10 @@ public class ComponentFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, randomInt(), mockRenderingBoundaries, mockComponent));
+                () -> factory.make(null, randomInt(), mockRenderingBoundaries, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), null, mockComponent));
+                () -> factory.make(randomUUID(), randomInt(), null, mockComponent, DATA));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(randomUUID(), randomInt(), mockRenderingBoundaries, mockComponent, null));
     }
 }

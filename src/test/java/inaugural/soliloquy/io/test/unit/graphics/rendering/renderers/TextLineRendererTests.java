@@ -3,8 +3,6 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFontStyleInfo;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeTextLineRenderable;
 import inaugural.soliloquy.tools.Tools;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +14,11 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.Shader;
 
 import java.awt.*;
 import java.util.List;
@@ -30,6 +31,8 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
@@ -46,6 +49,8 @@ public class TextLineRendererTests {
 
     @Mock private Font mockFont;
     @Mock private FontStyleInfo mockFontInfo;
+    @Mock private Mesh mockMesh;
+    @Mock private Shader mockShader;
 
     private soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer renderer;
 
@@ -59,7 +64,8 @@ public class TextLineRendererTests {
         lenient().when(mockFont.bold()).thenReturn(mockFontInfo);
         lenient().when(mockFont.italic()).thenReturn(mockFontInfo);
         lenient().when(mockFont.boldItalic()).thenReturn(mockFontInfo);
-        lenient().when(mockFontInfo.getUvCoordinatesForGlyph(anyChar())).thenReturn(randomFloatBox());
+        lenient().when(mockFontInfo.getUvCoordinatesForGlyph(anyChar()))
+                .thenReturn(randomFloatBox());
 
         renderer = new TextLineRenderer(mockRenderingBoundaries,
                 DEFAULT_COLOR, mockGetScreenWToHRatio, mockTimestampValidator);
@@ -93,277 +99,144 @@ public class TextLineRendererTests {
 
     @Test
     public void testRenderWithInvalidArgs() {
-        var lineHeightProvider = new FakeStaticProvider<>(0.25f);
-        var textLine = "Text line";
+        var lineHeightProvider = generateMockStaticProvider(0.25f);
+        var textLine = randomString();
         Map<Integer, ProviderAtTime<Color>> colorProviderIndices = mapOf();
-        colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
-        List<Integer> italicIndices = listOf();
-        italicIndices.add(2);
-        italicIndices.add(6);
-        List<Integer> boldIndices = listOf();
-        boldIndices.add(3);
-        boldIndices.add(5);
-        var renderingAreaProvider = new FakeStaticProvider<>(vertexOf(0f, 0f));
-        var uuid = UUID.randomUUID();
-        var textLineRenderable = new FakeTextLineRenderable(mockFont,
-                lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
-                new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
-                boldIndices, renderingAreaProvider, uuid);
-        var timestamp = MOST_RECENT_TIMESTAMP;
+        colorProviderIndices.put(4, generateMockStaticProvider(Color.RED));
+        var italicIndices = listOf(2, 6);
+        var boldIndices = listOf(3, 5);
+        var renderingAreaProvider = generateMockStaticProvider(vertexOf(0f, 0f));
+        var textLineRenderable = generateMockRenderable(mockFont,
+                lineHeightProvider, 0f, textLine, generateMockStaticProvider(1f),
+                generateMockStaticProvider(null), colorProviderIndices, italicIndices,
+                boldIndices, renderingAreaProvider, randomUUID());
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
+        when(textLineRenderable.getRenderingLocationProvider()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.getRenderingLocationProvider()).thenReturn(renderingAreaProvider);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
+        when(textLineRenderable.getFont()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.getFont()).thenReturn(mockFont);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.RenderingLocationProvider = renderingAreaProvider;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        var height = generateMockStaticProvider((Float) null);
+        when(textLineRenderable.lineHeightProvider()).thenReturn(height);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        height = generateMockStaticProvider(randomFloat());
+        when(textLineRenderable.lineHeightProvider()).thenReturn(height);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.Font = null;
-        textLineRenderable.Font = mockFont;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
-
-        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0f);
-        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0.25f);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
-
-        colorProviderIndices.put(null, new FakeStaticProvider<>(Color.BLUE));
+        colorProviderIndices.put(null, generateMockStaticProvider(Color.BLUE));
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         colorProviderIndices.remove(null);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         colorProviderIndices.put(6, null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         colorProviderIndices.remove(6);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        colorProviderIndices.put(-1, new FakeStaticProvider<>(Color.BLUE));
+        colorProviderIndices.put(-1, generateMockStaticProvider(Color.BLUE));
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         colorProviderIndices.remove(-1);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         colorProviderIndices.put(textLine.length(), null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         colorProviderIndices.remove(textLine.length());
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         italicIndices.add(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         //noinspection RedundantCast,SuspiciousMethodCalls
         italicIndices.remove((Object) (null));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         italicIndices.add(-1);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         italicIndices.remove((Object) (-1));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         italicIndices.add(2);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         italicIndices.remove(2);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        italicIndices.add(textLine.length());
-        italicIndices.remove((Object) (textLine.length()));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        italicIndices.add(textLine.length() + 1);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        italicIndices.remove((Object) (textLine.length() + 1));
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.ItalicIndices = null;
-        textLineRenderable.ItalicIndices = italicIndices;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.italicIndices()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.italicIndices()).thenReturn(italicIndices);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         boldIndices.add(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         //noinspection SuspiciousMethodCalls,RedundantCast
         boldIndices.remove((Object) (null));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         boldIndices.add(-1);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         boldIndices.remove((Object) (-1));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        boldIndices.add(textLine.length());
-        boldIndices.remove((Object) (textLine.length()));
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        boldIndices.add(textLine.length() + 1);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        boldIndices.remove((Object) (textLine.length() + 1));
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
         boldIndices.add(3);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
         boldIndices.remove(2);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.BoldIndices = null;
-        textLineRenderable.BoldIndices = boldIndices;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.boldIndices()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.boldIndices()).thenReturn(boldIndices);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.BorderColorProvider = null;
-        textLineRenderable.BorderColorProvider = new FakeStaticProvider<>(null);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getBorderColorProvider()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        var color = generateMockStaticProvider((Color) null);
+        when(textLineRenderable.getBorderColorProvider()).thenReturn(color);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.BorderThicknessProvider = new FakeStaticProvider<>(-0.0001f);
-        textLineRenderable.BorderThicknessProvider = new FakeStaticProvider<>(1f);
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        var thickness = generateMockStaticProvider(-0.0001f);
+        when(textLineRenderable.getBorderThicknessProvider()).thenReturn(thickness);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        thickness = generateMockStaticProvider(1f);
+        when(textLineRenderable.getBorderThicknessProvider()).thenReturn(thickness);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.Uuid = null;
-        textLineRenderable.Uuid = uuid;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.uuid()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.uuid()).thenReturn(randomUUID());
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.Justification = null;
-        textLineRenderable.Justification = TextJustification.LEFT;
-        try {
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getJustification()).thenReturn(null);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        textLineRenderable.Justification = TextJustification.UNKNOWN;
-        textLineRenderable.Justification = TextJustification.LEFT;
-        try {
-            //noinspection UnusedAssignment
-            renderer.render(textLineRenderable, timestamp++);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.UNKNOWN);
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(textLineRenderable, randomLong()));
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
     }
 
     @Test
     public void testTextLineLengthWithInvalidArgs() {
-        var lineHeightProvider = new FakeStaticProvider<>(0.25f);
+        var lineHeightProvider = generateMockStaticProvider(0.25f);
         String textLine = "Text line";
         Map<Integer, ProviderAtTime<Color>> colorProviderIndices = mapOf();
-        colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
+        colorProviderIndices.put(4, generateMockStaticProvider(Color.RED));
         List<Integer> italicIndices = listOf();
         italicIndices.add(2);
         italicIndices.add(6);
@@ -371,11 +244,11 @@ public class TextLineRendererTests {
         boldIndices.add(3);
         boldIndices.add(5);
         ProviderAtTime<Vertex> renderingAreaProvider =
-                new FakeStaticProvider<>(vertexOf(0f, 0f));
-        var uuid = UUID.randomUUID();
-        var textLineRenderable = new FakeTextLineRenderable(mockFont,
-                lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
-                new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
+                generateMockStaticProvider(vertexOf(0f, 0f));
+        var uuid = randomUUID();
+        var textLineRenderable = generateMockRenderable(mockFont,
+                lineHeightProvider, 0f, textLine, generateMockStaticProvider(1f),
+                generateMockStaticProvider(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, uuid);
 
 
@@ -383,244 +256,121 @@ public class TextLineRendererTests {
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(null, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.RenderingLocationProvider = null;
+        when(textLineRenderable.getRenderingLocationProvider()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.RenderingLocationProvider = renderingAreaProvider;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getRenderingLocationProvider()).thenReturn(renderingAreaProvider);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.Font = null;
+        when(textLineRenderable.getFont()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.Font = mockFont;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getFont()).thenReturn(mockFont);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(null);
+        var nullProvider = generateMockStaticProvider((Float) null);
+        when(textLineRenderable.lineHeightProvider()).thenReturn(nullProvider);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0f);
+        var zeroProvider = generateMockStaticProvider(0f);
+        when(textLineRenderable.lineHeightProvider()).thenReturn(zeroProvider);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.LineHeightProvider = new FakeStaticProvider<>(0.25f);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        var heightProvider = generateMockStaticProvider(0.25f);
+        when(textLineRenderable.lineHeightProvider()).thenReturn(heightProvider);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        colorProviderIndices.put(null, new FakeStaticProvider<>(Color.BLUE));
+        colorProviderIndices.put(null, generateMockStaticProvider(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(null);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         colorProviderIndices.put(6, null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(6);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        colorProviderIndices.put(-1, new FakeStaticProvider<>(Color.BLUE));
+        colorProviderIndices.put(-1, generateMockStaticProvider(Color.BLUE));
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(-1);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         colorProviderIndices.put(textLine.length(), null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         colorProviderIndices.remove(textLine.length());
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         italicIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         //noinspection RedundantCast,SuspiciousMethodCalls
         italicIndices.remove((Object) (null));
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         italicIndices.add(-1);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         italicIndices.remove((Object) (-1));
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         italicIndices.add(2);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         italicIndices.remove(2);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.ItalicIndices = null;
+        when(textLineRenderable.italicIndices()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.ItalicIndices = italicIndices;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.italicIndices()).thenReturn(italicIndices);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         boldIndices.add(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         //noinspection SuspiciousMethodCalls,RedundantCast
         boldIndices.remove((Object) (null));
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         boldIndices.add(-1);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         boldIndices.remove((Object) (-1));
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         boldIndices.add(3);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         boldIndices.remove(2);
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.BoldIndices = null;
+        when(textLineRenderable.boldIndices()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.BoldIndices = boldIndices;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.boldIndices()).thenReturn(boldIndices);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.Uuid = null;
+        when(textLineRenderable.uuid()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.Uuid = uuid;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.uuid()).thenReturn(uuid);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.Justification = null;
+        when(textLineRenderable.getJustification()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.Justification = TextJustification.LEFT;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.Justification = TextJustification.UNKNOWN;
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.UNKNOWN);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        textLineRenderable.Justification = TextJustification.LEFT;
-        try {
-            renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
-        }
-        catch (IllegalArgumentException e) {
-            fail("Should not throw IllegalArgumentException when all params are ostensibly valid");
-        }
-        catch (Exception ignored) {
-        }
+        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        assertDoesNotThrow(() -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
     }
 
     @Test
@@ -660,16 +410,16 @@ public class TextLineRendererTests {
         boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
 
         var lineHeight = 0.5f;
-        var lineHeightProvider = new FakeStaticProvider<>(lineHeight);
+        var lineHeightProvider = generateMockStaticProvider(lineHeight);
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
         List<Integer> italicIndices = listOf(1, 9);
         List<Integer> boldIndices = listOf(6, 14);
 
-        var textLineRenderable = new FakeTextLineRenderable(font,
-                lineHeightProvider, 0f, lineText, new FakeStaticProvider<>(null),
-                new FakeStaticProvider<>(null), null, italicIndices, boldIndices,
-                new FakeStaticProvider<>(vertexOf(0f, 0f)),
-                UUID.randomUUID());
+        var textLineRenderable = generateMockRenderable(font,
+                lineHeightProvider, 0f, lineText, generateMockStaticProvider(null),
+                generateMockStaticProvider(null), null, italicIndices, boldIndices,
+                generateMockStaticProvider(vertexOf(0f, 0f)),
+                randomUUID());
 
         var textLineLength = renderer.textLineLength(textLineRenderable,
                 MOST_RECENT_TIMESTAMP);
@@ -724,18 +474,18 @@ public class TextLineRendererTests {
         boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
 
         var lineHeight = 0.5f;
-        var lineHeightProvider = new FakeStaticProvider<>(lineHeight);
+        var lineHeightProvider = generateMockStaticProvider(lineHeight);
         @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
         var italicIndices = listOf(1, 9);
         var boldIndices = listOf(6, 14);
 
         var paddingBetweenGlyphs = 0.123f;
 
-        var textLineRenderable = new FakeTextLineRenderable(font,
+        var textLineRenderable = generateMockRenderable(font,
                 lineHeightProvider, paddingBetweenGlyphs, lineText,
-                new FakeStaticProvider<>(null), new FakeStaticProvider<>(null), null,
-                italicIndices, boldIndices, new FakeStaticProvider<>(vertexOf(0f, 0f)),
-                UUID.randomUUID());
+                generateMockStaticProvider(null), generateMockStaticProvider(null), null,
+                italicIndices, boldIndices, generateMockStaticProvider(vertexOf(0f, 0f)),
+                randomUUID());
 
         var textLineLength =
                 renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP);
@@ -756,27 +506,31 @@ public class TextLineRendererTests {
 
     @Test
     public void testRenderWithNullDropShadowProviders() {
-        var font = new FakeFont();
-        var textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
-                new FakeStaticProvider<>(null), null, listOf(), listOf(),
-                new FakeStaticProvider<>(vertexOf(0f, 0f)),
+        var font = mock(Font.class);
+        var textLineRenderable = generateMockRenderable(font,
+                generateMockStaticProvider(0.5f), 0f, "", generateMockStaticProvider(null),
+                generateMockStaticProvider(null), null, listOf(), listOf(),
+                generateMockStaticProvider(vertexOf(0f, 0f)),
                 null,
-                new FakeStaticProvider<>(vertexOf(.456f, .789f)),
-                new FakeStaticProvider<>(Color.WHITE),
-                UUID.randomUUID());
+                generateMockStaticProvider(vertexOf(.456f, .789f)),
+                generateMockStaticProvider(Color.WHITE),
+                randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.DropShadowSizeProvider = new FakeStaticProvider<>(null);
-        textLineRenderable.DropShadowOffsetProvider = null;
+        var size = generateMockStaticProvider(randomFloat());
+        when(textLineRenderable.dropShadowSizeProvider()).thenReturn(size);
+        var offset = generateMockStaticProvider((Vertex)null);
+        when(textLineRenderable.dropShadowOffsetProvider()).thenReturn(offset);
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.DropShadowOffsetProvider = new FakeStaticProvider<>(null);
-        textLineRenderable.DropShadowColorProvider = null;
+        offset = generateMockStaticProvider(randomVertex());
+        when(textLineRenderable.dropShadowOffsetProvider()).thenReturn(offset);
+        var color = generateMockStaticProvider((Color) null);
+        when(textLineRenderable.dropShadowColorProvider()).thenReturn(color);
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -784,15 +538,15 @@ public class TextLineRendererTests {
 
     @Test
     public void testRenderWithNegativeDropShadowSize() {
-        var font = new FakeFont();
-        var textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
-                new FakeStaticProvider<>(null), null, listOf(), listOf(),
-                new FakeStaticProvider<>(vertexOf(0f, 0f)),
-                new FakeStaticProvider<>(-.123f),
-                new FakeStaticProvider<>(vertexOf(.456f, .789f)),
-                new FakeStaticProvider<>(Color.WHITE),
-                UUID.randomUUID());
+        var font = mock(Font.class);
+        var textLineRenderable = generateMockRenderable(font,
+                generateMockStaticProvider(0.5f), 0f, "", generateMockStaticProvider(null),
+                generateMockStaticProvider(null), null, listOf(), listOf(),
+                generateMockStaticProvider(vertexOf(0f, 0f)),
+                generateMockStaticProvider(-.123f),
+                generateMockStaticProvider(vertexOf(.456f, .789f)),
+                generateMockStaticProvider(Color.WHITE),
+                randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -800,22 +554,22 @@ public class TextLineRendererTests {
 
     @Test
     public void testRenderWithPositiveDropShadowSizeAndOtherNullDropShadowValues() {
-        var font = new FakeFont();
-        var textLineRenderable = new FakeTextLineRenderable(font,
-                new FakeStaticProvider<>(0.5f), 0f, "", new FakeStaticProvider<>(null),
-                new FakeStaticProvider<>(null), null, listOf(), listOf(),
-                new FakeStaticProvider<>(vertexOf(0f, 0f)),
-                new FakeStaticProvider<>(.123f),
-                new FakeStaticProvider<>(null),
-                new FakeStaticProvider<>(Color.WHITE),
-                UUID.randomUUID());
+        var font = mock(Font.class);
+        var textLineRenderable = generateMockRenderable(font,
+                generateMockStaticProvider(0.5f), 0f, "", generateMockStaticProvider(null),
+                generateMockStaticProvider(null), null, listOf(), listOf(),
+                generateMockStaticProvider(vertexOf(0f, 0f)),
+                generateMockStaticProvider(.123f),
+                generateMockStaticProvider(null),
+                generateMockStaticProvider(Color.WHITE),
+                randomUUID());
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        textLineRenderable.DropShadowOffsetProvider =
-                new FakeStaticProvider<>(vertexOf(.456f, .789f));
-        textLineRenderable.DropShadowColorProvider = new FakeStaticProvider<>(null);
+        var offset = generateMockStaticProvider(vertexOf(.456f, .789f));
+        when(textLineRenderable.dropShadowOffsetProvider()).thenReturn(offset);
+        when(textLineRenderable.dropShadowColorProvider()).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderer.render(textLineRenderable, MOST_RECENT_TIMESTAMP));
@@ -823,23 +577,94 @@ public class TextLineRendererTests {
 
     @Test
     public void testRenderUpdatesTimestamp() {
-        var lineHeightProvider = new FakeStaticProvider<>(0.25f);
-        String textLine = "Text line";
+        var lineHeightProvider = generateMockStaticProvider(0.25f);
+        var textLine = randomString();
         Map<Integer, ProviderAtTime<Color>> colorProviderIndices = mapOf();
-        colorProviderIndices.put(4, new FakeStaticProvider<>(Color.RED));
+        colorProviderIndices.put(4, generateMockStaticProvider(Color.RED));
         List<Integer> italicIndices = listOf();
         List<Integer> boldIndices = listOf();
-        ProviderAtTime<Vertex> renderingAreaProvider = new FakeStaticProvider<>(vertexOf(0f, 0f));
-        var uuid = UUID.randomUUID();
-        var textLineRenderable = new FakeTextLineRenderable(mockFont,
-                lineHeightProvider, 0f, textLine, new FakeStaticProvider<>(1f),
-                new FakeStaticProvider<>(null), colorProviderIndices, italicIndices,
+        ProviderAtTime<Vertex> renderingAreaProvider = generateMockStaticProvider(vertexOf(0f, 0f));
+        var uuid = randomUUID();
+        var textLineRenderable = generateMockRenderable(mockFont,
+                lineHeightProvider, 0f, textLine, generateMockStaticProvider(1f),
+                generateMockStaticProvider(null), colorProviderIndices, italicIndices,
                 boldIndices, renderingAreaProvider, uuid);
         var timestamp = randomLong();
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
 
         renderer.render(textLineRenderable, timestamp);
 
         verify(mockTimestampValidator, once()).validateTimestamp(
                 renderer.getClass().getCanonicalName(), timestamp);
+    }
+
+    public TextLineRenderable generateMockRenderable(
+            Font font,
+            ProviderAtTime<Float> lineHeightProvider,
+            float paddingBetweenGlyphs,
+            String lineText,
+            ProviderAtTime<Float> borderThicknessProvider,
+            ProviderAtTime<Color> borderColorProvider,
+            Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+            List<Integer> italicIndices,
+            List<Integer> boldIndices,
+            ProviderAtTime<Vertex> renderingLocationProvider,
+            ProviderAtTime<Float> dropShadowSizeProvider,
+            ProviderAtTime<Vertex> dropShadowOffsetProvider,
+            ProviderAtTime<Color> dropShadowColorProvider,
+            UUID uuid
+    ) {
+        var renderable = mock(TextLineRenderable.class);
+
+        lenient().when(renderable.getFont()).thenReturn(font);
+        lenient().when(renderable.lineHeightProvider()).thenReturn(lineHeightProvider);
+        lenient().when(renderable.getPaddingBetweenGlyphs()).thenReturn(paddingBetweenGlyphs);
+        var text = generateMockStaticProvider(lineText);
+        lenient().when(renderable.getLineTextProvider()).thenReturn(text);
+        lenient().when(renderable.getBorderThicknessProvider()).thenReturn(borderThicknessProvider);
+        lenient().when(renderable.getBorderColorProvider()).thenReturn(borderColorProvider);
+        lenient().when(renderable.colorProviderIndices()).thenReturn(colorProviderIndices);
+        lenient().when(renderable.italicIndices()).thenReturn(italicIndices);
+        lenient().when(renderable.boldIndices()).thenReturn(boldIndices);
+        lenient().when(renderable.getRenderingLocationProvider()).thenReturn(renderingLocationProvider);
+        lenient().when(renderable.uuid()).thenReturn(uuid);
+        lenient().when(renderable.dropShadowSizeProvider()).thenReturn(dropShadowSizeProvider);
+        lenient().when(renderable.dropShadowOffsetProvider()).thenReturn(dropShadowOffsetProvider);
+        lenient().when(renderable.dropShadowColorProvider()).thenReturn(dropShadowColorProvider);
+        lenient().when(renderable.getJustification()).thenReturn(TextJustification.LEFT);
+
+        return renderable;
+    }
+
+    private TextLineRenderable generateMockRenderable(
+            Font font,
+            ProviderAtTime<Float> lineHeightProvider,
+            float paddingBetweenGlyphs,
+            String lineText,
+            ProviderAtTime<Float> borderThicknessProvider,
+            ProviderAtTime<Color> borderColorProvider,
+            Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+            List<Integer> italicIndices,
+            List<Integer> boldIndices,
+            ProviderAtTime<Vertex> renderingLocationProvider,
+            UUID uuid
+    ) {
+        return generateMockRenderable(
+                font,
+                lineHeightProvider,
+                paddingBetweenGlyphs,
+                lineText,
+                borderThicknessProvider,
+                borderColorProvider,
+                colorProviderIndices,
+                italicIndices,
+                boldIndices,
+                renderingLocationProvider,
+                generateMockStaticProvider(null),
+                generateMockStaticProvider(null),
+                generateMockStaticProvider(null),
+                uuid
+        );
     }
 }

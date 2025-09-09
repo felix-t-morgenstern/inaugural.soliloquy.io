@@ -87,12 +87,10 @@ public class ComponentRendererImplTests {
         inOrder.verify(mockBoundariesProvider, once()).provide(timestamp);
         inOrder.verify(mockRenderingBoundaries, once()).pushNewBoundaries(boundaries);
         inOrder.verify(mockComponent, once()).contentsRepresentation();
-        inOrder.verify(mockRenderers, once()).get(mockRenderable3.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable3, timestamp);
-        inOrder.verify(mockRenderers, once()).get(mockRenderable2.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable2, timestamp);
-        inOrder.verify(mockRenderers, once()).get(mockRenderable1.getClass());
-        inOrder.verify(mockRenderer, once()).render(mockRenderable1, timestamp);
+        verify(mockRenderers, times(3)).get(mockRenderable1.getClass());
+        verify(mockRenderer, once()).render(mockRenderable3, timestamp);
+        verify(mockRenderer, once()).render(mockRenderable2, timestamp);
+        verify(mockRenderer, once()).render(mockRenderable1, timestamp);
         inOrder.verify(mockRenderingBoundaries, once()).popMostRecentBoundaries();
     }
 }

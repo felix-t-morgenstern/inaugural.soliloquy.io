@@ -8,6 +8,7 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -29,7 +30,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
             UUID uuid,
             int z,
             ProviderAtTime<FloatBox> renderingBoundariesProvider,
-            Component containingComponent
+            Component containingComponent,
+            Map<String, Object> data
     ) throws IllegalArgumentException {
         return new ComponentImpl(
                 Check.ifNull(uuid, "uuid"),
@@ -37,6 +39,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 bindingContext(listOf(), false),
                 containingComponent,
                 renderingBoundariesProvider,
+                data,
                 ADD_TO_CAPTURING,
                 REMOVE_FROM_CAPTURING
         );

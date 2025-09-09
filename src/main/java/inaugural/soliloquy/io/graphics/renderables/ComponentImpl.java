@@ -8,10 +8,12 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 
 public class ComponentImpl implements Component {
@@ -22,6 +24,7 @@ public class ComponentImpl implements Component {
     private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
     private final int TIER;
+    private final Map<String, Object> DATA;
 
     private int z;
     private boolean isDeleted;
@@ -33,6 +36,7 @@ public class ComponentImpl implements Component {
                          KeyBindingContext bindingContext,
                          Component containingComponent,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
+                         Map<String, Object> data,
                          Consumer<RenderableWithMouseEvents> addToCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromCapturing) {
         UUID = Check.ifNull(uuid, "uuid");
@@ -46,6 +50,7 @@ public class ComponentImpl implements Component {
         }
         BINDING_CONTEXT = Check.ifNull(bindingContext, "bindingContext");
         RENDERABLES = setOf();
+        DATA = mapOf(Check.ifNull(data, "data"));
         ADD_TO_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
         REMOVE_FROM_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
     }
@@ -156,5 +161,10 @@ public class ComponentImpl implements Component {
     @Override
     public UUID uuid() {
         return UUID;
+    }
+
+    @Override
+    public Map<String, Object> data() throws IllegalStateException {
+        return DATA;
     }
 }

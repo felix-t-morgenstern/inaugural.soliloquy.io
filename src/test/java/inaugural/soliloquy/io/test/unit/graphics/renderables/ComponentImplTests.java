@@ -14,18 +14,24 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
 import soliloquy.specs.ui.definitions.providers.AbstractProviderDefinition;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentImplTests {
+    private final String DATA_KEY = randomString();
+    private final int DATA_VAL = randomInt();
+    private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
 
@@ -41,6 +47,7 @@ public class ComponentImplTests {
     @Mock private RenderableWithMouseEvents mockRenderableWithMouseEvents;
     @Mock private Component mockComponent;
 
+
     private Component component;
 
     @BeforeEach
@@ -49,7 +56,7 @@ public class ComponentImplTests {
                 .thenReturn(mockRenderingBoundaries);
 
         component = new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                mockAddToCapturing, mockRemoveFromCapturing);
+                DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         lenient().when(mockRenderable.component()).thenReturn(component);
         lenient().when(mockRenderableWithMouseEvents.component()).thenReturn(component);
@@ -60,19 +67,22 @@ public class ComponentImplTests {
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(null, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        mockAddToCapturing, mockRemoveFromCapturing));
+                        DATA, mockAddToCapturing, mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, null, null, mockRenderingBoundaries,
+                        DATA, mockAddToCapturing, mockRemoveFromCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, null, DATA,
                         mockAddToCapturing, mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, null, mockAddToCapturing,
-                        mockRemoveFromCapturing));
+                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
+                        null, mockAddToCapturing, mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        null, mockRemoveFromCapturing));
+                        DATA, mockAddToCapturing, null));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        mockAddToCapturing, null));
+                        DATA, null, mockRemoveFromCapturing));
     }
 
     @Test
@@ -80,7 +90,7 @@ public class ComponentImplTests {
         var mockComponent = mock(Component.class);
 
         component = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent,
-                mockRenderingBoundaries, mockAddToCapturing, mockRemoveFromCapturing);
+                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         verify(mockComponent, once()).add(component);
     }
@@ -203,17 +213,24 @@ public class ComponentImplTests {
     @Test
     public void testTierIncrementing() {
         var firstChild = new ComponentImpl(UUID, randomInt(), mockBindingContext, component,
-                mockRenderingBoundaries, mockAddToCapturing, mockRemoveFromCapturing);
+                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
         var secondChild = new ComponentImpl(UUID, randomInt(), mockBindingContext, firstChild,
-                mockRenderingBoundaries, mockAddToCapturing, mockRemoveFromCapturing);
+                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
     }
 
     @Test
+    public void testData() {
+        assertEquals(DATA, component.data());
+        assertNotSame(DATA, component.data());
+    }
+
+    @Test
     public void testDelete() {
-        var containedComponent = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent, mockRenderingBoundaries, mockAddToCapturing, mockRemoveFromCapturing);
+        var containedComponent = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent,
+                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         containedComponent.delete();
 

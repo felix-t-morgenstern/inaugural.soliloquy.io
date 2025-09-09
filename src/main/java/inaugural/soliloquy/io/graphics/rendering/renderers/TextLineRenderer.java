@@ -33,9 +33,12 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
     }
 
     @Override
-    public void render(TextLineRenderable textLineRenderable, long timestamp)
+    public void render(TextLineRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        float lineHeight = validateTextLineRenderableAndGetLineHeight(textLineRenderable,
+        Check.ifNull(renderable, "renderable");
+        Check.ifNull(renderable.getLineTextProvider(), "renderable.getLineTextProvider()");
+        var lineText = renderable.getLineTextProvider().provide(timestamp);
+        var lineHeight = validateTextLineRenderableAndGetLineHeight(renderable, lineText.length(),
                 timestamp, "render");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
@@ -43,12 +46,13 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         Float borderThickness = null;
         Color borderColor = null;
 
-        if (textLineRenderable.getBorderThicknessProvider() != null) {
-            borderThickness = textLineRenderable.getBorderThicknessProvider().provide(timestamp);
+
+        if (renderable.getBorderThicknessProvider() != null) {
+            borderThickness = renderable.getBorderThicknessProvider().provide(timestamp);
             if (borderThickness != null) {
                 Check.throwOnLtValue(borderThickness, 0f, "provided border thickness");
-                borderColor = Check.ifNull(textLineRenderable.getBorderColorProvider(),
-                                "textLineRenderable.getBorderColorProvider()")
+                borderColor = Check.ifNull(renderable.getBorderColorProvider(),
+                                "renderable.getBorderColorProvider()")
                         .provide(timestamp);
             }
         }
@@ -57,44 +61,43 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         Vertex dropShadowOffset = null;
         Color dropShadowColor = null;
 
-        dropShadowSize = textLineRenderable.dropShadowSizeProvider().provide(timestamp);
+        dropShadowSize = renderable.dropShadowSizeProvider().provide(timestamp);
         if (dropShadowSize != null) {
             if (dropShadowSize < 0f) {
                 throw new IllegalArgumentException(
                         "TextLineRendererImpl.render: dropShadowSize cannot be less than 0");
             }
-            dropShadowOffset = textLineRenderable.dropShadowOffsetProvider().provide(timestamp);
-            Check.ifNull(dropShadowOffset, "dropShadowOffset provided by textLineRenderable");
+            dropShadowOffset = renderable.dropShadowOffsetProvider().provide(timestamp);
+            Check.ifNull(dropShadowOffset, "dropShadowOffset provided by renderable");
             Check.ifNull(dropShadowOffset.X,
-                    "dropShadowOffset's X offset provided by textLineRenderable");
+                    "dropShadowOffset's X offset provided by renderable");
             Check.ifNull(dropShadowOffset.Y,
-                    "dropShadowOffset's Y offset provided by textLineRenderable");
-            dropShadowColor = textLineRenderable.dropShadowColorProvider().provide(timestamp);
-            Check.ifNull(dropShadowColor, "dropShadowColor provided by textLineRenderable");
+                    "dropShadowOffset's Y offset provided by renderable");
+            dropShadowColor = renderable.dropShadowColorProvider().provide(timestamp);
+            Check.ifNull(dropShadowColor, "dropShadowColor provided by renderable");
         }
 
-        Vertex renderingLocation =
-                textLineRenderable.getRenderingLocationProvider().provide(timestamp);
+        var renderingLocation = renderable.getRenderingLocationProvider().provide(timestamp);
         float startX;
         float startY = renderingLocation.Y;
 
-        if (textLineRenderable.getJustification() == TextJustification.LEFT) {
+        if (renderable.getJustification() == TextJustification.LEFT) {
             startX = renderingLocation.X;
         }
         else {
-            float lineLength = textLineLength(textLineRenderable, timestamp);
-            if (textLineRenderable.getJustification() == TextJustification.CENTER) {
+            float lineLength = textLineLength(renderable, timestamp);
+            if (renderable.getJustification() == TextJustification.CENTER) {
                 startX = renderingLocation.X - (lineLength / 2f);
             }
             else {
                 startX = renderingLocation.X - lineLength;
             }
         }
-        renderAtLocation(textLineRenderable, timestamp, lineHeight, startX, startY,
+        renderAtLocation(renderable, timestamp, lineText, lineHeight, startX, startY,
                 borderThickness, borderColor, dropShadowSize, dropShadowOffset, dropShadowColor);
     }
 
-    private void renderAtLocation(TextLineRenderable textLineRenderable, Long timestamp,
+    private void renderAtLocation(TextLineRenderable renderable, Long timestamp, String lineText,
                                   float lineHeight, float startX, float startY,
                                   Float borderThickness, Color borderColor, Float dropShadowSize,
                                   Vertex dropShadowOffset, Color dropShadowColor) {
@@ -103,7 +106,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             float yOffset = dropShadowOffset.Y;
             float sizeAdjustment = dropShadowSize / lineHeight;
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xOffset + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -130,7 +133,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             float yThickness = borderThickness;
             float xThickness = yThickness / getScreenWToHRatio.get();
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -151,7 +154,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -172,7 +175,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -193,7 +196,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -214,7 +217,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -235,7 +238,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -256,7 +259,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -277,7 +280,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
 
-            iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+            iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
@@ -298,7 +301,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                                 borderColor);
                     });
         }
-        iterateOverTextLine(textLineRenderable, timestamp, lineHeight,
+        iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                 textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
                     float leftX = startX + textLineLengthThusFar;
                     var renderingArea = floatBoxOf(
@@ -321,67 +324,71 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
     }
 
     @Override
-    public float textLineLength(TextLineRenderable textLineRenderable, long timestamp)
+    public float textLineLength(TextLineRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        float lineHeight = validateTextLineRenderableAndGetLineHeight(textLineRenderable,
+        Check.ifNull(renderable, "renderable");
+        Check.ifNull(renderable.getLineTextProvider(), "renderable.getLineTextProvider()");
+        var lineText = renderable.getLineTextProvider().provide(timestamp);
+        var lineHeight = validateTextLineRenderableAndGetLineHeight(renderable, lineText.length(),
                 timestamp, "textLineLength");
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        return iterateOverTextLine(textLineRenderable, timestamp, lineHeight, null);
+        return iterateOverTextLine(renderable, timestamp, lineText, lineHeight, null);
     }
 
     // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't
     // elegant, but this is not front-facing code.
-    private float iterateOverTextLine(TextLineRenderable textLineRenderable, Long timestamp,
-                                      float lineHeight,
-                                      Function<Float, Function<Float, Function<Integer,
-                                              Function<FloatBox, Consumer<Color>>>>>
-                                              renderingAction) {
-        boolean italic = false;
-        boolean bold = false;
-        int nextItalicIndex = 0;
-        int nextBoldIndex = 0;
-        float textLineLengthThusFar = 0f;
-        Color color = DEFAULT_COLOR;
+    private float iterateOverTextLine(
+            TextLineRenderable renderable,
+            Long timestamp,
+            String lineText,
+            float lineHeight,
+            Function<Float, Function<Float, Function<Integer,
+                    Function<FloatBox, Consumer<Color>>>>> renderingAction
+    ) {
+        var italic = false;
+        var bold = false;
+        var nextItalicIndex = 0;
+        var nextBoldIndex = 0;
+        var textLineLengthThusFar = 0f;
+        var color = DEFAULT_COLOR;
+        var paddingBetweenGlyphs = renderable.getPaddingBetweenGlyphs() * lineHeight;
         FontStyleInfo fontStyleInfo;
-        float paddingBetweenGlyphs =
-                textLineRenderable.getPaddingBetweenGlyphs() * lineHeight;
 
-        String lineText = textLineRenderable.getLineTextProvider().provide(timestamp);
         for (var i = 0; i < lineText.length(); i++) {
             if (renderingAction != null) {
-                if (textLineRenderable.colorProviderIndices() != null &&
-                        textLineRenderable.colorProviderIndices().containsKey(i)) {
-                    color = textLineRenderable.colorProviderIndices().get(i).provide(timestamp);
+                if (renderable.colorProviderIndices() != null &&
+                        renderable.colorProviderIndices().containsKey(i)) {
+                    color = renderable.colorProviderIndices().get(i).provide(timestamp);
                 }
             }
-            if (textLineRenderable.italicIndices() != null &&
-                    textLineRenderable.italicIndices().size() > nextItalicIndex &&
-                    textLineRenderable.italicIndices().get(nextItalicIndex) == i) {
+            if (renderable.italicIndices() != null &&
+                    renderable.italicIndices().size() > nextItalicIndex &&
+                    renderable.italicIndices().get(nextItalicIndex) == i) {
                 italic = !italic;
                 nextItalicIndex++;
             }
-            if (textLineRenderable.boldIndices() != null &&
-                    textLineRenderable.boldIndices().size() > nextBoldIndex &&
-                    textLineRenderable.boldIndices().get(nextBoldIndex) == i) {
+            if (renderable.boldIndices() != null &&
+                    renderable.boldIndices().size() > nextBoldIndex &&
+                    renderable.boldIndices().get(nextBoldIndex) == i) {
                 bold = !bold;
                 nextBoldIndex++;
             }
 
             if (italic) {
                 if (bold) {
-                    fontStyleInfo = textLineRenderable.getFont().boldItalic();
+                    fontStyleInfo = renderable.getFont().boldItalic();
                 }
                 else {
-                    fontStyleInfo = textLineRenderable.getFont().italic();
+                    fontStyleInfo = renderable.getFont().italic();
                 }
             }
             else {
                 if (bold) {
-                    fontStyleInfo = textLineRenderable.getFont().bold();
+                    fontStyleInfo = renderable.getFont().bold();
                 }
                 else {
-                    fontStyleInfo = textLineRenderable.getFont().plain();
+                    fontStyleInfo = renderable.getFont().plain();
                 }
             }
 
@@ -415,71 +422,74 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         return textLineLengthThusFar;
     }
 
-    private float validateTextLineRenderableAndGetLineHeight(TextLineRenderable textLineRenderable,
-                                                             long timestamp, String methodName) {
-        Check.ifNull(textLineRenderable, "textLineRenderable");
-        Check.ifNull(textLineRenderable.getFont(), "textLineRenderable.getFont()");
-        Check.ifNull(textLineRenderable.lineHeightProvider(),
-                "textLineRenderable.lineHeightProvider()");
-        Check.ifNull(textLineRenderable.getRenderingLocationProvider(),
-                "textLineRenderable.getRenderingLocationProvider()");
-        Check.ifNull(textLineRenderable.uuid(), "textLineRenderable.id()");
-        if (textLineRenderable.colorProviderIndices() != null) {
+    private float validateTextLineRenderableAndGetLineHeight(
+            TextLineRenderable renderable,
+            int lineTextLength,
+            long timestamp,
+            String methodName
+    ) {
+        Check.ifNull(renderable.getFont(), "renderable.getFont()");
+        Check.ifNull(renderable.lineHeightProvider(), "renderable.lineHeightProvider()");
+        Check.ifNull(renderable.getRenderingLocationProvider(),
+                "renderable.getRenderingLocationProvider()");
+        Check.ifNull(renderable.uuid(), "renderable.id()");
+        if (renderable.colorProviderIndices() != null) {
             Integer highestIndexThusFar = null;
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
-                    textLineRenderable.colorProviderIndices().entrySet();
+                    renderable.colorProviderIndices().entrySet();
             for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
-                validateIndex(entry.getKey(), "textLineRenderable.colorIndices()", methodName,
+                validateIndex(entry.getKey(), lineTextLength, "renderable.colorIndices()", methodName,
                         highestIndexThusFar);
                 highestIndexThusFar = entry.getKey();
                 if (entry.getValue() == null) {
                     throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": "
-                            + "textLineRenderable.colorIndices cannot contain null value");
+                            + "renderable.colorIndices cannot contain null value");
                 }
             }
         }
 
-        Check.ifNull(textLineRenderable.italicIndices(), "textLineRenderable.italicIndices()");
+        Check.ifNull(renderable.italicIndices(), "renderable.italicIndices()");
         Integer highestIndexThusFar = null;
-        for (var index : textLineRenderable.italicIndices()) {
-            validateIndex(index, "textLineRenderable.italicIndices()", methodName,
+        for (var index : renderable.italicIndices()) {
+            validateIndex(index, lineTextLength, "renderable.italicIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
         }
 
-        Check.ifNull(textLineRenderable.boldIndices(), "textLineRenderable.boldIndices()");
+        Check.ifNull(renderable.boldIndices(), "renderable.boldIndices()");
         highestIndexThusFar = null;
-        for (var index : textLineRenderable.boldIndices()) {
-            validateIndex(index, "textLineRenderable.boldIndices()", methodName,
+        for (var index : renderable.boldIndices()) {
+            validateIndex(index, lineTextLength, "renderable.boldIndices()", methodName,
                     highestIndexThusFar);
             highestIndexThusFar = index;
         }
 
-        if (Check.ifNull(textLineRenderable.getJustification(),
-                "textLineRenderable.getJustification()") == TextJustification.UNKNOWN) {
+        if (Check.ifNull(renderable.getJustification(),
+                "renderable.getJustification()") == TextJustification.UNKNOWN) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
                     "justification cannot be UNKNOWN");
         }
 
-        Float lineHeight = textLineRenderable.lineHeightProvider().provide(timestamp);
-        Check.ifNull(lineHeight, "value provided from textLineRenderable.lineHeightProvider()");
+        Float lineHeight = renderable.lineHeightProvider().provide(timestamp);
+        Check.ifNull(lineHeight, "value provided from renderable.lineHeightProvider()");
         if (lineHeight <= 0) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName +
-                    ": value provided from textLineRenderable.lineHeightProvider() must be " +
+                    ": value provided from renderable.lineHeightProvider() must be " +
                     "greater than 0");
         }
 
-        Check.ifNull(textLineRenderable.dropShadowSizeProvider(),
-                "textLineRenderable.dropShadowSizeProvider()");
-        Check.ifNull(textLineRenderable.dropShadowOffsetProvider(),
-                "textLineRenderable.dropShadowOffsetProvider()");
-        Check.ifNull(textLineRenderable.dropShadowColorProvider(),
-                "textLineRenderable.dropShadowColorProvider()");
+        Check.ifNull(renderable.dropShadowSizeProvider(),
+                "renderable.dropShadowSizeProvider()");
+        Check.ifNull(renderable.dropShadowOffsetProvider(),
+                "renderable.dropShadowOffsetProvider()");
+        Check.ifNull(renderable.dropShadowColorProvider(),
+                "renderable.dropShadowColorProvider()");
 
         return lineHeight;
     }
 
-    private void validateIndex(Integer index, String dataStructureName, String methodName,
+    private void validateIndex(Integer index, int lineTextLength, String dataStructureName,
+                               String methodName,
                                Integer highestIndexThusFar) {
         if (index == null) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
@@ -488,6 +498,9 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         if (index < 0) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
                     dataStructureName + " cannot contain negative key");
+        }
+        if (index > lineTextLength) {
+            throw new IllegalArgumentException("TextLineRenderableImpl." + methodName + ": " + dataStructureName + " cannot contain index above line length");
         }
         if (highestIndexThusFar != null && index <= highestIndexThusFar) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
