@@ -85,7 +85,7 @@ class TextLineRendererColorTest extends TextLineRendererTest {
                         staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, INTACT_COLOR,
-                windowResolutionManager::windowWidthToHeightRatio, null);
+                windowResolutionManager::windowWidthToHeightRatio, TimestampValidator);
 
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);

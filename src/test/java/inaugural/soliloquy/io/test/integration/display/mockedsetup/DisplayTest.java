@@ -147,7 +147,7 @@ public class DisplayTest {
     }
 
     protected static <T> StaticProvider<T> staticNullProvider() {
-        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, null);
+        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, TimestampValidator);
     }
 
     protected static Sprite generateMockSprite(int leftX, int topY, int rightX, int bottomY) {

@@ -27,7 +27,7 @@ import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
  * 2. The window will then close.
  */
 public class TextLineRendererSimpleTest extends TextLineRendererTest {
-    private final static String LINE_TEXT = "Quick Message!";
+    private final static String LINE_TEXT = "This is the text!";
 
     private static TextLineRenderable TextLineRenderable;
 
@@ -75,7 +75,7 @@ public class TextLineRendererSimpleTest extends TextLineRendererTest {
                 staticProvider(renderingLocation));
 
         TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
-                windowResolutionManager::windowWidthToHeightRatio, null);
+                windowResolutionManager::windowWidthToHeightRatio, TimestampValidator);
 
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));
         Renderers.put(TextLineRenderable.getClass(), TextLineRenderer);
