@@ -71,6 +71,9 @@ public class RasterizedLineSegmentRendererTests {
 
     @Test
     public void testRenderWithInvalidArgs() {
+        renderer.setMesh(mockMesh);
+        renderer.setShader(mockShader);
+
         assertThrows(IllegalArgumentException.class, () -> renderer.render(null, 0L));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(

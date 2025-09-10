@@ -11,30 +11,32 @@ import java.util.UUID;
 
 public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRenderable
         implements RasterizedLineSegmentRenderable {
-    private short stipplePattern;
-    private short stippleFactor;
+    private Short stipplePattern;
+    private Short stippleFactor;
 
     public RasterizedLineSegmentRenderableImpl(ProviderAtTime<Vertex> vertex1Provider,
                                                ProviderAtTime<Vertex> vertex2Provider,
                                                ProviderAtTime<Float> thicknessProvider,
-                                               short stipplePattern, short stippleFactor,
+                                               Short stipplePattern, short stippleFactor,
                                                ProviderAtTime<Color> colorProvider,
                                                int z,
                                                UUID uuid,
                                                Component component) {
-        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z, uuid, component);
+        super(vertex1Provider, vertex2Provider, thicknessProvider, colorProvider, z, uuid,
+                component);
         setStipplePattern(stipplePattern);
         setStippleFactor(stippleFactor);
     }
 
     @Override
-    public short getStipplePattern() {
+    public Short getStipplePattern() {
         return stipplePattern;
     }
 
     @Override
-    public void setStipplePattern(short stipplePattern) throws IllegalArgumentException {
-        this.stipplePattern = Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
+    public void setStipplePattern(Short stipplePattern) throws IllegalArgumentException {
+        this.stipplePattern = stipplePattern == null ? null :
+                Check.throwOnEqualsValue(stipplePattern, (short) 0, "stipplePattern");
     }
 
     @Override

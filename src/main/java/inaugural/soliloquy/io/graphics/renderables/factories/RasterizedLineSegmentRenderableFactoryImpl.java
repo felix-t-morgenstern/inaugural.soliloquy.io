@@ -16,7 +16,7 @@ public class RasterizedLineSegmentRenderableFactoryImpl
     public RasterizedLineSegmentRenderable make(ProviderAtTime<Vertex> vertex1Provider,
                                                 ProviderAtTime<Vertex> vertex2Provider,
                                                 ProviderAtTime<Float> thicknessProvider,
-                                                short stipplePattern,
+                                                Short stipplePattern,
                                                 short stippleFactor,
                                                 ProviderAtTime<Color> colorProvider,
                                                 int z,

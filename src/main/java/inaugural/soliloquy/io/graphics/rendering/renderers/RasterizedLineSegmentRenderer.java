@@ -18,46 +18,42 @@ public class RasterizedLineSegmentRenderer
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void render(RasterizedLineSegmentRenderable rasterizedLineSegmentRenderable,
+    public void render(RasterizedLineSegmentRenderable renderable,
                        long timestamp)
             throws IllegalArgumentException {
-        Check.ifNull(rasterizedLineSegmentRenderable, "rasterizedLineSegmentRenderable");
+        Check.ifNull(renderable, "renderable");
 
         var vertex1 =
-                Check.ifNull(rasterizedLineSegmentRenderable.getVertex1Provider(),
-                        "rasterizedLineSegmentRenderable.getVertex1Provider()")
+                Check.ifNull(renderable.getVertex1Provider(),
+                        "renderable.getVertex1Provider()")
                         .provide(timestamp);
         var vertex2 =
-                Check.ifNull(rasterizedLineSegmentRenderable.getVertex2Provider(),
-                        "rasterizedLineSegmentRenderable.getVertex2Provider()")
+                Check.ifNull(renderable.getVertex2Provider(),
+                        "renderable.getVertex2Provider()")
                         .provide(timestamp);
         float thickness = Check.ifNull(
-                Check.ifNull(rasterizedLineSegmentRenderable.getThicknessProvider(),
-                        "rasterizedLineSegmentRenderable.getThicknessProvider()")
+                Check.ifNull(renderable.getThicknessProvider(),
+                        "renderable.getThicknessProvider()")
                         .provide(timestamp),
                 "value provided by " +
-                        "rasterizedLineSegmentRenderable.getThicknessProvider()");
-        var color = Check.ifNull(rasterizedLineSegmentRenderable.getColorProvider(),
-                "rasterizedLineSegmentRenderable.getColorProvider()")
+                        "renderable.getThicknessProvider()");
+        var color = Check.ifNull(renderable.getColorProvider(),
+                "renderable.getColorProvider()")
                 .provide(timestamp);
 
         Check.throwOnLteZero(thickness,
-                "rasterizedLineSegmentRenderable provided thickness");
+                "renderable provided thickness");
 
-        Check.throwOnEqualsValue(rasterizedLineSegmentRenderable.getStipplePattern(),
-                (short) 0x0000,
-                "rasterizedLineSegmentRenderable.getStipplePattern()");
+        Check.throwOnLtValue(renderable.getStippleFactor(), (short) 1,
+                "renderable.getStippleFactor()");
+        Check.throwOnGtValue(renderable.getStippleFactor(), (short) 256,
+                "renderable.getStippleFactor()");
 
-        Check.throwOnLtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short) 1,
-                "rasterizedLineSegmentRenderable.getStippleFactor()");
-        Check.throwOnGtValue(rasterizedLineSegmentRenderable.getStippleFactor(), (short) 256,
-                "rasterizedLineSegmentRenderable.getStippleFactor()");
-
-        Check.ifNull(color, "rasterizedLineSegmentRenderable provided color");
-        Check.ifNull(vertex1, "rasterizedLineSegmentRenderable provided vertex 1");
-        Check.ifNull(vertex2, "rasterizedLineSegmentRenderable provided vertex 2");
-        Check.ifNull(rasterizedLineSegmentRenderable.uuid(),
-                "rasterizedLineSegmentRenderable.id()");
+        Check.ifNull(color, "renderable provided color");
+        Check.ifNull(vertex1, "renderable provided vertex 1");
+        Check.ifNull(vertex2, "renderable provided vertex 2");
+        Check.ifNull(renderable.uuid(),
+                "renderable.id()");
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
@@ -74,8 +70,19 @@ public class RasterizedLineSegmentRenderer
 
         glLineWidth(thickness);
 
-        glLineStipple(rasterizedLineSegmentRenderable.getStippleFactor(),
-                rasterizedLineSegmentRenderable.getStipplePattern());
+        var stipplePattern = renderable.getStipplePattern();
+        if (stipplePattern != null) {
+            Check.throwOnEqualsValue(stipplePattern,
+                    (short) 0x0000,
+                    "renderable.getStipplePattern()");
+
+            glEnable(GL_LINE_STIPPLE);
+            glLineStipple(renderable.getStippleFactor(),
+                    stipplePattern);
+        }
+        else {
+            glDisable(GL_LINE_STIPPLE);
+        }
 
         glColor4f(color.getRed() / MAX_CHANNEL_VAL,
                 color.getGreen() / MAX_CHANNEL_VAL,

@@ -69,12 +69,12 @@ public class FakeRasterizedLineSegmentRenderable implements RasterizedLineSegmen
     }
 
     @Override
-    public short getStipplePattern() {
+    public Short getStipplePattern() {
         return StipplePattern;
     }
 
     @Override
-    public void setStipplePattern(short i) throws IllegalArgumentException {
+    public void setStipplePattern(Short i) throws IllegalArgumentException {
 
     }
 
