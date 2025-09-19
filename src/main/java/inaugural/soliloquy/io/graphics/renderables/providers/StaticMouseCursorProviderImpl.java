@@ -7,7 +7,7 @@ import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvid
 import java.util.UUID;
 
 public class StaticMouseCursorProviderImpl
-        extends StaticProviderImpl<Long>
+        extends StaticProvider<Long>
         implements StaticMouseCursorProvider {
     private final String ID;
 

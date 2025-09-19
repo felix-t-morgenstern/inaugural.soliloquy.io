@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousec
 import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 
@@ -37,7 +37,7 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
                 new MouseCursorImageFactoryImpl(),
                 output -> MouseCursorProviders.put(
                         output.relativeLocation(),
-                        new StaticProviderImpl<>(
+                        new StaticProvider<>(
                                 randomUUID(),
                                 output.id(),
                                 null

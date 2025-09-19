@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup;
 
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.io.graphics.rendering.RenderingBoundariesImpl;
@@ -59,12 +59,12 @@ public class DisplayTest {
     protected static TimestampValidator TimestampValidator = new TimestampValidator(null);
 
     protected final static ProviderAtTime<Float> ZERO_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), 0f, TimestampValidator);
+            new StaticProvider<>(java.util.UUID.randomUUID(), 0f, TimestampValidator);
     protected final static ProviderAtTime<Color> BLACK_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), Color.BLACK, TimestampValidator);
+            new StaticProvider<>(java.util.UUID.randomUUID(), Color.BLACK, TimestampValidator);
 
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
-            new StaticProviderImpl<>(java.util.UUID.randomUUID(), WHOLE_SCREEN,
+            new StaticProvider<>(java.util.UUID.randomUUID(), WHOLE_SCREEN,
                     mock(TimestampValidator.class));
 
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
@@ -142,11 +142,11 @@ public class DisplayTest {
     }
 
     protected static <T> ProviderAtTime<T> staticProvider(T value) {
-        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), value, TimestampValidator);
+        return new StaticProvider<>(java.util.UUID.randomUUID(), value, TimestampValidator);
     }
 
     protected static <T> ProviderAtTime<T> staticNullProvider() {
-        return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, TimestampValidator);
+        return new StaticProvider<>(java.util.UUID.randomUUID(), null, TimestampValidator);
     }
 
     protected static Sprite generateMockSprite(int leftX, int topY, int rightX, int bottomY) {

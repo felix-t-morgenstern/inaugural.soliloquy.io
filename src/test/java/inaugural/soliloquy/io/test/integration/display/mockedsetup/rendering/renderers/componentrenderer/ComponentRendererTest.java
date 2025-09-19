@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
 import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
+import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
@@ -83,7 +83,7 @@ public class ComponentRendererTest extends DisplayTest {
                 spriteAxe07,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
+                new StaticProvider<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteAxe07LeftX,
                         spriteAxe07TopY,
                         spriteAxe07LeftX + spriteAxe07ScreenWidth,
@@ -100,7 +100,7 @@ public class ComponentRendererTest extends DisplayTest {
                 spriteAxe09,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
+                new StaticProvider<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteAxe09LeftX,
                         spriteAxe09TopY,
                         spriteAxe09LeftX + spriteAxe09ScreenWidth,
@@ -116,7 +116,7 @@ public class ComponentRendererTest extends DisplayTest {
                 spriteSword06,
                 ZERO_PROVIDER, BLACK_PROVIDER,
                 listOf(),
-                new StaticProviderImpl<>(java.util.UUID.randomUUID(), floatBoxOf(
+                new StaticProvider<>(java.util.UUID.randomUUID(), floatBoxOf(
                         spriteSword06LeftX,
                         spriteSword06TopY,
                         spriteSword06LeftX + spriteSword06ScreenWidth,

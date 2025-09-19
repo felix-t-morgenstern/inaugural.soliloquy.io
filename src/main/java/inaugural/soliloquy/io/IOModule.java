@@ -404,7 +404,7 @@ public class IOModule implements Module {
                 andRegister(new ProgressiveStringProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"rawtypes", "unchecked"}) BiFunction<UUID, Object, ProviderAtTime>
                 staticProviderFactory =
-                andRegister((uuid, val) -> new StaticProviderImpl(uuid, val, timestampValidator),
+                andRegister((uuid, val) -> new StaticProvider(uuid, val, timestampValidator),
                         STATIC_PROVIDER_FACTORY);
         andRegister(staticProviderFactory.apply(randomUUID(), NULL_PROVIDER));
 
@@ -466,7 +466,7 @@ public class IOModule implements Module {
         providerHandler.add(ProgressiveStringProvider.class.getCanonicalName(),
                 new ProgressiveStringProviderHandler(progressiveStringProviderFactory));
 
-        providerHandler.add(StaticProviderImpl.class.getCanonicalName(),
+        providerHandler.add(StaticProvider.class.getCanonicalName(),
                 new StaticProviderHandler(persistenceHandler, staticProviderFactory,
                         timestampValidator));
 

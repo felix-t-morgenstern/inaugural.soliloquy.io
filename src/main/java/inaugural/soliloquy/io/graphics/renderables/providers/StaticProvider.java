@@ -6,12 +6,12 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
-public class StaticProviderImpl<T> implements ProviderAtTime<T> {
+public class StaticProvider<T> implements ProviderAtTime<T> {
     private final UUID UUID;
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StaticProviderImpl(UUID uuid, T value, TimestampValidator timestampValidator) {
+    public StaticProvider(UUID uuid, T value, TimestampValidator timestampValidator) {
         UUID = Check.ifNull(uuid, "uuid");
         VALUE = value;
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
