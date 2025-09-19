@@ -81,6 +81,7 @@ public class IOModule implements Module {
     public IOModule(CommonModule common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
                     @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+                    @SuppressWarnings("rawtypes") Function<String, soliloquy.specs.common.entities.Function> getFunction,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
                     AssetDefinitionsDTO assetDefinitionsDTO) {
@@ -369,6 +370,7 @@ public class IOModule implements Module {
                         timestampValidator
                 )
         );
+        andRegister(new FunctionalProviderFactoryImpl(getFunction, getAction, timestampValidator));
         var loopingLinearMovingColorProviderFactory =
                 andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"unused", "unchecked"})
@@ -406,7 +408,7 @@ public class IOModule implements Module {
                 staticProviderFactory =
                 andRegister((uuid, val) -> new StaticProvider(uuid, val, timestampValidator),
                         STATIC_PROVIDER_FACTORY);
-        andRegister(staticProviderFactory.apply(randomUUID(), NULL_PROVIDER));
+        andRegister(staticProviderFactory.apply(randomUUID(), null), NULL_PROVIDER);
 
         // ========
         // Handlers
