@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables.providers;
 
+import inaugural.soliloquy.io.graphics.renderables.providers.ProgressiveStringProvider;
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProgressiveStringProviderHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,8 @@ public class ProgressiveStringProviderHandlerTests {
     public void testWrite() {
         when(mockProvider.uuid()).thenReturn(UUID);
         when(mockProvider.representation()).thenReturn(
-                pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)));
+                new ProgressiveStringProvider.Representation(STRING, TIME_TO_COMPLETE,
+                        START_TIMESTAMP));
         when(mockProvider.pausedTimestamp()).thenReturn(PAUSED_TIMESTAMP);
 
         var output = handler.write(mockProvider);

@@ -93,7 +93,7 @@ public class FunctionalProviderFactoryImplTests {
         assertEquals(DATA, provideEventInfo.data());
         assertNotSame(DATA, provideEventInfo.data());
 
-        var unpauseTimestamp = randomLong();
+        var unpauseTimestamp = randomLongWithInclusiveFloor(PAUSE_TIMESTAMP);
         output.reportUnpause(unpauseTimestamp);
         verify(mockValidator, once()).validateTimestamp(unpauseTimestamp);
         var unpauseEventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
@@ -104,12 +104,13 @@ public class FunctionalProviderFactoryImplTests {
         assertEquals(DATA, unpauseEventInfo.data());
         assertNotSame(DATA, unpauseEventInfo.data());
 
-        output.reportPause(PAUSE_TIMESTAMP);
-        verify(mockValidator, once()).validateTimestamp(PAUSE_TIMESTAMP);
+        var pauseTimestamp2 = randomLongWithInclusiveFloor(unpauseTimestamp);
+        output.reportPause(pauseTimestamp2);
+        verify(mockValidator, once()).validateTimestamp(pauseTimestamp2);
         var pauseEventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
         verify(MOCK_PAUSE_ACTION, once()).run(pauseEventInfoCapture.capture());
         var pauseEventInfo = pauseEventInfoCapture.getValue();
-        assertEquals(PAUSE_TIMESTAMP, pauseEventInfo.timestamp());
+        assertEquals(pauseTimestamp2, pauseEventInfo.timestamp());
         assertNull(pauseEventInfo.pauseTimestamp());
         assertEquals(DATA, pauseEventInfo.data());
         assertNotSame(DATA, pauseEventInfo.data());

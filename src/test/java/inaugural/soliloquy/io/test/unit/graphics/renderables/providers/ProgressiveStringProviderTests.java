@@ -156,7 +156,7 @@ public class ProgressiveStringProviderTests {
 
     @Test
     public void testRepresentation() {
-        assertEquals(pairOf(STRING, pairOf(TIME_TO_COMPLETE, START_TIMESTAMP)),
-                provider.representation());
+        assertEquals(new ProgressiveStringProvider.Representation(STRING, TIME_TO_COMPLETE,
+                START_TIMESTAMP), provider.representation());
     }
 }

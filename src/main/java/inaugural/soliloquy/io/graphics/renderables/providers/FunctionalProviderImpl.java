@@ -101,8 +101,4 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
     public Map<String, Object> data() throws IllegalStateException {
         return DATA;
     }
-
-    public record Representation(String provideId, String pauseId, String unpauseId,
-                                 Long pauseTimestamp, Map<String, Object> data) {
-    }
 }
