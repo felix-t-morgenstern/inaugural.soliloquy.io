@@ -9,7 +9,7 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -23,17 +23,17 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTest {
-    private final static StaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
+    private final static ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
             staticNullProvider();
-    private final static StaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
+    private final static ProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
             staticNullProvider();
-    private final static StaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+    private final static ProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
             staticNullProvider();
-    private final static StaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+    private final static ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER =
             staticNullProvider();
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.1f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.075f;
-    private final static StaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
+    private final static ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
     private final static String TILE_LOCATION_1 =
             "./src/test/resources/images/backgrounds/stone_tile_1.png";

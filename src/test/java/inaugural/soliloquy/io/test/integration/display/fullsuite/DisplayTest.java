@@ -11,8 +11,7 @@ import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
@@ -21,8 +20,11 @@ import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import java.awt.*;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
+import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
@@ -40,7 +42,8 @@ public class DisplayTest {
 
     @SuppressWarnings("rawtypes") private final Map<String, Action> ACTIONS;
 
-    private static StaticProviderFactory StaticProviderFactory;
+    @SuppressWarnings("rawtypes") private static BiFunction<UUID, Object, ProviderAtTime>
+            StaticProviderFactory;
 
     public IOModule ioModule;
     public Component topLevelComponent;
@@ -120,9 +123,10 @@ public class DisplayTest {
 
         var frameExecutor = ioModule.provide(FrameExecutor.class);
         var componentFactory = ioModule.provide(ComponentFactory.class);
-        StaticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+        StaticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
         var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
-        topLevelComponent = componentFactory.make(randomUUID(), 0, wholeScreenProvider, null, mapOf());
+        topLevelComponent =
+                componentFactory.make(randomUUID(), 0, wholeScreenProvider, null, mapOf());
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
         coreLoop.startup(() -> {
@@ -134,11 +138,12 @@ public class DisplayTest {
         });
     }
 
-    protected static <T> StaticProvider<T> staticProvider(T val) {
-        return StaticProviderFactory.make(randomUUID(), val);
+    protected static <T> ProviderAtTime<T> staticProvider(T val) {
+        //noinspection unchecked
+        return StaticProviderFactory.apply(randomUUID(), val);
     }
 
-    protected static <T> StaticProvider<T> nullProvider() {
+    protected static <T> ProviderAtTime<T> nullProvider() {
         return staticProvider(null);
     }
 

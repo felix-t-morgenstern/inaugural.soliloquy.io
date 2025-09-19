@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Action.action;
@@ -41,8 +41,8 @@ public class RectangleRenderableImplTests {
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
     private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
-    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
+            generateMockStaticProvider(null);
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
 
@@ -494,7 +494,7 @@ public class RectangleRenderableImplTests {
     public void testCapturesMouseEventsAtPoint() {
         var renderingDimensions = floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f);
         renderable.setRenderingDimensionsProvider(
-                new FakeStaticProvider<>(renderingDimensions));
+                generateMockStaticProvider(renderingDimensions));
 
         assertTrue(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.251f, 0.5f), TIMESTAMP));
@@ -514,7 +514,7 @@ public class RectangleRenderableImplTests {
     public void testCapturesMouseEventsAtPointDoesNotExceedRenderingBoundaries() {
         var renderingDimensions = floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f);
         renderable.setRenderingDimensionsProvider(
-                new FakeStaticProvider<>(renderingDimensions));
+                generateMockStaticProvider(renderingDimensions));
 
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(floatBoxOf(0f, 0f, 0.5f, 1f));
 

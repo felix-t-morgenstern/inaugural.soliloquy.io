@@ -24,7 +24,6 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -142,11 +141,11 @@ public class DisplayTest {
         glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
     }
 
-    protected static <T> StaticProvider<T> staticProvider(T value) {
+    protected static <T> ProviderAtTime<T> staticProvider(T value) {
         return new StaticProviderImpl<>(java.util.UUID.randomUUID(), value, TimestampValidator);
     }
 
-    protected static <T> StaticProvider<T> staticNullProvider() {
+    protected static <T> ProviderAtTime<T> staticNullProvider() {
         return new StaticProviderImpl<>(java.util.UUID.randomUUID(), null, TimestampValidator);
     }
 

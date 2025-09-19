@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.AntialiasedLineSegmentRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAntialiasedLineSegmentRenderable;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeWindowResolutionManager;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
@@ -23,6 +22,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
@@ -36,20 +36,20 @@ public class AntialiasedLineSegmentRendererTests {
             new FakeWindowResolutionManager();
 
     private final ProviderAtTime<Float> THICKNESS_GRADIENT_PERCENT_PROVIDER =
-            new FakeStaticProvider<>(randomFloatInRange(0f, 1f));
+            generateMockStaticProvider(randomFloatInRange(0f, 1f));
     private final ProviderAtTime<Float> LENGTH_GRADIENT_PERCENT_PROVIDER =
-            new FakeStaticProvider<>(randomFloatInRange(0f, 1f));
+            generateMockStaticProvider(randomFloatInRange(0f, 1f));
     private final ProviderAtTime<Float> THICKNESS_PROVIDER =
-            new FakeStaticProvider<>(randomFloatWithInclusiveFloor(0.001f));
-    private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeStaticProvider<>(randomColor());
+            generateMockStaticProvider(randomFloatWithInclusiveFloor(0.001f));
+    private final ProviderAtTime<Color> COLOR_PROVIDER = generateMockStaticProvider(randomColor());
     private final float X1 = randomFloat();
     private final float Y1 = randomFloat();
     private final float X2 = randomFloat();
     private final float Y2 = randomFloat();
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER =
-            new FakeStaticProvider<>(vertexOf(X1, Y1));
+            generateMockStaticProvider(vertexOf(X1, Y1));
     private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER =
-            new FakeStaticProvider<>(vertexOf(X2, Y2));
+            generateMockStaticProvider(vertexOf(X2, Y2));
 
     private final FakeAntialiasedLineSegmentRenderable ANTIALIASED_LINE_SEGMENT_RENDERABLE =
             new FakeAntialiasedLineSegmentRenderable(
@@ -128,7 +128,7 @@ public class AntialiasedLineSegmentRendererTests {
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
-                                new FakeStaticProvider<>(null),
+                                generateMockStaticProvider(null),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
@@ -137,7 +137,7 @@ public class AntialiasedLineSegmentRendererTests {
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
-                                new FakeStaticProvider<>(-0.001f),
+                                generateMockStaticProvider(-0.001f),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
@@ -146,7 +146,7 @@ public class AntialiasedLineSegmentRendererTests {
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
-                                new FakeStaticProvider<>(1.001f),
+                                generateMockStaticProvider(1.001f),
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
@@ -165,7 +165,7 @@ public class AntialiasedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                                new FakeStaticProvider<>(null),
+                                generateMockStaticProvider(null),
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
@@ -174,7 +174,7 @@ public class AntialiasedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                                new FakeStaticProvider<>(-0.001f),
+                                generateMockStaticProvider(-0.001f),
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
@@ -183,7 +183,7 @@ public class AntialiasedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                                new FakeStaticProvider<>(1.001f),
+                                generateMockStaticProvider(1.001f),
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
@@ -202,7 +202,7 @@ public class AntialiasedLineSegmentRendererTests {
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
-                                new FakeStaticProvider<>(null),
+                                generateMockStaticProvider(null),
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
@@ -211,7 +211,7 @@ public class AntialiasedLineSegmentRendererTests {
                 .render(new FakeAntialiasedLineSegmentRenderable(
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
-                                new FakeStaticProvider<>(0f),
+                                generateMockStaticProvider(0f),
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
@@ -230,7 +230,7 @@ public class AntialiasedLineSegmentRendererTests {
                                 THICKNESS_GRADIENT_PERCENT_PROVIDER,
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                                 THICKNESS_PROVIDER,
-                                new FakeStaticProvider<>(null),
+                                generateMockStaticProvider(null),
                                 VERTEX_1_PROVIDER,
                                 VERTEX_2_PROVIDER),
                         TIMESTAMP));
@@ -249,7 +249,7 @@ public class AntialiasedLineSegmentRendererTests {
                                 LENGTH_GRADIENT_PERCENT_PROVIDER,
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
-                                new FakeStaticProvider<>(null),
+                                generateMockStaticProvider(null),
                                 VERTEX_2_PROVIDER),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
@@ -268,7 +268,7 @@ public class AntialiasedLineSegmentRendererTests {
                                 THICKNESS_PROVIDER,
                                 COLOR_PROVIDER,
                                 VERTEX_1_PROVIDER,
-                                new FakeStaticProvider<>(null)),
+                                generateMockStaticProvider(null)),
                         TIMESTAMP));
     }
 

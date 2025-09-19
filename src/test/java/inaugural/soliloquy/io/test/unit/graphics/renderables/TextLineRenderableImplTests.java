@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables;
 import inaugural.soliloquy.io.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +25,7 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.assertEqualsAndNotSame;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -34,8 +34,8 @@ import static org.mockito.Mockito.verify;
 public class TextLineRenderableImplTests {
     private final FakeFont FONT = new FakeFont();
     private final float LINE_HEIGHT = 0.123f;
-    private final FakeStaticProvider<Float> LINE_HEIGHT_PROVIDER =
-            new FakeStaticProvider<>(LINE_HEIGHT);
+    private final ProviderAtTime<Float> LINE_HEIGHT_PROVIDER =
+            generateMockStaticProvider(LINE_HEIGHT);
     private final TextJustification JUSTIFICATION = TextJustification.LEFT;
     private final float PADDING_BETWEEN_GLYPHS = 0.456f;
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = mapOf();
@@ -206,8 +206,7 @@ public class TextLineRenderableImplTests {
     public void testGetAndSetLineHeight() {
         assertSame(LINE_HEIGHT_PROVIDER, renderable.lineHeightProvider());
 
-        FakeStaticProvider<Float> newLineHeightProvider =
-                new FakeStaticProvider<>(0.456f);
+        var newLineHeightProvider = generateMockStaticProvider(0.456f);
 
         renderable.setLineHeightProvider(newLineHeightProvider);
 
@@ -360,7 +359,7 @@ public class TextLineRenderableImplTests {
     public void testGetAndSetZ() {
         assertEquals(Z, renderable.getZ());
 
-        int newZ = randomInt();
+        var newZ = randomInt();
 
         renderable.setZ(newZ);
 

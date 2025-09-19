@@ -3,18 +3,20 @@ package inaugural.soliloquy.io.test.integration.display.fullsuite;
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.*;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.RasterizedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.EventInputs;
 
 import java.awt.*;
+import java.util.UUID;
+import java.util.function.BiFunction;
 
+import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static java.util.UUID.randomUUID;
@@ -131,16 +133,18 @@ public class CombinationTest extends DisplayTest {
         );
         rectRenderer.setCapturesMouseEvents(true);
 
-        var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+        @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
+                staticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
 
         var sprite = graphics.getSprite(SPRITE_ID);
-        var dimensProvider = staticProviderFactory.make(randomUUID(),
+        var dimensProvider = staticProviderFactory.apply(randomUUID(),
                 floatBoxOf(0.7f, 0.1f, 0.9f, 0.3f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
+        //noinspection unchecked
         spriteRenderableFactory.make(
                 sprite,
-                staticProviderFactory.make(randomUUID(), null),
-                staticProviderFactory.make(randomUUID(), null),
+                staticProviderFactory.apply(randomUUID(), null),
+                staticProviderFactory.apply(randomUUID(), null),
                 mapOf(
                         GLFW_MOUSE_BUTTON_LEFT,
                         ON_MOUSE_PRESS_ACTION

@@ -44,14 +44,13 @@ public class GlobalLoopingAnimationRenderableImplTests {
             new FakeGlobalLoopingAnimation(false);
     private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
-    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(null);
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
+    @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
@@ -72,13 +71,13 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderableWithMouseEvents = new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
                 mockBorderColorProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator);
         renderableWithoutMouseEvents =
                 new GlobalLoopingAnimationRenderableImpl(
                         GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator);
     }
 
@@ -87,32 +86,32 @@ public class GlobalLoopingAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new GlobalLoopingAnimationRenderableImpl(null, mockBorderThicknessProvider,
                         mockBorderColorProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
                 mockBorderColorProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null, mockBorderColorProvider,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider, null,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider, null,
                 ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
                 mockBorderColorProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                mockOnMouseLeaveAction, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                mockOnMouseLeaveAction, null, mockRenderingAreaProvider, Z, UUID,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
@@ -122,28 +121,28 @@ public class GlobalLoopingAnimationRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
                 mockBorderColorProvider, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
+                mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, null,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new GlobalLoopingAnimationRenderableImpl(null, mockBorderThicknessProvider,
-                        mockBorderColorProvider, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockBorderColorProvider, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null, mockBorderColorProvider,
-                COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                null, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                null, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                mockBorderColorProvider, null, RENDERING_AREA_PROVIDER, Z, UUID,
+                mockBorderColorProvider, null, mockRenderingAreaProvider, Z, UUID,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
@@ -151,7 +150,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                mockBorderColorProvider, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, null,
+                mockBorderColorProvider, COLOR_SHIFTS, mockRenderingAreaProvider, Z, null,
                 mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
     }
 
@@ -464,10 +463,10 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testGetAndSetRenderingAreaProvider() {
-        assertSame(RENDERING_AREA_PROVIDER,
+        assertSame(mockRenderingAreaProvider,
                 renderableWithMouseEvents
                         .getRenderingDimensionsProvider());
-        assertSame(RENDERING_AREA_PROVIDER,
+        assertSame(mockRenderingAreaProvider,
                 renderableWithoutMouseEvents
                         .getRenderingDimensionsProvider());
 
@@ -501,7 +500,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         FakeImage snippetImage = (FakeImage) animationFrameSnippet.Image;
         snippetImage.Width = 1000;
         snippetImage.Height = 3000;
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(-0.5f, -2f, 0.75f, 0.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(-0.5f, -2f, 0.75f, 0.5f));
 
         boolean capturesMouseEventAtPoint = renderableWithMouseEvents
                 .capturesMouseEventAtPoint(vertexOf(0.123f, 0.456f), TIMESTAMP);
@@ -518,8 +517,8 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 (int) (((((0.456f - 0.0456f) - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000))
                         + 1000),
                 (int) capturesMouseEventsAtPixelInputs.getFirst().SECOND);
-        assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(TIMESTAMP, (long) RENDERING_AREA_PROVIDER.TimestampInputs.getFirst());
+        verify(mockRenderingAreaProvider, once()).provide(anyLong());
+        verify(mockRenderingAreaProvider, once()).provide(TIMESTAMP);
     }
 
     @Test
@@ -531,7 +530,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         animation.AnimationFrameSnippet = animationFrameSnippet;
         GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS.Animation = animation;
         ((FakeImage) animationFrameSnippet.Image).SupportsMouseEventCapturing = true;
-        RENDERING_AREA_PROVIDER.ProvidedValue = WHOLE_SCREEN;
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(WHOLE_SCREEN);
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(floatBoxOf(0f, 0f, 0.5f, 1f));
 
         assertTrue(renderableWithMouseEvents
@@ -542,7 +541,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testCapturesMouseEventAtPointWithInvalidArgs() {
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(.5f, .5f, 1.5f, 1.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(.5f, .5f, 1.5f, 1.5f));
         GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS.Animation = new FakeAnimation(100);
 
         float verySmallNumber = 0.0001f;
@@ -564,7 +563,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 renderableWithMouseEvents
                         .capturesMouseEventAtPoint(vertexOf(.75f, 1.5f + verySmallNumber), 0L));
 
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(-0.5f, -0.5f, 0.5f, 0.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(-0.5f, -0.5f, 0.5f, 0.5f));
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderableWithMouseEvents
@@ -585,7 +584,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         assertEquals(Z, renderableWithMouseEvents.getZ());
         assertEquals(Z, renderableWithoutMouseEvents.getZ());
 
-        int newZ = randomInt();
+        var newZ = randomInt();
 
         renderableWithMouseEvents.setZ(newZ);
         renderableWithoutMouseEvents.setZ(newZ);

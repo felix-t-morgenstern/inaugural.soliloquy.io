@@ -1,17 +1,17 @@
 package inaugural.soliloquy.io.api;
 
-import inaugural.soliloquy.io.graphics.renderables.providers.StaticProviderImpl;
-import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.awt.*;
-import java.util.UUID;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class Constants {
+    // Dependency constants
+    public final static String STATIC_PROVIDER_FACTORY = "staticProviderFactory";
+    public final static String NULL_PROVIDER = "nullProvider";
+
     // Timing constants
     public final static String GMT = "GMT";
     public final static int MS_PER_SECOND = 1000;

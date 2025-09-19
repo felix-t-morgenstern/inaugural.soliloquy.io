@@ -7,7 +7,7 @@ import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -36,7 +36,7 @@ class TextLineRendererBoldAndItalicTest extends TextLineRendererTest {
     private final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING = 0.1f;
     private final static float LEADING_ADJUSTMENT = 0f;
     private final static float LINE_HEIGHT = 0.05f;
-    private final static StaticProvider<Float> LINE_HEIGHT_PROVIDER = staticProvider(LINE_HEIGHT);
+    private final static ProviderAtTime<Float> LINE_HEIGHT_PROVIDER = staticProvider(LINE_HEIGHT);
     private final static String LINE_TEXT = "Regular, italic, bold, bold-italic";
 
     private static TextLineRenderable TextLineRenderable;

@@ -9,10 +9,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
@@ -33,13 +33,13 @@ public class StaticProviderHandlerTests {
             "{\"uuid\":\"%s\",\"innerType\":\"java.lang.Integer\",\"val\":\"%s\"}",
             UUID, WRITTEN_INT);
 
-    @Mock private StaticProvider<Integer> mockProvider;
-    @Mock private StaticProviderFactory mockFactory;
+    @Mock private ProviderAtTime<Integer> mockProvider;
+    @SuppressWarnings("rawtypes") @Mock private BiFunction<UUID, Object, ProviderAtTime> mockFactory;
     @Mock private PersistenceHandler mockPersistenceHandler;
     @Mock private TimestampValidator mockTimestampValidator;
 
     /** @noinspection rawtypes */
-    private TypeHandler<StaticProvider> handler;
+    private TypeHandler<ProviderAtTime> handler;
 
     @BeforeEach
     public void setUp() {
@@ -81,16 +81,15 @@ public class StaticProviderHandlerTests {
 
     @Test
     public void testRead() {
-        //noinspection unchecked,rawtypes
-        when(mockFactory.make(any(), any())).thenReturn((StaticProvider) mockProvider);
+        when(mockFactory.apply(any(), any())).thenReturn(mockProvider);
 
         //noinspection unchecked
-        var staticProvider = (StaticProvider<Integer>) handler.read(WRITTEN_VALUE);
+        var staticProvider = (ProviderAtTime<Integer>) handler.read(WRITTEN_VALUE);
 
         assertNotNull(staticProvider);
         assertSame(mockProvider, staticProvider);
         verify(INT_HANDLER, once()).read(WRITTEN_INT);
-        verify(mockFactory, once()).make(eq(UUID), eq(INT_VALUE));
+        verify(mockFactory, once()).apply(eq(UUID), eq(INT_VALUE));
     }
 
     @Test

@@ -8,7 +8,6 @@ import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer.SpriteRendererTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
@@ -22,23 +21,25 @@ import java.util.function.Supplier;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
-import static org.mockito.Mockito.*;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class CombinationTest extends SpriteRendererTest {
     protected static RectangleRenderable RectangleRenderable;
     protected static Renderer<RectangleRenderable> RectangleRenderer;
 
-    private final static FakeStaticProvider<Color> TOP_LEFT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.RED);
-    private final static FakeStaticProvider<Color> TOP_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.GREEN);
-    private final static FakeStaticProvider<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.BLUE);
-    private final static FakeStaticProvider<Color> BOTTOM_LEFT_COLOR_PROVIDER =
-            new FakeStaticProvider<>(Color.WHITE);
-    private final static FakeStaticProvider<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final static ProviderAtTime<Color> TOP_LEFT_COLOR_PROVIDER =
+            generateMockStaticProvider(Color.RED);
+    private final static ProviderAtTime<Color> TOP_RIGHT_COLOR_PROVIDER =
+            generateMockStaticProvider(Color.GREEN);
+    private final static ProviderAtTime<Color> BOTTOM_RIGHT_COLOR_PROVIDER =
+            generateMockStaticProvider(Color.BLUE);
+    private final static ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER =
+            generateMockStaticProvider(Color.WHITE);
+    private final static ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
+            generateMockStaticProvider(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
     private final static ProviderAtTime<FloatBox> RECT_RENDERING_AREA_PROVIDER = WHOLE_SCREEN_PROVIDER;

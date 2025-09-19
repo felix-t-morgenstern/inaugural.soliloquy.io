@@ -13,6 +13,7 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.ui.EventInputs;
 
@@ -42,14 +43,13 @@ public class SpriteRenderableImplTests {
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
-    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(null);
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
     @Mock private Component mockContainingComponent;
+    @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
     @Mock private Action<EventInputs> mockOnPressAction;
@@ -66,12 +66,12 @@ public class SpriteRenderableImplTests {
         renderableWithMouseEvents =
                 new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
                         BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator);
         renderableWithoutMouseEvents =
                 new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator);
     }
 
@@ -80,31 +80,31 @@ public class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(null, BORDER_THICKNESS_PROVIDER,
                         BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         // NB: These following two constructors should not_ throw exceptions
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS, null,
                         BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, null, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, null,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
@@ -115,38 +115,38 @@ public class SpriteRenderableImplTests {
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, null, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, null));
 
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS, null,
-                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        BORDER_THICKNESS_PROVIDER, null, COLOR_SHIFTS, mockRenderingAreaProvider, Z,
                         UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
@@ -156,17 +156,17 @@ public class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, null, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_NOT_SUPPORTING_MOUSE_EVENTS,
                         BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, null));
     }
 
@@ -457,9 +457,9 @@ public class SpriteRenderableImplTests {
 
     @Test
     public void testGetAndSetRenderingAreaProvider() {
-        assertSame(RENDERING_AREA_PROVIDER,
+        assertSame(mockRenderingAreaProvider,
                 renderableWithMouseEvents.getRenderingDimensionsProvider());
-        assertSame(RENDERING_AREA_PROVIDER,
+        assertSame(mockRenderingAreaProvider,
                 renderableWithoutMouseEvents.getRenderingDimensionsProvider());
 
         FakeProviderAtTime<FloatBox> newRenderingDimensionsProvider = new FakeProviderAtTime<>();
@@ -480,7 +480,7 @@ public class SpriteRenderableImplTests {
         assertEquals(Z, renderableWithMouseEvents.getZ());
         assertEquals(Z, renderableWithoutMouseEvents.getZ());
 
-        int newZ = randomInt();
+        var newZ = randomInt();
 
         renderableWithMouseEvents.setZ(newZ);
         renderableWithoutMouseEvents.setZ(newZ);
@@ -497,7 +497,7 @@ public class SpriteRenderableImplTests {
         SPRITE_SUPPORTING_MOUSE_EVENTS.BottomY = 2500;
         ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Width = 1000;
         ((FakeImage) SPRITE_SUPPORTING_MOUSE_EVENTS.Image).Height = 3000;
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(-0.5f, -2f, 0.75f, 0.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(-0.5f, -2f, 0.75f, 0.5f));
 
         var capturesMouseEventAtPoint = renderableWithMouseEvents
                 .capturesMouseEventAtPoint(vertexOf(0.123f, 0.456f), TIMESTAMP);
@@ -512,14 +512,14 @@ public class SpriteRenderableImplTests {
         assertEquals(
                 (int) ((((0.456f - (-2.0f)) / (0.5f - (-2.0f))) * (2500 - 1000)) + 1000),
                 (int) capturesMouseEventsAtPixelInputs.getFirst().SECOND);
-        assertEquals(1, RENDERING_AREA_PROVIDER.TimestampInputs.size());
-        assertEquals(TIMESTAMP, (long) RENDERING_AREA_PROVIDER.TimestampInputs.getFirst());
+        verify(mockRenderingAreaProvider, once()).provide(anyLong());
+        verify(mockRenderingAreaProvider, once()).provide(TIMESTAMP);
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
     }
 
     @Test
     public void testCapturesMouseEventsAtPointDoesNotExceedRenderingBoundaries() {
-        RENDERING_AREA_PROVIDER.ProvidedValue = WHOLE_SCREEN;
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(WHOLE_SCREEN);
         SPRITE_SUPPORTING_MOUSE_EVENTS.Image = new FakeImage(true);
         when(mockRenderingBoundaries.currentBoundaries()).thenReturn(floatBoxOf(0f, 0f, 0.5f, 1f));
 
@@ -537,7 +537,7 @@ public class SpriteRenderableImplTests {
                 renderableWithoutMouseEvents.capturesMouseEventAtPoint(vertexOf(.5f, .5f),
                         0L));
 
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(.5f, .5f, 1.5f, 1.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(.5f, .5f, 1.5f, 1.5f));
 
         assertThrows(IllegalArgumentException.class, () -> renderableWithMouseEvents
                 .capturesMouseEventAtPoint(vertexOf(.5f - verySmallNumber, .75f), 0L));
@@ -548,7 +548,7 @@ public class SpriteRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> renderableWithMouseEvents
                 .capturesMouseEventAtPoint(vertexOf(.75f, 1.5f + verySmallNumber), 0L));
 
-        RENDERING_AREA_PROVIDER.ProvidedValue = floatBoxOf(-0.5f, -0.5f, 0.5f, 0.5f);
+        when(mockRenderingAreaProvider.provide(anyLong())).thenReturn(floatBoxOf(-0.5f, -0.5f, 0.5f, 0.5f));
 
         assertThrows(IllegalArgumentException.class, () -> renderableWithMouseEvents
                 .capturesMouseEventAtPoint(vertexOf(0f - verySmallNumber, .25f), 0L));

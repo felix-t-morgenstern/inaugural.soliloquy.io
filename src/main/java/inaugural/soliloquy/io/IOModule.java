@@ -62,14 +62,21 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.io.api.Constants.NULL_PROVIDER;
+import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class IOModule implements Module {
     private final Injector INJECTOR;
+
+    private final Map<String, Object> NAMED_INSTANCES;
 
     public IOModule(CommonModule common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
@@ -82,6 +89,8 @@ public class IOModule implements Module {
         // ====
 
         INJECTOR = Injectors.manual();
+
+        NAMED_INSTANCES = mapOf();
 
         var persistenceHandler = common.provide(PersistenceHandler.class);
 
@@ -393,7 +402,11 @@ public class IOModule implements Module {
                 ), timestampValidator));
         var progressiveStringProviderFactory =
                 andRegister(new ProgressiveStringProviderFactoryImpl(timestampValidator));
-        var staticProviderFactory = andRegister(new StaticProviderFactoryImpl(timestampValidator));
+        @SuppressWarnings({"rawtypes", "unchecked"}) BiFunction<UUID, Object, ProviderAtTime>
+                staticProviderFactory =
+                andRegister((uuid, val) -> new StaticProviderImpl(uuid, val, timestampValidator),
+                        STATIC_PROVIDER_FACTORY);
+        andRegister(staticProviderFactory.apply(randomUUID(), NULL_PROVIDER));
 
         // ========
         // Handlers
@@ -534,13 +547,26 @@ public class IOModule implements Module {
         return INJECTOR.getInstance(clazz);
     }
 
-    public <T> T provide(String instance) throws IllegalArgumentException {
-        Check.ifNullOrEmpty(instance, "instance");
-        throw new IllegalArgumentException("No named instances within IOModule");
+    public <T> T provide(String instanceName) throws IllegalArgumentException {
+        Check.ifNullOrEmpty(instanceName, "instanceName");
+
+        if (!NAMED_INSTANCES.containsKey(instanceName)) {
+            throw new IllegalArgumentException("IOModule.provide: instanceName (" + instanceName +
+                    ") does not correspond to a valid instance");
+        }
+
+        //noinspection unchecked
+        return (T) NAMED_INSTANCES.get(instanceName);
     }
 
     private <T> T andRegister(T registrant) {
         INJECTOR.registerInstance(registrant);
+
+        return registrant;
+    }
+
+    private <T> T andRegister(T registrant, String instanceName) {
+        NAMED_INSTANCES.put(instanceName, registrant);
 
         return registrant;
     }

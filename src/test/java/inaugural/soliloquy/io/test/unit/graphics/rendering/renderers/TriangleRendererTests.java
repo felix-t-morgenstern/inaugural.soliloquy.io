@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleRenderer;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeTriangleRenderable;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
@@ -22,7 +21,7 @@ import java.awt.*;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
@@ -32,19 +31,19 @@ import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 @ExtendWith(MockitoExtension.class)
 public class TriangleRendererTests {
     private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER =
-            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
+            generateMockStaticProvider(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER =
-            new FakeStaticProvider<>(randomColor());
+            generateMockStaticProvider(randomColor());
     private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER =
-            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
+            generateMockStaticProvider(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER =
-            new FakeStaticProvider<>(randomColor());
+            generateMockStaticProvider(randomColor());
     private final ProviderAtTime<Vertex> VERTEX_3_PROVIDER =
-            new FakeStaticProvider<>(vertexOf(randomFloat(), randomFloat()));
+            generateMockStaticProvider(vertexOf(randomFloat(), randomFloat()));
     private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER =
-            new FakeStaticProvider<>(randomColor());
+            generateMockStaticProvider(randomColor());
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeStaticProvider<>(randomInt());
+            generateMockStaticProvider(randomInt());
     @SuppressWarnings("unchecked") private final ProviderAtTime<Float>
             MOCK_TEXTURE_TILE_WIDTH_PROVIDER = (ProviderAtTime<Float>) mock(ProviderAtTime.class);
     @SuppressWarnings("unchecked") private final ProviderAtTime<Float>
@@ -124,7 +123,7 @@ public class TriangleRendererTests {
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
-                .render(new FakeTriangleRenderable(new FakeStaticProvider<>(null),
+                .render(new FakeTriangleRenderable(generateMockStaticProvider(null),
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
@@ -149,7 +148,7 @@ public class TriangleRendererTests {
                         MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
-                                VERTEX_1_COLOR_PROVIDER, new FakeStaticProvider<>(null),
+                                VERTEX_1_COLOR_PROVIDER, generateMockStaticProvider(null),
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
@@ -174,7 +173,7 @@ public class TriangleRendererTests {
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
-                                VERTEX_2_COLOR_PROVIDER, new FakeStaticProvider<>(null),
+                                VERTEX_2_COLOR_PROVIDER, generateMockStaticProvider(null),
                                 VERTEX_3_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER,
                                 MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
@@ -215,14 +214,14 @@ public class TriangleRendererTests {
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
-                                VERTEX_3_COLOR_PROVIDER, new FakeStaticProvider<>(randomInt()),
+                                VERTEX_3_COLOR_PROVIDER, generateMockStaticProvider(randomInt()),
                                 null, MOCK_TEXTURE_TILE_HEIGHT_PROVIDER),
                         MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
                 .render(new FakeTriangleRenderable(VERTEX_1_PROVIDER,
                                 VERTEX_1_COLOR_PROVIDER, VERTEX_2_PROVIDER,
                                 VERTEX_2_COLOR_PROVIDER, VERTEX_3_PROVIDER,
-                                VERTEX_3_COLOR_PROVIDER, new FakeStaticProvider<>(randomInt()),
+                                VERTEX_3_COLOR_PROVIDER, generateMockStaticProvider(randomInt()),
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER, null),
                         MOST_RECENT_TIMESTAMP));
     }

@@ -225,7 +225,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
     public void testGetAndSetZ() {
         assertEquals(Z, renderable.getZ());
 
-        int newZ = randomInt();
+        var newZ = randomInt();
         renderable.setZ(newZ);
 
         assertEquals(newZ, renderable.getZ());

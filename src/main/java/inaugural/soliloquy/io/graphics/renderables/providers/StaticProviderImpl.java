@@ -2,11 +2,11 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
-public class StaticProviderImpl<T> implements StaticProvider<T> {
+public class StaticProviderImpl<T> implements ProviderAtTime<T> {
     private final UUID UUID;
     private final T VALUE;
     private final TimestampValidator TIMESTAMP_VALIDATOR;

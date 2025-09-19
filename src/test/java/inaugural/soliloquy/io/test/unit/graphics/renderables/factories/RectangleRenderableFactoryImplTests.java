@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.RectangleRenderableFactoryImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +36,8 @@ public class RectangleRenderableFactoryImplTests {
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
     private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
-    private final FakeStaticProvider<FloatBox> RENDERING_AREA_PROVIDER =
-            new FakeStaticProvider<>(null);
+    private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
+            generateMockStaticProvider(null);
     private final int Z = randomInt();
 
     private final UUID UUID = java.util.UUID.randomUUID();

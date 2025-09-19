@@ -9,9 +9,13 @@ import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.EventInputs;
 
+import java.util.UUID;
+import java.util.function.BiFunction;
+
+import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static java.util.UUID.randomUUID;
@@ -96,16 +100,18 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
         );
         rectRenderer.setCapturesMouseEvents(true);
 
-        var staticProviderFactory = ioModule.provide(StaticProviderFactory.class);
+        @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
+                staticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
 
         var sprite = graphics.getSprite(SPRITE_ID);
-        var dimensProvider = staticProviderFactory.make(randomUUID(),
+        var dimensProvider = staticProviderFactory.apply(randomUUID(),
                 floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
+        //noinspection unchecked
         spriteRenderableFactory.make(
                 sprite,
-                staticProviderFactory.make(randomUUID(), null),
-                staticProviderFactory.make(randomUUID(), null),
+                staticProviderFactory.apply(randomUUID(), null),
+                staticProviderFactory.apply(randomUUID(), null),
                 mapOf(
                         GLFW_MOUSE_BUTTON_LEFT,
                         ON_MOUSE_PRESS_ACTION

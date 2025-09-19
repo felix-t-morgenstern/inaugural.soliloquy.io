@@ -1,10 +1,10 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor;
 
 import inaugural.soliloquy.io.api.Constants;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 
+import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
@@ -27,9 +27,9 @@ class MouseCursorImplSimpleTest extends MouseCursorImplTest {
         var standardHandMouseCursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 
         MouseCursorProviders.put(Constants.STANDARD_ARROW_MOUSE_CURSOR_ID,
-                new FakeStaticProvider<>(standardArrowMouseCursor));
+                generateMockStaticProvider(standardArrowMouseCursor));
         MouseCursorProviders.put(Constants.STANDARD_HAND_CURSOR_ID,
-                new FakeStaticProvider<>(standardHandMouseCursor));
+                generateMockStaticProvider(standardHandMouseCursor));
     }
 
     private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {

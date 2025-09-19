@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class StaticProviderImplTests {
 
     @Mock private TimestampValidator mockTimestampValidator;
 
-    private StaticProvider<Object> provider;
+    private ProviderAtTime<Object> provider;
 
     @BeforeEach
     public void setUp() {

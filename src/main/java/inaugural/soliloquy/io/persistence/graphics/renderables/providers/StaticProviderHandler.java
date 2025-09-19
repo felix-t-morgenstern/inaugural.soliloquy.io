@@ -4,19 +4,19 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.persistence.PersistenceHandler;
-import soliloquy.specs.io.graphics.renderables.providers.StaticProvider;
-import soliloquy.specs.io.graphics.renderables.providers.factories.StaticProviderFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
+import java.util.function.BiFunction;
 
 /** @noinspection rawtypes */
-public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
-    private final StaticProviderFactory FACTORY;
+public class StaticProviderHandler extends AbstractTypeHandler<ProviderAtTime> {
+    private final BiFunction<UUID, Object, ProviderAtTime> FACTORY;
     private final PersistenceHandler PERSISTENCE_HANDLER;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     public StaticProviderHandler(PersistenceHandler persistenceHandler,
-                                 StaticProviderFactory factory,
+                                 BiFunction<UUID, Object, ProviderAtTime> factory,
                                  TimestampValidator timestampValidator) {
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         FACTORY = Check.ifNull(factory, "factory");
@@ -25,29 +25,29 @@ public class StaticProviderHandler extends AbstractTypeHandler<StaticProvider> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public StaticProvider read(String writtenValue) throws IllegalArgumentException {
+    public ProviderAtTime read(String writtenValue) throws IllegalArgumentException {
         Check.ifNullOrEmpty(writtenValue, "writtenValue");
         var dto = JSON.fromJson(writtenValue, StaticProviderDTO.class);
         var uuid = UUID.fromString(dto.uuid);
         var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.innerType);
-        return FACTORY.make(uuid, typeHandler.read(dto.val));
+        return (ProviderAtTime) FACTORY.apply(uuid, typeHandler.read(dto.val));
     }
 
     @Override
-    public String write(StaticProvider staticProvider) {
-        Check.ifNull(staticProvider, "staticProvider");
+    public String write(ProviderAtTime provider) {
+        Check.ifNull(provider, "provider");
 
         var staticProviderDTO = new StaticProviderDTO();
 
         var mostRecentTimestamp = TIMESTAMP_VALIDATOR.mostRecentTimestamp();
-        var staticValue = staticProvider.provide(mostRecentTimestamp);
+        var staticValue = provider.provide(mostRecentTimestamp);
         if (staticValue != null) {
             var type = staticValue.getClass().getCanonicalName();
             var typeHandler = PERSISTENCE_HANDLER.getTypeHandler(type);
-            staticProviderDTO.uuid = staticProvider.uuid().toString();
+            staticProviderDTO.uuid = provider.uuid().toString();
             staticProviderDTO.innerType = type;
             staticProviderDTO.val = typeHandler
-                    .write(staticProvider.provide(mostRecentTimestamp));
+                    .write(provider.provide(mostRecentTimestamp));
         }
 
         return JSON.toJson(staticProviderDTO);

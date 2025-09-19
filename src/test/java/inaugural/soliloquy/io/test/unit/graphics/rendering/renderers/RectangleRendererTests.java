@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeRectangleRenderable;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeStaticProvider;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -139,7 +138,7 @@ public class RectangleRendererTests {
                 new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, new FakeStaticProvider<>(null), UUID),
+                        mockTextureTileHeightProvider, generateMockStaticProvider(null), UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
