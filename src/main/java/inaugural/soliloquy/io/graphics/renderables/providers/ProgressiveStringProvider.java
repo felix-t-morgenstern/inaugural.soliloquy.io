@@ -5,6 +5,7 @@ import inaugural.soliloquy.tools.timing.AbstractFinitePausableAtTime;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
@@ -49,12 +50,14 @@ public class ProgressiveStringProvider
 
     @Override
     public Object representation() {
-        // TODO: Revise this awful data structure.
-        return pairOf(STRING, pairOf(TIME_TO_COMPLETE, anchorTime));
+        return new Representation(STRING, TIME_TO_COMPLETE, anchorTime);
     }
 
     @Override
     public UUID uuid() {
         return UUID;
+    }
+
+    public record Representation(String text, long timeToComplete, long anchorTime) {
     }
 }

@@ -81,7 +81,8 @@ public class IOModule implements Module {
     public IOModule(CommonModule common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
                     @SuppressWarnings("rawtypes") Function<String, Action> getAction,
-                    @SuppressWarnings("rawtypes") Function<String, soliloquy.specs.common.entities.Function> getFunction,
+                    @SuppressWarnings("rawtypes")
+                    Function<String, soliloquy.specs.common.entities.Function> getFunction,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
                     AssetDefinitionsDTO assetDefinitionsDTO) {
@@ -94,6 +95,8 @@ public class IOModule implements Module {
         NAMED_INSTANCES = mapOf();
 
         var persistenceHandler = common.provide(PersistenceHandler.class);
+        @SuppressWarnings("rawtypes") TypeHandler<Map> mapHandler =
+                persistenceHandler.getTypeHandler(Map.class.getCanonicalName());
 
         // ======
         // Basics
@@ -370,7 +373,8 @@ public class IOModule implements Module {
                         timestampValidator
                 )
         );
-        andRegister(new FunctionalProviderFactoryImpl(getFunction, getAction, timestampValidator));
+        var functionalProviderFactory = andRegister(
+                new FunctionalProviderFactoryImpl(getFunction, getAction, timestampValidator));
         var loopingLinearMovingColorProviderFactory =
                 andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"unused", "unchecked"})
@@ -455,6 +459,9 @@ public class IOModule implements Module {
                 new LoopingLinearMovingColorProviderHandler(
                         loopingLinearMovingColorProviderFactory));
 
+        providerHandler.add(FunctionalProviderImpl.class.getCanonicalName(),
+                new FunctionalProviderHandler(mapHandler, functionalProviderFactory));
+
         var loopingLinearProviderHandler =
                 new LoopingLinearMovingProviderHandler(persistenceHandler,
                         loopingLinearMovingProviderFactory);
@@ -506,9 +513,8 @@ public class IOModule implements Module {
                 new TriangleRenderableHandler(getAction, providerHandler,
                         triangleRenderableFactory));
         persistenceHandler.addTypeHandler(ComponentImpl.class,
-                new ComponentHandler(providerHandler,
-                        persistenceHandler.getTypeHandler(Map.class.getCanonicalName()),
-                        persistenceHandler, getAction, componentFactory));
+                new ComponentHandler(providerHandler, mapHandler, persistenceHandler, getAction,
+                        componentFactory));
 
         // ========
         // Graphics
