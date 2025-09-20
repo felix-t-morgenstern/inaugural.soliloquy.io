@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.integration.display.fullsuite;
 import inaugural.soliloquy.common.CommonModule;
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.WindowResolution;
-import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
+import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.common.entities.Action;
@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
@@ -41,13 +42,61 @@ public class DisplayTest {
     private final static String SHADER_FILENAME_PREFIX =
             "./src/main/resources/shaders/defaultShader";
 
+    protected final static String SPRITE_ID = "spriteId";
+    protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
+            "./src/test/resources/images/items/RPG_Weapons.png";
+
+    protected final static String EXPLOSION_ANIMATION_ID = "explosion";
+    protected final static String EXPLOSION_RELATIVE_LOCATION =
+            "./src/test/resources/images/effects/Explosion.png";
+    protected final static AnimationDefinitionDTO ANIMATION_DEF = new AnimationDefinitionDTO(
+            EXPLOSION_ANIMATION_ID,
+            600,
+            IntStream.range(0, 11).mapToObj(i -> new AnimationFrameDefinitionDTO(
+                    EXPLOSION_RELATIVE_LOCATION,
+                    i * 50,
+                    i * 96,
+                    0,
+                    (i + 1) * 96,
+                    96,
+                    0,
+                    0
+            )).toArray(AnimationFrameDefinitionDTO[]::new)
+    );
+
+    protected final static String IMAGE_ASSET_SET_ID = "imageAssetSet";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_KEY = "imageAssetSetDisplayParamKey";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_SPRITE = "imageAssetSetDisplayParamValSprite";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_ANIM = "imageAssetSetDisplayParamValAnim";
+    protected final static ImageAssetSetDefinitionDTO IMAGE_ASSET_SET_DEF =
+            new ImageAssetSetDefinitionDTO(
+                    IMAGE_ASSET_SET_ID,
+                    new ImageAssetSetAssetDefinitionDTO(
+                            SPRITE.getValue(),
+                            SPRITE_ID,
+                            new ImageAssetSetAssetDefinitionDTO.DisplayParamDefinitionDTO(
+                                    IMAGE_ASSET_SET_DISPLAY_PARAM_KEY,
+                                    IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_SPRITE
+                            )
+                    ),
+                    new ImageAssetSetAssetDefinitionDTO(
+                            ANIMATION.getValue(),
+                            EXPLOSION_ANIMATION_ID,
+                            new ImageAssetSetAssetDefinitionDTO.DisplayParamDefinitionDTO(
+                                    IMAGE_ASSET_SET_DISPLAY_PARAM_KEY,
+                                    IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_ANIM
+                            )
+                    )
+            );
+
     @SuppressWarnings("rawtypes") private final Map<String, Action> ACTIONS;
     @SuppressWarnings("rawtypes") private final Map<String, Function> FUNCTIONS;
 
+    protected static IOModule ioModule;
+    private static GlobalClock Clock;
     @SuppressWarnings("rawtypes") private static BiFunction<UUID, Object, ProviderAtTime>
             StaticProviderFactory;
 
-    public IOModule ioModule;
     public Component topLevelComponent;
 
     public DisplayTest() {
@@ -165,8 +214,8 @@ public class DisplayTest {
         return mockSetting;
     }
 
-    protected static long timestamp(IOModule ioModule) {
-        var globalClock = ioModule.provide(GlobalClock.class);
-        return globalClock.globalTimestamp();
+    protected static long timestamp() {
+        Clock = Clock == null ? ioModule.provide(GlobalClock.class) : Clock;
+        return Clock.globalTimestamp();
     }
 }

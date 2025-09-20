@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class AnimationFactory extends AbstractAssetFactory<AnimationDefinition, Animation> {
     @Override
-    public Animation apply(AnimationDefinition animationDefinition) throws IllegalArgumentException {
+    public Animation apply(AnimationDefinition animationDefinition)
+            throws IllegalArgumentException {
         Check.ifNull(animationDefinition, "animationDefinition");
         return new AnimationImpl(animationDefinition.id(), animationDefinition.msDuration(),
                 animationDefinition.frameSnippetDefinitions());
@@ -37,7 +38,8 @@ public class AnimationFactory extends AbstractAssetFactory<AnimationDefinition, 
 
         @Override
         public AnimationFrameSnippet snippetAtFrame(int ms) throws IllegalArgumentException {
-            return FLOOR_FRAME_PROVIDER.valueAtFrame(ms);
+            return FLOOR_FRAME_PROVIDER.valueAtFrame(
+                    Math.min(ms, FLOOR_FRAME_PROVIDER.MS_DURATION));
         }
 
         @Override

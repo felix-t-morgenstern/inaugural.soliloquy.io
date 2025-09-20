@@ -13,19 +13,15 @@ import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class SpriteSimpleDisplayTest extends DisplayTest {
-    protected final static String SPRITE_ID = "spriteId";
-    protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
-            "./src/test/resources/images/items/RPG_Weapons.png";
-
     protected final static AssetDefinitionsDTO ASSET_DTOS = new AssetDefinitionsDTO(
             new ImageDefinitionDTO[]{
                     new ImageDefinitionDTO(RPG_WEAPONS_RELATIVE_LOCATION, true)
             },
             arrayOf(),
-            new SpriteDefinitionDTO[]{
+            arrayOf(
                     new SpriteDefinitionDTO(SPRITE_ID, RPG_WEAPONS_RELATIVE_LOCATION,
                             266, 271, 313, 343)
-            },
+            ),
             arrayOf(),
             arrayOf(),
             arrayOf(),
