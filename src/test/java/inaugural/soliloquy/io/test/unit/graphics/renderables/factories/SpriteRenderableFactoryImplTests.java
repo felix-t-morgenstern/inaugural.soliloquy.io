@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SpriteRenderableFactoryImplTests {
     private final FakeSprite SPRITE_SUPPORTS_MOUSE_EVENTS =
             new FakeSprite(new FakeImage(true));
-    private final FakeSprite SPRITE_NOT_SUPPORTS_MOUSE_EVENTS =
-            new FakeSprite(new FakeImage(false));
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
@@ -72,7 +70,6 @@ public class SpriteRenderableFactoryImplTests {
 
         assertNotNull(spriteRenderableWithMouseEvents);
         assertInstanceOf(SpriteRenderableImpl.class, spriteRenderableWithMouseEvents);
-        assertTrue(spriteRenderableWithMouseEvents.getCapturesMouseEvents());
 
         var spriteRenderableWithoutMouseEvents = factory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
@@ -89,12 +86,6 @@ public class SpriteRenderableFactoryImplTests {
                 () -> factory.make(null, BORDER_THICKNESS_PROVIDER,
                         BORDER_COLOR_PROVIDER, null, null, mockOnMouseOver, mockOnMouseLeave,
                         COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
-                        mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_NOT_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null,
-                        mockOnMouseOver,
-                        mockOnMouseLeave, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, null,

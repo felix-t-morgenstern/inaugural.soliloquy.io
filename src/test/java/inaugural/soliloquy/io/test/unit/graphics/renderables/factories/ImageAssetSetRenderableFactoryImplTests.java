@@ -85,25 +85,13 @@ public class ImageAssetSetRenderableFactoryImplTests {
     @Test
     public void testMake() {
         // TODO: Create proper maps for press and release!
-        var imageAssetSetRenderableWithMouseEvents =
-                factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, mapOf(), mapOf(),
-                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER,
-                        Z, UUID, mockContainingComponent);
+        var output = factory.make(imageAssetSetSupportsMouseEvents, DISPLAY_PARAMS,
+                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, mapOf(), mapOf(), mockOnMouseOver,
+                mockOnMouseLeave, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
+                mockContainingComponent);
 
-        assertNotNull(imageAssetSetRenderableWithMouseEvents);
-        assertInstanceOf(ImageAssetSetRenderableImpl.class, imageAssetSetRenderableWithMouseEvents);
-        assertTrue(imageAssetSetRenderableWithMouseEvents.getCapturesMouseEvents());
-
-        var imageAssetSetRenderableWithoutMouseEvents =
-                factory.make(imageAssetSetNotSupportsMouseEvents, DISPLAY_PARAMS, COLOR_SHIFTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingComponent);
-
-        assertNotNull(imageAssetSetRenderableWithoutMouseEvents);
-        assertInstanceOf(ImageAssetSetRenderableImpl.class,
-                imageAssetSetRenderableWithoutMouseEvents);
-        assertFalse(imageAssetSetRenderableWithoutMouseEvents.getCapturesMouseEvents());
+        assertNotNull(output);
+        assertInstanceOf(ImageAssetSetRenderableImpl.class, output);
     }
 
     @Test

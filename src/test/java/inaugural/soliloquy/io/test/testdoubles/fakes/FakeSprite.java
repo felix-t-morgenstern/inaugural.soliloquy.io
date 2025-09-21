@@ -11,13 +11,6 @@ public class FakeSprite implements Sprite {
     public int RightX;
     public int BottomY;
 
-    public FakeSprite() {
-    }
-
-    public FakeSprite(String id) {
-        Id = id;
-    }
-
     public FakeSprite(Image image) {
         Image = image;
     }

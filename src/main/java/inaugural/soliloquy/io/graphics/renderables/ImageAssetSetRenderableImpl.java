@@ -66,7 +66,6 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                 renderingBoundaries, timestampValidator);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
-        throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }
 
     @Override

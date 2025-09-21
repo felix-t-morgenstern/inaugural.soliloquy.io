@@ -37,9 +37,9 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            Component containingComponent,
                                            RenderingBoundaries renderingBoundaries,
                                            TimestampValidator timestampValidator) {
-        this(false, null, null, null, null, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, containingComponent,
-                renderingBoundaries, timestampValidator);
+        this(null, null, null, null, colorShifts, borderThicknessProvider, borderColorProvider,
+                renderingAreaProvider, z, uuid, containingComponent, renderingBoundaries,
+                timestampValidator);
     }
 
     protected AbstractImageAssetRenderable(
@@ -53,32 +53,13 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
             ProviderAtTime<FloatBox> renderingAreaProvider,
             int z,
             UUID uuid,
-            Component component,
+            Component containingComponent,
             RenderingBoundaries renderingBoundaries,
             TimestampValidator timestampValidator) {
-        this(true, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
-                component, renderingBoundaries, timestampValidator);
-    }
-
-    private AbstractImageAssetRenderable(boolean capturesMouseEvents,
-                                         Map<Integer, Action<EventInputs>> onPress,
-                                         Map<Integer, Action<EventInputs>> onRelease,
-                                         Action<EventInputs> onMouseOver,
-                                         Action<EventInputs> onMouseLeave,
-                                         List<ColorShift> colorShifts,
-                                         ProviderAtTime<Float> borderThicknessProvider,
-                                         ProviderAtTime<Color> borderColorProvider,
-                                         ProviderAtTime<FloatBox> renderingDimensionsProvider,
-                                         int z,
-                                         UUID uuid,
-                                         Component containingComponent,
-                                         RenderingBoundaries renderingBoundaries,
-                                         TimestampValidator timestampValidator) {
-        super(capturesMouseEvents, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                containingComponent, renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
+                renderingBoundaries, timestampValidator);
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
-        setRenderingDimensionsProvider(renderingDimensionsProvider);
+        setRenderingDimensionsProvider(renderingAreaProvider);
         setBorderColorProvider(borderColorProvider);
         setBorderThicknessProvider(borderThicknessProvider);
     }

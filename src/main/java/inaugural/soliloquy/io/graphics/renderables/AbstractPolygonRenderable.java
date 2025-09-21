@@ -32,7 +32,7 @@ public abstract class AbstractPolygonRenderable
             RenderingBoundaries renderingBoundaries,
             TimestampValidator timestampValidator
     ) {
-        super(false, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
+        super(onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setTextureIdProvider(textureIdProvider);
         setTextureTileWidthProvider(textureTileWidthProvider);

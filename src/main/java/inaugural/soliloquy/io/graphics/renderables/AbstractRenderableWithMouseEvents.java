@@ -28,8 +28,7 @@ public abstract class AbstractRenderableWithMouseEvents
     private Action<EventInputs> onMouseOver;
     private Action<EventInputs> onMouseLeave;
 
-    protected AbstractRenderableWithMouseEvents(boolean capturesMouseEvents,
-                                                Map<Integer, Action<EventInputs>> onPress,
+    protected AbstractRenderableWithMouseEvents(Map<Integer, Action<EventInputs>> onPress,
                                                 Map<Integer, Action<EventInputs>> onRelease,
                                                 Action<EventInputs> onMouseOver,
                                                 Action<EventInputs> onMouseLeave,
@@ -39,20 +38,12 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 RenderingBoundaries renderingBoundaries,
                                                 TimestampValidator timestampValidator) {
         super(z, uuid, containingComponent);
-        this.capturesMouseEvents = capturesMouseEvents;
         ON_PRESS = onPress == null ? mapOf() : onPress;
         ON_RELEASE = onRelease == null ? mapOf() : onRelease;
         this.onMouseOver = onMouseOver;
         this.onMouseLeave = onMouseLeave;
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
         RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
-    }
-
-    protected void throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport() {
-        if (!underlyingAssetSupportsMouseEvents()) {
-            throw new IllegalArgumentException(className() +
-                    ": underlying asset does not support capturing mouse events");
-        }
     }
 
     @Override

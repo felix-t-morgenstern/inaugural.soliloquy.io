@@ -51,7 +51,6 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                 borderColorProvider, renderingDimensionsProvider, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setSprite(sprite);
-        throwInConstructorIfFedUnderlyingAssetThatDoesNotSupport();
     }
 
     @Override

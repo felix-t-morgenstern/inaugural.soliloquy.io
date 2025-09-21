@@ -97,11 +97,6 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
                         null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER,
                         Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
-                .make(GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
-                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
-                        UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER,
                         ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));

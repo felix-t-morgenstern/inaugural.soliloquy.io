@@ -156,25 +156,18 @@ public class ImageAssetSetRenderableImplTests {
                         mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator);
+
+        renderable.setCapturesMouseEvents(true);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(null, DISPLAY_PARAMS, onPressActions, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, colorShifts,
                         mockBorderThicknessProvider, mockBorderColorProvider,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
-        when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(false);
-        assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
-                        onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        colorShifts, mockBorderThicknessProvider, mockBorderColorProvider,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
-                        mockRenderingBoundaries, mockTimestampValidator));
-        lenient().when(mockImageAssetSet.supportsMouseEventCapturing()).thenReturn(true);
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableImpl(mockImageAssetSet, DISPLAY_PARAMS,
                         onPressActions, null, mockOnMouseOverAction, mockOnMouseLeaveAction, null,

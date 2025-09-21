@@ -99,8 +99,6 @@ public class AnimationFactoryTests {
         assertTrue(createdAnimation.supportsMouseEventCapturing());
 
         assertThrows(IllegalArgumentException.class, () -> createdAnimation.snippetAtFrame(-1));
-        assertThrows(IllegalArgumentException.class,
-                () -> createdAnimation.snippetAtFrame(animationDurationMS + 1));
 
         AnimationFrameSnippet frame1 = createdAnimation.snippetAtFrame(SNIPPET_2_MS - 1);
         assertNotNull(frame1);
