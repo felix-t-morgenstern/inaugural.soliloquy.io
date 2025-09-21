@@ -26,8 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
-import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
-import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
 import static inaugural.soliloquy.tools.CheckedExceptionWrapper.sleep;
@@ -49,7 +48,7 @@ public class DisplayTest {
     protected final static String EXPLOSION_ANIMATION_ID = "explosion";
     protected final static String EXPLOSION_RELATIVE_LOCATION =
             "./src/test/resources/images/effects/Explosion.png";
-    protected final static AnimationDefinitionDTO ANIMATION_DEF = new AnimationDefinitionDTO(
+    protected final static AnimationDefinitionDTO EXPLOSION_ANIMATION_DEF = new AnimationDefinitionDTO(
             EXPLOSION_ANIMATION_ID,
             600,
             IntStream.range(0, 11).mapToObj(i -> new AnimationFrameDefinitionDTO(
@@ -63,6 +62,25 @@ public class DisplayTest {
                     0
             )).toArray(AnimationFrameDefinitionDTO[]::new)
     );
+
+    protected final static String TORCH_ANIMATION_ID = "torchAnimation";
+    protected final static String TORCH_RELATIVE_LOCATION =
+            "./src/test/resources/images/fixtures/animated_torch_numbered.png";
+    protected final static AnimationDefinitionDTO TORCH_ANIMATION_DEF = new AnimationDefinitionDTO(
+            TORCH_ANIMATION_ID,
+            1800,
+            IntStream.range(0, 8).mapToObj(i -> new AnimationFrameDefinitionDTO(
+                    TORCH_RELATIVE_LOCATION,
+                    i * 200,
+                    i * 32,
+                    0,
+                    (i + 1) * 32,
+                    64,
+                    0,
+                    0
+            )).toArray(AnimationFrameDefinitionDTO[]::new)
+    );
+    protected final static String TORCH_GLOBAL_LOOPING_ANIMATION_ID = "torchGlobalAnimation";
 
     protected final static String IMAGE_ASSET_SET_ID = "imageAssetSet";
     protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_KEY = "imageAssetSetDisplayParamKey";

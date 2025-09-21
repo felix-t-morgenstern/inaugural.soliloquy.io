@@ -13,7 +13,7 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
-public class FiniteAnimationRendererTest extends DisplayTest {
+public class FiniteAnimationRendererSimpleDisplayTest extends DisplayTest {
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
@@ -25,7 +25,7 @@ public class FiniteAnimationRendererTest extends DisplayTest {
                         arrayOf(),
                         arrayOf(),
                         arrayOf(
-                                ANIMATION_DEF
+                                EXPLOSION_ANIMATION_DEF
                         ),
                         arrayOf(),
                         arrayOf(),
@@ -35,7 +35,7 @@ public class FiniteAnimationRendererTest extends DisplayTest {
                 ),
                 () -> DisplayTest.runThenClose("Finite animation renderer",
                         4000),
-                FiniteAnimationRendererTest::populateTopLevelComponent
+                FiniteAnimationRendererSimpleDisplayTest::populateTopLevelComponent
         );
     }
 

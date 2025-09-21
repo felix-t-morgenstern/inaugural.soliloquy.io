@@ -33,7 +33,7 @@ public class ImageAssetSetSimpleDisplayTest extends DisplayTest {
                                         266, 271, 313, 343)
                         ),
                         arrayOf(
-                                ANIMATION_DEF
+                                EXPLOSION_ANIMATION_DEF
                         ),
                         arrayOf(),
                         arrayOf(

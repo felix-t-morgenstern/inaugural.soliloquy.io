@@ -43,7 +43,7 @@ public class GlobalLoopingAnimationPreloaderTask implements Runnable {
                     "globalLoopingAnimationDefinitionDTO.animationId within " +
                             "globalLoopingAnimationDefinitionDTOs (" +
                             globalLoopingAnimationDefinitionDTO.id + ")");
-            Check.throwOnLteZero(globalLoopingAnimationDefinitionDTO.periodModuloOffset,
+            Check.throwOnLtValue(globalLoopingAnimationDefinitionDTO.periodModuloOffset, 0,
                     "globalLoopingAnimationDefinitionDTO.periodModuloOffset within " +
                             "globalLoopingAnimationDefinitionDTOs (" +
                             globalLoopingAnimationDefinitionDTO.id + ")");
