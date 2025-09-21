@@ -36,6 +36,12 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
         else {
             sound.play();
         }
+        if (dto.loopingStopMs != null) {
+            sound.setLoopingStopMs(dto.loopingStopMs);
+        }
+        if (dto.loopingRestartMs != null) {
+            sound.setLoopingRestartMs(dto.loopingRestartMs);
+        }
         return sound;
     }
 

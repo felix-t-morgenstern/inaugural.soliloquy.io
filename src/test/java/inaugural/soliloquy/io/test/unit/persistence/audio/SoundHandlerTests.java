@@ -105,6 +105,8 @@ public class SoundHandlerTests {
         else {
             verify(mockSound, once()).play();
         }
+        verify(mockSound, once()).setLoopingStopMs(LOOPING_STOP_MS);
+        verify(mockSound, once()).setLoopingRestartMs(LOOPING_RESTART_MS);
     }
 
     @Test
