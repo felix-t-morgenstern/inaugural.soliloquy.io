@@ -99,7 +99,7 @@ public class FunctionalProviderImplTests {
         var inOrder = Mockito.inOrder(mockTimestampValidator, mockPause);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(PAUSED_TIMESTAMP);
         var eventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
-        inOrder.verify(mockPause, once()).run(eventInfoCapture.capture());
+        inOrder.verify(mockPause, once()).accept(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);
         assertEquals(PAUSED_TIMESTAMP, eventInfo.timestamp());
@@ -125,7 +125,7 @@ public class FunctionalProviderImplTests {
         var inOrder = Mockito.inOrder(mockTimestampValidator, mockUnpause);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(unpauseTimestamp);
         var eventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
-        inOrder.verify(mockUnpause, once()).run(eventInfoCapture.capture());
+        inOrder.verify(mockUnpause, once()).accept(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);
         assertEquals(unpauseTimestamp, eventInfo.timestamp());

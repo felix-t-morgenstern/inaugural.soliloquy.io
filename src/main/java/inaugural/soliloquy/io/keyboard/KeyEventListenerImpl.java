@@ -86,9 +86,10 @@ public class KeyEventListenerImpl implements KeyEventListener {
         handleKeyEvent(key, binding -> {
             var keyAction = getKeyAction.apply(binding);
             if (keyAction != null) {
-                keyAction.run(keyEventInfo()
-                        .withKey(key)
-                        .withTimestamp(timestamp));
+                keyAction.accept(
+                        keyEventInfo()
+                                .withKey(key)
+                                .withTimestamp(timestamp));
             }
         });
     }

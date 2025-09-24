@@ -346,7 +346,7 @@ public class ImageAssetSetRenderableImplTests {
         renderable.press(2, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMousePressAction).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMousePressAction).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         var newOnPress = (Action<EventInputs>) mock(Action.class);
@@ -354,11 +354,11 @@ public class ImageAssetSetRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnPress).accept(eq(inputs(TIMESTAMP + 1, renderable)));
 
         renderable.press(0, TIMESTAMP + 2);
 
-        verify(newOnPress).run(any());
+        verify(newOnPress).accept(any());
     }
 
     @Test
@@ -395,7 +395,7 @@ public class ImageAssetSetRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(newOnRelease).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnRelease).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -444,7 +444,7 @@ public class ImageAssetSetRenderableImplTests {
         renderable.mouseOver(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
@@ -452,7 +452,7 @@ public class ImageAssetSetRenderableImplTests {
 
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseOver).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -474,7 +474,7 @@ public class ImageAssetSetRenderableImplTests {
         renderable.mouseLeave(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         var newOnMouseLeave = (Action<EventInputs>) mock(Action.class);
@@ -482,7 +482,7 @@ public class ImageAssetSetRenderableImplTests {
 
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test

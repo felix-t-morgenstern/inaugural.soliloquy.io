@@ -146,7 +146,7 @@ public class KeyEventListenerImplTests {
         keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
         var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
-        verify(onPress, once()).run(keyEventInfoCaptor.capture());
+        verify(onPress, once()).accept(keyEventInfoCaptor.capture());
         var eventInfoProvided = keyEventInfoCaptor.getValue();
         assertEquals(KEY, eventInfoProvided.key);
         assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
@@ -164,7 +164,7 @@ public class KeyEventListenerImplTests {
         keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
         var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
-        verify(onRelease, once()).run(keyEventInfoCaptor.capture());
+        verify(onRelease, once()).accept(keyEventInfoCaptor.capture());
         var eventInfoProvided = keyEventInfoCaptor.getValue();
         assertEquals(KEY, eventInfoProvided.key);
         assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
@@ -189,13 +189,13 @@ public class KeyEventListenerImplTests {
 
         keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
-        verify(upperBindingOnPress, once()).run(any());
-        verify(lowerBindingOnPress, never()).run(any());
+        verify(upperBindingOnPress, once()).accept(any());
+        verify(lowerBindingOnPress, never()).accept(any());
 
         keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
-        verify(upperBindingOnPress, once()).run(any());
-        verify(lowerBindingOnPress, never()).run(any());
+        verify(upperBindingOnPress, once()).accept(any());
+        verify(lowerBindingOnPress, never()).accept(any());
     }
 
     @Test

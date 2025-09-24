@@ -222,7 +222,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.press(2, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnPressAction, once()).run(eq(inputs(TIMESTAMP,
+        verify(mockOnPressAction, once()).accept(eq(inputs(TIMESTAMP,
                 renderable)));
 
         //noinspection unchecked
@@ -231,12 +231,12 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).run(eq(inputs(TIMESTAMP + 1,
+        verify(newOnPress, once()).accept(eq(inputs(TIMESTAMP + 1,
                 renderable)));
 
         renderable.press(0, TIMESTAMP + 2);
 
-        verify(newOnPress, once()).run(any());
+        verify(newOnPress, once()).accept(any());
     }
 
     @Test
@@ -278,7 +278,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(newOnRelease, once()).run(eq(inputs(TIMESTAMP + 1,
+        verify(newOnRelease, once()).accept(eq(inputs(TIMESTAMP + 1,
                 renderable)));
     }
 
@@ -340,7 +340,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.mouseOver(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction, once()).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
@@ -348,7 +348,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseOver, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test
@@ -378,7 +378,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.mouseLeave(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction, once()).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseLeave = mock(Action.class);
@@ -386,7 +386,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test

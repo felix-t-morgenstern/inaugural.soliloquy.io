@@ -234,7 +234,7 @@ public class SpriteRenderableImplTests {
         renderable.press(2, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnPressAction, once()).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnPressAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnPress = mock(Action.class);
@@ -242,11 +242,11 @@ public class SpriteRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnPress, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
 
         renderable.press(0, TIMESTAMP + 2);
 
-        verify(newOnPress, once()).run(any());
+        verify(newOnPress, once()).accept(any());
     }
 
     @Test
@@ -288,7 +288,7 @@ public class SpriteRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(newOnRelease, once()).run(
+        verify(newOnRelease, once()).accept(
                 eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
@@ -343,7 +343,7 @@ public class SpriteRenderableImplTests {
         renderable.mouseOver(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction, once()).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
@@ -351,7 +351,7 @@ public class SpriteRenderableImplTests {
 
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).run(
+        verify(newOnMouseOver, once()).accept(
                 eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
@@ -382,7 +382,7 @@ public class SpriteRenderableImplTests {
         renderable.mouseLeave(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction, once()).run(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseLeave = mock(Action.class);
@@ -390,7 +390,7 @@ public class SpriteRenderableImplTests {
 
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).run(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
     }
 
     @Test

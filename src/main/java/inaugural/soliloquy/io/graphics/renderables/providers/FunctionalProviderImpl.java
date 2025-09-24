@@ -68,7 +68,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
         }
         VALIDATOR.validateTimestamp(timestamp);
         if (PAUSE != null) {
-            PAUSE.run(new EventInfo(timestamp, null, DATA));
+            PAUSE.accept(new EventInfo(timestamp, null, DATA));
         }
         pauseTimestamp = timestamp;
     }
@@ -87,7 +87,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
         }
         VALIDATOR.validateTimestamp(timestamp);
         if (UNPAUSE != null) {
-            UNPAUSE.run(new EventInfo(timestamp, pauseTimestamp, DATA));
+            UNPAUSE.accept(new EventInfo(timestamp, pauseTimestamp, DATA));
         }
         pauseTimestamp = null;
     }

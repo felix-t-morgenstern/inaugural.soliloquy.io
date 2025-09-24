@@ -97,7 +97,7 @@ public class FunctionalProviderFactoryImplTests {
         output.reportUnpause(unpauseTimestamp);
         verify(mockValidator, once()).validateTimestamp(unpauseTimestamp);
         var unpauseEventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
-        verify(MOCK_UNPAUSE_ACTION, once()).run(unpauseEventInfoCapture.capture());
+        verify(MOCK_UNPAUSE_ACTION, once()).accept(unpauseEventInfoCapture.capture());
         var unpauseEventInfo = unpauseEventInfoCapture.getValue();
         assertEquals(unpauseTimestamp, unpauseEventInfo.timestamp());
         assertEquals(PAUSE_TIMESTAMP, unpauseEventInfo.pauseTimestamp());
@@ -108,7 +108,7 @@ public class FunctionalProviderFactoryImplTests {
         output.reportPause(pauseTimestamp2);
         verify(mockValidator, once()).validateTimestamp(pauseTimestamp2);
         var pauseEventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
-        verify(MOCK_PAUSE_ACTION, once()).run(pauseEventInfoCapture.capture());
+        verify(MOCK_PAUSE_ACTION, once()).accept(pauseEventInfoCapture.capture());
         var pauseEventInfo = pauseEventInfoCapture.getValue();
         assertEquals(pauseTimestamp2, pauseEventInfo.timestamp());
         assertNull(pauseEventInfo.pauseTimestamp());

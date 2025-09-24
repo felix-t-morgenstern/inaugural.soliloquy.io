@@ -173,7 +173,7 @@ public abstract class AbstractRenderableWithMouseEvents
         throwIfNotSupportingMouseEvents(methodName);
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         if (action != null) {
-            action.run(inputs(timestamp, this));
+            action.accept(inputs(timestamp, this));
         }
     }
 
