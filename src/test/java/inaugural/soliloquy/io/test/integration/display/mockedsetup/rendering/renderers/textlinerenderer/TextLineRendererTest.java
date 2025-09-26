@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;

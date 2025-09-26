@@ -42,9 +42,9 @@ public class Constants {
 
     public final static FloatBox WHOLE_SCREEN = floatBoxOf(0f, 0f, 1f, 1f);
 
-    public final static int LEFT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_1;
-    public final static int RIGHT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_2;
-    public final static int MIDDLE_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_3;
+    public final static int LEFT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_LEFT;
+    public final static int RIGHT_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_RIGHT;
+    public final static int MIDDLE_MOUSE_BUTTON = GLFW_MOUSE_BUTTON_MIDDLE;
     public final static int[] ALL_SUPPORTED_MOUSE_BUTTONS = new int[]{
             LEFT_MOUSE_BUTTON,
             RIGHT_MOUSE_BUTTON,

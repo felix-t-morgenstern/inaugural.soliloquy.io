@@ -14,7 +14,7 @@ public class FiniteAnimationRendererBrightnessShiftTest extends FiniteAnimationR
                                 windowResolutionManager,
                                 colorShiftStackAggregator),
                 FiniteAnimationRendererTest::graphicsPreloaderLoadAction,
-                graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TestDurationMs)
+                coreLoop -> closeAfterSomeTime(coreLoop, TestDurationMs)
         );
     }
 }

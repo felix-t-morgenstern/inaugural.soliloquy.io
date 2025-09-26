@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.GlobalLoopingAnimationDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.GlobalLoopingAnimationPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.GlobalLoopingAnimationPreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 
 import java.util.List;
 import java.util.function.Consumer;

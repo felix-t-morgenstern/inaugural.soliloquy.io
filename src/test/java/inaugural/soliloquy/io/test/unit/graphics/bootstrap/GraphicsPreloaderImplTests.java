@@ -1,8 +1,8 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap;
 
 import inaugural.soliloquy.io.api.dto.*;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageAssetSetFactory;
+import inaugural.soliloquy.io.bootstrap.GraphicsPreloaderImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageAssetSetFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import soliloquy.specs.common.shared.HasId;
 import soliloquy.specs.io.graphics.assets.*;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
+import soliloquy.specs.io.bootstrap.GraphicsPreloader;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.MouseCursorImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 

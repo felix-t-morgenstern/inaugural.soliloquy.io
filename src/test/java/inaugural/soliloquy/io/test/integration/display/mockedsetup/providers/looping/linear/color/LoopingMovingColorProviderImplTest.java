@@ -1,9 +1,9 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.looping.linear.color;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.LoopingLinearMovingColorProviderImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer.SpriteRendererBorderTest;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.LoopingLinearMovingColorProvider;
 
 import java.awt.*;

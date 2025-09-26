@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.SpriteDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.SpritePreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.SpritePreloaderTask;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
 import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 import java.util.List;
 import java.util.Map;

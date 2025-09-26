@@ -1,18 +1,18 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.ImageAssetSetDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
 import static soliloquy.specs.io.graphics.assets.ImageAsset.ImageAssetType;
-import static soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
 
 public class ImageAssetSetPreloaderTask implements Runnable {
     private final Function<ImageAssetSetDefinition, ImageAssetSet> FACTORY;

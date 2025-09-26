@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.componentrenderer;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -20,9 +20,9 @@ class ComponentRendererSimpleTest extends ComponentRendererTest {
         runTest(ComponentRendererSimpleTest::closeAfterSomeTime);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(3000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

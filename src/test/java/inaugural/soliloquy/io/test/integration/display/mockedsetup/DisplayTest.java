@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup;
 
 import inaugural.soliloquy.io.api.WindowResolution;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
@@ -18,8 +18,9 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
@@ -82,7 +83,7 @@ public class DisplayTest {
     protected static void runTest(Function<WindowResolutionManager, Set<Renderer>>
                                           generateRenderablesAndRenderersWithMeshAndShader,
                                   Runnable graphicsPreloaderLoadAction,
-                                  Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
+                                  Consumer<CoreLoop> closeAfterSomeTime) {
         var windowResolutionManager =
                 new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED, RESOLUTION);
 
@@ -119,26 +120,27 @@ public class DisplayTest {
         var renderersWithMeshAndShader =
                 generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);
 
-        var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("My title bar", FrameTimer, 0, windowResolutionManager,
+        var coreLoop =
+                new CoreLoopImpl("My title bar", FrameTimer, 0, windowResolutionManager,
                         GLOBAL_CLOCK, frameExecutor, new ShaderFactoryImpl(),
                         renderersWithMeshAndShader, SHADER_FILENAME_PREFIX, MeshImpl::new,
                         renderersWithMeshAndShader, MESH_DATA, MESH_DATA, graphicsPreloader,
+                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
                         MouseCursor, mouseListener);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime.accept(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime.accept(coreLoop));
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
-        closeAfterSomeTime(graphicsCoreLoop, 3000);
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
+        closeAfterSomeTime(coreLoop, 3000);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop, int totalMs) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop, int totalMs) {
         CheckedExceptionWrapper.sleep(totalMs);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 
     protected static <T> ProviderAtTime<T> staticProvider(T value) {

@@ -1,10 +1,10 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.GlobalLoopingAnimationDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 
 import java.util.Collection;
 import java.util.function.Consumer;

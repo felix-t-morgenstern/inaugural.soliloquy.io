@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.graphics.bootstrap;
+package inaugural.soliloquy.io.bootstrap;
 
 import inaugural.soliloquy.io.api.Constants;
 import inaugural.soliloquy.io.mouse.MouseListener;
@@ -8,8 +8,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
+import soliloquy.specs.io.bootstrap.GraphicsPreloader;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
@@ -31,7 +32,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
+public class CoreLoopImpl implements CoreLoop {
     private final FrameTimer FRAME_TIMER;
     private final int FRAME_TIMER_POLLING_INTERVAL;
     private final WindowResolutionManager WINDOW_RESOLUTION_MANAGER;
@@ -47,6 +48,11 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private final float[] MESH_VERTICES;
     private final float[] MESH_UV_COORDINATES;
     private final GraphicsPreloader GRAPHICS_PRELOADER;
+    private final AudioLoader AUDIO_LOADER;
+    private final Set<String> AUDIO_REL_DIRS;
+    private final Map<String, String> IDS_FOR_FILENAMES;
+    private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID;
+    private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID;
     private final MouseCursor MOUSE_CURSOR;
     private final MouseListener MOUSE_LISTENER;
 
@@ -56,7 +62,7 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
     private String titlebar;
     private Vertex screenMouseLocation;
 
-    public GraphicsCoreLoopImpl(
+    public CoreLoopImpl(
             String titlebar,
             FrameTimer frameTimer,
             int frameTimerPollingInterval,
@@ -71,6 +77,11 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
             float[] meshVertices,
             float[] meshUvCoordinates,
             GraphicsPreloader graphicsPreloader,
+            AudioLoader audioLoader,
+            Set<String> audioRelDirs,
+            Map<String, String> idsForFilenames,
+            Map<String, Integer> defaultLoopStopMsById,
+            Map<String, Integer> defaultLoopRestartMsById,
             MouseCursor mouseCursor,
             MouseListener mouseListener) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
@@ -92,6 +103,12 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         MESH_VERTICES = Check.ifNull(meshVertices, "meshVertices");
         MESH_UV_COORDINATES = Check.ifNull(meshUvCoordinates, "meshUvCoordinates");
         GRAPHICS_PRELOADER = Check.ifNull(graphicsPreloader, "graphicsPreloader");
+        AUDIO_LOADER = Check.ifNull(audioLoader, "audioLoader");
+        AUDIO_REL_DIRS = Check.ifNull(audioRelDirs, "audioRelDirs");
+        IDS_FOR_FILENAMES = Check.ifNull(idsForFilenames, "idsForFilenames");
+        DEFAULT_LOOP_STOP_MS_BY_ID = Check.ifNull(defaultLoopStopMsById, "defaultLoopStopMsById");
+        DEFAULT_LOOP_RESTART_MS_BY_ID =
+                Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
         MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
         MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
 
@@ -137,6 +154,13 @@ public class GraphicsCoreLoopImpl implements GraphicsCoreLoop {
         // TODO: Consider test for whether GraphicsPreloader.load was called before_ the first
         //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
+
+        AUDIO_REL_DIRS.forEach(relDir -> AUDIO_LOADER.loadFromDirectory(
+                relDir,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID
+        ));
 
         new Thread(FRAME_TIMER::start).start();
 

@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.AnimationFrameDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimationPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.AnimationPreloaderTask;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
 import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Collection;
 import java.util.function.Consumer;

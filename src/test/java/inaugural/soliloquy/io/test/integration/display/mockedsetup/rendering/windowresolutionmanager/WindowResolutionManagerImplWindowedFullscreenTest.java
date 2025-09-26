@@ -1,13 +1,14 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.windowresolutionmanager;
 
 import inaugural.soliloquy.io.api.WindowResolution;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -17,6 +18,7 @@ import soliloquy.specs.io.input.mouse.MouseCursor;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -53,19 +55,20 @@ class WindowResolutionManagerImplWindowedFullscreenTest {
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 
         @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader = setOf();
-        @SuppressWarnings("unchecked") var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("My title bar", frameTimer, 20, windowResolutionManager,
+        @SuppressWarnings("unchecked") var coreLoop =
+                new CoreLoopImpl("My title bar", frameTimer, 20, windowResolutionManager,
                         mockGlobalClock, frameExecutor, new FakeShaderFactory(),
-                        renderersWithShader, "_", mock(BiFunction.class), renderersWithMesh, MESH_DATA,
-                        MESH_DATA, new FakeGraphicsPreloader(), mock(MouseCursor.class),
+                        renderersWithShader, "_", mock(BiFunction.class), renderersWithMesh,
+                        MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), mock(AudioLoader.class),
+                        setOf(), mapOf(), mapOf(), mapOf(), mock(MouseCursor.class),
                         mock(MouseListener.class));
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
     }
 
-    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void closeAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(3000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

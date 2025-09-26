@@ -26,7 +26,7 @@ public class GlobalLoopingAnimationRendererColorRotationShiftTest
                         colorShiftStackAggregator
                 ),
                 GlobalLoopingAnimationRendererTest::graphicsPreloaderLoadAction,
-                graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TEST_DURATION_MS)
+                coreLoop -> closeAfterSomeTime(coreLoop, TEST_DURATION_MS)
         );
     }
 }

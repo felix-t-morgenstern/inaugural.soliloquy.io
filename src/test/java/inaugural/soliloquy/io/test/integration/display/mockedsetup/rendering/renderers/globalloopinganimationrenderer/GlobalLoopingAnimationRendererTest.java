@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.globalloopinganimationrenderer;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.AnimationFactory;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.GlobalLoopingAnimationRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.GlobalLoopingAnimationImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.GlobalLoopingAnimationRenderer;
@@ -12,9 +12,9 @@ import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -110,10 +110,10 @@ class GlobalLoopingAnimationRendererTest extends DisplayTest {
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop, int ms) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop, int ms) {
         CheckedExceptionWrapper.sleep(ms);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 
     private static AnimationFrameSnippet makeSnippet(Image renderableImage, int leftX, int topY,

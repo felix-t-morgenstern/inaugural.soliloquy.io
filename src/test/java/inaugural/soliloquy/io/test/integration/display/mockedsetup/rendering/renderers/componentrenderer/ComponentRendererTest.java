@@ -1,8 +1,8 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.componentrenderer;
 
 import inaugural.soliloquy.io.api.WindowResolution;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
@@ -16,8 +16,9 @@ import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -40,7 +41,7 @@ public class ComponentRendererTest extends DisplayTest {
     private final static String SWORD_06_LOCATION =
             "./src/test/resources/images/items/Sword06_986×2658.png";
 
-    public static void runTest(Consumer<GraphicsCoreLoop> closeAfterSomeTime) {
+    public static void runTest(Consumer<CoreLoop> closeAfterSomeTime) {
         var resolution = WindowResolution.RES_1920x1080;
 
         var windowResolutionManager =
@@ -142,11 +143,12 @@ public class ComponentRendererTest extends DisplayTest {
         var frameExecutor = new FrameExecutorImpl(componentRenderer, 100);
         frameExecutor.setTopLevelComponent(MockTopLevelComponent);
 
-        var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("My title bar",
+        var coreLoop =
+                new CoreLoopImpl("My title bar",
                         frameTimer, 20, windowResolutionManager, GLOBAL_CLOCK, frameExecutor,
                         new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX,
                         MeshImpl::new, renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader,
+                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
                         mock(MouseCursor.class), mock(MouseListener.class));
 
         graphicsPreloader.LoadAction = () -> {
@@ -159,6 +161,6 @@ public class ComponentRendererTest extends DisplayTest {
             when(frameTimer.shouldExecuteNextFrame()).thenReturn(true);
         };
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime.accept(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime.accept(coreLoop));
     }
 }

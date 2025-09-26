@@ -1,10 +1,10 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
 import inaugural.soliloquy.io.graphics.shared.FloorFrameProvider;
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Map;
 

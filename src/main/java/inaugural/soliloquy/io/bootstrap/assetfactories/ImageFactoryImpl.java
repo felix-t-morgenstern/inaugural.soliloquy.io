@@ -1,12 +1,12 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
 import inaugural.soliloquy.io.graphics.assets.ImageImpl;
 import inaugural.soliloquy.io.graphics.assets.ReadsCapturingMasks;
 import inaugural.soliloquy.tools.Check;
 import org.lwjgl.BufferUtils;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.nio.ByteBuffer;
 

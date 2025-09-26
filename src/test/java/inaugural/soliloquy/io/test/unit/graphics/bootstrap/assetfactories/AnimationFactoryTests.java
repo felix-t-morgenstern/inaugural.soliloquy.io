@@ -1,13 +1,13 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AnimationFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAnimationFrameSnippet;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Map;
 import java.util.function.Function;

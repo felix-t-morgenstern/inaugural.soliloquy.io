@@ -1,11 +1,11 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor;
 
 import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
+import inaugural.soliloquy.io.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
@@ -46,11 +46,11 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
                 .run();
     }
 
-    private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
         MouseCursor.setMouseCursor(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION);
 
         CheckedExceptionWrapper.sleep(4000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

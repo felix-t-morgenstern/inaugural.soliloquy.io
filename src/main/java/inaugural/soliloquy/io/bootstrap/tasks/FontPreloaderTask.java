@@ -1,12 +1,12 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.FontDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.FontStyleDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.FontStyleDefinitionGlyphPropertyDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.util.Collection;
 import java.util.Map;

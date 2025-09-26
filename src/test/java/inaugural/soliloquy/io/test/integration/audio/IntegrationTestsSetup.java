@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.audio.AudioImpl;
 import inaugural.soliloquy.io.audio.entities.SoundTypeImpl;
 import inaugural.soliloquy.io.audio.entities.SoundsPlayingImpl;
 import inaugural.soliloquy.io.audio.factories.SoundFactoryImpl;
-import inaugural.soliloquy.io.audio.bootstrap.AudioLoaderImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AudioLoaderImpl;
 import soliloquy.specs.io.audio.Audio;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;

@@ -1,8 +1,8 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.util.List;
 

@@ -1,13 +1,13 @@
 package inaugural.soliloquy.io.test.unit.audio.bootstrap;
 
-import inaugural.soliloquy.io.audio.bootstrap.AudioLoaderImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AudioLoaderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.audio.entities.SoundType;
-import soliloquy.specs.io.audio.infrastructure.AudioLoader;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 
 import java.util.Map;
 import java.util.function.Consumer;

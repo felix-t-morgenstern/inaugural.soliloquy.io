@@ -31,8 +31,8 @@ public class SoundFactoryImpl implements SoundFactory {
         var soundType = GET_SOUND_TYPE.apply(soundTypeId);
         if (soundType == null) {
             throw new IllegalArgumentException(
-                    "SoundFactoryImpl.make: soundTypeId must correspond to a valid (i.e. " +
-                            "registered) sound type id");
+                    "SoundFactoryImpl.make: soundTypeId (" + soundTypeId +
+                            ") must correspond to a valid (i.e. " + "registered) sound type id");
         }
 
         var sound = new SoundImpl(uuid, soundType, SOUNDS_PLAYING::removeSound);

@@ -5,8 +5,8 @@ import soliloquy.specs.common.valueobjects.Coordinate2d;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

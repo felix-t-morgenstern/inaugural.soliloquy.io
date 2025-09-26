@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.looping.linear.color;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import java.awt.*;
 
@@ -29,7 +29,7 @@ class LoopingMovingColorProviderImplResetTest extends LoopingMovingColorProvider
                 LoopingMovingColorProviderImplResetTest::closeAfterSomeTime);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
         BORDER_COLOR_PROVIDER.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(2000);
@@ -38,6 +38,6 @@ class LoopingMovingColorProviderImplResetTest extends LoopingMovingColorProvider
 
         CheckedExceptionWrapper.sleep(6000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

@@ -1,10 +1,10 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.MouseCursorImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
 
 import static inaugural.soliloquy.tools.random.Random.randomIntInRange;
 import static inaugural.soliloquy.tools.random.Random.randomString;

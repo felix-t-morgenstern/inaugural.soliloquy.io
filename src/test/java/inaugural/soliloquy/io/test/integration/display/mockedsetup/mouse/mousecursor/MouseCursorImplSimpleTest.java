@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousec
 
 import inaugural.soliloquy.io.api.Constants;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.lwjgl.glfw.GLFW.*;
@@ -32,13 +32,13 @@ class MouseCursorImplSimpleTest extends MouseCursorImplTest {
                 generateMockStaticProvider(standardHandMouseCursor));
     }
 
-    private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
         MouseCursor.setMouseCursor(Constants.STANDARD_HAND_CURSOR_ID);
 
         CheckedExceptionWrapper.sleep(2000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

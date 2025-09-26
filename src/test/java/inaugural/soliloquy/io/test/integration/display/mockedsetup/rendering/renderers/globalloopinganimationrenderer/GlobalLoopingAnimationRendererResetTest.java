@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.globalloopinganimationrenderer;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -27,7 +27,7 @@ class GlobalLoopingAnimationRendererResetTest extends GlobalLoopingAnimationRend
         );
     }
 
-    private static void runThenClose(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void runThenClose(CoreLoop coreLoop) {
         GlobalLoopingAnimation.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(1000);
@@ -36,6 +36,6 @@ class GlobalLoopingAnimationRendererResetTest extends GlobalLoopingAnimationRend
 
         CheckedExceptionWrapper.sleep(2250);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

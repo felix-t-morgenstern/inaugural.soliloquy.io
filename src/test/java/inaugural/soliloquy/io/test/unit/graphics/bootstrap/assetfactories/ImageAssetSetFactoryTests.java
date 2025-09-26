@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageAssetSetFactory;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageAssetSetFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAnimation;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
@@ -13,8 +13,8 @@ import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.io.graphics.assets.ImageAsset.ImageAssetType;
-import static soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
+import static soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageAssetSetFactoryTests {

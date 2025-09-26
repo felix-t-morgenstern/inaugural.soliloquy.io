@@ -1,8 +1,8 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AssetDefinition;
 import soliloquy.specs.io.graphics.assets.Asset;
 import soliloquy.specs.io.graphics.assets.AssetSnippet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AssetDefinition;
 
 import java.util.function.Function;
 

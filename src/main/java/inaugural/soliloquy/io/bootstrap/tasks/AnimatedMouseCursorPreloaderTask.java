@@ -1,9 +1,9 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorFrameDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.Collection;

@@ -1,14 +1,15 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.windowresolutionmanager;
 
 import inaugural.soliloquy.io.api.WindowResolution;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.*;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -17,6 +18,7 @@ import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Set;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -65,18 +67,19 @@ class WindowResolutionManagerImplDisplayChangeTest {
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 
         @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader = setOf();
-        GraphicsCoreLoop graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("My title bar",
+        CoreLoop coreLoop =
+                new CoreLoopImpl("My title bar",
                         frameTimer, 20, windowResolutionManager, mockGlobalClock, frameExecutor,
                         new FakeShaderFactory(), renderersWithShader, "_", MeshImpl::new,
                         renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
+                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
                         mock(MouseCursor.class), mock(MouseListener.class));
 
-        graphicsCoreLoop.startup(() ->
-                closeAfterSomeTime(graphicsCoreLoop, windowResolutionManager));
+        coreLoop.startup(() ->
+                closeAfterSomeTime(coreLoop, windowResolutionManager));
     }
 
-    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop,
+    private static void closeAfterSomeTime(CoreLoop coreLoop,
                                            WindowResolutionManager windowResolutionManager) {
         var ms = 4000;
 
@@ -145,6 +148,6 @@ class WindowResolutionManagerImplDisplayChangeTest {
 
         CheckedExceptionWrapper.sleep(ms);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

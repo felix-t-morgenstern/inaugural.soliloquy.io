@@ -1,10 +1,10 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories.preloading;
+package inaugural.soliloquy.io.bootstrap.assetfactories.preloading;
 
 import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.AssetPreloaderTaskFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 import java.util.Collection;

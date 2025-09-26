@@ -1,14 +1,14 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.StaticMouseCursorDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.StaticMouseCursorPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.StaticMouseCursorPreloaderTask;
 import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 
 import java.util.Collection;

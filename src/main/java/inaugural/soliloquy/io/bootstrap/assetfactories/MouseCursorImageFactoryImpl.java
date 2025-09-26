@@ -1,11 +1,11 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.MouseCursorImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

@@ -1,12 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
+import inaugural.soliloquy.io.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.MouseCursorImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.MouseCursorImageDefinition;
 
 
 import java.util.List;

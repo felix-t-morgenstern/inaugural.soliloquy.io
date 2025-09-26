@@ -1,9 +1,9 @@
-package inaugural.soliloquy.io.graphics.bootstrap.assetfactories;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.io.graphics.assets.*;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.Map;
 import java.util.function.Function;

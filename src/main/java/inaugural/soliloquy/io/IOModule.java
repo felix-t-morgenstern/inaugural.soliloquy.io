@@ -9,12 +9,12 @@ import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import inaugural.soliloquy.io.audio.entities.SoundTypeImpl;
 import inaugural.soliloquy.io.audio.entities.SoundsPlayingImpl;
 import inaugural.soliloquy.io.audio.factories.SoundFactoryImpl;
-import inaugural.soliloquy.io.audio.bootstrap.AudioLoaderImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AudioLoaderImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.*;
 import inaugural.soliloquy.io.graphics.GraphicsImpl;
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsPreloaderImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.*;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.renderables.*;
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.*;
@@ -48,9 +48,9 @@ import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -86,6 +86,9 @@ public class IOModule implements Module {
                     Function<String, soliloquy.specs.common.entities.Function> getFunction,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
+                    Map<String, String> idsForFilenames,
+                    Map<String, Integer> defaultLoopStopMsById,
+                    Map<String, Integer> defaultLoopRestartMsById,
                     AssetDefinitionsDTO assetDefinitionsDTO) {
         // ====
         // Prep
@@ -121,11 +124,11 @@ public class IOModule implements Module {
         var soundFactory = andRegister(new SoundFactoryImpl(soundTypes::get, soundsPlaying));
         @SuppressWarnings("unchecked") var audioFiletypes =
                 (Set<String>) getSetting.apply(AUDIO_FILETYPES_ID);
-        andRegister(new AudioLoaderImpl(
+        var audioLoader = new AudioLoaderImpl(
                 s -> soundTypes.put(s.id(), s),
                 SoundTypeImpl::new,
                 audioFiletypes
-        ));
+        );
         andRegister(new AudioImpl(soundsPlaying, SoundFactoryImpl::new));
 
         // =========
@@ -525,8 +528,23 @@ public class IOModule implements Module {
         // Graphics
         // ========
 
+        andRegister(new GraphicsImpl(
+                images::get,
+                sprites::get,
+                animations::get,
+                globalLoopingAnimations::get,
+                imageAssetSets::get,
+                fonts::get
+        ));
+
+        // =========
+        // Core Loop
+        // =========
+
+        @SuppressWarnings("unchecked") var audioRelDirs =
+                (Set<String>) getSetting.apply(AUDIO_RELATIVE_DIRS_ID);
         var renderersSet = setOf(contentRenderers.values().toArray(Renderer[]::new));
-        andRegister(new GraphicsCoreLoopImpl(
+        andRegister(new CoreLoopImpl(
                 initialTitlebar,
                 frameTimer,
                 frameTimerPollingInterval,
@@ -541,17 +559,13 @@ public class IOModule implements Module {
                 meshVertices,
                 meshUvCoords,
                 graphicsPreloader,
+                audioLoader,
+                audioRelDirs,
+                idsForFilenames,
+                defaultLoopStopMsById,
+                defaultLoopRestartMsById,
                 mouseCursor,
                 mouseListener
-        ));
-
-        andRegister(new GraphicsImpl(
-                images::get,
-                sprites::get,
-                animations::get,
-                globalLoopingAnimations::get,
-                imageAssetSets::get,
-                fonts::get
         ));
 
         andRegister(new IOMethods(soundsPlaying, soundFactory), IO_METHODS);

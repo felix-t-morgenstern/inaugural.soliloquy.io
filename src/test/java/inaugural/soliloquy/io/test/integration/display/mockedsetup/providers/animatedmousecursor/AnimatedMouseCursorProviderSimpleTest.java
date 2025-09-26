@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.an
 
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor.MouseCursorImplTest;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -21,11 +21,11 @@ class AnimatedMouseCursorProviderSimpleTest extends AnimatedMouseCursorProviderT
                 AnimatedMouseCursorProviderSimpleTest::actAndCloseAfterSomeTime);
     }
 
-    private static void actAndCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
         MouseCursor.setMouseCursor(PROVIDER_ID);
 
         CheckedExceptionWrapper.sleep(4000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

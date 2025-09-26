@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.fullsuite;
 
 import inaugural.soliloquy.common.CommonModule;
+import inaugural.soliloquy.io.IOMethods;
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.api.dto.*;
@@ -9,7 +10,9 @@ import inaugural.soliloquy.tools.collections.Collections;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.entities.Function;
 import soliloquy.specs.gamestate.entities.Setting;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.audio.entities.SoundsPlaying;
+import soliloquy.specs.io.audio.factories.SoundFactory;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -31,6 +34,7 @@ import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
 import static inaugural.soliloquy.tools.CheckedExceptionWrapper.sleep;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -160,8 +164,12 @@ public class DisplayTest {
                     MAX_LOSSLESS_FONT_SIZE_CINZEL, LEADING_ADJUSTMENT_CINZEL, CINZEL_PLAIN_DTO,
                     CINZEL_ITALIC_DTO, CINZEL_BOLD_DTO, CINZEL_BOLD_ITALIC_DTO);
 
-    @SuppressWarnings("rawtypes") private final Map<String, Action> ACTIONS;
-    @SuppressWarnings("rawtypes") private final Map<String, Function> FUNCTIONS;
+    @SuppressWarnings("rawtypes") protected final Map<String, Action> ACTIONS;
+    @SuppressWarnings("rawtypes") protected final Map<String, Function> FUNCTIONS;
+
+    private final static String AUDIO_DIR_RELATIVE_PATH = "\\src\\test\\resources\\sounds\\";
+    protected final static String PRESS_SOUND_ID = "pressSoundId";
+    protected final static String RELEASE_SOUND_ID = "releaseSoundId";
 
     protected static IOModule ioModule;
     private static GlobalClock Clock;
@@ -193,7 +201,7 @@ public class DisplayTest {
         // Many of these are dummy values which should be tweaked for performance
         @SuppressWarnings("rawtypes") var settings = Collections.<String, Setting>mapOf(
                 AUDIO_FILETYPES_ID,
-                setOf(),
+                setOf("wav", "mp3"),
                 PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID,
                 generateMockSetting(10),
                 FRAME_TIMER_POLLING_INTERVAL_ID,
@@ -227,7 +235,9 @@ public class DisplayTest {
                 STARTING_WINDOW_RESOLUTION_ID,
                 generateMockSetting(DEFAULT_RES),
                 DEFAULT_FONT_COLOR_ID,
-                generateMockSetting(Color.WHITE)
+                generateMockSetting(Color.WHITE),
+                AUDIO_RELATIVE_DIRS_ID,
+                setOf(AUDIO_DIR_RELATIVE_PATH)
         );
 
         ioModule = new IOModule(
@@ -237,10 +247,31 @@ public class DisplayTest {
                 FUNCTIONS::get,
                 listOf(),
                 testName,
+                mapOf(
+                        "JDSherbert - Ultimate UI SFX Pack - Cursor - 5.wav",
+                        PRESS_SOUND_ID,
+                        "JDSherbert - Ultimate UI SFX Pack - Select - 1.wav",
+                        RELEASE_SOUND_ID
+                ),
+                mapOf(),
+                mapOf(),
                 assetDefinitionsDTO
         );
 
-        var coreLoop = ioModule.provide(GraphicsCoreLoop.class);
+        var ioMethods = new IOMethods(
+                ioModule.provide(SoundsPlaying.class),
+                ioModule.provide(SoundFactory.class)
+        );
+        var readIoMethods = readMethods(ioMethods);
+        readIoMethods.FIRST.forEach(a -> ACTIONS.put(a.id(), a));
+        readIoMethods.SECOND.forEach(f -> FUNCTIONS.put(f.id(), f));
+
+        DisplayTestMethods.PlaySound = ioMethods::playSound;
+        var readDisplayTestMethods = readMethods(DisplayTestMethods.class);
+        readDisplayTestMethods.FIRST.forEach(a -> ACTIONS.put(a.id(), a));
+        readDisplayTestMethods.SECOND.forEach(f -> FUNCTIONS.put(f.id(), f));
+
+        var coreLoop = ioModule.provide(CoreLoop.class);
 
         var frameTimer = ioModule.provide(FrameTimer.class);
         frameTimer.setTargetFps(null);

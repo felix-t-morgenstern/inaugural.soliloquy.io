@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.lo
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.graphics.renderables.providers.ResettableProvider;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ class LoopingLinearMovingFloatBoxProviderResetTest
                 LoopingLinearMovingFloatBoxProviderResetTest::closeAfterSomeTime);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
         ((ResettableProvider<FloatBox>) RENDERING_DIMENSIONS_PROVIDER)
                 .reset(GLOBAL_CLOCK.globalTimestamp());
 
@@ -41,6 +41,6 @@ class LoopingLinearMovingFloatBoxProviderResetTest
 
         CheckedExceptionWrapper.sleep(8000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

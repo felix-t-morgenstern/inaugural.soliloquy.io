@@ -2,8 +2,8 @@ package inaugural.soliloquy.io.test.unit.graphics.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.ImageAssetSetAssetDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.ImageAssetSetDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageAssetSetFactory;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.ImageAssetSetPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageAssetSetFactory;
+import inaugural.soliloquy.io.bootstrap.tasks.ImageAssetSetPreloaderTask;
 import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetDefinition;
 
 import java.util.Collection;
 import java.util.Map;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.io.graphics.assets.ImageAsset.ImageAssetType;
-import static soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
+import static soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageAssetSetAssetDefinition.DisplayParam;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageAssetSetPreloaderTaskTests {

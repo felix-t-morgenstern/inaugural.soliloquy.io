@@ -1,12 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.SpriteFactory;
+import inaugural.soliloquy.io.bootstrap.assetfactories.SpriteFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.assets.Sprite;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.SpriteDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.SpriteDefinition;
 
 import java.util.function.Function;
 

@@ -1,15 +1,15 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories.preloading;
 
 import inaugural.soliloquy.io.api.dto.AnimatedMouseCursorDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.preloading.AnimatedMouseCursorPreloaderTaskFactory;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
+import inaugural.soliloquy.io.bootstrap.assetfactories.preloading.AnimatedMouseCursorPreloaderTaskFactory;
+import inaugural.soliloquy.io.bootstrap.tasks.AnimatedMouseCursorPreloaderTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.AssetPreloaderTaskFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.AssetPreloaderTaskFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 
 

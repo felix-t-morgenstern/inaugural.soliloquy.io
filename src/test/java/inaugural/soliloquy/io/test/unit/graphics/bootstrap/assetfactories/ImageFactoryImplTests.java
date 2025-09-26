@@ -1,13 +1,12 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap.assetfactories;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;

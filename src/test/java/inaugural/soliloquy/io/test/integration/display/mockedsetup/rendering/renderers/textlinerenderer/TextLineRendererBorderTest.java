@@ -3,9 +3,9 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -95,9 +95,9 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         return setOf(TextLineRenderer);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(6000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

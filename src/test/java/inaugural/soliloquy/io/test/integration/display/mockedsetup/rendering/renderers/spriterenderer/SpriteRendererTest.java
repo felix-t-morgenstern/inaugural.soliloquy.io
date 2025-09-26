@@ -1,12 +1,12 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;

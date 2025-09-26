@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.finiteanimationrenderer;
 
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.AnimationFactory;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.assetfactories.AnimationFactory;
+import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.FiniteAnimationRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
@@ -10,9 +10,9 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregat
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -105,9 +105,9 @@ class FiniteAnimationRendererTest extends DisplayTest {
         FrameTimer.ShouldExecuteNextFrame = true;
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop, int ms) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop, int ms) {
         CheckedExceptionWrapper.sleep(ms);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

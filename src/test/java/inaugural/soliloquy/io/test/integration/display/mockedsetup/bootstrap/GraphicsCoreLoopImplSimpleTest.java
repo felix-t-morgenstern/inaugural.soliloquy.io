@@ -1,12 +1,13 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.bootstrap;
 
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -15,6 +16,7 @@ import soliloquy.specs.io.input.mouse.MouseCursor;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.mockito.Mockito.mock;
@@ -45,11 +47,12 @@ class GraphicsCoreLoopImplSimpleTest {
         @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh = setOf();
 
 
-        var graphicsCoreLoop =
-                new GraphicsCoreLoopImpl("New window",
+        var coreLoop =
+                new CoreLoopImpl("New window",
                         frameTimer, 20, WindowManager, new GlobalClockImpl(), frameExecutor,
                         new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                         renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
+                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
                         mock(MouseCursor.class), mock(MouseListener.class));
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
@@ -60,12 +63,12 @@ class GraphicsCoreLoopImplSimpleTest {
             return windowId;
         };
 
-        graphicsCoreLoop.startup(() -> resizeThenCloseAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> resizeThenCloseAfterSomeTime(coreLoop));
     }
 
-    private static void resizeThenCloseAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void resizeThenCloseAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

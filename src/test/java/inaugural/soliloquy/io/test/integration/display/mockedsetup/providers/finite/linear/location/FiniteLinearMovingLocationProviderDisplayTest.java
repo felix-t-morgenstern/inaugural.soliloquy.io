@@ -4,8 +4,8 @@ import inaugural.soliloquy.io.graphics.renderables.providers.FiniteLinearMovingV
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.FontStyleDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;

@@ -1,10 +1,10 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.ImageDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.ImageDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
 
 import java.util.Collection;
 import java.util.function.Consumer;

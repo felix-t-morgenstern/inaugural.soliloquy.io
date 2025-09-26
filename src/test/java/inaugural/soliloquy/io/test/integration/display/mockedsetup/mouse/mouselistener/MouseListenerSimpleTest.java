@@ -32,7 +32,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
                         null,
                         windowResolutionManager::windowWidthToHeightRatio),
                 MouseListenerSimpleTest::graphicsPreloaderLoadAction,
-                graphicsCoreLoop -> DisplayTest.closeAfterSomeTime(graphicsCoreLoop, 24000));
+                coreLoop -> DisplayTest.closeAfterSomeTime(coreLoop, 24000));
     }
 
     protected static void graphicsPreloaderLoadAction() {

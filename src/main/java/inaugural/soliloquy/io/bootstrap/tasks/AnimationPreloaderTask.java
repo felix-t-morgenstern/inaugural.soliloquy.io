@@ -1,4 +1,4 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.AnimationDefinitionDTO;
 import inaugural.soliloquy.io.api.dto.AnimationFrameDefinitionDTO;
@@ -6,7 +6,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.graphics.assets.Image;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.AnimationDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimationDefinition;
 
 import java.util.Collection;
 import java.util.Map;

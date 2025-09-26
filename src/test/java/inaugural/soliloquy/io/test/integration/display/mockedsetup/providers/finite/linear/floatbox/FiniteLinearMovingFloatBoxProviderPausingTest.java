@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.finite.linear.floatbox;
 
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -27,7 +27,7 @@ class FiniteLinearMovingFloatBoxProviderPausingTest
                 FiniteLinearMovingFloatBoxProviderPausingTest::closeAfterSomeTime);
     }
 
-    public static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    public static void closeAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
         long timestamp = GLOBAL_CLOCK.globalTimestamp();
@@ -40,6 +40,6 @@ class FiniteLinearMovingFloatBoxProviderPausingTest
 
         CheckedExceptionWrapper.sleep(2000);
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }

@@ -15,7 +15,7 @@ class FiniteAnimationRendererSimpleTest extends FiniteAnimationRendererTest {
                                 windowResolutionManager,
                                 null),
                 FiniteAnimationRendererTest::graphicsPreloaderLoadAction,
-                graphicsCoreLoop -> closeAfterSomeTime(graphicsCoreLoop, TestDurationMs)
+                coreLoop -> closeAfterSomeTime(coreLoop, TestDurationMs)
         );
     }
 }

@@ -1,8 +1,8 @@
-package inaugural.soliloquy.io.graphics.bootstrap.tasks;
+package inaugural.soliloquy.io.bootstrap.tasks;
 
 import inaugural.soliloquy.io.api.dto.StaticMouseCursorDefinitionDTO;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 
 import java.util.Collection;

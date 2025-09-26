@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
-import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
+import soliloquy.specs.io.bootstrap.GraphicsPreloader;
 
 import java.util.List;
 

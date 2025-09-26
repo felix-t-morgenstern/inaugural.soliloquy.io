@@ -1,9 +1,9 @@
-package inaugural.soliloquy.io.audio.bootstrap;
+package inaugural.soliloquy.io.bootstrap.assetfactories;
 
 import inaugural.soliloquy.tools.Check;
 import org.apache.commons.io.FilenameUtils;
 import soliloquy.specs.io.audio.entities.SoundType;
-import soliloquy.specs.io.audio.infrastructure.AudioLoader;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -34,11 +34,11 @@ public class AudioLoaderImpl implements AudioLoader {
     @Override
     public void loadFromDirectory(String relativePath, Map<String, String> idsForFilenames,
                                   Map<String, Integer> defaultLoopStopMsById,
-                                  Map<String, Integer> defaultLoopRestartByMs) {
+                                  Map<String, Integer> defaultLoopRestartMsById) {
         Check.ifNullOrEmpty(relativePath, "relativePath");
         Check.ifNull(idsForFilenames, "idsForFilenames");
         Check.ifNull(defaultLoopStopMsById, "defaultLoopStopMsById");
-        Check.ifNull(defaultLoopRestartByMs, "defaultLoopRestartByMs");
+        Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
 
         var absolutePath = executionDirectory() + relativePath;
         var filesWithProperExtension =
@@ -50,7 +50,7 @@ public class AudioLoaderImpl implements AudioLoader {
                 var idForFilename = idsForFilenames.get(fileWithProperExtensionName);
                 var fileRelativePath = relativePath + fileWithProperExtension.getName();
                 var defaultLoopingStopMs = defaultLoopStopMsById.get(idForFilename);
-                var defaultLoopingRestartMs = defaultLoopRestartByMs.get(idForFilename);
+                var defaultLoopingRestartMs = defaultLoopRestartMsById.get(idForFilename);
                 var soundType = SOUND_TYPE_FACTORY
                         .apply(idForFilename, fileRelativePath, defaultLoopingStopMs, defaultLoopingRestartMs);
                 ADD_SOUND_TYPE.accept(soundType);

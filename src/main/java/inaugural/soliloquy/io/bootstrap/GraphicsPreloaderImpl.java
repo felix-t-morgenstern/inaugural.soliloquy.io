@@ -1,13 +1,13 @@
-package inaugural.soliloquy.io.graphics.bootstrap;
+package inaugural.soliloquy.io.bootstrap;
 
 import inaugural.soliloquy.io.api.dto.*;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.*;
+import inaugural.soliloquy.io.bootstrap.tasks.*;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.assets.*;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsPreloader;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.ImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.MouseCursorImageFactory;
-import soliloquy.specs.io.graphics.bootstrap.assetfactories.definitions.*;
+import soliloquy.specs.io.bootstrap.GraphicsPreloader;
+import soliloquy.specs.io.bootstrap.assetfactories.ImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.MouseCursorImageFactory;
+import soliloquy.specs.io.bootstrap.assetfactories.definitions.*;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 

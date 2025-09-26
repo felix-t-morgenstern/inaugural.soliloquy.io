@@ -1,8 +1,8 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.animatedmousecursor;
 
 import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
-import inaugural.soliloquy.io.graphics.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
-import inaugural.soliloquy.io.graphics.bootstrap.tasks.MouseCursorImagePreloaderTask;
+import inaugural.soliloquy.io.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
+import inaugural.soliloquy.io.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.io.graphics.renderables.providers.AnimatedMouseCursorProviderImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor.MouseCursorImplTest;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;

@@ -20,7 +20,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
 
     private final Map<Integer, Map<EventType, Set<Runnable>>> PUBLISH_QUEUE;
 
-    private RenderableWithMouseEvents prevRegisteredMouseOverRenderable;
+    private RenderableWithMouseEvents currentMouseOverRenderable;
 
     public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex) {
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX =
@@ -42,18 +42,18 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
 
         Check.ifNull(buttonEvents, "buttonEvents");
 
-        var renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.getCapturingRenderableAtPoint(location,
-                timestamp);
+        var mouseCapturingRenderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX
+                .getCapturingRenderableAtPoint(location, timestamp);
 
-        if (renderable != prevRegisteredMouseOverRenderable) {
-            if (prevRegisteredMouseOverRenderable != null) {
-                prevRegisteredMouseOverRenderable.mouseLeave(timestamp);
+        if (mouseCapturingRenderable != currentMouseOverRenderable) {
+            if (currentMouseOverRenderable != null) {
+                currentMouseOverRenderable.mouseLeave(timestamp);
             }
 
-            prevRegisteredMouseOverRenderable = renderable;
+            currentMouseOverRenderable = mouseCapturingRenderable;
 
-            if (prevRegisteredMouseOverRenderable != null) {
-                prevRegisteredMouseOverRenderable.mouseOver(timestamp);
+            if (currentMouseOverRenderable != null) {
+                currentMouseOverRenderable.mouseOver(timestamp);
             }
         }
         buttonEvents.forEach((button, event) -> {
@@ -65,12 +65,12 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
                 PUBLISH_QUEUE.get(button).get(event).clear();
             }
 
-            if (prevRegisteredMouseOverRenderable != null) {
+            if (currentMouseOverRenderable != null) {
                 if (event == EventType.PRESS) {
-                    prevRegisteredMouseOverRenderable.press(button, timestamp);
+                    currentMouseOverRenderable.press(button, timestamp);
                 }
                 else {
-                    prevRegisteredMouseOverRenderable.release(button, timestamp);
+                    currentMouseOverRenderable.release(button, timestamp);
                 }
             }
         });

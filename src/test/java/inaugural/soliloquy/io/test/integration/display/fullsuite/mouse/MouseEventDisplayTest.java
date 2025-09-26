@@ -15,6 +15,7 @@ import soliloquy.specs.ui.EventInputs;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
+import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
 import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
@@ -108,16 +109,16 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         //noinspection unchecked
-        spriteRenderableFactory.make(
+        var spriteRenderable = spriteRenderableFactory.make(
                 sprite,
                 staticProviderFactory.apply(randomUUID(), null),
                 staticProviderFactory.apply(randomUUID(), null),
                 mapOf(
-                        GLFW_MOUSE_BUTTON_LEFT,
+                        LEFT_MOUSE_BUTTON,
                         ON_MOUSE_PRESS_ACTION
                 ),
                 mapOf(
-                        GLFW_MOUSE_BUTTON_LEFT,
+                        LEFT_MOUSE_BUTTON,
                         ON_MOUSE_RELEASE_ACTION
                 ),
                 ON_MOUSE_OVER_ACTION,
@@ -128,5 +129,6 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 randomUUID(),
                 topLevelComponent
         );
+        spriteRenderable.setCapturesMouseEvents(true);
     }
 }

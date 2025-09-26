@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap;
 
-import inaugural.soliloquy.io.graphics.bootstrap.GraphicsCoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
@@ -11,7 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import soliloquy.specs.io.graphics.bootstrap.GraphicsCoreLoop;
+import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.Shader;
@@ -22,20 +23,31 @@ import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GraphicsCoreLoopImplTests {
+public class CoreLoopImplTests {
     private final String TITLEBAR = randomString();
     private final FakeFrameTimer FRAME_TIMER = new FakeFrameTimer();
     private final int FRAME_TIMER_POLLING_INTERVAL = 20;
@@ -49,6 +61,10 @@ public class GraphicsCoreLoopImplTests {
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
+    private final Set<String> AUDIO_REL_DIRS = setOf(randomString());
+    private final Map<String, String> IDS_FOR_FILENAMES = mapOf();
+    private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID = mapOf();
+    private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID = mapOf();
 
     private BiFunction<float[], float[], Mesh> meshFactory;
     @Mock private Shader mockShader;
@@ -57,12 +73,13 @@ public class GraphicsCoreLoopImplTests {
     @Mock private GlobalClock mockGlobalClock;
     @Mock private FrameExecutor mockFrameExecutor;
     @Mock private WindowResolutionManager mockWindowResolutionManager;
+    @Mock private AudioLoader mockAudioLoader;
     @Mock private MouseCursor mockMouseCursor;
     @Mock private MouseListener mockMouseListener;
 
     private Long windowId;
 
-    private GraphicsCoreLoop graphicsCoreLoop;
+    private CoreLoop coreLoop;
 
     @BeforeEach
     public void setUp() {
@@ -90,7 +107,7 @@ public class GraphicsCoreLoopImplTests {
 
         mockMouseListener = mock(MouseListener.class);
 
-        graphicsCoreLoop = new GraphicsCoreLoopImpl(
+        coreLoop = new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -105,6 +122,11 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         );
@@ -112,7 +134,7 @@ public class GraphicsCoreLoopImplTests {
 
     @Test
     public void testInvalidConstructorParams() {
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 null,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -127,10 +149,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 "",
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -145,10 +172,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 null,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -163,10 +195,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 -1,
@@ -181,10 +218,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 1000,
@@ -199,10 +241,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -217,10 +264,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -235,10 +287,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -253,10 +310,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -271,10 +333,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -289,10 +356,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -307,10 +379,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -325,10 +402,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -343,10 +425,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -361,10 +448,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -379,10 +471,15 @@ public class GraphicsCoreLoopImplTests {
                 null,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -397,10 +494,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 null,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -415,10 +517,15 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 null,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -434,9 +541,14 @@ public class GraphicsCoreLoopImplTests {
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
                 null,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockMouseCursor,
                 mockMouseListener
         ));
-        assertThrows(IllegalArgumentException.class, () -> new GraphicsCoreLoopImpl(
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
                 FRAME_TIMER,
                 FRAME_TIMER_POLLING_INTERVAL,
@@ -451,6 +563,126 @@ public class GraphicsCoreLoopImplTests {
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                null,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockMouseCursor,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                null,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockMouseCursor,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                null,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockMouseCursor,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                null,
+                mockMouseCursor,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                null,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockMouseCursor,
                 null
         ));
@@ -458,22 +690,22 @@ public class GraphicsCoreLoopImplTests {
 
     @Test
     public void testGetTitlebar() {
-        assertEquals(TITLEBAR, graphicsCoreLoop.getTitlebar());
+        assertEquals(TITLEBAR, coreLoop.getTitlebar());
     }
 
     @Test
     public void testSetTitlebar() {
         var newTitlebar = randomString();
 
-        graphicsCoreLoop.setTitlebar(newTitlebar);
+        coreLoop.setTitlebar(newTitlebar);
 
-        assertEquals(newTitlebar, graphicsCoreLoop.getTitlebar());
+        assertEquals(newTitlebar, coreLoop.getTitlebar());
     }
 
     @Test
     public void testSetTitlebarWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> graphicsCoreLoop.setTitlebar(null));
-        assertThrows(IllegalArgumentException.class, () -> graphicsCoreLoop.setTitlebar(""));
+        assertThrows(IllegalArgumentException.class, () -> coreLoop.setTitlebar(null));
+        assertThrows(IllegalArgumentException.class, () -> coreLoop.setTitlebar(""));
     }
 
     @Test
@@ -483,14 +715,14 @@ public class GraphicsCoreLoopImplTests {
                 anyString())).thenReturn(0L);
 
         assertThrows(IllegalStateException.class, () ->
-                graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop)));
+                coreLoop.startup(() -> closeAfterSomeTime(coreLoop)));
     }
 
     @Test
     public void testWhenFrameTimerDoesNotPermitNewFrames() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
         verify(mockFrameExecutor, never()).execute(anyLong());
         verify(mockWindowResolutionManager, once())
@@ -501,7 +733,7 @@ public class GraphicsCoreLoopImplTests {
     public void testUpdateDimensionsOnFrame() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
 
     }
@@ -510,14 +742,14 @@ public class GraphicsCoreLoopImplTests {
     public void testWhenFrameTimerPermitsNewFrames() {
         FRAME_TIMER.ShouldExecuteNextFrame = true;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
         // NB: This test is *somewhat* indeterminate, since the polling interval used from
         //     FrameTimer does *not* guarantee polling at *precisely* that rate; instead, it only
         //     specifies the delay between either the last time a frame was rendered, or the last
-        //     time FrameRender instructed GraphicsCoreLoop to not render a frame, and the next
-        //     time GraphicsCoreLoop asks FrameTimer whether to render the next frame. This test
-        //     should no longer be indeterminate if GraphicsCoreLoop is refactored to treat the
+        //     time FrameRender instructed CoreLoop to not render a frame, and the next
+        //     time CoreLoop asks FrameTimer whether to render the next frame. This test
+        //     should no longer be indeterminate if CoreLoop is refactored to treat the
         //     polling interval as an actual interval, rather than merely a delay; however, since
         //     the interval should be very small in practice (e.g. 2-5ms), this slight
         //     indeterminacy should not radically affect performance.
@@ -532,7 +764,7 @@ public class GraphicsCoreLoopImplTests {
         FRAME_TIMER.AddThisWhenLoadIsCalled = GRAPHICS_PRELOADER.AddThisWhenLoadIsCalled =
                 invokedClassesInOrder;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
         assertTrue(invokedClassesInOrder.size() >= 2);
         assertSame(GRAPHICS_PRELOADER, invokedClassesInOrder.get(0));
@@ -540,10 +772,23 @@ public class GraphicsCoreLoopImplTests {
     }
 
     @Test
+    public void testAudioLoaderCalledBeforeFrameTimer() {
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
+
+        //noinspection OptionalGetWithoutIsPresent
+        verify(mockAudioLoader, once()).loadFromDirectory(
+                eq(AUDIO_REL_DIRS.stream().findFirst().get()),
+                same(IDS_FOR_FILENAMES),
+                same(DEFAULT_LOOP_STOP_MS_BY_ID),
+                same(DEFAULT_LOOP_RESTART_MS_BY_ID)
+        );
+    }
+
+    @Test
     public void testMeshAndShaderPassedToRenderersAndGraphicsPreloaderCalledAndMouseCursorUpdateCalled() {
         FRAME_TIMER.ShouldExecuteNextFrame = false;
 
-        graphicsCoreLoop.startup(() -> closeAfterSomeTime(graphicsCoreLoop));
+        coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
         verify(MOCK_RENDERER, once()).setMesh(mockMesh);
         verify(mockShaderFactory, once()).make(SHADER_FILE_PREFIX);
@@ -555,13 +800,13 @@ public class GraphicsCoreLoopImplTests {
     // NB: It is impossible to directly test the calls to MouseListener, since even
     // glfwSetCursorPos does not trigger the cursor position callback. Refer to the display tests!
 
-    private static void closeAfterSomeTime(GraphicsCoreLoop graphicsCoreLoop) {
+    private static void closeAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(100);
 
-        while (graphicsCoreLoop.windowId() <= 0) {
+        while (coreLoop.windowId() <= 0) {
             CheckedExceptionWrapper.sleep(100);
         }
 
-        glfwSetWindowShouldClose(graphicsCoreLoop.windowId(), true);
+        glfwSetWindowShouldClose(coreLoop.windowId(), true);
     }
 }
