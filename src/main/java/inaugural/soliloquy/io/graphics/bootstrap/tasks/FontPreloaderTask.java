@@ -47,24 +47,21 @@ public class FontPreloaderTask implements Runnable {
                 "fontDefinitionDTO.maxLosslessFontSize");
         Check.throwOnLtValue(fontDefinitionDTO.leadingAdjustment, 0f,
                 "fontDefinitionDTO.leadingAdjustment");
-        Check.throwOnGteValue(fontDefinitionDTO.leadingAdjustment, 1f,
-                "fontDefinitionDTO.leadingAdjustment");
         Check.ifNull(fontDefinitionDTO.plain, "fontDefinitionDTO.plain");
-        validateFontStyleDefinitionDTO(fontDefinitionDTO.plain,
-                fontDefinitionDTO.leadingAdjustment);
+        validateFontStyleDefinitionDTO(fontDefinitionDTO.plain
+        );
         Check.ifNull(fontDefinitionDTO.italic, "fontDefinitionDTO.italic");
-        validateFontStyleDefinitionDTO(fontDefinitionDTO.italic,
-                fontDefinitionDTO.leadingAdjustment);
+        validateFontStyleDefinitionDTO(fontDefinitionDTO.italic
+        );
         Check.ifNull(fontDefinitionDTO.bold, "fontDefinitionDTO.bold");
-        validateFontStyleDefinitionDTO(fontDefinitionDTO.bold,
-                fontDefinitionDTO.leadingAdjustment);
+        validateFontStyleDefinitionDTO(fontDefinitionDTO.bold
+        );
         Check.ifNull(fontDefinitionDTO.boldItalic, "fontDefinitionDTO.boldItalic");
-        validateFontStyleDefinitionDTO(fontDefinitionDTO.boldItalic,
-                fontDefinitionDTO.leadingAdjustment);
+        validateFontStyleDefinitionDTO(fontDefinitionDTO.boldItalic
+        );
     }
 
-    private void validateFontStyleDefinitionDTO(FontStyleDefinitionDTO fontStyleDefinitionDTO,
-                                                float leadingAdjustment) {
+    private void validateFontStyleDefinitionDTO(FontStyleDefinitionDTO fontStyleDefinitionDTO) {
         Check.throwOnLtValue(fontStyleDefinitionDTO.additionalGlyphHorizontalTextureSpacing, 0f,
                 "fontStyleDefinitionDTO.additionalGlyphHorizontalTextureSpacing");
         Check.throwOnLtValue(fontStyleDefinitionDTO.additionalGlyphVerticalTextureSpacing, 0f,
@@ -73,11 +70,8 @@ public class FontPreloaderTask implements Runnable {
                 "fontStyleDefinitionDTO.glyphwiseAdditionalHorizontalTextureSpacing");
         Check.ifNull(fontStyleDefinitionDTO.glyphwiseAdditionalLeftBoundaryShift,
                 "fontStyleDefinitionDTO.glyphwiseAdditionalLeftBoundaryShift");
-        Check.throwOnGteValue(
-                leadingAdjustment + fontStyleDefinitionDTO.additionalGlyphVerticalTextureSpacing,
-                1f,
-                "sum of leadingAdjustment and " +
-                        "fontStyleDefinitionDTO.additionalGlyphVerticalTextureSpacing");
+        Check.ifNull(fontStyleDefinitionDTO.glyphwiseWidthFactors,
+                "fontStyleDefinitionDTO.glyphwiseWidthFactors");
     }
 
     @Override
@@ -106,6 +100,8 @@ public class FontPreloaderTask implements Runnable {
                         dto.glyphwiseAdditionalHorizontalTextureSpacing),
                 makeFontStyleDefinitionGlyphProperties(
                         dto.glyphwiseAdditionalLeftBoundaryShift),
+                makeFontStyleDefinitionGlyphProperties(
+                        dto.glyphwiseWidthFactors),
                 dto.additionalGlyphVerticalTextureSpacing
         );
     }

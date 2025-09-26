@@ -39,6 +39,11 @@ public class FakeFontStyleInfo implements FontStyleInfo {
     }
 
     @Override
+    public Map<Character, Float> glyphwiseWidthFactors() {
+        return Map.of();
+    }
+
+    @Override
     public int textureId() {
         return 0;
     }

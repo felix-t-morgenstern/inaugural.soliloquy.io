@@ -9,6 +9,8 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class Constants {
     // Dependency constants
+    public final static String IO_METHODS = "ioMethods";
+    public final static String SUBSCRIBE_TO_NEXT_MOUSE_EVENT = "subscribeToNextMouseEvent";
     public final static String STATIC_PROVIDER_FACTORY = "staticProviderFactory";
     public final static String NULL_PROVIDER = "nullProvider";
 

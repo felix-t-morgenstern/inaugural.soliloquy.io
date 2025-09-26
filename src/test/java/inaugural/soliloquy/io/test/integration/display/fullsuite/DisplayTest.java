@@ -48,20 +48,21 @@ public class DisplayTest {
     protected final static String EXPLOSION_ANIMATION_ID = "explosion";
     protected final static String EXPLOSION_RELATIVE_LOCATION =
             "./src/test/resources/images/effects/Explosion.png";
-    protected final static AnimationDefinitionDTO EXPLOSION_ANIMATION_DEF = new AnimationDefinitionDTO(
-            EXPLOSION_ANIMATION_ID,
-            600,
-            IntStream.range(0, 11).mapToObj(i -> new AnimationFrameDefinitionDTO(
-                    EXPLOSION_RELATIVE_LOCATION,
-                    i * 50,
-                    i * 96,
-                    0,
-                    (i + 1) * 96,
-                    96,
-                    0,
-                    0
-            )).toArray(AnimationFrameDefinitionDTO[]::new)
-    );
+    protected final static AnimationDefinitionDTO EXPLOSION_ANIMATION_DEF =
+            new AnimationDefinitionDTO(
+                    EXPLOSION_ANIMATION_ID,
+                    600,
+                    IntStream.range(0, 11).mapToObj(i -> new AnimationFrameDefinitionDTO(
+                            EXPLOSION_RELATIVE_LOCATION,
+                            i * 50,
+                            i * 96,
+                            0,
+                            (i + 1) * 96,
+                            96,
+                            0,
+                            0
+                    )).toArray(AnimationFrameDefinitionDTO[]::new)
+            );
 
     protected final static String TORCH_ANIMATION_ID = "torchAnimation";
     protected final static String TORCH_RELATIVE_LOCATION =
@@ -83,9 +84,12 @@ public class DisplayTest {
     protected final static String TORCH_GLOBAL_LOOPING_ANIMATION_ID = "torchGlobalAnimation";
 
     protected final static String IMAGE_ASSET_SET_ID = "imageAssetSet";
-    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_KEY = "imageAssetSetDisplayParamKey";
-    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_SPRITE = "imageAssetSetDisplayParamValSprite";
-    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_ANIM = "imageAssetSetDisplayParamValAnim";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_KEY =
+            "imageAssetSetDisplayParamKey";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_SPRITE =
+            "imageAssetSetDisplayParamValSprite";
+    protected final static String IMAGE_ASSET_SET_DISPLAY_PARAM_VAL_ANIM =
+            "imageAssetSetDisplayParamValAnim";
     protected final static ImageAssetSetDefinitionDTO IMAGE_ASSET_SET_DEF =
             new ImageAssetSetDefinitionDTO(
                     IMAGE_ASSET_SET_ID,
@@ -106,6 +110,55 @@ public class DisplayTest {
                             )
                     )
             );
+
+    protected final static String CINZEL_ID = "cinzel";
+    protected final static String RELATIVE_LOCATION_CINZEL =
+            "./src/test/resources/fonts/Cinzel-VariableFont_wght.ttf";
+    protected final static float MAX_LOSSLESS_FONT_SIZE_CINZEL = 200f;
+    protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL = 0.25f;
+    protected final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL = 0.25f;
+    protected final static float LEADING_ADJUSTMENT_CINZEL = 0f;
+    protected final static FontStyleDefinitionGlyphPropertyDTO[] CINZEL_ITALIC_WIDTH_FACTORS =
+            arrayOf(
+                    new FontStyleDefinitionGlyphPropertyDTO('I', 0.965f),
+                    new FontStyleDefinitionGlyphPropertyDTO('W', 0.975f),
+                    new FontStyleDefinitionGlyphPropertyDTO('i', 0.965f),
+                    new FontStyleDefinitionGlyphPropertyDTO('w', 0.975f),
+                    new FontStyleDefinitionGlyphPropertyDTO('^', 0.975f)
+            );
+
+    protected final static FontStyleDefinitionDTO CINZEL_PLAIN_DTO =
+            new FontStyleDefinitionDTO(
+                    ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
+                    arrayOf(),
+                    arrayOf(),
+                    arrayOf(),
+                    ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
+    protected final static FontStyleDefinitionDTO CINZEL_ITALIC_DTO =
+            new FontStyleDefinitionDTO(
+                    ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
+                    arrayOf(),
+                    arrayOf(),
+                    CINZEL_ITALIC_WIDTH_FACTORS,
+                    ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
+    protected final static FontStyleDefinitionDTO CINZEL_BOLD_DTO =
+            new FontStyleDefinitionDTO(
+                    ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
+                    arrayOf(),
+                    arrayOf(),
+                    arrayOf(),
+                    ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
+    protected final static FontStyleDefinitionDTO CINZEL_BOLD_ITALIC_DTO =
+            new FontStyleDefinitionDTO(
+                    ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
+                    arrayOf(),
+                    arrayOf(),
+                    arrayOf(),
+                    ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
+    protected final static FontDefinitionDTO CINZEL_DEF =
+            new FontDefinitionDTO(CINZEL_ID, RELATIVE_LOCATION_CINZEL,
+                    MAX_LOSSLESS_FONT_SIZE_CINZEL, LEADING_ADJUSTMENT_CINZEL, CINZEL_PLAIN_DTO,
+                    CINZEL_ITALIC_DTO, CINZEL_BOLD_DTO, CINZEL_BOLD_ITALIC_DTO);
 
     @SuppressWarnings("rawtypes") private final Map<String, Action> ACTIONS;
     @SuppressWarnings("rawtypes") private final Map<String, Function> FUNCTIONS;

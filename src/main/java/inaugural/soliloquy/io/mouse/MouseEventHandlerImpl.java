@@ -8,17 +8,24 @@ import soliloquy.specs.io.input.mouse.MouseEventHandler;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 
 import java.util.Map;
+import java.util.Set;
+
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 
 public class MouseEventHandlerImpl implements MouseEventHandler {
     private final TimestampValidator TIMESTAMP_VALIDATOR = new TimestampValidator(null);
 
     private final MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
 
+    private final Map<Integer, Map<EventType, Set<Runnable>>> PUBLISH_QUEUE;
+
     private RenderableWithMouseEvents prevRegisteredMouseOverRenderable;
 
     public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex) {
         MOUSE_EVENT_CAPTURING_SPATIAL_INDEX =
                 Check.ifNull(mouseEventCapturingSpatialIndex, "mouseEventCapturingSpatialIndex");
+        PUBLISH_QUEUE = mapOf();
     }
 
     @Override
@@ -34,13 +41,6 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
         Check.throwOnGtValue(location.Y, 1f, "location.Y");
 
         Check.ifNull(buttonEvents, "buttonEvents");
-        // NB: I'm aware I'm looping over this map twice. This is unlikely to impact performance,
-        // since buttonEvents should be tiny; also, I want to verify its validity before entering
-        // the rest of the method.
-        buttonEvents.forEach((button, event) -> {
-            Check.ifNull(button, "button type in buttonEvents");
-            Check.ifNull(event, "event type in buttonEvents");
-        });
 
         var renderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX.getCapturingRenderableAtPoint(location,
                 timestamp);
@@ -56,15 +56,37 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
                 prevRegisteredMouseOverRenderable.mouseOver(timestamp);
             }
         }
-        if (prevRegisteredMouseOverRenderable != null) {
-            buttonEvents.forEach((button, event) -> {
+        buttonEvents.forEach((button, event) -> {
+            Check.ifNull(button, "button type in buttonEvents");
+            Check.ifNull(event, "event type in buttonEvents");
+
+            if (PUBLISH_QUEUE.containsKey(button)) {
+                PUBLISH_QUEUE.get(button).get(event).forEach(Runnable::run);
+                PUBLISH_QUEUE.get(button).get(event).clear();
+            }
+
+            if (prevRegisteredMouseOverRenderable != null) {
                 if (event == EventType.PRESS) {
                     prevRegisteredMouseOverRenderable.press(button, timestamp);
                 }
                 else {
                     prevRegisteredMouseOverRenderable.release(button, timestamp);
                 }
-            });
+            }
+        });
+    }
+
+    public void subscribeToNextEvent(int button, EventType eventType, Runnable subscriber) {
+        Map<EventType, Set<Runnable>> buttonEvents;
+        if (PUBLISH_QUEUE.containsKey(button)) {
+            buttonEvents = PUBLISH_QUEUE.get(button);
         }
+        else {
+            buttonEvents = mapOf();
+            PUBLISH_QUEUE.put(button, buttonEvents);
+            buttonEvents.put(EventType.PRESS, setOf());
+            buttonEvents.put(EventType.RELEASE, setOf());
+        }
+        buttonEvents.get(eventType).add(subscriber);
     }
 }

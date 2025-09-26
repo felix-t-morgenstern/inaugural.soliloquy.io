@@ -35,6 +35,8 @@ public class TextLineRendererTest extends DisplayTest {
             mapOf();
     protected final static Map<Character, Float> GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT =
             mapOf();
+    protected final static Map<Character, Float> GLYPHWISE_WIDTH_FACTORS =
+            mapOf();
 
     protected static FontDefinition FontDefinition;
     protected static Renderer<TextLineRenderable> TextLineRenderer;

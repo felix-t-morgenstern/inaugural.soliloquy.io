@@ -27,8 +27,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -1027,8 +1026,9 @@ public class GraphicsPreloaderImplTests {
 
     private FontStyleDefinitionDTO randomFontStyleDefinitionDTO() {
         return new FontStyleDefinitionDTO(randomFloatInRange(0, 0.5f),
-                new FontStyleDefinitionGlyphPropertyDTO[0],
-                new FontStyleDefinitionGlyphPropertyDTO[0],
+                arrayOf(),
+                arrayOf(),
+                arrayOf(),
                 randomFloatInRange(0, 0.5f));
     }
 

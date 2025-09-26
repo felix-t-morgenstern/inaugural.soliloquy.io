@@ -108,7 +108,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                        float leftX = startX + xOffset + textLineLengthThusFar;
+                        var leftX = startX + xOffset + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
                                         leftX,
@@ -131,11 +131,11 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
 
         if (borderThickness != null) {
             float yThickness = borderThickness;
-            float xThickness = yThickness / getScreenWToHRatio.get();
+            var xThickness = yThickness / getScreenWToHRatio.get();
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
                     textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
-                        float leftX = startX - xThickness + textLineLengthThusFar;
+                        var leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
                                         leftX,
@@ -396,10 +396,19 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                 textLineLengthThusFar += paddingBetweenGlyphs;
             }
 
-            char character = lineText.charAt(i);
-            FloatBox glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
-            float glyphLength =
-                    glyphBox.width() * (lineHeight / glyphBox.height())
+            var character = lineText.charAt(i);
+            var glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
+            if (fontStyleInfo.glyphwiseWidthFactors().containsKey(character)) {
+                var newWidth =
+                        glyphBox.width() * fontStyleInfo.glyphwiseWidthFactors().get(character);
+                glyphBox = floatBoxOf(
+                        glyphBox.LEFT_X,
+                        glyphBox.TOP_Y,
+                        glyphBox.LEFT_X + newWidth,
+                        glyphBox.BOTTOM_Y
+                );
+            }
+            var glyphLength = glyphBox.width() * (lineHeight / glyphBox.height())
                             * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
@@ -408,7 +417,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             }
 
             float lengthThusFarAddition = glyphLength;
-            float paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
+            var paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
             if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
                     .containsKey(character)) {
                 paddingPercentage +=

@@ -49,6 +49,14 @@ class FontPreloaderTaskTests {
             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD = makeRandomGlyphPropertyDTOs();
     private final static FontStyleDefinitionGlyphPropertyDTO[]
             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC = makeRandomGlyphPropertyDTOs();
+    private final static FontStyleDefinitionGlyphPropertyDTO[]
+            GLYPHWISE_WIDTH_FACTORS_PLAIN = makeRandomGlyphPropertyDTOs();
+    private final static FontStyleDefinitionGlyphPropertyDTO[]
+            GLYPHWISE_WIDTH_FACTORS_ITALIC = makeRandomGlyphPropertyDTOs();
+    private final static FontStyleDefinitionGlyphPropertyDTO[]
+            GLYPHWISE_WIDTH_FACTORS_BOLD = makeRandomGlyphPropertyDTOs();
+    private final static FontStyleDefinitionGlyphPropertyDTO[]
+            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC = makeRandomGlyphPropertyDTOs();
     private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN = 0.567f;
     private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC = 0.678f;
     private final float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD = 0.789f;
@@ -76,24 +84,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -116,24 +128,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -151,24 +167,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -186,24 +206,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -221,24 +245,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -256,24 +284,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -292,18 +324,21 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -321,24 +356,28 @@ class FontPreloaderTaskTests {
                                             -0.0001f,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -356,24 +395,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             null,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -382,35 +425,78 @@ class FontPreloaderTaskTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FontPreloaderTask(
                         listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            null,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                null,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                null,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
                         ),
                         mockFontFactory,
                         fonts::add));
@@ -426,24 +512,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             -0.0001f
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -461,41 +551,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            1f - LEADING_ADJUSTMENT
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     null,
@@ -503,12 +559,14 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -526,24 +584,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             -0.0001f,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -561,26 +623,108 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             null,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                null,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                null,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
                         ),
                         mockFontFactory,
                         fonts::add));
@@ -596,59 +740,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            null,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             -0.0001f
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -666,47 +779,14 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            1f - LEADING_ADJUSTMENT
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     null,
@@ -714,6 +794,7 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -731,24 +812,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             -0.0001f,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -766,26 +851,108 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             null,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                null,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                null,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
                         ),
                         mockFontFactory,
                         fonts::add));
@@ -801,59 +968,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            null,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             -0.0001f
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -871,53 +1007,21 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            1f - LEADING_ADJUSTMENT
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     null)
@@ -936,24 +1040,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             -0.0001f,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -971,26 +1079,108 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             null,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                null,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
+                        ),
+                        mockFontFactory,
+                        fonts::add));
+        assertThrows(IllegalArgumentException.class,
+                () -> new FontPreloaderTask(
+                        listOf(
+                                new FontDefinitionDTO(
+                                        ID,
+                                        RELATIVE_LOCATION,
+                                        MAX_LOSSLESS_FONT_SIZE,
+                                        LEADING_ADJUSTMENT,
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                                GLYPHWISE_WIDTH_FACTORS_PLAIN,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                                GLYPHWISE_WIDTH_FACTORS_ITALIC,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                                GLYPHWISE_WIDTH_FACTORS_BOLD,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
+                                        ),
+                                        new FontStyleDefinitionDTO(
+                                                ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
+                                                GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                                null,
+                                                ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
+                                        ))
                         ),
                         mockFontFactory,
                         fonts::add));
@@ -1006,59 +1196,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            null,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             -0.0001f
                                     ))
                         ),
@@ -1076,94 +1235,28 @@ class FontPreloaderTaskTests {
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                                            GLYPHWISE_WIDTH_FACTORS_PLAIN,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                                     ),
                                     new FontStyleDefinitionDTO(
                                             ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                                             GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            1f - LEADING_ADJUSTMENT
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    1f,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
-                                    ))
-                        ),
-                        mockFontFactory,
-                        fonts::add));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FontPreloaderTask(
-                        listOf(
-                            new FontDefinitionDTO(
-                                    ID,
-                                    RELATIVE_LOCATION,
-                                    MAX_LOSSLESS_FONT_SIZE,
-                                    LEADING_ADJUSTMENT,
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
-                                            ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
-                                    ),
-                                    new FontStyleDefinitionDTO(
-                                            ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
-                                            GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                                            GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                                             ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                                     ))
                         ),
@@ -1189,24 +1282,28 @@ class FontPreloaderTaskTests {
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_PLAIN,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_PLAIN,
+                        GLYPHWISE_WIDTH_FACTORS_PLAIN,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_PLAIN
                 ),
                 new FontStyleDefinitionDTO(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_ITALIC,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_ITALIC,
+                        GLYPHWISE_WIDTH_FACTORS_ITALIC,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_ITALIC
                 ),
                 new FontStyleDefinitionDTO(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD,
+                        GLYPHWISE_WIDTH_FACTORS_BOLD,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD
                 ),
                 new FontStyleDefinitionDTO(
                         ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                         GLYPHWISE_ADDITIONAL_HORIZONTAL_TEXTURE_SPACING_BOLD_ITALIC,
                         GLYPHWISE_ADDITIONAL_LEFT_BOUNDARY_SHIFT_BOLD_ITALIC,
+                        GLYPHWISE_WIDTH_FACTORS_BOLD_ITALIC,
                         ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_BOLD_ITALIC
                 ));
 

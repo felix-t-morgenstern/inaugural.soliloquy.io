@@ -36,6 +36,7 @@ import inaugural.soliloquy.io.persistence.graphics.renderables.providers.*;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import org.apache.commons.lang3.function.TriConsumer;
 import org.int4.dirk.api.Injector;
 import org.int4.dirk.di.Injectors;
 import soliloquy.specs.common.entities.Action;
@@ -66,12 +67,12 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.io.api.Constants.NULL_PROVIDER;
-import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
+import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
+import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
 
 public class IOModule implements Module {
     private final Injector INJECTOR;
@@ -243,6 +244,10 @@ public class IOModule implements Module {
         var mouseCapturing = new MouseEventCapturingSpatialIndexImpl();
         var mouseEventHandler = new MouseEventHandlerImpl(mouseCapturing);
         var mouseListener = new MouseListener(mouseEventHandler);
+
+        TriConsumer<Integer, EventType, Runnable> subscribeToNextMouseEvent =
+                mouseEventHandler::subscribeToNextEvent;
+        andRegister(subscribeToNextMouseEvent, SUBSCRIBE_TO_NEXT_MOUSE_EVENT);
 
         // =========
         // Renderers
@@ -548,6 +553,8 @@ public class IOModule implements Module {
                 imageAssetSets::get,
                 fonts::get
         ));
+
+        andRegister(new IOMethods(soundsPlaying, soundFactory), IO_METHODS);
     }
 
     @Override
