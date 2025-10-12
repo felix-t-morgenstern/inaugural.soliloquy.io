@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.factories.ComponentFactoryImpl;
+import inaugural.soliloquy.tools.collections.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,14 +12,13 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
-import static inaugural.soliloquy.tools.random.Random.randomString;
+import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,20 +54,21 @@ public class ComponentFactoryImplTests {
     public void testMake() {
         var uuid = randomUUID();
         var z = randomInt();
+        var bindings = Collections.<KeyBinding>setOf();
+        var overrides = randomBoolean();
         var tier = randomInt();
         when(mockComponent.tier()).thenReturn(tier);
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
-        var output = factory.make(uuid, z, mockRenderingBoundaries, mockComponent, DATA);
+        var output = factory.make(uuid, z, bindings, overrides, mockRenderingBoundaries, mockComponent, DATA);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);
 
         assertNotNull(output);
-        assertNotNull(output.keyBindingContext());
-        assertEquals(listOf(), output.keyBindingContext().BINDINGS);
-        assertFalse(output.keyBindingContext().BLOCKS_LOWER_BINDINGS);
+        assertSame(bindings, output.keyBindings());
+        assertEquals(overrides, output.blocksLowerKeyBindings());
         assertEquals(uuid, output.uuid());
         assertEquals(z, output.getZ());
         assertEquals(tier + 1, output.tier());
@@ -82,10 +83,12 @@ public class ComponentFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, randomInt(), mockRenderingBoundaries, mockComponent, DATA));
+                () -> factory.make(null, randomInt(), setOf(), randomBoolean(), mockRenderingBoundaries, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), null, mockComponent, DATA));
+                () -> factory.make(randomUUID(), randomInt(), null, randomBoolean(), mockRenderingBoundaries, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), mockRenderingBoundaries, mockComponent, null));
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), null, mockComponent, DATA));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), mockRenderingBoundaries, mockComponent, null));
     }
 }

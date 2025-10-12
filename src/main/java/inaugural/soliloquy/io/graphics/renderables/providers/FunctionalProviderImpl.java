@@ -13,18 +13,18 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
     private final UUID UUID;
-    private final soliloquy.specs.common.entities.Function<EventInfo, T> PROVIDE;
-    private final Action<EventInfo> PAUSE;
-    private final Action<EventInfo> UNPAUSE;
+    private final soliloquy.specs.common.entities.Function<Inputs, T> PROVIDE;
+    private final Action<Inputs> PAUSE;
+    private final Action<Inputs> UNPAUSE;
     private final Map<String, Object> DATA;
     private final TimestampValidator VALIDATOR;
 
     private Long pauseTimestamp;
 
     public FunctionalProviderImpl(UUID uuid,
-                                  Function<EventInfo, T> provide,
-                                  Action<EventInfo> pause,
-                                  Action<EventInfo> unpause,
+                                  Function<Inputs, T> provide,
+                                  Action<Inputs> pause,
+                                  Action<Inputs> unpause,
                                   Map<String, Object> data,
                                   Long pauseTimestamp,
                                   TimestampValidator validator) {
@@ -40,7 +40,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
     @Override
     public T provide(long timestamp) throws IllegalArgumentException {
         VALIDATOR.validateTimestamp(timestamp);
-        return PROVIDE.apply(new EventInfo(timestamp, pauseTimestamp, DATA));
+        return PROVIDE.apply(new Inputs(timestamp, pauseTimestamp, DATA));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
         }
         VALIDATOR.validateTimestamp(timestamp);
         if (PAUSE != null) {
-            PAUSE.accept(new EventInfo(timestamp, null, DATA));
+            PAUSE.accept(new Inputs(timestamp, null, DATA));
         }
         pauseTimestamp = timestamp;
     }
@@ -87,7 +87,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
         }
         VALIDATOR.validateTimestamp(timestamp);
         if (UNPAUSE != null) {
-            UNPAUSE.accept(new EventInfo(timestamp, pauseTimestamp, DATA));
+            UNPAUSE.accept(new Inputs(timestamp, pauseTimestamp, DATA));
         }
         pauseTimestamp = null;
     }

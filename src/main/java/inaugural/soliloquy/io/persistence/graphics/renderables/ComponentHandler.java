@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.PersistenceHandler;
@@ -9,13 +10,15 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static soliloquy.specs.io.input.keyboard.entities.KeyBinding.keyBinding;
+import static inaugural.soliloquy.tools.Tools.defaultIfNull;
+import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 
 public class ComponentHandler extends AbstractTypeHandler<Component> {
     @SuppressWarnings("rawtypes") private final TypeHandler<ProviderAtTime> PROVIDER_HANDLER;
@@ -47,9 +50,18 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         var dimens = PROVIDER_HANDLER.read(dto.dimens);
         var data = DATA_HANDLER.read(dto.data);
 
+        var bindings = Collections.<KeyBinding>setOf();
+        Arrays.stream(dto.bindings).forEach(b -> {
+            var onPress = defaultIfNull(b.onPress, null, GET_ACTION);
+            var onRelease = defaultIfNull(b.onRelease, null, GET_ACTION);
+            bindings.add(keyBinding(b.keys, onPress, onRelease));
+        });
+
         var component = FACTORY.make(
                 UUID.fromString(dto.uuid),
                 dto.z,
+                bindings,
+                dto.overrides,
                 dimens,
                 null,
                 data
@@ -58,15 +70,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         Arrays.stream(dto.content).forEach(c -> {
             var handler = PERSISTENCE_HANDLER.getTypeHandler(c.type);
             var content = (Renderable) handler.read(c.content);
-            //content.
             component.add(content);
-        });
-
-        component.keyBindingContext().BLOCKS_LOWER_BINDINGS = dto.bindingContext.overrides;
-        Arrays.stream(dto.bindingContext.bindings).forEach(b -> {
-            var onPress = b.onPress == null ? null : GET_ACTION.apply(b.onPress);
-            var onRelease = b.onRelease == null ? null : GET_ACTION.apply(b.onRelease);
-            component.keyBindingContext().BINDINGS.add(keyBinding(b.keys, onPress, onRelease));
         });
 
         return component;
@@ -81,17 +85,14 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         dto.uuid = component.uuid().toString();
         dto.z = component.getZ();
 
-        var context = component.keyBindingContext();
-        var contextDto = new Dto.BindingContextDto();
-        contextDto.overrides = context.BLOCKS_LOWER_BINDINGS;
-        contextDto.bindings = context.BINDINGS.stream().map(b -> {
-            var bindingDto = new Dto.BindingContextDto.BindingDto();
+        dto.overrides = component.blocksLowerKeyBindings();
+        dto.bindings = component.keyBindings().stream().map(b -> {
+            var bindingDto = new Dto.BindingDto();
             bindingDto.keys = b.BOUND_KEYS;
             bindingDto.onPress = b.ON_PRESS.id();
             bindingDto.onRelease = b.ON_RELEASE.id();
             return bindingDto;
-        }).toArray(Dto.BindingContextDto.BindingDto[]::new);
-        dto.bindingContext = contextDto;
+        }).toArray(Dto.BindingDto[]::new);
 
         dto.dimens = PROVIDER_HANDLER.write(component.getRenderingBoundariesProvider());
 
@@ -110,7 +111,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
 
     private final static class Dto {
         String uuid;
-        BindingContextDto bindingContext;
+        BindingDto[] bindings;
+        boolean overrides;
         String dimens;
         ContentDto[] content;
         String data;
@@ -121,15 +123,11 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             String content;
         }
 
-        private final static class BindingContextDto {
-            BindingDto[] bindings;
-            boolean overrides;
 
-            private final static class BindingDto {
-                char[] keys;
-                String onPress;
-                String onRelease;
-            }
+        private final static class BindingDto {
+            char[] keys;
+            String onPress;
+            String onRelease;
         }
     }
 }

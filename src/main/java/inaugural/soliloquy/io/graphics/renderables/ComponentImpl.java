@@ -6,7 +6,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +17,8 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 
 public class ComponentImpl  extends AbstractRenderable implements Component {
-    private final KeyBindingContext BINDING_CONTEXT;
+    private final Set<KeyBinding> BINDINGS;
+    private final boolean BLOCKS_LOWER_BINDINGS;
     private final Set<Renderable> RENDERABLES;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
@@ -29,13 +30,16 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     @SuppressWarnings("ConstantConditions")
     public ComponentImpl(UUID uuid,
                          int z,
-                         KeyBindingContext bindingContext,
+                         Set<KeyBinding> keyBindings,
+                         boolean blocksLowerKeyBindings,
                          Component containingComponent,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
                          Map<String, Object> data,
                          Consumer<RenderableWithMouseEvents> addToCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromCapturing) {
         super(z, uuid);
+        BINDINGS = Check.ifNull(keyBindings, "keyBindings");
+        BLOCKS_LOWER_BINDINGS = blocksLowerKeyBindings;
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
@@ -43,7 +47,6 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
         }
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
-        BINDING_CONTEXT = Check.ifNull(bindingContext, "bindingContext");
         RENDERABLES = setOf();
         DATA = mapOf(Check.ifNull(data, "data"));
         ADD_TO_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
@@ -51,8 +54,13 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     }
 
     @Override
-    public KeyBindingContext keyBindingContext() {
-        return BINDING_CONTEXT;
+    public Set<KeyBinding> keyBindings() {
+        return BINDINGS;
+    }
+
+    @Override
+    public boolean blocksLowerKeyBindings() {
+        return BLOCKS_LOWER_BINDINGS;
     }
 
     @Override

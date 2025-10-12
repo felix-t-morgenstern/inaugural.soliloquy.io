@@ -52,13 +52,18 @@ public class TextLineSimpleDisplayTest extends DisplayTest {
         var graphics = ioModule.provide(Graphics.class);
         var font = graphics.getFont(CINZEL_ID);
 
-        var lineHeight = staticProvider(0.1f);
-        var glyphPadding = 0.05f;
+        var lineHeight = 0.09f;
+        var lineHeightProvider = staticProvider(lineHeight);
+        var glyphPadding = 0.0025f;
 
         var factory = ioModule.provide(TextLineRenderableFactory.class);
         var strings = arrayOf(
                 "ABCDEFGHIJKLM",
                 "NOPQRSTUVWXYZ",
+                "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓ",
+                "ÔÕÖ×ØÙÚÛÜÝÞß",
+                "àáâãäåæçèéêëìíîïðñòó",
+                "ôõö÷øùúûüýþÿ",
                 "abcdefghijklm",
                 "nopqrstuvwxyz",
                 "0123456789-=",
@@ -70,8 +75,8 @@ public class TextLineSimpleDisplayTest extends DisplayTest {
             factory.make(
                     font,
                     staticProvider(string),
-                    staticProvider(vertexOf(0f, (0f + (0.1f * row++)))),
-                    lineHeight,
+                    staticProvider(vertexOf(0f, (0f + (lineHeight * row++)))),
+                    lineHeightProvider,
                     TextJustification.LEFT,
                     glyphPadding,
                     mapOf(0, staticProvider(Color.RED)),

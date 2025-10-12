@@ -34,7 +34,8 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.ui.EventInputs.inputs;
+import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 // TODO: This refactor is a WIP
 @ExtendWith(MockitoExtension.class)
@@ -222,8 +223,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.press(2, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnPressAction, once()).accept(eq(inputs(TIMESTAMP,
-                renderable)));
+        verify(mockOnPressAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnPress = mock(Action.class);
@@ -231,8 +233,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).accept(eq(inputs(TIMESTAMP + 1,
-                renderable)));
+        verify(newOnPress, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, renderable,
+                        mockContainingComponent)));
 
         renderable.press(0, TIMESTAMP + 2);
 
@@ -278,8 +281,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(newOnRelease, once()).accept(eq(inputs(TIMESTAMP + 1,
-                renderable)));
+        verify(newOnRelease, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -340,7 +344,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.mouseOver(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
@@ -348,7 +354,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseOver, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -378,7 +386,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.mouseLeave(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseLeave = mock(Action.class);
@@ -386,7 +396,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -394,7 +406,8 @@ public class GlobalLoopingAnimationRenderableImplTests {
         renderable.setCapturesMouseEvents(false);
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.mouseLeave(0L));
-        assertThrows(UnsupportedOperationException.class, () -> renderable.setOnMouseLeave(action(randomString(), _ -> {})));
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderable.setOnMouseLeave(action(randomString(), _ -> {})));
     }
 
     @Test

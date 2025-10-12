@@ -34,7 +34,8 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.ui.EventInputs.inputs;
+import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 // NB: This is a total fucking mess. Don't feel any pressure to fix it all at once.
 @ExtendWith(MockitoExtension.class)
@@ -247,14 +248,16 @@ public class FiniteAnimationRenderableImplTests {
 
         assertEquals(START_TIMESTAMP + pauseDuration, renderable.startTimestamp());
         assertNull(renderable.pausedTimestamp());
-        assertEquals(START_TIMESTAMP + ANIMATION_DURATION + pauseDuration, renderable.endTimestamp());
+        assertEquals(START_TIMESTAMP + ANIMATION_DURATION + pauseDuration,
+                renderable.endTimestamp());
     }
 
     @Test
     public void testPauseWhilePaused() {
         renderable.reportPause(PAUSED_TIMESTAMP_2);
 
-        assertThrows(IllegalArgumentException.class, () -> renderable.reportPause(PAUSED_TIMESTAMP_2));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderable.reportPause(PAUSED_TIMESTAMP_2));
     }
 
     @Test
@@ -276,7 +279,9 @@ public class FiniteAnimationRenderableImplTests {
         renderable.setOnPress(2, mockOnPressAction);
 
         renderable.press(2, TIMESTAMP);
-        verify(mockOnPressAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnPressAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnPress = mock(Action.class);
@@ -284,7 +289,9 @@ public class FiniteAnimationRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnPress, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(0, PRESS, renderable,
+                        mockContainingComponent)));
 
         renderable.press(0, TIMESTAMP + 2);
 
@@ -330,7 +337,8 @@ public class FiniteAnimationRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(newOnRelease, once()).accept(
-                eq(inputs(TIMESTAMP + 1, renderable)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -389,14 +397,18 @@ public class FiniteAnimationRenderableImplTests {
     public void testMouseOverAndSetOnMouseOver() {
         renderable.mouseOver(TIMESTAMP);
 
-        verify(mockOnMouseOverAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
         renderable.setOnMouseOver(newOnMouseOver);
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseOver, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -426,14 +438,18 @@ public class FiniteAnimationRenderableImplTests {
     public void testMouseLeaveAndSetOnMouseLeave() {
         renderable.mouseLeave(TIMESTAMP);
 
-        verify(mockOnMouseLeaveAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseLeave = mock(Action.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -441,7 +457,8 @@ public class FiniteAnimationRenderableImplTests {
         renderable.setCapturesMouseEvents(false);
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.mouseLeave(0L));
-        assertThrows(UnsupportedOperationException.class, () -> renderable.setOnMouseLeave(action(randomString(), _ -> {})));
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderable.setOnMouseLeave(action(randomString(), _ -> {})));
     }
 
     @Test
@@ -499,8 +516,10 @@ public class FiniteAnimationRenderableImplTests {
         renderable.reportPause(pauseTimestamp);
         renderable.reportUnpause(unpauseTimestamp);
 
-        assertEquals(START_TIMESTAMP + (unpauseTimestamp - pauseTimestamp), renderable.startTimestamp());
-        assertEquals(START_TIMESTAMP + ANIMATION_DURATION + (unpauseTimestamp - pauseTimestamp), renderable.endTimestamp());
+        assertEquals(START_TIMESTAMP + (unpauseTimestamp - pauseTimestamp),
+                renderable.startTimestamp());
+        assertEquals(START_TIMESTAMP + ANIMATION_DURATION + (unpauseTimestamp - pauseTimestamp),
+                renderable.endTimestamp());
     }
 
     @Test

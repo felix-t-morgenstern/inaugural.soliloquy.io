@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
 import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
@@ -11,6 +12,7 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -107,7 +109,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             float sizeAdjustment = dropShadowSize / lineHeight;
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         var leftX = startX + xOffset + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -134,7 +136,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             var xThickness = yThickness / getScreenWToHRatio.get();
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         var leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -155,7 +157,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -176,7 +178,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -197,7 +199,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -218,7 +220,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX + xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -239,7 +241,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -260,7 +262,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -281,7 +283,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     });
 
             iterateOverTextLine(renderable, timestamp, lineText, lineHeight,
-                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> color -> {
+                    textLineLengthThusFar -> glyphLength -> textureId -> glyphBox -> _ -> {
                         float leftX = startX - xThickness + textLineLengthThusFar;
                         var renderingArea = floatBoxOf(
                                 vertexOf(
@@ -336,6 +338,26 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         return iterateOverTextLine(renderable, timestamp, lineText, lineHeight, null);
     }
 
+    @Override
+    public float textLineLength(String text,
+                                Font font,
+                                float paddingBetweenGlyphs,
+                                List<Integer> italicIndices,
+                                List<Integer> boldIndices,
+                                float lineHeight) throws IllegalArgumentException {
+        return iterateOverTextLine(
+                text,
+                font,
+                paddingBetweenGlyphs,
+                italicIndices,
+                boldIndices,
+                null,
+                lineHeight,
+                null,
+                null
+        );
+    }
+
     // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't
     // elegant, but this is not front-facing code.
     private float iterateOverTextLine(
@@ -346,54 +368,80 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             Function<Float, Function<Float, Function<Integer,
                     Function<FloatBox, Consumer<Color>>>>> renderingAction
     ) {
+        return iterateOverTextLine(
+                lineText,
+                renderable.getFont(),
+                renderable.getPaddingBetweenGlyphs(),
+                renderable.italicIndices(),
+                renderable.boldIndices(),
+                timestamp,
+                lineHeight,
+                renderable.colorProviderIndices(),
+                renderingAction
+        );
+    }
+
+    // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't
+    // elegant, but this is not front-facing code.
+    private float iterateOverTextLine(
+            String lineText,
+            Font font,
+            float paddingBetweenGlyphs,
+            List<Integer> italicIndices,
+            List<Integer> boldIndices,
+            Long timestamp,
+            float lineHeight,
+            Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
+            Function<Float, Function<Float, Function<Integer,
+                    Function<FloatBox, Consumer<Color>>>>> renderingAction
+    ) {
         var italic = false;
         var bold = false;
         var nextItalicIndex = 0;
         var nextBoldIndex = 0;
         var textLineLengthThusFar = 0f;
         var color = DEFAULT_COLOR;
-        var paddingBetweenGlyphs = renderable.getPaddingBetweenGlyphs() * lineHeight;
+        var paddingToRender = paddingBetweenGlyphs * lineHeight;
         FontStyleInfo fontStyleInfo;
 
         for (var i = 0; i < lineText.length(); i++) {
             if (renderingAction != null) {
-                if (renderable.colorProviderIndices() != null &&
-                        renderable.colorProviderIndices().containsKey(i)) {
-                    color = renderable.colorProviderIndices().get(i).provide(timestamp);
+                if (colorProviderIndices != null && colorProviderIndices.containsKey(i)) {
+                    color = colorProviderIndices.get(i).provide(timestamp);
                 }
             }
-            if (renderable.italicIndices() != null &&
-                    renderable.italicIndices().size() > nextItalicIndex &&
-                    renderable.italicIndices().get(nextItalicIndex) == i) {
+            if (italicIndices != null &&
+                    italicIndices.size() > nextItalicIndex &&
+                    italicIndices.get(nextItalicIndex) == i) {
                 italic = !italic;
                 nextItalicIndex++;
             }
-            if (renderable.boldIndices() != null &&
-                    renderable.boldIndices().size() > nextBoldIndex &&
-                    renderable.boldIndices().get(nextBoldIndex) == i) {
+            if (boldIndices != null &&
+                    boldIndices.size() > nextBoldIndex &&
+                    boldIndices.get(nextBoldIndex) == i) {
                 bold = !bold;
                 nextBoldIndex++;
             }
 
             if (italic) {
                 if (bold) {
-                    fontStyleInfo = renderable.getFont().boldItalic();
+                    fontStyleInfo = font.boldItalic();
                 }
                 else {
-                    fontStyleInfo = renderable.getFont().italic();
+                    fontStyleInfo = font.italic();
                 }
             }
             else {
                 if (bold) {
-                    fontStyleInfo = renderable.getFont().bold();
+                    fontStyleInfo = font.bold();
                 }
                 else {
-                    fontStyleInfo = renderable.getFont().plain();
+                    fontStyleInfo = font.plain();
                 }
             }
 
             if (i > 0) {
-                textLineLengthThusFar += paddingBetweenGlyphs;
+                textLineLengthThusFar += paddingToRender;
             }
 
             var character = lineText.charAt(i);
@@ -409,7 +457,7 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                 );
             }
             var glyphLength = glyphBox.width() * (lineHeight / glyphBox.height())
-                            * fontStyleInfo.textureWidthToHeightRatio();
+                    * fontStyleInfo.textureWidthToHeightRatio();
 
             if (renderingAction != null) {
                 renderingAction.apply(textLineLengthThusFar).apply(glyphLength)

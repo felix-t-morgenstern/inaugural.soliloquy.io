@@ -9,29 +9,31 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
-import soliloquy.specs.io.input.keyboard.infrastructure.KeyEventListener;
-import soliloquy.specs.ui.definitions.keyboard.KeyEventInfo;
+import soliloquy.specs.io.graphics.renderables.Component;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
+import soliloquy.specs.ui.EventInputs;
+
+import java.util.Set;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static soliloquy.specs.io.input.keyboard.entities.KeyBinding.keyBinding;
-import static soliloquy.specs.io.input.keyboard.entities.KeyBindingContext.bindingContext;
+import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 
 @ExtendWith(MockitoExtension.class)
 public class KeyEventListenerImplTests {
-    private final int priority1 = randomIntWithInclusiveCeiling(Integer.MAX_VALUE - 2);
-    private final int priority2 = randomIntWithInclusiveFloor(priority1 + 1);
+    private final int PRIORITY_1 = randomIntWithInclusiveCeiling(Integer.MAX_VALUE - 2);
+    private final int PRIORITY_2 = randomIntWithInclusiveFloor(PRIORITY_1 + 1);
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
     private final char KEY = randomChar();
 
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private KeyBindingContext mockKeyBindingContext1;
-    @Mock private KeyBindingContext mockKeyBindingContext2;
-    @Mock private KeyBindingContext mockKeyBindingContext3;
+    @Mock private Component mockComponent1;
+    @Mock private Component mockComponent2;
+    @Mock private Component mockComponent3;
 
     private KeyEventListener keyEventListener;
 
@@ -41,87 +43,87 @@ public class KeyEventListenerImplTests {
     }
 
     @Test
-    public void testAddAndRemoveContextAndContextsRepresentation() {
-        keyEventListener.addContext(mockKeyBindingContext1, priority1);
-        keyEventListener.addContext(mockKeyBindingContext2, priority2);
-        keyEventListener.addContext(mockKeyBindingContext3, priority1);
+    public void testAddAndRemoveComponentAndComponentsRepresentation() {
+        keyEventListener.addComponent(mockComponent1, PRIORITY_1);
+        keyEventListener.addComponent(mockComponent2, PRIORITY_2);
+        keyEventListener.addComponent(mockComponent3, PRIORITY_1);
 
-        var contextsRepresentation = keyEventListener.contextsRepresentation();
-        var contextsRepresentation2 = keyEventListener.contextsRepresentation();
+        var representation = keyEventListener.componentsRepresentation();
+        var representation2 = keyEventListener.componentsRepresentation();
 
-        assertNotNull(contextsRepresentation);
-        assertNotSame(contextsRepresentation, contextsRepresentation2);
-        assertEquals(2, contextsRepresentation.size());
-        assertEquals(2, contextsRepresentation.get(priority1).size());
-        assertTrue(contextsRepresentation.get(priority1).contains(mockKeyBindingContext1));
-        assertTrue(contextsRepresentation.get(priority1).contains(mockKeyBindingContext3));
-        assertEquals(1, contextsRepresentation.get(priority2).size());
-        assertTrue(contextsRepresentation.get(priority2).contains(mockKeyBindingContext2));
+        assertNotNull(representation);
+        assertNotSame(representation, representation2);
+        assertEquals(2, representation.size());
+        assertEquals(2, representation.get(PRIORITY_1).size());
+        assertTrue(representation.get(PRIORITY_1).contains(mockComponent1));
+        assertTrue(representation.get(PRIORITY_1).contains(mockComponent3));
+        assertEquals(1, representation.get(PRIORITY_2).size());
+        assertTrue(representation.get(PRIORITY_2).contains(mockComponent2));
 
-        keyEventListener.removeContext(mockKeyBindingContext2);
-        var contextsRepresentationUpdated = keyEventListener.contextsRepresentation();
+        keyEventListener.removeComponent(mockComponent2);
+        var representationUpdated = keyEventListener.componentsRepresentation();
 
-        assertEquals(1, contextsRepresentationUpdated.size());
-        assertEquals(2, contextsRepresentationUpdated.get(priority1).size());
-        assertTrue(contextsRepresentationUpdated.get(priority1).contains(mockKeyBindingContext1));
-        assertTrue(contextsRepresentationUpdated.get(priority1).contains(mockKeyBindingContext3));
+        assertEquals(1, representationUpdated.size());
+        assertEquals(2, representationUpdated.get(PRIORITY_1).size());
+        assertTrue(representationUpdated.get(PRIORITY_1).contains(mockComponent1));
+        assertTrue(representationUpdated.get(PRIORITY_1).contains(mockComponent3));
     }
 
     @Test
-    public void testAddContextUpdatesPriority() {
-        keyEventListener.addContext(mockKeyBindingContext1, priority1);
-        keyEventListener.addContext(mockKeyBindingContext2, priority2);
-        keyEventListener.addContext(mockKeyBindingContext3, priority1);
+    public void testAddComponentUpdatesPriority() {
+        keyEventListener.addComponent(mockComponent1, PRIORITY_1);
+        keyEventListener.addComponent(mockComponent2, PRIORITY_2);
+        keyEventListener.addComponent(mockComponent3, PRIORITY_1);
 
-        var contextsRepresentation = keyEventListener.contextsRepresentation();
-        var contextsRepresentation2 = keyEventListener.contextsRepresentation();
+        var representation = keyEventListener.componentsRepresentation();
+        var representation2 = keyEventListener.componentsRepresentation();
 
-        assertNotNull(contextsRepresentation);
-        assertNotSame(contextsRepresentation, contextsRepresentation2);
-        assertEquals(2, contextsRepresentation.size());
-        assertEquals(2, contextsRepresentation.get(priority1).size());
-        assertTrue(contextsRepresentation.get(priority1).contains(mockKeyBindingContext1));
-        assertTrue(contextsRepresentation.get(priority1).contains(mockKeyBindingContext3));
-        assertEquals(1, contextsRepresentation.get(priority2).size());
-        assertTrue(contextsRepresentation.get(priority2).contains(mockKeyBindingContext2));
+        assertNotNull(representation);
+        assertNotSame(representation, representation2);
+        assertEquals(2, representation.size());
+        assertEquals(2, representation.get(PRIORITY_1).size());
+        assertTrue(representation.get(PRIORITY_1).contains(mockComponent1));
+        assertTrue(representation.get(PRIORITY_1).contains(mockComponent3));
+        assertEquals(1, representation.get(PRIORITY_2).size());
+        assertTrue(representation.get(PRIORITY_2).contains(mockComponent2));
 
-        keyEventListener.addContext(mockKeyBindingContext3, priority2);
-        var contextsRepresentationUpdated = keyEventListener.contextsRepresentation();
+        keyEventListener.addComponent(mockComponent3, PRIORITY_2);
+        var representationUpdated = keyEventListener.componentsRepresentation();
 
-        assertEquals(2, contextsRepresentationUpdated.size());
-        assertEquals(1, contextsRepresentationUpdated.get(priority1).size());
-        assertTrue(contextsRepresentationUpdated.get(priority1).contains(mockKeyBindingContext1));
-        assertEquals(2, contextsRepresentationUpdated.get(priority2).size());
-        assertTrue(contextsRepresentationUpdated.get(priority2).contains(mockKeyBindingContext2));
-        assertTrue(contextsRepresentationUpdated.get(priority2).contains(mockKeyBindingContext3));
+        assertEquals(2, representationUpdated.size());
+        assertEquals(1, representationUpdated.get(PRIORITY_1).size());
+        assertTrue(representationUpdated.get(PRIORITY_1).contains(mockComponent1));
+        assertEquals(2, representationUpdated.get(PRIORITY_2).size());
+        assertTrue(representationUpdated.get(PRIORITY_2).contains(mockComponent2));
+        assertTrue(representationUpdated.get(PRIORITY_2).contains(mockComponent3));
     }
 
     @Test
-    public void testAddAndRemoveContextWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> keyEventListener.addContext(null, 0));
-        assertThrows(IllegalArgumentException.class, () -> keyEventListener.removeContext(null));
+    public void testAddAndRemoveComponentWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> keyEventListener.addComponent(null, 0));
+        assertThrows(IllegalArgumentException.class, () -> keyEventListener.removeComponent(null));
     }
 
     @Test
     public void testActiveKeysRepresentation() {
-        var context1Binding1 = keyBinding(arrayChars('a', 'b'), null, null);
+        var component1Binding1 = keyBinding(arrayChars('a', 'b'), null, null);
 
-        var context1Binding2 = keyBinding(arrayChars('c'), null, null);
+        var component1Binding2 = keyBinding(arrayChars('c'), null, null);
 
-        var keyBindingContext1 = bindingContext(listOf(context1Binding1, context1Binding2), false);
+        var component1 = makeComponent(setOf(component1Binding1, component1Binding2), false);
 
-        var context2Binding1 = keyBinding(arrayChars('d'), null, null);
+        var component2Binding1 = keyBinding(arrayChars('d'), null, null);
 
-        var context2Binding2 = keyBinding(arrayChars('e'), null, null);
+        var component2Binding2 = keyBinding(arrayChars('e'), null, null);
 
-        var keyBindingContext2 = bindingContext(listOf(context2Binding1, context2Binding2), true);
+        var component2 = makeComponent(setOf(component2Binding1, component2Binding2), true);
 
-        var context3Binding1 = keyBinding(arrayChars('f'), null, null);
-        var keyBindingContext3 = bindingContext(listOf(context3Binding1), false);
+        var component3Binding1 = keyBinding(arrayChars('f'), null, null);
+        var component3 = makeComponent(setOf(component3Binding1), false);
 
-        keyEventListener.addContext(keyBindingContext1, 1);
-        keyEventListener.addContext(keyBindingContext2, 2);
-        keyEventListener.addContext(keyBindingContext3, 3);
+        keyEventListener.addComponent(component1, 1);
+        keyEventListener.addComponent(component2, 2);
+        keyEventListener.addComponent(component3, 3);
 
         var activeKeysRepresentation = keyEventListener.activeKeysRepresentation();
         var activeKeysRepresentation2 = keyEventListener.activeKeysRepresentation();
@@ -136,56 +138,58 @@ public class KeyEventListenerImplTests {
 
     @Test
     public void testKeyPressed() {
-        @SuppressWarnings("unchecked") var onPress = (Action<KeyEventInfo>) mock(Action.class);
+        @SuppressWarnings("unchecked") var onPress = (Action<EventInputs>) mock(Action.class);
         var binding = keyBinding(arrayChars(KEY), onPress, null);
 
-        var keyBindingContext = bindingContext(listOf(binding), false);
+        var component = makeComponent(setOf(binding), false);
 
-        keyEventListener.addContext(keyBindingContext, 0);
+        keyEventListener.addComponent(component, 0);
 
         keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
-        var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
+        var keyEventInfoCaptor = ArgumentCaptor.forClass(EventInputs.class);
         verify(onPress, once()).accept(keyEventInfoCaptor.capture());
         var eventInfoProvided = keyEventInfoCaptor.getValue();
         assertEquals(KEY, eventInfoProvided.key);
-        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
+        assertSame(component, eventInfoProvided.component);
+        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.TIMESTAMP);
     }
 
     @Test
     public void testKeyReleased() {
-        @SuppressWarnings("unchecked") var onRelease = (Action<KeyEventInfo>) mock(Action.class);
+        @SuppressWarnings("unchecked") var onRelease = (Action<EventInputs>) mock(Action.class);
         var binding = keyBinding(arrayChars(KEY), null, onRelease);
 
-        var keyBindingContext = bindingContext(listOf(binding), false);
+        var component = makeComponent(setOf(binding), false);
 
-        keyEventListener.addContext(keyBindingContext, 0);
+        keyEventListener.addComponent(component, 0);
 
         keyEventListener.release(KEY, MOST_RECENT_TIMESTAMP);
 
-        var keyEventInfoCaptor = ArgumentCaptor.forClass(KeyEventInfo.class);
+        var keyEventInfoCaptor = ArgumentCaptor.forClass(EventInputs.class);
         verify(onRelease, once()).accept(keyEventInfoCaptor.capture());
         var eventInfoProvided = keyEventInfoCaptor.getValue();
         assertEquals(KEY, eventInfoProvided.key);
-        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.timestamp);
+        assertSame(component, eventInfoProvided.component);
+        assertEquals(MOST_RECENT_TIMESTAMP, eventInfoProvided.TIMESTAMP);
     }
 
     @Test
-    public void testContextCanBlockLowerContexts() {
+    public void testComponentCanBlockLowerComponent() {
         @SuppressWarnings("unchecked") var lowerBindingOnPress =
-                (Action<KeyEventInfo>) mock(Action.class);
+                (Action<EventInputs>) mock(Action.class);
         var lowerBinding = keyBinding(arrayChars('a'), lowerBindingOnPress, null);
 
-        var lowerBindingContext = bindingContext(listOf(lowerBinding), false);
+        var lowerComponent = makeComponent(setOf(lowerBinding), false);
 
         @SuppressWarnings("unchecked") var upperBindingOnPress =
-                (Action<KeyEventInfo>) mock(Action.class);
+                (Action<EventInputs>) mock(Action.class);
         var upperBinding = keyBinding(arrayChars(KEY), upperBindingOnPress, null);
 
-        var upperBindingContext = bindingContext(listOf(upperBinding), true);
+        var upperComponent = makeComponent(setOf(upperBinding), true);
 
-        keyEventListener.addContext(upperBindingContext, 1);
-        keyEventListener.addContext(lowerBindingContext, 0);
+        keyEventListener.addComponent(upperComponent, 1);
+        keyEventListener.addComponent(lowerComponent, 0);
 
         keyEventListener.press(KEY, MOST_RECENT_TIMESTAMP);
 
@@ -214,5 +218,12 @@ public class KeyEventListenerImplTests {
         verify(mockTimestampValidator, once())
                 .validateTimestamp(keyEventListener.getClass().getCanonicalName(),
                         MOST_RECENT_TIMESTAMP);
+    }
+
+    private Component makeComponent(Set<KeyBinding> bindings, boolean overrides) {
+        var mockComponent = mock(Component.class);
+        lenient().when(mockComponent.keyBindings()).thenReturn(bindings);
+        lenient().when(mockComponent.blocksLowerKeyBindings()).thenReturn(overrides);
+        return mockComponent;
     }
 }

@@ -33,6 +33,7 @@ import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.api.dto.AssetType.*;
 import static inaugural.soliloquy.tools.CheckedExceptionWrapper.sleep;
+import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static java.util.UUID.randomUUID;
@@ -122,13 +123,54 @@ public class DisplayTest {
     protected final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL = 0.25f;
     protected final static float ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL = 0.25f;
     protected final static float LEADING_ADJUSTMENT_CINZEL = 0f;
+    protected final static FontStyleDefinitionGlyphPropertyDTO[] CINZEL_PLAIN_WIDTH_FACTORS =
+            arrayOf(
+                    new FontStyleDefinitionGlyphPropertyDTO('U', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('V', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('W', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('X', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('u', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('v', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('w', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('x', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('À', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Á', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Â', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Ã', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Ä', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Å', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Ü', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ß', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('à', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('á', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('â', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ã', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ä', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('å', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ë', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ü', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('þ', 0.99f)
+            );
     protected final static FontStyleDefinitionGlyphPropertyDTO[] CINZEL_ITALIC_WIDTH_FACTORS =
             arrayOf(
                     new FontStyleDefinitionGlyphPropertyDTO('I', 0.965f),
                     new FontStyleDefinitionGlyphPropertyDTO('W', 0.975f),
-                    new FontStyleDefinitionGlyphPropertyDTO('i', 0.965f),
+                    new FontStyleDefinitionGlyphPropertyDTO('i', 0.960f),
                     new FontStyleDefinitionGlyphPropertyDTO('w', 0.975f),
-                    new FontStyleDefinitionGlyphPropertyDTO('^', 0.975f)
+                    new FontStyleDefinitionGlyphPropertyDTO('^', 0.975f),
+                    new FontStyleDefinitionGlyphPropertyDTO('À', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Á', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Â', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Ã', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Ä', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('Å', 0.98f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ß', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('à', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('á', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('â', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ã', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('ä', 0.99f),
+                    new FontStyleDefinitionGlyphPropertyDTO('å', 0.99f)
             );
 
     protected final static FontStyleDefinitionDTO CINZEL_PLAIN_DTO =
@@ -136,7 +178,7 @@ public class DisplayTest {
                     ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
                     arrayOf(),
                     arrayOf(),
-                    arrayOf(),
+                    CINZEL_PLAIN_WIDTH_FACTORS,
                     ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
     protected final static FontStyleDefinitionDTO CINZEL_ITALIC_DTO =
             new FontStyleDefinitionDTO(
@@ -150,14 +192,14 @@ public class DisplayTest {
                     ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
                     arrayOf(),
                     arrayOf(),
-                    arrayOf(),
+                    CINZEL_PLAIN_WIDTH_FACTORS,
                     ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
     protected final static FontStyleDefinitionDTO CINZEL_BOLD_ITALIC_DTO =
             new FontStyleDefinitionDTO(
                     ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_CINZEL,
                     arrayOf(),
                     arrayOf(),
-                    arrayOf(),
+                    CINZEL_ITALIC_WIDTH_FACTORS,
                     ADDITIONAL_GLYPH_VERTICAL_TEXTURE_SPACING_CINZEL);
     protected final static FontDefinitionDTO CINZEL_DEF =
             new FontDefinitionDTO(CINZEL_ID, RELATIVE_LOCATION_CINZEL,
@@ -243,8 +285,8 @@ public class DisplayTest {
         ioModule = new IOModule(
                 commonModule,
                 settings::get,
-                ACTIONS::get,
-                FUNCTIONS::get,
+                ACTIONS,
+                FUNCTIONS,
                 listOf(),
                 testName,
                 mapOf(
@@ -281,7 +323,7 @@ public class DisplayTest {
         StaticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
         var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
         topLevelComponent =
-                componentFactory.make(randomUUID(), 0, wholeScreenProvider, null, mapOf());
+                componentFactory.make(randomUUID(), 0, setOf(), false, wholeScreenProvider, null, mapOf());
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
         coreLoop.startup(() -> {
@@ -317,7 +359,7 @@ public class DisplayTest {
     }
 
     protected static long timestamp() {
-        Clock = Clock == null ? ioModule.provide(GlobalClock.class) : Clock;
-        return Clock.globalTimestamp();
+        return (Clock = defaultIfNull(Clock, ioModule.provide(GlobalClock.class)))
+                .globalTimestamp();
     }
 }

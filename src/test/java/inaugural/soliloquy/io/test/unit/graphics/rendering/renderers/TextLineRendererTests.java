@@ -374,7 +374,7 @@ public class TextLineRendererTests {
     }
 
     @Test
-    public void testTextLineLength() {
+    public void testTextLineLengthFromRenderable() {
         var plain = new FakeFontStyleInfo();
         var italic = new FakeFontStyleInfo();
         var bold = new FakeFontStyleInfo();
@@ -423,6 +423,69 @@ public class TextLineRendererTests {
 
         var textLineLength = renderer.textLineLength(textLineRenderable,
                 MOST_RECENT_TIMESTAMP);
+
+        var expectedTextLineLength = ((glyphA.width() * 1 * textureWidthToHeightRatio) +
+                (glyphAItalic.width() * 5 * textureWidthToHeightRatioItalic) +
+                (glyphABoldItalic.width() * 2 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBoldItalic.width() * 1 * textureWidthToHeightRatioBoldItalic) +
+                (glyphBBold.width() * 5 * textureWidthToHeightRatioBold) +
+                (glyphB.width() * 2 * textureWidthToHeightRatio)) *
+                (lineHeight / glyphHeight);
+
+        // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
+        //     due to floating point rounding discrepancies
+        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
+    }
+
+    @Test
+    public void testTextLineLengthFromProps() {
+        var plain = new FakeFontStyleInfo();
+        var italic = new FakeFontStyleInfo();
+        var bold = new FakeFontStyleInfo();
+        var boldItalic = new FakeFontStyleInfo();
+        var font = new FakeFont(plain, italic, bold, boldItalic);
+
+        var glyphHeight = 0.1f;
+        var glyphA = floatBoxOf(0.0f, 0.0f, 0.356659007059121f, glyphHeight);
+        var glyphAItalic = floatBoxOf(0.0f, 0.0f, 0.48381785202459f, glyphHeight);
+        var glyphABold = floatBoxOf(0.0f, 0.0f, 0.677026478f, glyphHeight);
+        var glyphABoldItalic = floatBoxOf(0.0f, 0.0f, 0.24048836420184f, glyphHeight);
+        var glyphB = floatBoxOf(0.0f, 0.0f, 0.213723488507345f, glyphHeight);
+        var glyphBItalic = floatBoxOf(0.0f, 0.0f, 0.331731488913315f, glyphHeight);
+        var glyphBBold = floatBoxOf(0.0f, 0.0f, 0.709300081504505f, glyphHeight);
+        var glyphBBoldItalic = floatBoxOf(0.0f, 0.0f, 0.0767894524389122f, glyphHeight);
+
+        plain.Glyphs.put('A', glyphA);
+        italic.Glyphs.put('A', glyphAItalic);
+        bold.Glyphs.put('A', glyphABold);
+        boldItalic.Glyphs.put('A', glyphABoldItalic);
+        plain.Glyphs.put('B', glyphB);
+        italic.Glyphs.put('B', glyphBItalic);
+        bold.Glyphs.put('B', glyphBBold);
+        boldItalic.Glyphs.put('B', glyphBBoldItalic);
+
+        var textureWidthToHeightRatio = 0.12f;
+        var textureWidthToHeightRatioItalic = 0.34f;
+        var textureWidthToHeightRatioBold = 0.56f;
+        var textureWidthToHeightRatioBoldItalic = 0.78f;
+        plain.TextureWidthToHeightRatio = textureWidthToHeightRatio;
+        italic.TextureWidthToHeightRatio = textureWidthToHeightRatioItalic;
+        bold.TextureWidthToHeightRatio = textureWidthToHeightRatioBold;
+        boldItalic.TextureWidthToHeightRatio = textureWidthToHeightRatioBoldItalic;
+
+        var lineHeight = 0.5f;
+        @SuppressWarnings("SpellCheckingInspection") String lineText = "AAAAAAAABBBBBBBB";
+        List<Integer> italicIndices = listOf(1, 9);
+        List<Integer> boldIndices = listOf(6, 14);
+
+        var textLineLength = renderer.textLineLength(
+                lineText,
+                font,
+                0f,
+                italicIndices,
+                boldIndices,
+                lineHeight
+        );
 
         var expectedTextLineLength = ((glyphA.width() * 1 * textureWidthToHeightRatio) +
                 (glyphAItalic.width() * 5 * textureWidthToHeightRatioItalic) +

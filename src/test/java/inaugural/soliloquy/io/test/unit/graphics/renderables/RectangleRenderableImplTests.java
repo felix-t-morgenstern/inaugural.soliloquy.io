@@ -30,7 +30,8 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Action.action;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.ui.EventInputs.inputs;
+import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 @ExtendWith(MockitoExtension.class)
 public class RectangleRenderableImplTests {
@@ -298,7 +299,9 @@ public class RectangleRenderableImplTests {
         renderable.press(2, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnPressAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnPressAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnPress = mock(Action.class);
@@ -306,7 +309,9 @@ public class RectangleRenderableImplTests {
 
         renderable.press(2, TIMESTAMP + 1);
 
-        verify(newOnPress, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnPress, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, renderable,
+                        mockContainingComponent)));
 
         renderable.press(0, TIMESTAMP + 2);
 
@@ -337,7 +342,8 @@ public class RectangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.setOnRelease(2, action(randomString(), _ -> {})));
+                renderableNotSupportingMouseEvents.setOnRelease(2,
+                        action(randomString(), _ -> {})));
 
         renderable.release(2, TIMESTAMP);
 
@@ -348,7 +354,9 @@ public class RectangleRenderableImplTests {
         renderable.release(2, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(newOnRelease, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnRelease, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -402,7 +410,9 @@ public class RectangleRenderableImplTests {
         renderable.mouseOver(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseOverAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseOver = mock(Action.class);
@@ -410,7 +420,9 @@ public class RectangleRenderableImplTests {
 
         renderable.mouseOver(TIMESTAMP + 1);
 
-        verify(newOnMouseOver, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseOver, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
+                        mockContainingComponent)));
     }
 
     @Test
@@ -440,7 +452,9 @@ public class RectangleRenderableImplTests {
         renderable.mouseLeave(TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction, once()).accept(eq(inputs(TIMESTAMP, renderable)));
+        verify(mockOnMouseLeaveAction, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
 
         //noinspection unchecked
         Action<EventInputs> newOnMouseLeave = mock(Action.class);
@@ -448,7 +462,9 @@ public class RectangleRenderableImplTests {
 
         renderable.mouseLeave(TIMESTAMP + 1);
 
-        verify(newOnMouseLeave, once()).accept(eq(inputs(TIMESTAMP + 1, renderable)));
+        verify(newOnMouseLeave, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                        mockContainingComponent)));
     }
 
     @Test

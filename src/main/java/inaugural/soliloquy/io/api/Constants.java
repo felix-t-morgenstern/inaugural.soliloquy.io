@@ -3,16 +3,29 @@ package inaugural.soliloquy.io.api;
 import soliloquy.specs.common.valueobjects.FloatBox;
 
 import java.awt.*;
+import java.util.UUID;
 
+import static java.util.UUID.fromString;
 import static org.lwjgl.glfw.GLFW.*;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class Constants {
     // Dependency constants
-    public final static String IO_METHODS = "ioMethods";
     public final static String SUBSCRIBE_TO_NEXT_MOUSE_EVENT = "subscribeToNextMouseEvent";
     public final static String STATIC_PROVIDER_FACTORY = "staticProviderFactory";
+    public final static UUID NULL_PROVIDER_UUID =
+            fromString("cec9fcb6-4dde-4d61-99f8-0ceef03d0ffd");
     public final static String NULL_PROVIDER = "nullProvider";
+    public final static UUID WHOLE_SCREEN_PROVIDER_UUID =
+            fromString("201e3ed2-bc56-40ff-8290-7461f9683b60");
+    public final static String WHOLE_SCREEN_PROVIDER = "wholeScreenProvider";
+    public final static String TEXT_LINE_RENDERER = "textLineRenderer";
+
+    // IO Methods
+    public final static String MAKE_SOUND_METHOD_NAME = "makeSound";
+    public final static String PLAY_SOUND_METHOD_NAME = "playSound";
+    public final static String PAUSE_SOUND_METHOD_NAME = "pauseSound";
+    public final static String UNPAUSE_SOUND_METHOD_NAME = "unpauseSound";
 
     // Timing constants
     public final static String GMT = "GMT";

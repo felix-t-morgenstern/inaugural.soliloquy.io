@@ -7,13 +7,14 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static soliloquy.specs.io.input.keyboard.entities.KeyBindingContext.bindingContext;
 
 public class ComponentFactoryImpl implements ComponentFactory {
     private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
@@ -29,6 +30,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
     public Component make(
             UUID uuid,
             int z,
+            Set<KeyBinding> keyBindings,
+            boolean blocksLowerKeyBindings,
             ProviderAtTime<FloatBox> renderingBoundariesProvider,
             Component containingComponent,
             Map<String, Object> data
@@ -36,7 +39,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
         return new ComponentImpl(
                 Check.ifNull(uuid, "uuid"),
                 z,
-                bindingContext(listOf(), false),
+                keyBindings,
+                blocksLowerKeyBindings,
                 containingComponent,
                 renderingBoundariesProvider,
                 data,

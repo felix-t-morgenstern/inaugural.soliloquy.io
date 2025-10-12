@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static inaugural.soliloquy.io.test.integration.audio.IntegrationTestsSetup.integrationTestAudio;
+import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 
 public class BehavioralTestingInterface implements ActionListener {
     private final static String BUTTON_INITIALIZE = "Initialize";
@@ -134,22 +135,27 @@ public class BehavioralTestingInterface implements ActionListener {
     }
 
     private static void updateLabels() {
-        LABEL_ID.setText("Sound Uuid: " + (SOUND_FINITE == null ? "" : "" + SOUND_FINITE.uuid()));
-        LABEL_TYPE_ID
-                .setText("Sound Type Id: " + (SOUND_FINITE == null ? "" : SOUND_FINITE.soundType().id()));
+        LABEL_ID.setText(
+                "Sound Uuid: " + defaultIfNull(SOUND_FINITE, "", s -> s.uuid().toString()));
+        LABEL_TYPE_ID.setText(
+                "Sound Type Id: " + defaultIfNull(SOUND_FINITE, "", s -> s.soundType().id()));
         LABEL_VOLUME.setText(
                 "Volume: " + (
-                        SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" : "" + SOUND_FINITE.getVolume()));
+                        SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :
+                                "" + SOUND_FINITE.getVolume()));
         LABEL_DURATION.setText("Duration, ms: " +
-                (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" : "" + SOUND_FINITE.getMillisecondLength()));
+                (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :
+                        "" + SOUND_FINITE.getMillisecondLength()));
         LABEL_POSITION.setText("Position, ms: " +
-                (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" : "" + SOUND_FINITE.getMillisecondPosition()));
+                (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :
+                        "" + SOUND_FINITE.getMillisecondPosition()));
     }
 
     private void recurringPositionCheck() {
         while (RUN_RECURRING_POSITION_CHECK) {
-            LABEL_POSITION.setText("Position, ms: " + (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :
-                    "" + SOUND_FINITE.getMillisecondPosition()));
+            LABEL_POSITION.setText(
+                    "Position, ms: " + (SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :
+                            "" + SOUND_FINITE.getMillisecondPosition()));
             CheckedExceptionWrapper.sleep(100);
         }
     }

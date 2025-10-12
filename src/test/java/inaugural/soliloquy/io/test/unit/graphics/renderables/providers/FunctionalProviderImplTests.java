@@ -23,7 +23,7 @@ import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider.EventInfo;
+import static soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider.Inputs;
 
 @ExtendWith(MockitoExtension.class)
 public class FunctionalProviderImplTests {
@@ -34,9 +34,9 @@ public class FunctionalProviderImplTests {
     private final int DATA_VAL = randomInt();
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
 
-    @Mock Function<EventInfo, Integer> mockProvide;
-    @Mock Action<EventInfo> mockPause;
-    @Mock Action<EventInfo> mockUnpause;
+    @Mock Function<Inputs, Integer> mockProvide;
+    @Mock Action<Inputs> mockPause;
+    @Mock Action<Inputs> mockUnpause;
     @Mock private TimestampValidator mockTimestampValidator;
 
     private FunctionalProvider<Integer> provider;
@@ -50,7 +50,6 @@ public class FunctionalProviderImplTests {
         unpausedProvider =
                 new FunctionalProviderImpl<>(UUID, mockProvide, mockPause, mockUnpause, DATA, null,
                         mockTimestampValidator);
-        ;
     }
 
     @Test
@@ -79,7 +78,7 @@ public class FunctionalProviderImplTests {
         assertEquals(val, provided);
         var inOrder = Mockito.inOrder(mockTimestampValidator, mockProvide);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(TIMESTAMP);
-        var eventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
+        var eventInfoCapture = ArgumentCaptor.forClass(Inputs.class);
         inOrder.verify(mockProvide, once()).apply(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);
@@ -91,14 +90,12 @@ public class FunctionalProviderImplTests {
 
     @Test
     public void testReportPause() {
-        var val = randomInt();
-
         unpausedProvider.reportPause(PAUSED_TIMESTAMP);
 
         assertEquals(PAUSED_TIMESTAMP, unpausedProvider.pausedTimestamp());
         var inOrder = Mockito.inOrder(mockTimestampValidator, mockPause);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(PAUSED_TIMESTAMP);
-        var eventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
+        var eventInfoCapture = ArgumentCaptor.forClass(Inputs.class);
         inOrder.verify(mockPause, once()).accept(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);
@@ -116,7 +113,6 @@ public class FunctionalProviderImplTests {
 
     @Test
     public void testReportUnpause() {
-        var val = randomInt();
         var unpauseTimestamp = randomLongWithInclusiveFloor(PAUSED_TIMESTAMP + 1);
 
         provider.reportUnpause(unpauseTimestamp);
@@ -124,7 +120,7 @@ public class FunctionalProviderImplTests {
         assertNull(provider.pausedTimestamp());
         var inOrder = Mockito.inOrder(mockTimestampValidator, mockUnpause);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(unpauseTimestamp);
-        var eventInfoCapture = ArgumentCaptor.forClass(EventInfo.class);
+        var eventInfoCapture = ArgumentCaptor.forClass(Inputs.class);
         inOrder.verify(mockUnpause, once()).accept(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);

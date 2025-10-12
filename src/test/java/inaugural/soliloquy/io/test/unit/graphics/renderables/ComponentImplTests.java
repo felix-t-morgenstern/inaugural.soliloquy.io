@@ -11,18 +11,18 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.input.keyboard.entities.KeyBindingContext;
+import soliloquy.specs.io.input.keyboard.KeyBinding;
 import soliloquy.specs.ui.definitions.providers.AbstractProviderDefinition;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
-import static inaugural.soliloquy.tools.random.Random.randomString;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,6 +34,7 @@ public class ComponentImplTests {
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
     private final UUID UUID = java.util.UUID.randomUUID();
     private final int Z = randomInt();
+    private final boolean OVERRIDES_LOWER_KEY_BINDINGS = randomBoolean();
 
     @Mock private AbstractProviderDefinition<FloatBox> mockRenderingBoundariesDefinition;
     @SuppressWarnings("rawtypes")
@@ -42,7 +43,7 @@ public class ComponentImplTests {
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromCapturing;
 
-    @Mock private KeyBindingContext mockBindingContext;
+    @Mock private Set<KeyBinding> mockBindings;
     @Mock private Renderable mockRenderable;
     @Mock private RenderableWithMouseEvents mockRenderableWithMouseEvents;
     @Mock private Component mockComponent;
@@ -55,7 +56,8 @@ public class ComponentImplTests {
         lenient().when(mockProviderReader.apply(mockRenderingBoundariesDefinition))
                 .thenReturn(mockRenderingBoundaries);
 
-        component = new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
+        component = new ComponentImpl(UUID, Z, mockBindings, OVERRIDES_LOWER_KEY_BINDINGS, null,
+                mockRenderingBoundaries,
                 DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         lenient().when(mockRenderable.containingComponent()).thenReturn(component);
@@ -66,38 +68,41 @@ public class ComponentImplTests {
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(null, Z, mockBindingContext, null, mockRenderingBoundaries,
+                () -> new ComponentImpl(null, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockRenderingBoundaries, DATA, mockAddToCapturing,
+                        mockRemoveFromCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentImpl(UUID, Z, null, OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockRenderingBoundaries, DATA, mockAddToCapturing,
+                        mockRemoveFromCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null, null,
                         DATA, mockAddToCapturing, mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, null, null, mockRenderingBoundaries,
-                        DATA, mockAddToCapturing, mockRemoveFromCapturing));
+                () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockRenderingBoundaries, null, mockAddToCapturing,
+                        mockRemoveFromCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, null, DATA,
-                        mockAddToCapturing, mockRemoveFromCapturing));
+                () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockRenderingBoundaries, DATA, mockAddToCapturing, null));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        null, mockAddToCapturing, mockRemoveFromCapturing));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        DATA, mockAddToCapturing, null));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ComponentImpl(UUID, Z, mockBindingContext, null, mockRenderingBoundaries,
-                        DATA, null, mockRemoveFromCapturing));
+                () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockRenderingBoundaries, DATA, null, mockRemoveFromCapturing));
     }
 
     @Test
     public void testConstructorAddsSelfToContainingComponent() {
         var mockComponent = mock(Component.class);
 
-        component = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent,
+        component = new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
                 mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         verify(mockComponent, once()).add(component);
     }
 
     @Test
-    public void testKeyBindingContext() {
-        assertSame(mockBindingContext, component.keyBindingContext());
+    public void testKeyBindings() {
+        assertSame(mockBindings, component.keyBindings());
     }
 
     @Test
@@ -212,10 +217,13 @@ public class ComponentImplTests {
 
     @Test
     public void testTierIncrementing() {
-        var firstChild = new ComponentImpl(UUID, randomInt(), mockBindingContext, component,
-                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
-        var secondChild = new ComponentImpl(UUID, randomInt(), mockBindingContext, firstChild,
-                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
+        var firstChild = new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,
+                component, mockRenderingBoundaries, DATA, mockAddToCapturing,
+                mockRemoveFromCapturing);
+        var secondChild =
+                new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,
+                        firstChild, mockRenderingBoundaries, DATA, mockAddToCapturing,
+                        mockRemoveFromCapturing);
 
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
@@ -227,12 +235,12 @@ public class ComponentImplTests {
         var containingComponentTier = randomInt();
         when(mockContainingComponent.tier()).thenReturn(containingComponentTier);
 
-        ((ComponentImpl)component).setContainingComponent(mockContainingComponent);
+        ((ComponentImpl) component).setContainingComponent(mockContainingComponent);
 
         assertSame(mockContainingComponent, component.containingComponent());
         assertEquals(containingComponentTier + 1, component.tier());
 
-        ((ComponentImpl)component).setContainingComponent(null);
+        ((ComponentImpl) component).setContainingComponent(null);
 
         assertNull(component.containingComponent());
         assertEquals(0, component.tier());
@@ -246,8 +254,9 @@ public class ComponentImplTests {
 
     @Test
     public void testDelete() {
-        var containedComponent = new ComponentImpl(UUID, Z, mockBindingContext, mockComponent,
-                mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
+        var containedComponent =
+                new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
+                        mockRenderingBoundaries, DATA, mockAddToCapturing, mockRemoveFromCapturing);
 
         containedComponent.delete();
 

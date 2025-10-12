@@ -33,16 +33,13 @@ import inaugural.soliloquy.io.persistence.audio.SoundsPlayingHandler;
 import inaugural.soliloquy.io.persistence.graphics.renderables.*;
 import inaugural.soliloquy.io.persistence.graphics.renderables.colorshifting.ColorShiftHandler;
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.*;
-import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
+import inaugural.soliloquy.tools.module.AbstractModule;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.apache.commons.lang3.function.TriConsumer;
-import org.int4.dirk.api.Injector;
-import org.int4.dirk.di.Injectors;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
-import soliloquy.specs.game.Module;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
@@ -70,20 +67,16 @@ import java.util.function.Function;
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.tools.collections.Collections.*;
-import static java.util.UUID.randomUUID;
+import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
 
-public class IOModule implements Module {
-    private final Injector INJECTOR;
-
-    private final Map<String, Object> NAMED_INSTANCES;
-
+public class IOModule extends AbstractModule {
     public IOModule(CommonModule common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
-                    @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+                    @SuppressWarnings("rawtypes") Map<String, Action> actions,
                     @SuppressWarnings("rawtypes")
-                    Function<String, soliloquy.specs.common.entities.Function> getFunction,
+                    Map<String, soliloquy.specs.common.entities.Function> functions,
                     Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
                     String initialTitlebar,
                     Map<String, String> idsForFilenames,
@@ -93,10 +86,6 @@ public class IOModule implements Module {
         // ====
         // Prep
         // ====
-
-        INJECTOR = Injectors.manual();
-
-        NAMED_INSTANCES = mapOf();
 
         var persistenceHandler = common.provide(PersistenceHandler.class);
         @SuppressWarnings("rawtypes") TypeHandler<Map> mapHandler =
@@ -294,8 +283,9 @@ public class IOModule implements Module {
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                new TextLineRenderer(renderingBoundaries, defaultFontColor,
-                        resManager::windowWidthToHeightRatio, timestampValidator)
+                andRegister(new TextLineRenderer(renderingBoundaries, defaultFontColor,
+                                resManager::windowWidthToHeightRatio, timestampValidator),
+                        TEXT_LINE_RENDERER)
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
@@ -382,7 +372,8 @@ public class IOModule implements Module {
                 )
         );
         var functionalProviderFactory = andRegister(
-                new FunctionalProviderFactoryImpl(getFunction, getAction, timestampValidator));
+                new FunctionalProviderFactoryImpl(functions::get, actions::get,
+                        timestampValidator));
         var loopingLinearMovingColorProviderFactory =
                 andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"unused", "unchecked"})
@@ -420,7 +411,9 @@ public class IOModule implements Module {
                 staticProviderFactory =
                 andRegister((uuid, val) -> new StaticProvider(uuid, val, timestampValidator),
                         STATIC_PROVIDER_FACTORY);
-        andRegister(staticProviderFactory.apply(randomUUID(), null), NULL_PROVIDER);
+        andRegister(staticProviderFactory.apply(NULL_PROVIDER_UUID, null), NULL_PROVIDER);
+        andRegister(staticProviderFactory.apply(WHOLE_SCREEN_PROVIDER_UUID, WHOLE_SCREEN),
+                WHOLE_SCREEN_PROVIDER);
 
         // ========
         // Handlers
@@ -497,31 +490,32 @@ public class IOModule implements Module {
                 new AntialiasedLineSegmentRenderableHandler(providerHandler,
                         antialiasedLineSegmentRenderableFactory));
         persistenceHandler.addTypeHandler(FiniteAnimationRenderableImpl.class,
-                new FiniteAnimationRenderableHandler(animations::get, getAction, providerHandler,
+                new FiniteAnimationRenderableHandler(animations::get, actions::get, providerHandler,
                         shiftHandler, finiteAnimationRenderableFactory));
         persistenceHandler.addTypeHandler(GlobalLoopingAnimationRenderableImpl.class,
-                new GlobalLoopingAnimationRenderableHandler(globalLoopingAnimations::get, getAction,
-                        providerHandler, shiftHandler, globalLoopingAnimationRenderableFactory));
+                new GlobalLoopingAnimationRenderableHandler(globalLoopingAnimations::get,
+                        actions::get, providerHandler, shiftHandler,
+                        globalLoopingAnimationRenderableFactory));
         persistenceHandler.addTypeHandler(ImageAssetSetRenderableImpl.class,
-                new ImageAssetSetRenderableHandler(imageAssetSets::get, getAction, providerHandler,
-                        shiftHandler, imageAssetSetRenderableFactory));
+                new ImageAssetSetRenderableHandler(imageAssetSets::get, actions::get,
+                        providerHandler, shiftHandler, imageAssetSetRenderableFactory));
         persistenceHandler.addTypeHandler(RasterizedLineSegmentRenderableImpl.class,
                 new RasterizedLineSegmentRenderableHandler(providerHandler,
                         rasterizedLineSegmentRenderableFactory));
         persistenceHandler.addTypeHandler(RectangleRenderableImpl.class,
-                new RectangleRenderableHandler(getAction, providerHandler,
+                new RectangleRenderableHandler(actions::get, providerHandler,
                         rectangleRenderableFactory));
         persistenceHandler.addTypeHandler(SpriteRenderableImpl.class,
-                new SpriteRenderableHandler(sprites::get, getAction, providerHandler, shiftHandler,
-                        spriteRenderableFactory));
+                new SpriteRenderableHandler(sprites::get, actions::get, providerHandler,
+                        shiftHandler, spriteRenderableFactory));
         persistenceHandler.addTypeHandler(TextLineRenderableImpl.class,
                 new TextLineRenderableHandler(fonts::get, providerHandler,
                         textLineRenderableFactory));
         persistenceHandler.addTypeHandler(TriangleRenderableImpl.class,
-                new TriangleRenderableHandler(getAction, providerHandler,
+                new TriangleRenderableHandler(actions::get, providerHandler,
                         triangleRenderableFactory));
         persistenceHandler.addTypeHandler(ComponentImpl.class,
-                new ComponentHandler(providerHandler, mapHandler, persistenceHandler, getAction,
+                new ComponentHandler(providerHandler, mapHandler, persistenceHandler, actions::get,
                         componentFactory));
 
         // ========
@@ -568,35 +562,9 @@ public class IOModule implements Module {
                 mouseListener
         ));
 
-        andRegister(new IOMethods(soundsPlaying, soundFactory), IO_METHODS);
-    }
-
-    @Override
-    public <T> T provide(Class<T> clazz) throws IllegalArgumentException {
-        return INJECTOR.getInstance(clazz);
-    }
-
-    public <T> T provide(String instanceName) throws IllegalArgumentException {
-        Check.ifNullOrEmpty(instanceName, "instanceName");
-
-        if (!NAMED_INSTANCES.containsKey(instanceName)) {
-            throw new IllegalArgumentException("IOModule.provide: instanceName (" + instanceName +
-                    ") does not correspond to a valid instance");
-        }
-
-        //noinspection unchecked
-        return (T) NAMED_INSTANCES.get(instanceName);
-    }
-
-    private <T> T andRegister(T registrant) {
-        INJECTOR.registerInstance(registrant);
-
-        return registrant;
-    }
-
-    private <T> T andRegister(T registrant, String instanceName) {
-        NAMED_INSTANCES.put(instanceName, registrant);
-
-        return registrant;
+        var ioMethods = new IOMethods(soundsPlaying, soundFactory);
+        var readIoMethods = readMethods(ioMethods);
+        readIoMethods.FIRST.forEach(a -> actions.put(a.id(), a));
+        readIoMethods.SECOND.forEach(f -> functions.put(f.id(), f));
     }
 }

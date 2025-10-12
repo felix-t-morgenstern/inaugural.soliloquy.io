@@ -11,8 +11,12 @@ import soliloquy.specs.ui.EventInputs;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
+import static inaugural.soliloquy.io.api.Constants.RIGHT_MOUSE_BUTTON;
+import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static soliloquy.specs.ui.EventInputs.inputs;
+import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
+import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 public abstract class AbstractRenderableWithMouseEvents
         extends AbstractRenderable
@@ -38,8 +42,8 @@ public abstract class AbstractRenderableWithMouseEvents
                                                 RenderingBoundaries renderingBoundaries,
                                                 TimestampValidator timestampValidator) {
         super(z, uuid, containingComponent);
-        ON_PRESS = onPress == null ? mapOf() : onPress;
-        ON_RELEASE = onRelease == null ? mapOf() : onRelease;
+        ON_PRESS = defaultIfNull(onPress, mapOf());
+        ON_RELEASE = defaultIfNull(onRelease, mapOf());
         this.onMouseOver = onMouseOver;
         this.onMouseLeave = onMouseLeave;
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
@@ -67,7 +71,13 @@ public abstract class AbstractRenderableWithMouseEvents
     @Override
     public void press(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
-        callAction(ON_PRESS.get(mouseButton), timestamp, "press");
+        callAction(
+                LEFT_MOUSE_BUTTON,
+                ON_PRESS.get(mouseButton),
+                timestamp,
+                EventType.PRESS,
+                "press"
+        );
     }
 
     @Override
@@ -90,7 +100,13 @@ public abstract class AbstractRenderableWithMouseEvents
     @Override
     public void release(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
-        callAction(ON_RELEASE.get(mouseButton), timestamp, "release");
+        callAction(
+                RIGHT_MOUSE_BUTTON,
+                ON_RELEASE.get(mouseButton),
+                timestamp,
+                EventType.RELEASE,
+                "release"
+        );
     }
 
     @Override
@@ -127,7 +143,13 @@ public abstract class AbstractRenderableWithMouseEvents
 
     @Override
     public void mouseOver(long timestamp) throws UnsupportedOperationException {
-        callAction(onMouseOver, timestamp, "mouseOver");
+        callAction(
+                null,
+                onMouseOver,
+                timestamp,
+                EventType.MOUSE_OVER,
+                "mouseOver"
+        );
     }
 
     @Override
@@ -143,7 +165,13 @@ public abstract class AbstractRenderableWithMouseEvents
 
     @Override
     public void mouseLeave(long timestamp) throws UnsupportedOperationException {
-        callAction(onMouseLeave, timestamp, "mouseLeave");
+        callAction(
+                null,
+                onMouseLeave,
+                timestamp,
+                EventType.MOUSE_LEAVE,
+                "mouseLeave"
+        );
     }
 
     @Override
@@ -168,12 +196,18 @@ public abstract class AbstractRenderableWithMouseEvents
         }
     }
 
-    private void callAction(Action<EventInputs> action, long timestamp,
+    private void callAction(Integer mouseButton,
+                            Action<EventInputs> action,
+                            long timestamp,
+                            EventType eventType,
                             String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         if (action != null) {
-            action.accept(inputs(timestamp, this));
+            action.accept(
+                    eventInputs(timestamp)
+                            .withMouseEvent(mouseButton, eventType, this, this.containingComponent)
+            );
         }
     }
 

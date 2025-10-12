@@ -38,7 +38,7 @@ public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory 
         Check.ifNull(uuid, "uuid");
         Check.ifNull(data, "data");
 
-        @SuppressWarnings("unchecked") Function<FunctionalProvider.EventInfo, T> provideFunction = GET_FUNCTION.apply(Check.ifNullOrEmpty(provideFunctionId, "provideFunctionId"));
+        @SuppressWarnings("unchecked") Function<FunctionalProvider.Inputs, T> provideFunction = GET_FUNCTION.apply(Check.ifNullOrEmpty(provideFunctionId, "provideFunctionId"));
         if (provideFunction == null) {
             throw new IllegalArgumentException("FunctionalProviderFactoryImpl.make: provideFunctionId (" + provideFunctionId + ") does not correspond to valid Function");
         }
@@ -57,8 +57,8 @@ public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory 
         );
     }
 
-    private Action<FunctionalProvider.EventInfo> getAction(String actionId, String actionIdName) {
-        Action<FunctionalProvider.EventInfo> action = null;
+    private Action<FunctionalProvider.Inputs> getAction(String actionId, String actionIdName) {
+        Action<FunctionalProvider.Inputs> action = null;
         if (actionId != null) {
             if (actionId.isEmpty()) {
                 throw new IllegalArgumentException("FunctionalProviderFactoryImpl.make: " + actionIdName + " cannot be empty");
