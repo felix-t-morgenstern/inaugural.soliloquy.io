@@ -39,9 +39,6 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
     private final static Action<EventInputs> ON_MOUSE_RELEASE_ACTION =
             action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"));
 
-    private final static String TILE_LOCATION_RELATIVE_LOCATION =
-            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
-
     public static void main(String[] args) {
         var displayTest = new DisplayTest(
                 setOf(

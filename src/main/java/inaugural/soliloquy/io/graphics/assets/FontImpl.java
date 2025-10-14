@@ -191,6 +191,7 @@ public class FontImpl implements Font {
                 fontImageInfo.ImageDimensions.Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, generatedImage);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glDisable(GL_TEXTURE_2D);
 
         fontImageInfo.TextureId = textureId;
 
@@ -198,7 +199,8 @@ public class FontImpl implements Font {
     }
 
     private static FontImageInfo loopOverCharacters(
-            FontMetrics fontMetrics, float additionalGlyphHorizontalTextureSpacing,
+            FontMetrics fontMetrics,
+            float additionalGlyphHorizontalTextureSpacing,
             Map<Character, Float> glyphwiseAdditionalHorizontalTextureSpacing,
             Map<Character, Float> glyphwiseAdditionalLeftBoundaryShift,
             float additionalGlyphVerticalTextureSpacing,

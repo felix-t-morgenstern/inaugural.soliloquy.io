@@ -49,6 +49,8 @@ public class DisplayTest {
     protected final static String SPRITE_ID = "spriteId";
     protected final static String RPG_WEAPONS_RELATIVE_LOCATION =
             "./src/test/resources/images/items/RPG_Weapons.png";
+    protected final static String TILE_LOCATION_RELATIVE_LOCATION =
+            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
     protected final static String EXPLOSION_ANIMATION_ID = "explosion";
     protected final static String EXPLOSION_RELATIVE_LOCATION =

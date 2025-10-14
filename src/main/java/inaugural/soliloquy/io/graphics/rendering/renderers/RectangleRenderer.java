@@ -34,23 +34,23 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         var renderingDimensions = renderable.getRenderingDimensionsProvider().provide(timestamp);
 
-        glEnable(GL_TEXTURE_2D);
-
         var texId =
                 Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()")
                         .provide(timestamp);
-        var texTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
-                "renderable.getTextureTileWidthProvider()").provide(timestamp);
-        var texTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
-                "renderable.getTextureTileHeightProvider()").provide(timestamp);
 
         var hasTexture = false;
 
         var tilesPerWidth = 0f;
         var tilesPerHeight = 0f;
         if (texId != null) {
+            glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texId);
             hasTexture = true;
+
+            var texTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
+                    "renderable.getTextureTileWidthProvider()").provide(timestamp);
+            var texTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
+                    "renderable.getTextureTileHeightProvider()").provide(timestamp);
 
             Check.throwOnLtValue(texTileWidth, 0f, "provided texTileWidth in renderable");
             Check.throwOnLtValue(texTileHeight, 0f, "provided texTileHeight in renderable");
@@ -99,7 +99,9 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         glEnd();
 
-        glDisable(GL_TEXTURE_2D);
+        if (texId != null) {
+            glDisable(GL_TEXTURE_2D);
+        }
     }
 
     @Override
