@@ -14,9 +14,9 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class SpriteSimpleDisplayTest extends DisplayTest {
     protected final static AssetDefinitionsDTO ASSET_DTOS = new AssetDefinitionsDTO(
-            new ImageDefinitionDTO[]{
+            arrayOf(
                     new ImageDefinitionDTO(RPG_WEAPONS_RELATIVE_LOCATION, true)
-            },
+            ),
             arrayOf(),
             arrayOf(
                     new SpriteDefinitionDTO(SPRITE_ID, RPG_WEAPONS_RELATIVE_LOCATION,

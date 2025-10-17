@@ -89,6 +89,7 @@ public class RectangleRendererTests {
 
     @Test
     public void testRenderWithInvalidArgs() {
+        when(mockBackgroundTextureIdProvider.provide(anyLong())).thenReturn(randomInt());
         renderer.setMesh(mockMesh);
         renderer.setShader(mockShader);
 
@@ -127,6 +128,12 @@ public class RectangleRendererTests {
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                         null, RENDERING_AREA_PROVIDER, UUID),
+                MOST_RECENT_TIMESTAMP));
+        assertThrows(IllegalArgumentException.class, () -> renderer.render(
+                new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, null,
+                        mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID),
                 MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
                 new FakeRectangleRenderable(mockTopLeftColorProvider, mockTopRightColorProvider,

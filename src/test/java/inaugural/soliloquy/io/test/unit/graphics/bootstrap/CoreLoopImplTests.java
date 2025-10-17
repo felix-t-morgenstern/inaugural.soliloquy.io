@@ -20,6 +20,7 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.List;
@@ -74,6 +75,7 @@ public class CoreLoopImplTests {
     @Mock private FrameExecutor mockFrameExecutor;
     @Mock private WindowResolutionManager mockWindowResolutionManager;
     @Mock private AudioLoader mockAudioLoader;
+    @Mock private KeyEventListener mockKeyEventListener;
     @Mock private MouseCursor mockMouseCursor;
     @Mock private MouseListener mockMouseListener;
 
@@ -127,6 +129,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         );
@@ -154,6 +157,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -177,6 +181,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -200,6 +205,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -223,6 +229,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -246,6 +253,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -269,6 +277,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -292,6 +301,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -315,6 +325,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -338,6 +349,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -361,6 +373,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -384,6 +397,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -407,6 +421,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -430,6 +445,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -453,6 +469,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -476,6 +493,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -499,6 +517,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -522,6 +541,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -545,6 +565,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -568,6 +589,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -591,6 +613,7 @@ public class CoreLoopImplTests {
                 null,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -614,6 +637,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 null,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -637,6 +661,7 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 null,
+                mockKeyEventListener,
                 mockMouseCursor,
                 mockMouseListener
         ));
@@ -661,6 +686,7 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 null,
+                mockMouseCursor,
                 mockMouseListener
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
@@ -683,6 +709,31 @@ public class CoreLoopImplTests {
                 IDS_FOR_FILENAMES,
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
+                null,
+                mockMouseListener
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                RENDERERS_WITH_SHADER,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                RENDERERS_WITH_MESH,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
                 mockMouseCursor,
                 null
         ));

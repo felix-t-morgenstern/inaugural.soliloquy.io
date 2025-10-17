@@ -15,6 +15,7 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
@@ -31,23 +32,34 @@ public class ComponentFactoryImplTests {
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
 
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
-    @Mock private Consumer<RenderableWithMouseEvents> mockAddToCapturing;
-    @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromCapturing;
+    @Mock private BiConsumer<Component, Integer> mockAddToKeyCapturing;
+    @Mock private Consumer<Component> mockRemoveFromKeyCapturing;
+    @Mock private Consumer<RenderableWithMouseEvents> mockAddToMouseCapturing;
+    @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromMouseCapturing;
     @Mock private Component mockComponent;
 
     private ComponentFactory factory;
 
     @BeforeEach
     public void setUp() {
-        factory = new ComponentFactoryImpl(mockAddToCapturing, mockRemoveFromCapturing);
+        factory = new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
+                mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(null, mockRemoveFromCapturing));
+                () -> new ComponentFactoryImpl(null, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockAddToCapturing, null));
+                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, null, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
+                        null, mockRemoveFromMouseCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, null));
     }
 
     @Test
@@ -56,11 +68,13 @@ public class ComponentFactoryImplTests {
         var z = randomInt();
         var bindings = Collections.<KeyBinding>setOf();
         var overrides = randomBoolean();
+        var keyEventPriority = randomInt();
         var tier = randomInt();
         when(mockComponent.tier()).thenReturn(tier);
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
-        var output = factory.make(uuid, z, bindings, overrides, mockRenderingBoundaries, mockComponent, DATA);
+        var output = factory.make(uuid, z, bindings, overrides, keyEventPriority,
+                mockRenderingBoundaries, mockComponent, DATA);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
@@ -76,19 +90,28 @@ public class ComponentFactoryImplTests {
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
         assertEquals(DATA, output.data());
         assertNotSame(DATA, output.data());
-        verify(mockAddToCapturing, once()).accept(mockRenderableWithMouseEvents);
-        verify(mockRemoveFromCapturing, once()).accept(mockRenderableWithMouseEvents);
+        verify(mockAddToMouseCapturing, once()).accept(mockRenderableWithMouseEvents);
+        verify(mockRemoveFromMouseCapturing, once()).accept(mockRenderableWithMouseEvents);
+        verify(mockAddToKeyCapturing, once()).accept(output, keyEventPriority);
+
+        output.delete();
+
+        verify(mockRemoveFromKeyCapturing, once()).accept(output);
     }
 
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, randomInt(), setOf(), randomBoolean(), mockRenderingBoundaries, mockComponent, DATA));
+                () -> factory.make(null, randomInt(), setOf(), randomBoolean(), randomInt(),
+                        mockRenderingBoundaries, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), null, randomBoolean(), mockRenderingBoundaries, mockComponent, DATA));
+                () -> factory.make(randomUUID(), randomInt(), null, randomBoolean(), randomInt(),
+                        mockRenderingBoundaries, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), null, mockComponent, DATA));
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
+                        null, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), mockRenderingBoundaries, mockComponent, null));
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
+                        mockRenderingBoundaries, mockComponent, null));
     }
 }

@@ -20,8 +20,9 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     private final Set<KeyBinding> BINDINGS;
     private final boolean BLOCKS_LOWER_BINDINGS;
     private final Set<Renderable> RENDERABLES;
-    private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
-    private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
+    private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
+    private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
+    private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
     private final Map<String, Object> DATA;
 
     private int tier;
@@ -35,8 +36,9 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                          Component containingComponent,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
                          Map<String, Object> data,
-                         Consumer<RenderableWithMouseEvents> addToCapturing,
-                         Consumer<RenderableWithMouseEvents> removeFromCapturing) {
+                         Consumer<Component> removeFromKeyCapturing,
+                         Consumer<RenderableWithMouseEvents> addToMouseCapturing,
+                         Consumer<RenderableWithMouseEvents> removeFromMouseCapturing) {
         super(z, uuid);
         BINDINGS = Check.ifNull(keyBindings, "keyBindings");
         BLOCKS_LOWER_BINDINGS = blocksLowerKeyBindings;
@@ -49,8 +51,9 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         RENDERABLES = setOf();
         DATA = mapOf(Check.ifNull(data, "data"));
-        ADD_TO_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
-        REMOVE_FROM_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
+        REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
+        ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToMouseCapturing, "addToMouseCapturing");
+        REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromMouseCapturing, "removeFromMouseCapturing");
     }
 
     @Override
@@ -81,7 +84,7 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
         }
         RENDERABLES.add(renderable);
         if (renderable instanceof RenderableWithMouseEvents) {
-            ADD_TO_CAPTURING.accept((RenderableWithMouseEvents) renderable);
+            ADD_TO_MOUSE_CAPTURING.accept((RenderableWithMouseEvents) renderable);
         }
     }
 
@@ -94,7 +97,7 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
         }
         RENDERABLES.remove(renderable);
         if (renderable instanceof RenderableWithMouseEvents) {
-            REMOVE_FROM_CAPTURING.accept((RenderableWithMouseEvents) renderable);
+            REMOVE_FROM_MOUSE_CAPTURING.accept((RenderableWithMouseEvents) renderable);
         }
     }
 
@@ -156,6 +159,7 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     @Override
     public void delete() {
         RENDERABLES.forEach(Renderable::delete);
+        REMOVE_FROM_KEY_CAPTURING.accept(this);
         super.delete();
     }
 

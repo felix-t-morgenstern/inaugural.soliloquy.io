@@ -33,6 +33,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 "renderable.getRenderingDimensionsProvider()");
 
         var renderingDimensions = renderable.getRenderingDimensionsProvider().provide(timestamp);
+        Check.ifNull(renderingDimensions, "dimensions provided by renderable");
 
         var texId =
                 Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()")

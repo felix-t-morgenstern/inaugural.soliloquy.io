@@ -13,6 +13,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Set;
@@ -59,8 +60,8 @@ class WindowResolutionManagerImplFullscreenTest {
                         mockGlobalClock, frameExecutor, new FakeShaderFactory(),
                         renderersWithShader, "_", mock(BiFunction.class), renderersWithMesh,
                         MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), mock(AudioLoader.class),
-                        setOf(), mapOf(), mapOf(), mapOf(), mock(MouseCursor.class),
-                        mock(MouseListener.class));
+                        setOf(), mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class),
+                        mock(MouseCursor.class), mock(MouseListener.class));
 
         coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
     }

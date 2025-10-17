@@ -11,6 +11,7 @@ import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Set;
@@ -53,7 +54,8 @@ class GraphicsCoreLoopImplSimpleTest {
                         new FakeShaderFactory(), renderersWithShader, "_", meshFactory,
                         renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
                         mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(MouseCursor.class), mock(MouseListener.class));
+                        mock(KeyEventListener.class), mock(MouseCursor.class),
+                        mock(MouseListener.class));
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {

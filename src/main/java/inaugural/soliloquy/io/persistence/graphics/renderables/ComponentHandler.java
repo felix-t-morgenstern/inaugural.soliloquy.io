@@ -25,6 +25,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
     @SuppressWarnings("rawtypes") private final TypeHandler<Map> DATA_HANDLER;
     private final PersistenceHandler PERSISTENCE_HANDLER;
     @SuppressWarnings("rawtypes") private final Function<String, Action> GET_ACTION;
+    private final Function<Component, Integer> GET_KEY_EVENT_PRIORITY;
     private final ComponentFactory FACTORY;
 
     public ComponentHandler(
@@ -32,11 +33,13 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             @SuppressWarnings("rawtypes") TypeHandler<Map> dataHandler,
             PersistenceHandler persistenceHandler,
             @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            Function<Component, Integer> getKeyEventPriority,
             ComponentFactory factory) {
         PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
         DATA_HANDLER = Check.ifNull(dataHandler, "dataHandler");
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
         GET_ACTION = Check.ifNull(getAction, "getAction");
+        GET_KEY_EVENT_PRIORITY = Check.ifNull(getKeyEventPriority, "getKeyEventPriority");
         FACTORY = Check.ifNull(factory, "factory");
     }
 
@@ -62,6 +65,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
                 dto.z,
                 bindings,
                 dto.overrides,
+                dto.priority,
                 dimens,
                 null,
                 data
@@ -86,9 +90,10 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         dto.z = component.getZ();
 
         dto.overrides = component.blocksLowerKeyBindings();
+        dto.priority = GET_KEY_EVENT_PRIORITY.apply(component);
         dto.bindings = component.keyBindings().stream().map(b -> {
             var bindingDto = new Dto.BindingDto();
-            bindingDto.keys = b.BOUND_KEYS;
+            bindingDto.keys = b.BOUND_CODEPOINTS;
             bindingDto.onPress = b.ON_PRESS.id();
             bindingDto.onRelease = b.ON_RELEASE.id();
             return bindingDto;
@@ -113,6 +118,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         String uuid;
         BindingDto[] bindings;
         boolean overrides;
+        int priority;
         String dimens;
         ContentDto[] content;
         String data;
@@ -125,7 +131,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
 
 
         private final static class BindingDto {
-            char[] keys;
+            int[] keys;
             String onPress;
             String onRelease;
         }

@@ -23,6 +23,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Set;
@@ -149,7 +150,7 @@ public class ComponentRendererTest extends DisplayTest {
                         new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX,
                         MeshImpl::new, renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader,
                         mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(MouseCursor.class), mock(MouseListener.class));
+                        mock(KeyEventListener.class), mock(MouseCursor.class), mock(MouseListener.class));
 
         graphicsPreloader.LoadAction = () -> {
             when(spriteAxe07.image()).thenReturn(new ImageFactoryImpl(0.5f)

@@ -325,7 +325,8 @@ public class DisplayTest {
         StaticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
         var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
         topLevelComponent =
-                componentFactory.make(randomUUID(), 0, setOf(), false, wholeScreenProvider, null, mapOf());
+                componentFactory.make(randomUUID(), 0, setOf(), false, 0, wholeScreenProvider, null,
+                        mapOf());
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
         coreLoop.startup(() -> {

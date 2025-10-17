@@ -11,6 +11,7 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.bootstrap.GraphicsPreloader;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
@@ -53,6 +54,7 @@ public class CoreLoopImpl implements CoreLoop {
     private final Map<String, String> IDS_FOR_FILENAMES;
     private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID;
     private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID;
+    private final KeyEventListener KEY_EVENT_LISTENER;
     private final MouseCursor MOUSE_CURSOR;
     private final MouseListener MOUSE_LISTENER;
 
@@ -82,6 +84,7 @@ public class CoreLoopImpl implements CoreLoop {
             Map<String, String> idsForFilenames,
             Map<String, Integer> defaultLoopStopMsById,
             Map<String, Integer> defaultLoopRestartMsById,
+            KeyEventListener keyEventListener,
             MouseCursor mouseCursor,
             MouseListener mouseListener) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
@@ -109,6 +112,7 @@ public class CoreLoopImpl implements CoreLoop {
         DEFAULT_LOOP_STOP_MS_BY_ID = Check.ifNull(defaultLoopStopMsById, "defaultLoopStopMsById");
         DEFAULT_LOOP_RESTART_MS_BY_ID =
                 Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
+        KEY_EVENT_LISTENER = Check.ifNull(keyEventListener, "keyEventListener");
         MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
         MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
 
@@ -179,6 +183,7 @@ public class CoreLoopImpl implements CoreLoop {
 
                 var frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
+                KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
                 readMouseButtonStates();
 
                 if (screenMouseLocation != null) {
@@ -210,6 +215,7 @@ public class CoreLoopImpl implements CoreLoop {
         }
         if (window != prevWindow) {
             updateWindowDimensionsInResolutionManager();
+            KEY_EVENT_LISTENER.registerKeyListener(window);
             setNewMouseCallbacks();
         }
     }

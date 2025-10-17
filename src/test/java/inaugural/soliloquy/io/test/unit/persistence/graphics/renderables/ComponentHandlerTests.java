@@ -38,8 +38,9 @@ import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 public class ComponentHandlerTests {
     private final UUID UUID = randomUUID();
     private final int Z = randomInt();
-    private final char KEY = randomChar();
+    private final int KEY = randomInt();
     private final boolean OVERRIDES = randomBoolean();
+    private final int KEY_PRIORITY = randomInt();
     private final String ON_KEY_PRESS_ID = randomString();
     private final String ON_KEY_RELEASE_ID = randomString();
     @SuppressWarnings("rawtypes") private final LookupAndEntitiesWithId<Action>
@@ -63,6 +64,7 @@ public class ComponentHandlerTests {
     @Mock private Map<String, Object> mockData;
     @SuppressWarnings("rawtypes") @Mock private TypeHandler<Map> mockDataHandler;
     @Mock private PersistenceHandler mockPersistenceHandler;
+    @Mock private Function<Component, Integer> mockGetKeyEventPriority;
     @Mock private Component mockComponent;
     @Mock private ComponentFactory mockFactory;
 
@@ -89,35 +91,39 @@ public class ComponentHandlerTests {
                 .thenReturn((TypeHandler) mockContentHandler);
 
         writtenValue = String.format(
-                "{\"uuid\":\"%s\",\"bindings\":[{\"keys\":[\"%s\"]," +
-                        "\"onPress\":\"%s\",\"onRelease\":\"%s\"}],\"overrides\":%s," +
+                "{\"uuid\":\"%s\",\"bindings\":[{\"keys\":[%s],\"onPress\":\"%s\"," +
+                        "\"onRelease\":\"%s\"}],\"overrides\":%s,\"priority\":%d," +
                         "\"dimens\":\"%s\",\"content\":[{\"type\":\"%s\",\"content\":\"%s\"}]," +
                         "\"data\":\"%s\",\"z\":%d}",
-                UUID, KEY, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID, OVERRIDES, DIMENS_WRITTEN,
-                mockContent.getClass().getCanonicalName(), CONTENT_WRITTEN, DATA_WRITTEN, Z
+                UUID, KEY, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID, OVERRIDES, KEY_PRIORITY,
+                DIMENS_WRITTEN, mockContent.getClass().getCanonicalName(), CONTENT_WRITTEN,
+                DATA_WRITTEN, Z
         );
 
         handler = new ComponentHandler(mockProviderHandler, mockDataHandler, mockPersistenceHandler,
-                MOCK_GET_ACTION, mockFactory);
+                MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(null, mockDataHandler, mockPersistenceHandler,
-                        MOCK_GET_ACTION, mockFactory));
+                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, null, mockPersistenceHandler,
-                        MOCK_GET_ACTION, mockFactory));
+                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
-                        mockPersistenceHandler, null, mockFactory));
+                        mockPersistenceHandler, null, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler, null,
-                        MOCK_GET_ACTION, mockFactory));
+                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
-                        mockPersistenceHandler, MOCK_GET_ACTION, null));
+                        mockPersistenceHandler, MOCK_GET_ACTION, null, mockFactory));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
+                        mockPersistenceHandler, MOCK_GET_ACTION, mockGetKeyEventPriority, null));
     }
 
     @Test
@@ -125,11 +131,12 @@ public class ComponentHandlerTests {
         when(mockComponent.uuid()).thenReturn(UUID);
         when(mockComponent.getZ()).thenReturn(Z);
         when(mockComponent.contentsRepresentation()).thenReturn(setOf(mockContent));
-        when(mockComponent.keyBindings()).thenReturn(setOf(keyBinding(arrayChars(KEY),
+        when(mockComponent.keyBindings()).thenReturn(setOf(keyBinding(arrayInts(KEY),
                 MOCK_ON_KEY_PRESS, MOCK_ON_KEY_RELEASE)));
         when(mockComponent.blocksLowerKeyBindings()).thenReturn(OVERRIDES);
         when(mockComponent.getRenderingBoundariesProvider()).thenReturn(mockDimensProvider);
         when(mockComponent.data()).thenReturn(mockData);
+        when(mockGetKeyEventPriority.apply(any())).thenReturn(KEY_PRIORITY);
 
         var output = handler.write(mockComponent);
 
@@ -146,6 +153,7 @@ public class ComponentHandlerTests {
         verify(mockProviderHandler, once()).write(mockDimensProvider);
         verify(mockComponent, once()).data();
         verify(mockDataHandler, once()).write(mockData);
+        verify(mockGetKeyEventPriority, once()).apply(mockComponent);
     }
 
     @Test
@@ -155,8 +163,8 @@ public class ComponentHandlerTests {
 
     @Test
     public void testRead() {
-        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), any(), any(),
-                any())).thenReturn(mockComponent);
+        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), anyInt(), any(), any(), any()))
+                .thenReturn(mockComponent);
 
         var output = handler.read(writtenValue);
 
@@ -169,6 +177,7 @@ public class ComponentHandlerTests {
                 eq(Z),
                 bindingCaptor.capture(),
                 eq(OVERRIDES),
+                eq(KEY_PRIORITY),
                 same(mockDimensProvider),
                 isNull(),
                 same(mockData)
@@ -181,9 +190,10 @@ public class ComponentHandlerTests {
         verify(mockComponent, once()).add(mockContent);
         @SuppressWarnings("unchecked") var bindings = (Set<KeyBinding>) bindingCaptor.getValue();
         assertEquals(1, bindings.size());
-        @SuppressWarnings("OptionalGetWithoutIsPresent") var binding = bindings.stream().findFirst().get();
-        assertEquals(1, binding.BOUND_KEYS.length);
-        assertEquals(KEY, binding.BOUND_KEYS[0]);
+        @SuppressWarnings("OptionalGetWithoutIsPresent") var binding =
+                bindings.stream().findFirst().get();
+        assertEquals(1, binding.BOUND_CODEPOINTS.length);
+        assertEquals(KEY, binding.BOUND_CODEPOINTS[0]);
         verify(MOCK_GET_ACTION, once()).apply(ON_KEY_PRESS_ID);
         assertSame(MOCK_ON_KEY_PRESS, binding.ON_PRESS);
         verify(MOCK_GET_ACTION, once()).apply(ON_KEY_RELEASE_ID);

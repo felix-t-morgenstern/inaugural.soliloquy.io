@@ -23,6 +23,7 @@ import inaugural.soliloquy.io.graphics.renderables.providers.factories.*;
 import inaugural.soliloquy.io.graphics.rendering.*;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.*;
+import inaugural.soliloquy.io.keyboard.KeyEventHandlerImpl;
 import inaugural.soliloquy.io.keyboard.KeyEventListenerImpl;
 import inaugural.soliloquy.io.mouse.MouseCursorImpl;
 import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
@@ -102,7 +103,8 @@ public class IOModule extends AbstractModule {
         // Keyboard
         // ========
 
-        andRegister(new KeyEventListenerImpl(timestampValidator));
+        var keyEventHandler = andRegister(new KeyEventHandlerImpl(timestampValidator));
+        var keyEventListener = new KeyEventListenerImpl(keyEventHandler);
 
         // =====
         // Audio
@@ -112,7 +114,7 @@ public class IOModule extends AbstractModule {
         var soundsPlaying = andRegister(new SoundsPlayingImpl());
         var soundFactory = andRegister(new SoundFactoryImpl(soundTypes::get, soundsPlaying));
         @SuppressWarnings("unchecked") var audioFiletypes =
-                (Set<String>) getSetting.apply(AUDIO_FILETYPES_ID);
+                (Set<String>) (getSetting.apply(AUDIO_FILETYPES_ID).getValue());
         var audioLoader = new AudioLoaderImpl(
                 s -> soundTypes.put(s.id(), s),
                 SoundTypeImpl::new,
@@ -298,8 +300,12 @@ public class IOModule extends AbstractModule {
 
         var antialiasedLineSegmentRenderableFactory =
                 andRegister(new AntialiasedLineSegmentRenderableFactoryImpl());
-        var componentFactory = andRegister(new ComponentFactoryImpl(mouseCapturing::putRenderable,
-                mouseCapturing::removeRenderable));
+        var componentFactory = andRegister(new ComponentFactoryImpl(
+                keyEventHandler::addComponent,
+                keyEventHandler::removeComponent,
+                mouseCapturing::putRenderable,
+                mouseCapturing::removeRenderable
+        ));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));
         var globalLoopingAnimationRenderableFactory = andRegister(
@@ -516,7 +522,7 @@ public class IOModule extends AbstractModule {
                         triangleRenderableFactory));
         persistenceHandler.addTypeHandler(ComponentImpl.class,
                 new ComponentHandler(providerHandler, mapHandler, persistenceHandler, actions::get,
-                        componentFactory));
+                        keyEventHandler::getPriority, componentFactory));
 
         // ========
         // Graphics
@@ -558,6 +564,7 @@ public class IOModule extends AbstractModule {
                 idsForFilenames,
                 defaultLoopStopMsById,
                 defaultLoopRestartMsById,
+                keyEventListener,
                 mouseCursor,
                 mouseListener
         ));

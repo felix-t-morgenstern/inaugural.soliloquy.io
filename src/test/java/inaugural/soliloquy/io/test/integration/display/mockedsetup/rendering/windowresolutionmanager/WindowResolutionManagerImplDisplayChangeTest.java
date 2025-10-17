@@ -14,6 +14,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.*;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Set;
@@ -73,7 +74,7 @@ class WindowResolutionManagerImplDisplayChangeTest {
                         new FakeShaderFactory(), renderersWithShader, "_", MeshImpl::new,
                         renderersWithMesh, MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
                         mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(MouseCursor.class), mock(MouseListener.class));
+                        mock(KeyEventListener.class), mock(MouseCursor.class), mock(MouseListener.class));
 
         coreLoop.startup(() ->
                 closeAfterSomeTime(coreLoop, windowResolutionManager));

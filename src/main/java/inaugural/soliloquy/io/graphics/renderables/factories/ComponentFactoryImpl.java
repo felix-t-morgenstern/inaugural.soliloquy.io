@@ -12,18 +12,25 @@ import soliloquy.specs.io.input.keyboard.KeyBinding;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 
 public class ComponentFactoryImpl implements ComponentFactory {
-    private final Consumer<RenderableWithMouseEvents> ADD_TO_CAPTURING;
-    private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_CAPTURING;
+    private final BiConsumer<Component, Integer> ADD_TO_KEY_CAPTURING;
+    private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
+    private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
+    private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
 
-    public ComponentFactoryImpl(Consumer<RenderableWithMouseEvents> addToCapturing,
+    public ComponentFactoryImpl(BiConsumer<Component, Integer> addToKeyCapturing,
+                                Consumer<Component> removeFromKeyCapturing,
+                                Consumer<RenderableWithMouseEvents> addToCapturing,
                                 Consumer<RenderableWithMouseEvents> removeFromCapturing) {
-        ADD_TO_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
-        REMOVE_FROM_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
+        ADD_TO_KEY_CAPTURING = Check.ifNull(addToKeyCapturing, "addToKeyCapturing");
+        REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
+        ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
+        REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
     }
 
     @Override
@@ -32,11 +39,12 @@ public class ComponentFactoryImpl implements ComponentFactory {
             int z,
             Set<KeyBinding> keyBindings,
             boolean blocksLowerKeyBindings,
+            int keyBindingPriority,
             ProviderAtTime<FloatBox> renderingBoundariesProvider,
             Component containingComponent,
             Map<String, Object> data
     ) throws IllegalArgumentException {
-        return new ComponentImpl(
+        var component = new ComponentImpl(
                 Check.ifNull(uuid, "uuid"),
                 z,
                 keyBindings,
@@ -44,8 +52,11 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 containingComponent,
                 renderingBoundariesProvider,
                 data,
-                ADD_TO_CAPTURING,
-                REMOVE_FROM_CAPTURING
+                REMOVE_FROM_KEY_CAPTURING,
+                ADD_TO_MOUSE_CAPTURING,
+                REMOVE_FROM_MOUSE_CAPTURING
         );
+        ADD_TO_KEY_CAPTURING.accept(component, keyBindingPriority);
+        return component;
     }
 }

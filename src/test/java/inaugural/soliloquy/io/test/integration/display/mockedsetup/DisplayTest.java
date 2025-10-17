@@ -29,6 +29,7 @@ import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 
@@ -126,7 +127,7 @@ public class DisplayTest {
                         renderersWithMeshAndShader, SHADER_FILENAME_PREFIX, MeshImpl::new,
                         renderersWithMeshAndShader, MESH_DATA, MESH_DATA, graphicsPreloader,
                         mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        MouseCursor, mouseListener);
+                        mock(KeyEventListener.class), MouseCursor, mouseListener);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

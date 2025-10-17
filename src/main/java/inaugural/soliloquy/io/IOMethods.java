@@ -1,5 +1,7 @@
 package inaugural.soliloquy.io;
 
+import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.audio.factories.SoundFactory;
 
@@ -11,19 +13,18 @@ public class IOMethods {
 
     public IOMethods(SoundsPlaying soundsPlaying,
                      SoundFactory soundFactory) {
-        SOUNDS_PLAYING = soundsPlaying;
-        SOUND_FACTORY = soundFactory;
+        SOUNDS_PLAYING = Check.ifNull(soundsPlaying, "soundsPlaying");
+        SOUND_FACTORY = Check.ifNull(soundFactory, "soundFactory");
     }
 
-    public UUID makeSound(String soundId) {
-        var sound = SOUND_FACTORY.make(soundId);
-        return sound.uuid();
+    public Sound makeSound(String soundId) {
+        return SOUND_FACTORY.make(soundId);
     }
 
-    public UUID playSound(String soundId) {
-        var sound = SOUND_FACTORY.make(soundId);
+    public Sound playSound(String soundId) {
+        var sound = makeSound(soundId);
         sound.play();
-        return sound.uuid();
+        return sound;
     }
 
     public void pauseSound(UUID sound) {

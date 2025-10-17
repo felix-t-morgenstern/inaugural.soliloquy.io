@@ -14,4 +14,12 @@ public class DisplayTestMethods {
     public static void playMouseReleaseSound(EventInputs e) {
         PlaySound.accept("releaseSoundId");
     }
+
+    public static void printKeyPressed(EventInputs e) {
+        System.out.println("Key codepoint [" + e.keyCodepoint + "] pressed");
+    }
+
+    public static void printKeyReleased(EventInputs e) {
+        System.out.println("Key codepoint [" + e.keyCodepoint + "] released");
+    }
 }
