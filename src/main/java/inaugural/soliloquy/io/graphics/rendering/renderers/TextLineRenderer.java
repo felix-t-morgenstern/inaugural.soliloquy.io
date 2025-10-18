@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
@@ -358,6 +360,15 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
         );
     }
 
+    @Override
+    public float getGlyphWidth(char aChar,
+                               FontStyleInfo fontStyleInfo,
+                               float lineHeight)
+            throws IllegalArgumentException {
+        return getGlyphInfo(aChar, fontStyleInfo, lineHeight).SECOND -
+                rightPaddingAdjustment(aChar, fontStyleInfo, lineHeight);
+    }
+
     // NB: null timestamp implies that colorIndices should be ignored altogether. This isn't
     // elegant, but this is not front-facing code.
     private float iterateOverTextLine(
@@ -445,38 +456,55 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             }
 
             var character = lineText.charAt(i);
-            var glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(character);
-            if (fontStyleInfo.glyphwiseWidthFactors().containsKey(character)) {
-                var newWidth =
-                        glyphBox.width() * fontStyleInfo.glyphwiseWidthFactors().get(character);
-                glyphBox = floatBoxOf(
-                        glyphBox.LEFT_X,
-                        glyphBox.TOP_Y,
-                        glyphBox.LEFT_X + newWidth,
-                        glyphBox.BOTTOM_Y
-                );
-            }
-            var glyphLength = glyphBox.width() * (lineHeight / glyphBox.height())
-                    * fontStyleInfo.textureWidthToHeightRatio();
+
+            var glyphInfo = getGlyphInfo(character, fontStyleInfo, lineHeight);
+            var glyphBox = glyphInfo.FIRST;
+            float glyphLength = glyphInfo.SECOND;
 
             if (renderingAction != null) {
                 renderingAction.apply(textLineLengthThusFar).apply(glyphLength)
                         .apply(fontStyleInfo.textureId()).apply(glyphBox).accept(color);
             }
 
-            float lengthThusFarAddition = glyphLength;
-            var paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
-            if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
-                    .containsKey(character)) {
-                paddingPercentage +=
-                        fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(character);
-            }
-            lengthThusFarAddition -= paddingPercentage * lineHeight;
+            var lengthThusFarAddition =
+                    glyphLength - rightPaddingAdjustment(character, fontStyleInfo, lineHeight);
 
             textLineLengthThusFar += lengthThusFarAddition;
         }
 
         return textLineLengthThusFar;
+    }
+
+    private Pair<FloatBox, Float> getGlyphInfo(char aChar,
+                                               FontStyleInfo fontStyleInfo,
+                                               float lineHeight) {
+        var glyphBox = fontStyleInfo.getUvCoordinatesForGlyph(aChar);
+        if (fontStyleInfo.glyphwiseWidthFactors().containsKey(aChar)) {
+            var newWidth =
+                    glyphBox.width() * fontStyleInfo.glyphwiseWidthFactors().get(aChar);
+            glyphBox = floatBoxOf(
+                    glyphBox.LEFT_X,
+                    glyphBox.TOP_Y,
+                    glyphBox.LEFT_X + newWidth,
+                    glyphBox.BOTTOM_Y
+            );
+        }
+        var glyphLength = glyphBox.width() * (lineHeight / glyphBox.height())
+                * fontStyleInfo.textureWidthToHeightRatio();
+
+        return pairOf(glyphBox, glyphLength);
+    }
+
+    private float rightPaddingAdjustment(char aChar,
+                                         FontStyleInfo fontStyleInfo,
+                                         float lineHeight) {
+        var paddingPercentage = fontStyleInfo.additionalHorizontalTextureSpacing();
+        if (fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing()
+                .containsKey(aChar)) {
+            paddingPercentage +=
+                    fontStyleInfo.glyphwiseAdditionalHorizontalTextureSpacing().get(aChar);
+        }
+        return paddingPercentage * lineHeight;
     }
 
     private float validateTextLineRenderableAndGetLineHeight(
@@ -495,7 +523,8 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
                     renderable.colorProviderIndices().entrySet();
             for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
-                validateIndex(entry.getKey(), lineTextLength, "renderable.colorIndices()", methodName,
+                validateIndex(entry.getKey(), lineTextLength, "renderable.colorIndices()",
+                        methodName,
                         highestIndexThusFar);
                 highestIndexThusFar = entry.getKey();
                 if (entry.getValue() == null) {
@@ -557,7 +586,9 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                     dataStructureName + " cannot contain negative key");
         }
         if (index > lineTextLength) {
-            throw new IllegalArgumentException("TextLineRenderableImpl." + methodName + ": " + dataStructureName + " cannot contain index above line length");
+            throw new IllegalArgumentException(
+                    "TextLineRenderableImpl." + methodName + ": " + dataStructureName +
+                            " cannot contain index above line length");
         }
         if (highestIndexThusFar != null && index <= highestIndexThusFar) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +

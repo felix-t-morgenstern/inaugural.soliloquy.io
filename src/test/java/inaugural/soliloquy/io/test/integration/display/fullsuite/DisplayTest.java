@@ -245,7 +245,7 @@ public class DisplayTest {
         // Many of these are dummy values which should be tweaked for performance
         @SuppressWarnings("rawtypes") var settings = Collections.<String, Setting>mapOf(
                 AUDIO_FILETYPES_ID,
-                setOf("wav", "mp3"),
+                generateMockSetting(setOf("wav", "mp3")),
                 PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID,
                 generateMockSetting(10),
                 FRAME_TIMER_POLLING_INTERVAL_ID,
