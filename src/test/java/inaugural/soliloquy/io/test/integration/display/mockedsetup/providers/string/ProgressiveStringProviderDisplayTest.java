@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.st
 
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.ProgressiveStringProvider;
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
@@ -96,7 +96,7 @@ public class ProgressiveStringProviderDisplayTest extends TextLineRendererTest {
                 staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocation));
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE,
                 windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));

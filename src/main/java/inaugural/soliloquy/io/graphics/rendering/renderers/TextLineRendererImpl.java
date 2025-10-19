@@ -11,6 +11,7 @@ import soliloquy.specs.io.graphics.renderables.TextJustification;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer;
 
 import java.awt.*;
 import java.util.List;
@@ -24,14 +25,14 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
-        implements soliloquy.specs.io.graphics.rendering.renderers.TextLineRenderer {
+public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
+        implements TextLineRenderer {
     private final Color DEFAULT_COLOR;
 
-    public TextLineRenderer(RenderingBoundaries renderingBoundaries,
-                            Color defaultColor,
-                            Supplier<Float> getScreenWToHRatio,
-                            TimestampValidator timestampValidator) {
+    public TextLineRendererImpl(RenderingBoundaries renderingBoundaries,
+                                Color defaultColor,
+                                Supplier<Float> getScreenWToHRatio,
+                                TimestampValidator timestampValidator) {
         super(renderingBoundaries, getScreenWToHRatio, timestampValidator);
         DEFAULT_COLOR = Check.ifNull(defaultColor, "defaultColor");
     }
@@ -519,14 +520,11 @@ public class TextLineRenderer extends CanRenderSnippets<TextLineRenderable>
                 "renderable.getRenderingLocationProvider()");
         Check.ifNull(renderable.uuid(), "renderable.id()");
         if (renderable.colorProviderIndices() != null) {
-            Integer highestIndexThusFar = null;
             Set<Map.Entry<Integer, ProviderAtTime<Color>>> colorProviderIndicesEntries =
                     renderable.colorProviderIndices().entrySet();
             for (Map.Entry<Integer, ProviderAtTime<Color>> entry : colorProviderIndicesEntries) {
                 validateIndex(entry.getKey(), lineTextLength, "renderable.colorIndices()",
-                        methodName,
-                        highestIndexThusFar);
-                highestIndexThusFar = entry.getKey();
+                        methodName, null);
                 if (entry.getValue() == null) {
                     throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": "
                             + "renderable.colorIndices cannot contain null value");

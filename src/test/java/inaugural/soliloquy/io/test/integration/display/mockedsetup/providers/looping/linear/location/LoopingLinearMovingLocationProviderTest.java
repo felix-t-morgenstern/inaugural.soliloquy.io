@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.looping.linear.location;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.LoopingLinearMovingVertexProvider;
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
@@ -81,7 +81,7 @@ public class LoopingLinearMovingLocationProviderTest extends TextLineRendererTes
                         staticNullProvider(), null, listOf(), listOf(),
                         LoopingLinearMovingLocationProvider);
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, Color.WHITE,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, Color.WHITE,
                 windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));

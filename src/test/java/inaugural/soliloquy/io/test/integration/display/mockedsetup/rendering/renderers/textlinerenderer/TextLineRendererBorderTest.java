@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.textlinerenderer;
 
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
@@ -86,7 +86,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
                 listOf(), staticProvider(renderingLocation));
         when(TextLineRenderable.getJustification()).thenReturn(TextJustification.CENTER);
 
-        TextLineRenderer = new TextLineRenderer(RENDERING_BOUNDARIES, INTACT_COLOR,
+        TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, INTACT_COLOR,
                 windowResolutionManager::windowWidthToHeightRatio, null);
 
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TextLineRenderable));

@@ -281,7 +281,7 @@ public class DisplayTest {
                 DEFAULT_FONT_COLOR_ID,
                 generateMockSetting(Color.WHITE),
                 AUDIO_RELATIVE_DIRS_ID,
-                setOf(AUDIO_DIR_RELATIVE_PATH)
+                generateMockSetting(setOf(AUDIO_DIR_RELATIVE_PATH))
         );
 
         ioModule = new IOModule(

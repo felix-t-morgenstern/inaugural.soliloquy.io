@@ -285,7 +285,7 @@ public class IOModule extends AbstractModule {
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                andRegister(new TextLineRenderer(renderingBoundaries, defaultFontColor,
+                andRegister(new TextLineRendererImpl(renderingBoundaries, defaultFontColor,
                                 resManager::windowWidthToHeightRatio, timestampValidator),
                         TEXT_LINE_RENDERER)
         );
@@ -542,7 +542,7 @@ public class IOModule extends AbstractModule {
         // =========
 
         @SuppressWarnings("unchecked") var audioRelDirs =
-                (Set<String>) getSetting.apply(AUDIO_RELATIVE_DIRS_ID);
+                (Set<String>) (getSetting.apply(AUDIO_RELATIVE_DIRS_ID).getValue());
         var renderersSet = setOf(contentRenderers.values().toArray(Renderer[]::new));
         andRegister(new CoreLoopImpl(
                 initialTitlebar,

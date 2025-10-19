@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
-import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFontStyleInfo;
 import inaugural.soliloquy.tools.Tools;
@@ -40,7 +40,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 @ExtendWith(MockitoExtension.class)
-public class TextLineRendererTests {
+public class TextLineRendererImplTests {
     private final Color DEFAULT_COLOR = Color.BLACK;
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
@@ -68,23 +68,23 @@ public class TextLineRendererTests {
         lenient().when(mockFontInfo.getUvCoordinatesForGlyph(anyChar()))
                 .thenReturn(randomFloatBox());
 
-        renderer = new TextLineRenderer(mockRenderingBoundaries,
+        renderer = new TextLineRendererImpl(mockRenderingBoundaries,
                 DEFAULT_COLOR, mockGetScreenWToHRatio, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(null, DEFAULT_COLOR,
+                () -> new TextLineRendererImpl(null, DEFAULT_COLOR,
                         mockGetScreenWToHRatio, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(mockRenderingBoundaries, null,
+                () -> new TextLineRendererImpl(mockRenderingBoundaries, null,
                         mockGetScreenWToHRatio, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
+                () -> new TextLineRendererImpl(mockRenderingBoundaries, DEFAULT_COLOR,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new TextLineRenderer(mockRenderingBoundaries, DEFAULT_COLOR,
+                () -> new TextLineRendererImpl(mockRenderingBoundaries, DEFAULT_COLOR,
                         mockGetScreenWToHRatio, null));
     }
 
