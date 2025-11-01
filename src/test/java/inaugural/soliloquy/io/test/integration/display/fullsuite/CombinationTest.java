@@ -5,7 +5,7 @@ import inaugural.soliloquy.io.api.dto.*;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.factories.*;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.EventInputs;
@@ -180,7 +180,7 @@ public class CombinationTest extends DisplayTest {
                 staticProvider("Hello world!"),
                 staticProvider(vertexOf(0.5f, 0.8f)),
                 staticProvider(0.08f),
-                TextJustification.LEFT,
+                HorizontalAlignment.LEFT,
                 0f,
                 mapOf(0, staticProvider(Color.MAGENTA)),
                 listOf(),

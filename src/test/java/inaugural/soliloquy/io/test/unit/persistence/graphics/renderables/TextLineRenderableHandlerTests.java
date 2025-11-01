@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -39,8 +39,8 @@ public class TextLineRenderableHandlerTests {
             generateMockLookupFunctionWithId(Font.class, FONT_ID);
     private final Font MOCK_FONT = MOCK_FONT_AND_LOOKUP.entities.getFirst();
     private final Function<String, Font> MOCK_GET_FONT = MOCK_FONT_AND_LOOKUP.lookup;
-    private final TextJustification JUSTIFICATION =
-            TextJustification.fromValue(randomIntInRange(0, 3));
+    private final HorizontalAlignment ALIGNMENT =
+            HorizontalAlignment.fromValue(randomIntInRange(0, 3));
     private final float GLYPH_PADDING = randomFloat();
     private final int COLOR_PROVIDER_INDEX = randomInt();
     private final int ITALIC_INDEX = randomInt();
@@ -78,7 +78,7 @@ public class TextLineRenderableHandlerTests {
                     "\"bold\":[%d],\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
                     "\"shadowSize\":\"%s\",\"shadowOffset\":\"%s\",\"shadowColor\":\"%s\"," +
                     "\"z\":%d,\"uuid\":\"%s\"}",
-            FONT_ID, TEXT_WRITTEN, LOC_WRITTEN, HEIGHT_WRITTEN, JUSTIFICATION.getValue(),
+            FONT_ID, TEXT_WRITTEN, LOC_WRITTEN, HEIGHT_WRITTEN, ALIGNMENT.getValue(),
             GLYPH_PADDING, COLOR_PROVIDER_INDEX, COLOR_WRITTEN, ITALIC_INDEX, BOLD_INDEX,
             BORDER_THICKNESS_WRITTEN, BORDER_COLOR_WRITTEN, DROP_SHADOW_SIZE_WRITTEN,
             DROP_SHADOW_OFFSET_WRITTEN, DROP_SHADOW_COLOR_WRITTEN, Z, UUID
@@ -107,7 +107,7 @@ public class TextLineRenderableHandlerTests {
         when(mockRenderable.getLineTextProvider()).thenReturn(mockTextProvider);
         when(mockRenderable.getRenderingLocationProvider()).thenReturn(mockLocProvider);
         when(mockRenderable.lineHeightProvider()).thenReturn(mockHeightProvider);
-        when(mockRenderable.getJustification()).thenReturn(JUSTIFICATION);
+        when(mockRenderable.getAlignment()).thenReturn(ALIGNMENT);
         when(mockRenderable.getPaddingBetweenGlyphs()).thenReturn(GLYPH_PADDING);
         when(mockRenderable.colorProviderIndices()).thenReturn(
                 mapOf(pairOf(COLOR_PROVIDER_INDEX, mockColorProvider)));
@@ -142,7 +142,7 @@ public class TextLineRenderableHandlerTests {
         verify(mockRenderable, once()).getLineTextProvider();
         verify(mockRenderable, once()).getRenderingLocationProvider();
         verify(mockRenderable, once()).lineHeightProvider();
-        verify(mockRenderable, once()).getJustification();
+        verify(mockRenderable, once()).getAlignment();
         verify(mockRenderable, once()).getPaddingBetweenGlyphs();
         verify(mockRenderable, once()).colorProviderIndices();
         verify(mockRenderable, once()).italicIndices();
@@ -177,11 +177,15 @@ public class TextLineRenderableHandlerTests {
         when(mockProviderHandler.read(LOC_WRITTEN)).thenReturn(mockLocProvider);
         when(mockProviderHandler.read(HEIGHT_WRITTEN)).thenReturn(mockHeightProvider);
         when(mockProviderHandler.read(COLOR_WRITTEN)).thenReturn(mockColorProvider);
-        when(mockProviderHandler.read(BORDER_THICKNESS_WRITTEN)).thenReturn(mockBorderThicknessProvider);
+        when(mockProviderHandler.read(BORDER_THICKNESS_WRITTEN)).thenReturn(
+                mockBorderThicknessProvider);
         when(mockProviderHandler.read(BORDER_COLOR_WRITTEN)).thenReturn(mockBorderColorProvider);
-        when(mockProviderHandler.read(DROP_SHADOW_SIZE_WRITTEN)).thenReturn(mockDropShadowSizeProvider);
-        when(mockProviderHandler.read(DROP_SHADOW_OFFSET_WRITTEN)).thenReturn(mockDropShadowOffsetProvider);
-        when(mockProviderHandler.read(DROP_SHADOW_COLOR_WRITTEN)).thenReturn(mockDropShadowColorProvider);
+        when(mockProviderHandler.read(DROP_SHADOW_SIZE_WRITTEN)).thenReturn(
+                mockDropShadowSizeProvider);
+        when(mockProviderHandler.read(DROP_SHADOW_OFFSET_WRITTEN)).thenReturn(
+                mockDropShadowOffsetProvider);
+        when(mockProviderHandler.read(DROP_SHADOW_COLOR_WRITTEN)).thenReturn(
+                mockDropShadowColorProvider);
 
         when(mockFactory.make(
                 any(),
@@ -221,7 +225,7 @@ public class TextLineRenderableHandlerTests {
                 same(mockTextProvider),
                 same(mockLocProvider),
                 same(mockHeightProvider),
-                eq(JUSTIFICATION),
+                eq(ALIGNMENT),
                 anyFloat(),
                 eq(mapOf(pairOf(COLOR_PROVIDER_INDEX, mockColorProvider))),
                 eq(listOf(ITALIC_INDEX)),

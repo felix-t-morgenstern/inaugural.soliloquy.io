@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.persistence.graphics.renderables.providers.Provide
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
 import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -44,7 +44,7 @@ public class TextLineRenderableHandler extends AbstractTypeHandler<TextLineRende
         var text = PROVIDER_HANDLER.read(dto.text);
         var loc = PROVIDER_HANDLER.read(dto.loc);
         var height = PROVIDER_HANDLER.read(dto.height);
-        var justification = TextJustification.fromValue(dto.just);
+        var alignment = HorizontalAlignment.fromValue(dto.just);
         var padding = dto.padding;
         @SuppressWarnings("unchecked") var colors = mapOf(Arrays.stream(dto.colors)
                 .map(c -> pairOf(c.index, (ProviderAtTime<Color>) PROVIDER_HANDLER.read(c.color))));
@@ -61,7 +61,7 @@ public class TextLineRenderableHandler extends AbstractTypeHandler<TextLineRende
                 text,
                 loc,
                 height,
-                justification,
+                alignment,
                 padding,
                 colors,
                 italics,
@@ -87,7 +87,7 @@ public class TextLineRenderableHandler extends AbstractTypeHandler<TextLineRende
         dto.text = PROVIDER_HANDLER.write(renderable.getLineTextProvider());
         dto.loc = PROVIDER_HANDLER.write(renderable.getRenderingLocationProvider());
         dto.height = PROVIDER_HANDLER.write(renderable.lineHeightProvider());
-        dto.just = renderable.getJustification().getValue();
+        dto.just = renderable.getAlignment().getValue();
         dto.padding = renderable.getPaddingBetweenGlyphs();
         dto.colors = renderable.colorProviderIndices().entrySet().stream()
                 .sorted(Comparator.comparingInt(Map.Entry::getKey)).map(e -> {

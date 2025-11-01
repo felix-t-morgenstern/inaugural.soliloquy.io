@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -36,7 +36,7 @@ public class TextLineRenderableImplTests {
     private final float LINE_HEIGHT = 0.123f;
     private final ProviderAtTime<Float> LINE_HEIGHT_PROVIDER =
             generateMockStaticProvider(LINE_HEIGHT);
-    private final TextJustification JUSTIFICATION = TextJustification.LEFT;
+    private final HorizontalAlignment ALIGNMENT = HorizontalAlignment.LEFT;
     private final float PADDING_BETWEEN_GLYPHS = 0.456f;
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = mapOf();
     private final List<Integer> ITALIC_INDICES = listOf();
@@ -61,7 +61,7 @@ public class TextLineRenderableImplTests {
     @BeforeEach
     public void setUp() {
         renderable = new TextLineRenderableImpl(FONT, mockLineTextProvider,
-                LINE_HEIGHT_PROVIDER, JUSTIFICATION, PADDING_BETWEEN_GLYPHS,
+                LINE_HEIGHT_PROVIDER, ALIGNMENT, PADDING_BETWEEN_GLYPHS,
                 COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
                 BORDER_COLOR_PROVIDER, RENDERING_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
                 DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
@@ -71,19 +71,19 @@ public class TextLineRenderableImplTests {
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                null, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                null, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, null, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, null, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, null, JUSTIFICATION,
+                FONT, mockLineTextProvider, null, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
@@ -95,68 +95,68 @@ public class TextLineRenderableImplTests {
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, TextJustification.UNKNOWN,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, HorizontalAlignment.UNKNOWN,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, null, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, null,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, null, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         // NB: These should not throw any exceptions
         new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 null, null, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent);
         new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 null, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent);
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 null, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, null, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, null,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, JUSTIFICATION,
+                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
@@ -214,18 +214,18 @@ public class TextLineRenderableImplTests {
     }
 
     @Test
-    public void testGetAndSetJustification() {
-        renderable.setJustification(TextJustification.CENTER);
+    public void testGetAndSetAlignment() {
+        renderable.setAlignment(HorizontalAlignment.CENTER);
 
-        assertEquals(TextJustification.CENTER, renderable.getJustification());
+        assertEquals(HorizontalAlignment.CENTER, renderable.getAlignment());
     }
 
     @Test
-    public void testSetJustificationWithInvalidArgs() {
+    public void testSetAlignmentWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setJustification(null));
+                () -> renderable.setAlignment(null));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setJustification(TextJustification.UNKNOWN));
+                () -> renderable.setAlignment(HorizontalAlignment.UNKNOWN));
     }
 
     @Test

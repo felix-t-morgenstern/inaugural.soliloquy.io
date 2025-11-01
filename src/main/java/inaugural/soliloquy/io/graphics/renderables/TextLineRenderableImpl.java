@@ -4,7 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -24,7 +24,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     private Font font;
     private ProviderAtTime<String> lineTextProvider;
     private ProviderAtTime<Float> lineHeightProvider;
-    private TextJustification justification;
+    private HorizontalAlignment alignment;
     private ProviderAtTime<Vertex> renderingLocationProvider;
     private float paddingBetweenGlyphs;
     private ProviderAtTime<Float> borderThicknessProvider;
@@ -36,7 +36,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     /** @noinspection ConstantConditions */
     public TextLineRenderableImpl(Font font, ProviderAtTime<String> lineTextProvider,
                                   ProviderAtTime<Float> lineHeightProvider,
-                                  TextJustification justification, float paddingBetweenGlyphs,
+                                  HorizontalAlignment alignment, float paddingBetweenGlyphs,
                                   Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                   List<Integer> italicIndices, List<Integer> boldIndices,
                                   ProviderAtTime<Float> borderThicknessProvider,
@@ -50,7 +50,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
         super(z, uuid, component);
         setFont(font);
         this.setLineTextProvider(lineTextProvider);
-        setJustification(justification);
+        setAlignment(alignment);
         setLineHeightProvider(lineHeightProvider);
         setRenderingLocationProvider(renderingLocationProvider);
         setPaddingBetweenGlyphs(paddingBetweenGlyphs);
@@ -120,18 +120,18 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
     }
 
     @Override
-    public TextJustification getJustification() {
-        return justification;
+    public HorizontalAlignment getAlignment() {
+        return alignment;
     }
 
     @Override
-    public void setJustification(TextJustification justification) throws IllegalArgumentException {
-        Check.ifNull(justification, "justification");
-        if (justification == TextJustification.UNKNOWN) {
+    public void setAlignment(HorizontalAlignment alignment) throws IllegalArgumentException {
+        Check.ifNull(alignment, "alignment");
+        if (alignment == HorizontalAlignment.UNKNOWN) {
             throw new IllegalArgumentException(
-                    "TextLineRenderableImpl.setJustification: justification cannot be UNKNOWN");
+                    "TextLineRenderableImpl.setAlignment: alignment cannot be UNKNOWN");
         }
-        this.justification = justification;
+        this.alignment = alignment;
     }
 
     @Override

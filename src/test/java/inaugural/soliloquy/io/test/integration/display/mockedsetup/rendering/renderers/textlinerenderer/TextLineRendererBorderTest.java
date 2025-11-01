@@ -6,7 +6,7 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -84,7 +84,7 @@ class TextLineRendererBorderTest extends TextLineRendererTest {
         TextLineRenderable = mockTextLineRenderable(staticProvider(0.1f), 0f, LINE_TEXT,
                 staticProvider(0.00125f), staticProvider(new Color(255, 25, 119)), null, listOf(),
                 listOf(), staticProvider(renderingLocation));
-        when(TextLineRenderable.getJustification()).thenReturn(TextJustification.CENTER);
+        when(TextLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.CENTER);
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, INTACT_COLOR,
                 windowResolutionManager::windowWidthToHeightRatio, null);

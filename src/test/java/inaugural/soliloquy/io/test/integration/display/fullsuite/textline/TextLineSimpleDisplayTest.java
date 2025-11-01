@@ -5,7 +5,7 @@ import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 
 import java.awt.*;
@@ -77,7 +77,7 @@ public class TextLineSimpleDisplayTest extends DisplayTest {
                     staticProvider(string),
                     staticProvider(vertexOf(0f, (0f + (lineHeight * row++)))),
                     lineHeightProvider,
-                    TextJustification.LEFT,
+                    HorizontalAlignment.LEFT,
                     glyphPadding,
                     mapOf(0, staticProvider(Color.RED)),
                     italicIndices,

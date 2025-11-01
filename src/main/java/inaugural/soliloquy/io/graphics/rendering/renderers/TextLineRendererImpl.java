@@ -7,7 +7,7 @@ import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -86,12 +86,12 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
         float startX;
         float startY = renderingLocation.Y;
 
-        if (renderable.getJustification() == TextJustification.LEFT) {
+        if (renderable.getAlignment() == HorizontalAlignment.LEFT) {
             startX = renderingLocation.X;
         }
         else {
             float lineLength = textLineLength(renderable, timestamp);
-            if (renderable.getJustification() == TextJustification.CENTER) {
+            if (renderable.getAlignment() == HorizontalAlignment.CENTER) {
                 startX = renderingLocation.X - (lineLength / 2f);
             }
             else {
@@ -548,10 +548,10 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             highestIndexThusFar = index;
         }
 
-        if (Check.ifNull(renderable.getJustification(),
-                "renderable.getJustification()") == TextJustification.UNKNOWN) {
+        if (Check.ifNull(renderable.getAlignment(),
+                "renderable.getAlignment()") == HorizontalAlignment.UNKNOWN) {
             throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
-                    "justification cannot be UNKNOWN");
+                    "alignment cannot be UNKNOWN");
         }
 
         Float lineHeight = renderable.lineHeightProvider().provide(timestamp);

@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -80,7 +80,7 @@ public class TextLineRendererTest extends DisplayTest {
         when(mockTextLineRenderable.getRenderingLocationProvider()).thenReturn(
                 renderingLocationProvider);
         when(mockTextLineRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
-        when(mockTextLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(mockTextLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(staticNullProvider());
         when(mockTextLineRenderable.dropShadowOffsetProvider()).thenReturn(
                 staticNullProvider());
@@ -120,7 +120,7 @@ public class TextLineRendererTest extends DisplayTest {
         when(mockTextLineRenderable.getRenderingLocationProvider()).thenReturn(
                 renderingLocationProvider);
         when(mockTextLineRenderable.uuid()).thenReturn(java.util.UUID.randomUUID());
-        when(mockTextLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(mockTextLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         when(mockTextLineRenderable.dropShadowSizeProvider()).thenReturn(dropShadowSizeProvider);
         when(mockTextLineRenderable.dropShadowOffsetProvider()).thenReturn(
                 dropShadowOffsetProvider);

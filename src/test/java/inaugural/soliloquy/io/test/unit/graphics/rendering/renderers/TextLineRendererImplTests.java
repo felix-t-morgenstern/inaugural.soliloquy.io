@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFontStyleInfo;
-import inaugural.soliloquy.tools.Tools;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.assets.FontStyleInfo;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
@@ -242,16 +241,16 @@ public class TextLineRendererImplTests {
         when(textLineRenderable.uuid()).thenReturn(randomUUID());
         assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        when(textLineRenderable.getJustification()).thenReturn(null);
+        when(textLineRenderable.getAlignment()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.render(textLineRenderable, randomLong()));
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
 
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.UNKNOWN);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.UNKNOWN);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.render(textLineRenderable, randomLong()));
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
     }
 
@@ -400,17 +399,17 @@ public class TextLineRendererImplTests {
         assertDoesNotThrow(
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        when(textLineRenderable.getJustification()).thenReturn(null);
+        when(textLineRenderable.getAlignment()).thenReturn(null);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         assertDoesNotThrow(
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.UNKNOWN);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.UNKNOWN);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        when(textLineRenderable.getJustification()).thenReturn(TextJustification.LEFT);
+        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         assertDoesNotThrow(
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
     }
@@ -769,7 +768,7 @@ public class TextLineRendererImplTests {
         lenient().when(renderable.dropShadowSizeProvider()).thenReturn(dropShadowSizeProvider);
         lenient().when(renderable.dropShadowOffsetProvider()).thenReturn(dropShadowOffsetProvider);
         lenient().when(renderable.dropShadowColorProvider()).thenReturn(dropShadowColorProvider);
-        lenient().when(renderable.getJustification()).thenReturn(TextJustification.LEFT);
+        lenient().when(renderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
 
         return renderable;
     }

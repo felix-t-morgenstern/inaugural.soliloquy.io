@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.graphics.renderables.TextLineRenderableImpl;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -19,7 +19,7 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
     public TextLineRenderable make(Font font, ProviderAtTime<String> lineTextProvider,
                                    ProviderAtTime<Vertex> locationProvider,
                                    ProviderAtTime<Float> lineHeightProvider,
-                                   TextJustification justification, float paddingBetweenGlyphs,
+                                   HorizontalAlignment alignment, float paddingBetweenGlyphs,
                                    Map<Integer, ProviderAtTime<Color>> colorProviderIndices,
                                    List<Integer> italicIndices, List<Integer> boldIndices,
                                    ProviderAtTime<Float> borderThicknessProvider,
@@ -31,7 +31,7 @@ public class TextLineRenderableFactoryImpl implements TextLineRenderableFactory 
                                    Component component)
             throws IllegalArgumentException {
         return new TextLineRenderableImpl(font, lineTextProvider, lineHeightProvider,
-                justification, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
+                alignment, paddingBetweenGlyphs, colorProviderIndices, italicIndices,
                 boldIndices, borderThicknessProvider, borderColorProvider,
                 locationProvider, dropShadowSizeProvider, dropShadowOffsetProvider,
                 dropShadowColorProvider, z, uuid, component);

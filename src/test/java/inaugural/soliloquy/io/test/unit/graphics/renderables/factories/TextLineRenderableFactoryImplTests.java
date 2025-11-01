@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.factories.TextLineRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TextLineRenderableFactoryImplTests {
-    private final TextJustification JUSTIFICATION = TextJustification.LEFT;
+    private final HorizontalAlignment ALIGNMENT = HorizontalAlignment.LEFT;
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = mapOf();
     private final List<Integer> ITALIC_INDICES = listOf();
     private final List<Integer> BOLD_INDICES = listOf();
@@ -57,7 +57,7 @@ public class TextLineRenderableFactoryImplTests {
         var paddingBetweenGlyphs = randomFloat();
         var renderable =
                 textLineRenderableFactory.make(mockFont, mockLineTextProvider, mockLocationProvider,
-                        mockHeightProvider, JUSTIFICATION, paddingBetweenGlyphs,
+                        mockHeightProvider, ALIGNMENT, paddingBetweenGlyphs,
                         COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
                         mockBorderThicknessProvider, mockBorderColorProvider,
                         mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
@@ -68,7 +68,7 @@ public class TextLineRenderableFactoryImplTests {
         assertSame(mockFont, renderable.getFont());
         assertSame(mockLineTextProvider, renderable.getLineTextProvider());
         assertSame(mockHeightProvider, renderable.lineHeightProvider());
-        assertEquals(JUSTIFICATION, renderable.getJustification());
+        assertEquals(ALIGNMENT, renderable.getAlignment());
         assertEquals(paddingBetweenGlyphs, renderable.getPaddingBetweenGlyphs());
         assertEquals(COLOR_PROVIDER_INDICES, renderable.colorProviderIndices());
         assertSame(mockContainingComponent, renderable.containingComponent());

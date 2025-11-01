@@ -6,7 +6,7 @@ import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
-import soliloquy.specs.io.graphics.renderables.TextJustification;
+import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
 import soliloquy.specs.io.graphics.renderables.TextLineRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
@@ -20,7 +20,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-class TextLineRendererJustificationsTest extends TextLineRendererTest {
+class TextLineRendererAlignmentTest extends TextLineRendererTest {
     private final static float LEADING_ADJUSTMENT = 0.0f;
     private final static String LINE_TEXT_LEFT = "This is left-aligned";
     private final static String LINE_TEXT_CENTER = "This is center-aligned";
@@ -32,7 +32,7 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
 
     public static void main(String[] args) {
         runTest(
-                TextLineRendererJustificationsTest::
+                TextLineRendererAlignmentTest::
                         generateRenderablesAndRenderersWithMeshAndShader,
                 () -> {
                     when(TextLineRenderableLeft.getFont()).thenReturn(new FontImpl(FontDefinition));
@@ -43,7 +43,7 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
 
                     FrameTimer.ShouldExecuteNextFrame = true;
                 },
-                TextLineRendererJustificationsTest::closeAfterSomeTime);
+                TextLineRendererAlignmentTest::closeAfterSomeTime);
     }
 
     /** @noinspection rawtypes */
@@ -95,9 +95,9 @@ class TextLineRendererJustificationsTest extends TextLineRendererTest {
                 staticNullProvider(), staticNullProvider(), null, listOf(), listOf(),
                 staticProvider(renderingLocationRight));
 
-        when(TextLineRenderableLeft.getJustification()).thenReturn(TextJustification.LEFT);
-        when(TextLineRenderableCenter.getJustification()).thenReturn(TextJustification.CENTER);
-        when(TextLineRenderableRight.getJustification()).thenReturn(TextJustification.RIGHT);
+        when(TextLineRenderableLeft.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
+        when(TextLineRenderableCenter.getAlignment()).thenReturn(HorizontalAlignment.CENTER);
+        when(TextLineRenderableRight.getAlignment()).thenReturn(HorizontalAlignment.RIGHT);
 
         TextLineRenderer = new TextLineRendererImpl(RENDERING_BOUNDARIES, INTACT_COLOR,
                 windowResolutionManager::windowWidthToHeightRatio, null);
