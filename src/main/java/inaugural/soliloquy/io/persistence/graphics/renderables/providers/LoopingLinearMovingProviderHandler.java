@@ -55,7 +55,7 @@ public class LoopingLinearMovingProviderHandler extends AbstractTypeHandler<Loop
         dto.offset = loopingLinearMovingProvider.periodModuloOffset();
 
         //noinspection unchecked
-        dto.type = ValuesAtTimestampType.get(loopingLinearMovingProvider.valuesWithinPeriod());
+        dto.type = ValuesAtTimestampType.getTypeName(loopingLinearMovingProvider.valuesWithinPeriod());
 
         var innerTypeHandler = PERSISTENCE_HANDLER.getTypeHandler(dto.type);
         //noinspection unchecked

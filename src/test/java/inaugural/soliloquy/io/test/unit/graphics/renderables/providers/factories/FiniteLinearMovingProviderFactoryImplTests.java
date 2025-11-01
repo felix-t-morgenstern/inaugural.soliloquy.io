@@ -23,10 +23,6 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class FiniteLinearMovingProviderFactoryImplTests {
-    private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
-
-    private final String FACTORY_2_TYPE_NAME = FloatBox.class.getCanonicalName();
-
     @Mock private FiniteLinearMovingProvider<Float> mockFactory1Output;
     /** @noinspection rawtypes */
     private final Function<UUID, Function<Map, Function<Long, Function<TimestampValidator,
@@ -74,8 +70,8 @@ public class FiniteLinearMovingProviderFactoryImplTests {
     public void setUp() {
         factory = new FiniteLinearMovingProviderFactoryImpl(
                 mapOf(
-                        pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
-                        pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
+                        pairOf(Float.class, FACTORY_1),
+                        pairOf(Integer.class, FACTORY_2)
                 ), mockTimestampValidator);
     }
 
@@ -90,13 +86,10 @@ public class FiniteLinearMovingProviderFactoryImplTests {
                         mapOf(pairOf(null, FACTORY_1)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf("", FACTORY_1)), mockTimestampValidator));
+                        mapOf(pairOf(Object.class, null)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () ->
                 new FiniteLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null)), mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class, () ->
-                new FiniteLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, FACTORY_1)), null));
+                        mapOf(pairOf(Object.class, FACTORY_1)), null));
     }
 
     @Test

@@ -22,7 +22,6 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class LoopingLinearMovingProviderFactoryImplTests {
-    private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     private final LoopingLinearMovingProvider<Float> FACTORY_1_OUTPUT =
             new FakeLoopingLinearMovingProvider<>();
     /** @noinspection rawtypes */
@@ -64,8 +63,8 @@ public class LoopingLinearMovingProviderFactoryImplTests {
     public void setUp() {
         loopingLinearMovingProviderFactory = new LoopingLinearMovingProviderFactoryImpl(
                 mapOf(
-                        pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
-                        pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
+                        pairOf(Float.class, FACTORY_1),
+                        pairOf(Integer.class, FACTORY_2)
                 ),
                 mockTimestampValidator
         );
@@ -79,15 +78,11 @@ public class LoopingLinearMovingProviderFactoryImplTests {
                 () -> new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1)),
                         mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new LoopingLinearMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1)),
-                        mockTimestampValidator));
+                () -> new LoopingLinearMovingProviderFactoryImpl(
+                        mapOf(pairOf(Object.class, null)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new LoopingLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null)), mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new LoopingLinearMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
-                                pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)), null));
+                        mapOf(pairOf(Object.class, FACTORY_1)), null));
     }
 
     @Test

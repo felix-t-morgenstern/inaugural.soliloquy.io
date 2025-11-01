@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapKeys;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FiniteLinearMovingProviderFactoryImpl
@@ -21,11 +22,11 @@ public class FiniteLinearMovingProviderFactoryImpl
 
     /** @noinspection rawtypes, ConstantConditions */
     public FiniteLinearMovingProviderFactoryImpl(
-            Map<String, Function<UUID, Function<Map, Function<Long, Function<TimestampValidator,
+            Map<Class, Function<UUID, Function<Map, Function<Long, Function<TimestampValidator,
                     FiniteLinearMovingProvider>>>>> factories,
             TimestampValidator timestampValidator) {
         Check.ifMapIsNonEmptyWithRealKeysAndValues(factories, "factories");
-        FACTORIES = mapOf(factories);
+        FACTORIES = mapKeys(factories, Class::getCanonicalName);
 
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
@@ -34,7 +35,7 @@ public class FiniteLinearMovingProviderFactoryImpl
     public <T> FiniteLinearMovingProvider<T> make(UUID uuid, Map<Long, T> valuesAtTimestamps,
                                                   Long pausedTimestamp)
             throws IllegalArgumentException {
-        var type = ValuesAtTimestampType.get(valuesAtTimestamps);
+        var type = ValuesAtTimestampType.getTypeName(valuesAtTimestamps);
         var factory = FACTORIES.get(type);
         //noinspection unchecked
         return (FiniteLinearMovingProvider<T>) factory.apply(uuid).apply(valuesAtTimestamps)

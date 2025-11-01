@@ -41,6 +41,8 @@ import org.apache.commons.lang3.function.TriConsumer;
 import soliloquy.specs.common.entities.Action;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
+import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.graphics.assets.*;
@@ -337,19 +339,19 @@ public class IOModule extends AbstractModule {
         @SuppressWarnings("unchecked") var finiteLinearMovingProviderFactory = andRegister(
                 new FiniteLinearMovingProviderFactoryImpl(mapOf(
                         pairOf(
-                                FiniteLinearMovingFloatBoxProvider.class.getCanonicalName(),
+                                FloatBox.class,
                                 uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
                                         new FiniteLinearMovingFloatBoxProvider(uuid,
                                                 valuesAtTimestamps, pausedTimestamp, timeVal)
                         ),
                         pairOf(
-                                FiniteLinearMovingFloatProvider.class.getCanonicalName(),
+                                Float.class,
                                 uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
                                         new FiniteLinearMovingFloatProvider(uuid,
                                                 valuesAtTimestamps, pausedTimestamp, timeVal)
                         ),
                         pairOf(
-                                FiniteLinearMovingVertexProvider.class.getCanonicalName(),
+                                Vertex.class,
                                 uuid -> valuesAtTimestamps -> pausedTimestamp -> timeVal ->
                                         new FiniteLinearMovingVertexProvider(uuid,
                                                 valuesAtTimestamps, pausedTimestamp, timeVal)
@@ -361,19 +363,19 @@ public class IOModule extends AbstractModule {
         @SuppressWarnings("unchecked") var finiteSinusoidMovingProviderFactory = andRegister(
                 new FiniteSinusoidMovingProviderFactoryImpl(mapOf(
                         pairOf(
-                                FiniteSinusoidMovingFloatBoxProvider.class.getCanonicalName(),
+                                FloatBox.class,
                                 uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingFloatBoxProvider(
                                         uuid, valuesAtTimestamps, transitionSharpnesses,
                                         pausedTimestamp, timeVal)
                         ),
                         pairOf(
-                                FiniteSinusoidMovingFloatProvider.class.getCanonicalName(),
+                                Float.class,
                                 uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingFloatProvider(
                                         uuid, valuesAtTimestamps, transitionSharpnesses,
                                         pausedTimestamp, timeVal)
                         ),
                         pairOf(
-                                FiniteSinusoidMovingVertexProvider.class.getCanonicalName(),
+                                Vertex.class,
                                 uuid -> valuesAtTimestamps -> transitionSharpnesses -> pausedTimestamp -> timeVal -> new FiniteSinusoidMovingVertexProvider(
                                         uuid, valuesAtTimestamps, transitionSharpnesses,
                                         pausedTimestamp, timeVal)
@@ -391,7 +393,7 @@ public class IOModule extends AbstractModule {
         var loopingLinearMovingProviderFactory =
                 andRegister(new LoopingLinearMovingProviderFactoryImpl(mapOf(
                         pairOf(
-                                LoopingLinearMovingFloatBoxProvider.class.getCanonicalName(),
+                                FloatBox.class,
                                 uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
                                         new LoopingLinearMovingFloatBoxProvider(uuid,
                                                 valuesWithinPeriod,
@@ -400,7 +402,7 @@ public class IOModule extends AbstractModule {
                                         )
                         ),
                         pairOf(
-                                LoopingLinearMovingFloatProvider.class.getCanonicalName(),
+                                Float.class,
                                 uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
                                         new LoopingLinearMovingFloatProvider(
                                                 uuid, valuesWithinPeriod, periodDuration,
@@ -408,7 +410,7 @@ public class IOModule extends AbstractModule {
                                         )
                         ),
                         pairOf(
-                                LoopingLinearMovingVertexProvider.class.getCanonicalName(),
+                                Vertex.class,
                                 uuid -> periodDuration -> periodModuloOffset -> valuesWithinPeriod -> pausedTimestamp -> timeVal ->
                                         new LoopingLinearMovingVertexProvider(
                                                 uuid, valuesWithinPeriod, periodDuration,

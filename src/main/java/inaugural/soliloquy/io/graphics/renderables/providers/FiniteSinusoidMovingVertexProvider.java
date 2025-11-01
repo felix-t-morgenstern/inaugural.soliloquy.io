@@ -23,9 +23,10 @@ public class FiniteSinusoidMovingVertexProvider
     @Override
     protected Vertex interpolateFromSineWeights(Vertex value1, Vertex value2,
                                                 float value2PercentToAdd) {
+        var value1PercentToAdd = 1f - value2PercentToAdd;
         return vertexOf(
-                value1.X + (value2.X * value2PercentToAdd),
-                value1.Y + (value2.Y * value2PercentToAdd)
+                (value1.X * value1PercentToAdd) + (value2.X * value2PercentToAdd),
+                (value1.Y * value1PercentToAdd) + (value2.Y * value2PercentToAdd)
         );
     }
 

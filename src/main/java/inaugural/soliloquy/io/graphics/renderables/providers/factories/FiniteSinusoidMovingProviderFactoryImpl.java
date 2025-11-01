@@ -9,21 +9,25 @@ import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteSinusoi
 import java.util.*;
 import java.util.function.Function;
 
+import static inaugural.soliloquy.tools.collections.Collections.mapKeys;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FiniteSinusoidMovingProviderFactoryImpl
         extends ValuesAtTimestampType
         implements FiniteSinusoidMovingProviderFactory {
     /** @noinspection rawtypes */
-    private final Map<String, Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> FACTORIES;
+    private final Map<String, Function<UUID, Function<Map, Function<float[], Function<Long,
+            Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>>
+            FACTORIES;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
     /** @noinspection rawtypes, ConstantConditions */
     public FiniteSinusoidMovingProviderFactoryImpl(
-            Map<String, Function<UUID, Function<Map, Function<float[], Function<Long, Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> factories,
+            Map<Class, Function<UUID, Function<Map, Function<float[], Function<Long,
+                    Function<TimestampValidator, FiniteSinusoidMovingProvider>>>>>> factories,
             TimestampValidator timestampValidator) {
         Check.ifMapIsNonEmptyWithRealKeysAndValues(factories, "factories");
-        FACTORIES = mapOf(factories);
+        FACTORIES = mapKeys(factories, Class::getCanonicalName);
 
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
@@ -33,8 +37,13 @@ public class FiniteSinusoidMovingProviderFactoryImpl
                                                     float[] transitionSharpnesses,
                                                     Long pausedTimestamp)
             throws IllegalArgumentException {
-        var type = get(valuesAtTimestamps);
-        var factory = FACTORIES.get(type);
+        var typeName = getTypeName(valuesAtTimestamps);
+        var factory = FACTORIES.get(typeName);
+        if (factory == null) {
+            throw new IllegalArgumentException(
+                    "FiniteSinusoidMovingProviderFactoryImpl#make: no factory found for typeName " +
+                            typeName);
+        }
         //noinspection unchecked
         return (FiniteSinusoidMovingProvider<T>) factory.apply(uuid).apply(valuesAtTimestamps)
                 .apply(transitionSharpnesses).apply(pausedTimestamp).apply(TIMESTAMP_VALIDATOR);

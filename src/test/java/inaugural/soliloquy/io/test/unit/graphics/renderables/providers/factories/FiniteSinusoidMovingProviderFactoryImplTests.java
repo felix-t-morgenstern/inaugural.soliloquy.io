@@ -23,7 +23,6 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class FiniteSinusoidMovingProviderFactoryImplTests {
-    private final String FACTORY_1_TYPE_NAME = Float.class.getCanonicalName();
     /** @noinspection rawtypes */
     @Mock private FiniteSinusoidMovingProvider factory1Output;
     /** @noinspection rawtypes */
@@ -78,8 +77,8 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
     public void setUp() {
         factory = new FiniteSinusoidMovingProviderFactoryImpl(
                 mapOf(
-                        pairOf(FACTORY_1_TYPE_NAME, FACTORY_1),
-                        pairOf(FACTORY_2_TYPE_NAME, FACTORY_2)
+                        pairOf(Float.class, FACTORY_1),
+                        pairOf(Integer.class, FACTORY_2)
                 ), mockTimestampValidator);
     }
 
@@ -92,13 +91,11 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf(null, FACTORY_1)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(mapOf(pairOf("", FACTORY_1)), mockTimestampValidator));
+                () -> new FiniteSinusoidMovingProviderFactoryImpl(
+                        mapOf(pairOf(Object.class, null)), mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteSinusoidMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, null)), mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FiniteSinusoidMovingProviderFactoryImpl(
-                        mapOf(pairOf(FACTORY_1_TYPE_NAME, FACTORY_1)), null));
+                        mapOf(pairOf(Object.class, FACTORY_1)), null));
     }
 
     @Test
@@ -121,15 +118,6 @@ public class FiniteSinusoidMovingProviderFactoryImplTests {
         assertSame(transitionSharpnesses, factory1InputTransitionSharpnesses);
         assertEquals(pausedTimestamp, factory1InputPausedTimestamp);
         assertSame(mockTimestampValidator, factory1InputValidator);
-    }
-
-    public float[] getFactory2InputTransitionSharpnesses() {
-        return factory2InputTransitionSharpnesses;
-    }
-
-    public void setFactory2InputTransitionSharpnesses(
-            float[] factory2InputTransitionSharpnesses) {
-        this.factory2InputTransitionSharpnesses = factory2InputTransitionSharpnesses;
     }
 
     // NB: No specific test is provided for make with invalid params, since the individual
