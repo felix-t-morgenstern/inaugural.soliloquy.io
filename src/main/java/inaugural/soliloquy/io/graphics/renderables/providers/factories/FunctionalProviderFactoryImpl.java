@@ -51,7 +51,7 @@ public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory 
                 provideFunction,
                 pauseAction,
                 unpauseAction,
-                mapOf(data),
+                data,
                 pauseTimestamp,
                 VALIDATOR
         );

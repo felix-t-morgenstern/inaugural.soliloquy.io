@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.tools.Tools.round;
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
@@ -475,7 +476,7 @@ public class TextLineRendererImplTests {
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
         //     due to floating point rounding discrepancies
-        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
+        assertEquals(round(expectedTextLineLength, 4), round(textLineLength, 4));
     }
 
     @Test
@@ -538,7 +539,7 @@ public class TextLineRendererImplTests {
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
         //     due to floating point rounding discrepancies
-        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
+        assertEquals(round(expectedTextLineLength, 4), round(textLineLength, 4));
     }
 
     @Test
@@ -568,7 +569,8 @@ public class TextLineRendererImplTests {
                         textureWidthToHeightRatio;
         var expectedPaddingAdj = (additionalHorizontalTextureSpacing + glyphAdditionalHorizontalTextureSpacing) * lineHeight;
         var expectedLength = expectedBaseLength - expectedPaddingAdj;
-        assertEquals(expectedLength, glyphLength);
+        // NB: I've been seeing some indeterminacy over decimal places
+        assertEquals(round(expectedLength, 4), round(glyphLength, 4));
     }
 
     @Test
@@ -635,7 +637,7 @@ public class TextLineRendererImplTests {
 
         // NB: Test is accurate to four significant digits; inaccuracy beyond that point is likely
         //     due to floating point rounding discrepancies
-        assertEquals(Tools.round(expectedTextLineLength, 4), Tools.round(textLineLength, 4));
+        assertEquals(round(expectedTextLineLength, 4), round(textLineLength, 4));
     }
 
     @Test

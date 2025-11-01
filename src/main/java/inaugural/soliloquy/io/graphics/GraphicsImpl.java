@@ -3,7 +3,9 @@ package inaugural.soliloquy.io.graphics;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.assets.*;
+import soliloquy.specs.io.graphics.renderables.Component;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 public class GraphicsImpl implements Graphics {
@@ -13,6 +15,7 @@ public class GraphicsImpl implements Graphics {
     private final Function<String, GlobalLoopingAnimation> GET_GLOBAL_LOOPING_ANIMATION;
     private final Function<String, ImageAssetSet> GET_IMAGE_ASSET_SET;
     private final Function<String, Font> GET_FONT;
+    private final Function<UUID, Component> GET_COMPONENT;
 
     public GraphicsImpl(
             Function<String, Image> getImage,
@@ -20,7 +23,8 @@ public class GraphicsImpl implements Graphics {
             Function<String, Animation> getAnimation,
             Function<String, GlobalLoopingAnimation> getGlobalLoopingAnimation,
             Function<String, ImageAssetSet> getImageAssetSet,
-            Function<String, Font> getFont
+            Function<String, Font> getFont,
+            Function<UUID, Component> getComponent
     ) {
         GET_IMAGE = Check.ifNull(getImage, "getImage");
         GET_SPRITE = Check.ifNull(getSprite, "getSprite");
@@ -28,6 +32,7 @@ public class GraphicsImpl implements Graphics {
         GET_GLOBAL_LOOPING_ANIMATION = Check.ifNull(getGlobalLoopingAnimation, "getGlobalLoopingAnimation");
         GET_IMAGE_ASSET_SET = Check.ifNull(getImageAssetSet, "getImageAssetSet");
         GET_FONT = Check.ifNull(getFont, "getFont");
+        GET_COMPONENT = Check.ifNull(getComponent, "getComponent");
     }
 
     @Override
@@ -59,5 +64,10 @@ public class GraphicsImpl implements Graphics {
     @Override
     public Font getFont(String fontId) throws IllegalArgumentException {
         return GET_FONT.apply(fontId);
+    }
+
+    @Override
+    public Component getComponent(UUID uuid) throws IllegalArgumentException {
+        return GET_COMPONENT.apply(uuid);
     }
 }

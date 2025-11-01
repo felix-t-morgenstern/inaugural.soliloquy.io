@@ -20,6 +20,7 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     private final Set<KeyBinding> BINDINGS;
     private final boolean BLOCKS_LOWER_BINDINGS;
     private final Set<Renderable> RENDERABLES;
+    private final Consumer<Component> DEREGISTER_COMPONENT;
     private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
@@ -36,6 +37,8 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                          Component containingComponent,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
                          Map<String, Object> data,
+                         Consumer<Component> registerComponent,
+                         Consumer<Component> deregisterComponent,
                          Consumer<Component> removeFromKeyCapturing,
                          Consumer<RenderableWithMouseEvents> addToMouseCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromMouseCapturing) {
@@ -51,9 +54,12 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         RENDERABLES = setOf();
         DATA = mapOf(Check.ifNull(data, "data"));
+        DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
         REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
         ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToMouseCapturing, "addToMouseCapturing");
         REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromMouseCapturing, "removeFromMouseCapturing");
+
+        Check.ifNull(registerComponent, "registerComponent").accept(this);
     }
 
     @Override
@@ -159,6 +165,7 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     @Override
     public void delete() {
         RENDERABLES.forEach(Renderable::delete);
+        DEREGISTER_COMPONENT.accept(this);
         REMOVE_FROM_KEY_CAPTURING.accept(this);
         super.delete();
     }

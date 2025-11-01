@@ -49,6 +49,7 @@ import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -62,6 +63,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -155,13 +157,14 @@ public class IOModule extends AbstractModule {
         // Assets
         // ======
 
-        var images = Collections.<String, Image>mapOf();
-        var sprites = Collections.<String, Sprite>mapOf();
-        var animations = Collections.<String, Animation>mapOf();
-        var globalLoopingAnimations = Collections.<String, GlobalLoopingAnimation>mapOf();
-        var imageAssetSets = Collections.<String, ImageAssetSet>mapOf();
-        var fonts = Collections.<String, Font>mapOf();
-        var mouseCursors = Collections.<String, ProviderAtTime<Long>>mapOf();
+        var images = new ConcurrentHashMap<String, Image>();
+        var sprites = new ConcurrentHashMap<String, Sprite>();
+        var animations = new ConcurrentHashMap<String, Animation>();
+        var globalLoopingAnimations = new ConcurrentHashMap<String, GlobalLoopingAnimation>();
+        var imageAssetSets = new ConcurrentHashMap<String, ImageAssetSet>();
+        var fonts = new ConcurrentHashMap<String, Font>();
+        var components = new ConcurrentHashMap<UUID, Component>();
+        var mouseCursors = new ConcurrentHashMap<String, ProviderAtTime<Long>>();
 
         // ===================
         // Graphics Preloading
@@ -301,6 +304,8 @@ public class IOModule extends AbstractModule {
         var antialiasedLineSegmentRenderableFactory =
                 andRegister(new AntialiasedLineSegmentRenderableFactoryImpl());
         var componentFactory = andRegister(new ComponentFactoryImpl(
+                c -> components.put(c.uuid(), c),
+                c -> components.remove(c.uuid()),
                 keyEventHandler::addComponent,
                 keyEventHandler::removeComponent,
                 mouseCapturing::putRenderable,
@@ -534,7 +539,8 @@ public class IOModule extends AbstractModule {
                 animations::get,
                 globalLoopingAnimations::get,
                 imageAssetSets::get,
-                fonts::get
+                fonts::get,
+                components::get
         ));
 
         // =========

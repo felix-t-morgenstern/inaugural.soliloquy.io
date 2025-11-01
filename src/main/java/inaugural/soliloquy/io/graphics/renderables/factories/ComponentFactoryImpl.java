@@ -15,18 +15,22 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
-
 public class ComponentFactoryImpl implements ComponentFactory {
+    private final Consumer<Component> REGISTER_COMPONENT;
+    private final Consumer<Component> DEREGISTER_COMPONENT;
     private final BiConsumer<Component, Integer> ADD_TO_KEY_CAPTURING;
     private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
 
-    public ComponentFactoryImpl(BiConsumer<Component, Integer> addToKeyCapturing,
+    public ComponentFactoryImpl(Consumer<Component> registerComponent,
+                                Consumer<Component> deregisterComponent,
+                                BiConsumer<Component, Integer> addToKeyCapturing,
                                 Consumer<Component> removeFromKeyCapturing,
                                 Consumer<RenderableWithMouseEvents> addToCapturing,
                                 Consumer<RenderableWithMouseEvents> removeFromCapturing) {
+        REGISTER_COMPONENT = Check.ifNull(registerComponent, "registerComponent");
+        DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
         ADD_TO_KEY_CAPTURING = Check.ifNull(addToKeyCapturing, "addToKeyCapturing");
         REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
         ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
@@ -52,6 +56,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 containingComponent,
                 renderingBoundariesProvider,
                 data,
+                REGISTER_COMPONENT,
+                DEREGISTER_COMPONENT,
                 REMOVE_FROM_KEY_CAPTURING,
                 ADD_TO_MOUSE_CAPTURING,
                 REMOVE_FROM_MOUSE_CAPTURING

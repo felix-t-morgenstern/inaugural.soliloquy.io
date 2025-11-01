@@ -55,10 +55,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
             Check.throwOnLteZero(textureTileWidth, "textureTileWidth (with non-null textureId)");
             Check.throwOnLteZero(textureTileHeight, "textureTileHeight (with non-null textureId)");
         }
-        else {
-            Check.throwOnLtValue(textureTileWidth, 0f, "textureTileWidth (with null textureId)");
-            Check.throwOnLtValue(textureTileHeight, 0f, "textureTileHeight (with null textureId)");
-        }
 
         unbindMeshAndShader();
 
@@ -78,8 +74,6 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
         var tilesPerWidth = 0f;
         var tilesPerHeight = 0f;
 
-        glEnable(GL_TEXTURE_2D);
-
         if (textureId != null) {
             maxX = Math.max(x3, Math.max(x2, x1));
             minX = Math.min(x3, Math.min(x2, x1));
@@ -92,6 +86,7 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
             tilesPerWidth = width / textureTileWidth;
             tilesPerHeight = height / textureTileHeight;
 
+            glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, textureId);
         }
 

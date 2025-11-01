@@ -16,8 +16,6 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
     @Override
     public void render(RectangleRenderable renderable, long timestamp)
             throws IllegalArgumentException {
-        unbindMeshAndShader();
-
         Check.ifNull(renderable, "renderable");
 
         Check.ifNull(renderable.getTopLeftColorProvider(),
@@ -38,6 +36,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         var texId =
                 Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider()")
                         .provide(timestamp);
+
+        unbindMeshAndShader();
 
         var hasTexture = false;
 
@@ -100,9 +100,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         glEnd();
 
-        if (texId != null) {
-            glDisable(GL_TEXTURE_2D);
-        }
+        glDisable(GL_TEXTURE_2D);
     }
 
     @Override

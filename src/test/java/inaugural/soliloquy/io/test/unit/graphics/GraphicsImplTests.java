@@ -8,14 +8,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.assets.*;
+import soliloquy.specs.io.graphics.renderables.Component;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.*;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static java.util.UUID.randomUUID;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
@@ -48,6 +51,12 @@ public class GraphicsImplTests {
     private final Font MOCK_FONT = MOCK_FONT_AND_LOOKUP.entities.getFirst();
     private final Function<String, Font> MOCK_GET_FONT = MOCK_FONT_AND_LOOKUP.lookup;
 
+    private final UUID COMPONENT_ID = randomUUID();
+    private final LookupAndEntitiesWithUuid<Component> MOCK_COMPONENT_AND_LOOKUP =
+            generateMockLookupFunctionWithUuid(Component.class, COMPONENT_ID);
+    private final Component MOCK_COMPONENT = MOCK_COMPONENT_AND_LOOKUP.entities.getFirst();
+    private final Function<UUID, Component> MOCK_GET_COMPONENT = MOCK_COMPONENT_AND_LOOKUP.lookup;
+
     @Mock private Image mockImage;
     private Function<String, Image> mockGetImage;
 
@@ -63,7 +72,8 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 MOCK_GET_IMAGE_ASSET_SET,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         );
     }
 
@@ -75,7 +85,8 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 MOCK_GET_IMAGE_ASSET_SET,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
                 null,
@@ -83,7 +94,8 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 MOCK_GET_IMAGE_ASSET_SET,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
                 mockGetImage,
@@ -91,7 +103,8 @@ public class GraphicsImplTests {
                 null,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 MOCK_GET_IMAGE_ASSET_SET,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
                 mockGetImage,
@@ -99,7 +112,8 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 null,
                 MOCK_GET_IMAGE_ASSET_SET,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
                 mockGetImage,
@@ -107,7 +121,8 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 null,
-                MOCK_GET_FONT
+                MOCK_GET_FONT,
+                MOCK_GET_COMPONENT
         ));
         assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
                 mockGetImage,
@@ -115,6 +130,16 @@ public class GraphicsImplTests {
                 MOCK_GET_ANIMATION,
                 MOCK_GET_GLOBAL_LOOPING_ANIMATION,
                 MOCK_GET_IMAGE_ASSET_SET,
+                null,
+                MOCK_GET_COMPONENT
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new GraphicsImpl(
+                mockGetImage,
+                MOCK_GET_SPRITE,
+                MOCK_GET_ANIMATION,
+                MOCK_GET_GLOBAL_LOOPING_ANIMATION,
+                MOCK_GET_IMAGE_ASSET_SET,
+                MOCK_GET_FONT,
                 null
         ));
     }
@@ -122,40 +147,70 @@ public class GraphicsImplTests {
     @Test
     public void testGetSprite() {
         var sprite = graphics.getSprite(SPRITE_ID);
+        var resultFromNull = graphics.getSprite(null);
+        var resultFromEmpty = graphics.getSprite("");
 
         assertSame(MOCK_SPRITE, sprite);
+        assertNull(resultFromNull);
+        assertNull(resultFromEmpty);
         verify(MOCK_GET_SPRITE, once()).apply(SPRITE_ID);
     }
 
     @Test
     public void testGetAnimation() {
         var animation = graphics.getAnimation(ANIMATION_ID);
+        var resultFromNull = graphics.getAnimation(null);
+        var resultFromEmpty = graphics.getAnimation("");
 
         assertSame(MOCK_ANIMATION, animation);
+        assertNull(resultFromNull);
+        assertNull(resultFromEmpty);
         verify(MOCK_GET_ANIMATION, once()).apply(ANIMATION_ID);
     }
 
     @Test
     public void testGetGlobalLoopingAnimation() {
         var globalLoopingAnimation = graphics.getGlobalLoopingAnimation(GLOBAL_LOOPING_ANIMATION_ID);
+        var resultFromNull = graphics.getGlobalLoopingAnimation(null);
+        var resultFromEmpty = graphics.getGlobalLoopingAnimation("");
 
         assertSame(MOCK_GLOBAL_LOOPING_ANIMATION, globalLoopingAnimation);
+        assertNull(resultFromNull);
+        assertNull(resultFromEmpty);
         verify(MOCK_GET_GLOBAL_LOOPING_ANIMATION, once()).apply(GLOBAL_LOOPING_ANIMATION_ID);
     }
 
     @Test
     public void testGetImageAssetSet() {
         var imageAssetSet = graphics.getImageAssetSet(IMAGE_ASSET_SET_ID);
+        var resultFromNull = graphics.getImageAssetSet(null);
+        var resultFromEmpty = graphics.getImageAssetSet("");
 
         assertSame(MOCK_IMAGE_ASSET_SET, imageAssetSet);
+        assertNull(resultFromNull);
+        assertNull(resultFromEmpty);
         verify(MOCK_GET_IMAGE_ASSET_SET, once()).apply(IMAGE_ASSET_SET_ID);
     }
 
     @Test
     public void testGetFont() {
         var font = graphics.getFont(FONT_ID);
+        var resultFromNull = graphics.getFont(null);
+        var resultFromEmpty = graphics.getFont("");
 
         assertSame(MOCK_FONT, font);
+        assertNull(resultFromNull);
+        assertNull(resultFromEmpty);
         verify(MOCK_GET_FONT, once()).apply(FONT_ID);
+    }
+
+    @Test
+    public void testGetComponent() {
+        var component = graphics.getComponent(COMPONENT_ID);
+        var resultFromNull = graphics.getComponent(null);
+
+        assertSame(MOCK_COMPONENT, component);
+        assertNull(resultFromNull);
+        verify(MOCK_GET_COMPONENT, once()).apply(COMPONENT_ID);
     }
 }

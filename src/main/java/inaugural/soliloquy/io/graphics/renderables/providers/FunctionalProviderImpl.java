@@ -50,7 +50,7 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
                 PAUSE.id(),
                 UNPAUSE.id(),
                 pauseTimestamp,
-                DATA
+                mapOf(DATA)
         );
     }
 

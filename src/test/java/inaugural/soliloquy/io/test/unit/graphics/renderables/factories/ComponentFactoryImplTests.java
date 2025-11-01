@@ -32,6 +32,8 @@ public class ComponentFactoryImplTests {
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
 
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
+    @Mock private Consumer<Component> mockRegisterComponent;
+    @Mock private Consumer<Component> mockDeregisterComponent;
     @Mock private BiConsumer<Component, Integer> mockAddToKeyCapturing;
     @Mock private Consumer<Component> mockRemoveFromKeyCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToMouseCapturing;
@@ -42,24 +44,37 @@ public class ComponentFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-        factory = new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
+        factory = new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
                 mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(null, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, null, mockAddToMouseCapturing,
+                () -> new ComponentFactoryImpl(null, mockDeregisterComponent, mockAddToKeyCapturing,
+                        mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
                         mockRemoveFromMouseCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
-                        null, mockRemoveFromMouseCapturing));
+                () -> new ComponentFactoryImpl(mockRegisterComponent, null, mockAddToKeyCapturing,
+                        mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentFactoryImpl(mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, null));
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent, null,
+                        mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, null, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, mockRemoveFromKeyCapturing, null,
+                        mockRemoveFromMouseCapturing));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        null));
     }
 
     @Test
@@ -79,6 +94,7 @@ public class ComponentFactoryImplTests {
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);
+        verify(mockRegisterComponent, once()).accept(output);
 
         assertNotNull(output);
         assertSame(bindings, output.keyBindings());
@@ -96,6 +112,7 @@ public class ComponentFactoryImplTests {
 
         output.delete();
 
+        verify(mockDeregisterComponent, once()).accept(output);
         verify(mockRemoveFromKeyCapturing, once()).accept(output);
     }
 
