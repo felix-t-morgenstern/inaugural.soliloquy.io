@@ -42,6 +42,7 @@ public class FrameExecutorImplTests {
 
     @Mock private Component mockTopLevelComponent;
     @Mock private ComponentRenderer mockComponentRenderer;
+    @Mock private Runnable mockReportFrameCompletion;
 
     private FrameExecutor frameExecutor;
 
@@ -49,15 +50,15 @@ public class FrameExecutorImplTests {
     public void setUp() {
         EVENTS_FIRED.clear();
 
-        frameExecutor = new FrameExecutorImpl(mockComponentRenderer, 100);
+        frameExecutor = new FrameExecutorImpl(mockComponentRenderer, 100, mockReportFrameCompletion);
     }
 
     @Test
     public void constructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(null, 1));
+                () -> new FrameExecutorImpl(null, 1, mockReportFrameCompletion));
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockComponentRenderer, 0));
+                () -> new FrameExecutorImpl(mockComponentRenderer, 0, mockReportFrameCompletion));
     }
 
     @Test
@@ -92,6 +93,7 @@ public class FrameExecutorImplTests {
         assertEquals(GLOBAL_TIMESTAMP, (long) frameBlockingEvent1FiringTime);
         assertEquals(GLOBAL_TIMESTAMP, (long) frameBlockingEvent2FiringTime);
         verify(mockComponentRenderer, once()).render(mockTopLevelComponent, GLOBAL_TIMESTAMP);
+        verify(mockReportFrameCompletion, once()).run();
     }
 
     @Test

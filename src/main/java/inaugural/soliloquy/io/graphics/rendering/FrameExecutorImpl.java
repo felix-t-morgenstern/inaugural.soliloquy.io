@@ -15,17 +15,19 @@ public class FrameExecutorImpl implements FrameExecutor {
     private final ComponentRenderer COMPONENT_RENDERER;
     private final Semaphore SEMAPHORE;
     private final List<Consumer<Long>> FRAME_BLOCKING_EVENTS;
+    private final Runnable REPORT_FRAME_COMPLETION;
 
     private Component topLevelComponent;
 
     public FrameExecutorImpl(ComponentRenderer componentRenderer,
-                             int semaphorePermissions) {
+                             int semaphorePermissions, Runnable reportFrameCompletion) {
         COMPONENT_RENDERER = Check.ifNull(componentRenderer, "componentRenderer");
         SEMAPHORE = new Semaphore(
                 Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
                 true
         );
         FRAME_BLOCKING_EVENTS = listOf();
+        REPORT_FRAME_COMPLETION = Check.ifNull(reportFrameCompletion, "reportFrameCompletion");
     }
 
     @Override
@@ -56,11 +58,14 @@ public class FrameExecutorImpl implements FrameExecutor {
                 }).start();
             }
             catch (InterruptedException e) {
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         }
         FRAME_BLOCKING_EVENTS.clear();
 
         COMPONENT_RENDERER.render(topLevelComponent, timestamp);
+
+        REPORT_FRAME_COMPLETION.run();
     }
 }

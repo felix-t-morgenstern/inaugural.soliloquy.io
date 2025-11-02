@@ -1,66 +1,66 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.timing;
 
 import inaugural.soliloquy.io.graphics.rendering.FrameRateReporterImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameRateReporterAggregateOutput;
 import inaugural.soliloquy.tools.Tools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporter;
-import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporterAggregateOutput;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.function.Consumer;
 
 import static inaugural.soliloquy.io.api.Constants.GMT;
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
-import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomString;
+import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class FrameRateReporterImplTests {
-    private final String FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID =
-            "frameRateReporterAggregateOutputId";
-    private final FakeFrameRateReporterAggregateOutput FRAME_RATE_REPORTER_AGGREGATE_OUTPUT =
-            new FakeFrameRateReporterAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
-    private final List<FrameRateReporterAggregateOutput> AGGREGATE_OUTPUTS =
-            listOf(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT);
+    private final String OUTPUT_ID = randomString();
     private final int PERIODS_PER_AGGREGATE = 3;
 
+    @Mock private Consumer<FrameRateReporter.Aggregate> mockAggregateOutput;
+
     private long startingDatetime;
+    private Map<String, Consumer<FrameRateReporter.Aggregate>> aggregateOutputs;
+
     private FrameRateReporter frameRateReporter;
 
     @BeforeEach
     public void setUp() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(GMT));
+        aggregateOutputs = mapOf(OUTPUT_ID, mockAggregateOutput);
+
+        var calendar = Calendar.getInstance(TimeZone.getTimeZone(GMT));
 
         calendar.set(2021, Calendar.APRIL, 8, 0, 4, 31);
         startingDatetime = calendar.getTimeInMillis();
 
-        frameRateReporter = new FrameRateReporterImpl(PERIODS_PER_AGGREGATE, AGGREGATE_OUTPUTS);
+        frameRateReporter = new FrameRateReporterImpl(PERIODS_PER_AGGREGATE, aggregateOutputs);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameRateReporterImpl(0, AGGREGATE_OUTPUTS));
+                () -> new FrameRateReporterImpl(0, aggregateOutputs));
         assertThrows(IllegalArgumentException.class,
                 () -> new FrameRateReporterImpl(PERIODS_PER_AGGREGATE, null));
         assertThrows(IllegalArgumentException.class,
                 () -> new FrameRateReporterImpl(PERIODS_PER_AGGREGATE,
-                        listOf((FrameRateReporterAggregateOutput) null)));
+                        mapOf(null, mockAggregateOutput)));
         assertThrows(IllegalArgumentException.class,
                 () -> new FrameRateReporterImpl(PERIODS_PER_AGGREGATE,
-                        listOf(new FakeFrameRateReporterAggregateOutput(null))));
+                        mapOf("", mockAggregateOutput)));
         assertThrows(IllegalArgumentException.class,
                 () -> new FrameRateReporterImpl(PERIODS_PER_AGGREGATE,
-                        listOf(new FakeFrameRateReporterAggregateOutput(""))));
-        assertThrows(IllegalArgumentException.class,
-                () -> new FrameRateReporterImpl(PERIODS_PER_AGGREGATE,
-                        listOf(new FakeFrameRateReporterAggregateOutput(
-                                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID),
-                                new FakeFrameRateReporterAggregateOutput(
-                                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID))));
+                        mapOf(OUTPUT_ID, null)));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class FrameRateReporterImplTests {
         float actualFps2 = 0.1266f;
         float actualFps3 = 0.5525f;
         float actualFps4 = 0.5632f;
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
         frameRateReporter.reportFrameRate(startingDatetime, targetFps1, actualFps1);
         frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2,
@@ -117,20 +117,15 @@ public class FrameRateReporterImplTests {
         frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4,
                 actualFps4);
 
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
-        assertEquals(new Date(startingDatetime),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
+        var aggregateCaptor = ArgumentCaptor.forClass(FrameRateReporter.Aggregate.class);
+        verify(mockAggregateOutput, once()).accept(any());
+        verify(mockAggregateOutput, once()).accept(aggregateCaptor.capture());
+        var aggregate = aggregateCaptor.getValue();
+        assertEquals(new Date(startingDatetime), aggregate.periodStart());
         assertEquals(Tools.round(((targetFps1 / 3f) + (targetFps2 / 3f) + (targetFps3 / 3f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst(),
-                        3));
+                Tools.round(aggregate.targetFps(), 3));
         assertEquals((Float) ((actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst());
+                aggregate.actualFps());
     }
 
     @SuppressWarnings("WrapperTypeMayBePrimitive")
@@ -148,50 +143,39 @@ public class FrameRateReporterImplTests {
         float actualFps4 = 0.5632f;
         float actualFps5 = 0.0375f;
         float actualFps6 = 0.7415f;
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
 
 
         frameRateReporter.reportFrameRate(startingDatetime, targetFps1, actualFps1);
-        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2,
-                actualFps2);
-        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3,
-                actualFps3);
-        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4,
-                actualFps4);
-        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5,
-                actualFps5);
-        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6,
-                actualFps6);
+        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2, actualFps2);
+        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3, actualFps3);
+        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4, actualFps4);
+        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5, actualFps5);
+        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6, actualFps6);
 
 
 
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
-
-        assertEquals(new Date(startingDatetime),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
-        assertEquals((Float) ((targetFps1 / 2f) + (targetFps3 / 2f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst());
-        assertEquals((Float) ((actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst());
-
-        assertEquals(new Date(startingDatetime + 3000),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(1));
+        verify(mockAggregateOutput, times(2)).accept(any());
+        var aggregateCaptor = ArgumentCaptor.forClass(FrameRateReporter.Aggregate.class);
+        verify(mockAggregateOutput, times(2)).accept(aggregateCaptor.capture());
+        var aggregates = aggregateCaptor.getAllValues();
+        var aggregate1 = aggregates.getFirst();
+        assertEquals(new FrameRateReporter.Aggregate(
+                new Date(startingDatetime),
+                (targetFps1 / 2f) + (targetFps3 / 2f),
+                (actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)
+        ), aggregate1);
+        var aggregate2 = aggregates.get(1);
+        assertEquals(new Date(startingDatetime + 3000), aggregate2.periodStart());
         assertEquals(
                 Tools.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(1),
-                        3));
+                Tools.round(aggregate2.targetFps(), 3)
+        );
         assertEquals(
                 Tools.round(((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1),
-                        3));
+                Tools.round(aggregate2.actualFps(), 3)
+        );
     }
 
     @Test
@@ -204,27 +188,19 @@ public class FrameRateReporterImplTests {
         float actualFps2 = 0.1266f;
         float actualFps3 = 0.5525f;
         float actualFps4 = 0.5632f;
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
         frameRateReporter.reportFrameRate(startingDatetime, targetFps1, actualFps1);
-        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2,
-                actualFps2);
-        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3,
-                actualFps3);
-        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4,
-                actualFps4);
+        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2, actualFps2);
+        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3, actualFps3);
+        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4, actualFps4);
 
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
-        assertEquals(new Date(startingDatetime),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
-        assertNull(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst());
-        assertEquals((Float) ((actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst());
+        verify(mockAggregateOutput, once()).accept(any());
+        verify(mockAggregateOutput, once()).accept(new FrameRateReporter.Aggregate(
+                new Date(startingDatetime),
+                null,
+                (actualFps1 / 3f) + (actualFps2 / 3f) + (actualFps3 / 3f)
+        ));
     }
 
     @SuppressWarnings("WrapperTypeMayBePrimitive")
@@ -242,7 +218,7 @@ public class FrameRateReporterImplTests {
         float actualFps4 = 0.5632f;
         float actualFps5 = 0.0375f;
         float actualFps6 = 0.7415f;
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
 
 
@@ -250,41 +226,32 @@ public class FrameRateReporterImplTests {
         frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2,
                 actualFps2);
 
-        frameRateReporter.deactivateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.deactivateAggregateOutput(OUTPUT_ID);
 
-        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3,
-                actualFps3);
-        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4,
-                actualFps4);
-        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5,
-                actualFps5);
+        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3, actualFps3);
+        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4, actualFps4);
+        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5, actualFps5);
 
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
-        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6,
-                actualFps6);
+        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6, actualFps6);
 
 
 
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
+        verify(mockAggregateOutput, once()).accept(any());
 
-        assertEquals(new Date(startingDatetime + 3000),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
+        var aggregateCaptor = ArgumentCaptor.forClass(FrameRateReporter.Aggregate.class);
+        verify(mockAggregateOutput, once()).accept(aggregateCaptor.capture());
+        var aggregate = aggregateCaptor.getValue();
+        assertEquals(new Date(startingDatetime + 3000), aggregate.periodStart());
         assertEquals(
                 Tools.round(((targetFps4 / 3f) + (targetFps5 / 3f) + (targetFps6 / 3f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst(),
-                        3));
+                Tools.round(aggregate.targetFps(), 3)
+        );
         assertEquals(
                 Tools.round(((actualFps4 / 3f) + (actualFps5 / 3f) + (actualFps6 / 3f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst(),
-                        3));
+                Tools.round(aggregate.actualFps(), 3)
+        );
     }
 
     @Test
@@ -342,7 +309,7 @@ public class FrameRateReporterImplTests {
         float actualFps4 = 0.5632f;
         float actualFps5 = 0.0375f;
         float actualFps6 = 0.7415f;
-        frameRateReporter.activateAggregateOutput(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT_ID);
+        frameRateReporter.activateAggregateOutput(OUTPUT_ID);
 
 
 
@@ -352,60 +319,52 @@ public class FrameRateReporterImplTests {
         frameRateReporter.reportPause(startingDatetime + 1800);
 
         // 80% of period 2
-        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2,
-                actualFps2);
+        frameRateReporter.reportFrameRate(startingDatetime + 1000, targetFps2, actualFps2);
 
         // 0% of period 3
-        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3,
-                actualFps3);
+        frameRateReporter.reportFrameRate(startingDatetime + 2000, targetFps3, actualFps3);
 
         frameRateReporter.reportUnpause(startingDatetime + 3500);
 
         // 50% of period 4
-        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4,
-                actualFps4);
+        frameRateReporter.reportFrameRate(startingDatetime + 3000, targetFps4, actualFps4);
 
         frameRateReporter.reportPause(startingDatetime + 4100);
 
         frameRateReporter.reportUnpause(startingDatetime + 4400);
 
         // 70% of period 5
-        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5,
-                actualFps5);
+        frameRateReporter.reportFrameRate(startingDatetime + 4000, targetFps5, actualFps5);
 
         // 100% of period 6, but 0% of targetFps for period 6
-        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6,
-                actualFps6);
+        frameRateReporter.reportFrameRate(startingDatetime + 5000, targetFps6, actualFps6);
 
 
 
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(2,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
+        verify(mockAggregateOutput, times(2)).accept(any());
 
-        assertEquals(new Date(startingDatetime),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
+        var aggregateCaptor = ArgumentCaptor.forClass(FrameRateReporter.Aggregate.class);
+        verify(mockAggregateOutput, times(2)).accept(aggregateCaptor.capture());
+        var aggregates = aggregateCaptor.getAllValues();
+
+        var aggregate1 = aggregates.getFirst();
+        assertEquals(new Date(startingDatetime), aggregate1.periodStart());
         assertEquals(
                 Tools.round(((targetFps1 / 1.8f) + ((targetFps2 * 0.8f) / 1.8f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst(),
-                        3));
+                Tools.round(aggregate1.targetFps(), 3)
+        );
         assertEquals((Float) ((actualFps1 / 1.8f) + ((actualFps2 * 0.8f) / 1.8f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst());
+                aggregate1.actualFps());
 
-        assertEquals(new Date(startingDatetime + 3000),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.get(1));
+        var aggregate2 = aggregates.get(1);
+        assertEquals(new Date(startingDatetime + 3000), aggregate2.periodStart());
         assertEquals((Float) (((targetFps4 * 0.5f) / 1.2f) + ((targetFps5 * 0.7f) / 1.2f)),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.get(1));
+                aggregate2.targetFps());
         assertEquals(
                 Tools.round((((actualFps4 * 0.5f) / 2.2f) + ((actualFps5 * 0.7f) / 2.2f) +
-                        ((actualFps6 * 1.0f) / 2.2f)), 3),
-                Tools.round(
-                        FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.get(1),
-                        3));
+                        ((actualFps6) / 2.2f)), 3),
+                Tools.round(aggregate2.actualFps(), 3)
+        );
     }
 
     @Test
@@ -426,17 +385,12 @@ public class FrameRateReporterImplTests {
 
 
 
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.size());
-        assertEquals(1,
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.size());
-
-        assertEquals(new Date(startingDatetime),
-                FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateDates.getFirst());
-        assertNull(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateTargetFps.getFirst());
-        assertNull(FRAME_RATE_REPORTER_AGGREGATE_OUTPUT.OutputtedAggregateActualFps.getFirst());
+        verify(mockAggregateOutput, once()).accept(any());
+        verify(mockAggregateOutput, once()).accept(new FrameRateReporter.Aggregate(
+                new Date(startingDatetime),
+                null,
+                null
+        ));
     }
 
     @Test

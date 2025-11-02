@@ -247,9 +247,9 @@ public class DisplayTest {
                 AUDIO_FILETYPES_ID,
                 generateMockSetting(setOf("wav", "mp3")),
                 PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID,
-                generateMockSetting(10),
+                generateMockSetting(1),
                 FRAME_TIMER_POLLING_INTERVAL_ID,
-                generateMockSetting(100),
+                generateMockSetting(-1),
                 FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID,
                 generateMockSetting(3),
                 SHADER_FILENAME_PREFIX_ID,
@@ -261,7 +261,7 @@ public class DisplayTest {
                 MOUSE_CAPTURE_ALPHA_THRESHOLD_ID,
                 generateMockSetting(0.5f),
                 GRAPHICS_PRELOADER_THREAD_POOL_SIZE_ID,
-                generateMockSetting(4),
+                generateMockSetting(8),
                 GRAPHICS_PRELOADER_ASSET_TYPE_BATCH_SIZES_ID,
                 generateMockSetting(mapOf(setOf(
                         IMAGE,
@@ -289,7 +289,15 @@ public class DisplayTest {
                 settings::get,
                 ACTIONS,
                 FUNCTIONS,
-                listOf(),
+                mapOf(
+                        pairOf(
+                                CONSOLE_FRAME_RATE_REPORTER,
+                                a -> System.out.printf(
+                                        "FPS >> [%s] target = %s, actual = %s%n",
+                                        a.periodStart(), a.targetFps(), a.actualFps()
+                                )
+                        )
+                ),
                 testName,
                 mapOf(
                         "JDSherbert - Ultimate UI SFX Pack - Cursor - 5.wav",

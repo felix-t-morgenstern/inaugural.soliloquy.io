@@ -75,7 +75,7 @@ public class FrameTimerImpl implements FrameTimer {
 
         if (currentPeriodStartTimestamp != null) {
             synchronized (this) {
-                reportFrameInformation(currentPeriodStartTimestamp, targetFps,
+                reportFrameInformation(currentPeriodStartTimestamp, currentPeriodEndTimestamp, targetFps,
                         framesExecutedInCurrentPeriod);
                 framesExecutedInCurrentPeriod = 0;
             }
@@ -93,8 +93,12 @@ public class FrameTimerImpl implements FrameTimer {
         startNewPeriodLoopIteration();
     }
 
-    private void reportFrameInformation(long gmtTimestamp, Float targetFps, float actualFps) {
-        FRAME_RATE_REPORTER.reportFrameRate(gmtTimestamp, targetFps, actualFps);
+    private void reportFrameInformation(long periodStartTimestamp,
+                                        long periodEndTimestamp,
+                                        Float targetFps,
+                                        int framesWithinPeriod) {
+        var actualFps = (framesWithinPeriod / (float)(periodEndTimestamp - periodStartTimestamp)) * MS_PER_SECOND;
+        FRAME_RATE_REPORTER.reportFrameRate(periodStartTimestamp, targetFps, actualFps);
     }
 
     @Override

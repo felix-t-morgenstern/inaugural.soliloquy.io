@@ -89,11 +89,9 @@ public class CoreLoopImpl implements CoreLoop {
             MouseListener mouseListener) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
-        FRAME_TIMER_POLLING_INTERVAL = Check.throwOnLtValue(
+        FRAME_TIMER_POLLING_INTERVAL =
                 Check.throwOnGteValue(frameTimerPollingInterval, MS_PER_SECOND,
-                        "frameTimerPollingInterval"),
-                0, "frameTimerPollingInterval"
-        );
+                        "frameTimerPollingInterval");
         WINDOW_RESOLUTION_MANAGER = Check.ifNull(windowResolutionManager,
                 "windowResolutionManager");
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");

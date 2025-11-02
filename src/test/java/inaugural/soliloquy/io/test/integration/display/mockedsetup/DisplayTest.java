@@ -115,7 +115,7 @@ public class DisplayTest {
         when(MockTopLevelComponent.contentsRepresentation()).thenReturn(
                 setOf(MockFirstChildComponent));
 
-        var frameExecutor = new FrameExecutorImpl(componentRenderer, 100);
+        var frameExecutor = new FrameExecutorImpl(componentRenderer, 100, () -> {});
         frameExecutor.setTopLevelComponent(MockTopLevelComponent);
 
         var renderersWithMeshAndShader =

@@ -38,6 +38,9 @@ public class Constants {
     public final static float MAX_CHANNEL_VAL = 255f;
     public final static Color INTACT_COLOR = Color.WHITE;
 
+    // Frame reporting constants
+    public final static String CONSOLE_FRAME_RATE_REPORTER = "consoleFrameRateReporter";
+
     // Graphics preloading constants
     public final static String IMAGES_PRELOADING_COMPONENT = "imagesPreloadingComponent";
     public final static String FONTS_PRELOADING_COMPONENT = "fontsPreloadingComponent";
@@ -67,6 +70,8 @@ public class Constants {
             RIGHT_MOUSE_BUTTON,
             MIDDLE_MOUSE_BUTTON
     );
+
+    // Key constants
     public final static int[] ALL_KEYS = arrayInts(
             GLFW_KEY_UNKNOWN,
             GLFW_KEY_SPACE,

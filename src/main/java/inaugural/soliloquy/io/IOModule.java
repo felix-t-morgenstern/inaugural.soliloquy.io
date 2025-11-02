@@ -9,12 +9,11 @@ import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import inaugural.soliloquy.io.audio.entities.SoundTypeImpl;
 import inaugural.soliloquy.io.audio.entities.SoundsPlayingImpl;
 import inaugural.soliloquy.io.audio.factories.SoundFactoryImpl;
-import inaugural.soliloquy.io.bootstrap.assetfactories.AudioLoaderImpl;
+import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.bootstrap.assetfactories.*;
 import inaugural.soliloquy.io.graphics.GraphicsImpl;
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
-import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
-import inaugural.soliloquy.io.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.graphics.renderables.*;
 import inaugural.soliloquy.io.graphics.renderables.colorshifting.ColorShiftStackAggregatorImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.*;
@@ -45,12 +44,12 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
-import soliloquy.specs.io.graphics.assets.*;
-import soliloquy.specs.io.graphics.assets.Font;
-import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.GlobalLoopingAnimationDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.StaticMouseCursorProviderDefinition;
+import soliloquy.specs.io.graphics.assets.*;
+import soliloquy.specs.io.graphics.assets.Font;
+import soliloquy.specs.io.graphics.assets.Image;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
@@ -58,15 +57,15 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
-import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporterAggregateOutput;
+import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporter;
 
 import java.awt.*;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.*;
@@ -82,7 +81,7 @@ public class IOModule extends AbstractModule {
                     @SuppressWarnings("rawtypes") Map<String, Action> actions,
                     @SuppressWarnings("rawtypes")
                     Map<String, soliloquy.specs.common.entities.Function> functions,
-                    Collection<FrameRateReporterAggregateOutput> aggregateOutputs,
+                    Map<String, Consumer<FrameRateReporter.Aggregate>> aggregateOutputs,
                     String initialTitlebar,
                     Map<String, String> idsForFilenames,
                     Map<String, Integer> defaultLoopStopMsById,
@@ -146,8 +145,9 @@ public class IOModule extends AbstractModule {
                 (int) getSetting.apply(FRAME_TIMER_POLLING_INTERVAL_ID).getValue();
         var semaphorePermissions =
                 (int) getSetting.apply(FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID).getValue();
-        var frameExecutor =
-                andRegister(new FrameExecutorImpl(componentRenderer, semaphorePermissions));
+        var frameExecutor = andRegister(
+                new FrameExecutorImpl(componentRenderer, semaphorePermissions,
+                        frameTimer::registerFrameExecution));
 
         var shaderFactory = new ShaderFactoryImpl();
         var shaderFilenamePrefix = (String) getSetting.apply(SHADER_FILENAME_PREFIX_ID).getValue();

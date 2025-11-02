@@ -141,7 +141,7 @@ public class ComponentRendererTest extends DisplayTest {
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
                 setOf(spriteRenderable1, spriteRenderable2, spriteRenderable3));
 
-        var frameExecutor = new FrameExecutorImpl(componentRenderer, 100);
+        var frameExecutor = new FrameExecutorImpl(componentRenderer, 100, () -> {});
         frameExecutor.setTopLevelComponent(MockTopLevelComponent);
 
         var coreLoop =
