@@ -145,8 +145,8 @@ public class FiniteSinusoidMovingFloatProviderTests {
         float time2Weight = timeAfterTime2 / (float) distanceBetweenTimes;
         double weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
         double sineValue = Math.sin(weightSine);
-        double sharpenedSineValue =
-                (sineValue < 0f ? -1f : 1f) * Math.pow(Math.abs(sineValue), SHARPNESS_2);
+        var distFromTarget = -1 - sineValue;
+        var sharpenedSineValue = sineValue + (distFromTarget * SHARPNESS_2);
         float percentToAdd = (float) ((sharpenedSineValue + 1f) / 2f);
         float expectedValue = VALUE_2 + (distanceBetweenValues * percentToAdd);
 

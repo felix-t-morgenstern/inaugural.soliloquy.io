@@ -89,7 +89,8 @@ public class FiniteSinusoidMovingVertexProviderTests {
         var weight2 = (float) (TIMESTAMP_IN_PERIOD - TIME_1) / (TIME_2 - TIME_1);
         var weightSine = (-Math.PI / 2f) + (Math.PI * weight2);
         var sineValue = Math.sin(weightSine);
-        var sharpenedSineValue = (sineValue < 0f ? -1f : 1f) * Math.pow(Math.abs(sineValue), TRANSITION_SHARPNESS);
+        var distFromTarget = (sineValue > 0 ? 1 : -1) - sineValue;
+        var sharpenedSineValue = sineValue + (distFromTarget * TRANSITION_SHARPNESS);
         var sineAdjustedWeight2 = (float) ((sharpenedSineValue + 1f) / 2f);
         var sineAdjustedWeight1 = 1f - sineAdjustedWeight2;
         var expected = vertexOf(

@@ -47,8 +47,8 @@ public abstract class AbstractFiniteSinusoidMovingProvider<T>
             sharpenedSineValue = sineValue;
         }
         else {
-            sharpenedSineValue =
-                    (sineValue < 0f ? -1f : 1f) * Math.pow(Math.abs(sineValue), sharpness);
+            var distFromTarget = (sineValue > 0 ? 1 : -1) - sineValue;
+            sharpenedSineValue = sineValue + (distFromTarget * sharpness);
         }
 
         var sineAdjustedWeight2 = (float) ((sharpenedSineValue + 1f) / 2f);

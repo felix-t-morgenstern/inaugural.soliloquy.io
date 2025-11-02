@@ -171,8 +171,8 @@ class FiniteSinusoidMovingFloatBoxProviderTests {
         var time2Weight = timeAfterTime2 / (float) distanceBetweenTimes;
         var weightSine = (-Math.PI / 2f) + (Math.PI * time2Weight);
         var sineValue = Math.sin(weightSine);
-        var sharpenedSineValue =
-                -1f * Math.pow(Math.abs(sineValue), SHARPNESS_2);
+        var distFromTarget = -1 - sineValue;
+        var sharpenedSineValue = sineValue + (distFromTarget * SHARPNESS_2);
         var percentToAdd = (float) ((sharpenedSineValue + 1f) / 2f);
 
         var expectedLeftX =
