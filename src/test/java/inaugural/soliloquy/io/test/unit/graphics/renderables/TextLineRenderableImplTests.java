@@ -27,8 +27,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.assertEqualsAndNotSam
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TextLineRenderableImplTests {
@@ -164,8 +163,8 @@ public class TextLineRenderableImplTests {
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockContainingComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockContainingComponent, never()).add(renderable);
     }
 
     @Test

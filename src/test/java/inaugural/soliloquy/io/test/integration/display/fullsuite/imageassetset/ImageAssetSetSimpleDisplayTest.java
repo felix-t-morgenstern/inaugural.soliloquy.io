@@ -84,6 +84,7 @@ public class ImageAssetSetSimpleDisplayTest extends DisplayTest {
                 randomUUID(),
                 topLevelComponent
         );
+        topLevelComponent.add(Renderable);
     }
 
     protected static void runThenClose() {

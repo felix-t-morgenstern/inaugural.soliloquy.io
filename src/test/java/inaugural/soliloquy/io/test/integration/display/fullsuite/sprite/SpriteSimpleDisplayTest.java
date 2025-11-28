@@ -48,7 +48,8 @@ public class SpriteSimpleDisplayTest extends DisplayTest {
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
 
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
-        spriteRenderableFactory.make(
+
+        topLevelComponent.add(spriteRenderableFactory.make(
                 sprite,
                 staticProvider(null),
                 staticProvider(null),
@@ -57,6 +58,6 @@ public class SpriteSimpleDisplayTest extends DisplayTest {
                 0,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

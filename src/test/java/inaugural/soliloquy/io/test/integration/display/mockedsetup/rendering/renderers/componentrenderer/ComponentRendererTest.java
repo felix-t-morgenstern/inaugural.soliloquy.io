@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
@@ -29,6 +30,7 @@ import soliloquy.specs.io.input.mouse.MouseCursor;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static inaugural.soliloquy.io.graphics.renderables.ComponentImpl.COMPONENT_PRERENDER_HOOK;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,7 +64,7 @@ public class ComponentRendererTest extends DisplayTest {
         Renderers = mapOf();
         TimestampValidator = new TimestampValidator(null);
         var componentRenderer =
-                new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
+                new ComponentRendererImpl(Renderers, COMPONENT_PRERENDER_HOOK, RENDERING_BOUNDARIES, TimestampValidator);
 
         var spriteAxe07Width = 512;
         var spriteAxe07Height = 512;

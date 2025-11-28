@@ -109,54 +109,48 @@ public class ImageAssetSetPreloaderTaskTests {
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(null,
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(1, "assetId")})),
+                                new ImageAssetSetAssetDefinitionDTO(1, "assetId"))),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO("",
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(1, "assetId")})),
-                        mockFactory,
-                        mockAcceptOutput));
-        assertThrows(IllegalArgumentException.class, () ->
-                new ImageAssetSetPreloaderTask(
-                        listOf(new ImageAssetSetDefinitionDTO(randomString(), null)),
+                                new ImageAssetSetAssetDefinitionDTO(1, "assetId"))),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(randomString(),
-                                new ImageAssetSetAssetDefinitionDTO[]{})),
+                                (ImageAssetSetAssetDefinitionDTO) null)),
+                        mockFactory,
+                        mockAcceptOutput));
+        assertThrows(IllegalArgumentException.class, () ->
+                new ImageAssetSetPreloaderTask(
+                        listOf(new ImageAssetSetDefinitionDTO(randomString())),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(randomString(),
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(0, "assetId")})),
+                                new ImageAssetSetAssetDefinitionDTO(0, "assetId"))),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(randomString(),
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(4, randomString())})),
+                                new ImageAssetSetAssetDefinitionDTO(4, randomString()))),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(randomString(),
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(1, null)})),
+                                new ImageAssetSetAssetDefinitionDTO(1, null))),
                         mockFactory,
                         mockAcceptOutput));
         assertThrows(IllegalArgumentException.class, () ->
                 new ImageAssetSetPreloaderTask(
                         listOf(new ImageAssetSetDefinitionDTO(randomString(),
-                                new ImageAssetSetAssetDefinitionDTO[]{
-                                        new ImageAssetSetAssetDefinitionDTO(1, "")})),
+                                new ImageAssetSetAssetDefinitionDTO(1, ""))),
                         mockFactory,
                         mockAcceptOutput));
 

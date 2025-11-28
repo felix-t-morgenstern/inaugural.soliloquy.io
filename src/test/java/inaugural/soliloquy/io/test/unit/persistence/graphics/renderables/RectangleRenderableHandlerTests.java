@@ -66,12 +66,12 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 TOP_LEFT_COLOR_WRITTEN, TOP_RIGHT_COLOR_WRITTEN, BOTTOM_LEFT_COLOR_WRITTEN,
                 BOTTOM_RIGHT_COLOR_WRITTEN, DIMENSIONS_WRITTEN, TEXTURE_ID_WRITTEN,
                 TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN, ON_PRESS_BUTTON,
-                ON_PRESS_ACTION_ID, ON_RELEASE_BUTTON, ON_RELEASE_ACTION_ID,
-                ON_MOUSE_OVER_ACTION_ID, ON_MOUSE_LEAVE_ACTION_ID, Z, UUID,
+                ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID,
+                ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID,
                 mockRenderable.getClass().getCanonicalName()
         );
 
-        handler = new RectangleRenderableHandler(MOCK_GET_ACTION, mockProviderHandler, mockFactory);
+        handler = new RectangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, mockFactory);
     }
 
     @Test
@@ -79,9 +79,9 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableHandler(null, mockProviderHandler, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableHandler(MOCK_GET_ACTION, null, mockFactory));
+                () -> new RectangleRenderableHandler(MOCK_GET_CONSUMER, null, mockFactory));
         assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableHandler(MOCK_GET_ACTION, mockProviderHandler, null));
+                () -> new RectangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, null));
     }
 
     @Test
@@ -172,10 +172,10 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 same(mockTextureIdProvider),
                 same(mockTextureTileWidthProvider),
                 same(mockTextureTileHeightProvider),
-                eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_ACTION))),
-                eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_ACTION))),
-                same(MOCK_ON_MOUSE_OVER_ACTION),
-                same(MOCK_ON_MOUSE_LEAVE_ACTION),
+                eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
+                eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
+                same(MOCK_ON_MOUSE_OVER_CONSUMER),
+                same(MOCK_ON_MOUSE_LEAVE_CONSUMER),
                 same(mockDimensionsProvider),
                 eq(Z),
                 eq(UUID),

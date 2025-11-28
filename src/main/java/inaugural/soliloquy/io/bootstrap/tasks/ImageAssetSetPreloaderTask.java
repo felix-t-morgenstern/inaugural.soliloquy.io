@@ -43,6 +43,7 @@ public class ImageAssetSetPreloaderTask implements Runnable {
                         imageAssetSetDefinitionDTO.id + ") is empty");
             }
             for (var imageAssetSetAssetDTO : imageAssetSetDefinitionDTO.assets) {
+                Check.ifNull(imageAssetSetAssetDTO, "imageAssetSetAssetDTO within imageAssetSetDefinitionDTOs");
                 Check.ifNullOrEmpty(imageAssetSetAssetDTO.assetId,
                         "imageAssetSetAssetDTO.assetId within imageAssetSetDefinitionDTOs (" +
                                 imageAssetSetDefinitionDTO.id + ")");

@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 
@@ -13,9 +13,9 @@ public class TriangleRenderableHandler extends AbstractPolygonRenderableHandler<
     private final TriangleRenderableFactory FACTORY;
 
     public TriangleRenderableHandler(
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             ProviderHandler providerHandler, TriangleRenderableFactory factory) {
-        super(getAction, providerHandler);
+        super(getConsumer, providerHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 

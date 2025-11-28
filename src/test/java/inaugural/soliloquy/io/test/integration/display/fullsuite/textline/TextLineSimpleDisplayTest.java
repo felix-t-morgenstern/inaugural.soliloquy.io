@@ -72,7 +72,7 @@ public class TextLineSimpleDisplayTest extends DisplayTest {
         );
         var row = 0;
         for (var string : strings) {
-            factory.make(
+            topLevelComponent.add(factory.make(
                     font,
                     staticProvider(string),
                     staticProvider(vertexOf(0f, (0f + (lineHeight * row++)))),
@@ -90,7 +90,7 @@ public class TextLineSimpleDisplayTest extends DisplayTest {
                     0,
                     randomUUID(),
                     topLevelComponent
-            );
+            ));
         }
     }
 }

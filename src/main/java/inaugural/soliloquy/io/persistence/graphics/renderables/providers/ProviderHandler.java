@@ -14,9 +14,8 @@ public class ProviderHandler extends AbstractTypeHandler<ProviderAtTime> {
     @SuppressWarnings("rawtypes") private final Map<String, TypeHandler>
             SUBHANDLERS;
 
-    public ProviderHandler(
-            Map<String, TypeHandler> subhandlers) {
-        SUBHANDLERS = mapOf(Check.ifNull(subhandlers, "subhandlers"));
+    public ProviderHandler() {
+        SUBHANDLERS = mapOf();
     }
 
     public void add(String type, TypeHandler handler) {

@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.sprite.SpriteSimpleDisplayTest;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
@@ -20,32 +20,31 @@ import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static java.util.UUID.randomUUID;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
-    private static final String ON_MOUSE_OVER_ACTION_ID = "onMouseOver";
-    private static final String ON_MOUSE_LEAVE_ACTION_ID = "onMouseLeave";
-    private static final String ON_MOUSE_PRESS_ACTION_ID = "onMousePress";
-    private static final String ON_MOUSE_RELEASE_ACTION_ID = "onMouseRelease";
+    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
+    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
+    private static final String ON_MOUSE_PRESS_CONSUMER_ID = "onMousePress";
+    private static final String ON_MOUSE_RELEASE_CONSUMER_ID = "onMouseRelease";
 
-    private final static Action<EventInputs> ON_MOUSE_OVER_ACTION =
-            action(ON_MOUSE_OVER_ACTION_ID, _ -> System.out.println("MOUSE OVER"));
-    private final static Action<EventInputs> ON_MOUSE_LEAVE_ACTION =
-            action(ON_MOUSE_LEAVE_ACTION_ID, _ -> System.out.println("MOUSE LEAVE"));
-    private final static Action<EventInputs> ON_MOUSE_PRESS_ACTION =
-            action(ON_MOUSE_PRESS_ACTION_ID, _ -> System.out.println("MOUSE PRESS"));
-    private final static Action<EventInputs> ON_MOUSE_RELEASE_ACTION =
-            action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"));
+    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
+            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
+    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
+            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
+    private final static Consumer<EventInputs> ON_MOUSE_PRESS_CONSUMER =
+            consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS"));
+    private final static Consumer<EventInputs> ON_MOUSE_RELEASE_CONSUMER =
+            consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"));
 
     public static void main(String[] args) {
         var displayTest = new DisplayTest(
                 setOf(
-                        action(ON_MOUSE_OVER_ACTION_ID, _ -> System.out.println("MOUSE OVER")),
-                        action(ON_MOUSE_LEAVE_ACTION_ID, _ -> System.out.println("MOUSE LEAVE")),
-                        action(ON_MOUSE_PRESS_ACTION_ID, _ -> System.out.println("MOUSE PRESS")),
-                        action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"))
+                        consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER")),
+                        consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE")),
+                        consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS")),
+                        consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"))
                 )
         );
         displayTest.runTest(
@@ -97,6 +96,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 topLevelComponent
         );
         rectRenderer.setCapturesMouseEvents(true);
+        topLevelComponent.add(rectRenderer);
 
         @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
                 staticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
@@ -112,14 +112,14 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 staticProviderFactory.apply(randomUUID(), null),
                 mapOf(
                         LEFT_MOUSE_BUTTON,
-                        ON_MOUSE_PRESS_ACTION
+                        ON_MOUSE_PRESS_CONSUMER
                 ),
                 mapOf(
                         LEFT_MOUSE_BUTTON,
-                        ON_MOUSE_RELEASE_ACTION
+                        ON_MOUSE_RELEASE_CONSUMER
                 ),
-                ON_MOUSE_OVER_ACTION,
-                ON_MOUSE_LEAVE_ACTION,
+                ON_MOUSE_OVER_CONSUMER,
+                ON_MOUSE_LEAVE_CONSUMER,
                 listOf(),
                 dimensProvider,
                 1,
@@ -127,5 +127,6 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 topLevelComponent
         );
         spriteRenderable.setCapturesMouseEvents(true);
+        topLevelComponent.add(spriteRenderable);
     }
 }

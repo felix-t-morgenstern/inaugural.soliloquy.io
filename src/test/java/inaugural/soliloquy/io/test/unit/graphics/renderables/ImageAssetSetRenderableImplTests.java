@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.*;
@@ -32,7 +32,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockWithId;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
@@ -82,7 +82,7 @@ public class ImageAssetSetRenderableImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    private Map<Integer, Action<EventInputs>> onPressActions;
+    private Map<Integer, Consumer<EventInputs>> onPressActions;
     private List<ColorShift> colorShifts;
 
     private final FloatBox RENDERING_AREA = floatBoxOf(
@@ -99,9 +99,9 @@ public class ImageAssetSetRenderableImplTests {
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private Action<EventInputs> mockOnMousePressAction;
-    @Mock private Action<EventInputs> mockOnMouseOverAction;
-    @Mock private Action<EventInputs> mockOnMouseLeaveAction;
+    @Mock private Consumer<EventInputs> mockOnMousePressAction;
+    @Mock private Consumer<EventInputs> mockOnMouseOverAction;
+    @Mock private Consumer<EventInputs> mockOnMouseLeaveAction;
     @Mock private Image mockImage;
     @Mock private Sprite mockSprite;
     @Mock private AnimationFrameSnippet mockAnimationFrameSnippet;
@@ -265,10 +265,10 @@ public class ImageAssetSetRenderableImplTests {
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockContainingComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockContainingComponent, never()).add(renderable);
     }
-
+    
     @Test
     public void testGetAndSetImageAssetSet() {
         assertSame(mockImageAssetSet, renderable.getImageAssetSet());
@@ -360,7 +360,7 @@ public class ImageAssetSetRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        var newOnPress = (Action<EventInputs>) mock(Action.class);
+        var newOnPress = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
         renderable.press(2, TIMESTAMP + 1);
@@ -380,20 +380,20 @@ public class ImageAssetSetRenderableImplTests {
         var id3 = randomString();
 
         //noinspection unchecked
-        renderable.setOnPress(0, generateMockWithId(Action.class, id1));
+        renderable.setOnPress(0, generateMockWithId(Consumer.class, id1));
         //noinspection unchecked
-        renderable.setOnPress(2, generateMockWithId(Action.class, id2));
+        renderable.setOnPress(2, generateMockWithId(Consumer.class, id2));
         //noinspection unchecked
-        renderable.setOnPress(7, generateMockWithId(Action.class, id3));
+        renderable.setOnPress(7, generateMockWithId(Consumer.class, id3));
         renderable.setOnPress(2, null);
 
-        var pressActionIds = renderable.pressActionIds();
+        var pressConsumerIds = renderable.pressConsumerIds();
 
-        assertNotNull(pressActionIds);
-        assertNotSame(renderable.pressActionIds(), pressActionIds);
-        assertEquals(2, pressActionIds.size());
-        assertEquals(id1, pressActionIds.get(0));
-        assertEquals(id3, pressActionIds.get(7));
+        assertNotNull(pressConsumerIds);
+        assertNotSame(renderable.pressConsumerIds(), pressConsumerIds);
+        assertEquals(2, pressConsumerIds.size());
+        assertEquals(id1, pressConsumerIds.get(0));
+        assertEquals(id3, pressConsumerIds.get(7));
     }
 
     @Test
@@ -401,7 +401,7 @@ public class ImageAssetSetRenderableImplTests {
         renderable.release(2, TIMESTAMP);
 
         //noinspection unchecked
-        var newOnRelease = (Action<EventInputs>) mock(Action.class);
+        var newOnRelease = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
         renderable.release(2, TIMESTAMP + 1);
@@ -419,35 +419,35 @@ public class ImageAssetSetRenderableImplTests {
         var id3 = randomString();
 
         //noinspection unchecked
-        renderable.setOnRelease(0, generateMockWithId(Action.class, id1));
+        renderable.setOnRelease(0, generateMockWithId(Consumer.class, id1));
         //noinspection unchecked
-        renderable.setOnRelease(2, generateMockWithId(Action.class, id2));
+        renderable.setOnRelease(2, generateMockWithId(Consumer.class, id2));
         //noinspection unchecked
-        renderable.setOnRelease(7, generateMockWithId(Action.class, id3));
+        renderable.setOnRelease(7, generateMockWithId(Consumer.class, id3));
         renderable.setOnRelease(2, null);
 
-        var releaseActionIds = renderable.releaseActionIds();
+        var releaseConsumerIds = renderable.releaseConsumerIds();
 
-        assertNotNull(releaseActionIds);
-        assertNotSame(renderable.releaseActionIds(), releaseActionIds);
-        assertEquals(2, releaseActionIds.size());
-        assertEquals(id1, releaseActionIds.get(0));
-        assertEquals(id3, releaseActionIds.get(7));
+        assertNotNull(releaseConsumerIds);
+        assertNotSame(renderable.releaseConsumerIds(), releaseConsumerIds);
+        assertEquals(2, releaseConsumerIds.size());
+        assertEquals(id1, releaseConsumerIds.get(0));
+        assertEquals(id3, releaseConsumerIds.get(7));
     }
 
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(-1, action(randomString(), _ -> {})));
+                () -> renderable.setOnPress(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(-1, action(randomString(), _ -> {})));
+                () -> renderable.setOnRelease(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(8, action(randomString(), _ -> {})));
+                () -> renderable.setOnPress(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(8, action(randomString(), _ -> {})));
+                () -> renderable.setOnRelease(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 3));
     }
@@ -463,7 +463,7 @@ public class ImageAssetSetRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnMouseOver = mock(Action.class);
+        Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
         renderable.mouseOver(TIMESTAMP + 1);
@@ -475,16 +475,16 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testMouseOverActionId() {
-        var mouseOverActionId = randomString();
+        var mouseOverConsumerId = randomString();
 
         renderable.setOnMouseOver(null);
 
-        assertNull(renderable.mouseOverActionId());
+        assertNull(renderable.mouseOverConsumerId());
 
         //noinspection unchecked
-        renderable.setOnMouseOver(generateMockWithId(Action.class, mouseOverActionId));
+        renderable.setOnMouseOver(generateMockWithId(Consumer.class, mouseOverConsumerId));
 
-        assertEquals(mouseOverActionId, renderable.mouseOverActionId());
+        assertEquals(mouseOverConsumerId, renderable.mouseOverConsumerId());
     }
 
     @Test
@@ -497,7 +497,7 @@ public class ImageAssetSetRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        var newOnMouseLeave = (Action<EventInputs>) mock(Action.class);
+        var newOnMouseLeave = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
         renderable.mouseLeave(TIMESTAMP + 1);
@@ -509,16 +509,16 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testMouseLeaveActionId() {
-        var mouseLeaveActionId = randomString();
+        var mouseLeaveConsumerId = randomString();
 
         renderable.setOnMouseLeave(null);
 
-        assertNull(renderable.mouseLeaveActionId());
+        assertNull(renderable.mouseLeaveConsumerId());
 
         //noinspection unchecked
-        renderable.setOnMouseLeave(generateMockWithId(Action.class, mouseLeaveActionId));
+        renderable.setOnMouseLeave(generateMockWithId(Consumer.class, mouseLeaveConsumerId));
 
-        assertEquals(mouseLeaveActionId, renderable.mouseLeaveActionId());
+        assertEquals(mouseLeaveConsumerId, renderable.mouseLeaveConsumerId());
     }
 
     @Test
@@ -528,23 +528,23 @@ public class ImageAssetSetRenderableImplTests {
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnPress(randomIntInRange(0, 7),
-                        (Action<EventInputs>) mock(Action.class)));
+                        (Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.press(randomIntInRange(0, 7), TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnRelease(randomIntInRange(0, 7),
-                        (Action<EventInputs>) mock(Action.class)));
+                        (Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.release(randomIntInRange(0, 7), TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnMouseOver((Action<EventInputs>) mock(Action.class)));
+                () -> renderable.setOnMouseOver((Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.mouseOver(TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnMouseLeave((Action<EventInputs>) mock(Action.class)));
+                () -> renderable.setOnMouseLeave((Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.mouseLeave(TIMESTAMP + 1));
         assertThrows(UnsupportedOperationException.class,

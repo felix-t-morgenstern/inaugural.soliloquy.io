@@ -37,7 +37,7 @@ import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.module.AbstractModule;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.apache.commons.lang3.function.TriConsumer;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Methods;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.FloatBox;
@@ -70,6 +70,7 @@ import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
+import static inaugural.soliloquy.io.graphics.renderables.ComponentImpl.COMPONENT_PRERENDER_HOOK;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
@@ -78,9 +79,7 @@ import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
 public class IOModule extends AbstractModule {
     public IOModule(CommonModule common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
-                    @SuppressWarnings("rawtypes") Map<String, Action> actions,
-                    @SuppressWarnings("rawtypes")
-                    Map<String, soliloquy.specs.common.entities.Function> functions,
+                    Methods methods,
                     Map<String, Consumer<FrameRateReporter.Aggregate>> aggregateOutputs,
                     String initialTitlebar,
                     Map<String, String> idsForFilenames,
@@ -133,8 +132,12 @@ public class IOModule extends AbstractModule {
 
         Map<Class<?>, Renderer<? extends Renderable>> contentRenderers = mapOf();
 
-        var componentRenderer = new ComponentRendererImpl(contentRenderers, renderingBoundaries,
-                timestampValidator);
+        var componentRenderer = new ComponentRendererImpl(
+                contentRenderers,
+                COMPONENT_PRERENDER_HOOK,
+                renderingBoundaries,
+                timestampValidator
+        );
 
         var periodsPerFrameRateReportAggregate =
                 (int) getSetting.apply(PERIODS_PER_FRAME_RATE_REPORT_AGGREGATE_ID).getValue();
@@ -311,7 +314,9 @@ public class IOModule extends AbstractModule {
                 keyEventHandler::addComponent,
                 keyEventHandler::removeComponent,
                 mouseCapturing::putRenderable,
-                mouseCapturing::removeRenderable
+                mouseCapturing::removeRenderable,
+                methods.CONSUMERS::get,
+                methods.BICONSUMERS::get
         ));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));
@@ -385,7 +390,7 @@ public class IOModule extends AbstractModule {
                 )
         );
         var functionalProviderFactory = andRegister(
-                new FunctionalProviderFactoryImpl(functions::get, actions::get,
+                new FunctionalProviderFactoryImpl(methods.FUNCTIONS::get, methods.CONSUMERS::get,
                         timestampValidator));
         var loopingLinearMovingColorProviderFactory =
                 andRegister(new LoopingLinearMovingColorProviderFactoryImpl(timestampValidator));
@@ -442,10 +447,7 @@ public class IOModule extends AbstractModule {
 
         // Providers
 
-        @SuppressWarnings("rawtypes") var providerSubhandlers =
-                Collections.<String, TypeHandler>mapOf();
-
-        var providerHandler = new ProviderHandler(providerSubhandlers);
+        var providerHandler = new ProviderHandler();
 
         providerHandler.add(FiniteLinearMovingColorProviderImpl.class.getCanonicalName(),
                 new FiniteLinearMovingColorProviderHandler(finiteLinearMovingColorProviderFactory));
@@ -503,32 +505,34 @@ public class IOModule extends AbstractModule {
                 new AntialiasedLineSegmentRenderableHandler(providerHandler,
                         antialiasedLineSegmentRenderableFactory));
         persistenceHandler.addTypeHandler(FiniteAnimationRenderableImpl.class,
-                new FiniteAnimationRenderableHandler(animations::get, actions::get, providerHandler,
+                new FiniteAnimationRenderableHandler(animations::get, methods.CONSUMERS::get,
+                        providerHandler,
                         shiftHandler, finiteAnimationRenderableFactory));
         persistenceHandler.addTypeHandler(GlobalLoopingAnimationRenderableImpl.class,
                 new GlobalLoopingAnimationRenderableHandler(globalLoopingAnimations::get,
-                        actions::get, providerHandler, shiftHandler,
+                        methods.CONSUMERS::get, providerHandler, shiftHandler,
                         globalLoopingAnimationRenderableFactory));
         persistenceHandler.addTypeHandler(ImageAssetSetRenderableImpl.class,
-                new ImageAssetSetRenderableHandler(imageAssetSets::get, actions::get,
+                new ImageAssetSetRenderableHandler(imageAssetSets::get, methods.CONSUMERS::get,
                         providerHandler, shiftHandler, imageAssetSetRenderableFactory));
         persistenceHandler.addTypeHandler(RasterizedLineSegmentRenderableImpl.class,
                 new RasterizedLineSegmentRenderableHandler(providerHandler,
                         rasterizedLineSegmentRenderableFactory));
         persistenceHandler.addTypeHandler(RectangleRenderableImpl.class,
-                new RectangleRenderableHandler(actions::get, providerHandler,
+                new RectangleRenderableHandler(methods.CONSUMERS::get, providerHandler,
                         rectangleRenderableFactory));
         persistenceHandler.addTypeHandler(SpriteRenderableImpl.class,
-                new SpriteRenderableHandler(sprites::get, actions::get, providerHandler,
+                new SpriteRenderableHandler(sprites::get, methods.CONSUMERS::get, providerHandler,
                         shiftHandler, spriteRenderableFactory));
         persistenceHandler.addTypeHandler(TextLineRenderableImpl.class,
                 new TextLineRenderableHandler(fonts::get, providerHandler,
                         textLineRenderableFactory));
         persistenceHandler.addTypeHandler(TriangleRenderableImpl.class,
-                new TriangleRenderableHandler(actions::get, providerHandler,
+                new TriangleRenderableHandler(methods.CONSUMERS::get, providerHandler,
                         triangleRenderableFactory));
         persistenceHandler.addTypeHandler(ComponentImpl.class,
-                new ComponentHandler(providerHandler, mapHandler, persistenceHandler, actions::get,
+                new ComponentHandler(providerHandler, mapHandler, persistenceHandler,
+                        methods.CONSUMERS::get,
                         keyEventHandler::getPriority, componentFactory));
 
         // ========
@@ -577,9 +581,6 @@ public class IOModule extends AbstractModule {
                 mouseListener
         ));
 
-        var ioMethods = new IOMethods(soundsPlaying, soundFactory);
-        var readIoMethods = readMethods(ioMethods);
-        readIoMethods.FIRST.forEach(a -> actions.put(a.id(), a));
-        readIoMethods.SECOND.forEach(f -> functions.put(f.id(), f));
+        methods.concatenate(readMethods(new IOMethods(soundsPlaying, soundFactory)));
     }
 }

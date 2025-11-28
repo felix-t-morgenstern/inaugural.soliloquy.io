@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.io.persistence.graphics.renderables.providers.ProviderHandler;
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.PolygonRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -12,9 +12,9 @@ abstract class AbstractPolygonRenderableHandler<TRenderable extends PolygonRende
     protected final ProviderHandler PROVIDER_HANDLER;
 
     protected AbstractPolygonRenderableHandler(
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             ProviderHandler providerHandler) {
-        super(getAction);
+        super(getConsumer);
         PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
     }
 

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.renderables.FiniteAnimationRenderable;
@@ -18,12 +18,12 @@ public class FiniteAnimationRenderableHandler
 
     public FiniteAnimationRenderableHandler(
             Function<String, Animation> getAnimation,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler,
             FiniteAnimationRenderableFactory factory
     ) {
-        super(getAnimation, getAction, providerHandler, shiftHandler);
+        super(getAnimation, getConsumer, providerHandler, shiftHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 

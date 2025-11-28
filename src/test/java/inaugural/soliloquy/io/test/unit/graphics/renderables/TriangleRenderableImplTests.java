@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
@@ -26,7 +26,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
@@ -34,7 +34,7 @@ import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 @ExtendWith(MockitoExtension.class)
 public class TriangleRenderableImplTests {
-    private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
+    private final Map<Integer, Consumer<EventInputs>> ON_PRESS_CONSUMERS = mapOf();
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
 
@@ -52,9 +52,9 @@ public class TriangleRenderableImplTests {
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private Action<EventInputs> mockOnPressAction;
-    @Mock private Action<EventInputs> mockOnMouseOverAction;
-    @Mock private Action<EventInputs> mockOnMouseLeaveAction;
+    @Mock private Consumer<EventInputs> mockOnPressAction;
+    @Mock private Consumer<EventInputs> mockOnMouseOverAction;
+    @Mock private Consumer<EventInputs> mockOnMouseLeaveAction;
 
     private TriangleRenderable renderable;
     private TriangleRenderable renderableNotSupportingMouseEvents;
@@ -69,7 +69,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         );
         renderable.setCapturesMouseEvents(true);
@@ -80,7 +80,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         );
         renderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
@@ -94,7 +94,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -103,7 +103,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -112,7 +112,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -121,7 +121,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -130,7 +130,7 @@ public class TriangleRenderableImplTests {
                 null, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -139,7 +139,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, null,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -148,7 +148,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 null,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -157,7 +157,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 null, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -166,7 +166,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, null,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -175,7 +175,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, null, mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -184,7 +184,7 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, null, mockTimestampValidator
         ));
         assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableImpl(
@@ -193,14 +193,14 @@ public class TriangleRenderableImplTests {
                 mockVertex3Provider, mockVertex3ColorProvider,
                 mockBackgroundTextureIdProvider,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
                 Z, UUID, mockContainingComponent, mockRenderingBoundaries, null
         ));
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockContainingComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockContainingComponent, never()).add(renderable);
     }
 
     @Test
@@ -302,7 +302,7 @@ public class TriangleRenderableImplTests {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.press(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.setOnPress(2, action(randomString(), _ -> {})));
+                renderableNotSupportingMouseEvents.setOnPress(2, consumer(randomString(), _ -> {})));
 
         renderable.setOnPress(2, mockOnPressAction);
 
@@ -314,7 +314,7 @@ public class TriangleRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnPress = mock(Action.class);
+        Consumer<EventInputs> newOnPress = mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
         renderable.press(2, TIMESTAMP + 1);
@@ -334,17 +334,17 @@ public class TriangleRenderableImplTests {
         var id2 = randomString();
         var id3 = randomString();
 
-        renderable.setOnPress(0, action(id1, _ -> {}));
-        renderable.setOnPress(2, action(id2, _ -> {}));
-        renderable.setOnPress(7, action(id3, _ -> {}));
+        renderable.setOnPress(0, consumer(id1, _ -> {}));
+        renderable.setOnPress(2, consumer(id2, _ -> {}));
+        renderable.setOnPress(7, consumer(id3, _ -> {}));
         renderable.setOnPress(2, null);
 
-        var pressActionIds = renderable.pressActionIds();
+        var pressConsumerIds = renderable.pressConsumerIds();
 
-        assertNotNull(pressActionIds);
-        assertEquals(2, pressActionIds.size());
-        assertEquals(id1, pressActionIds.get(0));
-        assertEquals(id3, pressActionIds.get(7));
+        assertNotNull(pressConsumerIds);
+        assertEquals(2, pressConsumerIds.size());
+        assertEquals(id1, pressConsumerIds.get(0));
+        assertEquals(id3, pressConsumerIds.get(7));
     }
 
     @Test
@@ -353,12 +353,12 @@ public class TriangleRenderableImplTests {
                 renderableNotSupportingMouseEvents.release(2, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnRelease(2,
-                        action(randomString(), _ -> {})));
+                        consumer(randomString(), _ -> {})));
 
         renderable.release(2, TIMESTAMP);
 
         //noinspection unchecked
-        Action<EventInputs> newOnRelease = mock(Action.class);
+        Consumer<EventInputs> newOnRelease = mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
         renderable.release(2, TIMESTAMP + 1);
@@ -375,34 +375,34 @@ public class TriangleRenderableImplTests {
         var id2 = randomString();
         var id3 = randomString();
 
-        renderable.setOnRelease(0, action(id1, _ -> {}));
-        renderable.setOnRelease(2, action(id2, _ -> {}));
-        renderable.setOnRelease(7, action(id3, _ -> {}));
+        renderable.setOnRelease(0, consumer(id1, _ -> {}));
+        renderable.setOnRelease(2, consumer(id2, _ -> {}));
+        renderable.setOnRelease(7, consumer(id3, _ -> {}));
         renderable.setOnRelease(2, null);
 
-        var releaseActionIds = renderable.releaseActionIds();
+        var releaseConsumerIds = renderable.releaseConsumerIds();
 
-        assertNotNull(releaseActionIds);
-        assertEquals(2, releaseActionIds.size());
-        assertEquals(id1, releaseActionIds.get(0));
-        assertEquals(id3, releaseActionIds.get(7));
+        assertNotNull(releaseConsumerIds);
+        assertEquals(2, releaseConsumerIds.size());
+        assertEquals(id1, releaseConsumerIds.get(0));
+        assertEquals(id3, releaseConsumerIds.get(7));
     }
 
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnPress(-1, action(randomString(), _ -> {})));
+                renderable.setOnPress(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnRelease(-1, action(randomString(), _ -> {})));
+                renderable.setOnRelease(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnPress(8, action(randomString(), _ -> {})));
+                renderable.setOnPress(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setOnRelease(8, action(randomString(), _ -> {})));
+                renderable.setOnRelease(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
@@ -424,7 +424,7 @@ public class TriangleRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnMouseOver = mock(Action.class);
+        Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
         renderable.mouseOver(TIMESTAMP + 1);
@@ -436,18 +436,18 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testMouseOverActionId() {
-        var mouseOverActionId = randomString();
+        var mouseOverConsumerId = randomString();
 
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.mouseOverActionId());
+                renderableNotSupportingMouseEvents.mouseOverConsumerId());
 
         renderable.setOnMouseOver(null);
 
-        assertNull(renderable.mouseOverActionId());
+        assertNull(renderable.mouseOverConsumerId());
 
-        renderable.setOnMouseOver(action(mouseOverActionId, _ -> {}));
+        renderable.setOnMouseOver(consumer(mouseOverConsumerId, _ -> {}));
 
-        assertEquals(mouseOverActionId, renderable.mouseOverActionId());
+        assertEquals(mouseOverConsumerId, renderable.mouseOverConsumerId());
     }
 
     @Test
@@ -465,7 +465,7 @@ public class TriangleRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnMouseLeave = mock(Action.class);
+        Consumer<EventInputs> newOnMouseLeave = mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
         renderable.mouseLeave(TIMESTAMP + 1);
@@ -477,18 +477,18 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testMouseLeaveActionId() {
-        var mouseLeaveActionId = "mouseLeaveActionId";
+        var mouseLeaveConsumerId = "mouseLeaveConsumerId";
 
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.mouseLeaveActionId());
+                renderableNotSupportingMouseEvents.mouseLeaveConsumerId());
 
         renderable.setOnMouseLeave(null);
 
-        assertNull(renderable.mouseLeaveActionId());
+        assertNull(renderable.mouseLeaveConsumerId());
 
-        renderable.setOnMouseLeave(action(mouseLeaveActionId, _ -> {}));
+        renderable.setOnMouseLeave(consumer(mouseLeaveConsumerId, _ -> {}));
 
-        assertEquals(mouseLeaveActionId, renderable.mouseLeaveActionId());
+        assertEquals(mouseLeaveConsumerId, renderable.mouseLeaveConsumerId());
     }
 
     @Test

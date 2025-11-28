@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.entities.Function;
 import soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider;
 
@@ -14,8 +14,8 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
     private final UUID UUID;
     private final soliloquy.specs.common.entities.Function<Inputs, T> PROVIDE;
-    private final Action<Inputs> PAUSE;
-    private final Action<Inputs> UNPAUSE;
+    private final Consumer<Inputs> PAUSE;
+    private final Consumer<Inputs> UNPAUSE;
     private final Map<String, Object> DATA;
     private final TimestampValidator VALIDATOR;
 
@@ -23,8 +23,8 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
 
     public FunctionalProviderImpl(UUID uuid,
                                   Function<Inputs, T> provide,
-                                  Action<Inputs> pause,
-                                  Action<Inputs> unpause,
+                                  Consumer<Inputs> pause,
+                                  Consumer<Inputs> unpause,
                                   Map<String, Object> data,
                                   Long pauseTimestamp,
                                   TimestampValidator validator) {

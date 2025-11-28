@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
@@ -35,15 +35,15 @@ public class RectangleRenderableFactoryImplTests {
     private final ProviderAtTime<Color> BOTTOM_LEFT_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             new FakeProviderAtTime<>();
-    private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
+    private final Map<Integer, Consumer<EventInputs>> ON_PRESS_CONSUMERS = mapOf();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             generateMockStaticProvider(null);
     private final int Z = randomInt();
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private Action<EventInputs> mockOnMouseOver;
-    @Mock private Action<EventInputs> mockOnMouseLeave;
+    @Mock private Consumer<EventInputs> mockOnMouseOver;
+    @Mock private Consumer<EventInputs> mockOnMouseLeave;
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
     @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
     @Mock private Component mockContainingComponent;
@@ -71,7 +71,7 @@ public class RectangleRenderableFactoryImplTests {
                 TOP_LEFT_COLOR_PROVIDER, TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                 BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                 mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                 RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent);
 
         assertNotNull(rectangleRenderable);
@@ -85,63 +85,63 @@ public class RectangleRenderableFactoryImplTests {
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         null, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, null,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         null, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, null,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         null, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, null,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         null, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () ->
                 rectangleRenderableFactory.make(TOP_LEFT_COLOR_PROVIDER,
                         TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER,
                         BOTTOM_LEFT_COLOR_PROVIDER, BACKGROUND_TEXTURE_ID_PROVIDER,
                         mockTextureTileWidthProvider, mockTextureTileHeightProvider,
-                        ON_PRESS_ACTIONS, null, mockOnMouseOver, mockOnMouseLeave,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent));
     }
 }

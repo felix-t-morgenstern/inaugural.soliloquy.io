@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
@@ -30,7 +30,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
@@ -43,7 +43,7 @@ public class SpriteRenderableImplTests {
             new FakeSprite(new FakeImage(false));
     private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final Map<Integer, Action<EventInputs>> ON_PRESS_ACTIONS = mapOf();
+    private final Map<Integer, Consumer<EventInputs>> ON_PRESS_CONSUMERS = mapOf();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
     private final int Z = randomInt();
     private final long TIMESTAMP = randomLong();
@@ -54,9 +54,9 @@ public class SpriteRenderableImplTests {
     @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private Action<EventInputs> mockOnPressAction;
-    @Mock private Action<EventInputs> mockOnMouseOverAction;
-    @Mock private Action<EventInputs> mockOnMouseLeaveAction;
+    @Mock private Consumer<EventInputs> mockOnPressAction;
+    @Mock private Consumer<EventInputs> mockOnMouseOverAction;
+    @Mock private Consumer<EventInputs> mockOnMouseLeaveAction;
 
     private SpriteRenderable renderable;
 
@@ -66,7 +66,7 @@ public class SpriteRenderableImplTests {
 
         renderable =
                 new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                        BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
                         mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator);
 
@@ -77,46 +77,46 @@ public class SpriteRenderableImplTests {
     public void testConstructorWithInvalidParameters() {
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                        BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
                         mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS, null,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null, mockOnMouseOverAction,
+                        BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
                         mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, null, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, null,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS, null, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, null, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         null, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new SpriteRenderableImpl(SPRITE_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_ACTIONS, null,
+                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, null));
@@ -162,8 +162,8 @@ public class SpriteRenderableImplTests {
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockContainingComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockContainingComponent, never()).add(renderable);
     }
 
     @Test
@@ -240,7 +240,7 @@ public class SpriteRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnPress = mock(Action.class);
+        Consumer<EventInputs> newOnPress = mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
         renderable.press(2, TIMESTAMP + 1);
@@ -260,7 +260,7 @@ public class SpriteRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.press(2, 0L));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnPress(2, action(randomString(), _ -> {})));
+                () -> renderable.setOnPress(2, consumer(randomString(), _ -> {})));
     }
 
     @Test
@@ -269,17 +269,17 @@ public class SpriteRenderableImplTests {
         var id2 = randomString();
         var id3 = randomString();
 
-        renderable.setOnPress(0, action(id1, _ -> {}));
-        renderable.setOnPress(2, action(id2, _ -> {}));
-        renderable.setOnPress(7, action(id3, _ -> {}));
+        renderable.setOnPress(0, consumer(id1, _ -> {}));
+        renderable.setOnPress(2, consumer(id2, _ -> {}));
+        renderable.setOnPress(7, consumer(id3, _ -> {}));
         renderable.setOnPress(2, null);
 
-        var pressActionIds = renderable.pressActionIds();
+        var pressConsumerIds = renderable.pressConsumerIds();
 
-        assertNotNull(pressActionIds);
-        assertEquals(2, pressActionIds.size());
-        assertEquals(id1, pressActionIds.get(0));
-        assertEquals(id3, pressActionIds.get(7));
+        assertNotNull(pressConsumerIds);
+        assertEquals(2, pressConsumerIds.size());
+        assertEquals(id1, pressConsumerIds.get(0));
+        assertEquals(id3, pressConsumerIds.get(7));
     }
 
     @Test
@@ -287,7 +287,7 @@ public class SpriteRenderableImplTests {
         renderable.release(2, TIMESTAMP);
 
         //noinspection unchecked
-        Action<EventInputs> newOnRelease = mock(Action.class);
+        Consumer<EventInputs> newOnRelease = mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
         renderable.release(2, TIMESTAMP + 1);
@@ -304,7 +304,7 @@ public class SpriteRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.release(2, 0L));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnRelease(2, action(randomString(), _ -> {})));
+                () -> renderable.setOnRelease(2, consumer(randomString(), _ -> {})));
     }
 
     @Test
@@ -313,33 +313,33 @@ public class SpriteRenderableImplTests {
         var id2 = randomString();
         var id3 = randomString();
 
-        renderable.setOnRelease(0, action(id1, _ -> {}));
-        renderable.setOnRelease(2, action(id2, _ -> {}));
-        renderable.setOnRelease(7, action(id3, _ -> {}));
+        renderable.setOnRelease(0, consumer(id1, _ -> {}));
+        renderable.setOnRelease(2, consumer(id2, _ -> {}));
+        renderable.setOnRelease(7, consumer(id3, _ -> {}));
         renderable.setOnRelease(2, null);
 
-        Map<Integer, String> releaseActionIds = renderable.releaseActionIds();
+        Map<Integer, String> releaseConsumerIds = renderable.releaseConsumerIds();
 
-        assertNotNull(releaseActionIds);
-        assertEquals(2, releaseActionIds.size());
-        assertEquals(id1, releaseActionIds.get(0));
-        assertEquals(id3, releaseActionIds.get(7));
+        assertNotNull(releaseConsumerIds);
+        assertEquals(2, releaseConsumerIds.size());
+        assertEquals(id1, releaseConsumerIds.get(0));
+        assertEquals(id3, releaseConsumerIds.get(7));
     }
 
     @Test
     public void testPressOrReleaseMethodsWithInvalidButtons() {
 
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(-1, action(randomString(), _ -> {})));
+                () -> renderable.setOnPress(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(-1, action(randomString(), _ -> {})));
+                () -> renderable.setOnRelease(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnPress(8, action(randomString(), _ -> {})));
+                () -> renderable.setOnPress(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
-                () -> renderable.setOnRelease(8, action(randomString(), _ -> {})));
+                () -> renderable.setOnRelease(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 3));
     }
@@ -354,7 +354,7 @@ public class SpriteRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnMouseOver = mock(Action.class);
+        Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
         renderable.mouseOver(TIMESTAMP + 1);
@@ -370,20 +370,20 @@ public class SpriteRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.mouseOver(0L));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnMouseOver(action(randomString(), _ -> {})));
+                () -> renderable.setOnMouseOver(consumer(randomString(), _ -> {})));
     }
 
     @Test
     public void testMouseOverActionId() {
-        var mouseOverActionId = randomString();
+        var mouseOverConsumerId = randomString();
 
         renderable.setOnMouseOver(null);
 
-        assertNull(renderable.mouseOverActionId());
+        assertNull(renderable.mouseOverConsumerId());
 
-        renderable.setOnMouseOver(action(mouseOverActionId, _ -> {}));
+        renderable.setOnMouseOver(consumer(mouseOverConsumerId, _ -> {}));
 
-        assertEquals(mouseOverActionId, renderable.mouseOverActionId());
+        assertEquals(mouseOverConsumerId, renderable.mouseOverConsumerId());
     }
 
     @Test
@@ -396,7 +396,7 @@ public class SpriteRenderableImplTests {
                         mockContainingComponent)));
 
         //noinspection unchecked
-        Action<EventInputs> newOnMouseLeave = mock(Action.class);
+        Consumer<EventInputs> newOnMouseLeave = mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
         renderable.mouseLeave(TIMESTAMP + 1);
@@ -412,20 +412,20 @@ public class SpriteRenderableImplTests {
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.mouseLeave(0L));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.setOnMouseLeave(action(randomString(), _ -> {})));
+                () -> renderable.setOnMouseLeave(consumer(randomString(), _ -> {})));
     }
 
     @Test
     public void testMouseLeaveActionId() {
-        var mouseLeaveActionId = randomString();
+        var mouseLeaveConsumerId = randomString();
 
         renderable.setOnMouseLeave(null);
 
-        assertNull(renderable.mouseLeaveActionId());
+        assertNull(renderable.mouseLeaveConsumerId());
 
-        renderable.setOnMouseLeave(action(mouseLeaveActionId, _ -> {}));
+        renderable.setOnMouseLeave(consumer(mouseLeaveConsumerId, _ -> {}));
 
-        assertEquals(mouseLeaveActionId, renderable.mouseLeaveActionId());
+        assertEquals(mouseLeaveConsumerId, renderable.mouseLeaveConsumerId());
     }
 
     @Test

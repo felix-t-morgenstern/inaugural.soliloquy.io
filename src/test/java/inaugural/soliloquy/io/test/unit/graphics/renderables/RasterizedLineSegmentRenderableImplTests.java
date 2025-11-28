@@ -18,6 +18,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,8 +73,8 @@ public class RasterizedLineSegmentRenderableImplTests {
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockContainingComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockContainingComponent, never()).add(renderable);
     }
 
     @Test

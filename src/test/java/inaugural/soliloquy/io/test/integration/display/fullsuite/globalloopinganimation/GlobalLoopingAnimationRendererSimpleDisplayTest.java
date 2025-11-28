@@ -65,7 +65,7 @@ public class GlobalLoopingAnimationRendererSimpleDisplayTest extends DisplayTest
         globalLoopingAnimation.reset(timestamp());
 
         var renderableFactory = ioModule.provide(GlobalLoopingAnimationRenderableFactory.class);
-        renderableFactory.make(
+        topLevelComponent.add(renderableFactory.make(
                 globalLoopingAnimation,
                 nullProvider(),
                 nullProvider(),
@@ -78,6 +78,6 @@ public class GlobalLoopingAnimationRendererSimpleDisplayTest extends DisplayTest
                 0,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
@@ -137,14 +137,14 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<EventInputs> action)
+    public void setOnPress(int i, Consumer<EventInputs> action)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public Map<Integer, String> pressActionIds() {
-        return null;
+    public Map<Integer, String> pressConsumerIds() {
+        return Map.of();
     }
 
     @Override
@@ -154,14 +154,14 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<EventInputs> action)
+    public void setOnRelease(int i, Consumer<EventInputs> consumer)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public java.util.Map<Integer, String> releaseActionIds() {
-        return null;
+    public Map<Integer, String> releaseConsumerIds() {
+        return Map.of();
     }
 
     @Override
@@ -170,8 +170,13 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public String mouseOverActionId() {
-        return null;
+    public void setOnMouseOver(Consumer<EventInputs> consumer) {
+
+    }
+
+    @Override
+    public String mouseOverConsumerId() {
+        return "";
     }
 
     @Override
@@ -180,18 +185,13 @@ public class FakeRectangleRenderable implements RectangleRenderable {
     }
 
     @Override
-    public String mouseLeaveActionId() {
-        return null;
-    }
-
-    @Override
-    public void setOnMouseOver(Action action) {
+    public void setOnMouseLeave(Consumer<EventInputs> consumer) {
 
     }
 
     @Override
-    public void setOnMouseLeave(Action action) {
-
+    public String mouseLeaveConsumerId() {
+        return "";
     }
 
     @Override

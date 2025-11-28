@@ -18,8 +18,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AntialiasedLineSegmentRenderableImplTests {
@@ -137,8 +136,8 @@ public class AntialiasedLineSegmentRenderableImplTests {
     }
 
     @Test
-    public void testConstructorAddsSelfToContainingComponent() {
-        verify(mockComponent, once()).add(renderable);
+    public void testConstructorDoesNotAddSelfToContainingComponent() {
+        verify(mockComponent, never()).add(renderable);
     }
 
     @Test

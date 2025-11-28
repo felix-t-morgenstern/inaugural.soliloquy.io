@@ -30,7 +30,7 @@ public class ColorComponentIntensityShiftTest extends SpriteSimpleDisplayTest {
         var sprite = graphics.getSprite(SPRITE_ID);
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
-        spriteRenderableFactory.make(
+        topLevelComponent.add(spriteRenderableFactory.make(
                 sprite,
                 staticProvider(null),
                 staticProvider(null),
@@ -45,6 +45,6 @@ public class ColorComponentIntensityShiftTest extends SpriteSimpleDisplayTest {
                 0,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

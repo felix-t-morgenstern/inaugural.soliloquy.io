@@ -44,7 +44,7 @@ public class TriangleSimpleDisplayTest extends DisplayTest {
         var vector2 = staticProvider(vertexOf(0.8f, 0.4f));
         var vector3 = staticProvider(vertexOf(0.5f, 0.8f));
         var triangleRenderableFactory = ioModule.provide(TriangleRenderableFactory.class);
-        triangleRenderableFactory.make(
+        topLevelComponent.add(triangleRenderableFactory.make(
                 vector1,
                 staticProvider(color),
                 vector2,
@@ -61,6 +61,6 @@ public class TriangleSimpleDisplayTest extends DisplayTest {
                 randomInt(),
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

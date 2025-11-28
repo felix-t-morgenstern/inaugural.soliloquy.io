@@ -29,7 +29,7 @@ public class SpriteBorderDisplayTest extends SpriteSimpleDisplayTest {
         var sprite = graphics.getSprite(SPRITE_ID);
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
-        spriteRenderableFactory.make(
+        topLevelComponent.add(spriteRenderableFactory.make(
                 sprite,
                 staticProvider(randomFloatInRange(0.01f, 0.1f)),
                 staticProvider(randomColor()),
@@ -38,6 +38,6 @@ public class SpriteBorderDisplayTest extends SpriteSimpleDisplayTest {
                 0,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

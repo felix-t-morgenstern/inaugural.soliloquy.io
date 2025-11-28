@@ -9,7 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.entities.Function;
 import soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider;
 
@@ -35,8 +35,8 @@ public class FunctionalProviderImplTests {
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
 
     @Mock Function<Inputs, Integer> mockProvide;
-    @Mock Action<Inputs> mockPause;
-    @Mock Action<Inputs> mockUnpause;
+    @Mock Consumer<Inputs> mockPause;
+    @Mock Consumer<Inputs> mockUnpause;
     @Mock private TimestampValidator mockTimestampValidator;
 
     private FunctionalProvider<Integer> provider;

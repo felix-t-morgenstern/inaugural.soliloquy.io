@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.renderables.Component;
@@ -24,7 +24,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
     @SuppressWarnings("rawtypes") private final TypeHandler<ProviderAtTime> PROVIDER_HANDLER;
     @SuppressWarnings("rawtypes") private final TypeHandler<Map> DATA_HANDLER;
     private final PersistenceHandler PERSISTENCE_HANDLER;
-    @SuppressWarnings("rawtypes") private final Function<String, Action> GET_ACTION;
+    @SuppressWarnings("rawtypes") private final Function<String, Consumer> GET_CONSUMER;
     private final Function<Component, Integer> GET_KEY_EVENT_PRIORITY;
     private final ComponentFactory FACTORY;
 
@@ -32,13 +32,13 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             @SuppressWarnings("rawtypes") TypeHandler<Map> dataHandler,
             PersistenceHandler persistenceHandler,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             Function<Component, Integer> getKeyEventPriority,
             ComponentFactory factory) {
         PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
         DATA_HANDLER = Check.ifNull(dataHandler, "dataHandler");
         PERSISTENCE_HANDLER = Check.ifNull(persistenceHandler, "persistenceHandler");
-        GET_ACTION = Check.ifNull(getAction, "getAction");
+        GET_CONSUMER = Check.ifNull(getConsumer, "getConsumer");
         GET_KEY_EVENT_PRIORITY = Check.ifNull(getKeyEventPriority, "getKeyEventPriority");
         FACTORY = Check.ifNull(factory, "factory");
     }
@@ -51,12 +51,13 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         var dto = JSON.fromJson(writtenVal, Dto.class);
 
         var dimens = PROVIDER_HANDLER.read(dto.dimens);
+        var renderingBoundaries = PROVIDER_HANDLER.read(dto.boundaries);
         var data = DATA_HANDLER.read(dto.data);
 
         var bindings = Collections.<KeyBinding>setOf();
         Arrays.stream(dto.bindings).forEach(b -> {
-            var onPress = defaultIfNull(b.onPress, null, GET_ACTION);
-            var onRelease = defaultIfNull(b.onRelease, null, GET_ACTION);
+            var onPress = defaultIfNull(b.onPress, null, GET_CONSUMER);
+            var onRelease = defaultIfNull(b.onRelease, null, GET_CONSUMER);
             bindings.add(keyBinding(b.keys, onPress, onRelease));
         });
 
@@ -67,6 +68,9 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
                 dto.overrides,
                 dto.priority,
                 dimens,
+                renderingBoundaries,
+                dto.prerenderHook,
+                dto.addHook,
                 null,
                 data
         );
@@ -99,7 +103,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             return bindingDto;
         }).toArray(Dto.BindingDto[]::new);
 
-        dto.dimens = PROVIDER_HANDLER.write(component.getRenderingBoundariesProvider());
+        dto.dimens = PROVIDER_HANDLER.write(component.getDimensionsProvider());
+        dto.boundaries = PROVIDER_HANDLER.write(component.getRenderingBoundariesProvider());
 
         dto.content = component.contentsRepresentation().stream().map(c -> {
             var contentDto = new Dto.ContentDto();
@@ -108,6 +113,9 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             contentDto.content = contentHandler.write(c);
             return contentDto;
         }).toArray(Dto.ContentDto[]::new);
+
+        dto.prerenderHook = component.prerenderHookId();
+        dto.addHook = component.addHookId();
 
         dto.data = DATA_HANDLER.write(component.data());
 
@@ -120,7 +128,10 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         boolean overrides;
         int priority;
         String dimens;
+        String boundaries;
         ContentDto[] content;
+        String prerenderHook;
+        String addHook;
         String data;
         int z;
 

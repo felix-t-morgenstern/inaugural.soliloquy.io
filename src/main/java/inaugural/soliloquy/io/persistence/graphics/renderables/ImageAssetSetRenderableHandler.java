@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.io.graphics.assets.ImageAssetSet;
@@ -23,11 +23,11 @@ public class ImageAssetSetRenderableHandler
 
     public ImageAssetSetRenderableHandler(
             Function<String, ImageAssetSet> getImageAssetSet,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler,
             ImageAssetSetRenderableFactory factory) {
-        super(getImageAssetSet, getAction, providerHandler, shiftHandler);
+        super(getImageAssetSet, getConsumer, providerHandler, shiftHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 

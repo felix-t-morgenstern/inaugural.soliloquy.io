@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
@@ -40,8 +40,8 @@ public class SpriteRenderableFactoryImplTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private Action<EventInputs> mockOnMouseOver;
-    @Mock private Action<EventInputs> mockOnMouseLeave;
+    @Mock private Consumer<EventInputs> mockOnMouseOver;
+    @Mock private Consumer<EventInputs> mockOnMouseLeave;
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;

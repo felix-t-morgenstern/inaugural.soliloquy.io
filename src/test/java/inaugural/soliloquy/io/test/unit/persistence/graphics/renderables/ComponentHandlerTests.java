@@ -7,7 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.BiConsumer;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.FloatBox;
@@ -37,27 +38,33 @@ import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 @ExtendWith(MockitoExtension.class)
 public class ComponentHandlerTests {
     private final UUID UUID = randomUUID();
+    private final String PRERENDER_HOOK_ID = randomString();
+    @SuppressWarnings("unchecked") private final BiConsumer<Component, Long> MOCK_PRERENDER_HOOK =
+            generateMockWithId(BiConsumer.class, PRERENDER_HOOK_ID);
+    private final String ADD_HOOK_ID = randomString();
     private final int Z = randomInt();
     private final int KEY = randomInt();
     private final boolean OVERRIDES = randomBoolean();
     private final int KEY_PRIORITY = randomInt();
     private final String ON_KEY_PRESS_ID = randomString();
     private final String ON_KEY_RELEASE_ID = randomString();
-    @SuppressWarnings("rawtypes") private final LookupAndEntitiesWithId<Action>
-            MOCK_ACTIONS_AND_LOOKUP =
-            generateMockLookupFunctionWithId(Action.class, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID);
-    @SuppressWarnings("unchecked") private final Action<EventInputs> MOCK_ON_KEY_PRESS =
-            MOCK_ACTIONS_AND_LOOKUP.entities.getFirst();
-    @SuppressWarnings("unchecked") private final Action<EventInputs> MOCK_ON_KEY_RELEASE =
-            MOCK_ACTIONS_AND_LOOKUP.entities.get(1);
+    @SuppressWarnings("rawtypes") private final LookupAndEntitiesWithId<Consumer>
+            MOCK_CONSUMERS_AND_LOOKUP =
+            generateMockLookupFunctionWithId(Consumer.class, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID);
+    @SuppressWarnings("unchecked") private final Consumer<EventInputs> MOCK_ON_KEY_PRESS =
+            MOCK_CONSUMERS_AND_LOOKUP.entities.getFirst();
+    @SuppressWarnings("unchecked") private final Consumer<EventInputs> MOCK_ON_KEY_RELEASE =
+            MOCK_CONSUMERS_AND_LOOKUP.entities.get(1);
     @SuppressWarnings("rawtypes")
-    private final Function<String, Action> MOCK_GET_ACTION = MOCK_ACTIONS_AND_LOOKUP.lookup;
+    private final Function<String, Consumer> MOCK_GET_CONSUMER = MOCK_CONSUMERS_AND_LOOKUP.lookup;
 
     private final String DIMENS_WRITTEN = randomString();
+    private final String BOUNDARIES_WRITTEN = randomString();
     private final String DATA_WRITTEN = randomString();
     private final String CONTENT_WRITTEN = randomString();
 
     @Mock private ProviderAtTime<FloatBox> mockDimensProvider;
+    @Mock private ProviderAtTime<FloatBox> mockRenderingBoundariesProvider;
     @SuppressWarnings("rawtypes") @Mock private TypeHandler<ProviderAtTime> mockProviderHandler;
     @Mock private Renderable mockContent;
     @Mock private TypeHandler<Renderable> mockContentHandler;
@@ -76,7 +83,8 @@ public class ComponentHandlerTests {
     public void setUp() {
         hydrateMockHandler(
                 mockProviderHandler,
-                pairOf(mockDimensProvider, DIMENS_WRITTEN)
+                pairOf(mockDimensProvider, DIMENS_WRITTEN),
+                pairOf(mockRenderingBoundariesProvider, BOUNDARIES_WRITTEN)
         );
         hydrateMockHandler(
                 mockDataHandler,
@@ -93,37 +101,38 @@ public class ComponentHandlerTests {
         writtenValue = String.format(
                 "{\"uuid\":\"%s\",\"bindings\":[{\"keys\":[%s],\"onPress\":\"%s\"," +
                         "\"onRelease\":\"%s\"}],\"overrides\":%s,\"priority\":%d," +
-                        "\"dimens\":\"%s\",\"content\":[{\"type\":\"%s\",\"content\":\"%s\"}]," +
+                        "\"dimens\":\"%s\",\"boundaries\":\"%s\",\"content\":[{\"type\":\"%s\"," +
+                        "\"content\":\"%s\"}],\"prerenderHook\":\"%s\",\"addHook\":\"%s\"," +
                         "\"data\":\"%s\",\"z\":%d}",
                 UUID, KEY, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID, OVERRIDES, KEY_PRIORITY,
-                DIMENS_WRITTEN, mockContent.getClass().getCanonicalName(), CONTENT_WRITTEN,
-                DATA_WRITTEN, Z
+                DIMENS_WRITTEN, BOUNDARIES_WRITTEN, mockContent.getClass().getCanonicalName(),
+                CONTENT_WRITTEN, PRERENDER_HOOK_ID, ADD_HOOK_ID, DATA_WRITTEN, Z
         );
 
         handler = new ComponentHandler(mockProviderHandler, mockDataHandler, mockPersistenceHandler,
-                MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory);
+                MOCK_GET_CONSUMER, mockGetKeyEventPriority, mockFactory);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(null, mockDataHandler, mockPersistenceHandler,
-                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
+                        MOCK_GET_CONSUMER, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, null, mockPersistenceHandler,
-                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
+                        MOCK_GET_CONSUMER, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
                         mockPersistenceHandler, null, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler, null,
-                        MOCK_GET_ACTION, mockGetKeyEventPriority, mockFactory));
+                        MOCK_GET_CONSUMER, mockGetKeyEventPriority, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
-                        mockPersistenceHandler, MOCK_GET_ACTION, null, mockFactory));
+                        mockPersistenceHandler, MOCK_GET_CONSUMER, null, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentHandler(mockProviderHandler, mockDataHandler,
-                        mockPersistenceHandler, MOCK_GET_ACTION, mockGetKeyEventPriority, null));
+                        mockPersistenceHandler, MOCK_GET_CONSUMER, mockGetKeyEventPriority, null));
     }
 
     @Test
@@ -134,7 +143,11 @@ public class ComponentHandlerTests {
         when(mockComponent.keyBindings()).thenReturn(setOf(keyBinding(arrayInts(KEY),
                 MOCK_ON_KEY_PRESS, MOCK_ON_KEY_RELEASE)));
         when(mockComponent.blocksLowerKeyBindings()).thenReturn(OVERRIDES);
-        when(mockComponent.getRenderingBoundariesProvider()).thenReturn(mockDimensProvider);
+        when(mockComponent.getRenderingBoundariesProvider()).thenReturn(
+                mockRenderingBoundariesProvider);
+        when(mockComponent.getDimensionsProvider()).thenReturn(mockDimensProvider);
+        when(mockComponent.prerenderHookId()).thenReturn(PRERENDER_HOOK_ID);
+        when(mockComponent.addHookId()).thenReturn(ADD_HOOK_ID);
         when(mockComponent.data()).thenReturn(mockData);
         when(mockGetKeyEventPriority.apply(any())).thenReturn(KEY_PRIORITY);
 
@@ -149,8 +162,11 @@ public class ComponentHandlerTests {
         verify(mockPersistenceHandler, once()).getTypeHandler(
                 mockContent.getClass().getCanonicalName());
         verify(mockContentHandler, once()).write(mockContent);
+        verify(mockComponent, once()).getDimensionsProvider();
         verify(mockComponent, once()).getRenderingBoundariesProvider();
         verify(mockProviderHandler, once()).write(mockDimensProvider);
+        verify(mockComponent, once()).addHookId();
+        verify(mockComponent, once()).prerenderHookId();
         verify(mockComponent, once()).data();
         verify(mockDataHandler, once()).write(mockData);
         verify(mockGetKeyEventPriority, once()).apply(mockComponent);
@@ -163,8 +179,8 @@ public class ComponentHandlerTests {
 
     @Test
     public void testRead() {
-        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), anyInt(), any(), any(), any()))
-                .thenReturn(mockComponent);
+        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), anyInt(), any(), any(),
+                any(), any(), any(), any())).thenReturn(mockComponent);
 
         var output = handler.read(writtenValue);
 
@@ -179,6 +195,9 @@ public class ComponentHandlerTests {
                 eq(OVERRIDES),
                 eq(KEY_PRIORITY),
                 same(mockDimensProvider),
+                same(mockRenderingBoundariesProvider),
+                eq(PRERENDER_HOOK_ID),
+                eq(ADD_HOOK_ID),
                 isNull(),
                 same(mockData)
         );
@@ -194,9 +213,9 @@ public class ComponentHandlerTests {
                 bindings.stream().findFirst().get();
         assertEquals(1, binding.BOUND_CODEPOINTS.length);
         assertEquals(KEY, binding.BOUND_CODEPOINTS[0]);
-        verify(MOCK_GET_ACTION, once()).apply(ON_KEY_PRESS_ID);
+        verify(MOCK_GET_CONSUMER, once()).apply(ON_KEY_PRESS_ID);
         assertSame(MOCK_ON_KEY_PRESS, binding.ON_PRESS);
-        verify(MOCK_GET_ACTION, once()).apply(ON_KEY_RELEASE_ID);
+        verify(MOCK_GET_CONSUMER, once()).apply(ON_KEY_RELEASE_ID);
         assertSame(MOCK_ON_KEY_RELEASE, binding.ON_RELEASE);
     }
 

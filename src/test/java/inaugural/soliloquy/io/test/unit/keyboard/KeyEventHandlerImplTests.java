@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 import soliloquy.specs.io.input.keyboard.KeyEventHandler;
@@ -145,7 +145,7 @@ public class KeyEventHandlerImplTests {
 
     @Test
     public void testKeyPressed() {
-        @SuppressWarnings("unchecked") var onPress = (Action<EventInputs>) mock(Action.class);
+        @SuppressWarnings("unchecked") var onPress = (Consumer<EventInputs>) mock(Consumer.class);
         var binding = keyBinding(arrayInts(KEY_CODEPOINT), onPress, null);
 
         var component = makeComponent(setOf(binding), false);
@@ -164,7 +164,7 @@ public class KeyEventHandlerImplTests {
 
     @Test
     public void testKeyReleased() {
-        @SuppressWarnings("unchecked") var onRelease = (Action<EventInputs>) mock(Action.class);
+        @SuppressWarnings("unchecked") var onRelease = (Consumer<EventInputs>) mock(Consumer.class);
         var binding = keyBinding(arrayInts(KEY_CODEPOINT), null, onRelease);
 
         var component = makeComponent(setOf(binding), false);
@@ -184,13 +184,13 @@ public class KeyEventHandlerImplTests {
     @Test
     public void testComponentCanBlockLowerComponent() {
         @SuppressWarnings("unchecked") var lowerBindingOnPress =
-                (Action<EventInputs>) mock(Action.class);
+                (Consumer<EventInputs>) mock(Consumer.class);
         var lowerBinding = keyBinding(arrayInts(randomInt()), lowerBindingOnPress, null);
 
         var lowerComponent = makeComponent(setOf(lowerBinding), false);
 
         @SuppressWarnings("unchecked") var upperBindingOnPress =
-                (Action<EventInputs>) mock(Action.class);
+                (Consumer<EventInputs>) mock(Consumer.class);
         var upperBinding = keyBinding(arrayInts(KEY_CODEPOINT), upperBindingOnPress, null);
 
         var upperComponent = makeComponent(setOf(upperBinding), true);

@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.assets.Sprite;
 import soliloquy.specs.io.graphics.renderables.SpriteRenderable;
@@ -18,10 +18,10 @@ public class SpriteRenderableHandler
 
     public SpriteRenderableHandler(
             Function<String, Sprite> getAsset,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler, SpriteRenderableFactory factory) {
-        super(getAsset, getAction, providerHandler, shiftHandler);
+        super(getAsset, getConsumer, providerHandler, shiftHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 

@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -24,18 +24,18 @@ public abstract class AbstractRenderableWithMouseEvents
     protected final RenderingBoundaries RENDERING_BOUNDARIES;
     protected final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    private final Map<Integer, Action<EventInputs>> ON_PRESS;
-    private final Map<Integer, Action<EventInputs>> ON_RELEASE;
+    private final Map<Integer, Consumer<EventInputs>> ON_PRESS;
+    private final Map<Integer, Consumer<EventInputs>> ON_RELEASE;
 
     protected boolean capturesMouseEvents;
 
-    private Action<EventInputs> onMouseOver;
-    private Action<EventInputs> onMouseLeave;
+    private Consumer<EventInputs> onMouseOver;
+    private Consumer<EventInputs> onMouseLeave;
 
-    protected AbstractRenderableWithMouseEvents(Map<Integer, Action<EventInputs>> onPress,
-                                                Map<Integer, Action<EventInputs>> onRelease,
-                                                Action<EventInputs> onMouseOver,
-                                                Action<EventInputs> onMouseLeave,
+    protected AbstractRenderableWithMouseEvents(Map<Integer, Consumer<EventInputs>> onPress,
+                                                Map<Integer, Consumer<EventInputs>> onRelease,
+                                                Consumer<EventInputs> onMouseOver,
+                                                Consumer<EventInputs> onMouseLeave,
                                                 int z,
                                                 UUID uuid,
                                                 Component containingComponent,
@@ -71,7 +71,7 @@ public abstract class AbstractRenderableWithMouseEvents
     @Override
     public void press(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
-        callAction(
+        callConsumer(
                 LEFT_MOUSE_BUTTON,
                 ON_PRESS.get(mouseButton),
                 timestamp,
@@ -81,7 +81,7 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void setOnPress(int mouseButton, Action<EventInputs> onPress) {
+    public void setOnPress(int mouseButton, Consumer<EventInputs> onPress) {
         throwIfNotSupportingMouseEvents("setOnPress");
         throwOnInvalidButton(mouseButton, "setOnPress");
         if (onPress == null) {
@@ -93,14 +93,14 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public Map<Integer, String> pressActionIds() {
-        return getActionIds(ON_PRESS);
+    public Map<Integer, String> pressConsumerIds() {
+        return getConsumerIds(ON_PRESS);
     }
 
     @Override
     public void release(int mouseButton, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
-        callAction(
+        callConsumer(
                 RIGHT_MOUSE_BUTTON,
                 ON_RELEASE.get(mouseButton),
                 timestamp,
@@ -111,7 +111,7 @@ public abstract class AbstractRenderableWithMouseEvents
 
     @Override
     public void setOnRelease(int mouseButton,
-                             Action<EventInputs> onRelease) {
+                             Consumer<EventInputs> onRelease) {
         throwIfNotSupportingMouseEvents("setOnRelease");
         throwOnInvalidButton(mouseButton, "setOnRelease");
         if (onRelease == null) {
@@ -123,8 +123,8 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public Map<Integer, String> releaseActionIds() {
-        return getActionIds(ON_RELEASE);
+    public Map<Integer, String> releaseConsumerIds() {
+        return getConsumerIds(ON_RELEASE);
     }
 
     private void throwOnInvalidButton(int button, String methodName) {
@@ -134,8 +134,8 @@ public abstract class AbstractRenderableWithMouseEvents
         }
     }
 
-    private Map<Integer, String> getActionIds(
-            Map<Integer, Action<EventInputs>> actions) {
+    private Map<Integer, String> getConsumerIds(
+            Map<Integer, Consumer<EventInputs>> actions) {
         Map<Integer, String> actionIds = mapOf();
         actions.forEach((button, action) -> actionIds.put(button, action.id()));
         return actionIds;
@@ -143,7 +143,7 @@ public abstract class AbstractRenderableWithMouseEvents
 
     @Override
     public void mouseOver(long timestamp) throws UnsupportedOperationException {
-        callAction(
+        callConsumer(
                 null,
                 onMouseOver,
                 timestamp,
@@ -153,19 +153,19 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void setOnMouseOver(Action<EventInputs> onMouseOver) {
+    public void setOnMouseOver(Consumer<EventInputs> onMouseOver) {
         throwIfNotSupportingMouseEvents("setOnMouseOver");
         this.onMouseOver = onMouseOver;
     }
 
     @Override
-    public String mouseOverActionId() {
-        return actionId(onMouseOver, "mouseOverActionId");
+    public String mouseOverConsumerId() {
+        return actionId(onMouseOver, "mouseOverConsumerId");
     }
 
     @Override
     public void mouseLeave(long timestamp) throws UnsupportedOperationException {
-        callAction(
+        callConsumer(
                 null,
                 onMouseLeave,
                 timestamp,
@@ -175,17 +175,17 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void setOnMouseLeave(Action<EventInputs> onMouseLeave) {
+    public void setOnMouseLeave(Consumer<EventInputs> onMouseLeave) {
         throwIfNotSupportingMouseEvents("setOnMouseLeave");
         this.onMouseLeave = onMouseLeave;
     }
 
     @Override
-    public String mouseLeaveActionId() {
-        return actionId(onMouseLeave, "mouseLeaveActionId");
+    public String mouseLeaveConsumerId() {
+        return actionId(onMouseLeave, "mouseLeaveConsumerId");
     }
 
-    private String actionId(Action<EventInputs> action,
+    private String actionId(Consumer<EventInputs> action,
                             String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
         if (action == null) {
@@ -196,11 +196,11 @@ public abstract class AbstractRenderableWithMouseEvents
         }
     }
 
-    private void callAction(Integer mouseButton,
-                            Action<EventInputs> action,
-                            long timestamp,
-                            EventType eventType,
-                            String methodName) {
+    private void callConsumer(Integer mouseButton,
+                              Consumer<EventInputs> action,
+                              long timestamp,
+                              EventType eventType,
+                              String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         if (action != null) {

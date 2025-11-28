@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.PolygonRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -22,10 +22,10 @@ public abstract class AbstractPolygonRenderable
             ProviderAtTime<Integer> textureIdProvider,
             ProviderAtTime<Float> textureTileWidthProvider,
             ProviderAtTime<Float> textureTileHeight,
-            Map<Integer, Action<EventInputs>> onPress,
-            Map<Integer, Action<EventInputs>> onRelease,
-            Action<EventInputs> onMouseOver,
-            Action<EventInputs> onMouseLeave,
+            Map<Integer, Consumer<EventInputs>> onPress,
+            Map<Integer, Consumer<EventInputs>> onRelease,
+            Consumer<EventInputs> onMouseOver,
+            Consumer<EventInputs> onMouseLeave,
             int z,
             java.util.UUID uuid,
             Component containingComponent,

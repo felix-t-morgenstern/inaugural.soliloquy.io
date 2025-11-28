@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.ui.EventInputs;
 
@@ -15,15 +15,15 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 abstract class AbstractMouseEventsRenderableHandler<TRenderable extends RenderableWithMouseEvents>
         extends AbstractTypeHandler<TRenderable> {
-    @SuppressWarnings("rawtypes") protected final Function<String, Action> GET_ACTION;
+    @SuppressWarnings("rawtypes") protected final Function<String, Consumer> GET_CONSUMER;
 
     protected AbstractMouseEventsRenderableHandler(
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction) {
-        GET_ACTION = Check.ifNull(getAction, "getAction");
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer) {
+        GET_CONSUMER = Check.ifNull(getConsumer, "getConsumer");
     }
 
     protected void hydrateDto(Dto dto, TRenderable renderable) {
-        var onPressIds = renderable.pressActionIds();
+        var onPressIds = renderable.pressConsumerIds();
         var onPress =
                 new FiniteAnimationRenderableHandler.FiniteAnimationRenderableDto.ButtonEvent[onPressIds.size()];
         int i = 0;
@@ -36,7 +36,7 @@ abstract class AbstractMouseEventsRenderableHandler<TRenderable extends Renderab
         }
         dto.onPress = onPress;
 
-        var onReleaseIds = renderable.releaseActionIds();
+        var onReleaseIds = renderable.releaseConsumerIds();
         var onRelease =
                 new FiniteAnimationRenderableHandler.FiniteAnimationRenderableDto.ButtonEvent[onReleaseIds.size()];
         i = 0;
@@ -49,9 +49,9 @@ abstract class AbstractMouseEventsRenderableHandler<TRenderable extends Renderab
         }
         dto.onRelease = onRelease;
 
-        dto.mouseOver = renderable.mouseOverActionId();
+        dto.mouseOver = renderable.mouseOverConsumerId();
 
-        dto.mouseLeave = renderable.mouseLeaveActionId();
+        dto.mouseLeave = renderable.mouseLeaveConsumerId();
 
         dto.z = renderable.getZ();
         dto.uuid = renderable.uuid().toString();
@@ -61,21 +61,21 @@ abstract class AbstractMouseEventsRenderableHandler<TRenderable extends Renderab
     protected void hydrateReadProps(ReadProps readProps, Dto dto) {
         //noinspection unchecked
         readProps.onPress = mapOf(Arrays.stream(dto.onPress)
-                .map(p -> pairOf(p.button, (Action<EventInputs>) GET_ACTION.apply(p.actionId))));
+                .map(p -> pairOf(p.button, (Consumer<EventInputs>) GET_CONSUMER.apply(p.actionId))));
         //noinspection unchecked
         readProps.onRelease = mapOf(Arrays.stream(dto.onRelease)
-                .map(p -> pairOf(p.button, (Action<EventInputs>) GET_ACTION.apply(p.actionId))));
+                .map(p -> pairOf(p.button, (Consumer<EventInputs>) GET_CONSUMER.apply(p.actionId))));
         //noinspection unchecked
-        readProps.onMouseOver = GET_ACTION.apply(dto.mouseOver);
+        readProps.onMouseOver = GET_CONSUMER.apply(dto.mouseOver);
         //noinspection unchecked
-        readProps.onMouseLeave = GET_ACTION.apply(dto.mouseLeave);
+        readProps.onMouseLeave = GET_CONSUMER.apply(dto.mouseLeave);
     }
 
     protected static class ReadProps {
-        Map<Integer, Action<EventInputs>> onPress;
-        Map<Integer, Action<EventInputs>> onRelease;
-        Action<EventInputs> onMouseOver;
-        Action<EventInputs> onMouseLeave;
+        Map<Integer, Consumer<EventInputs>> onPress;
+        Map<Integer, Consumer<EventInputs>> onRelease;
+        Consumer<EventInputs> onMouseOver;
+        Consumer<EventInputs> onMouseLeave;
     }
 
     protected static class Dto {

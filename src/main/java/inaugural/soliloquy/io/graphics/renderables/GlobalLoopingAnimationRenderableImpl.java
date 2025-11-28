@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
@@ -40,10 +40,10 @@ public class GlobalLoopingAnimationRenderableImpl
     public GlobalLoopingAnimationRenderableImpl(GlobalLoopingAnimation globalLoopingAnimation,
                                                 ProviderAtTime<Float> borderThicknessProvider,
                                                 ProviderAtTime<Color> borderColorProvider,
-                                                Map<Integer, Action<EventInputs>> onPress,
-                                                Map<Integer, Action<EventInputs>> onRelease,
-                                                Action<EventInputs> onMouseOver,
-                                                Action<EventInputs> onMouseLeave,
+                                                Map<Integer, Consumer<EventInputs>> onPress,
+                                                Map<Integer, Consumer<EventInputs>> onRelease,
+                                                Consumer<EventInputs> onMouseOver,
+                                                Consumer<EventInputs> onMouseLeave,
                                                 List<ColorShift> colorShifts,
                                                 ProviderAtTime<FloatBox> renderingAreaProvider,
                                                 int z, UUID uuid,

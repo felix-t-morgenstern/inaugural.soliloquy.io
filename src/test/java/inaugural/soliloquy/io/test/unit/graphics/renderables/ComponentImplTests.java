@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.entities.BiConsumer;
+import soliloquy.specs.common.entities.Consumer;
+import soliloquy.specs.common.entities.Function;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
@@ -17,8 +20,6 @@ import soliloquy.specs.ui.definitions.providers.AbstractProviderDefinition;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
@@ -39,12 +40,15 @@ public class ComponentImplTests {
     @Mock private AbstractProviderDefinition<FloatBox> mockRenderingBoundariesDefinition;
     @SuppressWarnings("rawtypes")
     @Mock private Function<AbstractProviderDefinition, ProviderAtTime> mockProviderReader;
+    @Mock private ProviderAtTime<FloatBox> mockDimensions;
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
     @Mock private Consumer<Component> mockRegisterComponent;
     @Mock private Consumer<Component> mockDeregisterComponent;
     @Mock private Consumer<Component> mockRemoveFromKeyCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToMouseCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromMouseCapturing;
+    @Mock private BiConsumer<Component, Long> mockPrerenderHook;
+    @Mock private Consumer<Renderable> mockAddHook;
 
     @Mock private Set<KeyBinding> mockBindings;
     @Mock private Renderable mockRenderable;
@@ -60,8 +64,10 @@ public class ComponentImplTests {
                 .thenReturn(mockRenderingBoundaries);
 
         component = new ComponentImpl(UUID, Z, mockBindings, OVERRIDES_LOWER_KEY_BINDINGS, null,
-                mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                mockRemoveFromMouseCapturing);
+                mockDimensions, mockRenderingBoundaries, DATA,
+                mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                mockAddHook);
 
         lenient().when(mockRenderable.containingComponent()).thenReturn(component);
         lenient().when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(component);
@@ -72,40 +78,59 @@ public class ComponentImplTests {
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(null, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, null, OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockDimensions, null, DATA, mockRegisterComponent, mockDeregisterComponent,
+                        mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null, null,
-                        DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, null, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, null, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, null, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, null,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, null, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent, null,
+                        mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, null));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, null, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, null, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing, null,
+                        mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing, null,
-                        mockRemoveFromMouseCapturing));
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, null, mockPrerenderHook, mockAddHook));
     }
 
     @Test
@@ -113,8 +138,9 @@ public class ComponentImplTests {
         var mockComponent = mock(Component.class);
 
         component = new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
-                mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                mockRemoveFromMouseCapturing);
+                mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook);
 
         verify(mockComponent, once()).add(component);
         verify(mockRegisterComponent, once()).accept(component);
@@ -132,6 +158,13 @@ public class ComponentImplTests {
 
         assertNotNull(content);
         assertEquals(setOf(mockRenderable), content);
+    }
+
+    @Test
+    public void testAddCallsHook() {
+        component.add(mockRenderable);
+
+        verify(mockAddHook, once()).accept(mockRenderable);
     }
 
     @Test
@@ -231,14 +264,42 @@ public class ComponentImplTests {
     }
 
     @Test
+    public void testGetDimensionsProvider() {
+        assertSame(mockDimensions, component.getDimensionsProvider());
+    }
+
+    @Test
+    public void testSetDimensionsProvider() {
+        @SuppressWarnings("unchecked") var newDimensions =
+                (ProviderAtTime<FloatBox>) mock(ProviderAtTime.class);
+
+        component.setDimensionsProvider(newDimensions);
+
+        assertSame(newDimensions, component.getDimensionsProvider());
+    }
+
+    @Test
+    public void testSetDimensionsProviderWithInvalidArgs() {
+        assertThrows(IllegalArgumentException.class, () -> component.setDimensionsProvider(null));
+    }
+
+    @Test
     public void testTierDefaultValue() {
         assertEquals(0, component.tier());
     }
 
     @Test
     public void testTierIncrementing() {
-        var firstChild = new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,component, mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
-        var secondChild = new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,firstChild, mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
+        var firstChild = new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,
+                component, mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook);
+        var secondChild =
+                new ComponentImpl(UUID, randomInt(), setOf(), OVERRIDES_LOWER_KEY_BINDINGS,
+                        firstChild, mockDimensions, mockRenderingBoundaries, DATA,
+                        mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook);
 
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
@@ -271,8 +332,10 @@ public class ComponentImplTests {
     public void testDelete() {
         var containedComponent =
                 new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
-                        mockRenderingBoundaries, DATA, mockRegisterComponent, mockDeregisterComponent, mockRemoveFromKeyCapturing,
-                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        mockAddHook);
 
         containedComponent.delete();
 
@@ -280,5 +343,48 @@ public class ComponentImplTests {
         verify(mockComponent, once()).remove(containedComponent);
         verify(mockDeregisterComponent, once()).accept(containedComponent);
         verify(mockRemoveFromKeyCapturing, once()).accept(containedComponent);
+    }
+
+    @Test
+    public void testPrerenderHook() {
+        var timestamp = randomLong();
+
+        ((ComponentImpl) component).prerenderHook(timestamp);
+
+        verify(mockPrerenderHook, once()).accept(component, timestamp);
+    }
+
+    @Test
+    public void testPrerenderHookWhenNoHookPresent() {
+        var timestamp = randomLong();
+        var componentWithNoPrerenderHook =
+                new ComponentImpl(UUID, Z, mockBindings, OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, null, mockAddHook);
+
+        componentWithNoPrerenderHook.prerenderHook(timestamp);
+
+        verify(mockPrerenderHook, never()).accept(any(), any());
+    }
+
+    @Test
+    public void testAddHookId() {
+        var addHookId = randomString();
+        when(mockAddHook.id()).thenReturn(addHookId);
+
+        assertEquals(addHookId, component.addHookId());
+    }
+
+    @Test
+    public void testAddHookIdWhenNoHookPresent() {
+        var componentWithNoHook =
+                new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, null,
+                        mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
+                        mockDeregisterComponent, mockRemoveFromKeyCapturing,
+                        mockAddToMouseCapturing, mockRemoveFromMouseCapturing, mockPrerenderHook,
+                        null);
+
+        assertNull(componentWithNoHook.addHookId());
     }
 }

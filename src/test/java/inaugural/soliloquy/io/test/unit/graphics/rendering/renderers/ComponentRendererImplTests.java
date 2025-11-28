@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.entities.BiConsumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
@@ -18,17 +19,15 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.util.Map;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
-import static inaugural.soliloquy.tools.random.Random.randomFloatBox;
-import static inaugural.soliloquy.tools.random.Random.randomLong;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static inaugural.soliloquy.tools.testing.Mock.generateMockMap;
+import static inaugural.soliloquy.tools.testing.Mock.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentRendererImplTests {
-
     private Map<Class<?>, Renderer<? extends Renderable>> mockRenderers;
 
     @Mock private Renderable mockRenderable1;
@@ -37,6 +36,7 @@ public class ComponentRendererImplTests {
     @Mock private Renderer<Renderable> mockRenderer;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Component mockComponent;
+    @Mock private BiConsumer<Component, Long> mockPrerenderComponent;
     @Mock private TimestampValidator mockTimestampValidator;
 
     private ComponentRenderer renderer;
@@ -48,19 +48,24 @@ public class ComponentRendererImplTests {
                 pairOf(mockRenderable2.getClass(), mockRenderer),
                 pairOf(mockRenderable3.getClass(), mockRenderer));
 
-        renderer = new ComponentRendererImpl(mockRenderers, mockRenderingBoundaries,
-                mockTimestampValidator);
+        renderer = new ComponentRendererImpl(mockRenderers, mockPrerenderComponent,
+                mockRenderingBoundaries, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentRendererImpl(null, mockRenderingBoundaries,
+                () -> new ComponentRendererImpl(null, mockPrerenderComponent,
+                        mockRenderingBoundaries, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentRendererImpl(mockRenderers, null, mockRenderingBoundaries,
                         mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentRendererImpl(mockRenderers, null, mockTimestampValidator));
+                () -> new ComponentRendererImpl(mockRenderers, mockPrerenderComponent, null,
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new ComponentRendererImpl(mockRenderers, mockRenderingBoundaries, null));
+                () -> new ComponentRendererImpl(mockRenderers, mockPrerenderComponent,
+                        mockRenderingBoundaries, null));
     }
 
     @Test
@@ -80,9 +85,10 @@ public class ComponentRendererImplTests {
         renderer.render(mockComponent, timestamp);
 
         var inOrder =
-                inOrder(mockBoundariesProvider, mockRenderingBoundaries, mockComponent,
-                        mockRenderers, mockRenderer, mockTimestampValidator);
+                inOrder(mockPrerenderComponent, mockBoundariesProvider, mockRenderingBoundaries,
+                        mockComponent, mockRenderers, mockRenderer, mockTimestampValidator);
         inOrder.verify(mockTimestampValidator, once()).validateTimestamp(timestamp);
+        inOrder.verify(mockPrerenderComponent, once()).accept(mockComponent, timestamp);
         inOrder.verify(mockComponent, once()).getRenderingBoundariesProvider();
         inOrder.verify(mockBoundariesProvider, once()).provide(timestamp);
         inOrder.verify(mockRenderingBoundaries, once()).pushNewBoundaries(boundaries);

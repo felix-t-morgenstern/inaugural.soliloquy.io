@@ -2,13 +2,13 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousel
 
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer.SpriteRendererTest;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.ui.EventInputs;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
 import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
 import static inaugural.soliloquy.tools.random.Random.randomString;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 
 /**
  * Test acceptance criteria:
@@ -49,7 +49,7 @@ class MouseListenerSimpleTest extends SpriteRendererTest {
         MouseEventCapturingSpatialIndex.putRenderable(SpriteRenderable);
     }
 
-    private static Action<EventInputs> messageAction(String message) {
-        return action(randomString(), _ -> System.out.println(message));
+    private static Consumer<EventInputs> messageAction(String message) {
+        return consumer(randomString(), _ -> System.out.println(message));
     }
 }

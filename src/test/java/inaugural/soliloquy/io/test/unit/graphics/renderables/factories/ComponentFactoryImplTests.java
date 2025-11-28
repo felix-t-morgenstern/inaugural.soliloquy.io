@@ -7,20 +7,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.entities.BiConsumer;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
+import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.LookupAndEntitiesWithId;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockLookupFunctionWithId;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,6 +35,25 @@ public class ComponentFactoryImplTests {
     private final int DATA_VAL = randomInt();
     private final Map<String, Object> DATA = mapOf(DATA_KEY, DATA_VAL);
 
+    private final String ADD_HOOK_ID = randomString();
+    @SuppressWarnings("rawtypes") private final LookupAndEntitiesWithId<Consumer>
+            MOCK_CONSUMER_AND_LOOKUP =
+            generateMockLookupFunctionWithId(Consumer.class, ADD_HOOK_ID);
+    @SuppressWarnings("unchecked") private final Consumer<Renderable> MOCK_ADD_HOOK_CONSUMER =
+            MOCK_CONSUMER_AND_LOOKUP.entities.getFirst();
+    @SuppressWarnings("rawtypes") private final Function<String, Consumer> MOCK_GET_CONSUMER =
+            MOCK_CONSUMER_AND_LOOKUP.lookup;
+
+    private final String PRERENDER_HOOK_ID = randomString();
+    @SuppressWarnings("rawtypes") private final LookupAndEntitiesWithId<BiConsumer>
+            MOCK_BICONSUMER_AND_LOOKUP =
+            generateMockLookupFunctionWithId(BiConsumer.class, PRERENDER_HOOK_ID);
+    @SuppressWarnings("unchecked") private final BiConsumer<Component, Long>
+            MOCK_PRERENDER_HOOK_BICONSUMER = MOCK_BICONSUMER_AND_LOOKUP.entities.getFirst();
+    @SuppressWarnings("rawtypes") private final Function<String, BiConsumer> MOCK_GET_BICONSUMER =
+            MOCK_BICONSUMER_AND_LOOKUP.lookup;
+
+    @Mock private ProviderAtTime<FloatBox> mockDimensions;
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
     @Mock private Consumer<Component> mockRegisterComponent;
     @Mock private Consumer<Component> mockDeregisterComponent;
@@ -45,8 +68,8 @@ public class ComponentFactoryImplTests {
     @BeforeEach
     public void setUp() {
         factory = new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
-                mockAddToKeyCapturing, mockRemoveFromKeyCapturing,
-                mockAddToMouseCapturing, mockRemoveFromMouseCapturing);
+                mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER);
     }
 
     @Test
@@ -54,27 +77,35 @@ public class ComponentFactoryImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(null, mockDeregisterComponent, mockAddToKeyCapturing,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, null, mockAddToKeyCapturing,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent, null,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, null, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing));
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, mockRemoveFromKeyCapturing, null,
-                        mockRemoveFromMouseCapturing));
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        null));
+                        null, MOCK_GET_CONSUMER, MOCK_GET_BICONSUMER));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, null, MOCK_GET_BICONSUMER));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, MOCK_GET_CONSUMER, null));
     }
 
     @Test
@@ -89,7 +120,8 @@ public class ComponentFactoryImplTests {
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
         var output = factory.make(uuid, z, bindings, overrides, keyEventPriority,
-                mockRenderingBoundaries, mockComponent, DATA);
+                mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                mockComponent, DATA);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
         when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
@@ -103,12 +135,15 @@ public class ComponentFactoryImplTests {
         assertEquals(z, output.getZ());
         assertEquals(tier + 1, output.tier());
         assertSame(mockComponent, output.containingComponent());
+        assertSame(mockDimensions, output.getDimensionsProvider());
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
         assertEquals(DATA, output.data());
         assertNotSame(DATA, output.data());
         verify(mockAddToMouseCapturing, once()).accept(mockRenderableWithMouseEvents);
         verify(mockRemoveFromMouseCapturing, once()).accept(mockRenderableWithMouseEvents);
         verify(mockAddToKeyCapturing, once()).accept(output, keyEventPriority);
+        verify(MOCK_GET_CONSUMER, once()).apply(ADD_HOOK_ID);
+        verify(MOCK_GET_BICONSUMER, once()).apply(PRERENDER_HOOK_ID);
 
         output.delete();
 
@@ -120,15 +155,22 @@ public class ComponentFactoryImplTests {
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(null, randomInt(), setOf(), randomBoolean(), randomInt(),
-                        mockRenderingBoundaries, mockComponent, DATA));
+                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                        mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), null, randomBoolean(), randomInt(),
-                        mockRenderingBoundaries, mockComponent, DATA));
+                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                        mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
-                        null, mockComponent, DATA));
+                        mockDimensions, null, PRERENDER_HOOK_ID, ADD_HOOK_ID, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
-                        mockRenderingBoundaries, mockComponent, null));
+                        null, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                        mockComponent, DATA));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
+                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                        mockComponent, null));
     }
 }

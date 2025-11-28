@@ -56,7 +56,7 @@ public class FiniteAnimationRendererSimpleDisplayTest extends DisplayTest {
         ));
 
         var renderableFactory = ioModule.provide(FiniteAnimationRenderableFactory.class);
-        renderableFactory.make(
+        topLevelComponent.add(renderableFactory.make(
                 animation,
                 nullProvider(),
                 nullProvider(),
@@ -67,6 +67,6 @@ public class FiniteAnimationRendererSimpleDisplayTest extends DisplayTest {
                 topLevelComponent,
                 timestamp() + 1000,
                 null
-        );
+        ));
     }
 }

@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.fullsuite;
 
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.*;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.HorizontalAlignment;
@@ -19,32 +19,32 @@ import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class CombinationTest extends DisplayTest {
-    private static final String ON_MOUSE_OVER_ACTION_ID = "onMouseOver";
-    private static final String ON_MOUSE_LEAVE_ACTION_ID = "onMouseLeave";
-    private static final String ON_MOUSE_PRESS_ACTION_ID = "onMousePress";
-    private static final String ON_MOUSE_RELEASE_ACTION_ID = "onMouseRelease";
+    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
+    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
+    private static final String ON_MOUSE_PRESS_CONSUMER_ID = "onMousePress";
+    private static final String ON_MOUSE_RELEASE_CONSUMER_ID = "onMouseRelease";
 
-    private final static Action<EventInputs> ON_MOUSE_OVER_ACTION =
-            action(ON_MOUSE_OVER_ACTION_ID, _ -> System.out.println("MOUSE OVER"));
-    private final static Action<EventInputs> ON_MOUSE_LEAVE_ACTION =
-            action(ON_MOUSE_LEAVE_ACTION_ID, _ -> System.out.println("MOUSE LEAVE"));
-    private final static Action<EventInputs> ON_MOUSE_PRESS_ACTION =
-            action(ON_MOUSE_PRESS_ACTION_ID, _ -> System.out.println("MOUSE PRESS"));
-    private final static Action<EventInputs> ON_MOUSE_RELEASE_ACTION =
-            action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"));
+    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
+            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
+    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
+            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
+    private final static Consumer<EventInputs> ON_MOUSE_PRESS_CONSUMER =
+            consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS"));
+    private final static Consumer<EventInputs> ON_MOUSE_RELEASE_CONSUMER =
+            consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"));
 
     public static void main(String[] args) {
         var displayTest = new DisplayTest(
                 setOf(
-                        action(ON_MOUSE_OVER_ACTION_ID, _ -> System.out.println("MOUSE OVER")),
-                        action(ON_MOUSE_LEAVE_ACTION_ID, _ -> System.out.println("MOUSE LEAVE")),
-                        action(ON_MOUSE_PRESS_ACTION_ID, _ -> System.out.println("MOUSE PRESS")),
-                        action(ON_MOUSE_RELEASE_ACTION_ID, _ -> System.out.println("MOUSE RELEASE"))
+                        consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER")),
+                        consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE")),
+                        consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS")),
+                        consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"))
                 )
         );
         displayTest.runTest(
@@ -91,7 +91,7 @@ public class CombinationTest extends DisplayTest {
 
         var antialiasedLineSegmentFactory =
                 ioModule.provide(AntialiasedLineSegmentRenderableFactory.class);
-        antialiasedLineSegmentFactory.make(
+        topLevelComponent.add(antialiasedLineSegmentFactory.make(
                 staticProvider(vertexOf(.1f, .69f)),
                 staticProvider(vertexOf(.9f, .71f)),
                 staticProvider(Color.RED),
@@ -101,7 +101,7 @@ public class CombinationTest extends DisplayTest {
                 -1,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
 
         var graphics = ioModule.provide(Graphics.class);
 
@@ -125,6 +125,7 @@ public class CombinationTest extends DisplayTest {
                 randomUUID(),
                 topLevelComponent
         );
+        topLevelComponent.add(rectRendererWithTex);
         rectangleRenderableFactory.make(
                 staticProvider(randomColor()),
                 staticProvider(randomColor()),
@@ -143,6 +144,7 @@ public class CombinationTest extends DisplayTest {
                 topLevelComponent
         );
         rectRendererWithTex.setCapturesMouseEvents(true);
+        topLevelComponent.add(rectRendererWithTex);
 
         @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
                 staticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
@@ -152,30 +154,30 @@ public class CombinationTest extends DisplayTest {
                 floatBoxOf(0.7f, 0.1f, 0.9f, 0.3f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         //noinspection unchecked
-        spriteRenderableFactory.make(
+        topLevelComponent.add(spriteRenderableFactory.make(
                 sprite,
                 staticProviderFactory.apply(randomUUID(), null),
                 staticProviderFactory.apply(randomUUID(), null),
                 mapOf(
                         GLFW_MOUSE_BUTTON_LEFT,
-                        ON_MOUSE_PRESS_ACTION
+                        ON_MOUSE_PRESS_CONSUMER
                 ),
                 mapOf(
                         GLFW_MOUSE_BUTTON_LEFT,
-                        ON_MOUSE_RELEASE_ACTION
+                        ON_MOUSE_RELEASE_CONSUMER
                 ),
-                ON_MOUSE_OVER_ACTION,
-                ON_MOUSE_LEAVE_ACTION,
+                ON_MOUSE_OVER_CONSUMER,
+                ON_MOUSE_LEAVE_CONSUMER,
                 listOf(),
                 spriteDimensProvider,
                 1,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
 
         var cinzel = graphics.getFont(CINZEL_ID);
         var textLineRenderableFactory = ioModule.provide(TextLineRenderableFactory.class);
-        textLineRenderableFactory.make(
+        topLevelComponent.add(textLineRenderableFactory.make(
                 cinzel,
                 staticProvider("Hello world!"),
                 staticProvider(vertexOf(0.5f, 0.8f)),
@@ -193,6 +195,6 @@ public class CombinationTest extends DisplayTest {
                 0,
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }

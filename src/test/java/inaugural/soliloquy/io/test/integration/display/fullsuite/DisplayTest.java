@@ -7,8 +7,8 @@ import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.api.dto.*;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
-import soliloquy.specs.common.entities.Action;
-import soliloquy.specs.common.entities.Function;
+import soliloquy.specs.common.entities.Consumer;
+import soliloquy.specs.common.entities.Methods;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.audio.factories.SoundFactory;
@@ -22,7 +22,6 @@ import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -39,6 +38,7 @@ import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class DisplayTest {
@@ -208,8 +208,7 @@ public class DisplayTest {
                     MAX_LOSSLESS_FONT_SIZE_CINZEL, LEADING_ADJUSTMENT_CINZEL, CINZEL_PLAIN_DTO,
                     CINZEL_ITALIC_DTO, CINZEL_BOLD_DTO, CINZEL_BOLD_ITALIC_DTO);
 
-    @SuppressWarnings("rawtypes") protected final Map<String, Action> ACTIONS;
-    @SuppressWarnings("rawtypes") protected final Map<String, Function> FUNCTIONS;
+    protected final Methods METHODS;
 
     private final static String AUDIO_DIR_RELATIVE_PATH = "\\src\\test\\resources\\sounds\\";
     protected final static String PRESS_SOUND_ID = "pressSoundId";
@@ -217,7 +216,7 @@ public class DisplayTest {
 
     protected static IOModule ioModule;
     private static GlobalClock Clock;
-    @SuppressWarnings("rawtypes") private static BiFunction<UUID, Object, ProviderAtTime>
+    @SuppressWarnings("rawtypes") private static java.util.function.BiFunction<UUID, Object, ProviderAtTime>
             StaticProviderFactory;
 
     public Component topLevelComponent;
@@ -226,10 +225,10 @@ public class DisplayTest {
         this(setOf());
     }
 
-    public DisplayTest(@SuppressWarnings("rawtypes") Set<Action> actions) {
-        ACTIONS = mapOf();
-        FUNCTIONS = mapOf();
-        Check.ifNull(actions, "actions").forEach(action -> ACTIONS.put(action.id(), action));
+    public DisplayTest(@SuppressWarnings("rawtypes") Set<Consumer> consumers) {
+        METHODS = new Methods();
+        Check.ifNull(consumers, "consumers")
+                .forEach(action -> METHODS.CONSUMERS.put(action.id(), action));
     }
 
     public void runTest(
@@ -287,8 +286,7 @@ public class DisplayTest {
         ioModule = new IOModule(
                 commonModule,
                 settings::get,
-                ACTIONS,
-                FUNCTIONS,
+                METHODS,
                 mapOf(
                         pairOf(
                                 CONSOLE_FRAME_RATE_REPORTER,
@@ -314,14 +312,11 @@ public class DisplayTest {
                 ioModule.provide(SoundsPlaying.class),
                 ioModule.provide(SoundFactory.class)
         );
-        var readIoMethods = readMethods(ioMethods);
-        readIoMethods.FIRST.forEach(a -> ACTIONS.put(a.id(), a));
-        readIoMethods.SECOND.forEach(f -> FUNCTIONS.put(f.id(), f));
+        METHODS.concatenate(readMethods(ioMethods));
 
         DisplayTestMethods.PlaySound = ioMethods::playSound;
-        var readDisplayTestMethods = readMethods(DisplayTestMethods.class);
-        readDisplayTestMethods.FIRST.forEach(a -> ACTIONS.put(a.id(), a));
-        readDisplayTestMethods.SECOND.forEach(f -> FUNCTIONS.put(f.id(), f));
+
+        METHODS.concatenate(readMethods(DisplayTestMethods.class));
 
         var coreLoop = ioModule.provide(CoreLoop.class);
 
@@ -332,9 +327,8 @@ public class DisplayTest {
         var componentFactory = ioModule.provide(ComponentFactory.class);
         StaticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
         var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
-        topLevelComponent =
-                componentFactory.make(randomUUID(), 0, setOf(), false, 0, wholeScreenProvider, null,
-                        mapOf());
+        topLevelComponent = componentFactory.make(randomUUID(), 0, setOf(), false, 0,
+                staticProvider(floatBoxOf(0f, 0f)), wholeScreenProvider, null, null, null, mapOf());
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
         coreLoop.startup(() -> {

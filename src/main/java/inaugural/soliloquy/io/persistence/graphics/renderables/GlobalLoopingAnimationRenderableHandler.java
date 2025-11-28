@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.assets.GlobalLoopingAnimation;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
@@ -19,11 +19,11 @@ public class GlobalLoopingAnimationRenderableHandler extends
 
     public GlobalLoopingAnimationRenderableHandler(
             Function<String, GlobalLoopingAnimation> getGlobalLoopingAnimation,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler,
             GlobalLoopingAnimationRenderableFactory factory) {
-        super(getGlobalLoopingAnimation, getAction, providerHandler, shiftHandler);
+        super(getGlobalLoopingAnimation, getConsumer, providerHandler, shiftHandler);
         FACTORY = Check.ifNull(factory, "factory");
     }
 

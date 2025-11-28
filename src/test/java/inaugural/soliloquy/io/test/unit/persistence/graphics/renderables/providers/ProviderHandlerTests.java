@@ -9,15 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
-import java.util.Map;
-
-import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomString;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 @ExtendWith(MockitoExtension.class)
 public class ProviderHandlerTests {
@@ -26,13 +23,13 @@ public class ProviderHandlerTests {
 
     private String writtenValue = null;
     private String writtenValueWithExtraneousFields = null;
-    @SuppressWarnings("rawtypes") private Map<String, TypeHandler> subhandlers;
+    private String mockProviderClassName;
 
     private ProviderHandler providerHandler;
 
     @BeforeEach
     public void setUp() {
-        var mockProviderClassName = mockProvider.getClass().getCanonicalName();
+        mockProviderClassName = mockProvider.getClass().getCanonicalName();
 
         writtenValue = String.format("{\"type\":\"%s\"}", mockProviderClassName);
         writtenValueWithExtraneousFields = String.format("{\"type\":\"%s\",\"%s\":\"%s\"}",
@@ -41,35 +38,22 @@ public class ProviderHandlerTests {
         lenient().when(mockSubhandler.write(any())).thenReturn(writtenValue);
         lenient().when(mockSubhandler.read(anyString())).thenReturn(mockProvider);
 
-        subhandlers = mapOf(pairOf(mockProviderClassName, mockSubhandler));
-
-        providerHandler = new ProviderHandler(subhandlers);
+        providerHandler = new ProviderHandler();
     }
 
     @Test
-    public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new ProviderHandler(null));
-    }
-
-    @Test
-    public void testWrite() {
+    public void testAddAndWrite() {
+        providerHandler.add(mockProviderClassName, mockSubhandler);
         var output = providerHandler.write(mockProvider);
 
         assertEquals(writtenValue, output);
     }
 
     @Test
-    public void testRead() {
+    public void testAddAndRead() {
+        providerHandler.add(mockProviderClassName, mockSubhandler);
         var readProvider = providerHandler.read(writtenValueWithExtraneousFields);
 
         assertSame(mockProvider, readProvider);
-    }
-
-    @Test
-    public void testSubhandlersIsCloned() {
-        subhandlers.clear();
-
-        testRead();
-        testWrite();
     }
 }

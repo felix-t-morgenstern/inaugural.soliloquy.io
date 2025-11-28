@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.keyboard;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 import soliloquy.specs.io.input.keyboard.KeyEventHandler;
@@ -72,21 +72,21 @@ public class KeyEventHandlerImpl implements KeyEventHandler {
 
     @Override
     public void press(int pressedKeyCodepoint, long timestamp) {
-        runKeyAction(pressedKeyCodepoint, timestamp, b -> b.ON_PRESS);
+        runKeyConsumer(pressedKeyCodepoint, timestamp, b -> b.ON_PRESS);
     }
 
     @Override
     public void release(int releasedKeyCodepoint, long timestamp) {
-        runKeyAction(releasedKeyCodepoint, timestamp, b -> b.ON_RELEASE);
+        runKeyConsumer(releasedKeyCodepoint, timestamp, b -> b.ON_RELEASE);
     }
 
-    private void runKeyAction(int pressedKeyCodepoint, long timestamp,
-                              Function<KeyBinding, Action<EventInputs>> getKeyAction) {
+    private void runKeyConsumer(int pressedKeyCodepoint, long timestamp,
+                              Function<KeyBinding, Consumer<EventInputs>> getKeyConsumer) {
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
         handleKeyEvent(pressedKeyCodepoint, (binding, component) -> {
-            var keyAction = getKeyAction.apply(binding);
-            if (keyAction != null) {
-                keyAction.accept(
+            var keyConsumer = getKeyConsumer.apply(binding);
+            if (keyConsumer != null) {
+                keyConsumer.accept(
                         eventInputs(timestamp)
                                 .withKeyEvent(pressedKeyCodepoint, component)
                 );

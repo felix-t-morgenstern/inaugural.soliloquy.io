@@ -17,9 +17,9 @@ abstract class AbstractRenderable implements Renderable {
                                  Component containingComponent) {
         this(z, uuid);
         this.containingComponent = containingComponent;
-        if (containingComponent != null) {
-            containingComponent.add(this);
-        }
+        // NB: containingComponent.add is NOT called here, since dimensions need to be properly
+        // instantiated BEFORE a Component's add hook Action is fired (c.f.
+        // Component#addActionHookId)
     }
 
     protected AbstractRenderable(int z, UUID uuid) {

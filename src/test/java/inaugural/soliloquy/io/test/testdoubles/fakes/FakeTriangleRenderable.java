@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.testdoubles.fakes;
 
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
@@ -163,14 +163,13 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnPress(int i, Action<EventInputs> action)
-            throws IllegalArgumentException {
+    public void setOnPress(int i, Consumer<EventInputs> consumer) throws IllegalArgumentException {
 
     }
 
     @Override
-    public Map<Integer, String> pressActionIds() {
-        return null;
+    public Map<Integer, String> pressConsumerIds() {
+        return Map.of();
     }
 
     @Override
@@ -180,14 +179,14 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnRelease(int i, Action<EventInputs> action)
+    public void setOnRelease(int i, Consumer<EventInputs> consumer)
             throws IllegalArgumentException {
 
     }
 
     @Override
-    public Map<Integer, String> releaseActionIds() {
-        return null;
+    public Map<Integer, String> releaseConsumerIds() {
+        return Map.of();
     }
 
     @Override
@@ -196,13 +195,13 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnMouseOver(Action<EventInputs> action) {
+    public void setOnMouseOver(Consumer<EventInputs> consumer) {
 
     }
 
     @Override
-    public String mouseOverActionId() {
-        return null;
+    public String mouseOverConsumerId() {
+        return "";
     }
 
     @Override
@@ -211,13 +210,13 @@ public class FakeTriangleRenderable implements TriangleRenderable {
     }
 
     @Override
-    public void setOnMouseLeave(Action<EventInputs> action) {
+    public void setOnMouseLeave(Consumer<EventInputs> consumer) {
 
     }
 
     @Override
-    public String mouseLeaveActionId() {
-        return null;
+    public String mouseLeaveConsumerId() {
+        return "";
     }
 
     @Override

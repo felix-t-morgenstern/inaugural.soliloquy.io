@@ -1,6 +1,8 @@
 package inaugural.soliloquy.io.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.entities.BiConsumer;
+import soliloquy.specs.common.shared.HasId;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
@@ -8,26 +10,34 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 
+import java.util.function.Consumer;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 
+import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 
-public class ComponentImpl  extends AbstractRenderable implements Component {
+public class ComponentImpl extends AbstractRenderable implements Component {
     private final Set<KeyBinding> BINDINGS;
     private final boolean BLOCKS_LOWER_BINDINGS;
     private final Set<Renderable> RENDERABLES;
+    private final Map<String, Object> DATA;
+    private final BiConsumer<Component, Long> PRERENDER;
+    private final soliloquy.specs.common.entities.Consumer<Renderable> ADD_HOOK;
+
     private final Consumer<Component> DEREGISTER_COMPONENT;
     private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
-    private final Map<String, Object> DATA;
 
     private int tier;
+    private ProviderAtTime<FloatBox> dimensionsProvider;
     private ProviderAtTime<FloatBox> renderingBoundariesProvider;
+
+    public final static java.util.function.BiConsumer<Component, Long> COMPONENT_PRERENDER_HOOK =
+            (c, t) -> ((ComponentImpl) c).prerenderHook(t);
 
     @SuppressWarnings("ConstantConditions")
     public ComponentImpl(UUID uuid,
@@ -35,16 +45,20 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                          Set<KeyBinding> keyBindings,
                          boolean blocksLowerKeyBindings,
                          Component containingComponent,
+                         ProviderAtTime<FloatBox> dimensionsProvider,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
                          Map<String, Object> data,
                          Consumer<Component> registerComponent,
                          Consumer<Component> deregisterComponent,
                          Consumer<Component> removeFromKeyCapturing,
                          Consumer<RenderableWithMouseEvents> addToMouseCapturing,
-                         Consumer<RenderableWithMouseEvents> removeFromMouseCapturing) {
+                         Consumer<RenderableWithMouseEvents> removeFromMouseCapturing,
+                         BiConsumer<Component, Long> prerender,
+                         soliloquy.specs.common.entities.Consumer<Renderable> addHook) {
         super(z, uuid);
         BINDINGS = Check.ifNull(keyBindings, "keyBindings");
         BLOCKS_LOWER_BINDINGS = blocksLowerKeyBindings;
+        this.dimensionsProvider = Check.ifNull(dimensionsProvider, "dimensionsProvider");
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
@@ -53,11 +67,14 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
         RENDERABLES = setOf();
+        PRERENDER = prerender;
+        ADD_HOOK = addHook;
         DATA = mapOf(Check.ifNull(data, "data"));
         DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
         REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
         ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToMouseCapturing, "addToMouseCapturing");
-        REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromMouseCapturing, "removeFromMouseCapturing");
+        REMOVE_FROM_MOUSE_CAPTURING =
+                Check.ifNull(removeFromMouseCapturing, "removeFromMouseCapturing");
 
         Check.ifNull(registerComponent, "registerComponent").accept(this);
     }
@@ -88,6 +105,11 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                                 ") is not one greater than this Component's tier (" + tier + ")");
             }
         }
+
+        if (ADD_HOOK != null) {
+            ADD_HOOK.accept(renderable);
+        }
+
         RENDERABLES.add(renderable);
         if (renderable instanceof RenderableWithMouseEvents) {
             ADD_TO_MOUSE_CAPTURING.accept((RenderableWithMouseEvents) renderable);
@@ -118,6 +140,17 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
     }
 
     @Override
+    public ProviderAtTime<FloatBox> getDimensionsProvider() {
+        return dimensionsProvider;
+    }
+
+    @Override
+    public void setDimensionsProvider(ProviderAtTime<FloatBox> dimensionsProvider)
+            throws IllegalArgumentException {
+        this.dimensionsProvider = Check.ifNull(dimensionsProvider, "dimensionsProvider");
+    }
+
+    @Override
     public ProviderAtTime<FloatBox> getRenderingBoundariesProvider() {
         return renderingBoundariesProvider;
     }
@@ -131,6 +164,22 @@ public class ComponentImpl  extends AbstractRenderable implements Component {
                             "rendering boundaries for top-level Component");
         }
         renderingBoundariesProvider = Check.ifNull(provider, "provider");
+    }
+
+    public void prerenderHook(long timestamp) {
+        if (PRERENDER != null) {
+            PRERENDER.accept(this, timestamp);
+        }
+    }
+
+    @Override
+    public String prerenderHookId() {
+        return defaultIfNull(PRERENDER, null, HasId::id);
+    }
+
+    @Override
+    public String addHookId() {
+        return defaultIfNull(ADD_HOOK, null, soliloquy.specs.common.entities.Consumer::id);
     }
 
     @Override

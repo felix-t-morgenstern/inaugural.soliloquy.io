@@ -12,7 +12,7 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static java.util.UUID.randomUUID;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
@@ -53,7 +53,7 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                 mapOf(
                         pairOf(
                                 LEFT_MOUSE_BUTTON,
-                                action(
+                                consumer(
                                         "playMousePressSound",
                                         DisplayTestMethods::playMousePressSound
                                 )
@@ -62,7 +62,7 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                 mapOf(
                         pairOf(
                                 LEFT_MOUSE_BUTTON,
-                                action(
+                                consumer(
                                         "playMouseReleaseSound",
                                         DisplayTestMethods::playMouseReleaseSound
                                 )
@@ -76,5 +76,6 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                 topLevelComponent
         );
         rectRenderable.setCapturesMouseEvents(true);
+        topLevelComponent.add(rectRenderable);
     }
 }

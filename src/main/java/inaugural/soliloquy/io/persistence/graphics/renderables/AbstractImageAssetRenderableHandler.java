@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.persistence.graphics.renderables;
 
 import inaugural.soliloquy.tools.Check;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.assets.Asset;
@@ -23,10 +23,10 @@ abstract class AbstractImageAssetRenderableHandler<TAsset extends Asset,
 
     protected AbstractImageAssetRenderableHandler(
             Function<String, TAsset> getAsset,
-            @SuppressWarnings("rawtypes") Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer,
             @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler,
             TypeHandler<ColorShift> shiftHandler) {
-        super(getAction);
+        super(getConsumer);
         GET_ASSET = Check.ifNull(getAsset, "getAsset");
         PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
         SHIFT_HANDLER = Check.ifNull(shiftHandler, "shiftHandler");

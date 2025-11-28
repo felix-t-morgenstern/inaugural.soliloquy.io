@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.graphics.renderables.providers.factories;
 import inaugural.soliloquy.io.graphics.renderables.providers.FunctionalProviderImpl;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
-import soliloquy.specs.common.entities.Action;
+import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.entities.Function;
 import soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider;
 import soliloquy.specs.io.graphics.renderables.providers.factories.FunctionalProviderFactory;
@@ -15,15 +15,15 @@ import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory {
     @SuppressWarnings("rawtypes") private final java.util.function.Function<String, Function> GET_FUNCTION;
-    @SuppressWarnings("rawtypes") private final java.util.function.Function<String, Action> GET_ACTION;
+    @SuppressWarnings("rawtypes") private final java.util.function.Function<String, Consumer> GET_CONSUMER;
     private final TimestampValidator VALIDATOR;
 
     public FunctionalProviderFactoryImpl(
             @SuppressWarnings("rawtypes") java.util.function.Function<String, Function> getFunction,
-            @SuppressWarnings("rawtypes") java.util.function.Function<String, Action> getAction,
+            @SuppressWarnings("rawtypes") java.util.function.Function<String, Consumer> getConsumer,
             TimestampValidator validator) {
         GET_FUNCTION = Check.ifNull(getFunction, "getFunction");
-        GET_ACTION = Check.ifNull(getAction, "getAction");
+        GET_CONSUMER = Check.ifNull(getConsumer, "getConsumer");
         VALIDATOR = Check.ifNull(validator, "validator");
     }
 
@@ -31,8 +31,8 @@ public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory 
     public <T> FunctionalProvider<T> make(
             UUID uuid,
             String provideFunctionId,
-            String pauseActionId,
-            String unpauseActionId,
+            String pauseConsumerId,
+            String unpauseConsumerId,
             Long pauseTimestamp,
             Map<String, Object> data) throws IllegalArgumentException {
         Check.ifNull(uuid, "uuid");
@@ -43,28 +43,28 @@ public class FunctionalProviderFactoryImpl implements FunctionalProviderFactory 
             throw new IllegalArgumentException("FunctionalProviderFactoryImpl.make: provideFunctionId (" + provideFunctionId + ") does not correspond to valid Function");
         }
 
-        var pauseAction = getAction(pauseActionId, "pauseActionId");
-        var unpauseAction = getAction(unpauseActionId, "unpauseActionId");
+        var pauseConsumer = getConsumer(pauseConsumerId, "pauseConsumerId");
+        var unpauseConsumer = getConsumer(unpauseConsumerId, "unpauseConsumerId");
 
         return new FunctionalProviderImpl<>(
                 uuid,
                 provideFunction,
-                pauseAction,
-                unpauseAction,
+                pauseConsumer,
+                unpauseConsumer,
                 data,
                 pauseTimestamp,
                 VALIDATOR
         );
     }
 
-    private Action<FunctionalProvider.Inputs> getAction(String actionId, String actionIdName) {
-        Action<FunctionalProvider.Inputs> action = null;
+    private Consumer<FunctionalProvider.Inputs> getConsumer(String actionId, String actionIdName) {
+        Consumer<FunctionalProvider.Inputs> action = null;
         if (actionId != null) {
             if (actionId.isEmpty()) {
                 throw new IllegalArgumentException("FunctionalProviderFactoryImpl.make: " + actionIdName + " cannot be empty");
             }
             //noinspection unchecked
-            action = GET_ACTION.apply(Check.ifNullOrEmpty(actionId, actionIdName));
+            action = GET_CONSUMER.apply(Check.ifNullOrEmpty(actionId, actionIdName));
             if (action == null) {
                 throw new IllegalArgumentException("FunctionalProviderFactoryImpl.make: " + actionIdName + " (" + actionId + ") does not correspond to valid Function");
             }

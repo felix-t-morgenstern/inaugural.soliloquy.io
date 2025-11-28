@@ -12,7 +12,8 @@ import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
-import static soliloquy.specs.common.entities.Action.action;
+import static soliloquy.specs.common.entities.Consumer.consumer;
+import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 
 public class KeyEventDisplayTest extends DisplayTest {
@@ -42,19 +43,22 @@ public class KeyEventDisplayTest extends DisplayTest {
                                                     Component topLevelComponent) {
         var componentFactory = ioModule.provide(ComponentFactory.class);
 
-        componentFactory.make(
+        topLevelComponent.add(componentFactory.make(
                 randomUUID(),
                 0,
                 setOf(keyBinding(
                         arrayInts(GLFW_KEY_B),
-                        action(randomString(), DisplayTestMethods::printKeyPressed),
-                        action(randomString(), DisplayTestMethods::printKeyReleased)
+                        consumer(randomString(), DisplayTestMethods::printKeyPressed),
+                        consumer(randomString(), DisplayTestMethods::printKeyReleased)
                 )),
                 true,
                 0,
+                staticProvider(floatBoxOf(0f,0f)),
                 staticProvider(WHOLE_SCREEN),
+                null,
+                null,
                 topLevelComponent,
                 mapOf()
-        );
+        ));
     }
 }

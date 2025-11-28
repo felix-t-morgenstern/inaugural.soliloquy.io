@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup;
 
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.MeshImpl;
@@ -41,6 +42,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
+import static inaugural.soliloquy.io.graphics.renderables.ComponentImpl.COMPONENT_PRERENDER_HOOK;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -92,7 +94,8 @@ public class DisplayTest {
 
         Renderers = mapOf();
         var componentRenderer =
-                new ComponentRendererImpl(Renderers, RENDERING_BOUNDARIES, TimestampValidator);
+                new ComponentRendererImpl(Renderers, COMPONENT_PRERENDER_HOOK, RENDERING_BOUNDARIES,
+                        TimestampValidator);
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 

@@ -45,7 +45,7 @@ public class RectangleTextureDisplayTest extends DisplayTest {
         var backgroundTex = graphics.getImage(TILE_LOCATION_RELATIVE_LOCATION).textureId();
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
-        rectangleRenderableFactory.make(
+        topLevelComponent.add(rectangleRenderableFactory.make(
                 staticProvider(randomColor()),
                 staticProvider(randomColor()),
                 staticProvider(randomColor()),
@@ -61,6 +61,6 @@ public class RectangleTextureDisplayTest extends DisplayTest {
                 randomInt(),
                 randomUUID(),
                 topLevelComponent
-        );
+        ));
     }
 }
