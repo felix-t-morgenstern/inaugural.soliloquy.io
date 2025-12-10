@@ -66,7 +66,7 @@ class TriangleRendererTileTest extends TriangleRendererTest {
     /** @noinspection rawtypes */
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        TriangleRenderer = new TriangleRenderer(TimestampValidator);
+        TriangleRenderer = new TriangleRenderer(TimestampValidator, RENDERING_BOUNDARIES);
 
         TriangleRenderable =
                 new TriangleRenderableImpl(

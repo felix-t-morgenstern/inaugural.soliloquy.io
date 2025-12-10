@@ -1,8 +1,10 @@
 package inaugural.soliloquy.io.graphics.rendering.renderers;
 
+import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Renderable;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 
 import java.awt.*;
 
@@ -12,8 +14,12 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 
 abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
         extends AbstractRenderer<TRenderable> {
-    protected AbstractPointDrawingRenderer(TimestampValidator timestampValidator) {
+    protected final RenderingBoundaries RENDERING_BOUNDARIES;
+
+    protected AbstractPointDrawingRenderer(TimestampValidator timestampValidator,
+                                           RenderingBoundaries renderingBoundaries) {
         super(timestampValidator);
+        RENDERING_BOUNDARIES = Check.ifNull(renderingBoundaries, "renderingBoundaries");
     }
 
     protected void setDrawColor(Color color) {

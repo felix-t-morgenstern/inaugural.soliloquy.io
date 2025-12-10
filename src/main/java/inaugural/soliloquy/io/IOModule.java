@@ -259,7 +259,7 @@ public class IOModule extends AbstractModule {
 
         contentRenderers.put(
                 AntialiasedLineSegmentRenderableImpl.class,
-                new AntialiasedLineSegmentRenderer(resManager, timestampValidator)
+                new AntialiasedLineSegmentRenderer(resManager, timestampValidator, renderingBoundaries)
         );
         contentRenderers.put(
                 FiniteAnimationRenderableImpl.class,
@@ -279,11 +279,11 @@ public class IOModule extends AbstractModule {
         );
         contentRenderers.put(
                 RasterizedLineSegmentRenderableImpl.class,
-                new RasterizedLineSegmentRenderer(timestampValidator)
+                new RasterizedLineSegmentRenderer(timestampValidator, renderingBoundaries)
         );
         contentRenderers.put(
                 RectangleRenderableImpl.class,
-                new RectangleRenderer(timestampValidator)
+                new RectangleRenderer(timestampValidator, renderingBoundaries)
         );
         contentRenderers.put(
                 SpriteRenderableImpl.class,
@@ -299,7 +299,7 @@ public class IOModule extends AbstractModule {
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
-                new TriangleRenderer(timestampValidator)
+                new TriangleRenderer(timestampValidator, renderingBoundaries)
         );
 
         // ===========

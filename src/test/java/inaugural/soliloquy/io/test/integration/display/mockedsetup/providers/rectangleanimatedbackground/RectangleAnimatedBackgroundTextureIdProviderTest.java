@@ -63,7 +63,7 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
-        return setOf(RectangleRenderer = new RectangleRenderer(null));
+        return setOf(RectangleRenderer = new RectangleRenderer(null, RENDERING_BOUNDARIES));
     }
 
     protected static void graphicsPreloaderLoadAction() {

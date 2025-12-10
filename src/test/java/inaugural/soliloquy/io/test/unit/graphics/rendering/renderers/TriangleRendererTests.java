@@ -14,6 +14,7 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -57,6 +58,7 @@ public class TriangleRendererTests {
     private final Long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private TimestampValidator mockTimestampValidator;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
 
@@ -88,12 +90,15 @@ public class TriangleRendererTests {
         mockMesh = mock(Mesh.class);
         mockShader = mock(Shader.class);
 
-        renderer = new TriangleRenderer(mockTimestampValidator);
+        renderer = new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderer(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TriangleRenderer(null, mockRenderingBoundaries));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TriangleRenderer(mockTimestampValidator, null));
     }
 
     @Test
@@ -104,7 +109,8 @@ public class TriangleRendererTests {
 
         renderer.render(TRIANGLE_RENDERABLE, timestamp);
 
-        verify(mockTimestampValidator, once()).validateTimestamp(renderer.getClass().getCanonicalName(), timestamp);
+        verify(mockTimestampValidator, once()).validateTimestamp(
+                renderer.getClass().getCanonicalName(), timestamp);
     }
 
     @Test
@@ -228,8 +234,10 @@ public class TriangleRendererTests {
 
     @Test
     public void testRenderWithMeshAndShaderUnset() {
-        TriangleRenderer triangleRendererWithoutMesh = new TriangleRenderer(mockTimestampValidator);
-        TriangleRenderer triangleRendererWithoutShader = new TriangleRenderer(mockTimestampValidator);
+        var triangleRendererWithoutMesh =
+                new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
+        var triangleRendererWithoutShader =
+                new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
 
         triangleRendererWithoutMesh.setShader(mockShader);
         triangleRendererWithoutShader.setMesh(mockMesh);

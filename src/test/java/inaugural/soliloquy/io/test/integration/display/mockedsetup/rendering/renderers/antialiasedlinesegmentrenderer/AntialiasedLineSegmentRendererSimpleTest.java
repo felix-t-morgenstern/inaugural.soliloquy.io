@@ -39,7 +39,7 @@ class AntialiasedLineSegmentRendererSimpleTest extends DisplayTest {
     private static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
         var antialiasedLineSegmentRenderer =
-                new AntialiasedLineSegmentRenderer(windowResolutionManager, null);
+                new AntialiasedLineSegmentRenderer(windowResolutionManager, null, RENDERING_BOUNDARIES);
 
         var antialiasedLineSegmentRenderable1 =
                 new AntialiasedLineSegmentRenderableImpl(

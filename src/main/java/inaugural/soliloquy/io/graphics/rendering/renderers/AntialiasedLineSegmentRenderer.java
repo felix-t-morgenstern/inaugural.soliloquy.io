@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 
 import java.awt.*;
@@ -28,8 +29,9 @@ public class AntialiasedLineSegmentRenderer
     private static final Map<Float, Float> SQUARING_MEMOIZATION = mapOf();
 
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
-                                          TimestampValidator timestampValidator) {
-        super(timestampValidator);
+                                          TimestampValidator timestampValidator,
+                                          RenderingBoundaries renderingBoundaries) {
+        super(timestampValidator, renderingBoundaries);
         Check.ifNull(windowResolutionManager, "windowResolutionManager");
         WINDOW_WIDTH_TO_HEIGHT_RATIO = windowResolutionManager::windowWidthToHeightRatio;
     }

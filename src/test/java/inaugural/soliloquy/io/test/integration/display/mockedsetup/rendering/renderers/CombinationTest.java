@@ -84,7 +84,7 @@ public class CombinationTest extends SpriteRendererTest {
 
 
 
-        RectangleRenderer = new RectangleRenderer(TimestampValidator);
+        RectangleRenderer = new RectangleRenderer(TimestampValidator, RENDERING_BOUNDARIES);
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),

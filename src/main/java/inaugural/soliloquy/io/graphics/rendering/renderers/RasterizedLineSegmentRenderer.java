@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import static inaugural.soliloquy.io.api.Constants.MAX_CHANNEL_VAL;
@@ -12,8 +13,9 @@ public class RasterizedLineSegmentRenderer
         extends AbstractPointDrawingRenderer<RasterizedLineSegmentRenderable>
         implements Renderer<RasterizedLineSegmentRenderable> {
 
-    public RasterizedLineSegmentRenderer(TimestampValidator timestampValidator) {
-        super(timestampValidator);
+    public RasterizedLineSegmentRenderer(TimestampValidator timestampValidator,
+                                         RenderingBoundaries renderingBoundaries) {
+        super(timestampValidator, renderingBoundaries);
     }
 
     @SuppressWarnings("ConstantConditions")

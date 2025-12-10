@@ -3,14 +3,16 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRenderable>
         implements Renderer<TriangleRenderable> {
-    public TriangleRenderer(TimestampValidator timestampValidator) {
-        super(timestampValidator);
+    public TriangleRenderer(TimestampValidator timestampValidator,
+                            RenderingBoundaries renderingBoundaries) {
+        super(timestampValidator, renderingBoundaries);
     }
 
     @Override

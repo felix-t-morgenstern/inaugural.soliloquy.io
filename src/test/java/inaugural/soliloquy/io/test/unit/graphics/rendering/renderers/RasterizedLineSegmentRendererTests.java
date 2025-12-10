@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
 
 import java.awt.*;
@@ -30,6 +31,7 @@ public class RasterizedLineSegmentRendererTests {
     private final long MOST_RECENT_TIMESTAMP = randomLong();
 
     @Mock private TimestampValidator mockTimestampValidator;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
 
@@ -53,12 +55,13 @@ public class RasterizedLineSegmentRendererTests {
 
     @BeforeEach
     public void setUp() {
-        renderer = new RasterizedLineSegmentRenderer(mockTimestampValidator);
+        renderer = new RasterizedLineSegmentRenderer(mockTimestampValidator, mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderer(null));
+        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderer(null, mockRenderingBoundaries));
+        assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderer(mockTimestampValidator, null));
     }
 
     @Test
@@ -223,14 +226,14 @@ public class RasterizedLineSegmentRendererTests {
                         generateMockStaticProvider(Color.WHITE),
                         1, UUID.randomUUID());
 
-        var rendererWithoutMesh = new RasterizedLineSegmentRenderer(mockTimestampValidator);
+        var rendererWithoutMesh = new RasterizedLineSegmentRenderer(mockTimestampValidator, mockRenderingBoundaries);
 
         rendererWithoutMesh.setShader(mockShader);
 
         assertThrows(IllegalStateException.class, () -> rendererWithoutMesh
                 .render(lineSegmentRenderable, MOST_RECENT_TIMESTAMP));
 
-        var rendererWithoutShader = new RasterizedLineSegmentRenderer(mockTimestampValidator);
+        var rendererWithoutShader = new RasterizedLineSegmentRenderer(mockTimestampValidator, mockRenderingBoundaries);
 
         rendererWithoutShader.setMesh(mockMesh);
 

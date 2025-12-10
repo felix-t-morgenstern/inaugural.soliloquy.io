@@ -14,6 +14,7 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -43,6 +44,7 @@ public class RectangleRendererTests {
     @Mock private ProviderAtTime<Color> mockBottomLeftColorProvider;
     @Mock private ProviderAtTime<Integer> mockBackgroundTextureIdProvider;
     @Mock private TimestampValidator mockTimestampValidator;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
     @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
@@ -73,12 +75,13 @@ public class RectangleRendererTests {
         lenient().when(mockTextureTileHeightProvider.provide(anyLong()))
                 .thenReturn(randomFloatInRange(0f, 1f));
 
-        renderer = new RectangleRenderer(mockTimestampValidator);
+        renderer = new RectangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderer(null));
+        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderer(null, mockRenderingBoundaries));
+        assertThrows(IllegalArgumentException.class, () -> new RectangleRenderer(mockTimestampValidator, null));
     }
 
     @Test
@@ -163,13 +166,13 @@ public class RectangleRendererTests {
                 mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,
                 mockTextureTileHeightProvider, RENDERING_AREA_PROVIDER, UUID);
 
-        var rendererWithoutMesh = new RectangleRenderer(mockTimestampValidator);
+        var rendererWithoutMesh = new RectangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
         rendererWithoutMesh.setShader(mockShader);
 
         assertThrows(IllegalStateException.class, () ->
                 rendererWithoutMesh.render(rectangleRenderable, MOST_RECENT_TIMESTAMP));
 
-        var rendererWithoutShader = new RectangleRenderer(mockTimestampValidator);
+        var rendererWithoutShader = new RectangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
         rendererWithoutShader.setMesh(mockMesh);
 
         assertThrows(IllegalStateException.class, () ->

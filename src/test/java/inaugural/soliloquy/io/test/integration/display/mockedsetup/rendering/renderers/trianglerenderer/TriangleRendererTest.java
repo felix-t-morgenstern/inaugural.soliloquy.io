@@ -20,7 +20,7 @@ class TriangleRendererTest extends DisplayTest {
     public static Set<Renderer> generateRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             TriangleRenderable renderable) {
-        TriangleRenderer = new TriangleRenderer(null);
+        TriangleRenderer = new TriangleRenderer(null, RENDERING_BOUNDARIES);
 
         TriangleRenderable = renderable;
 

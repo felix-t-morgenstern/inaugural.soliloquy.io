@@ -15,6 +15,7 @@ import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
@@ -63,6 +64,7 @@ public class AntialiasedLineSegmentRendererTests {
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
     @Mock private TimestampValidator mockTimestampValidator;
+    @Mock private RenderingBoundaries mockRenderingBoundaries;
 
     private Renderer<AntialiasedLineSegmentRenderable> renderer;
 
@@ -85,13 +87,20 @@ public class AntialiasedLineSegmentRendererTests {
     @BeforeEach
     public void setUp() {
         renderer = new AntialiasedLineSegmentRenderer(WINDOW_RESOLUTION_MANAGER,
-                mockTimestampValidator);
+                mockTimestampValidator, mockRenderingBoundaries);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new AntialiasedLineSegmentRenderer(null, mockTimestampValidator));
+                () -> new AntialiasedLineSegmentRenderer(null, mockTimestampValidator,
+                        mockRenderingBoundaries));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AntialiasedLineSegmentRenderer(WINDOW_RESOLUTION_MANAGER, null,
+                        mockRenderingBoundaries));
+        assertThrows(IllegalArgumentException.class,
+                () -> new AntialiasedLineSegmentRenderer(WINDOW_RESOLUTION_MANAGER,
+                        mockTimestampValidator, null));
     }
 
     @Test
@@ -112,7 +121,8 @@ public class AntialiasedLineSegmentRendererTests {
 
         renderer.render(ANTIALIASED_LINE_SEGMENT_RENDERABLE, TIMESTAMP);
 
-        verify(mockTimestampValidator, once()).validateTimestamp(renderer.getClass().getCanonicalName(), TIMESTAMP);
+        verify(mockTimestampValidator, once()).validateTimestamp(
+                renderer.getClass().getCanonicalName(), TIMESTAMP);
     }
 
     @Test
