@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @BeforeEach
     public void setUp() {
-        mockComponent = mock(Component.class);
+        mockComponent = mock(ComponentImpl.class);
 
         renderable = new AntialiasedLineSegmentRenderableImpl(
                 VERTEX_1_PROVIDER,

@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering;
 
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +72,7 @@ public class FrameExecutorImplTests {
     public void testSetNewTopLevelComponentDeletesPrev() {
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 
-        frameExecutor.setTopLevelComponent(mock(Component.class));
+        frameExecutor.setTopLevelComponent(mock(ComponentImpl.class));
 
         verify(mockTopLevelComponent, once()).delete();
     }

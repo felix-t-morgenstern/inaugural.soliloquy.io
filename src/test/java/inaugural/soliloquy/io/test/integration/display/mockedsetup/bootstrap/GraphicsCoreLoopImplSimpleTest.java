@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.bootstrap;
 
 import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.GlobalClockImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
@@ -38,7 +39,7 @@ class GraphicsCoreLoopImplSimpleTest {
 
     public static void main(String[] args) {
         var frameTimer = new FakeFrameTimer();
-        var mockTopLevelComponent = mock(Component.class);
+        var mockTopLevelComponent = mock(ComponentImpl.class);
         when(mockTopLevelComponent.contentsRepresentation()).thenReturn(setOf());
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100, () -> {});
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);

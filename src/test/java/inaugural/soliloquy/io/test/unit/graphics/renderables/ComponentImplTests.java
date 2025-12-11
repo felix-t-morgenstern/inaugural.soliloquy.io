@@ -135,7 +135,7 @@ public class ComponentImplTests {
 
     @Test
     public void testConstructorRegistersSelfAndAddsSelfToContainingComponent() {
-        var mockComponent = mock(Component.class);
+        var mockComponent = mock(ComponentImpl.class);
 
         component = new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
                 mockDimensions, mockRenderingBoundaries, DATA, mockRegisterComponent,
@@ -185,7 +185,7 @@ public class ComponentImplTests {
 
     @Test
     public void testAddRenderableInDifferentComponent() {
-        when(mockRenderable.containingComponent()).thenReturn(mock(Component.class));
+        when(mockRenderable.containingComponent()).thenReturn(mock(ComponentImpl.class));
         assertThrows(IllegalArgumentException.class, () -> component.add(mockRenderable));
     }
 
@@ -257,7 +257,7 @@ public class ComponentImplTests {
         assertThrows(IllegalArgumentException.class, () -> component.remove(null));
         when(mockRenderable.containingComponent()).thenReturn(null);
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
-        when(mockRenderable.containingComponent()).thenReturn(mock(Component.class));
+        when(mockRenderable.containingComponent()).thenReturn(mock(ComponentImpl.class));
         assertThrows(IllegalArgumentException.class, () -> component.remove(mockRenderable));
         when(mockRenderable.isDeleted()).thenReturn(true);
         assertDoesNotThrow(() -> component.remove(mockRenderable));
@@ -304,10 +304,10 @@ public class ComponentImplTests {
         assertEquals(1, firstChild.tier());
         assertEquals(2, secondChild.tier());
     }
-
+    
     @Test
     public void testSetContainingComponent() {
-        var mockContainingComponent = mock(Component.class);
+        var mockContainingComponent = mock(ComponentImpl.class);
         var containingComponentTier = randomInt();
         when(mockContainingComponent.tier()).thenReturn(containingComponentTier);
 

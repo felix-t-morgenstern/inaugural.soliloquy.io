@@ -186,6 +186,9 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
             Color origTopRightColor,
             Color origBottomRightColor,
             Color origBottomLeftColor) {
+        if (origTopLeftColor == null || origTopRightColor == null || origBottomRightColor == null || origBottomLeftColor == null) {
+            return null;
+        }
         var topLeftDist = distance(vertex, renderingDimens.topLeft());
         var topRightDist = distance(vertex, renderingDimens.topRight());
         var bottomLeftDist = distance(vertex, renderingDimens.bottomLeft());

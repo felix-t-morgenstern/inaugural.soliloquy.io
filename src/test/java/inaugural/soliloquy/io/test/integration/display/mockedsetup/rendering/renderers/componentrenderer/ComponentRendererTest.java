@@ -52,10 +52,10 @@ public class ComponentRendererTest extends DisplayTest {
 
         var frameTimer = mock(FrameTimer.class);
 
-        MockTopLevelComponent = mock(Component.class);
+        MockTopLevelComponent = mock(ComponentImpl.class);
         when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
-        MockFirstChildComponent = mock(Component.class);
+        MockFirstChildComponent = mock(ComponentImpl.class);
         when(MockFirstChildComponent.containingComponent()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);

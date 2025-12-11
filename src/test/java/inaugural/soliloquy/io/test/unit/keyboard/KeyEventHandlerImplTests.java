@@ -1,5 +1,6 @@
 package inaugural.soliloquy.io.test.unit.keyboard;
 
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.keyboard.KeyEventHandlerImpl;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -228,7 +229,7 @@ public class KeyEventHandlerImplTests {
     }
 
     private Component makeComponent(Set<KeyBinding> bindings, boolean overrides) {
-        var mockComponent = mock(Component.class);
+        var mockComponent = mock(ComponentImpl.class);
         lenient().when(mockComponent.keyBindings()).thenReturn(bindings);
         lenient().when(mockComponent.blocksLowerKeyBindings()).thenReturn(overrides);
         return mockComponent;

@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.wi
 
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
+import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
@@ -49,7 +50,7 @@ class WindowResolutionManagerImplFullscreenTest {
         frameTimer.ShouldExecuteNextFrame = true;
         @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh = setOf();
 
-        var mockTopLevelComponent = mock(Component.class);
+        var mockTopLevelComponent = mock(ComponentImpl.class);
         when(mockTopLevelComponent.contentsRepresentation()).thenReturn(setOf());
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100, () -> {});
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
