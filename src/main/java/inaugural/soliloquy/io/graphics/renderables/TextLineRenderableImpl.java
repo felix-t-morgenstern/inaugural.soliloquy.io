@@ -126,12 +126,7 @@ public class TextLineRenderableImpl extends AbstractRenderable implements TextLi
 
     @Override
     public void setAlignment(HorizontalAlignment alignment) throws IllegalArgumentException {
-        Check.ifNull(alignment, "alignment");
-        if (alignment == HorizontalAlignment.UNKNOWN) {
-            throw new IllegalArgumentException(
-                    "TextLineRenderableImpl.setAlignment: alignment cannot be UNKNOWN");
-        }
-        this.alignment = alignment;
+        this.alignment = Check.ifNull(alignment, "alignment");
     }
 
     @Override

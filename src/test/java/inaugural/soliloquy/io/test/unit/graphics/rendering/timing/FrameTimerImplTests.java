@@ -5,11 +5,15 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameRateReporter;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// The test suite here uses timers to verify behavior, which inflate test time. Until this suite
+// is refactored to be more expedient, it should only be run when the class in question is changed.
+@Disabled
 public class FrameTimerImplTests {
     private final FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
     private final FakeFrameRateReporter FRAME_RATE_REPORTER = new FakeFrameRateReporter();

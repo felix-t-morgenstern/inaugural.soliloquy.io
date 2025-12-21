@@ -94,12 +94,6 @@ public class TextLineRenderableImplTests {
                 DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
-                FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, HorizontalAlignment.UNKNOWN,
-                PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
-                Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, null, BOLD_INDICES,
                 BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
@@ -221,10 +215,7 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testSetAlignmentWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class,
-                () -> renderable.setAlignment(null));
-        assertThrows(IllegalArgumentException.class,
-                () -> renderable.setAlignment(HorizontalAlignment.UNKNOWN));
+        assertThrows(IllegalArgumentException.class, () -> renderable.setAlignment(null));
     }
 
     @Test

@@ -78,6 +78,9 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         Arrays.stream(dto.content).forEach(c -> {
             var handler = PERSISTENCE_HANDLER.getTypeHandler(c.type);
             var content = (Renderable) handler.read(c.content);
+            // Data should NOT be need to be passed to the add hook from this handler, since the
+            // ultimate side effect of the add hook is intended to be the mutation of component
+            // data
             component.add(content);
         });
 

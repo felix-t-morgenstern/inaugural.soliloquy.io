@@ -315,7 +315,6 @@ public class IOModule extends AbstractModule {
                 keyEventHandler::removeComponent,
                 mouseCapturing::putRenderable,
                 mouseCapturing::removeRenderable,
-                methods.CONSUMERS::get,
                 methods.BICONSUMERS::get
         ));
         var finiteAnimationRenderableFactory = andRegister(

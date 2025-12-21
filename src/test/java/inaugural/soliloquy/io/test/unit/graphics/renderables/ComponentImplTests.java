@@ -4,6 +4,7 @@ import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.BiConsumer;
@@ -48,7 +49,7 @@ public class ComponentImplTests {
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToMouseCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromMouseCapturing;
     @Mock private BiConsumer<Component, Long> mockPrerenderHook;
-    @Mock private Consumer<Renderable> mockAddHook;
+    @Mock private BiConsumer<Component, Component.Addend> mockAddHook;
 
     @Mock private Set<KeyBinding> mockBindings;
     @Mock private Renderable mockRenderable;
@@ -162,9 +163,16 @@ public class ComponentImplTests {
 
     @Test
     public void testAddCallsHook() {
-        component.add(mockRenderable);
+        var key = randomString();
+        var val = randomInt();
 
-        verify(mockAddHook, once()).accept(mockRenderable);
+        component.add(mockRenderable, mapOf(key,val));
+
+        var addendCaptor = ArgumentCaptor.forClass(Component.Addend.class);
+        verify(mockAddHook, once()).accept(same(component), addendCaptor.capture());
+        var addend = addendCaptor.getValue();
+        assertSame(mockRenderable, addend.content());
+        assertEquals(mapOf(key, val), addend.data());
     }
 
     @Test

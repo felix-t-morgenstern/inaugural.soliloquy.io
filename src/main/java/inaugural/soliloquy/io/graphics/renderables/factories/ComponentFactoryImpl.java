@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
-import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -25,8 +24,6 @@ public class ComponentFactoryImpl implements ComponentFactory {
     private final Consumer<RenderableWithMouseEvents> ADD_TO_MOUSE_CAPTURING;
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
     @SuppressWarnings("rawtypes")
-    private final Function<String, soliloquy.specs.common.entities.Consumer> GET_CONSUMER;
-    @SuppressWarnings("rawtypes")
     private final Function<String, soliloquy.specs.common.entities.BiConsumer> GET_BICONSUMER;
 
     public ComponentFactoryImpl(Consumer<Component> registerComponent,
@@ -36,8 +33,6 @@ public class ComponentFactoryImpl implements ComponentFactory {
                                 Consumer<RenderableWithMouseEvents> addToCapturing,
                                 Consumer<RenderableWithMouseEvents> removeFromCapturing,
                                 @SuppressWarnings("rawtypes")
-                                Function<String, soliloquy.specs.common.entities.Consumer> getConsumer,
-                                @SuppressWarnings("rawtypes")
                                 Function<String, soliloquy.specs.common.entities.BiConsumer> getBiConsumer) {
         REGISTER_COMPONENT = Check.ifNull(registerComponent, "registerComponent");
         DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
@@ -45,7 +40,6 @@ public class ComponentFactoryImpl implements ComponentFactory {
         REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
         ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
         REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
-        GET_CONSUMER = Check.ifNull(getConsumer, "getConsumer");
         GET_BICONSUMER = Check.ifNull(getBiConsumer, "getBiConsumer");
     }
 
@@ -63,8 +57,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
             Component containingComponent,
             Map<String, Object> data
     ) throws IllegalArgumentException {
-        @SuppressWarnings("unchecked") soliloquy.specs.common.entities.Consumer<Renderable>
-                addHook = GET_CONSUMER.apply(addActionHookId);
+        @SuppressWarnings("unchecked") soliloquy.specs.common.entities.BiConsumer<Component, Component.Addend>
+                addHook = GET_BICONSUMER.apply(addActionHookId);
         @SuppressWarnings("unchecked") soliloquy.specs.common.entities.BiConsumer<Component, Long>
                 prerenderHook = GET_BICONSUMER.apply(prerenderHookId);
         var component = new ComponentImpl(

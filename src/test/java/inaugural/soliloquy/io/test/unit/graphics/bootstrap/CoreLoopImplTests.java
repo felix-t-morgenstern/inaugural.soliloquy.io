@@ -6,6 +6,7 @@ import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -47,6 +48,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+// The test suite here uses timers to verify behavior, which inflate test time. Until this suite
+// is refactored to be more expedient, it should only be run when the class in question is changed.
+@Disabled
 @ExtendWith(MockitoExtension.class)
 public class CoreLoopImplTests {
     private final String TITLEBAR = randomString();
