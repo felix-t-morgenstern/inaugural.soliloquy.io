@@ -56,8 +56,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
 
         var bindings = Collections.<KeyBinding>setOf();
         Arrays.stream(dto.bindings).forEach(b -> {
-            var onPress = defaultIfNull(b.onPress, null, GET_CONSUMER);
-            var onRelease = defaultIfNull(b.onRelease, null, GET_CONSUMER);
+            var onPress = defaultIfNull(b.onPress, GET_CONSUMER, null);
+            var onRelease = defaultIfNull(b.onRelease, GET_CONSUMER, null);
             bindings.add(keyBinding(b.keys, onPress, onRelease));
         });
 

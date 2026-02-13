@@ -136,9 +136,9 @@ public class BehavioralTestingInterface implements ActionListener {
 
     private static void updateLabels() {
         LABEL_ID.setText(
-                "Sound Uuid: " + defaultIfNull(SOUND_FINITE, "", s -> s.uuid().toString()));
+                "Sound Uuid: " + defaultIfNull(SOUND_FINITE, s -> s.uuid().toString(), ""));
         LABEL_TYPE_ID.setText(
-                "Sound Type Id: " + defaultIfNull(SOUND_FINITE, "", s -> s.soundType().id()));
+                "Sound Type Id: " + defaultIfNull(SOUND_FINITE, s -> s.soundType().id(), ""));
         LABEL_VOLUME.setText(
                 "Volume: " + (
                         SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :

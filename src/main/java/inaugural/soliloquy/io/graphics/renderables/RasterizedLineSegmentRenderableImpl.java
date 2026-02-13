@@ -37,8 +37,11 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRend
 
     @Override
     public void setStipplePattern(Short stipplePattern) throws IllegalArgumentException {
-        this.stipplePattern = defaultIfNull(stipplePattern, null,
-                s -> Check.throwOnEqualsValue(s, (short) 0, "stipplePattern"));
+        this.stipplePattern = defaultIfNull(
+                stipplePattern,
+                s -> Check.throwOnEqualsValue(s, (short) 0, "stipplePattern"),
+                null
+        );
     }
 
     @Override

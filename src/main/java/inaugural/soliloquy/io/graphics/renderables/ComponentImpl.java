@@ -64,7 +64,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
-            containingComponent.add(this);
+            //containingComponent.add(this);
         }
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
@@ -181,12 +181,12 @@ public class ComponentImpl extends AbstractRenderable implements Component {
 
     @Override
     public String prerenderHookId() {
-        return defaultIfNull(PRERENDER, null, HasId::id);
+        return defaultIfNull(PRERENDER, HasId::id, null);
     }
 
     @Override
     public String addHookId() {
-        return defaultIfNull(ADD_HOOK, null, soliloquy.specs.common.entities.BiConsumer::id);
+        return defaultIfNull(ADD_HOOK, soliloquy.specs.common.entities.BiConsumer::id, null);
     }
 
     @Override
