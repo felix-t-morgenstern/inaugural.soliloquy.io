@@ -246,12 +246,6 @@ public class TextLineRendererImplTests {
                 () -> renderer.render(textLineRenderable, randomLong()));
         when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
         assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
-
-        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.UNKNOWN);
-        assertThrows(IllegalArgumentException.class,
-                () -> renderer.render(textLineRenderable, randomLong()));
-        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
-        assertDoesNotThrow(() -> renderer.render(textLineRenderable, randomLong()));
     }
 
     @Test
@@ -400,13 +394,6 @@ public class TextLineRendererImplTests {
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
 
         when(textLineRenderable.getAlignment()).thenReturn(null);
-        assertThrows(IllegalArgumentException.class,
-                () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);
-        assertDoesNotThrow(
-                () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
-
-        when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.UNKNOWN);
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.textLineLength(textLineRenderable, MOST_RECENT_TIMESTAMP));
         when(textLineRenderable.getAlignment()).thenReturn(HorizontalAlignment.LEFT);

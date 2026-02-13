@@ -25,7 +25,6 @@ import java.awt.*;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import static inaugural.soliloquy.io.api.Constants.*;

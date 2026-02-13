@@ -40,7 +40,7 @@ public class TextLineRenderableHandlerTests {
     private final Font MOCK_FONT = MOCK_FONT_AND_LOOKUP.entities.getFirst();
     private final Function<String, Font> MOCK_GET_FONT = MOCK_FONT_AND_LOOKUP.lookup;
     private final HorizontalAlignment ALIGNMENT =
-            HorizontalAlignment.fromValue(randomIntInRange(0, 3));
+            HorizontalAlignment.fromValue(randomIntInRange(1, 3));
     private final float GLYPH_PADDING = randomFloat();
     private final int COLOR_PROVIDER_INDEX = randomInt();
     private final int ITALIC_INDEX = randomInt();

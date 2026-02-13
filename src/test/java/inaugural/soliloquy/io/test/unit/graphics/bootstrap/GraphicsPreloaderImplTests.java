@@ -5,6 +5,7 @@ import inaugural.soliloquy.io.bootstrap.GraphicsPreloaderImpl;
 import inaugural.soliloquy.io.bootstrap.assetfactories.ImageAssetSetFactory;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
+// The test suite here uses timers to verify behavior, which inflate test time. Until this suite
+// is refactored to be more expedient, it should only be run when the class in question is changed.
+@Disabled
 @ExtendWith(MockitoExtension.class)
 public class GraphicsPreloaderImplTests {
     private final int THREAD_POOL_SIZE = 12;

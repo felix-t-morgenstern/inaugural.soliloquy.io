@@ -18,6 +18,7 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static soliloquy.specs.io.graphics.renderables.Component.Addend.addend;
 
 public class ComponentImpl extends AbstractRenderable implements Component {
     private final Set<KeyBinding> BINDINGS;
@@ -25,7 +26,8 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     private final Set<Renderable> RENDERABLES;
     private final Map<String, Object> DATA;
     private final BiConsumer<Component, Long> PRERENDER;
-    private final soliloquy.specs.common.entities.Consumer<Renderable> ADD_HOOK;
+    private final soliloquy.specs.common.entities.BiConsumer<Component, Addend>
+            ADD_HOOK;
 
     private final Consumer<Component> DEREGISTER_COMPONENT;
     private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
@@ -54,7 +56,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
                          Consumer<RenderableWithMouseEvents> addToMouseCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromMouseCapturing,
                          BiConsumer<Component, Long> prerender,
-                         soliloquy.specs.common.entities.Consumer<Renderable> addHook) {
+                         soliloquy.specs.common.entities.BiConsumer<Component, Addend> addHook) {
         super(z, uuid);
         BINDINGS = Check.ifNull(keyBindings, "keyBindings");
         BLOCKS_LOWER_BINDINGS = blocksLowerKeyBindings;
@@ -62,7 +64,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
-            containingComponent.add(this);
+            //containingComponent.add(this);
         }
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");
@@ -91,6 +93,11 @@ public class ComponentImpl extends AbstractRenderable implements Component {
 
     @Override
     public void add(Renderable renderable) throws IllegalArgumentException {
+        add(renderable, null);
+    }
+
+    @Override
+    public void add(Renderable renderable, Map<String, Object> data) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
         if (renderable.containingComponent() != this) {
             throw new IllegalArgumentException(
@@ -107,7 +114,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
         }
 
         if (ADD_HOOK != null) {
-            ADD_HOOK.accept(renderable);
+            ADD_HOOK.accept(this, addend(renderable, data));
         }
 
         RENDERABLES.add(renderable);
@@ -174,12 +181,12 @@ public class ComponentImpl extends AbstractRenderable implements Component {
 
     @Override
     public String prerenderHookId() {
-        return defaultIfNull(PRERENDER, null, HasId::id);
+        return defaultIfNull(PRERENDER, HasId::id, null);
     }
 
     @Override
     public String addHookId() {
-        return defaultIfNull(ADD_HOOK, null, soliloquy.specs.common.entities.Consumer::id);
+        return defaultIfNull(ADD_HOOK, soliloquy.specs.common.entities.BiConsumer::id, null);
     }
 
     @Override

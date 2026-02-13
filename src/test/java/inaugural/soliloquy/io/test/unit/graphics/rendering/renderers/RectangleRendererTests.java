@@ -21,6 +21,7 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.UUID;
 
+import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
@@ -74,6 +75,8 @@ public class RectangleRendererTests {
                 .thenReturn(randomFloatInRange(0f, 1f));
         lenient().when(mockTextureTileHeightProvider.provide(anyLong()))
                 .thenReturn(randomFloatInRange(0f, 1f));
+
+        lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
 
         renderer = new RectangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
     }
@@ -160,7 +163,7 @@ public class RectangleRendererTests {
 
     @Test
     public void testRenderWithoutMeshOrShader() {
-        RectangleRenderable rectangleRenderable = new FakeRectangleRenderable(
+        var rectangleRenderable = new FakeRectangleRenderable(
                 mockTopLeftColorProvider, mockTopRightColorProvider,
                 mockBottomRightColorProvider, mockBottomLeftColorProvider,
                 mockBackgroundTextureIdProvider, mockTextureTileWidthProvider,

@@ -56,7 +56,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         var origBottomRightColor = renderable.getBottomRightColorProvider().provide(timestamp);
         var origBottomLeftColor = renderable.getBottomLeftColorProvider().provide(timestamp);
 
-        Color intersectTopLeftColor = getCornerColor(
+        var intersectTopLeftColor = getCornerColor(
                 intersect,
                 renderingDimensions,
                 FloatBox::topLeft,
@@ -65,7 +65,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origBottomRightColor,
                 origBottomLeftColor
         );
-        Color intersectTopRightColor = getCornerColor(
+        var intersectTopRightColor = getCornerColor(
                 intersect,
                 renderingDimensions,
                 FloatBox::topRight,
@@ -74,7 +74,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origBottomRightColor,
                 origBottomLeftColor
         );
-        Color intersectBottomRightColor = getCornerColor(
+        var intersectBottomRightColor = getCornerColor(
                 intersect,
                 renderingDimensions,
                 FloatBox::bottomRight,
@@ -83,7 +83,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origBottomRightColor,
                 origBottomLeftColor
         );
-        Color intersectBottomLeftColor = getCornerColor(
+        var intersectBottomLeftColor = getCornerColor(
                 intersect,
                 renderingDimensions,
                 FloatBox::bottomLeft,

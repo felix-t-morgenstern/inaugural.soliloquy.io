@@ -548,11 +548,7 @@ public class TextLineRendererImpl extends CanRenderSnippets<TextLineRenderable>
             highestIndexThusFar = index;
         }
 
-        if (Check.ifNull(renderable.getAlignment(),
-                "renderable.getAlignment()") == HorizontalAlignment.UNKNOWN) {
-            throw new IllegalArgumentException("TextLineRendererImpl." + methodName + ": " +
-                    "alignment cannot be UNKNOWN");
-        }
+        Check.ifNull(renderable.getAlignment(), "renderable.getAlignment()");
 
         Float lineHeight = renderable.lineHeightProvider().provide(timestamp);
         Check.ifNull(lineHeight, "value provided from renderable.lineHeightProvider()");

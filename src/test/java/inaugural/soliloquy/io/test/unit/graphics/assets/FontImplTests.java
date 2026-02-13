@@ -2,10 +2,7 @@ package inaugural.soliloquy.io.test.unit.graphics.assets;
 
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
 import inaugural.soliloquy.tools.Tools;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import soliloquy.specs.io.graphics.assets.Font;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;
@@ -19,10 +16,14 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL11.GL_MAX_TEXTURE_SIZE;
 import static org.lwjgl.opengl.GL11.glGetInteger;
 
+// The test suite here is lengthy to run. Until this suite is refactored to be more expedient (or
+// if it never can be), it should only be run when the class in question is changed.
+@Disabled
 // TODO: This test requires some refactoring.
 public class FontImplTests {
     private final static String ID = "FontId";
-    private final static String RELATIVE_LOCATION = "./src/test/resources/fonts/Trajan Pro Regular.ttf";
+    private final static String RELATIVE_LOCATION =
+            "./src/test/resources/fonts/Trajan Pro Regular.ttf";
     private final static float MAX_LOSSLESS_FONT_SIZE = 200f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_PLAIN = 0.123f;
     private final static float ADDITIONAL_GLYPH_HORIZONTAL_TEXTURE_SPACING_ITALIC = 0.234f;

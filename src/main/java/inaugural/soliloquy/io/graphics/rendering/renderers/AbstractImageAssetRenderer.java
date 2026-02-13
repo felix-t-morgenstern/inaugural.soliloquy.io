@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;
-import static inaugural.soliloquy.tools.valueobjects.FloatBox.translate;
+import static inaugural.soliloquy.tools.valueobjects.FloatBox.translateFloatBox;
 
 abstract class AbstractImageAssetRenderer<TSnippet extends AssetSnippet,
         TRenderable extends ImageAssetRenderable>
@@ -65,42 +65,50 @@ abstract class AbstractImageAssetRenderer<TSnippet extends AssetSnippet,
             var xThickness = borderThickness / getScreenWToHRatio.get();
 
             // upper-left
-            super.render(translate(renderingArea, -xThickness, -borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, -xThickness, -borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // upper-center
-            super.render(translate(renderingArea, 0f, -borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, 0f, -borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // upper-right
-            super.render(translate(renderingArea, xThickness, -borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, xThickness, -borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // center-right
-            super.render(translate(renderingArea, xThickness, 0),
+            super.render(
+                    translateFloatBox(renderingArea, xThickness, 0),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // bottom-right
-            super.render(translate(renderingArea, xThickness, borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, xThickness, borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // bottom-center
-            super.render(translate(renderingArea, 0f, borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, 0f, borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // bottom-left
-            super.render(translate(renderingArea, -xThickness, borderThickness),
+            super.render(
+                    translateFloatBox(renderingArea, -xThickness, borderThickness),
                     asset,
                     INTACT_COLOR,
                     borderColor);
             // center-left
-            super.render(translate(renderingArea, -xThickness, 0f),
+            super.render(
+                    translateFloatBox(renderingArea, -xThickness, 0f),
                     asset,
                     INTACT_COLOR,
                     borderColor);

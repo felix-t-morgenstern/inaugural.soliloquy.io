@@ -7,11 +7,11 @@ import java.util.function.Consumer;
 public class DisplayTestMethods {
     static Consumer<String> PlaySound;
 
-    public static void playMousePressSound(EventInputs e) {
+    public static void playMousePressSound(@SuppressWarnings("unused") EventInputs e) {
         PlaySound.accept("pressSoundId");
     }
 
-    public static void playMouseReleaseSound(EventInputs e) {
+    public static void playMouseReleaseSound(@SuppressWarnings("unused") EventInputs e) {
         PlaySound.accept("releaseSoundId");
     }
 

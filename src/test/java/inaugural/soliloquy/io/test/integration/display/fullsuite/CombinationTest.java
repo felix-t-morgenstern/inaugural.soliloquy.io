@@ -17,6 +17,7 @@ import java.util.function.BiFunction;
 import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
+import static inaugural.soliloquy.tools.random.Random.randomHighSaturationColor;
 import static java.util.UUID.randomUUID;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static soliloquy.specs.common.entities.Consumer.consumer;
@@ -145,6 +146,26 @@ public class CombinationTest extends DisplayTest {
         );
         rectRendererWithTex.setCapturesMouseEvents(true);
         topLevelComponent.add(rectRendererWithTex);
+
+        var triangleRenderableFactory = ioModule.provide(TriangleRenderableFactory.class);
+        topLevelComponent.add(triangleRenderableFactory.make(
+                staticProvider(vertexOf(0.01f, 0.95f)),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(vertexOf(0.99f, 0.95f)),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(vertexOf(0.5f, 0.975f)),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(null),
+                staticProvider(0f),
+                staticProvider(0f),
+                mapOf(),
+                mapOf(),
+                null,
+                null,
+                0,
+                randomUUID(),
+                topLevelComponent
+        ));
 
         @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
                 staticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);

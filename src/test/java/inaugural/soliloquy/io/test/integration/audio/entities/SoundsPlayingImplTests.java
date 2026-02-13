@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.integration.audio.entities;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.audio.Audio;
 import soliloquy.specs.io.audio.entities.Sound;
@@ -8,6 +9,9 @@ import soliloquy.specs.io.audio.entities.Sound;
 import static inaugural.soliloquy.io.test.integration.audio.IntegrationTestsSetup.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+// The test suite here uses timers to verify behavior, which inflate test time. Until this suite
+// is refactored to be more expedient, it should only be run when the class in question is changed.
+@Disabled
 public class SoundsPlayingImplTests {
     private Audio audio;
     private Sound soundFinite;

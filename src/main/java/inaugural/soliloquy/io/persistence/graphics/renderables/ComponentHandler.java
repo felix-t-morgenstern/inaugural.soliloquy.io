@@ -56,8 +56,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
 
         var bindings = Collections.<KeyBinding>setOf();
         Arrays.stream(dto.bindings).forEach(b -> {
-            var onPress = defaultIfNull(b.onPress, null, GET_CONSUMER);
-            var onRelease = defaultIfNull(b.onRelease, null, GET_CONSUMER);
+            var onPress = defaultIfNull(b.onPress, GET_CONSUMER, null);
+            var onRelease = defaultIfNull(b.onRelease, GET_CONSUMER, null);
             bindings.add(keyBinding(b.keys, onPress, onRelease));
         });
 
@@ -78,6 +78,9 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         Arrays.stream(dto.content).forEach(c -> {
             var handler = PERSISTENCE_HANDLER.getTypeHandler(c.type);
             var content = (Renderable) handler.read(c.content);
+            // Data should NOT be need to be passed to the add hook from this handler, since the
+            // ultimate side effect of the add hook is intended to be the mutation of component
+            // data
             component.add(content);
         });
 
