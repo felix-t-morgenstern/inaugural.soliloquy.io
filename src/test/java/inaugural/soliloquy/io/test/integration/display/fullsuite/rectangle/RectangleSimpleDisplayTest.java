@@ -6,9 +6,10 @@ import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 
+import java.awt.*;
+
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.random.Random.randomColor;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
@@ -29,7 +30,7 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                         new StaticMouseCursorDefinitionDTO[]{}
                 ),
                 () -> DisplayTest.runThenClose("Simple Rectangle", 4000),
-                inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle.TriangleSimpleDisplayTest::populateTopLevelComponent
+                RectangleSimpleDisplayTest::populateTopLevelComponent
         );
     }
 
@@ -38,10 +39,10 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
         var rectDimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
         topLevelComponent.add(rectangleRenderableFactory.make(
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
+                staticProvider(Color.RED),
+                staticProvider(Color.GREEN),
+                staticProvider(Color.ORANGE),
+                staticProvider(Color.BLUE),
                 nullProvider(),
                 nullProvider(),
                 nullProvider(),

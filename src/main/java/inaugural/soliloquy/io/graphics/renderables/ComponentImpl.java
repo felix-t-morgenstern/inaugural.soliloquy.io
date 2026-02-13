@@ -64,7 +64,6 @@ public class ComponentImpl extends AbstractRenderable implements Component {
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
-            //containingComponent.add(this);
         }
         this.renderingBoundariesProvider =
                 Check.ifNull(renderingBoundariesProvider, "renderingBoundariesProvider");

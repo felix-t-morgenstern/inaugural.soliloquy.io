@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
-import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -12,11 +11,8 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import java.awt.*;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.tools.collections.Collections.arrayOf;
 import static inaugural.soliloquy.tools.valueobjects.FloatBox.intersection;
-import static inaugural.soliloquy.tools.valueobjects.Vertex.distance;
 import static org.lwjgl.opengl.GL11.*;
-import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
 public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRenderable>
         implements Renderer<RectangleRenderable> {
@@ -63,7 +59,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origTopLeftColor,
                 origTopRightColor,
                 origBottomRightColor,
-                origBottomLeftColor
+                origBottomLeftColor,
+                origTopLeftColor
         );
         var intersectTopRightColor = getCornerColor(
                 intersect,
@@ -72,7 +69,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origTopLeftColor,
                 origTopRightColor,
                 origBottomRightColor,
-                origBottomLeftColor
+                origBottomLeftColor,
+                origTopRightColor
         );
         var intersectBottomRightColor = getCornerColor(
                 intersect,
@@ -81,7 +79,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origTopLeftColor,
                 origTopRightColor,
                 origBottomRightColor,
-                origBottomLeftColor
+                origBottomLeftColor,
+                origBottomRightColor
         );
         var intersectBottomLeftColor = getCornerColor(
                 intersect,
@@ -90,6 +89,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                 origTopLeftColor,
                 origTopRightColor,
                 origBottomRightColor,
+                origBottomLeftColor,
                 origBottomLeftColor
         );
 
@@ -164,8 +164,9 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                                  Color origTopLeftColor,
                                  Color origTopRightColor,
                                  Color origBottomRightColor,
-                                 Color origBottomLeftColor) {
-        if (getCorner.apply(intersect) != getCorner.apply(renderingDimensions)) {
+                                 Color origBottomLeftColor,
+                                 Color origCornerColor) {
+        if (!getCorner.apply(intersect).equals(getCorner.apply(renderingDimensions))) {
             return triangulate(
                     getCorner.apply(intersect),
                     renderingDimensions,
@@ -175,7 +176,7 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
                     origBottomLeftColor);
         }
         else {
-            return origTopLeftColor;
+            return origCornerColor;
         }
     }
 
@@ -189,44 +190,45 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         if (origTopLeftColor == null || origTopRightColor == null || origBottomRightColor == null || origBottomLeftColor == null) {
             return null;
         }
-        var topLeftDist = distance(vertex, renderingDimens.topLeft());
-        var topRightDist = distance(vertex, renderingDimens.topRight());
-        var bottomLeftDist = distance(vertex, renderingDimens.bottomLeft());
-        var bottomRightDist = distance(vertex, renderingDimens.bottomRight());
 
-        var totalDist = topLeftDist + topRightDist + bottomLeftDist + bottomRightDist;
+        var horizPosition = (vertex.X - renderingDimens.LEFT_X) / renderingDimens.width();
+        var vertPosition = (vertex.Y - renderingDimens.TOP_Y) / renderingDimens.height();
 
-        var topLeftDistPercent = topLeftDist / totalDist;
-        var topRightDistPercent = topRightDist / totalDist;
-        var bottomLeftDistPercent = bottomLeftDist / totalDist;
-        var bottomRightDistPercent = bottomRightDist / totalDist;
+        var r = 0f;
+        var g = 0f;
+        var b = 0f;
+        var a = 0f;
 
-        var colorsAndWeights = arrayOf(
-                pairOf(origTopLeftColor, topLeftDistPercent),
-                pairOf(origTopRightColor, topRightDistPercent),
-                pairOf(origBottomRightColor, bottomLeftDistPercent),
-                pairOf(origBottomLeftColor, bottomRightDistPercent)
+        var topLeftPercent = (1f - horizPosition) * (1f - vertPosition);
+        r += topLeftPercent * (float)origTopLeftColor.getRed();
+        g += topLeftPercent * (float)origTopLeftColor.getGreen();
+        b += topLeftPercent * (float)origTopLeftColor.getBlue();
+        a += topLeftPercent * (float)origTopLeftColor.getAlpha();
+
+        var topRightPercent = horizPosition * (1f - vertPosition);
+        r += topRightPercent * (float)origTopRightColor.getRed();
+        g += topRightPercent * (float)origTopRightColor.getGreen();
+        b += topRightPercent * (float)origTopRightColor.getBlue();
+        a += topRightPercent * (float)origTopRightColor.getAlpha();
+
+        var bottomRightPercent = horizPosition * vertPosition;
+        r += bottomRightPercent * (float)origBottomRightColor.getRed();
+        g += bottomRightPercent * (float)origBottomRightColor.getGreen();
+        b += bottomRightPercent * (float)origBottomRightColor.getBlue();
+        a += bottomRightPercent * (float)origBottomRightColor.getAlpha();
+
+        var bottomLeftPercent = (1f - horizPosition) * vertPosition;
+        r += bottomLeftPercent * (float)origBottomLeftColor.getRed();
+        g += bottomLeftPercent * (float)origBottomLeftColor.getGreen();
+        b += bottomLeftPercent * (float)origBottomLeftColor.getBlue();
+        a += bottomLeftPercent * (float)origBottomLeftColor.getAlpha();
+
+        return new Color(
+                Math.min((int)r + 1, 255),
+                Math.min((int)g + 1, 255),
+                Math.min((int)b + 1, 255),
+                Math.min((int)a + 1, 255)
         );
-
-        var r = getTriangulatedChannel(Color::getRed, colorsAndWeights);
-        var g = getTriangulatedChannel(Color::getGreen, colorsAndWeights);
-        var b = getTriangulatedChannel(Color::getBlue, colorsAndWeights);
-        var a = getTriangulatedChannel(Color::getAlpha, colorsAndWeights);
-
-        return new Color(r, g, b, a);
-    }
-
-    @SafeVarargs
-    private static int getTriangulatedChannel(Function<Color, Integer> getChannel,
-                                       Pair<Color, Float>... colorsAndPercents) {
-        var weightedChannel = 0;
-
-        for (var colorAndPercent : colorsAndPercents) {
-            weightedChannel +=
-                    (int) (getChannel.apply(colorAndPercent.FIRST) * colorAndPercent.SECOND);
-        }
-
-        return weightedChannel;
     }
 
     @Override
