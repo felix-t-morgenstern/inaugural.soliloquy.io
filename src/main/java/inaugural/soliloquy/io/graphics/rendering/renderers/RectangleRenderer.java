@@ -101,8 +101,10 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         var hasTexture = false;
 
-        var tilesPerWidth = 0f;
-        var tilesPerHeight = 0f;
+        var texStartX = 0f;
+        var texEndX = 0f;
+        var texStartY = 0f;
+        var texEndY = 0f;
         if (texId != null) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texId);
@@ -116,8 +118,31 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
             Check.throwOnLtValue(texTileWidth, 0f, "provided texTileWidth in renderable");
             Check.throwOnLtValue(texTileHeight, 0f, "provided texTileHeight in renderable");
 
-            tilesPerWidth = renderingDimensions.width() / texTileWidth;
-            tilesPerHeight = renderingDimensions.height() / texTileHeight;
+            texStartX = texStartLoc(
+                    renderingDimensions.LEFT_X,
+                    texTileWidth,
+                    intersect.LEFT_X
+            );
+
+            texEndX = texEndLoc(
+                    renderingDimensions.LEFT_X,
+                    renderingDimensions.RIGHT_X,
+                    texTileWidth,
+                    intersect.RIGHT_X
+            );
+
+            texStartY = texStartLoc(
+                    renderingDimensions.TOP_Y,
+                    texTileHeight,
+                    intersect.TOP_Y
+            );
+
+            texEndY = texEndLoc(
+                    renderingDimensions.TOP_Y,
+                    renderingDimensions.BOTTOM_Y,
+                    texTileHeight,
+                    intersect.BOTTOM_Y
+            );
         }
 
         Check.ifNull(renderingDimensions,
@@ -131,31 +156,57 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
 
         setDrawColor(intersectTopLeftColor);
         if (hasTexture) {
-            glTexCoord2f(0f, 0f);
+            glTexCoord2f(texStartX, texStartY);
         }
         drawPoint(intersect.LEFT_X, intersect.TOP_Y);
 
         setDrawColor(intersectTopRightColor);
         if (hasTexture) {
-            glTexCoord2f(tilesPerWidth, 0f);
+            glTexCoord2f(texEndX, texStartY);
         }
         drawPoint(intersect.RIGHT_X, intersect.TOP_Y);
 
         setDrawColor(intersectBottomRightColor);
         if (hasTexture) {
-            glTexCoord2f(tilesPerWidth, tilesPerHeight);
+            glTexCoord2f(texEndX, texEndY);
         }
         drawPoint(intersect.RIGHT_X, intersect.BOTTOM_Y);
 
         setDrawColor(intersectBottomLeftColor);
         if (hasTexture) {
-            glTexCoord2f(0f, tilesPerHeight);
+            glTexCoord2f(texStartX, texEndY);
         }
         drawPoint(intersect.LEFT_X, intersect.BOTTOM_Y);
 
         glEnd();
 
         glDisable(GL_TEXTURE_2D);
+    }
+
+    private float texStartLoc(float renderingDimensSpanStart,
+                              float tileSpan,
+                              float intersectActualSpanStart) {
+        if (renderingDimensSpanStart == intersectActualSpanStart) {
+            return 0f;
+        }
+
+        return (intersectActualSpanStart - renderingDimensSpanStart) / tileSpan;
+    }
+
+    private float texEndLoc(float renderingDimensSpanStart,
+                            float renderingDimensSpanEnd,
+                            float tileSpan,
+                            float intersectActualSpanEnd) {
+        var tilesPerSpan = (renderingDimensSpanEnd - renderingDimensSpanStart) / tileSpan;
+
+        if (renderingDimensSpanEnd == intersectActualSpanEnd) {
+            return tilesPerSpan;
+        }
+
+        var spanClipped = renderingDimensSpanEnd - intersectActualSpanEnd;
+        var percentSpanClipped = spanClipped / (renderingDimensSpanEnd - renderingDimensSpanStart);
+
+        return tilesPerSpan * (1f - percentSpanClipped);
     }
 
     private Color getCornerColor(FloatBox intersect,
@@ -187,7 +238,8 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
             Color origTopRightColor,
             Color origBottomRightColor,
             Color origBottomLeftColor) {
-        if (origTopLeftColor == null || origTopRightColor == null || origBottomRightColor == null || origBottomLeftColor == null) {
+        if (origTopLeftColor == null || origTopRightColor == null || origBottomRightColor == null ||
+                origBottomLeftColor == null) {
             return null;
         }
 
@@ -200,34 +252,34 @@ public class RectangleRenderer extends AbstractPointDrawingRenderer<RectangleRen
         var a = 0f;
 
         var topLeftPercent = (1f - horizPosition) * (1f - vertPosition);
-        r += topLeftPercent * (float)origTopLeftColor.getRed();
-        g += topLeftPercent * (float)origTopLeftColor.getGreen();
-        b += topLeftPercent * (float)origTopLeftColor.getBlue();
-        a += topLeftPercent * (float)origTopLeftColor.getAlpha();
+        r += topLeftPercent * (float) origTopLeftColor.getRed();
+        g += topLeftPercent * (float) origTopLeftColor.getGreen();
+        b += topLeftPercent * (float) origTopLeftColor.getBlue();
+        a += topLeftPercent * (float) origTopLeftColor.getAlpha();
 
         var topRightPercent = horizPosition * (1f - vertPosition);
-        r += topRightPercent * (float)origTopRightColor.getRed();
-        g += topRightPercent * (float)origTopRightColor.getGreen();
-        b += topRightPercent * (float)origTopRightColor.getBlue();
-        a += topRightPercent * (float)origTopRightColor.getAlpha();
+        r += topRightPercent * (float) origTopRightColor.getRed();
+        g += topRightPercent * (float) origTopRightColor.getGreen();
+        b += topRightPercent * (float) origTopRightColor.getBlue();
+        a += topRightPercent * (float) origTopRightColor.getAlpha();
 
         var bottomRightPercent = horizPosition * vertPosition;
-        r += bottomRightPercent * (float)origBottomRightColor.getRed();
-        g += bottomRightPercent * (float)origBottomRightColor.getGreen();
-        b += bottomRightPercent * (float)origBottomRightColor.getBlue();
-        a += bottomRightPercent * (float)origBottomRightColor.getAlpha();
+        r += bottomRightPercent * (float) origBottomRightColor.getRed();
+        g += bottomRightPercent * (float) origBottomRightColor.getGreen();
+        b += bottomRightPercent * (float) origBottomRightColor.getBlue();
+        a += bottomRightPercent * (float) origBottomRightColor.getAlpha();
 
         var bottomLeftPercent = (1f - horizPosition) * vertPosition;
-        r += bottomLeftPercent * (float)origBottomLeftColor.getRed();
-        g += bottomLeftPercent * (float)origBottomLeftColor.getGreen();
-        b += bottomLeftPercent * (float)origBottomLeftColor.getBlue();
-        a += bottomLeftPercent * (float)origBottomLeftColor.getAlpha();
+        r += bottomLeftPercent * (float) origBottomLeftColor.getRed();
+        g += bottomLeftPercent * (float) origBottomLeftColor.getGreen();
+        b += bottomLeftPercent * (float) origBottomLeftColor.getBlue();
+        a += bottomLeftPercent * (float) origBottomLeftColor.getAlpha();
 
         return new Color(
-                Math.min((int)r + 1, 255),
-                Math.min((int)g + 1, 255),
-                Math.min((int)b + 1, 255),
-                Math.min((int)a + 1, 255)
+                Math.min((int) r + 1, 255),
+                Math.min((int) g + 1, 255),
+                Math.min((int) b + 1, 255),
+                Math.min((int) a + 1, 255)
         );
     }
 

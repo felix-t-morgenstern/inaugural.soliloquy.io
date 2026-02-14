@@ -8,8 +8,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static inaugural.soliloquy.tools.random.Random.randomColor;
-import static inaugural.soliloquy.tools.random.Random.randomInt;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
@@ -46,13 +45,13 @@ public class RectangleTextureDisplayTest extends DisplayTest {
         var dimensProvider = staticProvider(floatBoxOf(0.25f, 0.25f, 0.75f, 0.75f));
         var rectangleRenderableFactory = ioModule.provide(RectangleRenderableFactory.class);
         topLevelComponent.add(rectangleRenderableFactory.make(
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
-                staticProvider(randomColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
                 staticProvider(backgroundTex),
-                staticProvider(0.5f),
-                staticProvider(0.5f),
+                staticProvider(0.25f),
+                staticProvider(0.25f),
                 mapOf(),
                 mapOf(),
                 null,

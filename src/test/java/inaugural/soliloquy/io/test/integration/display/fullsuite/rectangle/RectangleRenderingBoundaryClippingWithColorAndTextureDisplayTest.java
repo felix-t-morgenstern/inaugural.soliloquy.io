@@ -1,8 +1,10 @@
 package inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle;
 
 import inaugural.soliloquy.io.IOModule;
-import inaugural.soliloquy.io.api.dto.*;
+import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
+import inaugural.soliloquy.io.api.dto.ImageDefinitionDTO;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
+import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
@@ -13,18 +15,24 @@ import java.awt.*;
 
 import static inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.random.Random.randomHighSaturationColor;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
+public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest extends DisplayTest {
+    private final static String TILE_LOCATION_RELATIVE_LOCATION =
+            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
+
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
-                "Rectangle clipping display test",
+                "Rectangle clipping with color and texture display test",
                 new AssetDefinitionsDTO(
-                        arrayOf(),
+                        new ImageDefinitionDTO[]{
+                                new ImageDefinitionDTO(TILE_LOCATION_RELATIVE_LOCATION, false)
+                        },
                         arrayOf(),
                         arrayOf(),
                         arrayOf(),
@@ -34,8 +42,8 @@ public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
                         arrayOf(),
                         arrayOf()
                 ),
-                () -> DisplayTest.runThenClose("Rectangle clipping", 8000),
-                RectangleRenderingBoundaryClippingDisplayTest::populateTopLevelComponent
+                () -> DisplayTest.runThenClose("Rectangle clipping with color and texture", 8000),
+                RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest::populateTopLevelComponent
         );
     }
 
@@ -84,7 +92,7 @@ public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
         ));
 
         var finiteLinearMovingProviderFactory = ioModule.provide(FiniteLinearMovingProviderFactory.class);
-        var squareLength = 0.2f;
+        var squareLength = 0.3f;
         var dimensProvider = finiteLinearMovingProviderFactory.make(
                 randomUUID(),
                 mapOf(
@@ -112,14 +120,16 @@ public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
                 ),
                 null
         );
+        var graphics = ioModule.provide(Graphics.class);
+        var backgroundTex = graphics.getImage(TILE_LOCATION_RELATIVE_LOCATION).textureId();
         componentWithRenderingBoundaries.add(rectangleRenderableFactory.make(
-                staticProvider(Color.RED),
-                staticProvider(Color.GREEN),
-                staticProvider(Color.ORANGE),
-                staticProvider(Color.BLUE),
-                staticProvider(null),
-                staticProvider(1f),
-                staticProvider(1f),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(backgroundTex),
+                staticProvider(squareLength / 2f),
+                staticProvider(squareLength / 2f),
                 mapOf(),
                 mapOf(),
                 null,
