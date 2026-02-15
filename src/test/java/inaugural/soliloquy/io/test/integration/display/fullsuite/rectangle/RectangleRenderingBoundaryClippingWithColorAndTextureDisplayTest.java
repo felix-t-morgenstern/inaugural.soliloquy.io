@@ -22,17 +22,14 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest extends DisplayTest {
-    private final static String TILE_LOCATION_RELATIVE_LOCATION =
-            "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
-
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
                 "Rectangle clipping with color and texture display test",
                 new AssetDefinitionsDTO(
-                        new ImageDefinitionDTO[]{
+                        arrayOf(
                                 new ImageDefinitionDTO(TILE_LOCATION_RELATIVE_LOCATION, false)
-                        },
+                        ),
                         arrayOf(),
                         arrayOf(),
                         arrayOf(),
