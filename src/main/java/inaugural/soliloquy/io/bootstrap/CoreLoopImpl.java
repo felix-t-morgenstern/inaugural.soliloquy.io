@@ -3,27 +3,28 @@ package inaugural.soliloquy.io.bootstrap;
 import inaugural.soliloquy.io.api.Constants;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.bootstrap.GraphicsPreloader;
 import soliloquy.specs.io.bootstrap.CoreLoop;
+import soliloquy.specs.io.bootstrap.GraphicsPreloader;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
-import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.io.input.mouse.MouseCursor;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
-import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
+import soliloquy.specs.io.input.keyboard.KeyEventListener;
+import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static inaugural.soliloquy.io.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.io.api.Constants.MS_PER_SECOND;
@@ -40,12 +41,10 @@ public class CoreLoopImpl implements CoreLoop {
     private final GlobalClock GLOBAL_CLOCK;
     private final FrameExecutor FRAME_EXECUTOR;
     private final ShaderFactory SHADER_FACTORY;
-    @SuppressWarnings("rawtypes")
-    private final Set<Renderer> RENDERERS_WITH_SHADER;
+    private final Set<Consumer<Shader>> SHADER_SUBSCRIBERS;
     private final String SHADER_FILENAME_PREFIX;
     private final BiFunction<float[], float[], Mesh> MESH_FACTORY;
-    @SuppressWarnings("rawtypes")
-    private final Set<Renderer> RENDERERS_WITH_MESH;
+    private final Set<Consumer<Mesh>> MESH_SUBSCRIBERS;
     private final float[] MESH_VERTICES;
     private final float[] MESH_UV_COORDINATES;
     private final GraphicsPreloader GRAPHICS_PRELOADER;
@@ -72,10 +71,10 @@ public class CoreLoopImpl implements CoreLoop {
             GlobalClock globalClock,
             FrameExecutor frameExecutor,
             ShaderFactory shaderFactory,
-            @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader,
+            Set<Consumer<Shader>> shaderSubscribers,
             String shaderFilenamePrefix,
             BiFunction<float[], float[], Mesh> meshFactory,
-            @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh,
+            Set<Consumer<Mesh>> meshSubscribers,
             float[] meshVertices,
             float[] meshUvCoordinates,
             GraphicsPreloader graphicsPreloader,
@@ -97,10 +96,10 @@ public class CoreLoopImpl implements CoreLoop {
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
         FRAME_EXECUTOR = Check.ifNull(frameExecutor, "frameExecutor");
         SHADER_FACTORY = Check.ifNull(shaderFactory, "shaderFactory");
-        RENDERERS_WITH_SHADER = Check.ifNull(renderersWithShader, "renderersWithShader");
+        SHADER_SUBSCRIBERS = Check.ifNull(shaderSubscribers, "shaderSubscribers");
         SHADER_FILENAME_PREFIX = Check.ifNullOrEmpty(shaderFilenamePrefix, "shaderFilenamePrefix");
         MESH_FACTORY = Check.ifNull(meshFactory, "meshFactory");
-        RENDERERS_WITH_MESH = Check.ifNull(renderersWithMesh, "renderersWithMesh");
+        MESH_SUBSCRIBERS = Check.ifNull(meshSubscribers, "meshSubscribers");
         MESH_VERTICES = Check.ifNull(meshVertices, "meshVertices");
         MESH_UV_COORDINATES = Check.ifNull(meshUvCoordinates, "meshUvCoordinates");
         GRAPHICS_PRELOADER = Check.ifNull(graphicsPreloader, "graphicsPreloader");
@@ -128,8 +127,6 @@ public class CoreLoopImpl implements CoreLoop {
 
         updateWindow();
 
-
-
         GL.createCapabilities();
 
         glClearColor(0, 0, 0, 0);
@@ -142,14 +139,16 @@ public class CoreLoopImpl implements CoreLoop {
         glDepthMask(false);
         glEnable(GL_TEXTURE_2D);
 
+        glOrtho(0d, 1d, 1d, 0d, 0d, 1d);
+
         var shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
         shader.bind();
 
-        RENDERERS_WITH_SHADER.forEach(renderer -> renderer.setShader(shader));
+        SHADER_SUBSCRIBERS.forEach(s -> s.accept(shader));
 
         var mesh = MESH_FACTORY.apply(MESH_VERTICES, MESH_UV_COORDINATES);
 
-        RENDERERS_WITH_MESH.forEach(renderer -> renderer.setMesh(mesh));
+        MESH_SUBSCRIBERS.forEach(s -> s.accept(mesh));
 
         mesh.bind();
 
@@ -223,7 +222,7 @@ public class CoreLoopImpl implements CoreLoop {
     // performance enhancements.
     private void setNewMouseCallbacks() {
         //noinspection resource
-        glfwSetCursorPosCallback(window, (window, xPixel, yPixel) -> {
+        glfwSetCursorPosCallback(window, (_, xPixel, yPixel) -> {
             var windowDimensions = updateWindowDimensionsInResolutionManager();
             var width = windowDimensions.FIRST;
             var height = windowDimensions.SECOND;

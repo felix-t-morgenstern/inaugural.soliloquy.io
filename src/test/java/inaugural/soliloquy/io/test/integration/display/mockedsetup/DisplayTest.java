@@ -16,7 +16,7 @@ import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.bootstrap.CoreLoop;
@@ -26,9 +26,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShiftStackAggregator;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
-import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
-import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.io.graphics.rendering.*;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
@@ -40,6 +38,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.io.graphics.renderables.ComponentImpl.COMPONENT_PRERENDER_HOOK;
@@ -124,13 +123,20 @@ public class DisplayTest {
         var renderersWithMeshAndShader =
                 generateRenderablesAndRenderersWithMeshAndShader.apply(windowResolutionManager);
 
+        var shaderSubscribers = renderersWithMeshAndShader.stream()
+                .map(r -> (Consumer<Shader>) r::setShader)
+                .collect(Collectors.toSet());
+        var meshSubscribers = renderersWithMeshAndShader.stream()
+                .map(r -> (Consumer<Mesh>) r::setMesh)
+                .collect(Collectors.toSet());
+
         var coreLoop =
                 new CoreLoopImpl("My title bar", FrameTimer, 0, windowResolutionManager,
                         GLOBAL_CLOCK, frameExecutor, new ShaderFactoryImpl(),
-                        renderersWithMeshAndShader, SHADER_FILENAME_PREFIX, MeshImpl::new,
-                        renderersWithMeshAndShader, MESH_DATA, MESH_DATA, graphicsPreloader,
-                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(KeyEventListener.class), MouseCursor, mouseListener);
+                        shaderSubscribers, SHADER_FILENAME_PREFIX, MeshImpl::new, meshSubscribers,
+                        MESH_DATA, MESH_DATA, graphicsPreloader, mock(AudioLoader.class), setOf(),
+                        mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class), MouseCursor,
+                        mouseListener);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

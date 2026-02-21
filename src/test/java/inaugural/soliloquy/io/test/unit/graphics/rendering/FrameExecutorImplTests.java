@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering;
 
 import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

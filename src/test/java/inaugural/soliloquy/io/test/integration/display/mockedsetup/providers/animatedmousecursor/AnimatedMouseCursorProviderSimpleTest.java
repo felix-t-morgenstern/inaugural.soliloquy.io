@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.animatedmousecursor;
 
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor.MouseCursorImplTest;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;

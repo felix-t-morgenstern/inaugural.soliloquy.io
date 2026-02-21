@@ -6,18 +6,18 @@ import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeComponentRenderer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeShaderFactory;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
-import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
-import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
-import java.util.Set;
 import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -40,15 +40,15 @@ class WindowResolutionManagerImplWindowedFullscreenTest {
             new float[]{0f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f, 0f, 0f, 1f};
 
     public static void main(String[] args) {
-        WindowResolutionManagerImpl windowResolutionManager = new WindowResolutionManagerImpl(
-                WindowDisplayMode.WINDOWED_FULLSCREEN, WindowResolution.RES_WINDOWED_FULLSCREEN);
+        var windowResolutionManager =
+                new WindowResolutionManagerImpl(WindowDisplayMode.WINDOWED_FULLSCREEN,
+                        WindowResolution.RES_WINDOWED_FULLSCREEN);
 
-        long timestamp = randomLong();
-        GlobalClock mockGlobalClock = mock(GlobalClock.class);
+        var timestamp = randomLong();
+        var mockGlobalClock = mock(GlobalClock.class);
         when(mockGlobalClock.globalTimestamp()).thenReturn(timestamp);
-        FakeFrameTimer frameTimer = new FakeFrameTimer();
+        var frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        @SuppressWarnings("rawtypes") Set<Renderer> renderersWithMesh = setOf();
 
 
         var mockTopLevelComponent = mock(ComponentImpl.class);
@@ -56,11 +56,10 @@ class WindowResolutionManagerImplWindowedFullscreenTest {
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100, () -> {});
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 
-        @SuppressWarnings("rawtypes") Set<Renderer> renderersWithShader = setOf();
         @SuppressWarnings("unchecked") var coreLoop =
                 new CoreLoopImpl("My title bar", frameTimer, 20, windowResolutionManager,
                         mockGlobalClock, frameExecutor, new FakeShaderFactory(),
-                        renderersWithShader, "_", mock(BiFunction.class), renderersWithMesh,
+                        setOf(), "_", mock(BiFunction.class), setOf(),
                         MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(), mock(AudioLoader.class),
                         setOf(), mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class),
                         mock(MouseCursor.class), mock(MouseListener.class));

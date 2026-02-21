@@ -1,7 +1,9 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.trianglerenderer;
 
 import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -20,13 +22,15 @@ class TriangleRendererTest extends DisplayTest {
     public static Set<Renderer> generateRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager,
             TriangleRenderable renderable) {
-        TriangleRenderer = new TriangleRenderer(null, RENDERING_BOUNDARIES);
+        TriangleRenderer =
+                new TriangleRenderer(null, RENDERING_BOUNDARIES, new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
 
         TriangleRenderable = renderable;
 
         Renderers.put(TriangleRenderableImpl.class,
                 TriangleRenderer);
-        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TriangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
+                setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(TriangleRenderer);

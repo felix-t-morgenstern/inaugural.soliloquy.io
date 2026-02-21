@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.looping.linear.floatbox;
 
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.graphics.renderables.providers.ResettableProvider;

@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.finiteanimationrenderer;
 
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;

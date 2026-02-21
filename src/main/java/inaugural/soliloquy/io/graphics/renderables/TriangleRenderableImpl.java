@@ -16,6 +16,7 @@ import java.awt.*;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.valueobjects.Vertex.pointIsInTriangle;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
 public class TriangleRenderableImpl
@@ -134,30 +135,21 @@ public class TriangleRenderableImpl
     }
 
     /*
-     * Taken from https://www.geeksforgeeks
-     * .org/check-whether-a-given-point-lies-inside-a-triangle-or-not/ on 2022/08/11
+     * Taken from
+     * https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
+     * on 2022/08/11
      */
     @Override
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        var v1 = vertex1Provider.provide(timestamp);
-        var v2 = vertex2Provider.provide(timestamp);
-        var v3 = vertex3Provider.provide(timestamp);
-
-        var renderableArea = area(v1, v2, v3);
-
-        var area1 = area(point, v1, v2);
-        var area2 = area(point, v2, v3);
-        var area3 = area(point, v3, v1);
-
-        return renderableArea == (area1 + area2 + area3);
-    }
-
-    private float area(Vertex v1, Vertex v2, Vertex v3) {
-        return Math.abs(
-                ((v1.X * (v2.Y - v3.Y)) + (v2.X * (v3.Y - v1.Y)) + (v3.X * (v1.Y - v2.Y))) / 2.0f);
+        return pointIsInTriangle(
+                point,
+                vertex1Provider.provide(timestamp),
+                vertex2Provider.provide(timestamp),
+                vertex3Provider.provide(timestamp)
+        );
     }
 
     @Override

@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.finite.linear.color;
 
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 
 import static inaugural.soliloquy.io.api.Constants.INTACT_COLOR;

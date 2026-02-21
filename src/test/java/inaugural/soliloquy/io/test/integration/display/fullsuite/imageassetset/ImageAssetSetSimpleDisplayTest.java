@@ -10,8 +10,8 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.ImageAssetSetRenderable;
 import soliloquy.specs.io.graphics.renderables.factories.ImageAssetSetRenderableFactory;
 
-import static inaugural.soliloquy.tools.CheckedExceptionWrapper.sleep;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.exception.CheckedExceptionWrapper.sleep;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 

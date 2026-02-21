@@ -55,6 +55,8 @@ import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.providers.AnimatedMouseCursorProvider;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
+import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporter;
@@ -67,6 +69,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
@@ -257,9 +260,14 @@ public class IOModule extends AbstractModule {
 
         var shiftAggregator = new ColorShiftStackAggregatorImpl();
 
+        var basicTriangleRenderer = new BasicTriangleRenderer();
+        var triangleSegmentRenderer =
+                new TriangleSegmentRenderer(renderingBoundaries, basicTriangleRenderer);
+
         contentRenderers.put(
                 AntialiasedLineSegmentRenderableImpl.class,
-                new AntialiasedLineSegmentRenderer(resManager, timestampValidator, renderingBoundaries)
+                new AntialiasedLineSegmentRenderer(resManager, timestampValidator,
+                        renderingBoundaries)
         );
         contentRenderers.put(
                 FiniteAnimationRenderableImpl.class,
@@ -299,7 +307,8 @@ public class IOModule extends AbstractModule {
         );
         contentRenderers.put(
                 TriangleRenderableImpl.class,
-                new TriangleRenderer(timestampValidator, renderingBoundaries)
+                new TriangleRenderer(timestampValidator, renderingBoundaries,
+                        triangleSegmentRenderer)
         );
 
         // ===========
@@ -554,7 +563,15 @@ public class IOModule extends AbstractModule {
 
         @SuppressWarnings("unchecked") var audioRelDirs =
                 (Set<String>) (getSetting.apply(AUDIO_RELATIVE_DIRS_ID).getValue());
-        var renderersSet = setOf(contentRenderers.values().toArray(Renderer[]::new));
+        var renderersSet = setOf(contentRenderers.values());
+        var shaderSubscribers = renderersSet.stream()
+                .map(r -> (Consumer<Shader>) r::setShader)
+                .collect(Collectors.toSet());
+        shaderSubscribers.add(basicTriangleRenderer::setShader);
+        var meshSubscribers = renderersSet.stream()
+                .map(r -> (Consumer<Mesh>) r::setMesh)
+                .collect(Collectors.toSet());
+        meshSubscribers.add(basicTriangleRenderer::setMesh);
         andRegister(new CoreLoopImpl(
                 initialTitlebar,
                 frameTimer,
@@ -563,10 +580,10 @@ public class IOModule extends AbstractModule {
                 globalClock,
                 frameExecutor,
                 shaderFactory,
-                renderersSet,
+                shaderSubscribers,
                 shaderFilenamePrefix,
                 MeshImpl::new,
-                renderersSet,
+                meshSubscribers,
                 meshVertices,
                 meshUvCoords,
                 graphicsPreloader,

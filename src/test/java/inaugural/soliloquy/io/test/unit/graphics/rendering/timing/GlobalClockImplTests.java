@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.timing;
 
 import inaugural.soliloquy.io.graphics.rendering.GlobalClockImpl;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;

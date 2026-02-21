@@ -3,7 +3,7 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.timing;
 import inaugural.soliloquy.io.graphics.rendering.FrameTimerImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameRateReporter;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

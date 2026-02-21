@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,6 @@ import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
-import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
@@ -28,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -58,11 +58,10 @@ public class CoreLoopImplTests {
     private final int FRAME_TIMER_POLLING_INTERVAL = 20;
     private final long GLOBAL_TIMESTAMP = randomLong();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
-    @SuppressWarnings("rawtypes") private final Renderer MOCK_RENDERER = mock(Renderer.class);
-    @SuppressWarnings("rawtypes")
-    private final Set<Renderer> RENDERERS_WITH_SHADER = setOf(MOCK_RENDERER);
-    @SuppressWarnings("rawtypes")
-    private final Set<Renderer> RENDERERS_WITH_MESH = setOf(MOCK_RENDERER);
+    @SuppressWarnings({"unchecked"}) private final Consumer<Shader> MOCK_SHADER_SUBSCRIBER = mock(Consumer.class);
+    private final Set<Consumer<Shader>> SHADER_SUBSCRIBERS = setOf(MOCK_SHADER_SUBSCRIBER);
+    @SuppressWarnings({"unchecked"}) private final Consumer<Mesh> MOCK_MESH_SUBSCRIBER = mock(Consumer.class);
+    private final Set<Consumer<Mesh>> MESH_SUBSCRIBERS = setOf(MOCK_MESH_SUBSCRIBER);
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
     private final FakeGraphicsPreloader GRAPHICS_PRELOADER = new FakeGraphicsPreloader();
@@ -121,10 +120,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -149,10 +148,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -173,10 +172,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -197,10 +196,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -221,10 +220,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -245,10 +244,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -269,10 +268,10 @@ public class CoreLoopImplTests {
                 null,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -293,10 +292,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 null,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -317,10 +316,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 null,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -344,7 +343,7 @@ public class CoreLoopImplTests {
                 null,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -365,10 +364,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 null,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -389,10 +388,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 "",
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -413,10 +412,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 null,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -437,7 +436,7 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
                 null,
@@ -461,10 +460,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 null,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -485,10 +484,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 null,
                 GRAPHICS_PRELOADER,
@@ -509,10 +508,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 null,
@@ -533,10 +532,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -557,10 +556,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -581,10 +580,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -605,10 +604,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -629,10 +628,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -653,10 +652,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -677,10 +676,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -701,10 +700,10 @@ public class CoreLoopImplTests {
                 mockGlobalClock,
                 mockFrameExecutor,
                 mockShaderFactory,
-                RENDERERS_WITH_SHADER,
+                SHADER_SUBSCRIBERS,
                 SHADER_FILE_PREFIX,
                 meshFactory,
-                RENDERERS_WITH_MESH,
+                MESH_SUBSCRIBERS,
                 MESH_VERTICES,
                 MESH_UV_COORDINATES,
                 GRAPHICS_PRELOADER,
@@ -821,9 +820,9 @@ public class CoreLoopImplTests {
 
         coreLoop.startup(() -> closeAfterSomeTime(coreLoop));
 
-        verify(MOCK_RENDERER, once()).setMesh(mockMesh);
+        verify(MOCK_MESH_SUBSCRIBER, once()).accept(mockMesh);
         verify(mockShaderFactory, once()).make(SHADER_FILE_PREFIX);
-        verify(MOCK_RENDERER, once()).setShader(mockShader);
+        verify(MOCK_SHADER_SUBSCRIBER, once()).accept(mockShader);
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
         verify(mockMouseCursor, atLeastOnce()).updateCursor(anyLong());
     }

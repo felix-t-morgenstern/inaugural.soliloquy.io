@@ -9,19 +9,22 @@ import soliloquy.specs.io.graphics.Graphics;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
+import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.ui.EventInputs;
 
+import java.awt.*;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
 import static inaugural.soliloquy.io.api.Constants.STATIC_PROVIDER_FACTORY;
 import static inaugural.soliloquy.tools.collections.Collections.*;
-import static inaugural.soliloquy.tools.random.Random.randomColor;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
+import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
     private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
@@ -66,7 +69,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                         new AnimatedMouseCursorDefinitionDTO[]{},
                         new StaticMouseCursorDefinitionDTO[]{}
                 ),
-                () -> DisplayTest.runThenClose("Mouse event", 4000),
+                () -> DisplayTest.runThenClose("Mouse event", 8000),
                 MouseEventDisplayTest::populateTopLevelComponent
         );
     }
@@ -103,7 +106,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
 
         var sprite = graphics.getSprite(SPRITE_ID);
         var dimensProvider = staticProviderFactory.apply(randomUUID(),
-                floatBoxOf(0.25f, 0.125f, 0.75f, 0.875f));
+                floatBoxOf(0.375f, 0.3125f, 0.625f, 0.6875f));
         var spriteRenderableFactory = ioModule.provide(SpriteRenderableFactory.class);
         //noinspection unchecked
         var spriteRenderable = spriteRenderableFactory.make(
@@ -127,6 +130,35 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 topLevelComponent
         );
         spriteRenderable.setCapturesMouseEvents(true);
+
         topLevelComponent.add(spriteRenderable);
+        var vector1 = staticProvider(vertexOf(0.05f, 0.05f));
+        var vector2 = staticProvider(vertexOf(0.2f, 0.05f));
+        var vector3 = staticProvider(vertexOf(0.05f, 0.95f));
+        var triangleRenderableFactory = ioModule.provide(TriangleRenderableFactory.class);
+        topLevelComponent.add(triangleRenderableFactory.make(
+                vector1,
+                staticProvider(Color.ORANGE),
+                vector2,
+                staticProvider(Color.ORANGE),
+                vector3,
+                staticProvider(Color.ORANGE),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
+                mapOf(
+                        LEFT_MOUSE_BUTTON,
+                        ON_MOUSE_PRESS_CONSUMER
+                ),
+                mapOf(
+                        LEFT_MOUSE_BUTTON,
+                        ON_MOUSE_RELEASE_CONSUMER
+                ),
+                ON_MOUSE_OVER_CONSUMER,
+                ON_MOUSE_LEAVE_CONSUMER,
+                randomInt(),
+                randomUUID(),
+                topLevelComponent
+        ));
     }
 }

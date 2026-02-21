@@ -4,7 +4,7 @@ import inaugural.soliloquy.io.api.dto.MouseCursorImageDefinitionDTO;
 import inaugural.soliloquy.io.bootstrap.assetfactories.MouseCursorImageFactoryImpl;
 import inaugural.soliloquy.io.bootstrap.tasks.MouseCursorImagePreloaderTask;
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 
 

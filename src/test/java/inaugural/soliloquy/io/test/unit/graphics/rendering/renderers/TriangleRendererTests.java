@@ -1,6 +1,7 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeTriangleRenderable;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
@@ -20,6 +21,7 @@ import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 
+import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
@@ -59,6 +61,7 @@ public class TriangleRendererTests {
 
     @Mock private TimestampValidator mockTimestampValidator;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
+    @Mock private TriangleSegmentRenderer mockTriangleSegmentRenderer;
     @Mock private Mesh mockMesh;
     @Mock private Shader mockShader;
 
@@ -87,24 +90,29 @@ public class TriangleRendererTests {
         lenient().when(MOCK_TEXTURE_TILE_HEIGHT_PROVIDER.provide(anyLong()))
                 .thenReturn(randomFloatInRange(0f, 1f));
 
+        lenient().when(mockRenderingBoundaries.currentBoundaries()).thenReturn(WHOLE_SCREEN);
+
         mockMesh = mock(Mesh.class);
         mockShader = mock(Shader.class);
 
-        renderer = new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
+        renderer = new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries,
+                mockTriangleSegmentRenderer);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new TriangleRenderer(null, mockRenderingBoundaries));
+                () -> new TriangleRenderer(null, mockRenderingBoundaries,
+                        mockTriangleSegmentRenderer));
         assertThrows(IllegalArgumentException.class,
-                () -> new TriangleRenderer(mockTimestampValidator, null));
+                () -> new TriangleRenderer(mockTimestampValidator, null,
+                        mockTriangleSegmentRenderer));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries, null));
     }
 
     @Test
     public void testRenderUpdatesTimestamp() {
-        renderer.setMesh(mockMesh);
-        renderer.setShader(mockShader);
         var timestamp = randomLong();
 
         renderer.render(TRIANGLE_RENDERABLE, timestamp);
@@ -115,9 +123,6 @@ public class TriangleRendererTests {
 
     @Test
     public void testRenderWithInvalidArgs() {
-        renderer.setMesh(mockMesh);
-        renderer.setShader(mockShader);
-
         assertThrows(IllegalArgumentException.class,
                 () -> renderer.render(null, MOST_RECENT_TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () -> renderer
@@ -230,32 +235,5 @@ public class TriangleRendererTests {
                                 VERTEX_3_COLOR_PROVIDER, generateMockStaticProvider(randomInt()),
                                 MOCK_TEXTURE_TILE_WIDTH_PROVIDER, null),
                         MOST_RECENT_TIMESTAMP));
-    }
-
-    @Test
-    public void testRenderWithMeshAndShaderUnset() {
-        var triangleRendererWithoutMesh =
-                new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
-        var triangleRendererWithoutShader =
-                new TriangleRenderer(mockTimestampValidator, mockRenderingBoundaries);
-
-        triangleRendererWithoutMesh.setShader(mockShader);
-        triangleRendererWithoutShader.setMesh(mockMesh);
-
-        assertThrows(IllegalStateException.class, () -> triangleRendererWithoutMesh
-                .render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP));
-        assertThrows(IllegalStateException.class, () -> triangleRendererWithoutShader
-                .render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP));
-    }
-
-    @Test
-    public void testRenderUnbindsMeshAndShader() {
-        renderer.setMesh(mockMesh);
-        renderer.setShader(mockShader);
-
-        renderer.render(TRIANGLE_RENDERABLE, MOST_RECENT_TIMESTAMP);
-
-        verify(mockMesh, once()).unbind();
-        verify(mockShader, once()).unbind();
     }
 }

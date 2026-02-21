@@ -7,8 +7,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.SpriteRenderableFactory;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
-import static inaugural.soliloquy.tools.random.Random.randomColor;
-import static inaugural.soliloquy.tools.random.Random.randomFloatInRange;
+import static inaugural.soliloquy.tools.random.Random.*;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 
@@ -32,7 +31,7 @@ public class SpriteBorderDisplayTest extends SpriteSimpleDisplayTest {
         topLevelComponent.add(spriteRenderableFactory.make(
                 sprite,
                 staticProvider(randomFloatInRange(0.01f, 0.1f)),
-                staticProvider(randomColor()),
+                staticProvider(randomHighSaturationColor()),
                 listOf(),
                 dimensProvider,
                 0,

@@ -2,7 +2,9 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 
 import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
@@ -66,7 +68,8 @@ class TriangleRendererTileTest extends TriangleRendererTest {
     /** @noinspection rawtypes */
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        TriangleRenderer = new TriangleRenderer(TimestampValidator, RENDERING_BOUNDARIES);
+        TriangleRenderer = new TriangleRenderer(TimestampValidator, RENDERING_BOUNDARIES,
+                new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
 
         TriangleRenderable =
                 new TriangleRenderableImpl(

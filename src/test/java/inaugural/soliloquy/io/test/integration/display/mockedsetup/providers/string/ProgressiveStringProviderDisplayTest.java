@@ -5,7 +5,7 @@ import inaugural.soliloquy.io.graphics.renderables.providers.ProgressiveStringPr
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.textlinerenderer.TextLineRendererTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;

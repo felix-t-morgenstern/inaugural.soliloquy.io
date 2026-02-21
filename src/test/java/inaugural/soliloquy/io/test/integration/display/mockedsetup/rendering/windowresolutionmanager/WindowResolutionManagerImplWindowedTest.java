@@ -6,22 +6,22 @@ import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
-import inaugural.soliloquy.io.test.testdoubles.fakes.*;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
-import inaugural.soliloquy.tools.collections.Collections;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeComponentRenderer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
+import inaugural.soliloquy.io.test.testdoubles.fakes.FakeShaderFactory;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
-import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
-import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
 import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.function.BiFunction;
 
-import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.mockito.Mockito.mock;
@@ -48,20 +48,16 @@ class WindowResolutionManagerImplWindowedTest {
         when(mockGlobalClock.globalTimestamp()).thenReturn(timestamp);
         var frameTimer = new FakeFrameTimer();
         frameTimer.ShouldExecuteNextFrame = true;
-        //noinspection rawtypes
-        var renderersWithMesh = Collections.<Renderer>setOf();
 
         var mockTopLevelComponent = mock(ComponentImpl.class);
         when(mockTopLevelComponent.contentsRepresentation()).thenReturn(setOf());
         var frameExecutor = new FrameExecutorImpl(new FakeComponentRenderer(), 100, () -> {});
         frameExecutor.setTopLevelComponent(mockTopLevelComponent);
 
-        //noinspection rawtypes
-        var renderersWithShader = Collections.<Renderer>setOf();
         @SuppressWarnings("unchecked") var coreLoop =
                 new CoreLoopImpl("My title bar", frameTimer, 20, windowManager, mockGlobalClock,
-                        frameExecutor, new FakeShaderFactory(), renderersWithShader, "_",
-                        mock(BiFunction.class), renderersWithMesh, MESH_DATA, MESH_DATA,
+                        frameExecutor, new FakeShaderFactory(), setOf(), "_",
+                        mock(BiFunction.class), setOf(), MESH_DATA, MESH_DATA,
                         new FakeGraphicsPreloader(), mock(AudioLoader.class), setOf(), mapOf(),
                         mapOf(), mapOf(), mock(KeyEventListener.class), mock(MouseCursor.class),
                         mock(MouseListener.class));

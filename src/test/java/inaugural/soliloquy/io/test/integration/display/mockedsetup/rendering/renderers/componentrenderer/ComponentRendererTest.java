@@ -20,7 +20,6 @@ import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
-import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
@@ -59,12 +58,14 @@ public class ComponentRendererTest extends DisplayTest {
         when(MockFirstChildComponent.containingComponent()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
-        when(MockTopLevelComponent.contentsRepresentation()).thenReturn(setOf(MockFirstChildComponent));
+        when(MockTopLevelComponent.contentsRepresentation()).thenReturn(
+                setOf(MockFirstChildComponent));
 
         Renderers = mapOf();
         TimestampValidator = new TimestampValidator(null);
         var componentRenderer =
-                new ComponentRendererImpl(Renderers, COMPONENT_PRERENDER_HOOK, RENDERING_BOUNDARIES, TimestampValidator);
+                new ComponentRendererImpl(Renderers, COMPONENT_PRERENDER_HOOK, RENDERING_BOUNDARIES,
+                        TimestampValidator);
 
         var spriteAxe07Width = 512;
         var spriteAxe07Height = 512;
@@ -149,10 +150,11 @@ public class ComponentRendererTest extends DisplayTest {
         var coreLoop =
                 new CoreLoopImpl("My title bar",
                         frameTimer, 20, windowResolutionManager, GLOBAL_CLOCK, frameExecutor,
-                        new ShaderFactoryImpl(), renderersWithShader, SHADER_FILENAME_PREFIX,
-                        MeshImpl::new, renderersWithMesh, MESH_DATA, MESH_DATA, graphicsPreloader,
-                        mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(KeyEventListener.class), mock(MouseCursor.class), mock(MouseListener.class));
+                        new ShaderFactoryImpl(), setOf(spriteRenderer::setShader),
+                        SHADER_FILENAME_PREFIX, MeshImpl::new, setOf(spriteRenderer::setMesh),
+                        MESH_DATA, MESH_DATA, graphicsPreloader, mock(AudioLoader.class), setOf(),
+                        mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class),
+                        mock(MouseCursor.class), mock(MouseListener.class));
 
         graphicsPreloader.LoadAction = () -> {
             when(spriteAxe07.image()).thenReturn(new ImageFactoryImpl(0.5f)

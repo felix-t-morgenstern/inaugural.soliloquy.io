@@ -7,7 +7,7 @@ import inaugural.soliloquy.io.graphics.rendering.renderers.FiniteAnimationRender
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAnimationFrameSnippet;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeColorShiftStackAggregator;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.assets.Animation;
 import soliloquy.specs.io.graphics.assets.AnimationFrameSnippet;
 import soliloquy.specs.io.bootstrap.CoreLoop;

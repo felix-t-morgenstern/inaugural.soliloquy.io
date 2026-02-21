@@ -135,7 +135,7 @@ public class ComponentImplTests {
     }
 
     @Test
-    public void testConstructorRegistersSelfAndAddsSelfToContainingComponent() {
+    public void testConstructorRegistersSelf() {
         var mockComponent = mock(ComponentImpl.class);
 
         component = new ComponentImpl(UUID, Z, setOf(), OVERRIDES_LOWER_KEY_BINDINGS, mockComponent,
@@ -143,7 +143,6 @@ public class ComponentImplTests {
                 mockDeregisterComponent, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
                 mockRemoveFromMouseCapturing, mockPrerenderHook, mockAddHook);
 
-        verify(mockComponent, once()).add(component);
         verify(mockRegisterComponent, once()).accept(component);
     }
 

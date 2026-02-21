@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.test.behavioral;
 
 import inaugural.soliloquy.io.test.integration.audio.IntegrationTestsSetup;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.audio.Audio;
 import soliloquy.specs.io.audio.entities.Sound;
 

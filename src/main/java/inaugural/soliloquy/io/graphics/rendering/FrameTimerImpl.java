@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.graphics.rendering;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporter;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;

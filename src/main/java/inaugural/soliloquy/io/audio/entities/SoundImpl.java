@@ -1,7 +1,7 @@
 package inaugural.soliloquy.io.audio.entities;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -58,7 +58,7 @@ public class SoundImpl implements Sound {
             loopStopMs = durationMs = (int) MEDIA_PLAYER.getTotalDuration().toMillis();
             isReady = true;
             MEDIA_PLAYER
-                    .setOnMarker(mediaMarkerEvent -> setMillisecondPosition(loopRestartMs + 1));
+                    .setOnMarker(_ -> setMillisecondPosition(loopRestartMs + 1));
             MEDIA_PLAYER.setOnEndOfMedia(this::stop);
         });
         while (!isReady) {

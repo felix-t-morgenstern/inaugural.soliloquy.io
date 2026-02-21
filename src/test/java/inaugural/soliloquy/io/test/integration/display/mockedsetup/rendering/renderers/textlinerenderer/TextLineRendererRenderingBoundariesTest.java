@@ -2,7 +2,7 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 
 import inaugural.soliloquy.io.graphics.assets.FontImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TextLineRendererImpl;
-import inaugural.soliloquy.tools.CheckedExceptionWrapper;
+import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontDefinition;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.FontStyleDefinition;

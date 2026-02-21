@@ -41,7 +41,7 @@ abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
     }
 
     protected void drawPoint(float x, float y) {
-        glVertex2f((x * 2f) - 1f, 1f - (y * 2f));
+        glVertex2f(x, y);
     }
 
     protected void unbindMeshAndShader() {
