@@ -134,11 +134,6 @@ public class TriangleRenderableImpl
         vertex3ColorProvider = Check.ifNull(provider, "provider");
     }
 
-    /*
-     * Taken from
-     * https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
-     * on 2022/08/11
-     */
     @Override
     public boolean capturesMouseEventAtPoint(Vertex point, long timestamp)
             throws UnsupportedOperationException, IllegalArgumentException {
