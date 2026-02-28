@@ -1,11 +1,15 @@
-package inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle;
+package inaugural.soliloquy.io.test.integration.display.fullsuite.antialiasedlinesegment;
 
 import inaugural.soliloquy.io.IOModule;
-import inaugural.soliloquy.io.api.dto.*;
+import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
+import inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle.RectangleRenderingBoundaryClippingDisplayTest;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
+import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
 import soliloquy.specs.io.graphics.renderables.factories.ComponentFactory;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.renderables.providers.factories.FiniteLinearMovingProviderFactory;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 
@@ -13,16 +17,19 @@ import java.awt.*;
 
 import static inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static inaugural.soliloquy.tools.random.Random.randomHighSaturationColor;
+import static inaugural.soliloquy.tools.valueobjects.Vertex.translateVertex;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
-public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
+public class AntialiasedLineSegmentRenderingBoundaryClippingTest extends DisplayTest {
     public static void main(String[] args) {
         var displayTest = new DisplayTest();
         displayTest.runTest(
-                "Rectangle clipping display test",
+                "Antialiased line segment clipping display test",
                 new AssetDefinitionsDTO(
                         arrayOf(),
                         arrayOf(),
@@ -34,8 +41,8 @@ public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
                         arrayOf(),
                         arrayOf()
                 ),
-                () -> DisplayTest.runThenClose("Rectangle clipping", 8000),
-                RectangleRenderingBoundaryClippingDisplayTest::populateTopLevelComponent
+                () -> DisplayTest.runThenClose("Antialiased line segment clipping", 8000),
+                AntialiasedLineSegmentRenderingBoundaryClippingTest::populateTopLevelComponent
         );
     }
 
@@ -84,50 +91,44 @@ public class RectangleRenderingBoundaryClippingDisplayTest extends DisplayTest {
         ));
 
         var finiteLinearMovingProviderFactory = ioModule.provide(FiniteLinearMovingProviderFactory.class);
-        var squareLength = 0.2f;
-        var dimensProvider = finiteLinearMovingProviderFactory.make(
-                randomUUID(),
-                mapOf(
-                        pairOf(
-                                now,
-                                floatBoxOf(
-                                        vertexOf(0.1f,0.1f),
-                                        squareLength, squareLength
-                                )
-                        ),
-                        pairOf(
-                                now + 4000,
-                                floatBoxOf(
-                                        vertexOf(0.9f - squareLength,0.5f - (squareLength/2f)),
-                                        squareLength, squareLength
-                                )
-                        ),
-                        pairOf(
-                                now + 8000,
-                                floatBoxOf(
-                                        vertexOf(0.1f,0.9f - squareLength),
-                                        squareLength, squareLength
-                                )
-                        )
-                ),
-                null
-        );
-        componentWithRenderingBoundaries.add(rectangleRenderableFactory.make(
-                staticProvider(Color.RED),
-                staticProvider(Color.GREEN),
-                staticProvider(Color.WHITE),
-                staticProvider(Color.BLUE),
-                staticProvider(null),
-                staticProvider(1f),
-                staticProvider(1f),
-                mapOf(),
-                mapOf(),
-                null,
-                null,
-                dimensProvider,
+        var v1Start = vertexOf(0f, 0f);
+        var v2Start = vertexOf(.2f, .1f);
+
+        var antialiasedLineSegmentFactory =
+                ioModule.provide(AntialiasedLineSegmentRenderableFactory.class);
+        componentWithRenderingBoundaries.add(antialiasedLineSegmentFactory.make(
+                makeVertexProvider(finiteLinearMovingProviderFactory, now, v1Start),
+                makeVertexProvider(finiteLinearMovingProviderFactory, now, v2Start),
+                staticProvider(randomHighSaturationColor()),
+                staticProvider(.005f),
+                staticProvider(0.75f),
+                staticProvider(0.01f),
                 0,
                 randomUUID(),
                 componentWithRenderingBoundaries
         ));
+    }
+
+    private static ProviderAtTime<Vertex> makeVertexProvider(FiniteLinearMovingProviderFactory factory,
+                                                      long now,
+                                                      Vertex start) {
+        return factory.make(
+                randomUUID(),
+                mapOf(
+                        pairOf(
+                                now,
+                                start
+                        ),
+                        pairOf(
+                                now + 4000,
+                                translateVertex(start, 0.8f, 0.45f)
+                        ),
+                        pairOf(
+                                now + 8000,
+                                translateVertex(start, 0f, 0.9f)
+                        )
+                ),
+                null
+        );
     }
 }

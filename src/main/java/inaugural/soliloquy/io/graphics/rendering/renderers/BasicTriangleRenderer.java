@@ -83,8 +83,7 @@ public class BasicTriangleRenderer {
         setDrawColor(point.color);
         if (hasTexture) {
             glTexCoord2f(point.texCoordinate.X, point.texCoordinate.Y);
-        }
-        drawLoc(point.loc);
+        }glVertex2f(point.loc().X, point.loc().Y);
     }
 
     private void setDrawColor(Color color) {
@@ -95,10 +94,6 @@ public class BasicTriangleRenderer {
         else {
             glColor4f(1f, 1f, 1f, 1f);
         }
-    }
-
-    private void drawLoc(Vertex loc) {
-        glVertex2f(loc.X, loc.Y);
     }
 
     public void setMesh(Mesh mesh) throws IllegalArgumentException {
@@ -112,6 +107,9 @@ public class BasicTriangleRenderer {
     public record Point(Vertex loc, Color color, Vertex texCoordinate) {
         public static Point point(Vertex loc, Color color, Vertex texCoordinate) {
             return new Point(loc, color, texCoordinate);
+        }
+        public static Point point(Vertex loc, Color color) {
+            return new Point(loc, color, null);
         }
     }
 }

@@ -34,6 +34,24 @@ public class TriangleSegmentRenderer {
     }
 
     public void draw(
+            Point point1,
+            Point point2,
+            Point point3
+    ) {
+        draw(
+                point1.loc(),
+                point1.color(),
+                point2.loc(),
+                point2.color(),
+                point3.loc(),
+                point3.color(),
+                null,
+                null,
+                null
+        );
+    }
+
+    public void draw(
             Vertex vertex1,
             Color color1,
             Vertex vertex2,
@@ -45,6 +63,9 @@ public class TriangleSegmentRenderer {
             Float textureTileHeight
     ) {
         var triangleEncompassingDimens = polygonEncompassingDimens(vertex1, vertex2, vertex3);
+        if (triangleEncompassingDimens.width() == 0f || triangleEncompassingDimens.height() == 0f) {
+            return;
+        }
 
         var renderingBoundaries = RENDERING_BOUNDARIES.currentBoundaries();
         var dimensBoundsIntersect = intersection(triangleEncompassingDimens, renderingBoundaries);
@@ -59,8 +80,11 @@ public class TriangleSegmentRenderer {
                 pairOf(vertex3, color3)
         );
 
+        var hasColor = color1 != null && color2 != null && color3 != null;
+
         addPoints(
                 verticesAndColors,
+                hasColor,
                 renderingBoundaries,
                 triangleEncompassingDimens,
                 textureTileWidth,
@@ -81,6 +105,7 @@ public class TriangleSegmentRenderer {
             ) {
                 points.add(makePoint(
                         corner,
+                        hasColor,
                         verticesAndColors,
                         triangleEncompassingDimens,
                         textureTileWidth,
@@ -101,6 +126,7 @@ public class TriangleSegmentRenderer {
             var centroid = getVerticesCentroid(points.stream().map(Point::loc));
             var centroidPoint = makePoint(
                     centroid,
+                    hasColor,
                     verticesAndColors,
                     triangleEncompassingDimens,
                     textureTileWidth,
@@ -120,6 +146,7 @@ public class TriangleSegmentRenderer {
     }
 
     private void addPoints(List<Pair<Vertex, Color>> verticesAndColors,
+                           boolean hasColor,
                            FloatBox renderingBoundaries,
                            FloatBox encompassingDimens,
                            Float textureTileWidth,
@@ -163,8 +190,8 @@ public class TriangleSegmentRenderer {
                         1
                 );
                 // (If prev wasn't in and current is in, that implies 1 and only 1 intersect)
-                points.add(makePoint(intersects.getFirst(), verticesAndColors, encompassingDimens,
-                        textureTileWidth, textureTileHeight));
+                points.add(makePoint(intersects.getFirst(), hasColor, verticesAndColors,
+                        encompassingDimens, textureTileWidth, textureTileHeight));
             }
             // If prev was also in, it would have been added, and there will have been no
             // intersects to capture
@@ -180,33 +207,33 @@ public class TriangleSegmentRenderer {
                         slope,
                         renderingBoundaries,
                         prevWasIn ? 1 : 2
-                ).forEach(i -> {
-                    points.add(makePoint(i, verticesAndColors, encompassingDimens,
-                            textureTileWidth, textureTileHeight));
-                });
+                ).forEach(i -> points.add(
+                        makePoint(i, hasColor, verticesAndColors, encompassingDimens,
+                                textureTileWidth, textureTileHeight)));
             }
         }
 
 
         if (index < 3) {
-            addPoints(verticesAndColors, renderingBoundaries, encompassingDimens, textureTileWidth,
-                    textureTileHeight, points, index + 1, currentIsIn);
+            addPoints(verticesAndColors, hasColor, renderingBoundaries, encompassingDimens,
+                    textureTileWidth, textureTileHeight, points, index + 1, currentIsIn);
         }
     }
 
     private Point makePoint(Vertex loc,
+                            boolean hasColor,
                             List<Pair<Vertex, Color>> verticesAndColors,
                             FloatBox encompassingDimens,
                             Float textureTileWidth,
                             Float textureTileHeight) {
         return point(
                 loc,
-                triangulateColor(
+                hasColor ? triangulateColor(
                         loc,
-                        verticesAndColors.getFirst(),
+                        verticesAndColors.get(0),
                         verticesAndColors.get(1),
                         verticesAndColors.get(2)
-                ),
+                ) : null,
                 texCoordinates(
                         loc,
                         encompassingDimens,
@@ -285,12 +312,16 @@ public class TriangleSegmentRenderer {
                                       float xIntersectVal,
                                       float lowerY,
                                       float upperY) {
-        if (slope == Float.POSITIVE_INFINITY || slope == Float.NEGATIVE_INFINITY) {
+        if (Float.isInfinite(slope)) {
             return;
         }
         var yIntersectAtAxis = yIntersectAtX(slope, v1, xIntersectVal);
-        if (yIntersectAtAxis >= lowerY && yIntersectAtAxis <= upperY &&
-                valIsInRange(yIntersectAtAxis, v1.Y, v2.Y)) {
+        if (
+                yIntersectAtAxis >= lowerY &&
+                        yIntersectAtAxis <= upperY &&
+                        valIsInRange(yIntersectAtAxis, v1.Y, v2.Y) &&
+                        valIsInRange(xIntersectVal, v1.X, v2.X)
+        ) {
             intersects.add(vertexOf(xIntersectVal, yIntersectAtAxis));
         }
     }
@@ -302,7 +333,7 @@ public class TriangleSegmentRenderer {
                                         float yIntersectVal,
                                         float lowerX,
                                         float upperX) {
-        if (slope == Float.POSITIVE_INFINITY || slope == Float.NEGATIVE_INFINITY) {
+        if (Float.isInfinite(slope)) {
             if (valIsInRange(v1.X, lowerX, upperX) && valIsInRange(yIntersectVal, v1.Y, v2.Y)) {
                 intersects.add(vertexOf(v1.X, yIntersectVal));
             }
@@ -311,8 +342,12 @@ public class TriangleSegmentRenderer {
             }
         }
         var xIntersectAtAxis = xIntersectAtY(slope, v1, yIntersectVal);
-        if (xIntersectAtAxis >= lowerX && xIntersectAtAxis <= upperX &&
-                valIsInRange(xIntersectAtAxis, v1.X, v2.X)) {
+        if (
+                xIntersectAtAxis >= lowerX &&
+                        xIntersectAtAxis <= upperX &&
+                        valIsInRange(xIntersectAtAxis, v1.X, v2.X) &&
+                        valIsInRange(yIntersectVal, v1.Y, v2.Y)
+        ) {
             intersects.add(vertexOf(xIntersectAtAxis, yIntersectVal));
         }
     }
@@ -323,7 +358,6 @@ public class TriangleSegmentRenderer {
             Pair<Vertex, Color> renderingVertex2,
             Pair<Vertex, Color> renderingVertex3
     ) {
-
         if (point.equals(renderingVertex1.FIRST)) {
             return renderingVertex1.SECOND;
         }
@@ -402,20 +436,42 @@ public class TriangleSegmentRenderer {
                             Vertex oppositeVertex1,
                             Vertex oppositeVertex2) {
         var sourceToPointSlope = slope(source, point);
-        var sourceToPointYInt = yIntersectAtX(sourceToPointSlope, point, 0);
+
         var oppositeSegmentSlope = slope(oppositeVertex1, oppositeVertex2);
-        var oppositeSegmentYInt = yIntersectAtX(oppositeSegmentSlope, oppositeVertex1, 0);
 
-        var intersectX = (oppositeSegmentYInt - sourceToPointYInt) /
-                (sourceToPointSlope - oppositeSegmentSlope);
+        Vertex sourceToPointIntersectWithOppositeSegment;
+        if (Float.isInfinite(oppositeSegmentSlope)) {
+            sourceToPointIntersectWithOppositeSegment = vertexOf(
+                    oppositeVertex1.X,
+                    yIntersectAtX(sourceToPointSlope, source, oppositeVertex1.X)
+            );
+        }
+        else {
+            if (Float.isInfinite(sourceToPointSlope)) {
+                var parallelOppositeVertex =
+                        oppositeVertex1.X == source.X ? oppositeVertex1 : oppositeVertex2;
+                sourceToPointIntersectWithOppositeSegment =
+                        vertexOf(source.X, parallelOppositeVertex.Y);
+            }
+            else {
+                var sourceToPointYIntersect = yIntersectAtX(sourceToPointSlope, point, 0);
+                var oppositeSegmentYInt = yIntersectAtX(oppositeSegmentSlope, oppositeVertex1, 0);
+                var oppositeSegmentIntersectX = (oppositeSegmentYInt - sourceToPointYIntersect) /
+                        (sourceToPointSlope - oppositeSegmentSlope);
 
-        var intersect =
-                vertexOf(intersectX, (oppositeSegmentSlope * intersectX) + oppositeSegmentYInt);
+                sourceToPointIntersectWithOppositeSegment =
+                        vertexOf(oppositeSegmentIntersectX,
+                                (oppositeSegmentSlope * oppositeSegmentIntersectX) +
+                                        oppositeSegmentYInt
+                        );
+            }
+        }
 
         var sourceToPointDist = distance(source, point);
-        var sourceToIntersectDist = distance(source, intersect);
+        var sourceToOppositeIntersectIntersectDist =
+                distance(source, sourceToPointIntersectWithOppositeSegment);
 
-        return 1f - (sourceToPointDist / sourceToIntersectDist);
+        return 1f - (sourceToPointDist / sourceToOppositeIntersectIntersectDist);
     }
 
     private Vertex texCoordinates(Vertex vertex,

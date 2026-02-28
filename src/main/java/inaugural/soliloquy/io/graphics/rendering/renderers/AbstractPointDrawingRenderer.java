@@ -32,12 +32,8 @@ abstract class AbstractPointDrawingRenderer<TRenderable extends Renderable>
         }
     }
 
-    protected Color transparent(Color color) {
-        return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0);
-    }
-
     protected void drawPoint(Vertex point) {
-        drawPoint(point.X, point.Y);
+        glVertex2f(point.X, point.Y);
     }
 
     protected void drawPoint(float x, float y) {

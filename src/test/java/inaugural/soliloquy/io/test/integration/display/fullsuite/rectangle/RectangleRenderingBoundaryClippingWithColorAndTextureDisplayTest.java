@@ -96,21 +96,21 @@ public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest ex
                         pairOf(
                                 now,
                                 floatBoxOf(
-                                        vertexOf(0.1f,0.1f),
+                                        vertexOf(0.05f,0.05f),
                                         squareLength, squareLength
                                 )
                         ),
                         pairOf(
                                 now + 4000,
                                 floatBoxOf(
-                                        vertexOf(0.9f - squareLength,0.5f - (squareLength/2f)),
+                                        vertexOf(0.95f - squareLength,0.5f - (squareLength/2f)),
                                         squareLength, squareLength
                                 )
                         ),
                         pairOf(
                                 now + 8000,
                                 floatBoxOf(
-                                        vertexOf(0.1f,0.9f - squareLength),
+                                        vertexOf(0.05f,0.95f - squareLength),
                                         squareLength, squareLength
                                 )
                         )
@@ -120,10 +120,10 @@ public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest ex
         var graphics = ioModule.provide(Graphics.class);
         var backgroundTex = graphics.getImage(TILE_LOCATION_RELATIVE_LOCATION).textureId();
         componentWithRenderingBoundaries.add(rectangleRenderableFactory.make(
-                staticProvider(randomHighSaturationColor()),
-                staticProvider(randomHighSaturationColor()),
-                staticProvider(randomHighSaturationColor()),
-                staticProvider(randomHighSaturationColor()),
+                staticProvider(Color.RED),
+                staticProvider(Color.GREEN),
+                staticProvider(Color.BLUE),
+                staticProvider(Color.WHITE),
                 staticProvider(backgroundTex),
                 staticProvider(squareLength / 2f),
                 staticProvider(squareLength / 2f),

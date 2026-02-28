@@ -62,12 +62,12 @@ public class CombinationTest extends DisplayTest {
                                 new SpriteDefinitionDTO(SPRITE_ID, RPG_WEAPONS_RELATIVE_LOCATION,
                                         266, 271, 313, 343)
                         },
-                        new AnimationDefinitionDTO[]{},
-                        new GlobalLoopingAnimationDefinitionDTO[]{},
-                        new ImageAssetSetDefinitionDTO[]{},
-                        new MouseCursorImageDefinitionDTO[]{},
-                        new AnimatedMouseCursorDefinitionDTO[]{},
-                        new StaticMouseCursorDefinitionDTO[]{}
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf()
                 ),
                 () -> DisplayTest.runThenClose("Combination", 4000),
                 CombinationTest::populateTopLevelComponent

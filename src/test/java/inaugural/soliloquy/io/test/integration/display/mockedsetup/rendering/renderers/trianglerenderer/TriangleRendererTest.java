@@ -23,7 +23,7 @@ class TriangleRendererTest extends DisplayTest {
             WindowResolutionManager windowResolutionManager,
             TriangleRenderable renderable) {
         TriangleRenderer =
-                new TriangleRenderer(null, RENDERING_BOUNDARIES, new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
+                new TriangleRenderer(null, new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
 
         TriangleRenderable = renderable;
 

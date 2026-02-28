@@ -8,6 +8,7 @@ import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFact
 
 import java.awt.*;
 
+import static inaugural.soliloquy.tools.collections.Collections.arrayOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static java.util.UUID.randomUUID;
@@ -19,15 +20,15 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
         displayTest.runTest(
                 "Simple Rectangle display test",
                 new AssetDefinitionsDTO(
-                        new ImageDefinitionDTO[]{},
-                        new FontDefinitionDTO[]{},
-                        new SpriteDefinitionDTO[]{},
-                        new AnimationDefinitionDTO[]{},
-                        new GlobalLoopingAnimationDefinitionDTO[]{},
-                        new ImageAssetSetDefinitionDTO[]{},
-                        new MouseCursorImageDefinitionDTO[]{},
-                        new AnimatedMouseCursorDefinitionDTO[]{},
-                        new StaticMouseCursorDefinitionDTO[]{}
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf(),
+                        arrayOf()
                 ),
                 () -> DisplayTest.runThenClose("Simple Rectangle", 4000),
                 RectangleSimpleDisplayTest::populateTopLevelComponent

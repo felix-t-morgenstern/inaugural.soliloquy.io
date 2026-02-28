@@ -3,7 +3,9 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.providers.re
 import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.providers.RectangleAnimatedBackgroundTextureIdProvider;
+import inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.ImageDefinition;
@@ -63,7 +65,9 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
             float borderThickness, Color borderColor,
             ColorShiftStackAggregator colorShiftStackAggregator,
             WindowResolutionManager windowResolutionManager) {
-        return setOf(RectangleRenderer = new RectangleRenderer(TimestampValidator, RENDERING_BOUNDARIES));
+        return setOf(RectangleRenderer =
+                new RectangleRenderer(TimestampValidator,
+                        new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer())));
     }
 
     protected static void graphicsPreloaderLoadAction() {
@@ -108,7 +112,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
 
         RectangleAnimatedBackgroundTextureIdProvider =
                 new RectangleAnimatedBackgroundTextureIdProvider(java.util.UUID.randomUUID(),
-                        msDuration, (int) (currentTimestamp % msDuration), frames, null, TimestampValidator);
+                        msDuration, (int) (currentTimestamp % msDuration), frames, null,
+                        TimestampValidator);
 
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
@@ -118,7 +123,8 @@ public class RectangleAnimatedBackgroundTextureIdProviderTest extends DisplayTes
                 RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
                 RENDERING_BOUNDARIES, TimestampValidator);
 
-        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(RectangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
+                setOf(RectangleRenderable));
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
 
         FrameTimer.ShouldExecuteNextFrame = true;

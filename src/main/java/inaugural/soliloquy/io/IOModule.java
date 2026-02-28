@@ -69,12 +69,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.io.api.Settings.*;
 import static inaugural.soliloquy.io.graphics.renderables.ComponentImpl.COMPONENT_PRERENDER_HOOK;
-import static inaugural.soliloquy.tools.collections.Collections.*;
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
@@ -258,57 +258,95 @@ public class IOModule extends AbstractModule {
         // Renderers
         // =========
 
+        var shaderSubscribers = Collections.<Consumer<Shader>>setOf();
+        var meshSubscribers = Collections.<Consumer<Mesh>>setOf();
+
         var shiftAggregator = new ColorShiftStackAggregatorImpl();
 
         var basicTriangleRenderer = new BasicTriangleRenderer();
+        shaderSubscribers.add(basicTriangleRenderer::setShader);
+        meshSubscribers.add(basicTriangleRenderer::setMesh);
+
         var triangleSegmentRenderer =
                 new TriangleSegmentRenderer(renderingBoundaries, basicTriangleRenderer);
 
+        var antialiasedLineSegmentRenderer =
+                new AntialiasedLineSegmentRenderer(resManager, timestampValidator,
+                        triangleSegmentRenderer);
         contentRenderers.put(
                 AntialiasedLineSegmentRenderableImpl.class,
-                new AntialiasedLineSegmentRenderer(resManager, timestampValidator,
-                        renderingBoundaries)
-        );
-        contentRenderers.put(
-                FiniteAnimationRenderableImpl.class,
-                new FiniteAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
+                antialiasedLineSegmentRenderer
         );
 
+        var finiteAnimationRenderer = new FiniteAnimationRenderer(renderingBoundaries,
+                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
+        contentRenderers.put(
+                FiniteAnimationRenderableImpl.class,
+                finiteAnimationRenderer
+        );
+        shaderSubscribers.add(finiteAnimationRenderer::setShader);
+        meshSubscribers.add(finiteAnimationRenderer::setMesh);
+
+        var globalLoopingAnimationRenderer = new GlobalLoopingAnimationRenderer(renderingBoundaries,
+                resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator);
         contentRenderers.put(
                 GlobalLoopingAnimationRenderableImpl.class,
-                new GlobalLoopingAnimationRenderer(renderingBoundaries,
-                        resManager::windowWidthToHeightRatio, shiftAggregator, timestampValidator)
+                globalLoopingAnimationRenderer
         );
+        shaderSubscribers.add(globalLoopingAnimationRenderer::setShader);
+        meshSubscribers.add(globalLoopingAnimationRenderer::setMesh);
+
+        var imageAssetSetRenderer =
+                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 ImageAssetSetRenderableImpl.class,
-                new ImageAssetSetRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator)
+                imageAssetSetRenderer
         );
+        shaderSubscribers.add(imageAssetSetRenderer::setShader);
+        meshSubscribers.add(imageAssetSetRenderer::setMesh);
+
+        var rasterizedLineSegmentRenderer =
+                new RasterizedLineSegmentRenderer(timestampValidator, renderingBoundaries);
         contentRenderers.put(
                 RasterizedLineSegmentRenderableImpl.class,
-                new RasterizedLineSegmentRenderer(timestampValidator, renderingBoundaries)
+                rasterizedLineSegmentRenderer
         );
+        shaderSubscribers.add(imageAssetSetRenderer::setShader);
+        meshSubscribers.add(imageAssetSetRenderer::setMesh);
+
+        var rectangleRenderer = new RectangleRenderer(timestampValidator,
+                triangleSegmentRenderer);
         contentRenderers.put(
                 RectangleRenderableImpl.class,
-                new RectangleRenderer(timestampValidator, renderingBoundaries)
+                rectangleRenderer
         );
+
+        var spriteRenderer =
+                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
+                        shiftAggregator, timestampValidator);
         contentRenderers.put(
                 SpriteRenderableImpl.class,
-                new SpriteRenderer(renderingBoundaries, resManager::windowWidthToHeightRatio,
-                        shiftAggregator, timestampValidator)
+                spriteRenderer
         );
+        shaderSubscribers.add(spriteRenderer::setShader);
+        meshSubscribers.add(spriteRenderer::setMesh);
+
         var defaultFontColor = (Color) getSetting.apply(DEFAULT_FONT_COLOR_ID).getValue();
+        var textLineRenderer = andRegister(
+                new TextLineRendererImpl(renderingBoundaries, defaultFontColor,
+                        resManager::windowWidthToHeightRatio, timestampValidator),
+                TEXT_LINE_RENDERER);
         contentRenderers.put(
                 TextLineRenderableImpl.class,
-                andRegister(new TextLineRendererImpl(renderingBoundaries, defaultFontColor,
-                                resManager::windowWidthToHeightRatio, timestampValidator),
-                        TEXT_LINE_RENDERER)
+                textLineRenderer
         );
+        shaderSubscribers.add(textLineRenderer::setShader);
+        meshSubscribers.add(textLineRenderer::setMesh);
+
         contentRenderers.put(
                 TriangleRenderableImpl.class,
-                new TriangleRenderer(timestampValidator, renderingBoundaries,
-                        triangleSegmentRenderer)
+                new TriangleRenderer(timestampValidator, triangleSegmentRenderer)
         );
 
         // ===========
@@ -563,15 +601,6 @@ public class IOModule extends AbstractModule {
 
         @SuppressWarnings("unchecked") var audioRelDirs =
                 (Set<String>) (getSetting.apply(AUDIO_RELATIVE_DIRS_ID).getValue());
-        var renderersSet = setOf(contentRenderers.values());
-        var shaderSubscribers = renderersSet.stream()
-                .map(r -> (Consumer<Shader>) r::setShader)
-                .collect(Collectors.toSet());
-        shaderSubscribers.add(basicTriangleRenderer::setShader);
-        var meshSubscribers = renderersSet.stream()
-                .map(r -> (Consumer<Mesh>) r::setMesh)
-                .collect(Collectors.toSet());
-        meshSubscribers.add(basicTriangleRenderer::setMesh);
         andRegister(new CoreLoopImpl(
                 initialTitlebar,
                 frameTimer,

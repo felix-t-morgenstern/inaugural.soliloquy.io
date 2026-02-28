@@ -3,8 +3,10 @@ package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.re
 import inaugural.soliloquy.io.bootstrap.assetfactories.ImageFactoryImpl;
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.SpriteRenderableImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.SpriteRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.spriterenderer.SpriteRendererTest;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeSprite;
@@ -42,7 +44,8 @@ public class CombinationTest extends SpriteRendererTest {
             generateMockStaticProvider(null);
     private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
     private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
-    private final static ProviderAtTime<FloatBox> RECT_RENDERING_AREA_PROVIDER = WHOLE_SCREEN_PROVIDER;
+    private final static ProviderAtTime<FloatBox> RECT_RENDERING_AREA_PROVIDER =
+            WHOLE_SCREEN_PROVIDER;
     private final static String TILE_LOCATION =
             "./src/test/resources/images/tiles/sergey-shmidt-koy6FlCCy5s-unsplash.jpg";
 
@@ -84,12 +87,14 @@ public class CombinationTest extends SpriteRendererTest {
 
 
 
-        RectangleRenderer = new RectangleRenderer(TimestampValidator, RENDERING_BOUNDARIES);
+        RectangleRenderer = new RectangleRenderer(TimestampValidator,
+                new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
                 staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
-                RECT_RENDERING_AREA_PROVIDER, 0, java.util.UUID.randomUUID(), MockFirstChildComponent,
+                RECT_RENDERING_AREA_PROVIDER, 0, java.util.UUID.randomUUID(),
+                MockFirstChildComponent,
                 RENDERING_BOUNDARIES, TimestampValidator);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);

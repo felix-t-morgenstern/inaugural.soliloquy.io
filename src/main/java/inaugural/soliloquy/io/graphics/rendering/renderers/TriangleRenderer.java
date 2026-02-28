@@ -3,17 +3,17 @@ package inaugural.soliloquy.io.graphics.rendering.renderers;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.TriangleRenderable;
-import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
-public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRenderable>
-        implements Renderer<TriangleRenderable> {
+public class TriangleRenderer implements Renderer<TriangleRenderable> {
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
     private final TriangleSegmentRenderer TRIANGLE_SEGMENT_RENDERER;
 
     public TriangleRenderer(TimestampValidator timestampValidator,
-                            RenderingBoundaries renderingBoundaries,
                             TriangleSegmentRenderer triangleSegmentRenderer) {
-        super(timestampValidator, renderingBoundaries);
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
         TRIANGLE_SEGMENT_RENDERER =
                 Check.ifNull(triangleSegmentRenderer, "triangleSegmentRenderer");
     }
@@ -23,42 +23,20 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
             throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        Check.ifNull(renderable, "renderable");
-
-        Check.ifNull(renderable.getVertex1Provider(),
-                "renderable.getVertex1Provider");
         var vertex1 = renderable.getVertex1Provider().provide(timestamp);
-        Check.ifNull(vertex1, "provided vertex 1");
-
-        Check.ifNull(renderable.getVertex1ColorProvider(), "renderable.getVertex1ColorProvider");
         var color1 = renderable.getVertex1ColorProvider().provide(timestamp);
-
-        Check.ifNull(renderable.getVertex2Provider(),
-                "renderable.getVertex2Provider");
         var vertex2 = renderable.getVertex2Provider().provide(timestamp);
-        Check.ifNull(vertex2, "provided vertex 2");
-
-        Check.ifNull(renderable.getVertex2ColorProvider(), "renderable.getVertex2ColorProvider");
         var color2 = renderable.getVertex2ColorProvider().provide(timestamp);
-
-        Check.ifNull(renderable.getVertex3Provider(), "renderable.getVertex3Provider");
         var vertex3 = renderable.getVertex3Provider().provide(timestamp);
-        Check.ifNull(vertex3, "provided vertex 3");
-
-        Check.ifNull(renderable.getVertex3ColorProvider(), "renderable.getVertex3ColorProvider");
         var color3 = renderable.getVertex3ColorProvider().provide(timestamp);
 
-        Check.ifNull(renderable.getTextureIdProvider(), "renderable.getTextureIdProvider");
-        var textureId = renderable.getTextureIdProvider().provide(timestamp);
+        var texId = renderable.getTextureIdProvider().provide(timestamp);
 
-        var textureTileWidth = Check.ifNull(renderable.getTextureTileWidthProvider(),
-                "renderable.getTextureTileWidthProvider()").provide(timestamp);
-        var textureTileHeight = Check.ifNull(renderable.getTextureTileHeightProvider(),
-                "renderable.getTextureTileHeightProvider()").provide(timestamp);
-
-        if (textureId != null) {
-            Check.throwOnLteZero(textureTileWidth, "textureTileWidth (with non-null textureId)");
-            Check.throwOnLteZero(textureTileHeight, "textureTileHeight (with non-null textureId)");
+        Float texTileWidth = null;
+        Float texTileHeight = null;
+        if (texId != null) {
+            texTileWidth = renderable.getTextureTileWidthProvider().provide(timestamp);
+            texTileHeight = renderable.getTextureTileHeightProvider().provide(timestamp);
         }
 
         TRIANGLE_SEGMENT_RENDERER.draw(
@@ -68,14 +46,19 @@ public class TriangleRenderer extends AbstractPointDrawingRenderer<TriangleRende
                 color2,
                 vertex3,
                 color3,
-                textureId,
-                textureTileWidth,
-                textureTileHeight
+                texId,
+                texTileWidth,
+                texTileHeight
         );
     }
 
     @Override
-    protected String className() {
-        return "TriangleRenderer";
+    public void setMesh(Mesh mesh) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    public void setShader(Shader shader) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("");
     }
 }

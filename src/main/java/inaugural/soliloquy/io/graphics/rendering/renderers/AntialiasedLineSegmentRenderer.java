@@ -4,36 +4,48 @@ import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.AntialiasedLineSegmentRenderable;
-import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.graphics.rendering.Mesh;
+import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
+import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer.Point.point;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static java.lang.Math.abs;
-import static org.lwjgl.opengl.GL11.*;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class AntialiasedLineSegmentRenderer
-        extends AbstractPointDrawingRenderer<AntialiasedLineSegmentRenderable> {
+        implements Renderer<AntialiasedLineSegmentRenderable> {
     private final Supplier<Float> WINDOW_WIDTH_TO_HEIGHT_RATIO;
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
+    private final TriangleSegmentRenderer TRIANGLE_SEGMENT_RENDERER;
 
     private static final Map<Float, Map<Float, Vertex>>
             GET_OUTER_CCW_X_ADJUSTMENT_MEMOIZATION =
             mapOf();
-    private static final Map<Float, Float> HALVING_MEMOIZATION = mapOf();
-    private static final Map<Float, Float> SQUARE_ROOT_MEMOIZATION = mapOf();
-    private static final Map<Float, Float> SQUARING_MEMOIZATION = mapOf();
 
     public AntialiasedLineSegmentRenderer(WindowResolutionManager windowResolutionManager,
                                           TimestampValidator timestampValidator,
-                                          RenderingBoundaries renderingBoundaries) {
-        super(timestampValidator, renderingBoundaries);
-        Check.ifNull(windowResolutionManager, "windowResolutionManager");
-        WINDOW_WIDTH_TO_HEIGHT_RATIO = windowResolutionManager::windowWidthToHeightRatio;
+                                          TriangleSegmentRenderer triangleSegmentRenderer) {
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
+        WINDOW_WIDTH_TO_HEIGHT_RATIO = Check.ifNull(windowResolutionManager,
+                "windowResolutionManager")::windowWidthToHeightRatio;
+        TRIANGLE_SEGMENT_RENDERER =
+                Check.ifNull(triangleSegmentRenderer, "triangleSegmentRenderer");
+    }
+
+    @Override
+    public void setMesh(Mesh mesh) throws IllegalArgumentException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setShader(Shader shader) throws IllegalArgumentException {
+        throw new UnsupportedOperationException();
     }
 
     // TODO: Consider memoizing this whole damn thing, possibly with a memo lifetime?
@@ -42,45 +54,51 @@ public class AntialiasedLineSegmentRenderer
             throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
 
-        Check.ifNull(renderable, "renderable");
-
-        Check.ifNull(renderable.getThicknessGradientPercentProvider(),
-                "renderable.getThicknessGradientPercentProvider()");
-        Check.ifNull(renderable.getLengthGradientPercentProvider(),
-                "renderable.getLengthGradientPercentProvider()");
-        Check.ifNull(renderable.getThicknessProvider(), "renderable.getThicknessProvider()");
-        Check.ifNull(renderable.getColorProvider(), "renderable.getColorProvider()");
-        Check.ifNull(renderable.getVertex1Provider(), "renderable.getVertex1Provider()");
-        Check.ifNull(renderable.getVertex2Provider(), "renderable.getVertex2Provider()");
-
         var thicknessGradientPercent =
                 renderable.getThicknessGradientPercentProvider().provide(timestamp);
-        Check.ifNull(thicknessGradientPercent, "provided thicknessGradientPercent");
-        Check.isBetweenZeroAndOne(thicknessGradientPercent, "provided thicknessGradientPercent");
-
         var lengthGradientPercent =
                 renderable.getLengthGradientPercentProvider().provide(timestamp);
-        Check.ifNull(lengthGradientPercent, "provided lengthGradientPercent");
-        Check.isBetweenZeroAndOne(lengthGradientPercent, "provided lengthGradientPercent");
-
-        Float thickness = renderable.getThicknessProvider().provide(timestamp);
-        Check.ifNull(thickness, "provided thickness");
-        Check.throwOnLteZero(thickness, "provided thickness");
-
-        Color color = renderable.getColorProvider().provide(timestamp);
-        Check.ifNull(color, "color");
-
+        var thickness = renderable.getThicknessProvider().provide(timestamp);
+        var color = renderable.getColorProvider().provide(timestamp);
         var vertex1 = renderable.getVertex1Provider().provide(timestamp);
-        Check.ifNull(vertex1, "provided vertex1");
         var vertex2 = renderable.getVertex2Provider().provide(timestamp);
-        Check.ifNull(vertex2, "provided vertex2");
-
-        unbindMeshAndShader();
 
         var x1 = vertex1.X;
         var y1 = vertex1.Y;
         var x2 = vertex2.X;
         var y2 = vertex2.Y;
+
+        // The "antialiased line segment" is actually a rotatable rectangle, a percentage of
+        // whose outer area is a gradient leading from transparency to its color; the renderable
+        // just defines that rectangle in odd terms (i.e., the locations of its edges along one
+        // of its central axes, and the distance from that axis to its other edges). Put
+        // differently, the "line segment" can be thought of as nine rectangles; the middle one
+        // is filled in with the specified color, and the outer ones start filled in where they
+        // meet the middle rectangle, and have a gradient towards transparency on their outer
+        // edges. This is what makes the line segment "fuzzy" or "antialiased". "Clockwise" here
+        // refers to the rotational orientation from the perspective of v1 looking at v2. So, for
+        // instance, if v2 is directly above v1, the "clockwise" points would be those on the
+        // left side of the "line segment".
+
+        // O---D------------------------------------D---O
+        // |   |                                    |   |
+        // P---I------------------------------------I---P
+        // |   |                                    |   |
+        // V   |                                    |   V
+        // |   |                                    |   |
+        // P---I------------------------------------I---P
+        // |   |                                    |   |
+        // O---D------------------------------------D---O
+
+        // V - Vertices (for reference)
+        // O - Outer
+        // D - Distal (since they're furthest from their respective vertices)
+        // P - Proximal (since they're closest)
+        // I - Inner
+
+        // Also, OpenGL does support antialiased lines out-of-the-box, but this functionality is
+        // less flexible and is inconsistent across systems, but using CPU compute for this may
+        // be inadvised (and perhaps there should be two rather than one triangle)
 
         Vertex v1OuterCcw;
         Vertex v1ProximalCcw;
@@ -110,11 +128,10 @@ public class AntialiasedLineSegmentRenderer
         var run = (x2 - x1);
 
         if (run == 0) {
-            // Logic for vertical line segments should be MUCH_ simpler.
+            // Logic for vertical line segments should be _MUCH_ simpler.
 
             if (rise == 0f) {
-                // If there is simply no line at all, don't draw it. Maybe this should throw an
-                // exception?
+                // If there is simply no line at all, don't draw it.
                 return;
             }
 
@@ -125,9 +142,9 @@ public class AntialiasedLineSegmentRenderer
                 y1 = placeholder;
             }
 
-            var vertexToOuter = halve(thickness);
-            var vertexToProximal = halve(thickness) * (1f - thicknessGradientPercent);
-            var outerToDistal = halve(y2 - y1) * lengthGradientPercent;
+            var vertexToOuter = thickness / 2f;
+            var vertexToProximal = (thickness / 2f) * (1f - thicknessGradientPercent);
+            var outerToDistal = ((y2 - y1) / 2f) * lengthGradientPercent;
 
             v1OuterCcw = vertexOf(x1 + vertexToOuter, y1);
             v1ProximalCcw = vertexOf(x1 + vertexToProximal, y1);
@@ -149,7 +166,7 @@ public class AntialiasedLineSegmentRenderer
         else {
             // NB: Slopes are reversed, since Y values go from 0.0 at the top to 1.0 at the bottom
 
-            var length = sqRoot(square(rise) + square(run));
+            var length = (float) Math.sqrt((rise * rise) + (run * run));
 
             var providedSlope = rise / run;
             var reciprocalSlope = -1.0f / providedSlope;
@@ -175,7 +192,7 @@ public class AntialiasedLineSegmentRenderer
                 thickness *= distentionFactor;
             }
 
-            var halfThickness = halve(thickness);
+            var halfThickness = thickness / 2f;
 
             var outerCcwAdjustments = getAdjustments(halfThickness, reciprocalSlope);
             var outerCcwXAdjustment = outerCcwAdjustments.X;
@@ -185,7 +202,7 @@ public class AntialiasedLineSegmentRenderer
             var proximalCcwYAdjustment = proximalCcwXAdjustment * reciprocalSlope;
 
             var lengthGradientAdjustments =
-                    getAdjustments(halve(length) * lengthGradientPercent, providedSlope);
+                    getAdjustments((length / 2f) * lengthGradientPercent, providedSlope);
 
             var lengthGradientXAdjust = lengthGradientAdjustments.X;
             var lengthGradientYAdjust = lengthGradientAdjustments.Y;
@@ -219,99 +236,132 @@ public class AntialiasedLineSegmentRenderer
                     v2ProximalCw.Y - lengthGradientYAdjust);
         }
 
-        glBegin(GL_TRIANGLES);
+        var transparent = transparent(color);
 
-        setDrawColor(transparent(color));
-        drawPoint(v1OuterCcw);
-        drawPoint(v1DistalCcw);
-        setDrawColor(color);
-        drawPoint(v1InnerCcw);
+        var p1OuterCcw = point(v1OuterCcw, transparent);
+        var p1ProximalCcw = point(v1ProximalCcw, transparent);
+        var p1DistalCcw = point(v1DistalCcw, transparent);
+        var p1InnerCcw = point(v1InnerCcw, color);
+        var p1OuterCw = point(v1OuterCw, transparent);
+        var p1ProximalCw = point(v1ProximalCw, transparent);
+        var p1DistalCw = point(v1DistalCw, transparent);
+        var p1InnerCw = point(v1InnerCw, color);
+        var p2OuterCcw = point(v2OuterCcw, transparent);
+        var p2ProximalCcw = point(v2ProximalCcw, transparent);
+        var p2DistalCcw = point(v2DistalCcw, transparent);
+        var p2InnerCcw = point(v2InnerCcw, color);
+        var p2OuterCw = point(v2OuterCw, transparent);
+        var p2ProximalCw = point(v2ProximalCw, transparent);
+        var p2DistalCw = point(v2DistalCw, transparent);
+        var p2InnerCw = point(v2InnerCw, color);
 
-        drawPoint(v1InnerCcw);
-        setDrawColor(transparent(color));
-        drawPoint(v1OuterCcw);
-        drawPoint(v1ProximalCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1OuterCcw,
+                p1DistalCcw,
+                p1InnerCcw
+        );
 
-        drawPoint(v1ProximalCcw);
-        drawPoint(v1ProximalCw);
-        setDrawColor(color);
-        drawPoint(v1InnerCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCcw,
+                p1OuterCcw,
+                p1ProximalCcw
+        );
 
-        drawPoint(v1InnerCw);
-        drawPoint(v1InnerCcw);
-        setDrawColor(transparent(color));
-        drawPoint(v1ProximalCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1ProximalCcw,
+                p1ProximalCw,
+                p1InnerCcw
+        );
 
-        drawPoint(v1OuterCw);
-        drawPoint(v1ProximalCw);
-        setDrawColor(color);
-        drawPoint(v1InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCw,
+                p1InnerCcw,
+                p1ProximalCw
+        );
 
-        drawPoint(v1InnerCw);
-        setDrawColor(transparent(color));
-        drawPoint(v1OuterCw);
-        drawPoint(v1DistalCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1OuterCw,
+                p1ProximalCw,
+                p1InnerCw
+        );
 
-        setDrawColor(color);
-        drawPoint(v1InnerCcw);
-        setDrawColor(transparent(color));
-        drawPoint(v1DistalCcw);
-        drawPoint(v2DistalCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCw,
+                p1OuterCw,
+                p1DistalCw
+        );
 
-        drawPoint(v2DistalCcw);
-        setDrawColor(color);
-        drawPoint(v1InnerCcw);
-        drawPoint(v2InnerCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCcw,
+                p1DistalCcw,
+                p2DistalCcw
+        );
 
-        drawPoint(v1InnerCcw);
-        drawPoint(v2InnerCcw);
-        drawPoint(v1InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2DistalCcw,
+                p1InnerCcw,
+                p2InnerCcw
+        );
 
-        drawPoint(v2InnerCcw);
-        drawPoint(v1InnerCw);
-        drawPoint(v2InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCcw,
+                p2InnerCcw,
+                p1InnerCw
+        );
 
-        drawPoint(v1InnerCw);
-        drawPoint(v2InnerCw);
-        setDrawColor(transparent(color));
-        drawPoint(v1DistalCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2InnerCcw,
+                p1InnerCw,
+                p2InnerCw
+        );
 
-        drawPoint(v1DistalCw);
-        drawPoint(v2DistalCw);
-        setDrawColor(color);
-        drawPoint(v2InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1InnerCw,
+                p2InnerCw,
+                p1DistalCw
+        );
 
-        drawPoint(v2InnerCcw);
-        setDrawColor(transparent(color));
-        drawPoint(v2DistalCcw);
-        drawPoint(v2OuterCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p1DistalCw,
+                p2DistalCw,
+                p2InnerCw
+        );
 
-        drawPoint(v2OuterCcw);
-        drawPoint(v2ProximalCcw);
-        setDrawColor(color);
-        drawPoint(v2InnerCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2InnerCcw,
+                p2DistalCcw,
+                p2OuterCcw
+        );
 
-        drawPoint(v2InnerCw);
-        drawPoint(v2InnerCcw);
-        setDrawColor(transparent(color));
-        drawPoint(v2ProximalCcw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2OuterCcw,
+                p2ProximalCcw,
+                p2InnerCcw
+        );
 
-        drawPoint(v2ProximalCcw);
-        drawPoint(v2ProximalCw);
-        setDrawColor(color);
-        drawPoint(v2InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2InnerCw,
+                p2InnerCcw,
+                p2ProximalCcw
+        );
 
-        drawPoint(v2InnerCw);
-        setDrawColor(transparent(color));
-        drawPoint(v2ProximalCw);
-        drawPoint(v2OuterCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2ProximalCcw,
+                p2ProximalCw,
+                p2InnerCw
+        );
 
-        drawPoint(v2DistalCw);
-        drawPoint(v2OuterCw);
-        setDrawColor(color);
-        drawPoint(v2InnerCw);
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2InnerCw,
+                p2ProximalCw,
+                p2OuterCw
+        );
 
-        glEnd();
+        TRIANGLE_SEGMENT_RENDERER.draw(
+                p2DistalCw,
+                p2OuterCw,
+                p2InnerCw
+        );
     }
 
     private static Vertex getAdjustments(float lineSegment,
@@ -324,7 +374,7 @@ public class AntialiasedLineSegmentRenderer
             return memosForSegmentLength.get(slope);
         }
         else {
-            var result1 = sqRoot(square(lineSegment) / (1 + square(slope)));
+            var result1 = (float) Math.sqrt((lineSegment * lineSegment) / (1 + (slope * slope)));
             var result2 = result1 * slope;
             var result = vertexOf(result1, result2);
             memosForSegmentLength.put(slope, result);
@@ -332,32 +382,7 @@ public class AntialiasedLineSegmentRenderer
         }
     }
 
-    private static float halve(float value) {
-        return simpleOperationMemoized(value, v -> v / 2f, HALVING_MEMOIZATION);
-    }
-
-    private static float sqRoot(float value) {
-        return simpleOperationMemoized(value, v -> (float) Math.sqrt(v), SQUARE_ROOT_MEMOIZATION);
-    }
-
-    private static float square(float value) {
-        return simpleOperationMemoized(value, v -> v * v, SQUARING_MEMOIZATION);
-    }
-
-    private static float simpleOperationMemoized(float value,
-                                                 Function<Float, Float> operation,
-                                                 Map<Float, Float> memoization) {
-        if (memoization.containsKey(value)) {
-            return memoization.get(value);
-        }
-
-        var result = operation.apply(value);
-        memoization.put(value, result);
-        return result;
-    }
-
-    @Override
-    protected String className() {
-        return "AntialiasedLineSegmentRenderer";
+    private Color transparent(Color color) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0);
     }
 }

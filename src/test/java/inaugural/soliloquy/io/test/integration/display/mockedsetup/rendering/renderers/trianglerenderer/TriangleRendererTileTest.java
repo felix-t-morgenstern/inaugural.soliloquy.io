@@ -68,7 +68,7 @@ class TriangleRendererTileTest extends TriangleRendererTest {
     /** @noinspection rawtypes */
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        TriangleRenderer = new TriangleRenderer(TimestampValidator, RENDERING_BOUNDARIES,
+        TriangleRenderer = new TriangleRenderer(TimestampValidator,
                 new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
 
         TriangleRenderable =
@@ -84,7 +84,8 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                         RENDERING_BOUNDARIES, TimestampValidator);
 
         Renderers.put(TriangleRenderableImpl.class, TriangleRenderer);
-        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(TriangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
+                setOf(TriangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(TriangleRenderer);

@@ -1,7 +1,9 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.rendering.renderers.rectanglerenderer;
 
 import inaugural.soliloquy.io.graphics.renderables.RectangleRenderableImpl;
+import inaugural.soliloquy.io.graphics.rendering.renderers.BasicTriangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
+import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -53,7 +55,8 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
     @SuppressWarnings("rawtypes")
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        RectangleRenderer = new RectangleRenderer(TimestampValidator, RENDERING_BOUNDARIES);
+        RectangleRenderer = new RectangleRenderer(TimestampValidator,
+                new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
         RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
                 TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
                 BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
@@ -62,7 +65,8 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
                 RENDERING_BOUNDARIES, TimestampValidator);
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
-        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(setOf(RectangleRenderable));
+        when(MockFirstChildComponent.contentsRepresentation()).thenReturn(
+                setOf(RectangleRenderable));
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf(RectangleRenderer);
