@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.RasterizedLineSegmentRenderableImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,20 +17,19 @@ import java.util.UUID;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RasterizedLineSegmentRenderableImplTests {
-    private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final short STIPPLE_PATTERN = 456;
     private final short STIPPLE_FACTOR = 123;
-    private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = randomInt();
+    private final UUID UUID = java.util.UUID.randomUUID();
 
-    private static final UUID UUID = java.util.UUID.randomUUID();
+    @Mock private ProviderAtTime<Float> mockThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
+    @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
 
     @Mock private Component mockContainingComponent;
 
@@ -40,36 +38,36 @@ public class RasterizedLineSegmentRenderableImplTests {
     @BeforeEach
     public void setUp() {
         renderable = new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent);
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider, STIPPLE_PATTERN,
+                STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                null, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                null, mockVertex2Provider, mockThicknessProvider, STIPPLE_PATTERN,
+                STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                mockVertex1Provider, null, mockThicknessProvider, STIPPLE_PATTERN,
+                STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, null, STIPPLE_PATTERN,
-                STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                mockVertex1Provider, mockVertex2Provider, null, STIPPLE_PATTERN,
+                STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                (short) 0, STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                STIPPLE_PATTERN, (short) 0, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                STIPPLE_PATTERN, (short) 257, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
                 STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new RasterizedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null, mockContainingComponent));
+                mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                STIPPLE_PATTERN, STIPPLE_FACTOR, mockColorProvider, Z, null, mockContainingComponent));
     }
 
     @Test
@@ -79,9 +77,9 @@ public class RasterizedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetThicknessProvider() {
-        assertSame(THICKNESS_PROVIDER, renderable.getThicknessProvider());
+        assertSame(mockThicknessProvider, renderable.getThicknessProvider());
 
-        FakeProviderAtTime<Float> newThicknessProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newThicknessProvider = (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable.setThicknessProvider(newThicknessProvider);
 
@@ -130,9 +128,10 @@ public class RasterizedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetColorProvider() {
-        assertSame(COLOR_PROVIDER, renderable.getColorProvider());
+        assertSame(mockColorProvider, renderable.getColorProvider());
 
-        FakeProviderAtTime<Color> newColorProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newColorProvider = (ProviderAtTime<Color>) mock(ProviderAtTime.class);
+
         renderable.setColorProvider(newColorProvider);
 
         assertSame(newColorProvider, renderable.getColorProvider());
@@ -146,13 +145,12 @@ public class RasterizedLineSegmentRenderableImplTests {
 
     @Test
     public void testSetAndGetVertexProviders() {
-        assertSame(VERTEX_1_PROVIDER, renderable.getVertex1Provider());
-        assertSame(VERTEX_2_PROVIDER, renderable.getVertex2Provider());
+        assertSame(mockVertex1Provider, renderable.getVertex1Provider());
+        assertSame(mockVertex2Provider, renderable.getVertex2Provider());
 
-        FakeProviderAtTime<Vertex> newVertex1Provider =
-                new FakeProviderAtTime<>();
-        FakeProviderAtTime<Vertex> newVertex2Provider =
-                new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newVertex1Provider = (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
+        @SuppressWarnings("unchecked") var newVertex2Provider = (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
+
         renderable.setVertex1Provider(newVertex1Provider);
         renderable.setVertex2Provider(newVertex2Provider);
 

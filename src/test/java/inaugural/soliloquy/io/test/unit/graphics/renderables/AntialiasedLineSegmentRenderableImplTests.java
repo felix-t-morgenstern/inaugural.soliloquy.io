@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.AntialiasedLineSegmentRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +22,15 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AntialiasedLineSegmentRenderableImplTests {
-    private final FakeProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Float> THICKNESS_GRADIENT_PERCENT_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Float> LENGTH_GRADIENT_PERCENT_PROVIDER =
-            new FakeProviderAtTime<>();
     private final int Z = randomInt();
     private final UUID UUID = java.util.UUID.randomUUID();
+
+    @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
+    @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
+    @Mock private ProviderAtTime<Float> mockThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockColorProvider;
+    @Mock private ProviderAtTime<Float> mockThicknessGradientPercentProvider;
+    @Mock private ProviderAtTime<Float> mockLengthGradientPercentProvider;
 
     @Mock private Component mockComponent;
 
@@ -43,12 +41,12 @@ public class AntialiasedLineSegmentRenderableImplTests {
         mockComponent = mock(ComponentImpl.class);
 
         renderable = new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
+                mockColorProvider,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
@@ -59,77 +57,77 @@ public class AntialiasedLineSegmentRenderableImplTests {
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
                 null,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockVertex2Provider,
+                mockColorProvider,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
+                mockVertex1Provider,
                 null,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockColorProvider,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
                 null,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
+                mockColorProvider,
                 null,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
+                mockColorProvider,
+                mockThicknessProvider,
                 null,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockLengthGradientPercentProvider,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
+                mockColorProvider,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
                 null,
                 Z,
                 UUID,
                 mockComponent
         ));
         assertThrows(IllegalArgumentException.class, () -> new AntialiasedLineSegmentRenderableImpl(
-                VERTEX_1_PROVIDER,
-                VERTEX_2_PROVIDER,
-                COLOR_PROVIDER,
-                THICKNESS_PROVIDER,
-                THICKNESS_GRADIENT_PERCENT_PROVIDER,
-                LENGTH_GRADIENT_PERCENT_PROVIDER,
+                mockVertex1Provider,
+                mockVertex2Provider,
+                mockColorProvider,
+                mockThicknessProvider,
+                mockThicknessGradientPercentProvider,
+                mockLengthGradientPercentProvider,
                 Z,
                 null,
                 mockComponent
@@ -143,11 +141,13 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testSetAndGetVertexProviders() {
-        assertSame(VERTEX_1_PROVIDER, renderable.getVertex1Provider());
-        assertSame(VERTEX_2_PROVIDER, renderable.getVertex2Provider());
+        assertSame(mockVertex1Provider, renderable.getVertex1Provider());
+        assertSame(mockVertex2Provider, renderable.getVertex2Provider());
 
-        var newVertex1Provider = new FakeProviderAtTime<Vertex>();
-        var newVertex2Provider = new FakeProviderAtTime<Vertex>();
+        @SuppressWarnings("unchecked") var newVertex1Provider =
+                (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
+        @SuppressWarnings("unchecked") var newVertex2Provider =
+                (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
 
         renderable.setVertex1Provider(newVertex1Provider);
         renderable.setVertex2Provider(newVertex2Provider);
@@ -158,9 +158,10 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetThicknessProvider() {
-        assertSame(THICKNESS_PROVIDER, renderable.getThicknessProvider());
+        assertSame(mockThicknessProvider, renderable.getThicknessProvider());
 
-        var newThicknessProvider = new FakeProviderAtTime<Float>();
+        @SuppressWarnings("unchecked") var newThicknessProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable.setThicknessProvider(newThicknessProvider);
 
@@ -175,9 +176,11 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetColorProvider() {
-        assertSame(COLOR_PROVIDER, renderable.getColorProvider());
+        assertSame(mockColorProvider, renderable.getColorProvider());
 
-        FakeProviderAtTime<Color> newColorProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newColorProvider =
+                (ProviderAtTime<Color>) mock(ProviderAtTime.class);
+
         renderable.setColorProvider(newColorProvider);
 
         assertSame(newColorProvider, renderable.getColorProvider());
@@ -185,10 +188,11 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetThicknessGradientPercentProvider() {
-        assertSame(THICKNESS_GRADIENT_PERCENT_PROVIDER,
+        assertSame(mockThicknessGradientPercentProvider,
                 renderable.getThicknessGradientPercentProvider());
 
-        var newProvider = new FakeProviderAtTime<Float>();
+        @SuppressWarnings("unchecked") var newProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable.setThicknessGradientPercentProvider(newProvider);
 
@@ -197,10 +201,11 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testGetAndSetLengthGradientPercentProvider() {
-        assertSame(LENGTH_GRADIENT_PERCENT_PROVIDER,
+        assertSame(mockLengthGradientPercentProvider,
                 renderable.getLengthGradientPercentProvider());
 
-        ProviderAtTime<Float> newLengthGradientPercentProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newLengthGradientPercentProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable
                 .setLengthGradientPercentProvider(newLengthGradientPercentProvider);

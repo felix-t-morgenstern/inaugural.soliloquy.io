@@ -33,10 +33,14 @@ public class TriangleRenderer implements Renderer<TriangleRenderable> {
         var texId = renderable.getTextureIdProvider().provide(timestamp);
 
         Float texTileWidth = null;
+        Float texXOffset = null;
         Float texTileHeight = null;
+        Float texYOffset = null;
         if (texId != null) {
-            texTileWidth = renderable.getTextureTileWidthProvider().provide(timestamp);
-            texTileHeight = renderable.getTextureTileHeightProvider().provide(timestamp);
+            texTileWidth = renderable.getTextureTilesPerWidthProvider().provide(timestamp);
+            texXOffset = renderable.getTextureXOffsetProvider().provide(timestamp);
+            texTileHeight = renderable.getTextureTilesPerHeightProvider().provide(timestamp);
+            texYOffset = renderable.getTextureYOffsetProvider().provide(timestamp);
         }
 
         TRIANGLE_SEGMENT_RENDERER.draw(
@@ -48,7 +52,9 @@ public class TriangleRenderer implements Renderer<TriangleRenderable> {
                 color3,
                 texId,
                 texTileWidth,
-                texTileHeight
+                texXOffset,
+                texTileHeight,
+                texYOffset
         );
     }
 

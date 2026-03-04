@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables;
 
 import inaugural.soliloquy.io.graphics.renderables.TextLineRenderableImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFont;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,18 +39,16 @@ public class TextLineRenderableImplTests {
     private final Map<Integer, ProviderAtTime<Color>> COLOR_PROVIDER_INDICES = mapOf();
     private final List<Integer> ITALIC_INDICES = listOf();
     private final List<Integer> BOLD_INDICES = listOf();
-    private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> RENDERING_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Float> DROP_SHADOW_SIZE_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Vertex> DROP_SHADOW_OFFSET_PROVIDER =
-            new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> DROP_SHADOW_COLOR_PROVIDER =
-            new FakeProviderAtTime<>();
     private final int Z = randomInt();
 
     @Mock private ProviderAtTime<String> mockLineTextProvider;
     @Mock private ProviderAtTime<String> mockLineTextProvider2;
+    @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockBorderColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockRenderingProvider;
+    @Mock private ProviderAtTime<Float> mockDropShadowSizeProvider;
+    @Mock private ProviderAtTime<Vertex> mockDropShadowOffsetProvider;
+    @Mock private ProviderAtTime<Color> mockDropShadowColorProvider;
     @Mock private Component mockContainingComponent;
     private final UUID UUID = java.util.UUID.randomUUID();
 
@@ -61,9 +58,9 @@ public class TextLineRenderableImplTests {
     public void setUp() {
         renderable = new TextLineRenderableImpl(FONT, mockLineTextProvider,
                 LINE_HEIGHT_PROVIDER, ALIGNMENT, PADDING_BETWEEN_GLYPHS,
-                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, BORDER_THICKNESS_PROVIDER,
-                BORDER_COLOR_PROVIDER, RENDERING_PROVIDER, DROP_SHADOW_SIZE_PROVIDER,
-                DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER, Z, UUID,
+                COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES, mockBorderThicknessProvider,
+                mockBorderColorProvider, mockRenderingProvider, mockDropShadowSizeProvider,
+                mockDropShadowOffsetProvider, mockDropShadowColorProvider, Z, UUID,
                 mockContainingComponent);
     }
 
@@ -72,87 +69,98 @@ public class TextLineRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 null, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, null, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, null, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, null,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, null, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, null,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, null, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, null, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         // NB: These should not throw any exceptions
         new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                null, null, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                null, null, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent);
         new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                null, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                null, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent);
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, null,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                null, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                null, mockDropShadowOffsetProvider, mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, null, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, null, mockDropShadowColorProvider,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, null,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider, null,
                 Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> new TextLineRenderableImpl(
                 FONT, mockLineTextProvider, LINE_HEIGHT_PROVIDER, ALIGNMENT,
                 PADDING_BETWEEN_GLYPHS, COLOR_PROVIDER_INDICES, ITALIC_INDICES, BOLD_INDICES,
-                BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, RENDERING_PROVIDER,
-                DROP_SHADOW_SIZE_PROVIDER, DROP_SHADOW_OFFSET_PROVIDER, DROP_SHADOW_COLOR_PROVIDER,
+                mockBorderThicknessProvider, mockBorderColorProvider, mockRenderingProvider,
+                mockDropShadowSizeProvider, mockDropShadowOffsetProvider,
+                mockDropShadowColorProvider,
                 Z, null, mockContainingComponent));
     }
 
@@ -252,9 +260,10 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testGetAndSetBorderThicknessProvider() {
-        assertSame(BORDER_THICKNESS_PROVIDER, renderable.getBorderThicknessProvider());
+        assertSame(mockBorderThicknessProvider, renderable.getBorderThicknessProvider());
 
-        FakeProviderAtTime<Float> newBorderThicknessProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newBorderThicknessProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable.setBorderThicknessProvider(newBorderThicknessProvider);
 
@@ -267,16 +276,17 @@ public class TextLineRenderableImplTests {
         renderable.setBorderColorProvider(null);
 
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
+                renderable.setBorderThicknessProvider(mockBorderThicknessProvider));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER));
+                renderable.setBorderThicknessProvider(mockBorderThicknessProvider));
     }
 
     @Test
     public void testGetAndSetBorderColorProvider() {
-        assertSame(BORDER_COLOR_PROVIDER, renderable.getBorderColorProvider());
+        assertSame(mockBorderColorProvider, renderable.getBorderColorProvider());
 
-        FakeProviderAtTime<Color> newBorderColorProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newBorderColorProvider =
+                (ProviderAtTime<Color>) mock(ProviderAtTime.class);
 
         renderable.setBorderColorProvider(newBorderColorProvider);
 
@@ -285,7 +295,7 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testSetBorderColorProviderWithInvalidArgs() {
-        renderable.setBorderThicknessProvider(BORDER_THICKNESS_PROVIDER);
+        renderable.setBorderThicknessProvider(mockBorderThicknessProvider);
 
         assertThrows(IllegalArgumentException.class,
                 () -> renderable.setBorderColorProvider(null));
@@ -293,11 +303,11 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testGetAndSetRenderingLocationProvider() {
-        assertSame(RENDERING_PROVIDER,
+        assertSame(mockRenderingProvider,
                 renderable.getRenderingLocationProvider());
 
-        FakeProviderAtTime<Vertex> newRenderingLocationProvider =
-                new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newRenderingLocationProvider =
+                (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
 
         renderable.setRenderingLocationProvider(newRenderingLocationProvider);
 
@@ -307,9 +317,10 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testGetAndSetDropShadowSizeProvider() {
-        assertSame(DROP_SHADOW_SIZE_PROVIDER, renderable.dropShadowSizeProvider());
+        assertSame(mockDropShadowSizeProvider, renderable.dropShadowSizeProvider());
 
-        FakeProviderAtTime<Float> newDropShadowSizeProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newDropShadowSizeProvider =
+                (ProviderAtTime<Float>) mock(ProviderAtTime.class);
 
         renderable.setDropShadowSizeProvider(newDropShadowSizeProvider);
 
@@ -318,10 +329,10 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testGetAndSetDropShadowOffsetProvider() {
-        assertSame(DROP_SHADOW_OFFSET_PROVIDER, renderable.dropShadowOffsetProvider());
+        assertSame(mockDropShadowOffsetProvider, renderable.dropShadowOffsetProvider());
 
-        FakeProviderAtTime<Vertex> newDropShadowOffsetProvider =
-                new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newDropShadowOffsetProvider =
+                (ProviderAtTime<Vertex>) mock(ProviderAtTime.class);
 
         renderable.setDropShadowOffsetProvider(newDropShadowOffsetProvider);
 
@@ -330,9 +341,10 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testGetAndSetDropShadowColorProvider() {
-        assertSame(DROP_SHADOW_COLOR_PROVIDER, renderable.dropShadowColorProvider());
+        assertSame(mockDropShadowColorProvider, renderable.dropShadowColorProvider());
 
-        FakeProviderAtTime<Color> newDropShadowColorProvider = new FakeProviderAtTime<>();
+        @SuppressWarnings("unchecked") var newDropShadowColorProvider =
+                (ProviderAtTime<Color>) mock(ProviderAtTime.class);
 
         renderable.setDropShadowColorProvider(newDropShadowColorProvider);
 

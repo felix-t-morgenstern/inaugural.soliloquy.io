@@ -42,8 +42,6 @@ public class CombinationTest extends SpriteRendererTest {
             generateMockStaticProvider(Color.WHITE);
     private final static ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
             generateMockStaticProvider(null);
-    private final static float BACKGROUND_TEXTURE_TILE_WIDTH = 0.25f;
-    private final static float BACKGROUND_TEXTURE_TILE_HEIGHT = 0.5f;
     private final static ProviderAtTime<FloatBox> RECT_RENDERING_AREA_PROVIDER =
             WHOLE_SCREEN_PROVIDER;
     private final static String TILE_LOCATION =
@@ -89,13 +87,27 @@ public class CombinationTest extends SpriteRendererTest {
 
         RectangleRenderer = new RectangleRenderer(TimestampValidator,
                 new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
-        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
-                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
-                staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
-                RECT_RENDERING_AREA_PROVIDER, 0, java.util.UUID.randomUUID(),
+        RectangleRenderable = new RectangleRenderableImpl(
+                TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER,
+                BOTTOM_RIGHT_COLOR_PROVIDER,
+                BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER,
+                staticProvider(1f),
+                staticProvider(0f),
+                staticProvider(1f),
+                staticProvider(0f),
+                null,
+                null,
+                null,
+                null,
+                RECT_RENDERING_AREA_PROVIDER,
+                0,
+                java.util.UUID.randomUUID(),
                 MockFirstChildComponent,
-                RENDERING_BOUNDARIES, TimestampValidator);
+                RENDERING_BOUNDARIES,
+                TimestampValidator
+        );
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
 
@@ -111,8 +123,8 @@ public class CombinationTest extends SpriteRendererTest {
         var imageFactory = new ImageFactoryImpl(0.5f);
         var rectTileImage = imageFactory.make(new ImageDefinition(TILE_LOCATION, false));
         RectangleRenderable.setTextureIdProvider(staticProvider(rectTileImage.textureId()));
-        RectangleRenderable.setTextureTileWidthProvider(staticProvider(1f));
-        RectangleRenderable.setTextureTileHeightProvider(staticProvider(1f));
+        RectangleRenderable.setTextureTilesPerWidthProvider(staticProvider(1f));
+        RectangleRenderable.setTextureTilesPerHeightProvider(staticProvider(1f));
         Sprite.Image = imageFactory.make(new ImageDefinition(RPG_WEAPONS_RELATIVE_LOCATION, true));
         FrameTimer.ShouldExecuteNextFrame = true;
     }

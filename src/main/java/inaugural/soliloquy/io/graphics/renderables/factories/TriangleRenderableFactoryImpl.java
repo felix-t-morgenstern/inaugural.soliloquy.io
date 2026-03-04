@@ -33,9 +33,11 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    ProviderAtTime<Color> vertex2ColorProvider,
                                    ProviderAtTime<Vertex> vertex3Provider,
                                    ProviderAtTime<Color> vertex3ColorProvider,
-                                   ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                   ProviderAtTime<Float> textureTileWidthProvider,
-                                   ProviderAtTime<Float> textureTileHeightProvider,
+                                   ProviderAtTime<Integer> textureIdProvider,
+                                   ProviderAtTime<Float> textureTilesPerWidthProvider,
+                                   ProviderAtTime<Float> textureXOffsetProvider,
+                                   ProviderAtTime<Float> textureTilesPerHeightProvider,
+                                   ProviderAtTime<Float> textureYOffsetProvider,
                                    Map<Integer, Consumer<EventInputs>> onPress,
                                    Map<Integer, Consumer<EventInputs>> onRelease,
                                    Consumer<EventInputs> onMouseOver,
@@ -44,10 +46,10 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    UUID uuid,
                                    Component component)
             throws IllegalArgumentException {
-        return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider,
-                vertex2Provider, vertex2ColorProvider, vertex3Provider,
-                vertex3ColorProvider, backgroundTextureIdProvider, textureTileWidthProvider,
-                textureTileHeightProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
+        return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider, vertex2Provider,
+                vertex2ColorProvider, vertex3Provider, vertex3ColorProvider, textureIdProvider,
+                textureTilesPerWidthProvider, textureXOffsetProvider, textureTilesPerHeightProvider,
+                textureYOffsetProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
                 component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

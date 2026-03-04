@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io;
 
-import inaugural.soliloquy.common.CommonModule;
 import inaugural.soliloquy.io.api.WindowResolution;
 import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
 import inaugural.soliloquy.io.api.dto.AssetType;
@@ -42,6 +41,7 @@ import soliloquy.specs.common.persistence.PersistenceHandler;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.game.Module;
 import soliloquy.specs.gamestate.entities.Setting;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.bootstrap.assetfactories.definitions.AnimatedMouseCursorProviderDefinition;
@@ -80,7 +80,7 @@ import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
 
 public class IOModule extends AbstractModule {
-    public IOModule(CommonModule common,
+    public IOModule(Module common,
                     @SuppressWarnings("rawtypes") Function<String, Setting> getSetting,
                     Methods methods,
                     Map<String, Consumer<FrameRateReporter.Aggregate>> aggregateOutputs,

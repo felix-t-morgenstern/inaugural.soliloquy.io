@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 import inaugural.soliloquy.io.graphics.renderables.FiniteAnimationRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.FiniteAnimationRenderableFactoryImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeAnimation;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +37,6 @@ public class FiniteAnimationRenderableFactoryImplTests {
     private final String ANIMATION_NOT_SUPPORTING_ID = "animationNotSupportingId";
     private final FakeAnimation ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS =
             new FakeAnimation(ANIMATION_NOT_SUPPORTING_ID, false);
-    private final FakeProviderAtTime<Float> BORDER_THICKNESS_PROVIDER = new FakeProviderAtTime<>();
-    private final FakeProviderAtTime<Color> BORDER_COLOR_PROVIDER = new FakeProviderAtTime<>();
     private final Map<Integer, Consumer<EventInputs>> ON_PRESS_CONSUMERS = mapOf();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
@@ -48,10 +45,11 @@ public class FiniteAnimationRenderableFactoryImplTests {
 
     private final long START_TIMESTAMP = 111L;
     private final Long PAUSED_TIMESTAMP = -456L;
-    private final Long TIMESTAMP = -123L;
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
+    @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockBorderColorProvider;
     @Mock private Consumer<EventInputs> mockOnMouseOver;
     @Mock private Consumer<EventInputs> mockOnMouseLeave;
     @Mock private Component mockContainingComponent;
@@ -79,13 +77,13 @@ public class FiniteAnimationRenderableFactoryImplTests {
     public void testMake() {
         var finiteAnimationRenderableWithMouseEvents =
                 factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
+                        mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
                         UUID, mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 );
         var finiteAnimationRenderableWithoutMouseEvents =
                 factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        mockBorderThicknessProvider, mockBorderColorProvider, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, START_TIMESTAMP,
                         PAUSED_TIMESTAMP
                 );
@@ -101,78 +99,78 @@ public class FiniteAnimationRenderableFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                () -> factory.make(null, mockBorderThicknessProvider,
+                        mockBorderColorProvider, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        null, BORDER_COLOR_PROVIDER, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
+                        null, mockBorderColorProvider, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
+                        mockBorderThicknessProvider, null, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
                         UUID, mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
+                        mockBorderThicknessProvider, mockBorderColorProvider, null,
                         RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, START_TIMESTAMP,
                         PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS, null, Z,
+                        mockBorderThicknessProvider, mockBorderColorProvider, COLOR_SHIFTS, null, Z,
                         UUID, mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, COLOR_SHIFTS,
+                        mockBorderThicknessProvider, mockBorderColorProvider, COLOR_SHIFTS,
                         RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent, START_TIMESTAMP,
                         PAUSED_TIMESTAMP
                 ));
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                () -> factory.make(null, mockBorderThicknessProvider,
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        null, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                        null, mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
-                        BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                        mockBorderThicknessProvider, null, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
+                        mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOver, mockOnMouseLeave, null, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
+                        mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, null, Z, UUID,
                         mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, ON_PRESS_CONSUMERS, null,
+                        mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS, null,
                         mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, RENDERING_AREA_PROVIDER, Z,
                         null, mockContainingComponent, START_TIMESTAMP, PAUSED_TIMESTAMP
                 ));

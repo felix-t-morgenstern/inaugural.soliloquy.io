@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.RasterizedLineSegmentRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.RasterizedLineSegmentRenderableFactoryImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,15 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RasterizedLineSegmentRenderableFactoryImplTests {
-    private final ProviderAtTime<Float> THICKNESS_PROVIDER = new FakeProviderAtTime<>();
     private final short STIPPLE_PATTERN = 456;
     private final short STIPPLE_FACTOR = 123;
-    private final ProviderAtTime<Color> COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
     private final int Z = randomInt();
+    private final UUID UUID = java.util.UUID.randomUUID();
 
-    private static final UUID UUID = java.util.UUID.randomUUID();
+    @Mock private ProviderAtTime<Float> mockThicknessProvider;
+    @Mock private ProviderAtTime<Color> mockColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
+    @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
 
     @Mock private Component mockContainingComponent;
 
@@ -43,8 +42,8 @@ public class RasterizedLineSegmentRenderableFactoryImplTests {
     @Test
     public void testMake() {
         var rasterizedLineSegmentRenderable =
-                factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID,
+                factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                        STIPPLE_PATTERN, STIPPLE_FACTOR, mockColorProvider, Z, UUID,
                         mockContainingComponent);
 
         assertNotNull(rasterizedLineSegmentRenderable);
@@ -55,32 +54,32 @@ public class RasterizedLineSegmentRenderableFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, VERTEX_2_PROVIDER, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                        STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                () -> factory.make(null, mockVertex2Provider, mockThicknessProvider, STIPPLE_PATTERN,
+                        STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, null, THICKNESS_PROVIDER, STIPPLE_PATTERN,
-                        STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                () -> factory.make(mockVertex1Provider, null, mockThicknessProvider, STIPPLE_PATTERN,
+                        STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, null, STIPPLE_PATTERN,
-                        STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID, mockContainingComponent));
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, null, STIPPLE_PATTERN,
+                        STIPPLE_FACTOR, mockColorProvider, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        (short) 0, STIPPLE_FACTOR, COLOR_PROVIDER, Z, UUID,
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                        (short) 0, STIPPLE_FACTOR, mockColorProvider, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        STIPPLE_PATTERN, (short) 0, COLOR_PROVIDER, Z, UUID,
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                        STIPPLE_PATTERN, (short) 0, mockColorProvider, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        STIPPLE_PATTERN, (short) 257, COLOR_PROVIDER, Z, UUID,
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                        STIPPLE_PATTERN, (short) 257, mockColorProvider, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
                         STIPPLE_PATTERN, STIPPLE_FACTOR, null, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(VERTEX_1_PROVIDER, VERTEX_2_PROVIDER, THICKNESS_PROVIDER,
-                        STIPPLE_PATTERN, STIPPLE_FACTOR, COLOR_PROVIDER, Z, null,
+                () -> factory.make(mockVertex1Provider, mockVertex2Provider, mockThicknessProvider,
+                        STIPPLE_PATTERN, STIPPLE_FACTOR, mockColorProvider, Z, null,
                         mockContainingComponent));
     }
 }

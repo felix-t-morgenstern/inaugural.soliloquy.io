@@ -15,7 +15,6 @@ import java.awt.*;
 
 import static inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
-import static inaugural.soliloquy.tools.random.Random.randomHighSaturationColor;
 import static java.util.UUID.randomUUID;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
@@ -75,9 +74,11 @@ public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest ex
                 staticProvider(bgGrey),
                 staticProvider(bgGrey),
                 staticProvider(bgGrey),
-                staticProvider(null),
-                staticProvider(1f),
-                staticProvider(1f),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
                 mapOf(),
                 mapOf(),
                 null,
@@ -125,8 +126,10 @@ public class RectangleRenderingBoundaryClippingWithColorAndTextureDisplayTest ex
                 staticProvider(Color.BLUE),
                 staticProvider(Color.WHITE),
                 staticProvider(backgroundTex),
-                staticProvider(squareLength / 2f),
-                staticProvider(squareLength / 2f),
+                staticProvider(3f),
+                staticProvider(0.5f),
+                staticProvider(3f),
+                staticProvider(0.5f),
                 mapOf(),
                 mapOf(),
                 null,

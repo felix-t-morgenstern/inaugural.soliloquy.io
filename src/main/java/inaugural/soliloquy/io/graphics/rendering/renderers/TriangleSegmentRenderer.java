@@ -47,6 +47,8 @@ public class TriangleSegmentRenderer {
                 point3.color(),
                 null,
                 null,
+                null,
+                null,
                 null
         );
     }
@@ -59,8 +61,10 @@ public class TriangleSegmentRenderer {
             Vertex vertex3,
             Color color3,
             Integer textureId,
-            Float textureTileWidth,
-            Float textureTileHeight
+            Float textureTilesPerWidth,
+            Float textureXOffset,
+            Float textureTilesPerHeight,
+            Float textureYOffset
     ) {
         var triangleEncompassingDimens = polygonEncompassingDimens(vertex1, vertex2, vertex3);
         if (triangleEncompassingDimens.width() == 0f || triangleEncompassingDimens.height() == 0f) {
@@ -87,8 +91,10 @@ public class TriangleSegmentRenderer {
                 hasColor,
                 renderingBoundaries,
                 triangleEncompassingDimens,
-                textureTileWidth,
-                textureTileHeight,
+                textureTilesPerWidth,
+                textureXOffset,
+                textureTilesPerHeight,
+                textureYOffset,
                 points,
                 0,
                 null
@@ -108,8 +114,10 @@ public class TriangleSegmentRenderer {
                         hasColor,
                         verticesAndColors,
                         triangleEncompassingDimens,
-                        textureTileWidth,
-                        textureTileHeight
+                        textureTilesPerWidth,
+                        textureXOffset,
+                        textureTilesPerHeight,
+                        textureYOffset
                 ));
             }
         });
@@ -129,8 +137,10 @@ public class TriangleSegmentRenderer {
                     hasColor,
                     verticesAndColors,
                     triangleEncompassingDimens,
-                    textureTileWidth,
-                    textureTileHeight
+                    textureTilesPerWidth,
+                    textureXOffset,
+                    textureTilesPerHeight,
+                    textureYOffset
             );
             points.sort(Comparator.comparingDouble(
                     p -> Math.atan2(p.loc().Y - centroid.Y, p.loc().X - centroid.X)));
@@ -149,8 +159,10 @@ public class TriangleSegmentRenderer {
                            boolean hasColor,
                            FloatBox renderingBoundaries,
                            FloatBox encompassingDimens,
-                           Float textureTileWidth,
-                           Float textureTileHeight,
+                           Float textureTilesPerWidth,
+                           Float textureXOffset,
+                           Float textureTilesPerHeight,
+                           Float textureYOffset,
                            List<Point> points,
                            int index,
                            Boolean prevWasIn) {
@@ -174,8 +186,10 @@ public class TriangleSegmentRenderer {
                         texCoordinates(
                                 currentVertex,
                                 encompassingDimens,
-                                textureTileWidth,
-                                textureTileHeight
+                                textureTilesPerWidth,
+                                textureXOffset,
+                                textureTilesPerHeight,
+                                textureYOffset
                         )
                 ));
             }
@@ -191,7 +205,8 @@ public class TriangleSegmentRenderer {
                 );
                 // (If prev wasn't in and current is in, that implies 1 and only 1 intersect)
                 points.add(makePoint(intersects.getFirst(), hasColor, verticesAndColors,
-                        encompassingDimens, textureTileWidth, textureTileHeight));
+                        encompassingDimens, textureTilesPerWidth, textureXOffset,
+                        textureTilesPerHeight, textureYOffset));
             }
             // If prev was also in, it would have been added, and there will have been no
             // intersects to capture
@@ -209,14 +224,16 @@ public class TriangleSegmentRenderer {
                         prevWasIn ? 1 : 2
                 ).forEach(i -> points.add(
                         makePoint(i, hasColor, verticesAndColors, encompassingDimens,
-                                textureTileWidth, textureTileHeight)));
+                                textureTilesPerWidth, textureXOffset, textureTilesPerHeight,
+                                textureYOffset)));
             }
         }
 
 
         if (index < 3) {
             addPoints(verticesAndColors, hasColor, renderingBoundaries, encompassingDimens,
-                    textureTileWidth, textureTileHeight, points, index + 1, currentIsIn);
+                    textureTilesPerWidth, textureXOffset, textureTilesPerHeight, textureYOffset,
+                    points, index + 1, currentIsIn);
         }
     }
 
@@ -225,7 +242,9 @@ public class TriangleSegmentRenderer {
                             List<Pair<Vertex, Color>> verticesAndColors,
                             FloatBox encompassingDimens,
                             Float textureTileWidth,
-                            Float textureTileHeight) {
+                            Float textureXOffset,
+                            Float textureTileHeight,
+                            Float textureYOffset) {
         return point(
                 loc,
                 hasColor ? triangulateColor(
@@ -238,7 +257,9 @@ public class TriangleSegmentRenderer {
                         loc,
                         encompassingDimens,
                         textureTileWidth,
-                        textureTileHeight
+                        textureXOffset,
+                        textureTileHeight,
+                        textureYOffset
                 )
         );
     }
@@ -475,15 +496,19 @@ public class TriangleSegmentRenderer {
     }
 
     private Vertex texCoordinates(Vertex vertex,
-                                  FloatBox triangleEncompassingDimens,
+                                  FloatBox encompassingDimens,
                                   Float textureTileWidth,
-                                  Float textureTileHeight) {
+                                  Float textureXOffset,
+                                  Float textureTileHeight,
+                                  Float textureYOffset) {
         if (textureTileWidth == null || textureTileHeight == null) {
             return null;
         }
         return vertexOf(
-                (vertex.X - triangleEncompassingDimens.LEFT_X) / textureTileWidth,
-                (vertex.Y - triangleEncompassingDimens.TOP_Y) / textureTileHeight
+                (((vertex.X - encompassingDimens.LEFT_X) / encompassingDimens.width()) *
+                        textureTileWidth) + textureXOffset,
+                (((vertex.Y - encompassingDimens.TOP_Y) / encompassingDimens.height()) *
+                        textureTileHeight) + textureYOffset
         );
     }
 }

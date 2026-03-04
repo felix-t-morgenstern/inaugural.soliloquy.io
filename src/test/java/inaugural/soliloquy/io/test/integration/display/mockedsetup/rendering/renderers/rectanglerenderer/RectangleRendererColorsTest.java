@@ -57,12 +57,27 @@ class RectangleRendererColorsTest extends RectangleRendererTest {
             WindowResolutionManager windowResolutionManager) {
         RectangleRenderer = new RectangleRenderer(TimestampValidator,
                 new TriangleSegmentRenderer(RENDERING_BOUNDARIES, new BasicTriangleRenderer()));
-        RectangleRenderable = new RectangleRenderableImpl(TOP_LEFT_COLOR_PROVIDER,
-                TOP_RIGHT_COLOR_PROVIDER, BOTTOM_RIGHT_COLOR_PROVIDER, BOTTOM_LEFT_COLOR_PROVIDER,
-                BACKGROUND_TEXTURE_ID_PROVIDER, staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
-                staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
-                RENDERING_AREA_PROVIDER, 123, java.util.UUID.randomUUID(), MockFirstChildComponent,
-                RENDERING_BOUNDARIES, TimestampValidator);
+        RectangleRenderable = new RectangleRenderableImpl(
+                TOP_LEFT_COLOR_PROVIDER,
+                TOP_RIGHT_COLOR_PROVIDER,
+                BOTTOM_RIGHT_COLOR_PROVIDER,
+                BOTTOM_LEFT_COLOR_PROVIDER,
+                BACKGROUND_TEXTURE_ID_PROVIDER,
+                staticProvider(1f),
+                staticProvider(0f),
+                staticProvider(1f),
+                staticProvider(0f),
+                null,
+                null,
+                null,
+                null,
+                RENDERING_AREA_PROVIDER,
+                0,
+                java.util.UUID.randomUUID(),
+                MockFirstChildComponent,
+                RENDERING_BOUNDARIES,
+                TimestampValidator
+        );
 
         Renderers.put(RectangleRenderableImpl.class, RectangleRenderer);
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(

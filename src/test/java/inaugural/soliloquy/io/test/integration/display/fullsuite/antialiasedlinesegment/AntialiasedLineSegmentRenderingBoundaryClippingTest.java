@@ -3,7 +3,6 @@ package inaugural.soliloquy.io.test.integration.display.fullsuite.antialiasedlin
 import inaugural.soliloquy.io.IOModule;
 import inaugural.soliloquy.io.api.dto.AssetDefinitionsDTO;
 import inaugural.soliloquy.io.test.integration.display.fullsuite.DisplayTest;
-import inaugural.soliloquy.io.test.integration.display.fullsuite.rectangle.RectangleRenderingBoundaryClippingDisplayTest;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.AntialiasedLineSegmentRenderableFactory;
@@ -77,9 +76,11 @@ public class AntialiasedLineSegmentRenderingBoundaryClippingTest extends Display
                 staticProvider(bgGrey),
                 staticProvider(bgGrey),
                 staticProvider(bgGrey),
-                staticProvider(null),
-                staticProvider(1f),
-                staticProvider(1f),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
+                nullProvider(),
                 mapOf(),
                 mapOf(),
                 null,

@@ -1,6 +1,5 @@
 package inaugural.soliloquy.io.test.unit.persistence.graphics.renderables;
 
-import inaugural.soliloquy.io.persistence.graphics.renderables.RectangleRenderableHandler;
 import inaugural.soliloquy.io.persistence.graphics.renderables.TriangleRenderableHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,20 +64,21 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
         writtenValue = String.format(
                 "{\"vertex1\":\"%s\",\"vertex1Color\":\"%s\",\"vertex2\":\"%s\"," +
                         "\"vertex2Color\":\"%s\",\"vertex3\":\"%s\",\"vertex3Color\":\"%s\"," +
-                        "\"texId\":\"%s\",\"texWidth\":\"%s\",\"texHeight\":\"%s\"," +
-                        "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"z\":%d,\"uuid\":\"%s\"," +
-                        "\"type\":\"%s\"}",
+                        "\"texId\":\"%s\",\"texWidth\":\"%s\",\"texXOffset\":\"%s\"," +
+                        "\"texHeight\":\"%s\",\"texYOffset\":\"%s\",\"onPress\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
+                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
+                        "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
                 VERTEX_1_WRITTEN, VERTEX_1_COLOR_WRITTEN, VERTEX_2_WRITTEN, VERTEX_2_COLOR_WRITTEN,
                 VERTEX_3_WRITTEN, VERTEX_3_COLOR_WRITTEN, TEXTURE_ID_WRITTEN,
-                TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN, ON_PRESS_BUTTON,
-                ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID,
-                ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID,
-                mockRenderable.getClass().getCanonicalName()
+                TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_X_OFFSET_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN,
+                TEXTURE_Y_OFFSET_WRITTEN, ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON,
+                ON_RELEASE_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z,
+                UUID, mockRenderable.getClass().getCanonicalName()
         );
 
-        handler = new TriangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, mockFactory);
+        handler =
+                new TriangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, mockFactory);
     }
 
     @Test
@@ -143,6 +143,8 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
                 any(),
                 any(),
                 any(),
+                any(),
+                any(),
                 anyInt(),
                 any(),
                 any()
@@ -166,8 +168,10 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
                 same(mockVertex3Provider),
                 same(mockVertex3ColorProvider),
                 same(mockTextureIdProvider),
-                same(mockTextureTileWidthProvider),
-                same(mockTextureTileHeightProvider),
+                same(mockTextureTilesPerWidthProvider),
+                same(mockTextureXOffsetProvider),
+                same(mockTextureTilesPerHeightProvider),
+                same(mockTextureYOffsetProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),

@@ -47,6 +47,8 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                 nullProvider(),
                 nullProvider(),
                 nullProvider(),
+                nullProvider(),
+                nullProvider(),
                 mapOf(),
                 mapOf(),
                 null,

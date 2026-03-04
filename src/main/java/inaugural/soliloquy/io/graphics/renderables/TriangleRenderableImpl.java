@@ -35,9 +35,11 @@ public class TriangleRenderableImpl
                                   ProviderAtTime<Color> vertex2ColorProvider,
                                   ProviderAtTime<Vertex> vertex3Provider,
                                   ProviderAtTime<Color> vertex3ColorProvider,
-                                  ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                  ProviderAtTime<Float> textureTileWidthProvider,
-                                  ProviderAtTime<Float> textureTileHeightProvider,
+                                  ProviderAtTime<Integer> textureIdProvider,
+                                  ProviderAtTime<Float> textureTilesPerWidthProvider,
+                                  ProviderAtTime<Float> textureXOffsetProvider,
+                                  ProviderAtTime<Float> textureTilesPerHeightProvider,
+                                  ProviderAtTime<Float> textureYOffsetProvider,
                                   Map<Integer, Consumer<EventInputs>> onPress,
                                   Map<Integer, Consumer<EventInputs>> onRelease,
                                   Consumer<EventInputs> onMouseOver,
@@ -47,9 +49,10 @@ public class TriangleRenderableImpl
                                   Component component,
                                   RenderingBoundaries renderingBoundaries,
                                   TimestampValidator timestampValidator) {
-        super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, component,
-                renderingBoundaries, timestampValidator);
+        super(textureIdProvider, textureTilesPerWidthProvider, textureXOffsetProvider,
+                textureTilesPerHeightProvider, textureYOffsetProvider, onPress, onRelease,
+                onMouseOver, onMouseLeave, z, uuid, component, renderingBoundaries,
+                timestampValidator);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);
         setVertex2Provider(vertex2Provider);

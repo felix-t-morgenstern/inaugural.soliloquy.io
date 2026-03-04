@@ -14,14 +14,18 @@ import java.util.Map;
 public abstract class AbstractPolygonRenderable
         extends AbstractRenderableWithMouseEvents
         implements PolygonRenderable {
-    private ProviderAtTime<Integer> backgroundTextureIdProvider;
-    private ProviderAtTime<Float> textureTileWidthProvider;
-    private ProviderAtTime<Float> textureTileHeightProvider;
+    private ProviderAtTime<Integer> textureIdProvider;
+    private ProviderAtTime<Float> textureTilesPerWidthProvider;
+    private ProviderAtTime<Float> textureXOffsetProvider;
+    private ProviderAtTime<Float> textureTilesPerHeightProvider;
+    private ProviderAtTime<Float> textureYOffsetProvider;
 
     protected AbstractPolygonRenderable(
             ProviderAtTime<Integer> textureIdProvider,
-            ProviderAtTime<Float> textureTileWidthProvider,
-            ProviderAtTime<Float> textureTileHeight,
+            ProviderAtTime<Float> textureTilesPerWidthProvider,
+            ProviderAtTime<Float> textureXOffsetProvider,
+            ProviderAtTime<Float> textureTilesPerHeightProvider,
+            ProviderAtTime<Float> textureYOffsetProvider,
             Map<Integer, Consumer<EventInputs>> onPress,
             Map<Integer, Consumer<EventInputs>> onRelease,
             Consumer<EventInputs> onMouseOver,
@@ -35,41 +39,65 @@ public abstract class AbstractPolygonRenderable
         super(onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
                 renderingBoundaries, timestampValidator);
         setTextureIdProvider(textureIdProvider);
-        setTextureTileWidthProvider(textureTileWidthProvider);
-        setTextureTileHeightProvider(textureTileHeight);
+        setTextureTilesPerWidthProvider(textureTilesPerWidthProvider);
+        setTextureXOffsetProvider(textureXOffsetProvider);
+        setTextureTilesPerHeightProvider(textureTilesPerHeightProvider);
+        setTextureYOffsetProvider(textureYOffsetProvider);
     }
 
     @Override
     public ProviderAtTime<Integer> getTextureIdProvider() {
-        return backgroundTextureIdProvider;
+        return textureIdProvider;
     }
 
     @Override
     public void setTextureIdProvider(ProviderAtTime<Integer> backgroundTextureIdProvider)
             throws IllegalArgumentException {
-        this.backgroundTextureIdProvider = Check.ifNull(backgroundTextureIdProvider,
+        this.textureIdProvider = Check.ifNull(backgroundTextureIdProvider,
                 "backgroundTextureIdProvider");
     }
 
     @Override
-    public ProviderAtTime<Float> getTextureTileWidthProvider() {
-        return textureTileWidthProvider;
+    public ProviderAtTime<Float> getTextureTilesPerWidthProvider() {
+        return textureTilesPerWidthProvider;
     }
 
     @Override
-    public void setTextureTileWidthProvider(ProviderAtTime<Float> provider)
+    public void setTextureTilesPerWidthProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureTileWidthProvider = Check.ifNull(provider, "provider");
+        textureTilesPerWidthProvider = Check.ifNull(provider, "provider");
     }
 
     @Override
-    public ProviderAtTime<Float> getTextureTileHeightProvider() {
-        return textureTileHeightProvider;
+    public ProviderAtTime<Float> getTextureXOffsetProvider() {
+        return textureXOffsetProvider;
     }
 
     @Override
-    public void setTextureTileHeightProvider(ProviderAtTime<Float> provider)
+    public void setTextureXOffsetProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureTileHeightProvider = Check.ifNull(provider, "provider");
+        textureXOffsetProvider = Check.ifNull(provider, "provider");
+    }
+
+    @Override
+    public ProviderAtTime<Float> getTextureTilesPerHeightProvider() {
+        return textureTilesPerHeightProvider;
+    }
+
+    @Override
+    public void setTextureTilesPerHeightProvider(ProviderAtTime<Float> provider)
+            throws IllegalArgumentException {
+        textureTilesPerHeightProvider = Check.ifNull(provider, "provider");
+    }
+
+    @Override
+    public ProviderAtTime<Float> getTextureYOffsetProvider() {
+        return textureYOffsetProvider;
+    }
+
+    @Override
+    public void setTextureYOffsetProvider(ProviderAtTime<Float> provider)
+            throws IllegalArgumentException {
+        textureYOffsetProvider = Check.ifNull(provider, "provider");
     }
 }

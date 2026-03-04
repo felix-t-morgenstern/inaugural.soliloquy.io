@@ -50,6 +50,8 @@ public class TriangleSimpleDisplayTest extends DisplayTest {
                 nullProvider(),
                 nullProvider(),
                 nullProvider(),
+                nullProvider(),
+                nullProvider(),
                 mapOf(),
                 mapOf(),
                 null,

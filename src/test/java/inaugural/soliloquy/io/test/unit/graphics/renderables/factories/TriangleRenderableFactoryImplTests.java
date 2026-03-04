@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.renderables.factories;
 
 import inaugural.soliloquy.io.graphics.renderables.TriangleRenderableImpl;
 import inaugural.soliloquy.io.graphics.renderables.factories.TriangleRenderableFactoryImpl;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeProviderAtTime;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,19 +22,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TriangleRenderableFactoryImplTests {
-    private final ProviderAtTime<Vertex> VERTEX_1_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> VERTEX_1_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_2_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> VERTEX_2_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Vertex> VERTEX_3_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Color> VERTEX_3_COLOR_PROVIDER = new FakeProviderAtTime<>();
-    private final ProviderAtTime<Integer> BACKGROUND_TEXTURE_ID_PROVIDER =
-            new FakeProviderAtTime<>();
     private final int Z = randomInt();
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private ProviderAtTime<Float> mockTextureTileWidthProvider;
-    @Mock private ProviderAtTime<Float> mockTextureTileHeightProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
+    @Mock private ProviderAtTime<Color> mockVertex1ColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex2Provider;
+    @Mock private ProviderAtTime<Color> mockVertex2ColorProvider;
+    @Mock private ProviderAtTime<Vertex> mockVertex3Provider;
+    @Mock private ProviderAtTime<Color> mockVertex3ColorProvider;
+    @Mock private ProviderAtTime<Integer> mockBackgroundTextureIdProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTilesPerWidthProvider;
+    @Mock private ProviderAtTime<Float> mockTextureXOffsetProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTilesPerHeightProvider;
+    @Mock private ProviderAtTime<Float> mockTextureYOffsetProvider;
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
@@ -44,23 +44,26 @@ public class TriangleRenderableFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-        factory = new TriangleRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
+        factory =
+                new TriangleRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(null, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class, () -> new TriangleRenderableFactoryImpl(mockRenderingBoundaries, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TriangleRenderableFactoryImpl(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new TriangleRenderableFactoryImpl(mockRenderingBoundaries, null));
     }
 
     @Test
     public void testMake() {
         var renderable = factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+                .make(mockVertex1Provider, mockVertex1ColorProvider, mockVertex2Provider,
+                        mockVertex2ColorProvider, mockVertex3Provider, mockVertex3ColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent);
 
         assertNotNull(renderable);
@@ -69,75 +72,89 @@ public class TriangleRenderableFactoryImplTests {
 
     @Test
     public void testMakeWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(null, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(null, mockVertex1ColorProvider, mockVertex2Provider,
+                        mockVertex2ColorProvider, mockVertex3Provider, mockVertex3ColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, null,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, null, mockVertex2Provider,
+                        mockVertex2ColorProvider, mockVertex3Provider, mockVertex3ColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        null, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider, null,
+                        mockVertex2ColorProvider, mockVertex3Provider, mockVertex3ColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, null,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, null, mockVertex3Provider, mockVertex3ColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        null, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, null,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, null, null, null,
+                        null, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider, null,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, null,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, null, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        null, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider, null,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, null,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, null, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        null, null, null, null, null, Z, UUID,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, null,
+                        mockTextureYOffsetProvider, null, null, null, null, Z, UUID,
                         mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(VERTEX_1_PROVIDER, VERTEX_1_COLOR_PROVIDER,
-                        VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
-                        VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
-                        BACKGROUND_TEXTURE_ID_PROVIDER, mockTextureTileWidthProvider,
-                        mockTextureTileHeightProvider, null, null, null, null, Z, null,
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, null, null, null, null, null, Z, UUID,
                         mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockVertex1Provider, mockVertex1ColorProvider,
+                        mockVertex2Provider, mockVertex2ColorProvider, mockVertex3Provider,
+                        mockVertex3ColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, null, null, null,
+                        null, Z, null, mockContainingComponent));
     }
 }

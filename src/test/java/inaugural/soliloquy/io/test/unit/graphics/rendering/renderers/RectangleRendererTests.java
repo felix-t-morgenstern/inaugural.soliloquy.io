@@ -2,7 +2,6 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.RectangleRenderer;
 import inaugural.soliloquy.io.graphics.rendering.renderers.TriangleSegmentRenderer;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeRectangleRenderable;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,16 +12,13 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
-import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 
 import java.awt.*;
 import java.util.UUID;
 
-import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
 import static inaugural.soliloquy.tools.random.Random.*;
-import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -85,9 +81,9 @@ public class RectangleRendererTests {
                 .thenReturn(mockBottomRightColorProvider);
         lenient().when(mockRenderable.getTextureIdProvider())
                 .thenReturn(mockBackgroundTextureIdProvider);
-        lenient().when(mockRenderable.getTextureTileWidthProvider())
+        lenient().when(mockRenderable.getTextureTilesPerWidthProvider())
                 .thenReturn(mockTextureTileWidthProvider);
-        lenient().when(mockRenderable.getTextureTileHeightProvider())
+        lenient().when(mockRenderable.getTextureTilesPerHeightProvider())
                 .thenReturn(mockTextureTileHeightProvider);
 
         renderer = new RectangleRenderer(mockTimestampValidator,

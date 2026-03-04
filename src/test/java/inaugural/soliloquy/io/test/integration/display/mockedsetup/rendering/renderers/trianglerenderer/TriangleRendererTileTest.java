@@ -77,11 +77,15 @@ class TriangleRendererTileTest extends TriangleRendererTest {
                         VERTEX_2_PROVIDER, VERTEX_2_COLOR_PROVIDER,
                         VERTEX_3_PROVIDER, VERTEX_3_COLOR_PROVIDER,
                         BACKGROUND_TEXTURE_ID_PROVIDER,
-                        staticProvider(BACKGROUND_TEXTURE_TILE_WIDTH),
-                        staticProvider(BACKGROUND_TEXTURE_TILE_HEIGHT), null, null, null, null,
+                        staticProvider(1f),
+                        staticProvider(0f),
+                        staticProvider(1f),
+                        staticProvider(0f),
+                        null, null, null, null,
                         randomInt(),
                         java.util.UUID.randomUUID(), MockFirstChildComponent,
-                        RENDERING_BOUNDARIES, TimestampValidator);
+                        RENDERING_BOUNDARIES, TimestampValidator
+                );
 
         Renderers.put(TriangleRenderableImpl.class, TriangleRenderer);
         when(MockFirstChildComponent.contentsRepresentation()).thenReturn(

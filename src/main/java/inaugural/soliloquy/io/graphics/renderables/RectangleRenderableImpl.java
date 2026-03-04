@@ -29,8 +29,10 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<Color> bottomRightColorProvider,
                                    ProviderAtTime<Color> bottomLeftColorProvider,
                                    ProviderAtTime<Integer> backgroundTextureIdProvider,
-                                   ProviderAtTime<Float> textureTileWidthProvider,
-                                   ProviderAtTime<Float> textureTileHeightProvider,
+                                   ProviderAtTime<Float> textureTilesPerWidthProvider,
+                                   ProviderAtTime<Float> textureXOffsetProvider,
+                                   ProviderAtTime<Float> textureTilesPerHeightProvider,
+                                   ProviderAtTime<Float> textureYOffsetProvider,
                                    Map<Integer, Consumer<EventInputs>> onPress,
                                    Map<Integer, Consumer<EventInputs>> onRelease,
                                    Consumer<EventInputs> onMouseOver,
@@ -41,9 +43,10 @@ public class RectangleRenderableImpl
                                    Component containingComponent,
                                    RenderingBoundaries renderingBoundaries,
                                    TimestampValidator timestampValidator) {
-        super(backgroundTextureIdProvider, textureTileWidthProvider, textureTileHeightProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
-                renderingBoundaries, timestampValidator);
+        super(backgroundTextureIdProvider, textureTilesPerWidthProvider, textureXOffsetProvider,
+                textureTilesPerHeightProvider, textureYOffsetProvider, onPress, onRelease,
+                onMouseOver, onMouseLeave, z, uuid, containingComponent, renderingBoundaries,
+                timestampValidator);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);
@@ -151,5 +154,4 @@ public class RectangleRenderableImpl
         this.renderingDimensionsProvider = Check.ifNull(renderingDimensionsProvider,
                 "renderingDimensionsProvider");
     }
-
 }

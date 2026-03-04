@@ -50,6 +50,8 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                 nullProvider(),
                 nullProvider(),
                 nullProvider(),
+                nullProvider(),
+                nullProvider(),
                 mapOf(
                         pairOf(
                                 LEFT_MOUSE_BUTTON,

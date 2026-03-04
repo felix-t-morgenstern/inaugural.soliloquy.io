@@ -55,7 +55,9 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                         "\"bottomRightColor\":\"%s\"," +
                         "\"area\":\"%s\",\"texId\":\"%s\"," +
                         "\"texWidth\":\"%s\"," +
+                        "\"texXOffset\":\"%s\"," +
                         "\"texHeight\":\"%s\"," +
+                        "\"texYOffset\":\"%s\"," +
                         "\"onPress\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}]," +
                         "\"onRelease\":[{\"button\":%d," +
@@ -65,13 +67,14 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                         "\"uuid\":\"%s\",\"type\":\"%s\"}",
                 TOP_LEFT_COLOR_WRITTEN, TOP_RIGHT_COLOR_WRITTEN, BOTTOM_LEFT_COLOR_WRITTEN,
                 BOTTOM_RIGHT_COLOR_WRITTEN, DIMENSIONS_WRITTEN, TEXTURE_ID_WRITTEN,
-                TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN, ON_PRESS_BUTTON,
-                ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID,
-                ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID,
-                mockRenderable.getClass().getCanonicalName()
+                TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_X_OFFSET_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN,
+                TEXTURE_Y_OFFSET_WRITTEN, ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON,
+                ON_RELEASE_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z,
+                UUID, mockRenderable.getClass().getCanonicalName()
         );
 
-        handler = new RectangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, mockFactory);
+        handler =
+                new RectangleRenderableHandler(MOCK_GET_CONSUMER, mockProviderHandler, mockFactory);
     }
 
     @Test
@@ -150,6 +153,8 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 any(),
                 any(),
                 any(),
+                any(),
+                any(),
                 anyInt(),
                 any(),
                 any()
@@ -170,8 +175,10 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 same(mockBottomLeftColorProvider),
                 same(mockBottomRightColorProvider),
                 same(mockTextureIdProvider),
-                same(mockTextureTileWidthProvider),
-                same(mockTextureTileHeightProvider),
+                same(mockTextureTilesPerWidthProvider),
+                same(mockTextureXOffsetProvider),
+                same(mockTextureTilesPerHeightProvider),
+                same(mockTextureYOffsetProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),

@@ -46,10 +46,14 @@ public class RectangleRenderer implements Renderer<RectangleRenderable> {
         var texId = renderable.getTextureIdProvider().provide(timestamp);
 
         Float texTileWidth = null;
+        Float texXOffset = null;
         Float texTileHeight = null;
+        Float texYOffset = null;
         if (texId != null) {
-            texTileWidth = renderable.getTextureTileWidthProvider().provide(timestamp);
-            texTileHeight = renderable.getTextureTileHeightProvider().provide(timestamp);
+            texTileWidth = renderable.getTextureTilesPerWidthProvider().provide(timestamp);
+            texXOffset = renderable.getTextureXOffsetProvider().provide(timestamp);
+            texTileHeight = renderable.getTextureTilesPerHeightProvider().provide(timestamp);
+            texYOffset = renderable.getTextureYOffsetProvider().provide(timestamp);
         }
 
         TIMESTAMP_VALIDATOR.validateTimestamp(this.getClass().getCanonicalName(), timestamp);
@@ -63,7 +67,9 @@ public class RectangleRenderer implements Renderer<RectangleRenderable> {
                 origBottomRightColor,
                 texId,
                 texTileWidth,
-                texTileHeight
+                texXOffset,
+                texTileHeight,
+                texYOffset
         );
         TRIANGLE_SEGMENT_RENDERER.draw(
                 renderingDimensions.topLeft(),
@@ -74,7 +80,9 @@ public class RectangleRenderer implements Renderer<RectangleRenderable> {
                 origBottomRightColor,
                 texId,
                 texTileWidth,
-                texTileHeight
+                texXOffset,
+                texTileHeight,
+                texYOffset
         );
     }
 }

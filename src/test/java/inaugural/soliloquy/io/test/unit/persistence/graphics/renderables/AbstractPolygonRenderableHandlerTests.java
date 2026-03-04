@@ -19,20 +19,26 @@ public abstract class AbstractPolygonRenderableHandlerTests
         extends AbstractRenderableWithMouseEventsHandlerTests {
     protected final String TEXTURE_ID_WRITTEN = randomString();
     protected final String TEXTURE_TILE_WIDTH_WRITTEN = randomString();
+    protected final String TEXTURE_X_OFFSET_WRITTEN = randomString();
     protected final String TEXTURE_TILE_HEIGHT_WRITTEN = randomString();
+    protected final String TEXTURE_Y_OFFSET_WRITTEN = randomString();
 
     @Mock protected ProviderHandler mockProviderHandler;
     @Mock protected ProviderAtTime<Integer> mockTextureIdProvider;
-    @Mock protected ProviderAtTime<Float> mockTextureTileWidthProvider;
-    @Mock protected ProviderAtTime<Float> mockTextureTileHeightProvider;
+    @Mock protected ProviderAtTime<Float> mockTextureTilesPerWidthProvider;
+    @Mock protected ProviderAtTime<Float> mockTextureXOffsetProvider;
+    @Mock protected ProviderAtTime<Float> mockTextureTilesPerHeightProvider;
+    @Mock protected ProviderAtTime<Float> mockTextureYOffsetProvider;
 
     protected void setUp() {
         super.setUp();
 
         hydrateMockHandler(mockProviderHandler,
                 pairOf(mockTextureIdProvider,TEXTURE_ID_WRITTEN),
-                pairOf(mockTextureTileWidthProvider,TEXTURE_TILE_WIDTH_WRITTEN),
-                pairOf(mockTextureTileHeightProvider,TEXTURE_TILE_HEIGHT_WRITTEN)
+                pairOf(mockTextureTilesPerWidthProvider,TEXTURE_TILE_WIDTH_WRITTEN),
+                pairOf(mockTextureXOffsetProvider, TEXTURE_X_OFFSET_WRITTEN),
+                pairOf(mockTextureTilesPerHeightProvider,TEXTURE_TILE_HEIGHT_WRITTEN),
+                pairOf(mockTextureYOffsetProvider, TEXTURE_Y_OFFSET_WRITTEN)
         );
     }
 
@@ -40,21 +46,28 @@ public abstract class AbstractPolygonRenderableHandlerTests
         super.setUpMockRenderable(mockRenderable);
 
         when(mockRenderable.getTextureIdProvider()).thenReturn(mockTextureIdProvider);
-        when(mockRenderable.getTextureTileWidthProvider()).thenReturn(mockTextureTileWidthProvider);
-        when(mockRenderable.getTextureTileHeightProvider()).thenReturn(
-                mockTextureTileHeightProvider);
+        when(mockRenderable.getTextureTilesPerWidthProvider()).thenReturn(
+                mockTextureTilesPerWidthProvider);
+        when(mockRenderable.getTextureXOffsetProvider()).thenReturn(mockTextureXOffsetProvider);
+        when(mockRenderable.getTextureTilesPerHeightProvider()).thenReturn(
+                mockTextureTilesPerHeightProvider);
+        when(mockRenderable.getTextureYOffsetProvider()).thenReturn(mockTextureYOffsetProvider);
     }
 
     protected void verifyWritten(PolygonRenderable mockRenderable) {
         super.verifyWritten(mockRenderable);
 
         verify(mockRenderable, once()).getTextureIdProvider();
-        verify(mockRenderable, once()).getTextureTileWidthProvider();
-        verify(mockRenderable, once()).getTextureTileHeightProvider();
+        verify(mockRenderable, once()).getTextureTilesPerWidthProvider();
+        verify(mockRenderable, once()).getTextureXOffsetProvider();
+        verify(mockRenderable, once()).getTextureTilesPerHeightProvider();
+        verify(mockRenderable, once()).getTextureYOffsetProvider();
 
         verify(mockProviderHandler, once()).write(mockTextureIdProvider);
-        verify(mockProviderHandler, once()).write(mockTextureTileWidthProvider);
-        verify(mockProviderHandler, once()).write(mockTextureTileHeightProvider);
+        verify(mockProviderHandler, once()).write(mockTextureTilesPerWidthProvider);
+        verify(mockProviderHandler, once()).write(mockTextureXOffsetProvider);
+        verify(mockProviderHandler, once()).write(mockTextureTilesPerHeightProvider);
+        verify(mockProviderHandler, once()).write(mockTextureYOffsetProvider);
     }
 
     protected void verifyRead() {
@@ -62,6 +75,8 @@ public abstract class AbstractPolygonRenderableHandlerTests
 
         verify(mockProviderHandler, once()).read(TEXTURE_ID_WRITTEN);
         verify(mockProviderHandler, once()).read(TEXTURE_TILE_WIDTH_WRITTEN);
+        verify(mockProviderHandler, once()).read(TEXTURE_X_OFFSET_WRITTEN);
         verify(mockProviderHandler, once()).read(TEXTURE_TILE_HEIGHT_WRITTEN);
+        verify(mockProviderHandler, once()).read(TEXTURE_Y_OFFSET_WRITTEN);
     }
 }

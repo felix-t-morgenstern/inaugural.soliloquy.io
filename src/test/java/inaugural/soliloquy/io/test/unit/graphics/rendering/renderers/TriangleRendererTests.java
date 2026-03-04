@@ -30,7 +30,9 @@ public class TriangleRendererTests {
     private final Color COLOR_3 = randomColor();
     private final int TEXTURE_ID = randomInt();
     private final float TEXTURE_WIDTH = randomFloat();
+    private final float TEXTURE_X_OFFSET = randomFloat();
     private final float TEXTURE_HEIGHT = randomFloat();
+    private final float TEXTURE_Y_OFFSET = randomFloat();
 
     @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
     @Mock private ProviderAtTime<Color> mockColor1Provider;
@@ -68,8 +70,8 @@ public class TriangleRendererTests {
         lenient().when(mockRenderable.getVertex3Provider()).thenReturn(mockVertex3Provider);
         lenient().when(mockRenderable.getVertex3ColorProvider()).thenReturn(mockColor3Provider);
         lenient().when(mockRenderable.getTextureIdProvider()).thenReturn(mockTextureIdProvider);
-        lenient().when(mockRenderable.getTextureTileWidthProvider()).thenReturn(mockTextureWidthProvider);
-        lenient().when(mockRenderable.getTextureTileHeightProvider()).thenReturn(mockTextureHeightProvider);
+        lenient().when(mockRenderable.getTextureTilesPerWidthProvider()).thenReturn(mockTextureWidthProvider);
+        lenient().when(mockRenderable.getTextureTilesPerHeightProvider()).thenReturn(mockTextureHeightProvider);
 
         renderer = new TriangleRenderer(mockTimestampValidator, mockTriangleSegmentRenderer);
     }
@@ -109,10 +111,10 @@ public class TriangleRendererTests {
         verify(mockRenderable, once()).getTextureIdProvider();
         verify(mockTextureIdProvider, once()).provide(timestamp);
 
-        verify(mockRenderable, once()).getTextureTileWidthProvider();
+        verify(mockRenderable, once()).getTextureTilesPerWidthProvider();
         verify(mockTextureWidthProvider, once()).provide(timestamp);
 
-        verify(mockRenderable, once()).getTextureTileHeightProvider();
+        verify(mockRenderable, once()).getTextureTilesPerHeightProvider();
         verify(mockTextureHeightProvider, once()).provide(timestamp);
 
         verify(mockTriangleSegmentRenderer, once()).draw(
@@ -124,7 +126,9 @@ public class TriangleRendererTests {
                 COLOR_3,
                 TEXTURE_ID,
                 TEXTURE_WIDTH,
-                TEXTURE_HEIGHT
+                TEXTURE_X_OFFSET,
+                TEXTURE_HEIGHT,
+                TEXTURE_Y_OFFSET
         );
     }
 }
