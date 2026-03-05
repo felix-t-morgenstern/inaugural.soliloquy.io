@@ -320,7 +320,7 @@ public class DisplayTest {
         var coreLoop = ioModule.provide(CoreLoop.class);
 
         var frameTimer = ioModule.provide(FrameTimer.class);
-        frameTimer.setTargetFps(null);
+        frameTimer.setTargetFps(60f);
 
         var frameExecutor = ioModule.provide(FrameExecutor.class);
         var componentFactory = ioModule.provide(ComponentFactory.class);

@@ -16,7 +16,7 @@ public class FrameTimerImpl implements FrameTimer {
     private boolean stopped;
     private Float targetFps;
 
-    private Long currentPeriodStartTimestamp;
+    private long currentPeriodStartTimestamp = -1;
     private Long currentPeriodEndTimestamp;
     private int framesExecutedInCurrentPeriod;
 
@@ -40,7 +40,7 @@ public class FrameTimerImpl implements FrameTimer {
         if (started) {
             throw new UnsupportedOperationException("FrameTimerImpl: cannot be started twice");
         }
-        new Thread(this::startNewPeriodLoopIteration).start();
+        new Thread(this::startNewReportingPeriodLoopIteration).start();
         started = true;
 
         while (!stopped) {
@@ -68,12 +68,12 @@ public class FrameTimerImpl implements FrameTimer {
         }
     }
 
-    private void startNewPeriodLoopIteration() {
+    private void startNewReportingPeriodLoopIteration() {
         if (stopped) {
             return;
         }
 
-        if (currentPeriodStartTimestamp != null) {
+        if (currentPeriodStartTimestamp >= 0) {
             synchronized (this) {
                 reportFrameInformation(currentPeriodStartTimestamp, currentPeriodEndTimestamp, targetFps,
                         framesExecutedInCurrentPeriod);
@@ -90,7 +90,7 @@ public class FrameTimerImpl implements FrameTimer {
 
         CheckedExceptionWrapper.sleep(currentPeriodEndTimestamp - currentTimestamp);
 
-        startNewPeriodLoopIteration();
+        startNewReportingPeriodLoopIteration();
     }
 
     private void reportFrameInformation(long periodStartTimestamp,

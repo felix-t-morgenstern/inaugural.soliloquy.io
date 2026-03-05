@@ -127,32 +127,11 @@ public class CoreLoopImpl implements CoreLoop {
 
         updateWindow();
 
-        GL.createCapabilities();
+        glSetup();
 
-        glClearColor(0, 0, 0, 0);
+        bindShaderAndMesh();
 
-        glEnable(GL_LINE_STIPPLE);
-        glEnable(GL_LINE_SMOOTH);
-        glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glDepthMask(false);
-        glEnable(GL_TEXTURE_2D);
-
-        glOrtho(0d, 1d, 1d, 0d, 0d, 1d);
-
-        var shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
-        shader.bind();
-
-        SHADER_SUBSCRIBERS.forEach(s -> s.accept(shader));
-
-        var mesh = MESH_FACTORY.apply(MESH_VERTICES, MESH_UV_COORDINATES);
-
-        MESH_SUBSCRIBERS.forEach(s -> s.accept(mesh));
-
-        mesh.bind();
-
-        // TODO: Consider test for whether GraphicsPreloader.load was called before_ the first
+        // TODO: Consider test for whether GraphicsPreloader.load was called _before_ the first
         //  invocation of FrameTimer.shouldExecuteNextFrame
         GRAPHICS_PRELOADER.load();
 
@@ -172,25 +151,7 @@ public class CoreLoopImpl implements CoreLoop {
             MOUSE_CURSOR.updateCursor(window);
 
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
-                glfwPollEvents();
-
-                updateWindow();
-
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                var frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
-
-                KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
-                readMouseButtonStates();
-
-                if (screenMouseLocation != null) {
-                    MOUSE_LISTENER.registerMousePositionAndButtonStates(screenMouseLocation,
-                            MOUSE_BUTTON_STATES, frameTimestamp);
-                }
-
-                FRAME_EXECUTOR.execute(frameTimestamp);
-
-                glfwSwapBuffers(window);
+                runFrame();
             }
 
             if (FRAME_TIMER_POLLING_INTERVAL > 0) {
@@ -198,9 +159,57 @@ public class CoreLoopImpl implements CoreLoop {
             }
         }
 
-        FRAME_TIMER.stop();
+        tearDown();
+    }
 
-        glfwTerminate();
+    private void glSetup() {
+        GL.createCapabilities();
+
+        glClearColor(0, 0, 0, 0);
+
+        glEnable(GL_LINE_STIPPLE);
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDepthMask(false);
+        glEnable(GL_TEXTURE_2D);
+
+        glOrtho(0d, 1d, 1d, 0d, 0d, 1d);
+    }
+
+    private void bindShaderAndMesh() {
+        var shader = SHADER_FACTORY.make(SHADER_FILENAME_PREFIX);
+        shader.bind();
+
+        SHADER_SUBSCRIBERS.forEach(s -> s.accept(shader));
+
+        var mesh = MESH_FACTORY.apply(MESH_VERTICES, MESH_UV_COORDINATES);
+        mesh.bind();
+
+        MESH_SUBSCRIBERS.forEach(s -> s.accept(mesh));
+    }
+
+    private void runFrame() {
+        glfwPollEvents();
+
+        updateWindow();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        var frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
+
+        KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
+        readMouseButtonStates();
+
+        if (screenMouseLocation != null) {
+            MOUSE_LISTENER.registerMousePositionAndButtonStates(screenMouseLocation,
+                    MOUSE_BUTTON_STATES, frameTimestamp);
+        }
+
+        FRAME_EXECUTOR.execute(frameTimestamp);
+
+        glfwSwapBuffers(window);
     }
 
     private void updateWindow() {
@@ -220,6 +229,7 @@ public class CoreLoopImpl implements CoreLoop {
     // NB: Getting the screen dimensions for each callback ensures that mouse cursor position
     // will remain accurately depicted when the resolution changes, but may be a target for
     // performance enhancements.
+
     private void setNewMouseCallbacks() {
         //noinspection resource
         glfwSetCursorPosCallback(window, (_, xPixel, yPixel) -> {
@@ -233,7 +243,6 @@ public class CoreLoopImpl implements CoreLoop {
             screenMouseLocation = vertexOf(x, y);
         });
     }
-
     private void readMouseButtonStates() {
         for (var mouseButton : Constants.ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(mouseButton,
@@ -267,5 +276,11 @@ public class CoreLoopImpl implements CoreLoop {
     @Override
     public void setTitlebar(String titlebar) throws IllegalArgumentException {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
+    }
+
+    private void tearDown() {
+        FRAME_TIMER.stop();
+
+        glfwTerminate();
     }
 }
