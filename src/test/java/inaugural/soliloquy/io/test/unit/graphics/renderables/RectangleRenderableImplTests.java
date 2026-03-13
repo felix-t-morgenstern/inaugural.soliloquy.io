@@ -133,39 +133,6 @@ public class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
                         mockTopRightColorProvider, mockBottomRightColorProvider,
-                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, null,
-                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
-                        mockTopRightColorProvider, mockBottomRightColorProvider,
-                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
-                        mockTextureTilesPerWidthProvider, null, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
-                        mockTopRightColorProvider, mockBottomRightColorProvider,
-                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
-                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, null,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
-                        mockTopRightColorProvider, mockBottomRightColorProvider,
-                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
-                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
-                        mockTextureTilesPerHeightProvider, null, ON_PRESS_CONSUMERS, null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z,
-                        UUID, mockContainingComponent, mockRenderingBoundaries,
-                        mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
-                        mockTopRightColorProvider, mockBottomRightColorProvider,
                         mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
                         mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
                         mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
@@ -293,10 +260,6 @@ public class RectangleRenderableImplTests {
                 renderable.setBottomLeftColorProvider(null));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.setTextureIdProvider(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                renderable.setTextureTilesPerWidthProvider(null));
-        assertThrows(IllegalArgumentException.class, () ->
-                renderable.setTextureTilesPerHeightProvider(null));
     }
 
     @Test

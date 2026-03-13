@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static inaugural.soliloquy.tools.Tools.defaultIfNull;
+import static inaugural.soliloquy.tools.Tools.defaultIfNullElseTransform;
 import static soliloquy.specs.io.input.keyboard.KeyBinding.keyBinding;
 
 public class ComponentHandler extends AbstractTypeHandler<Component> {
@@ -56,8 +56,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
 
         var bindings = Collections.<KeyBinding>setOf();
         Arrays.stream(dto.bindings).forEach(b -> {
-            var onPress = defaultIfNull(b.onPress, GET_CONSUMER, null);
-            var onRelease = defaultIfNull(b.onRelease, GET_CONSUMER, null);
+            var onPress = defaultIfNullElseTransform(b.onPress, GET_CONSUMER, null);
+            var onRelease = defaultIfNullElseTransform(b.onRelease, GET_CONSUMER, null);
             bindings.add(keyBinding(b.keys, onPress, onRelease));
         });
 

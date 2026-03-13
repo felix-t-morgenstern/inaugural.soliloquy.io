@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.test.unit.graphics.rendering;
 import inaugural.soliloquy.io.graphics.rendering.ShaderImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
@@ -15,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL20.*;
 
+// The test suite here uses timers to verify behavior, which inflate test time. Until this suite
+// is refactored to be more expedient, it should only be run when the class in question is changed.
+@Disabled
 public class ShaderImplTests {
     private static final String SHADER_FILENAME_PREFIX = "./src/test/resources/shaders/unitTestingShader";
 

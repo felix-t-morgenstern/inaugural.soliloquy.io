@@ -65,7 +65,7 @@ public abstract class AbstractPolygonRenderable
     @Override
     public void setTextureTilesPerWidthProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureTilesPerWidthProvider = Check.ifNull(provider, "provider");
+        textureTilesPerWidthProvider = provider;
     }
 
     @Override
@@ -76,7 +76,7 @@ public abstract class AbstractPolygonRenderable
     @Override
     public void setTextureXOffsetProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureXOffsetProvider = Check.ifNull(provider, "provider");
+        textureXOffsetProvider = provider;
     }
 
     @Override
@@ -87,7 +87,7 @@ public abstract class AbstractPolygonRenderable
     @Override
     public void setTextureTilesPerHeightProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureTilesPerHeightProvider = Check.ifNull(provider, "provider");
+        textureTilesPerHeightProvider = provider;
     }
 
     @Override
@@ -98,6 +98,6 @@ public abstract class AbstractPolygonRenderable
     @Override
     public void setTextureYOffsetProvider(ProviderAtTime<Float> provider)
             throws IllegalArgumentException {
-        textureYOffsetProvider = Check.ifNull(provider, "provider");
+        textureYOffsetProvider = provider;
     }
 }

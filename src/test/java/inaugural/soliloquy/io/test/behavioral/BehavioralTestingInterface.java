@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static inaugural.soliloquy.io.test.integration.audio.IntegrationTestsSetup.integrationTestAudio;
-import static inaugural.soliloquy.tools.Tools.defaultIfNull;
+import static inaugural.soliloquy.tools.Tools.defaultIfNullElseTransform;
 
 public class BehavioralTestingInterface implements ActionListener {
     private final static String BUTTON_INITIALIZE = "Initialize";
@@ -136,9 +136,11 @@ public class BehavioralTestingInterface implements ActionListener {
 
     private static void updateLabels() {
         LABEL_ID.setText(
-                "Sound Uuid: " + defaultIfNull(SOUND_FINITE, s -> s.uuid().toString(), ""));
+                "Sound Uuid: " +
+                        defaultIfNullElseTransform(SOUND_FINITE, s -> s.uuid().toString(), ""));
         LABEL_TYPE_ID.setText(
-                "Sound Type Id: " + defaultIfNull(SOUND_FINITE, s -> s.soundType().id(), ""));
+                "Sound Type Id: " +
+                        defaultIfNullElseTransform(SOUND_FINITE, s -> s.soundType().id(), ""));
         LABEL_VOLUME.setText(
                 "Volume: " + (
                         SOUND_FINITE == null || SOUND_FINITE.isStopped() ? "" :

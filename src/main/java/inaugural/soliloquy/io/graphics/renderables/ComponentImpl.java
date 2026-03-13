@@ -10,12 +10,12 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 
-import java.util.function.Consumer;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
-import static inaugural.soliloquy.tools.Tools.defaultIfNull;
+import static inaugural.soliloquy.tools.Tools.defaultIfNullElseTransform;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
 import static soliloquy.specs.io.graphics.renderables.Component.Addend.addend;
@@ -96,7 +96,8 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     }
 
     @Override
-    public void add(Renderable renderable, Map<String, Object> data) throws IllegalArgumentException {
+    public void add(Renderable renderable, Map<String, Object> data)
+            throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
         if (renderable.containingComponent() != this) {
             throw new IllegalArgumentException(
@@ -180,12 +181,13 @@ public class ComponentImpl extends AbstractRenderable implements Component {
 
     @Override
     public String prerenderHookId() {
-        return defaultIfNull(PRERENDER, HasId::id, null);
+        return defaultIfNullElseTransform(PRERENDER, HasId::id, null);
     }
 
     @Override
     public String addHookId() {
-        return defaultIfNull(ADD_HOOK, soliloquy.specs.common.entities.BiConsumer::id, null);
+        return defaultIfNullElseTransform(ADD_HOOK, soliloquy.specs.common.entities.BiConsumer::id,
+                null);
     }
 
     @Override

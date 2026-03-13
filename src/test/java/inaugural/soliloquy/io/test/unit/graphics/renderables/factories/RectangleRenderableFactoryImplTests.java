@@ -54,7 +54,8 @@ public class RectangleRenderableFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-        factory = new RectangleRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
+        factory =
+                new RectangleRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
     }
 
     @Test
@@ -70,7 +71,8 @@ public class RectangleRenderableFactoryImplTests {
         RectangleRenderable rectangleRenderable = factory.make(
                 mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider,
                 mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
-                mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
                 ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
                 RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent);
 
@@ -80,17 +82,62 @@ public class RectangleRenderableFactoryImplTests {
 
     @Test
     public void testMakeWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> factory.make(null, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, null, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, null, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, null, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, null, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, null, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, null, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, null, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, null, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, null, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, null, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, mockBottomRightColorProvider, mockBottomLeftColorProvider, mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(null, mockTopRightColorProvider, mockBottomRightColorProvider,
+                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, null, mockBottomRightColorProvider,
+                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider, null,
+                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, null, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider, null,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider, null,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave,
+                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                        mockOnMouseLeave, null, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(mockTopLeftColorProvider, mockTopRightColorProvider,
+                        mockBottomRightColorProvider, mockBottomLeftColorProvider,
+                        mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
+                        mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
+                        mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, null,
+                        mockContainingComponent));
     }
 }

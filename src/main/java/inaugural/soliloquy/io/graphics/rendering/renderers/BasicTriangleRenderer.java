@@ -111,5 +111,14 @@ public class BasicTriangleRenderer {
         public static Point point(Vertex loc, Color color) {
             return new Point(loc, color, null);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Point(Vertex loc1, Color color1, Vertex texCoordinate1)) {
+                return loc1 == loc && color1 == color && texCoordinate1 == texCoordinate;
+            } else {
+                return false;
+            }
+        }
     }
 }

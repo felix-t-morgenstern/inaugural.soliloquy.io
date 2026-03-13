@@ -100,6 +100,7 @@ public class TriangleSegmentRenderer {
                 null
         );
 
+
         renderingBoundaries.corners().forEach(corner -> {
             if (contains(triangleEncompassingDimens, corner) &&
                     pointIsInTriangle(
@@ -122,16 +123,25 @@ public class TriangleSegmentRenderer {
             }
         });
 
-        if (points.size() == 3) {
+        var distinctPoints = Collections.<Point>listOf();
+        var distinctVertices = Collections.<Vertex>setOf();
+        points.forEach(p -> {
+            if (!distinctVertices.contains(p.loc())) {
+                distinctPoints.add(p);
+                distinctVertices.add(p.loc());
+            }
+        });
+
+        if (distinctPoints.size() == 3) {
             BASIC_TRIANGLE_RENDERER.draw(
-                    points.get(0),
-                    points.get(1),
-                    points.get(2),
+                    distinctPoints.get(0),
+                    distinctPoints.get(1),
+                    distinctPoints.get(2),
                     textureId
             );
         }
         else {
-            var centroid = getVerticesCentroid(points.stream().map(Point::loc));
+            var centroid = getVerticesCentroid(distinctPoints.stream().map(Point::loc));
             var centroidPoint = makePoint(
                     centroid,
                     hasColor,
@@ -142,12 +152,12 @@ public class TriangleSegmentRenderer {
                     textureTilesPerHeight,
                     textureYOffset
             );
-            points.sort(Comparator.comparingDouble(
+            distinctPoints.sort(Comparator.comparingDouble(
                     p -> Math.atan2(p.loc().Y - centroid.Y, p.loc().X - centroid.X)));
-            for (var i = 0; i < points.size(); i++) {
+            for (var i = 0; i < distinctPoints.size(); i++) {
                 BASIC_TRIANGLE_RENDERER.draw(
-                        points.get(i),
-                        points.get((i + 1) % points.size()),
+                        distinctPoints.get(i),
+                        distinctPoints.get((i + 1) % distinctPoints.size()),
                         centroidPoint,
                         textureId
                 );
@@ -163,7 +173,7 @@ public class TriangleSegmentRenderer {
                            Float textureXOffset,
                            Float textureTilesPerHeight,
                            Float textureYOffset,
-                           List<Point> points,
+                           List<Point> pointsCollector,
                            int index,
                            Boolean prevWasIn) {
         // index is allowed to go to 3 to "loop around" to the first vertex, in case there are
@@ -180,7 +190,7 @@ public class TriangleSegmentRenderer {
             currentIsIn = true;
 
             if (index < 3) {
-                points.add(point(
+                pointsCollector.add(point(
                         currentVertex,
                         verticesAndColors.get(index).SECOND,
                         texCoordinates(
@@ -204,7 +214,7 @@ public class TriangleSegmentRenderer {
                         1
                 );
                 // (If prev wasn't in and current is in, that implies 1 and only 1 intersect)
-                points.add(makePoint(intersects.getFirst(), hasColor, verticesAndColors,
+                pointsCollector.add(makePoint(intersects.getFirst(), hasColor, verticesAndColors,
                         encompassingDimens, textureTilesPerWidth, textureXOffset,
                         textureTilesPerHeight, textureYOffset));
             }
@@ -222,7 +232,7 @@ public class TriangleSegmentRenderer {
                         slope,
                         renderingBoundaries,
                         prevWasIn ? 1 : 2
-                ).forEach(i -> points.add(
+                ).forEach(i -> pointsCollector.add(
                         makePoint(i, hasColor, verticesAndColors, encompassingDimens,
                                 textureTilesPerWidth, textureXOffset, textureTilesPerHeight,
                                 textureYOffset)));
@@ -233,7 +243,7 @@ public class TriangleSegmentRenderer {
         if (index < 3) {
             addPoints(verticesAndColors, hasColor, renderingBoundaries, encompassingDimens,
                     textureTilesPerWidth, textureXOffset, textureTilesPerHeight, textureYOffset,
-                    points, index + 1, currentIsIn);
+                    pointsCollector, index + 1, currentIsIn);
         }
     }
 
@@ -337,13 +347,16 @@ public class TriangleSegmentRenderer {
             return;
         }
         var yIntersectAtAxis = yIntersectAtX(slope, v1, xIntersectVal);
+        var intersect = vertexOf(xIntersectVal, yIntersectAtAxis);
         if (
                 yIntersectAtAxis >= lowerY &&
                         yIntersectAtAxis <= upperY &&
                         valIsInRange(yIntersectAtAxis, v1.Y, v2.Y) &&
-                        valIsInRange(xIntersectVal, v1.X, v2.X)
+                        valIsInRange(xIntersectVal, v1.X, v2.X) &&
+                        !v1.equals(intersect) &&
+                        !v2.equals(intersect)
         ) {
-            intersects.add(vertexOf(xIntersectVal, yIntersectAtAxis));
+            intersects.add(intersect);
         }
     }
 
@@ -363,13 +376,16 @@ public class TriangleSegmentRenderer {
             }
         }
         var xIntersectAtAxis = xIntersectAtY(slope, v1, yIntersectVal);
+        var intersect = vertexOf(xIntersectAtAxis, yIntersectVal);
         if (
                 xIntersectAtAxis >= lowerX &&
                         xIntersectAtAxis <= upperX &&
                         valIsInRange(xIntersectAtAxis, v1.X, v2.X) &&
-                        valIsInRange(yIntersectVal, v1.Y, v2.Y)
+                        valIsInRange(yIntersectVal, v1.Y, v2.Y) &&
+                        !v1.equals(intersect) &&
+                        !v2.equals(intersect)
         ) {
-            intersects.add(vertexOf(xIntersectAtAxis, yIntersectVal));
+            intersects.add(intersect);
         }
     }
 

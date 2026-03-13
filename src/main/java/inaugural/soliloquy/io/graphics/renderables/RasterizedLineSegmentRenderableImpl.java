@@ -9,7 +9,7 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import java.awt.*;
 import java.util.UUID;
 
-import static inaugural.soliloquy.tools.Tools.defaultIfNull;
+import static inaugural.soliloquy.tools.Tools.defaultIfNullElseTransform;
 
 public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRenderable
         implements RasterizedLineSegmentRenderable {
@@ -37,7 +37,7 @@ public class RasterizedLineSegmentRenderableImpl extends AbstractLineSegmentRend
 
     @Override
     public void setStipplePattern(Short stipplePattern) throws IllegalArgumentException {
-        this.stipplePattern = defaultIfNull(
+        this.stipplePattern = defaultIfNullElseTransform(
                 stipplePattern,
                 s -> Check.throwOnEqualsValue(s, (short) 0, "stipplePattern"),
                 null

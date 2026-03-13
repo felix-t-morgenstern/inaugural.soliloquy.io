@@ -29,9 +29,9 @@ public class TriangleRendererTests {
     private final Vertex VERTEX_3 = randomVertex();
     private final Color COLOR_3 = randomColor();
     private final int TEXTURE_ID = randomInt();
-    private final float TEXTURE_WIDTH = randomFloat();
+    private final float TEXTURE_TILES_PER_WIDTH = randomFloat();
     private final float TEXTURE_X_OFFSET = randomFloat();
-    private final float TEXTURE_HEIGHT = randomFloat();
+    private final float TEXTURE_TILES_PER_HEIGHT = randomFloat();
     private final float TEXTURE_Y_OFFSET = randomFloat();
 
     @Mock private ProviderAtTime<Vertex> mockVertex1Provider;
@@ -41,8 +41,10 @@ public class TriangleRendererTests {
     @Mock private ProviderAtTime<Vertex> mockVertex3Provider;
     @Mock private ProviderAtTime<Color> mockColor3Provider;
     @Mock private ProviderAtTime<Integer> mockTextureIdProvider;
-    @Mock private ProviderAtTime<Float> mockTextureWidthProvider;
-    @Mock private ProviderAtTime<Float> mockTextureHeightProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTilesPerWidthProvider;
+    @Mock private ProviderAtTime<Float> mockTextureXOffsetProvider;
+    @Mock private ProviderAtTime<Float> mockTextureTilesPerHeightProvider;
+    @Mock private ProviderAtTime<Float> mockTextureYOffsetProvider;
 
     @Mock private TriangleRenderable mockRenderable;
 
@@ -60,8 +62,12 @@ public class TriangleRendererTests {
         lenient().when(mockVertex3Provider.provide(anyLong())).thenReturn(VERTEX_3);
         lenient().when(mockColor3Provider.provide(anyLong())).thenReturn(COLOR_3);
         lenient().when(mockTextureIdProvider.provide(anyLong())).thenReturn(TEXTURE_ID);
-        lenient().when(mockTextureWidthProvider.provide(anyLong())).thenReturn(TEXTURE_WIDTH);
-        lenient().when(mockTextureHeightProvider.provide(anyLong())).thenReturn(TEXTURE_HEIGHT);
+        lenient().when(mockTextureTilesPerWidthProvider.provide(anyLong())).thenReturn(
+                TEXTURE_TILES_PER_WIDTH);
+        lenient().when(mockTextureXOffsetProvider.provide(anyLong())).thenReturn(TEXTURE_X_OFFSET);
+        lenient().when(mockTextureTilesPerHeightProvider.provide(anyLong())).thenReturn(
+                TEXTURE_TILES_PER_HEIGHT);
+        lenient().when(mockTextureYOffsetProvider.provide(anyLong())).thenReturn(TEXTURE_Y_OFFSET);
 
         lenient().when(mockRenderable.getVertex1Provider()).thenReturn(mockVertex1Provider);
         lenient().when(mockRenderable.getVertex1ColorProvider()).thenReturn(mockColor1Provider);
@@ -70,8 +76,12 @@ public class TriangleRendererTests {
         lenient().when(mockRenderable.getVertex3Provider()).thenReturn(mockVertex3Provider);
         lenient().when(mockRenderable.getVertex3ColorProvider()).thenReturn(mockColor3Provider);
         lenient().when(mockRenderable.getTextureIdProvider()).thenReturn(mockTextureIdProvider);
-        lenient().when(mockRenderable.getTextureTilesPerWidthProvider()).thenReturn(mockTextureWidthProvider);
-        lenient().when(mockRenderable.getTextureTilesPerHeightProvider()).thenReturn(mockTextureHeightProvider);
+        lenient().when(mockRenderable.getTextureTilesPerWidthProvider()).thenReturn(
+                mockTextureTilesPerWidthProvider);
+        lenient().when(mockRenderable.getTextureXOffsetProvider()).thenReturn(mockTextureXOffsetProvider);
+        lenient().when(mockRenderable.getTextureTilesPerHeightProvider()).thenReturn(
+                mockTextureTilesPerHeightProvider);
+        lenient().when(mockRenderable.getTextureYOffsetProvider()).thenReturn(mockTextureYOffsetProvider);
 
         renderer = new TriangleRenderer(mockTimestampValidator, mockTriangleSegmentRenderer);
     }
@@ -112,10 +122,10 @@ public class TriangleRendererTests {
         verify(mockTextureIdProvider, once()).provide(timestamp);
 
         verify(mockRenderable, once()).getTextureTilesPerWidthProvider();
-        verify(mockTextureWidthProvider, once()).provide(timestamp);
+        verify(mockTextureTilesPerWidthProvider, once()).provide(timestamp);
 
         verify(mockRenderable, once()).getTextureTilesPerHeightProvider();
-        verify(mockTextureHeightProvider, once()).provide(timestamp);
+        verify(mockTextureTilesPerHeightProvider, once()).provide(timestamp);
 
         verify(mockTriangleSegmentRenderer, once()).draw(
                 VERTEX_1,
@@ -125,9 +135,9 @@ public class TriangleRendererTests {
                 VERTEX_3,
                 COLOR_3,
                 TEXTURE_ID,
-                TEXTURE_WIDTH,
+                TEXTURE_TILES_PER_WIDTH,
                 TEXTURE_X_OFFSET,
-                TEXTURE_HEIGHT,
+                TEXTURE_TILES_PER_HEIGHT,
                 TEXTURE_Y_OFFSET
         );
     }
