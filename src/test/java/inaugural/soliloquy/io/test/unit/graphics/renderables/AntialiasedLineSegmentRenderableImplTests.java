@@ -238,14 +238,14 @@ public class AntialiasedLineSegmentRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockComponent, renderable.containingComponent());
+        assertSame(mockComponent, renderable.getContainingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((AntialiasedLineSegmentRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
     }
 
     @Test

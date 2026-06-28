@@ -4,21 +4,18 @@ import com.conversantmedia.util.collection.spatial.RTreeFacade;
 import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Renderable;
-import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 
 import java.util.Comparator;
 
-public class MouseEventCapturingSpatialIndexImpl
-        implements MouseEventCapturingSpatialIndex {
+public class MouseEventCapturingSpatialIndex {
     private final RTreeFacade R_TREE;
 
-    public MouseEventCapturingSpatialIndexImpl() {
+    public MouseEventCapturingSpatialIndex() {
         R_TREE = new RTreeFacade();
     }
 
     // TODO: Verify and use timestamp
-    @Override
     public RenderableWithMouseEvents getCapturingRenderableAtPoint(Vertex point, long timestamp)
             throws IllegalArgumentException {
         var roughResults = R_TREE.search(point.X, point.Y, timestamp);
@@ -33,19 +30,17 @@ public class MouseEventCapturingSpatialIndexImpl
                 });
         var sortedByZ =
                 capturingResults.sorted(Comparator.comparingInt(Renderable::getZ).reversed());
-        var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.containingComponent().tier()));
+        var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.getContainingComponent().tier()));
 
         return sortedByTierAndZ.findFirst().orElse(null);
     }
 
-    @Override
     public void putRenderable(RenderableWithMouseEvents renderable)
             throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
         R_TREE.put(renderable);
     }
 
-    @Override
     public void removeRenderable(RenderableWithMouseEvents renderableWithMouseEvents)
             throws IllegalArgumentException {
         R_TREE.remove(Check.ifNull(renderableWithMouseEvents, "renderableWithMouseEvents"));

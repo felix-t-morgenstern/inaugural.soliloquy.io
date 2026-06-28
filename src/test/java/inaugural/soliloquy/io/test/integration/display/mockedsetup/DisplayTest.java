@@ -10,8 +10,9 @@ import inaugural.soliloquy.io.graphics.rendering.RenderingBoundariesImpl;
 import inaugural.soliloquy.io.graphics.rendering.WindowResolutionManagerImpl;
 import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.ComponentRendererImpl;
-import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
-import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
+import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndex;
+import inaugural.soliloquy.io.mouse.MouseEventHandler;
+import inaugural.soliloquy.io.mouse.MouseImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGlobalClock;
@@ -29,8 +30,6 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.*;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.io.input.mouse.MouseCursor;
-import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 
 import java.awt.*;
 import java.util.Map;
@@ -77,7 +76,7 @@ public class DisplayTest {
     protected static FakeFrameTimer FrameTimer;
     protected static Component MockTopLevelComponent;
     protected static Component MockFirstChildComponent;
-    protected static MouseCursor MouseCursor = mock(MouseCursor.class);
+    protected static MouseImpl MockMouse = mock(MouseImpl.class);
     protected static MouseEventCapturingSpatialIndex MouseEventCapturingSpatialIndex;
     protected static ColorShiftStackAggregator MockShiftAggregator;
 
@@ -98,20 +97,22 @@ public class DisplayTest {
 
         var graphicsPreloader = new FakeGraphicsPreloader();
 
-        MouseEventCapturingSpatialIndex = new MouseEventCapturingSpatialIndexImpl();
+        MouseEventCapturingSpatialIndex = new MouseEventCapturingSpatialIndex();
 
-        var mouseEventHandler = new MouseEventHandlerImpl(MouseEventCapturingSpatialIndex);
+        var mouseEventHandler = new MouseEventHandler(TimestampValidator,
+                MouseEventCapturingSpatialIndex::getCapturingRenderableAtPoint);
 
         MockShiftAggregator = mock(ColorShiftStackAggregator.class);
         when(MockShiftAggregator.aggregate(any(), anyLong())).thenReturn(netShifts(0, 0, 0, 0, 0));
 
-        var mouseListener = new MouseListener(mouseEventHandler);
+        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents,
+                TimestampValidator);
 
         MockTopLevelComponent = mock(ComponentImpl.class);
         when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
         MockFirstChildComponent = mock(ComponentImpl.class);
-        when(MockFirstChildComponent.containingComponent()).thenReturn(MockTopLevelComponent);
+        when(MockFirstChildComponent.getContainingComponent()).thenReturn(MockTopLevelComponent);
         when(MockFirstChildComponent.getRenderingBoundariesProvider()).thenReturn(
                 WHOLE_SCREEN_PROVIDER);
         when(MockTopLevelComponent.contentsRepresentation()).thenReturn(
@@ -135,8 +136,9 @@ public class DisplayTest {
                         GLOBAL_CLOCK, frameExecutor, new ShaderFactoryImpl(),
                         shaderSubscribers, SHADER_FILENAME_PREFIX, MeshImpl::new, meshSubscribers,
                         MESH_DATA, MESH_DATA, graphicsPreloader, mock(AudioLoader.class), setOf(),
-                        mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class), MouseCursor,
-                        mouseListener);
+                        mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class),
+                        MockMouse::updateCursor, MockMouse::setMostRecentMouseLocation,
+                        mouseListener::registerMousePositionAndButtonStates);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 

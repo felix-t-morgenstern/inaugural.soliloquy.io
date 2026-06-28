@@ -30,7 +30,7 @@ public class LoopingLinearMovingColorProviderImpl
         if (hueMovementIsClockwise.size() != valuesWithinPeriod.size()) {
             throw new IllegalArgumentException("FiniteLinearMovingColorProviderImpl: " +
                     "hueMovementIsClockwise (size = " + hueMovementIsClockwise.size() + ") must " +
-                    "have one fewer item than valuesWithinPeriod (size = " +
+                    "have the same number of items as valuesWithinPeriod (size = " +
                     valuesWithinPeriod.size() + ")");
         }
         hueMovementIsClockwise.forEach(isClockwise -> HUE_MOVEMENT_IS_CLOCKWISE.add(

@@ -47,7 +47,7 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
     }
 
     private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
-        MouseCursor.setMouseCursor(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION);
+        MockMouse.setMouseCursor(MOUSE_CURSOR_IMAGE_RELATIVE_LOCATION);
 
         CheckedExceptionWrapper.sleep(4000);
 

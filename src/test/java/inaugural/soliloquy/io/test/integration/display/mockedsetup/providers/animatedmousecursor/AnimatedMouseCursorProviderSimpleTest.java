@@ -22,7 +22,7 @@ class AnimatedMouseCursorProviderSimpleTest extends AnimatedMouseCursorProviderT
     }
 
     private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
-        MouseCursor.setMouseCursor(PROVIDER_ID);
+        MockMouse.setMouseCursor(PROVIDER_ID);
 
         CheckedExceptionWrapper.sleep(4000);
 

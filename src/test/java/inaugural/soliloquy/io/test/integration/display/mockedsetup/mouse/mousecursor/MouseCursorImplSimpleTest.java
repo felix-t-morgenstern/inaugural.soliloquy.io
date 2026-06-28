@@ -35,7 +35,7 @@ class MouseCursorImplSimpleTest extends MouseCursorImplTest {
     private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
         CheckedExceptionWrapper.sleep(2000);
 
-        MouseCursor.setMouseCursor(Constants.STANDARD_HAND_CURSOR_ID);
+        MockMouse.setMouseCursor(Constants.STANDARD_HAND_CURSOR_ID);
 
         CheckedExceptionWrapper.sleep(2000);
 

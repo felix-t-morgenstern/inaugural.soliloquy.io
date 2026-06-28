@@ -92,7 +92,7 @@ public class BasicTriangleRenderer {
             glColor4f(rgba[0], rgba[1], rgba[2], color.getAlpha() / MAX_CHANNEL_VAL);
         }
         else {
-            glColor4f(1f, 1f, 1f, 1f);
+            glColor4f(0f, 0f, 0f, 0f);
         }
     }
 

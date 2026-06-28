@@ -22,10 +22,10 @@ public abstract class AbstractFiniteSinusoidMovingProvider<T>
         super(uuid, valuesAtTimes, pausedTimestamp, timestampValidator);
         Check.ifNull(transitionSharpnesses, "transitionSharpnesses");
         if (transitionSharpnesses.length != valuesAtTimes.size() - 1) {
-            throw new IllegalArgumentException(
-                    className() + ": transitionSharpnesses must have number of" +
-                            " entries equal to one fewer than valuesAtTimes (" +
-                            valuesAtTimes.size() + ")");
+            throw new IllegalArgumentException(String.format(
+                    "%s: transitionSharpnesses (size = %s) must have number of entries equal to " +
+                            "one fewer than valuesAtTimes (size = %s)",
+                    className(), transitionSharpnesses.length, valuesAtTimes.size()));
         }
         for (var transitionSharpness : transitionSharpnesses) {
             if (transitionSharpness < 0f) {

@@ -23,9 +23,9 @@ import inaugural.soliloquy.io.graphics.rendering.factories.ShaderFactoryImpl;
 import inaugural.soliloquy.io.graphics.rendering.renderers.*;
 import inaugural.soliloquy.io.keyboard.KeyEventHandlerImpl;
 import inaugural.soliloquy.io.keyboard.KeyEventListenerImpl;
-import inaugural.soliloquy.io.mouse.MouseCursorImpl;
-import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
-import inaugural.soliloquy.io.mouse.MouseEventHandlerImpl;
+import inaugural.soliloquy.io.mouse.MouseImpl;
+import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndex;
+import inaugural.soliloquy.io.mouse.MouseEventHandler;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.persistence.audio.SoundHandler;
 import inaugural.soliloquy.io.persistence.audio.SoundsPlayingHandler;
@@ -60,6 +60,7 @@ import soliloquy.specs.io.graphics.rendering.Shader;
 import soliloquy.specs.io.graphics.rendering.WindowDisplayMode;
 import soliloquy.specs.io.graphics.rendering.renderers.Renderer;
 import soliloquy.specs.io.graphics.rendering.timing.FrameRateReporter;
+import soliloquy.specs.io.input.mouse.Mouse;
 
 import java.awt.*;
 import java.util.Map;
@@ -77,7 +78,6 @@ import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.reflection.Reflection.readMethods;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
-import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
 
 public class IOModule extends AbstractModule {
     public IOModule(Module common,
@@ -102,7 +102,7 @@ public class IOModule extends AbstractModule {
         // ======
 
         var globalClock = andRegister(new GlobalClockImpl());
-        var timestampValidator = new TimestampValidator(null);
+        var timestampValidator = andRegister(new TimestampValidator(null));
 
         // ========
         // Keyboard
@@ -245,12 +245,12 @@ public class IOModule extends AbstractModule {
         // Mouse
         // =====
 
-        var mouseCursor = andRegister(new MouseCursorImpl(mouseCursors::get, globalClock));
-        var mouseCapturing = new MouseEventCapturingSpatialIndexImpl();
-        var mouseEventHandler = new MouseEventHandlerImpl(mouseCapturing);
-        var mouseListener = new MouseListener(mouseEventHandler);
+        var mouse = andRegister(new MouseImpl(mouseCursors::get, globalClock));
+        var mouseCapturing = new MouseEventCapturingSpatialIndex();
+        var mouseEventHandler = new MouseEventHandler(timestampValidator, mouseCapturing::getCapturingRenderableAtPoint);
+        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents, timestampValidator);
 
-        TriConsumer<Integer, EventType, Runnable> subscribeToNextMouseEvent =
+        TriConsumer<Integer, Mouse.EventType, Runnable> subscribeToNextMouseEvent =
                 mouseEventHandler::subscribeToNextEvent;
         andRegister(subscribeToNextMouseEvent, SUBSCRIBE_TO_NEXT_MOUSE_EVENT);
 
@@ -622,8 +622,9 @@ public class IOModule extends AbstractModule {
                 defaultLoopStopMsById,
                 defaultLoopRestartMsById,
                 keyEventListener,
-                mouseCursor,
-                mouseListener
+                mouse::updateCursor,
+                mouse::setMostRecentMouseLocation,
+                mouseListener::registerMousePositionAndButtonStates
         ));
 
         methods.concatenate(readMethods(new IOMethods(soundsPlaying, soundFactory)));

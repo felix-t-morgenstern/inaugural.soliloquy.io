@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.unit.mouse;
 
-import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndexImpl;
+import inaugural.soliloquy.io.mouse.MouseEventCapturingSpatialIndex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,11 +10,9 @@ import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
-import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -23,7 +21,7 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 @ExtendWith(MockitoExtension.class)
-public class MouseEventCapturingSpatialIndexImplTests {
+public class MouseEventCapturingSpatialIndexTests {
     private final int Z_HIGHER = randomInt();
     private final int Z_LOWER = randomIntWithInclusiveCeiling(Z_HIGHER - 1);
     private final int COMPONENT_TIER_HIGHER = randomInt();
@@ -89,12 +87,12 @@ public class MouseEventCapturingSpatialIndexImplTests {
                 .thenReturn(true);
         lenient().when(mockRenderable4.capturesMouseEventAtPoint(any(), anyLong()))
                 .thenReturn(true);
-        lenient().when(mockRenderable1.containingComponent()).thenReturn(mockComponentHigher);
-        lenient().when(mockRenderable2.containingComponent()).thenReturn(mockComponentHigher);
-        lenient().when(mockRenderable3.containingComponent()).thenReturn(mockComponentLower);
-        lenient().when(mockRenderable4.containingComponent()).thenReturn(mockComponentLower);
+        lenient().when(mockRenderable1.getContainingComponent()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable2.getContainingComponent()).thenReturn(mockComponentHigher);
+        lenient().when(mockRenderable3.getContainingComponent()).thenReturn(mockComponentLower);
+        lenient().when(mockRenderable4.getContainingComponent()).thenReturn(mockComponentLower);
 
-        capturing = new MouseEventCapturingSpatialIndexImpl();
+        capturing = new MouseEventCapturingSpatialIndex();
     }
 
     @Test

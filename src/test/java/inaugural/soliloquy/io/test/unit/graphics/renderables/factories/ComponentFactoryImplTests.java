@@ -114,7 +114,7 @@ public class ComponentFactoryImplTests {
         var output = factory.make(uuid, z, bindings, overrides, keyEventPriority,
                 mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
                 mockComponent, DATA);
-        when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
+        when(mockRenderableWithMouseEvents.getContainingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
 
         var addendCaptor = ArgumentCaptor.forClass(Component.Addend.class);
@@ -127,7 +127,7 @@ public class ComponentFactoryImplTests {
         ((ComponentImpl) output).prerenderHook(timestamp);
         verify(MOCK_PRERENDER_HOOK, once()).accept(output, timestamp);
 
-        when(mockRenderableWithMouseEvents.containingComponent()).thenReturn(output);
+        when(mockRenderableWithMouseEvents.getContainingComponent()).thenReturn(output);
         output.remove(mockRenderableWithMouseEvents);
         verify(mockRegisterComponent, once()).accept(output);
 
@@ -137,7 +137,7 @@ public class ComponentFactoryImplTests {
         assertEquals(uuid, output.uuid());
         assertEquals(z, output.getZ());
         assertEquals(tier + 1, output.tier());
-        assertSame(mockComponent, output.containingComponent());
+        assertSame(mockComponent, output.getContainingComponent());
         assertSame(mockDimensions, output.getDimensionsProvider());
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
         assertEquals(DATA, output.data());

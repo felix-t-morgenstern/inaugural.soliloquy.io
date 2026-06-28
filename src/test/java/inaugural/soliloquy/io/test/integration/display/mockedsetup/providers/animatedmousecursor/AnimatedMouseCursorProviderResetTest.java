@@ -24,7 +24,7 @@ class AnimatedMouseCursorProviderResetTest extends AnimatedMouseCursorProviderTe
     }
 
     private static void actAndCloseAfterSomeTime(CoreLoop coreLoop) {
-        MouseCursor.setMouseCursor(PROVIDER_ID);
+        MockMouse.setMouseCursor(PROVIDER_ID);
         AnimatedMouseCursorProvider.reset(GLOBAL_CLOCK.globalTimestamp());
 
         CheckedExceptionWrapper.sleep(1000);

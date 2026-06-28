@@ -4,16 +4,18 @@ import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.graphics.renderables.ComponentImpl;
 import inaugural.soliloquy.io.graphics.rendering.FrameExecutorImpl;
 import inaugural.soliloquy.io.graphics.rendering.GlobalClockImpl;
+import inaugural.soliloquy.io.mouse.MouseImpl;
 import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.*;
 import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
+import org.apache.commons.lang3.function.TriConsumer;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
@@ -50,8 +52,8 @@ class GraphicsCoreLoopImplSimpleTest {
                         new FakeShaderFactory(), setOf(), "_", meshFactory,
                         setOf(), MESH_DATA, MESH_DATA, new FakeGraphicsPreloader(),
                         mock(AudioLoader.class), setOf(), mapOf(), mapOf(), mapOf(),
-                        mock(KeyEventListener.class), mock(MouseCursor.class),
-                        mock(MouseListener.class));
+                        mock(KeyEventListener.class), mock(Consumer.class), mock(Consumer.class),
+                        mock(TriConsumer.class));
 
         WindowManager.CallUpdateWindowSizeAndLocationOnlyOnce = true;
         WindowManager.UpdateWindowSizeAndLocationAction = () -> {

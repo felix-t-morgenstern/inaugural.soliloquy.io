@@ -1,6 +1,6 @@
 package inaugural.soliloquy.io.test.integration.display.mockedsetup.mouse.mousecursor;
 
-import inaugural.soliloquy.io.mouse.MouseCursorImpl;
+import inaugural.soliloquy.io.mouse.MouseImpl;
 import inaugural.soliloquy.io.test.integration.display.mockedsetup.DisplayTest;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
@@ -17,7 +17,7 @@ public class MouseCursorImplTest extends DisplayTest {
     /** @noinspection rawtypes, unused */
     public static Set<Renderer> generateRenderablesAndRenderersWithMeshAndShader(
             WindowResolutionManager windowResolutionManager) {
-        MouseCursor = new MouseCursorImpl(MouseCursorProviders::get, GLOBAL_CLOCK);
+        MockMouse = new MouseImpl(MouseCursorProviders::get, GLOBAL_CLOCK);
         FrameTimer.ShouldExecuteNextFrame = true;
 
         return setOf();

@@ -99,7 +99,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     public void add(Renderable renderable, Map<String, Object> data)
             throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (renderable.containingComponent() != this) {
+        if (renderable.getContainingComponent() != this) {
             throw new IllegalArgumentException(
                     "ComponentImpl.add: renderable must have this stored as its Component");
         }
@@ -126,7 +126,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     @Override
     public void remove(Renderable renderable) throws IllegalArgumentException {
         Check.ifNull(renderable, "renderable");
-        if (!renderable.isDeleted() && renderable.containingComponent() != this) {
+        if (!renderable.isDeleted() && renderable.getContainingComponent() != this) {
             throw new IllegalArgumentException(
                     "ComponentImpl.remove: renderable not in this Component");
         }
@@ -205,7 +205,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     }
 
     @Override
-    public Component containingComponent() {
+    public Component getContainingComponent() {
         return containingComponent;
     }
 

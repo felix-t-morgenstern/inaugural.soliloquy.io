@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.test.unit.graphics.rendering.renderers;
 
 import inaugural.soliloquy.io.graphics.rendering.renderers.RasterizedLineSegmentRenderer;
-import inaugural.soliloquy.io.test.testdoubles.fakes.FakeRasterizedLineSegmentRenderable;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.graphics.renderables.RasterizedLineSegmentRenderable;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.Mesh;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
 import soliloquy.specs.io.graphics.rendering.Shader;
@@ -23,7 +25,7 @@ import static inaugural.soliloquy.tools.testing.Mock.generateMockStaticProvider;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,7 +80,7 @@ public class RasterizedLineSegmentRendererTests {
         assertThrows(IllegalArgumentException.class, () -> renderer.render(null, 0L));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         null,
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -87,7 +89,7 @@ public class RasterizedLineSegmentRendererTests {
                 0L
         ));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(null),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -97,7 +99,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         null,
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -106,7 +108,7 @@ public class RasterizedLineSegmentRendererTests {
                 0L
         ));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(null),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -116,7 +118,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         null, (short) 0xAAAA, (short) 1,
@@ -126,7 +128,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(null), (short) 0xAAAA, (short) 1,
@@ -136,7 +138,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -146,7 +148,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -156,7 +158,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(0f), (short) 0xAAAA, (short) 1,
@@ -166,7 +168,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0x0000, (short) 1,
@@ -176,7 +178,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 0,
@@ -185,7 +187,7 @@ public class RasterizedLineSegmentRendererTests {
                 0L
         ));
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 257,
@@ -196,7 +198,7 @@ public class RasterizedLineSegmentRendererTests {
 
         //noinspection RedundantCast
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -206,7 +208,7 @@ public class RasterizedLineSegmentRendererTests {
         ));
 
         assertThrows(IllegalArgumentException.class, () -> renderer.render(
-                new FakeRasterizedLineSegmentRenderable(
+                makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -218,8 +220,7 @@ public class RasterizedLineSegmentRendererTests {
 
     @Test
     public void testRenderWithoutMeshOrShader() {
-        FakeRasterizedLineSegmentRenderable lineSegmentRenderable =
-                new FakeRasterizedLineSegmentRenderable(
+        var lineSegmentRenderable = makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -243,8 +244,7 @@ public class RasterizedLineSegmentRendererTests {
 
     @Test
     public void testRenderUpdatesTimestamp() {
-        FakeRasterizedLineSegmentRenderable lineSegmentRenderable =
-                new FakeRasterizedLineSegmentRenderable(
+        var lineSegmentRenderable = makeMockRenderable(
                         generateMockStaticProvider(vertexOf(-0.5f, 0.5f)),
                         generateMockStaticProvider(vertexOf(0.5f, -0.5f)),
                         generateMockStaticProvider(1.0f), (short) 0xAAAA, (short) 1,
@@ -258,5 +258,28 @@ public class RasterizedLineSegmentRendererTests {
 
         verify(mockTimestampValidator, once()).validateTimestamp(
                 renderer.getClass().getCanonicalName(), timestamp);
+    }
+
+    private RasterizedLineSegmentRenderable makeMockRenderable(
+            ProviderAtTime<Vertex> vertex1Provider,
+            ProviderAtTime<Vertex> vertex2Provider,
+            ProviderAtTime<Float> thicknessProvider,
+            short stipplePattern,
+            short stippleFactor,
+            ProviderAtTime<Color> colorProvider,
+            int z, UUID uuid
+    ) {
+        var mockRenderable = mock(RasterizedLineSegmentRenderable.class);
+
+        lenient().when(mockRenderable.getVertex1Provider()).thenReturn(vertex1Provider);
+        lenient().when(mockRenderable.getVertex2Provider()).thenReturn(vertex2Provider);
+        lenient().when(mockRenderable.getThicknessProvider()).thenReturn(thicknessProvider);
+        lenient().when(mockRenderable.getStippleFactor()).thenReturn(stippleFactor);
+        lenient().when(mockRenderable.getStipplePattern()).thenReturn(stipplePattern);
+        lenient().when(mockRenderable.getColorProvider()).thenReturn(colorProvider);
+        lenient().when(mockRenderable.getZ()).thenReturn(z);
+        lenient().when(mockRenderable.uuid()).thenReturn(uuid);
+
+        return mockRenderable;
     }
 }

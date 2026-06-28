@@ -1,10 +1,10 @@
 package inaugural.soliloquy.io.test.unit.graphics.bootstrap;
 
 import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
-import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
+import org.apache.commons.lang3.function.TriConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
 import soliloquy.specs.io.graphics.rendering.FrameExecutor;
@@ -21,7 +22,6 @@ import soliloquy.specs.io.graphics.rendering.WindowResolutionManager;
 import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.List;
 import java.util.Map;
@@ -36,8 +36,7 @@ import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.atLeast;
@@ -58,9 +57,11 @@ public class CoreLoopImplTests {
     private final int FRAME_TIMER_POLLING_INTERVAL = 20;
     private final long GLOBAL_TIMESTAMP = randomLong();
     private final String SHADER_FILE_PREFIX = "shaderFilePrefix";
-    @SuppressWarnings({"unchecked"}) private final Consumer<Shader> MOCK_SHADER_SUBSCRIBER = mock(Consumer.class);
+    @SuppressWarnings({"unchecked"}) private final Consumer<Shader> MOCK_SHADER_SUBSCRIBER =
+            mock(Consumer.class);
     private final Set<Consumer<Shader>> SHADER_SUBSCRIBERS = setOf(MOCK_SHADER_SUBSCRIBER);
-    @SuppressWarnings({"unchecked"}) private final Consumer<Mesh> MOCK_MESH_SUBSCRIBER = mock(Consumer.class);
+    @SuppressWarnings({"unchecked"}) private final Consumer<Mesh> MOCK_MESH_SUBSCRIBER =
+            mock(Consumer.class);
     private final Set<Consumer<Mesh>> MESH_SUBSCRIBERS = setOf(MOCK_MESH_SUBSCRIBER);
     private final float[] MESH_VERTICES = new float[]{0.123f};
     private final float[] MESH_UV_COORDINATES = new float[]{0.456f};
@@ -70,7 +71,7 @@ public class CoreLoopImplTests {
     private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID = mapOf();
     private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID = mapOf();
 
-    private BiFunction<float[], float[], Mesh> meshFactory;
+    @Mock private BiFunction<float[], float[], Mesh> meshFactory;
     @Mock private Shader mockShader;
     @Mock private ShaderFactory mockShaderFactory;
     @Mock private Mesh mockMesh;
@@ -79,8 +80,10 @@ public class CoreLoopImplTests {
     @Mock private WindowResolutionManager mockWindowResolutionManager;
     @Mock private AudioLoader mockAudioLoader;
     @Mock private KeyEventListener mockKeyEventListener;
-    @Mock private MouseCursor mockMouseCursor;
-    @Mock private MouseListener mockMouseListener;
+    @Mock private Consumer<Long> mockUpdateMouseCursor;
+    @Mock private Consumer<Vertex> mockUpdateMostRecentMouseLoc;
+    @Mock private TriConsumer<Vertex, Map<Integer, Boolean>, Long>
+            mockRegisterMousePositionAndButtonStates;
 
     private Long windowId;
 
@@ -90,14 +93,10 @@ public class CoreLoopImplTests {
     public void setUp() {
         lenient().when(mockShaderFactory.make(anyString())).thenReturn(mockShader);
 
-        meshFactory = (_, _) -> mockMesh;
+        when(meshFactory.apply(any(), any())).thenReturn(mockMesh);
 
-        mockGlobalClock = mock(GlobalClock.class);
         lenient().when(mockGlobalClock.globalTimestamp()).thenReturn(GLOBAL_TIMESTAMP);
 
-        mockFrameExecutor = mock(FrameExecutor.class);
-
-        mockWindowResolutionManager = mock(WindowResolutionManager.class);
         lenient().when(
                         mockWindowResolutionManager.updateWindowSizeAndLocation(anyLong(),
                                 anyString()))
@@ -109,8 +108,6 @@ public class CoreLoopImplTests {
                     glfwMakeContextCurrent(newWindowId);
                     return windowId = newWindowId;
                 });
-
-        mockMouseListener = mock(MouseListener.class);
 
         coreLoop = new CoreLoopImpl(
                 TITLEBAR,
@@ -133,8 +130,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         );
     }
 
@@ -161,8 +159,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 "",
@@ -185,8 +184,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -209,8 +209,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -233,8 +234,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -257,8 +259,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -281,8 +284,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -305,8 +309,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -329,8 +334,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -353,8 +359,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -377,8 +384,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -401,8 +409,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -425,8 +434,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -449,8 +459,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -473,8 +484,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -497,8 +509,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -521,8 +534,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -545,8 +559,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -569,8 +584,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -593,8 +609,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -617,8 +634,9 @@ public class CoreLoopImplTests {
                 null,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -641,8 +659,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 null,
                 mockKeyEventListener,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -665,8 +684,9 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 null,
-                mockMouseCursor,
-                mockMouseListener
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -690,7 +710,8 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
                 null,
-                mockMouseListener
+                mockUpdateMostRecentMouseLoc,
+                mockRegisterMousePositionAndButtonStates
         ));
         assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
                 TITLEBAR,
@@ -713,7 +734,33 @@ public class CoreLoopImplTests {
                 DEFAULT_LOOP_STOP_MS_BY_ID,
                 DEFAULT_LOOP_RESTART_MS_BY_ID,
                 mockKeyEventListener,
-                mockMouseCursor,
+                mockUpdateMouseCursor,
+                null,
+                mockRegisterMousePositionAndButtonStates
+        ));
+        assertThrows(IllegalArgumentException.class, () -> new CoreLoopImpl(
+                TITLEBAR,
+                FRAME_TIMER,
+                FRAME_TIMER_POLLING_INTERVAL,
+                mockWindowResolutionManager,
+                mockGlobalClock,
+                mockFrameExecutor,
+                mockShaderFactory,
+                SHADER_SUBSCRIBERS,
+                SHADER_FILE_PREFIX,
+                meshFactory,
+                MESH_SUBSCRIBERS,
+                MESH_VERTICES,
+                MESH_UV_COORDINATES,
+                GRAPHICS_PRELOADER,
+                mockAudioLoader,
+                AUDIO_REL_DIRS,
+                IDS_FOR_FILENAMES,
+                DEFAULT_LOOP_STOP_MS_BY_ID,
+                DEFAULT_LOOP_RESTART_MS_BY_ID,
+                mockKeyEventListener,
+                mockUpdateMouseCursor,
+                mockUpdateMostRecentMouseLoc,
                 null
         ));
     }
@@ -824,7 +871,9 @@ public class CoreLoopImplTests {
         verify(mockShaderFactory, once()).make(SHADER_FILE_PREFIX);
         verify(MOCK_SHADER_SUBSCRIBER, once()).accept(mockShader);
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
-        verify(mockMouseCursor, atLeastOnce()).updateCursor(anyLong());
+        verify(mockUpdateMouseCursor, atLeastOnce()).accept(anyLong());
+        verify(mockUpdateMostRecentMouseLoc, atLeastOnce()).accept(any());
+        verify(mockRegisterMousePositionAndButtonStates, atLeastOnce()).accept(any(), anyMap(), any());
     }
 
     // NB: It is impossible to directly test the calls to MouseListener, since even

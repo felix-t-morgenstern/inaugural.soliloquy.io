@@ -28,10 +28,11 @@ abstract class AbstractRenderable implements Renderable {
     }
 
     @Override
-    public Component containingComponent() {
+    public Component getContainingComponent() {
         return isDeleted ? null : containingComponent;
     }
 
+    @Override
     public void setContainingComponent(Component containingComponent) {
         this.containingComponent = containingComponent;
     }

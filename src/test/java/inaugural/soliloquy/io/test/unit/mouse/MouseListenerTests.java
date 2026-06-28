@@ -1,11 +1,17 @@
 package inaugural.soliloquy.io.test.unit.mouse;
 
 import inaugural.soliloquy.io.mouse.MouseListener;
+import inaugural.soliloquy.tools.timing.TimestampValidator;
+import org.apache.commons.lang3.function.TriConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.input.mouse.MouseEventHandler;
+import soliloquy.specs.io.input.mouse.Mouse;
+
+import java.util.Map;
 
 import static inaugural.soliloquy.io.api.Constants.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
@@ -16,26 +22,27 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
+@ExtendWith(MockitoExtension.class)
 public class MouseListenerTests {
     private final float X = randomFloatInRange(0f, 1f);
     private final float Y = randomFloatInRange(0f, 1f);
     private final Vertex POSITION = vertexOf(X, Y);
     private final long TIMESTAMP = randomLong();
 
-    @Mock private MouseEventHandler mockMouseEventHandler;
+    @Mock private TriConsumer<Vertex, Map<Integer, Mouse.EventType>, Long> mockActOnMouseLocationAndEvents;
+    @Mock private TimestampValidator mockTimestampValidator;
 
     private MouseListener mouseListener;
 
     @BeforeEach
     public void setUp() {
-        mockMouseEventHandler = mock(MouseEventHandler.class);
-
-        mouseListener = new MouseListener(mockMouseEventHandler);
+        mouseListener = new MouseListener(mockActOnMouseLocationAndEvents, mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () -> new MouseListener(null));
+        assertThrows(IllegalArgumentException.class, () -> new MouseListener(null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class, () -> new MouseListener(mockActOnMouseLocationAndEvents, null));
     }
 
     @Test
@@ -47,10 +54,13 @@ public class MouseListenerTests {
                     pairOf(MIDDLE_MOUSE_BUTTON, false)
                 ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+        verify(mockActOnMouseLocationAndEvents, once()).accept(
+                eq(POSITION),
                 eq(mapOf(
-                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
-                )), eq(TIMESTAMP));
+                    pairOf(RIGHT_MOUSE_BUTTON, Mouse.EventType.PRESS)
+                )),
+                eq(TIMESTAMP)
+        );
     }
 
     @Test
@@ -68,10 +78,13 @@ public class MouseListenerTests {
                     pairOf(MIDDLE_MOUSE_BUTTON, false)
                 ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+        verify(mockActOnMouseLocationAndEvents, once()).accept(
+                eq(POSITION),
                 eq(mapOf(
-                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.PRESS)
-                )), eq(TIMESTAMP));
+                    pairOf(RIGHT_MOUSE_BUTTON, Mouse.EventType.PRESS)
+                )),
+                eq(TIMESTAMP)
+        );
     }
 
     @Test
@@ -89,10 +102,13 @@ public class MouseListenerTests {
                     pairOf(MIDDLE_MOUSE_BUTTON, false)
                 ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+        verify(mockActOnMouseLocationAndEvents, once()).accept(
+                eq(POSITION),
                 eq(mapOf(
-                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
-                )), eq(TIMESTAMP));
+                    pairOf(RIGHT_MOUSE_BUTTON, Mouse.EventType.RELEASE)
+                )),
+                eq(TIMESTAMP)
+        );
     }
 
     @Test
@@ -116,10 +132,13 @@ public class MouseListenerTests {
                     pairOf(MIDDLE_MOUSE_BUTTON, false)
                 ), TIMESTAMP);
 
-        verify(mockMouseEventHandler, once()).actOnMouseLocationAndEvents(eq(POSITION),
+        verify(mockActOnMouseLocationAndEvents, once()).accept(
+                eq(POSITION),
                 eq(mapOf(
-                    pairOf(RIGHT_MOUSE_BUTTON, MouseEventHandler.EventType.RELEASE)
-                )), eq(TIMESTAMP));
+                    pairOf(RIGHT_MOUSE_BUTTON, Mouse.EventType.RELEASE)
+                )),
+                eq(TIMESTAMP)
+        );
     }
 
     @Test
@@ -204,20 +223,14 @@ public class MouseListenerTests {
     }
 
     @Test
-    public void testThrowsOnOutdatedTimestamp() {
-        mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
+    public void testValidatesTimestamp() {
+        mouseListener.registerMousePositionAndButtonStates(randomVertex(),
                 mapOf(
                     pairOf(LEFT_MOUSE_BUTTON, false),
                     pairOf(RIGHT_MOUSE_BUTTON, false),
                     pairOf(MIDDLE_MOUSE_BUTTON, false)
                 ), TIMESTAMP);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> mouseListener.registerMousePositionAndButtonStates(vertexOf(0, 0),
-                        mapOf(
-                            pairOf(LEFT_MOUSE_BUTTON, false),
-                            pairOf(RIGHT_MOUSE_BUTTON, false),
-                            pairOf(MIDDLE_MOUSE_BUTTON, false)
-                        ), TIMESTAMP - 1));
+        verify(mockTimestampValidator, once()).validateTimestamp(TIMESTAMP);
     }
 }

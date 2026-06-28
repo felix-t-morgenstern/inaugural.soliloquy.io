@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.*;
 import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 // TODO: This refactor is a WIP
@@ -547,7 +547,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
     public void testDelete() {
         renderable.delete();
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
 
         assertTrue(renderable.isDeleted());
 
@@ -561,13 +561,13 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.containingComponent());
+        assertSame(mockContainingComponent, renderable.getContainingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((GlobalLoopingAnimationRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
     }
 }

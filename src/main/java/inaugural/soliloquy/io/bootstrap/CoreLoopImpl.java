@@ -1,9 +1,9 @@
 package inaugural.soliloquy.io.bootstrap;
 
 import inaugural.soliloquy.io.api.Constants;
-import inaugural.soliloquy.io.mouse.MouseListener;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
+import org.apache.commons.lang3.function.TriConsumer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.common.valueobjects.Pair;
@@ -19,7 +19,6 @@ import soliloquy.specs.io.graphics.rendering.factories.ShaderFactory;
 import soliloquy.specs.io.graphics.rendering.timing.FrameTimer;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import soliloquy.specs.io.input.keyboard.KeyEventListener;
-import soliloquy.specs.io.input.mouse.MouseCursor;
 
 import java.util.Map;
 import java.util.Set;
@@ -54,8 +53,10 @@ public class CoreLoopImpl implements CoreLoop {
     private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID;
     private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID;
     private final KeyEventListener KEY_EVENT_LISTENER;
-    private final MouseCursor MOUSE_CURSOR;
-    private final MouseListener MOUSE_LISTENER;
+    private final Consumer<Long> UPDATE_MOUSE_CURSOR;
+    private final Consumer<Vertex> UPDATE_MOST_RECENT_MOUSE_LOC;
+    private final TriConsumer<Vertex, Map<Integer, Boolean>, Long>
+            REGISTER_MOUSE_POSITION_AND_BUTTON_STATES;
 
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
@@ -84,8 +85,9 @@ public class CoreLoopImpl implements CoreLoop {
             Map<String, Integer> defaultLoopStopMsById,
             Map<String, Integer> defaultLoopRestartMsById,
             KeyEventListener keyEventListener,
-            MouseCursor mouseCursor,
-            MouseListener mouseListener) {
+            Consumer<Long> updateMouseCursor,
+            Consumer<Vertex> updateMostRecentMouseLoc,
+            TriConsumer<Vertex, Map<Integer, Boolean>, Long> registerMousePositionAndButtonStates) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
         FRAME_TIMER_POLLING_INTERVAL =
@@ -110,8 +112,11 @@ public class CoreLoopImpl implements CoreLoop {
         DEFAULT_LOOP_RESTART_MS_BY_ID =
                 Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
         KEY_EVENT_LISTENER = Check.ifNull(keyEventListener, "keyEventListener");
-        MOUSE_CURSOR = Check.ifNull(mouseCursor, "mouseCursor");
-        MOUSE_LISTENER = Check.ifNull(mouseListener, "mouseListener");
+        UPDATE_MOUSE_CURSOR = Check.ifNull(updateMouseCursor, "updateMouseCursor");
+        UPDATE_MOST_RECENT_MOUSE_LOC = Check.ifNull(updateMostRecentMouseLoc, "updateMostRecentMouseLoc");
+        REGISTER_MOUSE_POSITION_AND_BUTTON_STATES =
+                Check.ifNull(registerMousePositionAndButtonStates,
+                        "registerMousePositionAndButtonStates");
 
         MOUSE_BUTTON_STATES = mapOf();
         for (var button : ALL_SUPPORTED_MOUSE_BUTTONS) {
@@ -148,7 +153,7 @@ public class CoreLoopImpl implements CoreLoop {
         gameThread.start();
 
         while (!glfwWindowShouldClose(window) && gameThread.isAlive()) {
-            MOUSE_CURSOR.updateCursor(window);
+            UPDATE_MOUSE_CURSOR.accept(window);
 
             if (FRAME_TIMER.shouldExecuteNextFrame()) {
                 runFrame();
@@ -202,9 +207,13 @@ public class CoreLoopImpl implements CoreLoop {
         KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
         readMouseButtonStates();
 
+        UPDATE_MOST_RECENT_MOUSE_LOC.accept(screenMouseLocation);
         if (screenMouseLocation != null) {
-            MOUSE_LISTENER.registerMousePositionAndButtonStates(screenMouseLocation,
-                    MOUSE_BUTTON_STATES, frameTimestamp);
+            REGISTER_MOUSE_POSITION_AND_BUTTON_STATES.accept(
+                    screenMouseLocation,
+                    MOUSE_BUTTON_STATES,
+                    frameTimestamp
+            );
         }
 
         FRAME_EXECUTOR.execute(frameTimestamp);
@@ -243,6 +252,7 @@ public class CoreLoopImpl implements CoreLoop {
             screenMouseLocation = vertexOf(x, y);
         });
     }
+
     private void readMouseButtonStates() {
         for (var mouseButton : Constants.ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(mouseButton,

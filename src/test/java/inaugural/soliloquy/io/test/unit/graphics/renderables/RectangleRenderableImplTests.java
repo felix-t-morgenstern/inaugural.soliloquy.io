@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.*;
 import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 @ExtendWith(MockitoExtension.class)

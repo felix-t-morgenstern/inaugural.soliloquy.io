@@ -383,13 +383,13 @@ public class TextLineRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.containingComponent());
+        assertSame(mockContainingComponent, renderable.getContainingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((TextLineRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
     }
 }

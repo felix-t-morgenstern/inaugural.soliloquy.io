@@ -6,6 +6,7 @@ import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
+import soliloquy.specs.io.input.mouse.Mouse;
 import soliloquy.specs.ui.EventInputs;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
 import static inaugural.soliloquy.io.api.Constants.RIGHT_MOUSE_BUTTON;
 import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
-import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.*;
 import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 public abstract class AbstractRenderableWithMouseEvents
@@ -75,7 +76,7 @@ public abstract class AbstractRenderableWithMouseEvents
                 LEFT_MOUSE_BUTTON,
                 ON_PRESS.get(mouseButton),
                 timestamp,
-                EventType.PRESS,
+                PRESS,
                 "press"
         );
     }
@@ -104,7 +105,7 @@ public abstract class AbstractRenderableWithMouseEvents
                 RIGHT_MOUSE_BUTTON,
                 ON_RELEASE.get(mouseButton),
                 timestamp,
-                EventType.RELEASE,
+                RELEASE,
                 "release"
         );
     }
@@ -147,7 +148,7 @@ public abstract class AbstractRenderableWithMouseEvents
                 null,
                 onMouseOver,
                 timestamp,
-                EventType.MOUSE_OVER,
+                MOUSE_OVER,
                 "mouseOver"
         );
     }
@@ -169,7 +170,7 @@ public abstract class AbstractRenderableWithMouseEvents
                 null,
                 onMouseLeave,
                 timestamp,
-                EventType.MOUSE_LEAVE,
+                MOUSE_LEAVE,
                 "mouseLeave"
         );
     }
@@ -199,7 +200,7 @@ public abstract class AbstractRenderableWithMouseEvents
     private void callConsumer(Integer mouseButton,
                               Consumer<EventInputs> action,
                               long timestamp,
-                              EventType eventType,
+                              Mouse.EventType eventType,
                               String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);

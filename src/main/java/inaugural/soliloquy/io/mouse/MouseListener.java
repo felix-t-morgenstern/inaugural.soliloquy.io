@@ -3,31 +3,42 @@ package inaugural.soliloquy.io.mouse;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.collections.Collections;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
+import org.apache.commons.lang3.function.TriConsumer;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.input.mouse.MouseEventHandler;
+import soliloquy.specs.io.input.mouse.Mouse;
 
 import java.util.Arrays;
 import java.util.Map;
 
 import static inaugural.soliloquy.io.api.Constants.ALL_SUPPORTED_MOUSE_BUTTONS;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.PRESS;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.RELEASE;
 
 public class MouseListener {
-    private final MouseEventHandler MOUSE_EVENT_HANDLER;
+    private final TriConsumer<Vertex, Map<Integer, Mouse.EventType>, Long>
+            ACT_ON_MOUSE_LOC_AND_EVENTS;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
-    public MouseListener(MouseEventHandler mouseEventHandler) {
-        MOUSE_EVENT_HANDLER = Check.ifNull(mouseEventHandler, "mouseEventHandler");
+    public MouseListener(
+            TriConsumer<Vertex, Map<Integer, Mouse.EventType>, Long> actOnMouseLocAndEvents,
+            TimestampValidator timestampValidator
+    ) {
+        ACT_ON_MOUSE_LOC_AND_EVENTS =
+                Check.ifNull(actOnMouseLocAndEvents, "actOnMouseLocAndEvents");
 
-        TIMESTAMP_VALIDATOR = new TimestampValidator(null);
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
 
         MOUSE_BUTTON_STATES = mapOf();
-        for(int button : ALL_SUPPORTED_MOUSE_BUTTONS) {
+        for (int button : ALL_SUPPORTED_MOUSE_BUTTONS) {
             MOUSE_BUTTON_STATES.put(button, false);
         }
     }
 
+    // I'm keeping all the Check calls in here, since mouse clicks are so infrequent in terms of
+    // clock cycles that the performance hit is probably negligible, but I don't have any data
+    // for that
     public void registerMousePositionAndButtonStates(Vertex position,
                                                      Map<Integer, Boolean> mouseButtonPressStates,
                                                      long timestamp)
@@ -45,7 +56,7 @@ public class MouseListener {
                             "mouse buttons' states reported");
         }
 
-        var mouseButtonEvents = Collections.<Integer, MouseEventHandler.EventType>mapOf();
+        var mouseButtonEvents = Collections.<Integer, Mouse.EventType>mapOf();
         mouseButtonPressStates.forEach((button, buttonIsPressedNow) -> {
             Check.ifNull(button, "button");
             if (Arrays.stream(ALL_SUPPORTED_MOUSE_BUTTONS).noneMatch(button::equals)) {
@@ -58,15 +69,15 @@ public class MouseListener {
 
             if (MOUSE_BUTTON_STATES.get(button) != buttonIsPressedNow) {
                 if (buttonIsPressedNow) {
-                    mouseButtonEvents.put(button, MouseEventHandler.EventType.PRESS);
+                    mouseButtonEvents.put(button, PRESS);
                 }
                 else {
-                    mouseButtonEvents.put(button, MouseEventHandler.EventType.RELEASE);
+                    mouseButtonEvents.put(button, RELEASE);
                 }
                 MOUSE_BUTTON_STATES.put(button, buttonIsPressedNow);
             }
         });
 
-        MOUSE_EVENT_HANDLER.actOnMouseLocationAndEvents(position, mouseButtonEvents, timestamp);
+        ACT_ON_MOUSE_LOC_AND_EVENTS.accept(position, mouseButtonEvents, timestamp);
     }
 }

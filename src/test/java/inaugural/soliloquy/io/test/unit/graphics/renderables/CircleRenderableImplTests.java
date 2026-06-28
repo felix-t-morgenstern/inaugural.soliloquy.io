@@ -135,14 +135,14 @@ public class CircleRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockComponent, renderable.containingComponent());
+        assertSame(mockComponent, renderable.getContainingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((CircleRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
     }
 
     @Test

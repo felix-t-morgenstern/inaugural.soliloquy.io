@@ -1,35 +1,45 @@
 package inaugural.soliloquy.io.mouse;
 
 import inaugural.soliloquy.tools.Check;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
-import soliloquy.specs.io.input.mouse.MouseCursor;
+import soliloquy.specs.io.input.mouse.Mouse;
 
 import java.util.function.Function;
 
 import static org.lwjgl.glfw.GLFW.glfwSetCursor;
 
-public class MouseCursorImpl implements MouseCursor {
-    private final Function<String, ProviderAtTime<Long>> MOUSE_CURSORS;
+public class MouseImpl implements Mouse {
+    private final Function<String, ProviderAtTime<Long>> GET_MOUSE_CURSOR;
     private final GlobalClock GLOBAL_CLOCK;
 
     private ProviderAtTime<Long> mouseCursorProvider;
+    private Vertex mostRecentMouseLocation;
     private long mostRecentCursor;
 
-    public MouseCursorImpl(Function<String, ProviderAtTime<Long>> mouseCursors,
-                           GlobalClock globalClock) {
-        MOUSE_CURSORS = Check.ifNull(mouseCursors, "mouseCursors");
+    public MouseImpl(Function<String, ProviderAtTime<Long>> getMouseCursor,
+                     GlobalClock globalClock) {
+        GET_MOUSE_CURSOR = Check.ifNull(getMouseCursor, "getMouseCursor");
         GLOBAL_CLOCK = Check.ifNull(globalClock, "globalClock");
     }
 
     @Override
     public void setMouseCursor(String mouseCursorId) throws IllegalArgumentException {
         Check.ifNullOrEmpty(mouseCursorId, "mouseCursorId");
-        mouseCursorProvider = Check.ifNull(MOUSE_CURSORS.apply(mouseCursorId),
+        mouseCursorProvider = Check.ifNull(GET_MOUSE_CURSOR.apply(mouseCursorId),
                 "mouse cursor provider corresponding to " + mouseCursorId);
     }
 
+    public void setMostRecentMouseLocation(Vertex mostRecentMouseLocation) {
+        this.mostRecentMouseLocation = mostRecentMouseLocation;
+    }
+
     @Override
+    public Vertex mostRecentMouseLocation() {
+        return mostRecentMouseLocation;
+    }
+
     public void updateCursor(long windowId) {
         if (mouseCursorProvider != null) {
             Long cursor = Check.ifNull(

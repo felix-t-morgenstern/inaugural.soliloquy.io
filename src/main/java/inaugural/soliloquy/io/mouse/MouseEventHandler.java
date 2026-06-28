@@ -3,33 +3,37 @@ package inaugural.soliloquy.io.mouse;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.valueobjects.Vertex;
-import soliloquy.specs.io.input.mouse.MouseEventCapturingSpatialIndex;
-import soliloquy.specs.io.input.mouse.MouseEventHandler;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
+import soliloquy.specs.io.input.mouse.Mouse;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.collections.Collections.setOf;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.PRESS;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.RELEASE;
 
-public class MouseEventHandlerImpl implements MouseEventHandler {
-    private final TimestampValidator TIMESTAMP_VALIDATOR = new TimestampValidator(null);
+public class MouseEventHandler {
+    private final TimestampValidator TIMESTAMP_VALIDATOR;
+    private final BiFunction<Vertex, Long, RenderableWithMouseEvents>
+            GET_CAPTURING_RENDERABLE_AT_LOC;
 
-    private final MouseEventCapturingSpatialIndex MOUSE_EVENT_CAPTURING_SPATIAL_INDEX;
-
-    private final Map<Integer, Map<EventType, Set<Runnable>>> PUBLISH_QUEUE;
+    private final Map<Integer, Map<Mouse.EventType, Set<Runnable>>> PUBLISH_QUEUE;
 
     private RenderableWithMouseEvents currentMouseOverRenderable;
 
-    public MouseEventHandlerImpl(MouseEventCapturingSpatialIndex mouseEventCapturingSpatialIndex) {
-        MOUSE_EVENT_CAPTURING_SPATIAL_INDEX =
-                Check.ifNull(mouseEventCapturingSpatialIndex, "mouseEventCapturingSpatialIndex");
+    public MouseEventHandler(TimestampValidator timestampValidator,
+                             BiFunction<Vertex, Long, RenderableWithMouseEvents> getCapturingRenderableAtLoc) {
+        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
+        GET_CAPTURING_RENDERABLE_AT_LOC =
+                Check.ifNull(getCapturingRenderableAtLoc, "getCapturingRenderableAtLoc");
         PUBLISH_QUEUE = mapOf();
     }
 
-    @Override
-    public void actOnMouseLocationAndEvents(Vertex location, Map<Integer, EventType> buttonEvents,
+    public void actOnMouseLocationAndEvents(Vertex location,
+                                            Map<Integer, Mouse.EventType> buttonEvents,
                                             long timestamp)
             throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
@@ -42,8 +46,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
 
         Check.ifNull(buttonEvents, "buttonEvents");
 
-        var mouseCapturingRenderable = MOUSE_EVENT_CAPTURING_SPATIAL_INDEX
-                .getCapturingRenderableAtPoint(location, timestamp);
+        var mouseCapturingRenderable = GET_CAPTURING_RENDERABLE_AT_LOC.apply(location, timestamp);
 
         if (mouseCapturingRenderable != currentMouseOverRenderable) {
             if (currentMouseOverRenderable != null) {
@@ -66,7 +69,7 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
             }
 
             if (currentMouseOverRenderable != null) {
-                if (event == EventType.PRESS) {
+                if (event == PRESS) {
                     currentMouseOverRenderable.press(button, timestamp);
                 }
                 else {
@@ -76,16 +79,16 @@ public class MouseEventHandlerImpl implements MouseEventHandler {
         });
     }
 
-    public void subscribeToNextEvent(int button, EventType eventType, Runnable subscriber) {
-        Map<EventType, Set<Runnable>> buttonEvents;
+    public void subscribeToNextEvent(int button, Mouse.EventType eventType, Runnable subscriber) {
+        Map<Mouse.EventType, Set<Runnable>> buttonEvents;
         if (PUBLISH_QUEUE.containsKey(button)) {
             buttonEvents = PUBLISH_QUEUE.get(button);
         }
         else {
             buttonEvents = mapOf();
             PUBLISH_QUEUE.put(button, buttonEvents);
-            buttonEvents.put(EventType.PRESS, setOf());
-            buttonEvents.put(EventType.RELEASE, setOf());
+            buttonEvents.put(PRESS, setOf());
+            buttonEvents.put(RELEASE, setOf());
         }
         buttonEvents.get(eventType).add(subscriber);
     }

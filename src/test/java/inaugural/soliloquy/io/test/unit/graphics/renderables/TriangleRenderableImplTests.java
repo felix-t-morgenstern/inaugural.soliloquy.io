@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 import static soliloquy.specs.common.entities.Consumer.consumer;
 import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
-import static soliloquy.specs.io.input.mouse.MouseEventHandler.EventType.*;
+import static soliloquy.specs.io.input.mouse.Mouse.EventType.*;
 import static soliloquy.specs.ui.EventInputs.eventInputs;
 
 @ExtendWith(MockitoExtension.class)
@@ -539,13 +539,13 @@ public class TriangleRenderableImplTests {
 
     @Test
     public void testComponent() {
-        assertSame(mockContainingComponent, renderable.containingComponent());
+        assertSame(mockContainingComponent, renderable.getContainingComponent());
     }
 
     @Test
     public void testSetComponent() {
         ((TriangleRenderableImpl) renderable).setContainingComponent(null);
 
-        assertNull(renderable.containingComponent());
+        assertNull(renderable.getContainingComponent());
     }
 }
