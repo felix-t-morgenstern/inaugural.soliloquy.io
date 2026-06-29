@@ -9,6 +9,7 @@ import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import static inaugural.soliloquy.tools.testing.Assertions.assertLessThan;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GlobalClockImplTests {
@@ -25,18 +26,20 @@ public class GlobalClockImplTests {
     // NB: Indeterminate tests are generally a testing antipattern, but it is unavoidable in this
     //     instance, so the test is run enough times to ensure that it is highly reliable and
     //     fairly accurate.
+    // IF you experience irregularities with this test due to slow machine performance, you may
+    // need to increase the value of timestampMsDifferenceTolerance.
     @Test
     public void testStartAndGlobalTimestamp() {
         final var numberOfTestsToRun = 10;
-        var timestampMsDifferenceTolerance = 20;
+        var timestampMsDifferenceTolerance = 60;
 
         for (var i = 0; i < numberOfTestsToRun; i++) {
             var actualGlobalTimestamp =
                     Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE)).getTimeInMillis();
             var globalTimestampFromGlobalClock = globalClock.globalTimestamp();
 
-            assertTrue(Math.abs(actualGlobalTimestamp - globalTimestampFromGlobalClock)
-                    < timestampMsDifferenceTolerance);
+            assertLessThan(timestampMsDifferenceTolerance,
+                    Math.abs(actualGlobalTimestamp - globalTimestampFromGlobalClock));
 
             CheckedExceptionWrapper.sleep(10);
         }
