@@ -23,7 +23,7 @@ import static soliloquy.specs.io.input.mouse.Mouse.EventType;
 
 @ExtendWith(MockitoExtension.class)
 public class MouseEventHandlerTests {
-    private final Vertex POSITION =
+    private final Vertex MOUSE_LOC =
             vertexOf(randomFloatInRange(0f, 1f), randomFloatInRange(0f, 1f));
     private final long TIMESTAMP = randomLong();
 
@@ -58,25 +58,25 @@ public class MouseEventHandlerTests {
 
     @Test
     public void testMouseOver() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
 
-        verify(mockMouseEventCapturingSpatialIndex).getCapturingRenderableAtPoint(POSITION,
+        verify(mockMouseEventCapturingSpatialIndex).getCapturingRenderableAtPoint(MOUSE_LOC,
                 TIMESTAMP);
-        verify(mockImageAssetRenderable).mouseOver(TIMESTAMP);
+        verify(mockImageAssetRenderable).mouseOver(MOUSE_LOC, TIMESTAMP);
     }
 
     @Test
     public void testMouseOverOnlyOnce() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(),
                 TIMESTAMP + 1);
 
         verify(mockMouseEventCapturingSpatialIndex, once())
-                .getCapturingRenderableAtPoint(POSITION, TIMESTAMP);
+                .getCapturingRenderableAtPoint(MOUSE_LOC, TIMESTAMP);
         verify(mockMouseEventCapturingSpatialIndex, once())
-                .getCapturingRenderableAtPoint(POSITION, TIMESTAMP + 1);
-        verify(mockImageAssetRenderable, once()).mouseOver(TIMESTAMP);
-        verify(mockImageAssetRenderable, never()).mouseOver(TIMESTAMP + 1);
+                .getCapturingRenderableAtPoint(MOUSE_LOC, TIMESTAMP + 1);
+        verify(mockImageAssetRenderable, once()).mouseOver(MOUSE_LOC, TIMESTAMP);
+        verify(mockImageAssetRenderable, never()).mouseOver(MOUSE_LOC, TIMESTAMP + 1);
     }
 
     @Test
@@ -86,12 +86,12 @@ public class MouseEventHandlerTests {
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(),
                 TIMESTAMP + 1);
 
-        verify(mockImageAssetRenderable).mouseOver(TIMESTAMP);
-        verify(mockImageAssetRenderable).mouseLeave(TIMESTAMP + 1);
+        verify(mockImageAssetRenderable).mouseOver(MOUSE_LOC, TIMESTAMP);
+        verify(mockImageAssetRenderable).mouseLeave(MOUSE_LOC, TIMESTAMP + 1);
     }
 
     @Test
@@ -101,24 +101,24 @@ public class MouseEventHandlerTests {
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(mockImageAssetRenderable2);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(),
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(),
                 TIMESTAMP + 1);
 
-        verify(mockImageAssetRenderable).mouseOver(TIMESTAMP);
-        verify(mockImageAssetRenderable).mouseLeave(TIMESTAMP + 1);
-        verify(mockImageAssetRenderable2).mouseOver(TIMESTAMP + 1);
+        verify(mockImageAssetRenderable).mouseOver(MOUSE_LOC, TIMESTAMP);
+        verify(mockImageAssetRenderable).mouseLeave(MOUSE_LOC, TIMESTAMP + 1);
+        verify(mockImageAssetRenderable2).mouseOver(MOUSE_LOC, TIMESTAMP + 1);
     }
 
     @Test
     public void testPressButtonOnRenderable() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(LEFT_MOUSE_BUTTON, EventType.PRESS)
                 ), TIMESTAMP);
 
         verify(mockImageAssetRenderable)
-                .press(LEFT_MOUSE_BUTTON, TIMESTAMP);
+                .press(LEFT_MOUSE_BUTTON, MOUSE_LOC, TIMESTAMP);
     }
 
     @Test
@@ -128,25 +128,25 @@ public class MouseEventHandlerTests {
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(LEFT_MOUSE_BUTTON, EventType.PRESS)
                 ), TIMESTAMP);
 
         verify(mockImageAssetRenderable, never())
-                .press(anyInt(), anyLong());
+                .press(anyInt(), any(), anyLong());
     }
 
     @Test
     public void testReleaseButtonOnRenderable() {
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(LEFT_MOUSE_BUTTON, EventType.RELEASE)
                 ), TIMESTAMP);
 
         verify(mockImageAssetRenderable)
-                .release(LEFT_MOUSE_BUTTON, TIMESTAMP);
+                .release(LEFT_MOUSE_BUTTON, MOUSE_LOC, TIMESTAMP);
     }
 
     @Test
@@ -156,14 +156,14 @@ public class MouseEventHandlerTests {
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(LEFT_MOUSE_BUTTON, EventType.RELEASE)
                 ), TIMESTAMP);
 
         verify(mockImageAssetRenderable, never())
-                .release(anyInt(), anyLong());
+                .release(anyInt(), any(), anyLong());
     }
 
     @Test
@@ -172,13 +172,13 @@ public class MouseEventHandlerTests {
                 .getCapturingRenderableAtPoint(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION, mapOf(), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(LEFT_MOUSE_BUTTON, EventType.PRESS)
                 ), TIMESTAMP);
 
-        verify(mockImageAssetRenderable, once()).press(LEFT_MOUSE_BUTTON, TIMESTAMP);
+        verify(mockImageAssetRenderable, once()).press(LEFT_MOUSE_BUTTON, MOUSE_LOC, TIMESTAMP);
     }
 
     @Test
@@ -200,14 +200,14 @@ public class MouseEventHandlerTests {
                         mapOf(),
                         TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(POSITION, null, TIMESTAMP));
+                mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, null, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+                mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                         mapOf(
                                 pairOf(0, null)
                         ), TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+                mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                         mapOf(
                                 pairOf(null, EventType.PRESS)
                         ), TIMESTAMP));
@@ -228,11 +228,11 @@ public class MouseEventHandlerTests {
         ((MouseEventHandler) mouseEventHandler)
                 .subscribeToNextEvent(button, EventType.PRESS, mockRunnable);
 
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(button, EventType.PRESS)
                 ), TIMESTAMP);
-        mouseEventHandler.actOnMouseLocationAndEvents(POSITION,
+        mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC,
                 mapOf(
                         pairOf(button, EventType.PRESS)
                 ), TIMESTAMP);

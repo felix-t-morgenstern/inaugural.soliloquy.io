@@ -32,31 +32,31 @@ public class MouseEventHandler {
         PUBLISH_QUEUE = mapOf();
     }
 
-    public void actOnMouseLocationAndEvents(Vertex location,
+    public void actOnMouseLocationAndEvents(Vertex mouseLoc,
                                             Map<Integer, Mouse.EventType> buttonEvents,
                                             long timestamp)
             throws IllegalArgumentException {
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
 
-        Check.ifNonNegative(location.X, "location.X");
-        Check.ifNonNegative(location.Y, "location.Y");
+        Check.ifNonNegative(mouseLoc.X, "mouseLoc.X");
+        Check.ifNonNegative(mouseLoc.Y, "mouseLoc.Y");
 
-        Check.throwOnGtValue(location.X, 1f, "location.X");
-        Check.throwOnGtValue(location.Y, 1f, "location.Y");
+        Check.throwOnGtValue(mouseLoc.X, 1f, "mouseLoc.X");
+        Check.throwOnGtValue(mouseLoc.Y, 1f, "mouseLoc.Y");
 
         Check.ifNull(buttonEvents, "buttonEvents");
 
-        var mouseCapturingRenderable = GET_CAPTURING_RENDERABLE_AT_LOC.apply(location, timestamp);
+        var mouseCapturingRenderable = GET_CAPTURING_RENDERABLE_AT_LOC.apply(mouseLoc, timestamp);
 
         if (mouseCapturingRenderable != currentMouseOverRenderable) {
             if (currentMouseOverRenderable != null) {
-                currentMouseOverRenderable.mouseLeave(timestamp);
+                currentMouseOverRenderable.mouseLeave(mouseLoc, timestamp);
             }
 
             currentMouseOverRenderable = mouseCapturingRenderable;
 
             if (currentMouseOverRenderable != null) {
-                currentMouseOverRenderable.mouseOver(timestamp);
+                currentMouseOverRenderable.mouseOver(mouseLoc, timestamp);
             }
         }
         buttonEvents.forEach((button, event) -> {
@@ -70,10 +70,10 @@ public class MouseEventHandler {
 
             if (currentMouseOverRenderable != null) {
                 if (event == PRESS) {
-                    currentMouseOverRenderable.press(button, timestamp);
+                    currentMouseOverRenderable.press(button, mouseLoc, timestamp);
                 }
                 else {
-                    currentMouseOverRenderable.release(button, timestamp);
+                    currentMouseOverRenderable.release(button, mouseLoc, timestamp);
                 }
             }
         });
