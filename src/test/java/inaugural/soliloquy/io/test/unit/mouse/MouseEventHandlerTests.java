@@ -41,17 +41,17 @@ public class MouseEventHandlerTests {
 
         mockMouseEventCapturingSpatialIndex = mock(MouseEventCapturingSpatialIndex.class);
         lenient().when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable);
 
         mouseEventHandler = new MouseEventHandler(mockTimestampValidator,
-                mockMouseEventCapturingSpatialIndex::getCapturingRenderableAtPoint);
+                mockMouseEventCapturingSpatialIndex::getCapturingRenderable);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> new MouseEventHandler(null,
-                mockMouseEventCapturingSpatialIndex::getCapturingRenderableAtPoint));
+                mockMouseEventCapturingSpatialIndex::getCapturingRenderable));
         assertThrows(IllegalArgumentException.class,
                 () -> new MouseEventHandler(mockTimestampValidator, null));
     }
@@ -60,7 +60,7 @@ public class MouseEventHandlerTests {
     public void testMouseOver() {
         mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);
 
-        verify(mockMouseEventCapturingSpatialIndex).getCapturingRenderableAtPoint(MOUSE_LOC,
+        verify(mockMouseEventCapturingSpatialIndex).getCapturingRenderable(MOUSE_LOC,
                 TIMESTAMP);
         verify(mockImageAssetRenderable).mouseOver(MOUSE_LOC, TIMESTAMP);
     }
@@ -72,9 +72,9 @@ public class MouseEventHandlerTests {
                 TIMESTAMP + 1);
 
         verify(mockMouseEventCapturingSpatialIndex, once())
-                .getCapturingRenderableAtPoint(MOUSE_LOC, TIMESTAMP);
+                .getCapturingRenderable(MOUSE_LOC, TIMESTAMP);
         verify(mockMouseEventCapturingSpatialIndex, once())
-                .getCapturingRenderableAtPoint(MOUSE_LOC, TIMESTAMP + 1);
+                .getCapturingRenderable(MOUSE_LOC, TIMESTAMP + 1);
         verify(mockImageAssetRenderable, once()).mouseOver(MOUSE_LOC, TIMESTAMP);
         verify(mockImageAssetRenderable, never()).mouseOver(MOUSE_LOC, TIMESTAMP + 1);
     }
@@ -82,7 +82,7 @@ public class MouseEventHandlerTests {
     @Test
     public void testMouseLeave() {
         when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
@@ -97,7 +97,7 @@ public class MouseEventHandlerTests {
     @Test
     public void testMouseLeaveAndMouseOverNewRenderable() {
         when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(mockImageAssetRenderable2);
 
@@ -124,7 +124,7 @@ public class MouseEventHandlerTests {
     @Test
     public void testPressButtonAfterMouseLeaveToNoRenderable() {
         when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
@@ -152,7 +152,7 @@ public class MouseEventHandlerTests {
     @Test
     public void testReleaseButtonAfterMouseLeaveToNoRenderable() {
         when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable)
                 .thenReturn(null);
 
@@ -169,7 +169,7 @@ public class MouseEventHandlerTests {
     @Test
     public void testMouseButtonEventsAreTriggeredWhenRenderableUnderMouseDoesNotChange() {
         when(mockMouseEventCapturingSpatialIndex
-                .getCapturingRenderableAtPoint(any(), anyLong()))
+                .getCapturingRenderable(any(), anyLong()))
                 .thenReturn(mockImageAssetRenderable);
 
         mouseEventHandler.actOnMouseLocationAndEvents(MOUSE_LOC, mapOf(), TIMESTAMP);

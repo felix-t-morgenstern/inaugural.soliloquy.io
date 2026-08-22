@@ -98,7 +98,6 @@ public class FunctionalProviderFactoryImplTests {
 
         var provideTimestamp = randomLong();
         output.provide(provideTimestamp);
-        verify(mockValidator, once()).validateTimestamp(provideTimestamp);
         var provideInputsCapture = ArgumentCaptor.forClass(Inputs.class);
         verify(MOCK_PROVIDE_FUNCTION, once()).apply(provideInputsCapture.capture());
         var provideInputs = provideInputsCapture.getValue();
@@ -133,7 +132,7 @@ public class FunctionalProviderFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         var invalidId = "I am not a valid Id!";
-
+        
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(null, PROVIDE_FUNCTION_ID, PAUSE_CONSUMER_ID,
                         UNPAUSE_CONSUMER_ID, PAUSE_TIMESTAMP, DATA));

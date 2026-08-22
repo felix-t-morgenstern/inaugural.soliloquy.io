@@ -300,7 +300,7 @@ public class FiniteAnimationRenderableImplTests {
         renderable.press(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnPress, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(0, PRESS, MOUSE_LOC, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent))
         );
 

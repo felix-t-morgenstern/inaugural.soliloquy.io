@@ -74,7 +74,7 @@ public abstract class AbstractRenderableWithMouseEvents
     public void press(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
         callConsumer(
-                LEFT_MOUSE_BUTTON,
+                mouseButton,
                 ON_PRESS.get(mouseButton),
                 timestamp,
                 PRESS,
@@ -104,7 +104,7 @@ public abstract class AbstractRenderableWithMouseEvents
     public void release(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
         callConsumer(
-                RIGHT_MOUSE_BUTTON,
+                mouseButton,
                 ON_RELEASE.get(mouseButton),
                 timestamp,
                 RELEASE,

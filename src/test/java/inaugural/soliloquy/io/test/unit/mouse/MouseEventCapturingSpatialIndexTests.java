@@ -96,19 +96,19 @@ public class MouseEventCapturingSpatialIndexTests {
     }
 
     @Test
-    public void testPutRenderableAndGetCapturingRenderableAtPoint() {
-        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+    public void testPutRenderableAndGetCapturingRenderable() {
+        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.putRenderable(mockRenderable1);
 
         assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+                capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
         assertNull(capturing
-                .getCapturingRenderableAtPoint(vertexOf(0.09999f, 0.09999f), 0L));
+                .getCapturingRenderable(vertexOf(0.09999f, 0.09999f), 0L));
         assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.5f, .5f), 0L));
+                capturing.getCapturingRenderable(vertexOf(.5f, .5f), 0L));
         assertNull(capturing
-                .getCapturingRenderableAtPoint(vertexOf(0.50001f, 0.50001f), 0L));
+                .getCapturingRenderable(vertexOf(0.50001f, 0.50001f), 0L));
     }
 
     @Test
@@ -129,31 +129,31 @@ public class MouseEventCapturingSpatialIndexTests {
 
     @Test
     public void testRemoveRenderable() {
-        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.putRenderable(mockRenderable1);
 
         assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+                capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.removeRenderable(mockRenderable1);
 
-        assertNull(capturing.getCapturingRenderableAtPoint(vertexOf(.1f, .1f), 0L));
+        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
     }
 
     @Test
-    public void testGetCapturingRenderableAtPointWithHighestZIndex() {
+    public void testGetCapturingRenderableWithHighestZIndex() {
         capturing.putRenderable(mockRenderable1);
         capturing.putRenderable(mockRenderable2);
         capturing.putRenderable(mockRenderable3);
         capturing.putRenderable(mockRenderable4);
 
         assertSame(mockRenderable1,
-                capturing.getCapturingRenderableAtPoint(vertexOf(.45f, .45f), 0L));
+                capturing.getCapturingRenderable(vertexOf(.45f, .45f), 0L));
     }
 
     @Test
-    public void testGetCapturingRenderableAtPointIgnoresRenderablesNotCapturingAtPoint() {
+    public void testGetCapturingRenderableAtPointIgnoresRenderablesNotCapturing() {
         when(mockRenderable1.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
         when(mockRenderable2.capturesMouseEventAtPoint(any(), anyLong())).thenReturn(false);
 
@@ -163,7 +163,7 @@ public class MouseEventCapturingSpatialIndexTests {
         capturing.putRenderable(mockRenderable4);
 
         assertSame(mockRenderable3, capturing
-                .getCapturingRenderableAtPoint(vertexOf(.454f, .456f), 789L));
+                .getCapturingRenderable(vertexOf(.454f, .456f), 789L));
         verify(mockRenderable1, once()).capturesMouseEventAtPoint(any(), anyLong());
         verify(mockRenderable1, once()).capturesMouseEventAtPoint(
                 eq(vertexOf(0.454f, 0.456f)), eq(789L));

@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
@@ -9,17 +8,14 @@ import java.util.UUID;
 public class StaticProvider<T> implements ProviderAtTime<T> {
     private final UUID UUID;
     private final T VALUE;
-    private final TimestampValidator TIMESTAMP_VALIDATOR;
 
-    public StaticProvider(UUID uuid, T value, TimestampValidator timestampValidator) {
+    public StaticProvider(UUID uuid, T value) {
         UUID = Check.ifNull(uuid, "uuid");
         VALUE = value;
-        TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
     }
 
     @Override
     public T provide(long timestamp) throws IllegalArgumentException {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         return VALUE;
     }
 
@@ -30,12 +26,10 @@ public class StaticProvider<T> implements ProviderAtTime<T> {
 
     @Override
     public void reportPause(long timestamp) throws IllegalArgumentException {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
     }
 
     @Override
     public void reportUnpause(long timestamp) throws IllegalArgumentException {
-        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
     }
 
     @Override

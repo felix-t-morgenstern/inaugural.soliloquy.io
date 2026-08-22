@@ -9,6 +9,7 @@ import soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider;
 import java.util.Map;
 import java.util.UUID;
 
+import static inaugural.soliloquy.tools.Tools.transformIfPresentElseNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 
 public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
@@ -39,7 +40,8 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
 
     @Override
     public T provide(long timestamp) throws IllegalArgumentException {
-        VALIDATOR.validateTimestamp(timestamp);
+        // Timestamps are NOT validated here, since the Provider may need to *calculate* a value
+        // from a *prior* timestamp to determine what to return at the *current* timestamp.
         return PROVIDE.apply(new Inputs(timestamp, pauseTimestamp, DATA));
     }
 
@@ -47,8 +49,8 @@ public class FunctionalProviderImpl<T> implements FunctionalProvider<T> {
     public Object representation() {
         return new Representation(
                 PROVIDE.id(),
-                PAUSE.id(),
-                UNPAUSE.id(),
+                transformIfPresentElseNull(PAUSE, Consumer::id),
+                transformIfPresentElseNull(UNPAUSE, Consumer::id),
                 pauseTimestamp,
                 mapOf(DATA)
         );

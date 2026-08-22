@@ -16,7 +16,7 @@ public class MouseEventCapturingSpatialIndex {
     }
 
     // TODO: Verify and use timestamp
-    public RenderableWithMouseEvents getCapturingRenderableAtPoint(Vertex point, long timestamp)
+    public RenderableWithMouseEvents getCapturingRenderable(Vertex point, long timestamp)
             throws IllegalArgumentException {
         var roughResults = R_TREE.search(point.X, point.Y, timestamp);
         var capturingResults = roughResults.stream()

@@ -22,6 +22,7 @@ import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static soliloquy.specs.io.graphics.renderables.providers.FunctionalProvider.Inputs;
 
@@ -76,10 +77,8 @@ public class FunctionalProviderImplTests {
         var provided = provider.provide(TIMESTAMP);
 
         assertEquals(val, provided);
-        var inOrder = Mockito.inOrder(mockTimestampValidator, mockProvide);
-        inOrder.verify(mockTimestampValidator, once()).validateTimestamp(TIMESTAMP);
         var eventInfoCapture = ArgumentCaptor.forClass(Inputs.class);
-        inOrder.verify(mockProvide, once()).apply(eventInfoCapture.capture());
+        verify(mockProvide, once()).apply(eventInfoCapture.capture());
         var eventInfo = eventInfoCapture.getValue();
         assertNotNull(eventInfo);
         assertEquals(TIMESTAMP, eventInfo.timestamp());

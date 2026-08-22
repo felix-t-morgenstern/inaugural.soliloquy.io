@@ -11,8 +11,6 @@ import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvid
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class StaticMouseCursorProviderImplTests {
@@ -25,20 +23,15 @@ public class StaticMouseCursorProviderImplTests {
 
     @BeforeEach
     public void setUp() {
-        provider =
-                new StaticMouseCursorProviderImpl(ID, PROVIDED_VALUE, mockTimestampValidator);
+        provider = new StaticMouseCursorProviderImpl(ID, PROVIDED_VALUE);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticMouseCursorProviderImpl(null, PROVIDED_VALUE,
-                        mockTimestampValidator));
+                () -> new StaticMouseCursorProviderImpl(null, PROVIDED_VALUE));
         assertThrows(IllegalArgumentException.class,
-                () -> new StaticMouseCursorProviderImpl("", PROVIDED_VALUE,
-                        mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new StaticMouseCursorProviderImpl(ID, PROVIDED_VALUE, null));
+                () -> new StaticMouseCursorProviderImpl("", PROVIDED_VALUE));
     }
 
     @Test
@@ -56,7 +49,6 @@ public class StaticMouseCursorProviderImplTests {
         var timestamp = randomLong();
 
         assertEquals(PROVIDED_VALUE, provider.provide(timestamp));
-        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(timestamp);
     }
 
     @Test

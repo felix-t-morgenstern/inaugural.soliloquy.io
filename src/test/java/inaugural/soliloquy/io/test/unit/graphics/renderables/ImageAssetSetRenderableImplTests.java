@@ -356,9 +356,10 @@ public class ImageAssetSetRenderableImplTests {
         renderable.press(2, MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMousePressAction).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
-                        mockContainingComponent)));
+        verify(mockOnMousePressAction).accept(eq(
+                eventInputs(TIMESTAMP)
+                        .withMouseEvent(2, PRESS, MOUSE_LOC, renderable, mockContainingComponent)
+        ));
 
         //noinspection unchecked
         var newOnPress = (Consumer<EventInputs>) mock(Consumer.class);
@@ -366,9 +367,10 @@ public class ImageAssetSetRenderableImplTests {
 
         renderable.press(2, MOUSE_LOC, TIMESTAMP + 1);
 
-        verify(newOnPress).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
-                        mockContainingComponent)));
+        verify(newOnPress).accept(eq(
+                eventInputs(TIMESTAMP + 1)
+                        .withMouseEvent(2, PRESS, MOUSE_LOC, renderable, mockContainingComponent)
+        ));
 
         renderable.press(0, MOUSE_LOC, TIMESTAMP + 2);
 
