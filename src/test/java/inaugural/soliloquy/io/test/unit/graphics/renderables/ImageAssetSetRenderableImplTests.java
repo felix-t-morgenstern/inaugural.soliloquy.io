@@ -50,6 +50,7 @@ public class ImageAssetSetRenderableImplTests {
             pairOf(DIRECTION_PARAM, DIRECTION)
     );
     private final int Z = randomInt();
+    private final Vertex MOUSE_LOC = randomVertex();
     private final long TIMESTAMP = randomLong();
     private final int SNIPPET_LEFT_X = randomInt();
     private final int SNIPPET_RIGHT_X = randomInt();
@@ -268,7 +269,7 @@ public class ImageAssetSetRenderableImplTests {
     public void testConstructorDoesNotAddSelfToContainingComponent() {
         verify(mockContainingComponent, never()).add(renderable);
     }
-    
+
     @Test
     public void testGetAndSetImageAssetSet() {
         assertSame(mockImageAssetSet, renderable.getImageAssetSet());
@@ -352,23 +353,26 @@ public class ImageAssetSetRenderableImplTests {
     public void testPressAndSetOnPress() {
         renderable.setOnPress(2, mockOnMousePressAction);
 
-        renderable.press(2, TIMESTAMP);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMousePressAction).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
-                        mockContainingComponent)));
+        verify(mockOnMousePressAction).accept(eq(
+                eventInputs(TIMESTAMP)
+                        .withMouseEvent(2, PRESS, MOUSE_LOC, renderable, mockContainingComponent)
+        ));
 
         //noinspection unchecked
         var newOnPress = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
-        renderable.press(2, TIMESTAMP + 1);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP + 1);
 
-        verify(newOnPress).accept(eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, renderable,
-                mockContainingComponent)));
+        verify(newOnPress).accept(eq(
+                eventInputs(TIMESTAMP + 1)
+                        .withMouseEvent(2, PRESS, MOUSE_LOC, renderable, mockContainingComponent)
+        ));
 
-        renderable.press(0, TIMESTAMP + 2);
+        renderable.press(0, MOUSE_LOC, TIMESTAMP + 2);
 
         verify(newOnPress).accept(any());
     }
@@ -398,17 +402,17 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testReleaseAndSetOnRelease() {
-        renderable.release(2, TIMESTAMP);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP);
 
         //noinspection unchecked
         var newOnRelease = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
-        renderable.release(2, TIMESTAMP + 1);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(newOnRelease).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
     }
 
@@ -441,36 +445,39 @@ public class ImageAssetSetRenderableImplTests {
                 () -> renderable.setOnPress(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
                 () -> renderable.setOnRelease(-1, consumer(randomString(), _ -> {})));
-        assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP));
-        assertThrows(IllegalArgumentException.class, () -> renderable.press(-1, TIMESTAMP + 1));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderable.press(-1, MOUSE_LOC, TIMESTAMP));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderable.press(-1, MOUSE_LOC, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class,
                 () -> renderable.setOnPress(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class,
                 () -> renderable.setOnRelease(8, consumer(randomString(), _ -> {})));
-        assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 2));
-        assertThrows(IllegalArgumentException.class, () -> renderable.press(8, TIMESTAMP + 3));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderable.press(8, MOUSE_LOC, TIMESTAMP + 2));
+        assertThrows(IllegalArgumentException.class,
+                () -> renderable.press(8, MOUSE_LOC, TIMESTAMP + 3));
     }
 
     @Test
     public void testMouseOverAndSetOnMouseOver() {
-
-        renderable.mouseOver(TIMESTAMP);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseOverAction).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
-        renderable.mouseOver(TIMESTAMP + 1);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseOver).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
@@ -489,22 +496,22 @@ public class ImageAssetSetRenderableImplTests {
 
     @Test
     public void testMouseLeaveAndSetOnMouseLeave() {
-        renderable.mouseLeave(TIMESTAMP);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseLeaveAction).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         var newOnMouseLeave = (Consumer<EventInputs>) mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
-        renderable.mouseLeave(TIMESTAMP + 1);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseLeave).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
@@ -530,23 +537,23 @@ public class ImageAssetSetRenderableImplTests {
                 () -> renderable.setOnPress(randomIntInRange(0, 7),
                         (Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.press(randomIntInRange(0, 7), TIMESTAMP + 1));
+                () -> renderable.press(randomIntInRange(0, 7), MOUSE_LOC, TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnRelease(randomIntInRange(0, 7),
                         (Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.release(randomIntInRange(0, 7), TIMESTAMP + 1));
+                () -> renderable.release(randomIntInRange(0, 7), MOUSE_LOC, TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnMouseOver((Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.mouseOver(TIMESTAMP + 1));
+                () -> renderable.mouseOver(MOUSE_LOC, TIMESTAMP + 1));
         //noinspection unchecked
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnMouseLeave((Consumer<EventInputs>) mock(Consumer.class)));
         assertThrows(UnsupportedOperationException.class,
-                () -> renderable.mouseLeave(TIMESTAMP + 1));
+                () -> renderable.mouseLeave(MOUSE_LOC, TIMESTAMP + 1));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.capturesMouseEventAtPoint(vertexOf(0f, 0f), TIMESTAMP + 1));
     }
@@ -602,7 +609,8 @@ public class ImageAssetSetRenderableImplTests {
         var expectedImageY = (int) (((POINT_Y - RENDERING_AREA_TOP_Y) / RENDERING_AREA.height()) *
                 (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) + SNIPPET_TOP_Y;
 
-        var capturesMouseEventAtPoint = renderable.capturesMouseEventAtPoint(POINT, TIMESTAMP);
+        var capturesMouseEventAtPoint =
+                renderable.capturesMouseEventAtPoint(POINT, TIMESTAMP);
 
         assertEquals(IMAGE_CAPTURES_EVENTS_AT_PIXEL, capturesMouseEventAtPoint);
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
@@ -625,7 +633,8 @@ public class ImageAssetSetRenderableImplTests {
                         RENDERING_AREA.height()) * (SNIPPET_BOTTOM_Y - SNIPPET_TOP_Y)) +
                         SNIPPET_TOP_Y;
 
-        var capturesMouseEventAtPoint = renderable.capturesMouseEventAtPoint(POINT, TIMESTAMP);
+        var capturesMouseEventAtPoint =
+                renderable.capturesMouseEventAtPoint(POINT, TIMESTAMP);
 
         assertEquals(IMAGE_CAPTURES_EVENTS_AT_PIXEL, capturesMouseEventAtPoint);
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);

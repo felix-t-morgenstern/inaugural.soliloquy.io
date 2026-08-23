@@ -39,8 +39,7 @@ class MouseCursorImplStaticImageTest extends MouseCursorImplTest {
                         output.relativeLocation(),
                         new StaticProvider<>(
                                 randomUUID(),
-                                output.id(),
-                                null
+                                output.id()
                         )
                 ))
                 .run();

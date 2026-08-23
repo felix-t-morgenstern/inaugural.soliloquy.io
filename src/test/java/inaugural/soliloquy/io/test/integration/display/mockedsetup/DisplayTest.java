@@ -61,13 +61,12 @@ public class DisplayTest {
     protected static TimestampValidator TimestampValidator = new TimestampValidator(null);
 
     protected final static ProviderAtTime<Float> ZERO_PROVIDER =
-            new StaticProvider<>(java.util.UUID.randomUUID(), 0f, TimestampValidator);
+            new StaticProvider<>(java.util.UUID.randomUUID(), 0f);
     protected final static ProviderAtTime<Color> BLACK_PROVIDER =
-            new StaticProvider<>(java.util.UUID.randomUUID(), Color.BLACK, TimestampValidator);
+            new StaticProvider<>(java.util.UUID.randomUUID(), Color.BLACK);
 
     public final static ProviderAtTime<FloatBox> WHOLE_SCREEN_PROVIDER =
-            new StaticProvider<>(java.util.UUID.randomUUID(), WHOLE_SCREEN,
-                    mock(TimestampValidator.class));
+            new StaticProvider<>(java.util.UUID.randomUUID(), WHOLE_SCREEN);
 
     protected final static WindowResolution RESOLUTION = WindowResolution.RES_1680x1050;
     protected final static FakeGlobalClock GLOBAL_CLOCK = new FakeGlobalClock();
@@ -100,13 +99,13 @@ public class DisplayTest {
         MouseEventCapturingSpatialIndex = new MouseEventCapturingSpatialIndex();
 
         var mouseEventHandler = new MouseEventHandler(TimestampValidator,
-                MouseEventCapturingSpatialIndex::getCapturingRenderableAtPoint);
+                MouseEventCapturingSpatialIndex::getCapturingRenderable);
 
         MockShiftAggregator = mock(ColorShiftStackAggregator.class);
         when(MockShiftAggregator.aggregate(any(), anyLong())).thenReturn(netShifts(0, 0, 0, 0, 0));
 
-        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents,
-                TimestampValidator);
+        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents
+        );
 
         MockTopLevelComponent = mock(ComponentImpl.class);
         when(MockTopLevelComponent.getRenderingBoundariesProvider()).thenReturn(
@@ -138,7 +137,7 @@ public class DisplayTest {
                         MESH_DATA, MESH_DATA, graphicsPreloader, mock(AudioLoader.class), setOf(),
                         mapOf(), mapOf(), mapOf(), mock(KeyEventListener.class),
                         MockMouse::updateCursor, MockMouse::setMostRecentMouseLocation,
-                        mouseListener::registerMousePositionAndButtonStates);
+                        mouseListener::determineMouseEventsAndAct);
 
         graphicsPreloader.LoadAction = graphicsPreloaderLoadAction;
 
@@ -156,11 +155,11 @@ public class DisplayTest {
     }
 
     protected static <T> ProviderAtTime<T> staticProvider(T value) {
-        return new StaticProvider<>(java.util.UUID.randomUUID(), value, TimestampValidator);
+        return new StaticProvider<>(java.util.UUID.randomUUID(), value);
     }
 
     protected static <T> ProviderAtTime<T> staticNullProvider() {
-        return new StaticProvider<>(java.util.UUID.randomUUID(), null, TimestampValidator);
+        return new StaticProvider<>(java.util.UUID.randomUUID(), null);
     }
 
     protected static Sprite generateMockSprite(int leftX, int topY, int rightX, int bottomY) {

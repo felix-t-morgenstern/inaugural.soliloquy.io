@@ -1,7 +1,6 @@
 package inaugural.soliloquy.io.graphics.renderables.providers;
 
 import inaugural.soliloquy.tools.Check;
-import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.io.graphics.renderables.providers.StaticMouseCursorProvider;
 
 import java.util.UUID;
@@ -11,10 +10,8 @@ public class StaticMouseCursorProviderImpl
         implements StaticMouseCursorProvider {
     private final String ID;
 
-    public StaticMouseCursorProviderImpl(String id,
-                                         long value,
-                                         TimestampValidator timestampValidator) {
-        super(UUID.randomUUID(), value, timestampValidator);
+    public StaticMouseCursorProviderImpl(String id, long value) {
+        super(UUID.randomUUID(), value);
         ID = Check.ifNullOrEmpty(id, "id");
     }
 

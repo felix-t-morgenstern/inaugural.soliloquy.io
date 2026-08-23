@@ -199,7 +199,7 @@ public class IOModule extends AbstractModule {
         Function<StaticMouseCursorProviderDefinition, StaticMouseCursorProvider>
                 staticMouseCursorFactory =
                 definition -> new StaticMouseCursorProviderImpl(definition.id(),
-                        definition.mouseCursorImageId(), null);
+                        definition.mouseCursorImageId());
 
         var graphicsPreloaderThreadPoolSize =
                 (int) getSetting.apply(GRAPHICS_PRELOADER_THREAD_POOL_SIZE_ID).getValue();
@@ -247,8 +247,9 @@ public class IOModule extends AbstractModule {
 
         var mouse = andRegister(new MouseImpl(mouseCursors::get, globalClock));
         var mouseCapturing = new MouseEventCapturingSpatialIndex();
-        var mouseEventHandler = new MouseEventHandler(timestampValidator, mouseCapturing::getCapturingRenderableAtPoint);
-        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents, timestampValidator);
+        var mouseEventHandler =
+                new MouseEventHandler(timestampValidator, mouseCapturing::getCapturingRenderable);
+        var mouseListener = new MouseListener(mouseEventHandler::actOnMouseLocationAndEvents);
 
         TriConsumer<Integer, Mouse.EventType, Runnable> subscribeToNextMouseEvent =
                 mouseEventHandler::subscribeToNextEvent;
@@ -472,9 +473,7 @@ public class IOModule extends AbstractModule {
         var progressiveStringProviderFactory =
                 andRegister(new ProgressiveStringProviderFactoryImpl(timestampValidator));
         @SuppressWarnings({"rawtypes", "unchecked"}) BiFunction<UUID, Object, ProviderAtTime>
-                staticProviderFactory =
-                andRegister((uuid, val) -> new StaticProvider(uuid, val, timestampValidator),
-                        STATIC_PROVIDER_FACTORY);
+                staticProviderFactory = andRegister(StaticProvider::new, STATIC_PROVIDER_FACTORY);
         andRegister(staticProviderFactory.apply(NULL_PROVIDER_UUID, null), NULL_PROVIDER);
         andRegister(staticProviderFactory.apply(WHOLE_SCREEN_PROVIDER_UUID, WHOLE_SCREEN),
                 WHOLE_SCREEN_PROVIDER);
@@ -624,7 +623,7 @@ public class IOModule extends AbstractModule {
                 keyEventListener,
                 mouse::updateCursor,
                 mouse::setMostRecentMouseLocation,
-                mouseListener::registerMousePositionAndButtonStates
+                mouseListener::determineMouseEventsAndAct
         ));
 
         methods.concatenate(readMethods(new IOMethods(soundsPlaying, soundFactory)));

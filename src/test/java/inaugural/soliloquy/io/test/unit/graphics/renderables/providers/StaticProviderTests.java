@@ -1,11 +1,9 @@
 package inaugural.soliloquy.io.test.unit.graphics.renderables.providers;
 
 import inaugural.soliloquy.io.graphics.renderables.providers.StaticProvider;
-import inaugural.soliloquy.tools.timing.TimestampValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
@@ -13,8 +11,6 @@ import java.util.UUID;
 
 import static inaugural.soliloquy.tools.random.Random.randomLong;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class StaticProviderTests {
@@ -22,21 +18,16 @@ public class StaticProviderTests {
 
     private final UUID UUID = java.util.UUID.randomUUID();
 
-    @Mock private TimestampValidator mockTimestampValidator;
-
     private ProviderAtTime<Object> provider;
 
     @BeforeEach
     public void setUp() {
-        provider = new StaticProvider<>(UUID, PROVIDED_VALUE, mockTimestampValidator);
+        provider = new StaticProvider<>(UUID, PROVIDED_VALUE);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new StaticProvider<>(null, null, mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new StaticProvider<>(UUID, null, null));
+        assertThrows(IllegalArgumentException.class, () -> new StaticProvider<>(null, null));
     }
 
     @Test
@@ -49,7 +40,6 @@ public class StaticProviderTests {
         var timestamp = randomLong();
 
         assertSame(PROVIDED_VALUE, provider.provide(timestamp));
-        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(timestamp);
     }
 
     @Test

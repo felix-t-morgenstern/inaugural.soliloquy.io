@@ -3,6 +3,7 @@ package inaugural.soliloquy.io.graphics.renderables;
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.timing.TimestampValidator;
 import soliloquy.specs.common.entities.Consumer;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.rendering.RenderingBoundaries;
@@ -70,13 +71,14 @@ public abstract class AbstractRenderableWithMouseEvents
     protected abstract boolean underlyingAssetSupportsMouseEvents();
 
     @Override
-    public void press(int mouseButton, long timestamp) throws UnsupportedOperationException {
+    public void press(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
         callConsumer(
-                LEFT_MOUSE_BUTTON,
+                mouseButton,
                 ON_PRESS.get(mouseButton),
                 timestamp,
                 PRESS,
+                Check.ifNull(mouseLoc, "mouseLoc"),
                 "press"
         );
     }
@@ -99,13 +101,14 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void release(int mouseButton, long timestamp) throws UnsupportedOperationException {
+    public void release(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
         callConsumer(
-                RIGHT_MOUSE_BUTTON,
+                mouseButton,
                 ON_RELEASE.get(mouseButton),
                 timestamp,
                 RELEASE,
+                Check.ifNull(mouseLoc, "mouseLoc"),
                 "release"
         );
     }
@@ -143,12 +146,13 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void mouseOver(long timestamp) throws UnsupportedOperationException {
+    public void mouseOver(Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         callConsumer(
                 null,
                 onMouseOver,
                 timestamp,
                 MOUSE_OVER,
+                Check.ifNull(mouseLoc, "mouseLoc"),
                 "mouseOver"
         );
     }
@@ -165,12 +169,13 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void mouseLeave(long timestamp) throws UnsupportedOperationException {
+    public void mouseLeave(Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
         callConsumer(
                 null,
                 onMouseLeave,
                 timestamp,
                 MOUSE_LEAVE,
+                Check.ifNull(mouseLoc, "mouseLoc"),
                 "mouseLeave"
         );
     }
@@ -201,13 +206,20 @@ public abstract class AbstractRenderableWithMouseEvents
                               Consumer<EventInputs> action,
                               long timestamp,
                               Mouse.EventType eventType,
+                              Vertex mouseLoc,
                               String methodName) {
         throwIfNotSupportingMouseEvents(methodName);
         TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
         if (action != null) {
             action.accept(
                     eventInputs(timestamp)
-                            .withMouseEvent(mouseButton, eventType, this, this.containingComponent)
+                            .withMouseEvent(
+                                    mouseButton,
+                                    eventType,
+                                    mouseLoc,
+                                    this,
+                                    this.containingComponent
+                            )
             );
         }
     }

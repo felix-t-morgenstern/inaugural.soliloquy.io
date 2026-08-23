@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
 import soliloquy.specs.common.valueobjects.Pair;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.GlobalLoopingAnimationRenderable;
 import soliloquy.specs.io.graphics.renderables.colorshifting.ColorShift;
@@ -47,6 +48,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
     private final Map<Integer, Consumer<EventInputs>> ON_PRESS_CONSUMERS = mapOf();
     private final List<ColorShift> COLOR_SHIFTS = listOf();
     private final int Z = randomInt();
+    private final Vertex MOUSE_LOC = randomVertex();
     private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -86,17 +88,20 @@ public class GlobalLoopingAnimationRenderableImplTests {
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null, mockBorderColorProvider,
-                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                COLOR_SHIFTS,
                 mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider, null,
-                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                COLOR_SHIFTS,
                 mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
                 GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider, null,
-                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
+                COLOR_SHIFTS,
                 mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class, () -> new GlobalLoopingAnimationRenderableImpl(
@@ -220,24 +225,24 @@ public class GlobalLoopingAnimationRenderableImplTests {
     public void testPressAndSetOnPress() {
         renderable.setOnPress(2, mockOnPressAction);
 
-        renderable.press(2, TIMESTAMP);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnPressAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnPress = mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
-        renderable.press(2, TIMESTAMP + 1);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnPress, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
-        renderable.press(0, TIMESTAMP + 2);
+        renderable.press(0, MOUSE_LOC, TIMESTAMP + 2);
 
         verify(newOnPress, once()).accept(any());
     }
@@ -246,7 +251,7 @@ public class GlobalLoopingAnimationRenderableImplTests {
     public void testPressAndSetOnPressWhenNotCapturingMouseEvents() {
         renderable.setCapturesMouseEvents(false);
 
-        assertThrows(UnsupportedOperationException.class, () -> renderable.press(2, 0L));
+        assertThrows(UnsupportedOperationException.class, () -> renderable.press(2, MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnPress(2, consumer(randomString(), _ -> {})));
     }
@@ -272,17 +277,17 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testReleaseAndSetOnRelease() {
-        renderable.release(2, TIMESTAMP);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP);
 
         //noinspection unchecked
         Consumer<EventInputs> newOnRelease = mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
-        renderable.release(2, TIMESTAMP + 1);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(newOnRelease, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
     }
 
@@ -290,7 +295,8 @@ public class GlobalLoopingAnimationRenderableImplTests {
     public void testReleaseAndSetOnReleaseWhenNotCapturingMouseEvents() {
         renderable.setCapturesMouseEvents(false);
 
-        assertThrows(UnsupportedOperationException.class, () -> renderable.release(2, 0L));
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderable.release(2, MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnRelease(2, consumer(randomString(), _ -> {})));
     }
@@ -323,9 +329,9 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 renderable.setOnRelease(-1,
                         consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(-1, TIMESTAMP));
+                renderable.press(-1, MOUSE_LOC, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(-1, TIMESTAMP + 1));
+                renderable.press(-1, MOUSE_LOC, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.setOnPress(8,
@@ -334,36 +340,37 @@ public class GlobalLoopingAnimationRenderableImplTests {
                 renderable.setOnRelease(8,
                         consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(8, TIMESTAMP + 2));
+                renderable.press(8, MOUSE_LOC, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(8, TIMESTAMP + 3));
+                renderable.press(8, MOUSE_LOC, TIMESTAMP + 3));
     }
 
     @Test
     public void testMouseOverAndSetOnMouseOver() {
-        renderable.mouseOver(TIMESTAMP);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseOverAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
-        renderable.mouseOver(TIMESTAMP + 1);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseOver, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
     public void testMouseOverAndSetOnMouseOverWhenNotCapturingMouseEvents() {
         renderable.setCapturesMouseEvents(false);
 
-        assertThrows(UnsupportedOperationException.class, () -> renderable.mouseOver(0L));
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderable.mouseOver(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnMouseOver(consumer(randomString(), _ -> {})));
     }
@@ -383,29 +390,30 @@ public class GlobalLoopingAnimationRenderableImplTests {
 
     @Test
     public void testMouseLeaveAndSetOnMouseLeave() {
-        renderable.mouseLeave(TIMESTAMP);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseLeaveAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnMouseLeave = mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
-        renderable.mouseLeave(TIMESTAMP + 1);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseLeave, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
     public void testMouseLeaveAndSetOnMouseLeaveWhenNotCapturingMouseEvents() {
         renderable.setCapturesMouseEvents(false);
 
-        assertThrows(UnsupportedOperationException.class, () -> renderable.mouseLeave(0L));
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderable.mouseLeave(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.setOnMouseLeave(consumer(randomString(), _ -> {})));
     }

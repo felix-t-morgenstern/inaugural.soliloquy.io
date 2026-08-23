@@ -56,7 +56,7 @@ public class CoreLoopImpl implements CoreLoop {
     private final Consumer<Long> UPDATE_MOUSE_CURSOR;
     private final Consumer<Vertex> UPDATE_MOST_RECENT_MOUSE_LOC;
     private final TriConsumer<Vertex, Map<Integer, Boolean>, Long>
-            REGISTER_MOUSE_POSITION_AND_BUTTON_STATES;
+            DETERMINE_MOUSE_EVENTS_AND_ACT;
 
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
 
@@ -87,7 +87,7 @@ public class CoreLoopImpl implements CoreLoop {
             KeyEventListener keyEventListener,
             Consumer<Long> updateMouseCursor,
             Consumer<Vertex> updateMostRecentMouseLoc,
-            TriConsumer<Vertex, Map<Integer, Boolean>, Long> registerMousePositionAndButtonStates) {
+            TriConsumer<Vertex, Map<Integer, Boolean>, Long> determineMouseEventsAndAct) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
         FRAME_TIMER_POLLING_INTERVAL =
@@ -113,10 +113,10 @@ public class CoreLoopImpl implements CoreLoop {
                 Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
         KEY_EVENT_LISTENER = Check.ifNull(keyEventListener, "keyEventListener");
         UPDATE_MOUSE_CURSOR = Check.ifNull(updateMouseCursor, "updateMouseCursor");
-        UPDATE_MOST_RECENT_MOUSE_LOC = Check.ifNull(updateMostRecentMouseLoc, "updateMostRecentMouseLoc");
-        REGISTER_MOUSE_POSITION_AND_BUTTON_STATES =
-                Check.ifNull(registerMousePositionAndButtonStates,
-                        "registerMousePositionAndButtonStates");
+        UPDATE_MOST_RECENT_MOUSE_LOC =
+                Check.ifNull(updateMostRecentMouseLoc, "updateMostRecentMouseLoc");
+        DETERMINE_MOUSE_EVENTS_AND_ACT =
+                Check.ifNull(determineMouseEventsAndAct, "determineMouseEventsAndAct");
 
         MOUSE_BUTTON_STATES = mapOf();
         for (var button : ALL_SUPPORTED_MOUSE_BUTTONS) {
@@ -209,7 +209,7 @@ public class CoreLoopImpl implements CoreLoop {
 
         UPDATE_MOST_RECENT_MOUSE_LOC.accept(screenMouseLocation);
         if (screenMouseLocation != null) {
-            REGISTER_MOUSE_POSITION_AND_BUTTON_STATES.accept(
+            DETERMINE_MOUSE_EVENTS_AND_ACT.accept(
                     screenMouseLocation,
                     MOUSE_BUTTON_STATES,
                     frameTimestamp

@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.entities.Consumer;
 import soliloquy.specs.common.valueobjects.FloatBox;
+import soliloquy.specs.common.valueobjects.Vertex;
 import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.RectangleRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
@@ -38,6 +39,7 @@ public class RectangleRenderableImplTests {
     private final ProviderAtTime<FloatBox> RENDERING_AREA_PROVIDER =
             generateMockStaticProvider(null);
     private final int Z = randomInt();
+    private final Vertex MOUSE_LOC = randomVertex();
     private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -274,31 +276,31 @@ public class RectangleRenderableImplTests {
     @Test
     public void testPressAndSetOnPress() {
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.press(2, 0L));
+                renderableNotSupportingMouseEvents.press(2, MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnPress(2,
                         consumer(randomString(), _ -> {})));
 
         renderable.setOnPress(2, mockOnPressAction);
 
-        renderable.press(2, TIMESTAMP);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnPressAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnPress = mock(Consumer.class);
         renderable.setOnPress(2, newOnPress);
 
-        renderable.press(2, TIMESTAMP + 1);
+        renderable.press(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnPress, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
-        renderable.press(0, TIMESTAMP + 2);
+        renderable.press(0, MOUSE_LOC, TIMESTAMP + 2);
 
         verify(newOnPress, once()).accept(any());
     }
@@ -325,22 +327,22 @@ public class RectangleRenderableImplTests {
     @Test
     public void testReleaseAndSetOnRelease() {
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.release(2, 0L));
+                renderableNotSupportingMouseEvents.release(2, MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnRelease(2,
                         consumer(randomString(), _ -> {})));
 
-        renderable.release(2, TIMESTAMP);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP);
 
         //noinspection unchecked
         Consumer<EventInputs> newOnRelease = mock(Consumer.class);
         renderable.setOnRelease(2, newOnRelease);
 
-        renderable.release(2, TIMESTAMP + 1);
+        renderable.release(2, MOUSE_LOC, TIMESTAMP + 1);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(newOnRelease, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, renderable,
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(2, RELEASE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
     }
 
@@ -371,43 +373,43 @@ public class RectangleRenderableImplTests {
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.setOnRelease(-1, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(-1, TIMESTAMP));
+                renderable.press(-1, MOUSE_LOC, TIMESTAMP));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(-1, TIMESTAMP + 1));
+                renderable.press(-1, MOUSE_LOC, TIMESTAMP + 1));
 
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.setOnPress(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
                 renderable.setOnRelease(8, consumer(randomString(), _ -> {})));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(8, TIMESTAMP + 2));
+                renderable.press(8, MOUSE_LOC, TIMESTAMP + 2));
         assertThrows(IllegalArgumentException.class, () ->
-                renderable.press(8, TIMESTAMP + 3));
+                renderable.press(8, MOUSE_LOC, TIMESTAMP + 3));
     }
 
     @Test
     public void testMouseOverAndSetOnMouseOver() {
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.mouseOver(0L));
+                renderableNotSupportingMouseEvents.mouseOver(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnMouseOver(mockOnMouseOverAction));
 
-        renderable.mouseOver(TIMESTAMP);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseOverAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnMouseOver = mock(Consumer.class);
         renderable.setOnMouseOver(newOnMouseOver);
 
-        renderable.mouseOver(TIMESTAMP + 1);
+        renderable.mouseOver(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseOver, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
@@ -429,27 +431,27 @@ public class RectangleRenderableImplTests {
     @Test
     public void testMouseLeaveAndSetOnMouseLeave() {
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.mouseLeave(0L));
+                renderableNotSupportingMouseEvents.mouseLeave(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnMouseLeave(
                         mockOnMouseLeaveAction));
 
-        renderable.mouseLeave(TIMESTAMP);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
         verify(mockOnMouseLeaveAction, once()).accept(
-                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, renderable,
+                eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
         //noinspection unchecked
         Consumer<EventInputs> newOnMouseLeave = mock(Consumer.class);
         renderable.setOnMouseLeave(newOnMouseLeave);
 
-        renderable.mouseLeave(TIMESTAMP + 1);
+        renderable.mouseLeave(MOUSE_LOC, TIMESTAMP + 1);
 
         verify(newOnMouseLeave, once()).accept(
-                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, renderable,
-                        mockContainingComponent)));
+                eq(eventInputs(TIMESTAMP + 1).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
