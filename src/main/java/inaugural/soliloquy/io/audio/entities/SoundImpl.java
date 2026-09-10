@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundType;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -34,9 +35,12 @@ public class SoundImpl implements Sound {
 
     private int durationMs;
 
-    private double volume;
+    private ProviderAtTime<Float> volumeProvider;
 
-    public SoundImpl(UUID uuid, SoundType soundType, Consumer<Sound> publishSoundStopped) {
+    public SoundImpl(UUID uuid,
+                     SoundType soundType,
+                     ProviderAtTime<Float> volumeProvider,
+                     Consumer<Sound> publishSoundStopped) {
         UUID = Check.ifNull(uuid, "uuid");
         SOUND_TYPE = Check.ifNull(soundType, "soundType");
         PUBLISH_SOUND_STOPPED = Check.ifNull(publishSoundStopped, "publishSoundStopped");
@@ -51,7 +55,7 @@ public class SoundImpl implements Sound {
         isMuted = false;
         isLooping = false;
         isReady = false;
-        volume = 1.0;
+        this.volumeProvider = Check.ifNull(volumeProvider, "volumeProvider");
 
         MEDIA_PLAYER.setOnReady(() ->
         {
@@ -120,7 +124,6 @@ public class SoundImpl implements Sound {
 
     public void unmute() throws UnsupportedOperationException {
         throwWhenStopped("unmute");
-        MEDIA_PLAYER.setVolume(volume);
         isMuted = false;
     }
 
@@ -136,19 +139,16 @@ public class SoundImpl implements Sound {
     }
 
     @Override
-    public double getVolume() throws UnsupportedOperationException {
+    public ProviderAtTime<Float> getVolumeProvider() throws UnsupportedOperationException {
         throwWhenStopped("getVolume");
-        return volume;
+        return volumeProvider;
     }
 
     @Override
-    public void setVolume(double volume)
+    public void setVolumeProvider(ProviderAtTime<Float> volumeProvider)
             throws IllegalArgumentException, UnsupportedOperationException {
         throwWhenStopped("setVolume");
-        if (!isMuted) {
-            MEDIA_PLAYER.setVolume(volume);
-        }
-        this.volume = volume;
+        this.volumeProvider = volumeProvider;
     }
 
     @Override
@@ -253,6 +253,13 @@ public class SoundImpl implements Sound {
         if (isStopped) {
             throw new UnsupportedOperationException("Sound." + methodName +
                     ": Sound has already been stopped");
+        }
+    }
+
+    public void refreshPlayingVolume(long timestamp) {
+        if (!isMuted) {
+            var providedVolume = volumeProvider.provide(timestamp);
+            MEDIA_PLAYER.setVolume(providedVolume);
         }
     }
 }

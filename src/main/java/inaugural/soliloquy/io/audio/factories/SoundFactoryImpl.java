@@ -6,6 +6,7 @@ import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.audio.factories.SoundFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 import java.util.function.Function;
@@ -20,13 +21,16 @@ public class SoundFactoryImpl implements SoundFactory {
     }
 
     @Override
-    public Sound make(String soundTypeId) throws IllegalArgumentException {
-        return make(soundTypeId, UUID.randomUUID());
+    public Sound make(String soundTypeId, ProviderAtTime<Float> volumeProvider)
+            throws IllegalArgumentException {
+        return make(soundTypeId, volumeProvider, UUID.randomUUID());
     }
 
     // NB: This method is not exposed on the SoundFactory since it is only intended for SoundHandler
-    public Sound make(String soundTypeId, UUID uuid) throws IllegalArgumentException {
+    public Sound make(String soundTypeId, ProviderAtTime<Float> volumeProvider, UUID uuid)
+            throws IllegalArgumentException {
         Check.ifNullOrEmpty(soundTypeId, "soundTypeId");
+        Check.ifNull(volumeProvider, "volumeProvider");
         Check.ifNull(uuid, "uuid");
         var soundType = GET_SOUND_TYPE.apply(soundTypeId);
         if (soundType == null) {
@@ -35,7 +39,7 @@ public class SoundFactoryImpl implements SoundFactory {
                             ") must correspond to a valid (i.e. " + "registered) sound type id");
         }
 
-        var sound = new SoundImpl(uuid, soundType, SOUNDS_PLAYING::removeSound);
+        var sound = new SoundImpl(uuid, soundType, volumeProvider, SOUNDS_PLAYING::removeSound);
 
         if (soundType.defaultLoopingStopMs() != null) {
             sound.setIsLooping(true);

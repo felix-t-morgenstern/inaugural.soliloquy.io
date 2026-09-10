@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.test.unit.persistence.audio;
 
 import com.google.gson.JsonSyntaxException;
 import inaugural.soliloquy.io.persistence.audio.SoundHandler;
+import org.apache.commons.lang3.function.TriFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,13 +11,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundType;
-import soliloquy.specs.io.audio.factories.SoundFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 import java.util.function.BiFunction;
 
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static inaugural.soliloquy.tools.testing.Mock.HandlerAndEntity;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockEntityAndHandler;
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,22 +32,28 @@ public class SoundHandlerTests {
     private final String SOUND_TYPE_ID = randomString();
     private final boolean IS_PAUSED = randomBoolean();
     private final boolean IS_MUTED = randomBoolean();
-    private final double VOLUME = randomDouble();
     private final int MS_POSITION = randomInt();
     private final boolean IS_LOOPING = randomBoolean();
     private final int LOOPING_STOP_MS = randomInt();
     private final int LOOPING_RESTART_MS = randomInt();
 
+    private final String VOL_PROVIDER_WRITTEN = randomString();
+    private final HandlerAndEntity<ProviderAtTime> MOCK_PROVIDER_AND_HANDLER =
+            generateMockEntityAndHandler(ProviderAtTime.class, VOL_PROVIDER_WRITTEN);
+    private final ProviderAtTime<Float> MOCK_VOL_PROVIDER = MOCK_PROVIDER_AND_HANDLER.entity;
+    private final TypeHandler<ProviderAtTime> MOCK_PROVIDER_HANDLER =
+            MOCK_PROVIDER_AND_HANDLER.handler;
+
     @Mock private SoundType mockSoundType;
     @Mock private Sound mockSound;
-    @Mock private BiFunction<String, UUID, Sound> mockSoundFactory;
+    @Mock private TriFunction<String, ProviderAtTime<Float>, UUID, Sound> mockSoundFactory;
 
     private TypeHandler<Sound> soundHandler;
 
     private final String DATA = String.format(
-            "{\"uuid\":\"%s\",\"type\":\"%s\",\"paused\":%b,\"muted\":%b,\"vol\":%s,\"msPos\":%d," +
-                    "\"looping\":%b,\"loopingStopMs\":%d,\"loopingRestartMs\":%d}",
-            UUID, SOUND_TYPE_ID, IS_PAUSED, IS_MUTED, VOLUME, MS_POSITION, IS_LOOPING,
+            "{\"uuid\":\"%s\",\"type\":\"%s\",\"paused\":%b,\"muted\":%b,\"vol\":\"%s\"," +
+                    "\"msPos\":%d,\"looping\":%b,\"loopingStopMs\":%d,\"loopingRestartMs\":%d}",
+            UUID, SOUND_TYPE_ID, IS_PAUSED, IS_MUTED, VOL_PROVIDER_WRITTEN, MS_POSITION, IS_LOOPING,
             LOOPING_STOP_MS, LOOPING_RESTART_MS);
 
     @BeforeEach
@@ -55,20 +64,23 @@ public class SoundHandlerTests {
         lenient().when(mockSound.soundType()).thenReturn(mockSoundType);
         lenient().when(mockSound.isPaused()).thenReturn(IS_PAUSED);
         lenient().when(mockSound.isMuted()).thenReturn(IS_MUTED);
-        lenient().when(mockSound.getVolume()).thenReturn(VOLUME);
+        lenient().when(mockSound.getVolumeProvider()).thenReturn(MOCK_VOL_PROVIDER);
         lenient().when(mockSound.getMillisecondPosition()).thenReturn(MS_POSITION);
         lenient().when(mockSound.getIsLooping()).thenReturn(IS_LOOPING);
         lenient().when(mockSound.getLoopingStopMs()).thenReturn(LOOPING_STOP_MS);
         lenient().when(mockSound.getLoopingRestartMs()).thenReturn(LOOPING_RESTART_MS);
 
-        lenient().when(mockSoundFactory.apply(anyString(), any())).thenReturn(mockSound);
+        lenient().when(mockSoundFactory.apply(anyString(), any(), any())).thenReturn(mockSound);
 
-        soundHandler = new SoundHandler(mockSoundFactory);
+        soundHandler = new SoundHandler(mockSoundFactory, MOCK_PROVIDER_HANDLER);
     }
 
     @Test
     public void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new SoundHandler(null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundHandler(null, MOCK_PROVIDER_HANDLER));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundHandler(mockSoundFactory, null));
     }
 
     @Test
@@ -76,6 +88,7 @@ public class SoundHandlerTests {
         var writtenValue = soundHandler.write(mockSound);
 
         assertEquals(DATA, writtenValue);
+        verify(MOCK_PROVIDER_HANDLER, once()).write(MOCK_VOL_PROVIDER);
     }
 
     @Test
@@ -89,9 +102,9 @@ public class SoundHandlerTests {
 
         assertNotNull(readValue);
         assertSame(mockSound, readValue);
-        verify(mockSoundFactory, once()).apply(eq(SOUND_TYPE_ID), eq(UUID));
+        verify(mockSoundFactory, once()).apply(eq(SOUND_TYPE_ID), same(MOCK_VOL_PROVIDER),
+                eq(UUID));
         verify(mockSound, once()).setIsLooping(IS_LOOPING);
-        verify(mockSound, once()).setVolume(VOLUME);
         if (IS_MUTED) {
             verify(mockSound, once()).mute();
         }
@@ -107,6 +120,7 @@ public class SoundHandlerTests {
         }
         verify(mockSound, once()).setLoopingStopMs(LOOPING_STOP_MS);
         verify(mockSound, once()).setLoopingRestartMs(LOOPING_RESTART_MS);
+        verify(MOCK_PROVIDER_HANDLER, once()).read(VOL_PROVIDER_WRITTEN);
     }
 
     @Test

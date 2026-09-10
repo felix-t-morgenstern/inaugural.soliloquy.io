@@ -2,46 +2,53 @@ package inaugural.soliloquy.io.test.unit.audio.entities;
 
 import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundType;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.testing.Assertions.once;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 // The test suite here uses timers to verify behavior, which inflate test time. Until this suite
 // is refactored to be more expedient, it should only be run when the class in question is changed.
-@Disabled
+//@Disabled
 @ExtendWith(MockitoExtension.class)
 public class SoundImplTests {
-    private final UUID UUID = java.util.UUID.randomUUID();
+    private final UUID UUID = randomUUID();
 
-    @Mock private SoundType soundType;
-    @Mock private Consumer<Sound> publishSoundStopped;
+    @Mock private SoundType mockSoundType;
+    @Mock private ProviderAtTime<Float> mockVolProvider;
+    @Mock private Consumer<Sound> mockPublishSoundStopped;
 
     private Sound sound;
 
     @BeforeEach
     void setUp() {
         var relativePath = "\\src\\test\\resources\\sounds\\Kevin_MacLeod_-_Living_Voyage.mp3";
-        lenient().when(soundType.relativePath()).thenReturn(relativePath);
+        lenient().when(mockSoundType.relativePath()).thenReturn(relativePath);
 
-        sound = new SoundImpl(UUID, soundType, publishSoundStopped);
+        sound = new SoundImpl(UUID, mockSoundType, mockVolProvider, mockPublishSoundStopped);
     }
 
     @Test
     public void testConstructorWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> new SoundImpl(null, soundType, publishSoundStopped));
-        assertThrows(IllegalArgumentException.class, () -> new SoundImpl(UUID, null, publishSoundStopped));
-        assertThrows(IllegalArgumentException.class, () -> new SoundImpl(UUID, soundType, null));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundImpl(null, mockSoundType, mockVolProvider, mockPublishSoundStopped));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundImpl(UUID, null, mockVolProvider, mockPublishSoundStopped));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundImpl(UUID, mockSoundType, null, mockPublishSoundStopped));
+        assertThrows(IllegalArgumentException.class,
+                () -> new SoundImpl(UUID, mockSoundType, mockVolProvider, null));
     }
 
     @Test
@@ -51,8 +58,12 @@ public class SoundImplTests {
 
     @Test
     public void testEquals() {
-        Sound sound2 = new SoundImpl(UUID, soundType, publishSoundStopped);
-        assertEquals(sound, sound2);
+        var equalSound =
+                new SoundImpl(UUID, mockSoundType, mockVolProvider, mockPublishSoundStopped);
+        var unequalSound = new SoundImpl(randomUUID(), mockSoundType, mockVolProvider,
+                mockPublishSoundStopped);
+        assertEquals(equalSound, sound);
+        assertNotEquals(unequalSound, sound);
     }
 
     @Test
@@ -124,16 +135,15 @@ public class SoundImplTests {
     }
 
     @Test
-    public void testGetVolume() {
-        assertEquals(1.0, sound.getVolume());
+    public void testGetAndSetVolumeProvider() {
+        assertSame(mockVolProvider, sound.getVolumeProvider());
 
-        sound.setVolume(0.5);
+        @SuppressWarnings("unchecked") ProviderAtTime<Float> newMockProvider =
+                mock(ProviderAtTime.class);
 
-        assertEquals(0.5, sound.getVolume());
+        sound.setVolumeProvider(newMockProvider);
 
-        sound.mute();
-
-        assertEquals(0.5, sound.getVolume());
+        assertSame(newMockProvider, sound.getVolumeProvider());
     }
 
     @Test
@@ -149,7 +159,6 @@ public class SoundImplTests {
 
         assertEquals(0, sound.getMillisecondPosition());
 
-        sound.setVolume(0.0);
         sound.play();
         Thread.sleep(timeToWait);
         sound.pause();
@@ -165,8 +174,6 @@ public class SoundImplTests {
 
     @Test
     public void testIsLooping() {
-        sound.setVolume(0.0);
-
         assertFalse(sound.getIsLooping());
 
         sound.setIsLooping(true);
@@ -211,19 +218,18 @@ public class SoundImplTests {
     public void testStopRemovesSoundFromSoundsPlaying() {
         sound.stop();
 
-        verify(publishSoundStopped, once()).accept(sound);
+        verify(mockPublishSoundStopped, once()).accept(sound);
     }
 
     @Test
     public void testEndOfSoundRemovesSoundFromSoundsPlaying() throws InterruptedException {
-        sound.setVolume(0);
         var msLength = sound.getMillisecondLength();
         sound.setMillisecondPosition(msLength - 10);
         sound.play();
         Thread.sleep(3000);
 
         assertTrue(sound.isStopped());
-        verify(publishSoundStopped, once()).accept(sound);
+        verify(mockPublishSoundStopped, once()).accept(sound);
     }
 
     @Test
@@ -236,8 +242,9 @@ public class SoundImplTests {
         assertThrows(UnsupportedOperationException.class, () -> sound.unmute());
         assertThrows(UnsupportedOperationException.class, () -> sound.getIsLooping());
         assertThrows(UnsupportedOperationException.class, () -> sound.setIsLooping(true));
-        assertThrows(UnsupportedOperationException.class, () -> sound.getVolume());
-        assertThrows(UnsupportedOperationException.class, () -> sound.setVolume(0));
+        assertThrows(UnsupportedOperationException.class, () -> sound.getVolumeProvider());
+        assertThrows(UnsupportedOperationException.class,
+                () -> sound.setVolumeProvider(mockVolProvider));
         assertThrows(UnsupportedOperationException.class, () -> sound.getMillisecondPosition());
         assertThrows(UnsupportedOperationException.class, () -> sound.setLoopingStopMs(456));
         assertThrows(UnsupportedOperationException.class, () -> sound.setLoopingRestartMs(123));

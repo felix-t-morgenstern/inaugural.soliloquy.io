@@ -4,6 +4,7 @@ import inaugural.soliloquy.tools.Check;
 import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.audio.factories.SoundFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
 
@@ -17,12 +18,12 @@ public class IOMethods {
         SOUND_FACTORY = Check.ifNull(soundFactory, "soundFactory");
     }
 
-    public Sound makeSound(String soundId) {
-        return SOUND_FACTORY.make(soundId);
+    public Sound makeSound(String soundId, ProviderAtTime<Float> volumeProvider) {
+        return SOUND_FACTORY.make(soundId, volumeProvider);
     }
 
-    public Sound playSound(String soundId) {
-        var sound = makeSound(soundId);
+    public Sound playSound(String soundId, ProviderAtTime<Float> volumeProvider) {
+        var sound = makeSound(soundId, volumeProvider);
         sound.play();
         return sound;
     }

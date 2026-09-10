@@ -8,6 +8,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
 import soliloquy.specs.common.valueobjects.Pair;
 import soliloquy.specs.common.valueobjects.Vertex;
+import soliloquy.specs.io.audio.entities.Sound;
+import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.bootstrap.CoreLoop;
 import soliloquy.specs.io.bootstrap.GraphicsPreloader;
 import soliloquy.specs.io.bootstrap.assetfactories.AudioLoader;
@@ -22,6 +24,7 @@ import soliloquy.specs.io.input.keyboard.KeyEventListener;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -52,6 +55,8 @@ public class CoreLoopImpl implements CoreLoop {
     private final Map<String, String> IDS_FOR_FILENAMES;
     private final Map<String, Integer> DEFAULT_LOOP_STOP_MS_BY_ID;
     private final Map<String, Integer> DEFAULT_LOOP_RESTART_MS_BY_ID;
+    private final SoundsPlaying SOUNDS_PLAYING;
+    private final BiConsumer<Sound, Long> REFRESH_SOUND_VOLUME;
     private final KeyEventListener KEY_EVENT_LISTENER;
     private final Consumer<Long> UPDATE_MOUSE_CURSOR;
     private final Consumer<Vertex> UPDATE_MOST_RECENT_MOUSE_LOC;
@@ -84,6 +89,8 @@ public class CoreLoopImpl implements CoreLoop {
             Map<String, String> idsForFilenames,
             Map<String, Integer> defaultLoopStopMsById,
             Map<String, Integer> defaultLoopRestartMsById,
+            SoundsPlaying soundsPlaying,
+            BiConsumer<Sound, Long> refreshSoundVolume,
             KeyEventListener keyEventListener,
             Consumer<Long> updateMouseCursor,
             Consumer<Vertex> updateMostRecentMouseLoc,
@@ -111,6 +118,8 @@ public class CoreLoopImpl implements CoreLoop {
         DEFAULT_LOOP_STOP_MS_BY_ID = Check.ifNull(defaultLoopStopMsById, "defaultLoopStopMsById");
         DEFAULT_LOOP_RESTART_MS_BY_ID =
                 Check.ifNull(defaultLoopRestartMsById, "defaultLoopRestartMsById");
+        SOUNDS_PLAYING = Check.ifNull(soundsPlaying, "soundsPlaying");
+        REFRESH_SOUND_VOLUME = Check.ifNull(refreshSoundVolume, "refreshSoundVolume");
         KEY_EVENT_LISTENER = Check.ifNull(keyEventListener, "keyEventListener");
         UPDATE_MOUSE_CURSOR = Check.ifNull(updateMouseCursor, "updateMouseCursor");
         UPDATE_MOST_RECENT_MOUSE_LOC =
@@ -204,6 +213,8 @@ public class CoreLoopImpl implements CoreLoop {
 
         var frameTimestamp = GLOBAL_CLOCK.globalTimestamp();
 
+        refreshSounds(frameTimestamp);
+
         KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
         readMouseButtonStates();
 
@@ -232,6 +243,13 @@ public class CoreLoopImpl implements CoreLoop {
             updateWindowDimensionsInResolutionManager();
             KEY_EVENT_LISTENER.registerKeyListener(window);
             setNewMouseCallbacks();
+        }
+    }
+
+    private void refreshSounds(long timestamp) {
+        var sounds = SOUNDS_PLAYING.representation();
+        for (var sound : sounds) {
+            REFRESH_SOUND_VOLUME.accept(sound, timestamp);
         }
     }
 

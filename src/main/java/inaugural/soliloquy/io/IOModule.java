@@ -472,7 +472,7 @@ public class IOModule extends AbstractModule {
                 ), timestampValidator));
         var progressiveStringProviderFactory =
                 andRegister(new ProgressiveStringProviderFactoryImpl(timestampValidator));
-        @SuppressWarnings({"rawtypes", "unchecked"}) BiFunction<UUID, Object, ProviderAtTime>
+        @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
                 staticProviderFactory = andRegister(StaticProvider::new, STATIC_PROVIDER_FACTORY);
         andRegister(staticProviderFactory.apply(NULL_PROVIDER_UUID, null), NULL_PROVIDER);
         andRegister(staticProviderFactory.apply(WHOLE_SCREEN_PROVIDER_UUID, WHOLE_SCREEN),
@@ -481,14 +481,6 @@ public class IOModule extends AbstractModule {
         // ========
         // Handlers
         // ========
-
-        // Audio
-
-        var soundHandler = new SoundHandler(soundFactory::make);
-        var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
-
-        persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
-        persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
 
         // Providers
 
@@ -539,6 +531,14 @@ public class IOModule extends AbstractModule {
         providerHandler.add(StaticProvider.class.getCanonicalName(),
                 new StaticProviderHandler(persistenceHandler, staticProviderFactory,
                         timestampValidator));
+
+        // Audio
+
+        var soundHandler = new SoundHandler(soundFactory::make, providerHandler);
+        var soundsPlayingHandler = new SoundsPlayingHandler(soundHandler, soundsPlaying);
+
+        persistenceHandler.addTypeHandler(SoundImpl.class, soundHandler);
+        persistenceHandler.addTypeHandler(SoundsPlayingImpl.class, soundsPlayingHandler);
 
         // Shifts
 
@@ -620,6 +620,8 @@ public class IOModule extends AbstractModule {
                 idsForFilenames,
                 defaultLoopStopMsById,
                 defaultLoopRestartMsById,
+                soundsPlaying,
+                (s, t) -> ((SoundImpl) s).refreshPlayingVolume(t),
                 keyEventListener,
                 mouse::updateCursor,
                 mouse::setMostRecentMouseLocation,

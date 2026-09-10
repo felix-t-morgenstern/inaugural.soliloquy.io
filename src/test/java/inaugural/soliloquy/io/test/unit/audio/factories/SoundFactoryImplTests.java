@@ -9,14 +9,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.audio.entities.SoundType;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
-import java.util.UUID;
 import java.util.function.Function;
 
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
-import static inaugural.soliloquy.tools.testing.Mock.generateMockLookupFunctionWithId;
 import static inaugural.soliloquy.tools.testing.Mock.LookupAndEntitiesWithId;
+import static inaugural.soliloquy.tools.testing.Mock.generateMockLookupFunctionWithId;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -30,18 +31,20 @@ public class SoundFactoryImplTests {
     private final SoundType MOCK_SOUND_TYPE = MOCK_SOUND_TYPE_AND_LOOKUP.entities.getFirst();
     private final int DEFAULT_LOOPING_RESTART_MS = 123;
     private final int DEFAULT_LOOPING_STOP_MS = 456;
-    private final String RELATIVE_PATH =
-            "\\src\\test\\resources\\sounds\\Kevin_MacLeod_-_Living_Voyage.mp3";
 
     @Mock private SoundsPlaying mockSoundsPlaying;
+    @Mock private ProviderAtTime<Float> mockVolProvider;
 
     private SoundFactoryImpl soundFactory;
 
     @BeforeEach
     public void setUp() {
+        final var RELATIVE_PATH =
+                "\\src\\test\\resources\\sounds\\Kevin_MacLeod_-_Living_Voyage.mp3";
         lenient().when(MOCK_SOUND_TYPE.relativePath()).thenReturn(RELATIVE_PATH);
         lenient().when(MOCK_SOUND_TYPE.defaultLoopingStopMs()).thenReturn(DEFAULT_LOOPING_STOP_MS);
-        lenient().when(MOCK_SOUND_TYPE.defaultLoopingRestartMs()).thenReturn(DEFAULT_LOOPING_RESTART_MS);
+        lenient().when(MOCK_SOUND_TYPE.defaultLoopingRestartMs())
+                .thenReturn(DEFAULT_LOOPING_RESTART_MS);
 
         mockSoundsPlaying = mock(SoundsPlaying.class);
 
@@ -58,11 +61,12 @@ public class SoundFactoryImplTests {
 
     @Test
     public void testMake() {
-        var sound = soundFactory.make(SOUND_TYPE_ID);
+        var sound = soundFactory.make(SOUND_TYPE_ID, mockVolProvider);
 
         assertNotNull(sound);
-        assertTrue(sound instanceof SoundImpl);
+        assertInstanceOf(SoundImpl.class, sound);
         assertSame(MOCK_SOUND_TYPE, sound.soundType());
+        assertSame(mockVolProvider, sound.getVolumeProvider());
         assertEquals(DEFAULT_LOOPING_RESTART_MS, sound.getLoopingRestartMs());
         assertEquals(DEFAULT_LOOPING_STOP_MS, sound.getLoopingStopMs());
         verify(MOCK_GET_SOUND_TYPE, once()).apply(SOUND_TYPE_ID);
@@ -71,28 +75,31 @@ public class SoundFactoryImplTests {
 
     @Test
     public void testMakeWithUuid() {
-        var uuid = UUID.randomUUID();
+        var uuid = randomUUID();
 
-        var sound = soundFactory.make(SOUND_TYPE_ID, uuid);
+        var sound = soundFactory.make(SOUND_TYPE_ID, mockVolProvider, uuid);
 
         assertEquals(uuid, sound.uuid());
     }
 
     @Test
-    public void testMakeWithInvalidSoundTypeId() {
-        assertThrows(IllegalArgumentException.class, () -> soundFactory.make(null));
-        assertThrows(IllegalArgumentException.class,
-                () -> soundFactory.make("InvalidSoundTypeId!"));
-    }
-
-    @Test
     public void testMakeWithInvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> soundFactory.make(null));
-        assertThrows(IllegalArgumentException.class, () -> soundFactory.make(""));
-        assertThrows(IllegalArgumentException.class, () -> soundFactory.make(RELATIVE_PATH, null));
         assertThrows(IllegalArgumentException.class,
-                () -> soundFactory.make(null, UUID.randomUUID()));
+                () -> soundFactory.make(null, mockVolProvider));
+        assertThrows(IllegalArgumentException.class, () -> soundFactory.make("", mockVolProvider));
         assertThrows(IllegalArgumentException.class,
-                () -> soundFactory.make("", UUID.randomUUID()));
+                () -> soundFactory.make("InvalidSoundTypeId!", mockVolProvider));
+        assertThrows(IllegalArgumentException.class, () -> soundFactory.make(SOUND_TYPE_ID, null));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> soundFactory.make(null, mockVolProvider, randomUUID()));
+        assertThrows(IllegalArgumentException.class,
+                () -> soundFactory.make("", mockVolProvider, randomUUID()));
+        assertThrows(IllegalArgumentException.class,
+                () -> soundFactory.make("InvalidSoundTypeId!", mockVolProvider, randomUUID()));
+        assertThrows(IllegalArgumentException.class,
+                () -> soundFactory.make(SOUND_TYPE_ID, null, randomUUID()));
+        assertThrows(IllegalArgumentException.class,
+                () -> soundFactory.make(SOUND_TYPE_ID, mockVolProvider, null));
     }
 }

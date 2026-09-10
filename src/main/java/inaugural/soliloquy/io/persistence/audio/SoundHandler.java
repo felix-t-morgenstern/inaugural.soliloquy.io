@@ -2,16 +2,21 @@ package inaugural.soliloquy.io.persistence.audio;
 
 import inaugural.soliloquy.tools.Check;
 import inaugural.soliloquy.tools.persistence.AbstractTypeHandler;
+import org.apache.commons.lang3.function.TriFunction;
+import soliloquy.specs.common.persistence.TypeHandler;
 import soliloquy.specs.io.audio.entities.Sound;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 public class SoundHandler extends AbstractTypeHandler<Sound> {
-    private final BiFunction<String, UUID, Sound> SOUND_FACTORY;
+    private final TriFunction<String, ProviderAtTime<Float>, UUID, Sound> SOUND_FACTORY;
+    @SuppressWarnings("rawtypes") private final TypeHandler<ProviderAtTime> PROVIDER_HANDLER;
 
-    public SoundHandler(BiFunction<String, UUID, Sound> soundFactory) {
+    public SoundHandler(TriFunction<String, ProviderAtTime<Float>, UUID, Sound> soundFactory,
+                        @SuppressWarnings("rawtypes") TypeHandler<ProviderAtTime> providerHandler) {
         SOUND_FACTORY = Check.ifNull(soundFactory, "soundFactory");
+        PROVIDER_HANDLER = Check.ifNull(providerHandler, "providerHandler");
     }
 
     @SuppressWarnings("unchecked")
@@ -20,9 +25,9 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
         Check.ifNullOrEmpty(data, "data");
 
         var dto = JSON.fromJson(data, SoundDTO.class);
-        var sound = SOUND_FACTORY.apply(dto.type, UUID.fromString(dto.uuid));
+        var volumeProvider = PROVIDER_HANDLER.read(dto.vol);
+        var sound = SOUND_FACTORY.apply(dto.type, volumeProvider, UUID.fromString(dto.uuid));
         sound.setIsLooping(dto.looping);
-        sound.setVolume(dto.vol);
         if (dto.muted) {
             sound.mute();
         }
@@ -54,7 +59,7 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
         soundDTO.type = sound.soundType().id();
         soundDTO.paused = sound.isPaused();
         soundDTO.muted = sound.isMuted();
-        soundDTO.vol = sound.getVolume();
+        soundDTO.vol = PROVIDER_HANDLER.write(sound.getVolumeProvider());
         soundDTO.msPos = sound.getMillisecondPosition();
         soundDTO.looping = sound.getIsLooping();
         soundDTO.loopingRestartMs = sound.getLoopingRestartMs();
@@ -68,7 +73,7 @@ public class SoundHandler extends AbstractTypeHandler<Sound> {
         String type;
         boolean paused;
         boolean muted;
-        double vol;
+        String vol;
         int msPos;
         boolean looping;
         Integer loopingStopMs;

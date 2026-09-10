@@ -9,11 +9,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import soliloquy.specs.io.audio.entities.Sound;
 import soliloquy.specs.io.audio.entities.SoundsPlaying;
 import soliloquy.specs.io.audio.factories.SoundFactory;
+import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import static inaugural.soliloquy.tools.random.Random.randomString;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
@@ -24,13 +26,14 @@ public class IOMethodsTests {
 
     @Mock private SoundsPlaying mockSoundsPlaying;
     @Mock private SoundFactory mockSoundFactory;
+    @Mock private ProviderAtTime<Float> mockVolProvider;
     @Mock private Sound mockSound;
 
     private IOMethods methods;
 
     @BeforeEach
     public void setUp() {
-        lenient().when(mockSoundFactory.make(anyString())).thenReturn(mockSound);
+        lenient().when(mockSoundFactory.make(anyString(), any())).thenReturn(mockSound);
 
         methods = new IOMethods(mockSoundsPlaying, mockSoundFactory);
     }
@@ -43,18 +46,18 @@ public class IOMethodsTests {
 
     @Test
     public void testMakeSound() {
-        var sound = methods.makeSound(SOUND_ID);
+        var sound = methods.makeSound(SOUND_ID, mockVolProvider);
 
         assertSame(mockSound, sound);
-        verify(mockSoundFactory, once()).make(SOUND_ID);
+        verify(mockSoundFactory, once()).make(SOUND_ID, mockVolProvider);
     }
 
     @Test
     public void testPlaySound() {
-        var sound = methods.playSound(SOUND_ID);
+        var sound = methods.playSound(SOUND_ID, mockVolProvider);
 
         assertSame(mockSound, sound);
-        verify(mockSoundFactory, once()).make(SOUND_ID);
+        verify(mockSoundFactory, once()).make(SOUND_ID, mockVolProvider);
         verify(mockSound, once()).play();
     }
 }
