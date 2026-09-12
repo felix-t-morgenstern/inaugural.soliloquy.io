@@ -2,6 +2,7 @@ package inaugural.soliloquy.io.test.unit.audio.entities;
 
 import inaugural.soliloquy.io.audio.entities.SoundImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 // The test suite here uses timers to verify behavior, which inflate test time. Until this suite
 // is refactored to be more expedient, it should only be run when the class in question is changed.
-//@Disabled
+@Disabled
 @ExtendWith(MockitoExtension.class)
 public class SoundImplTests {
     private final UUID UUID = randomUUID();
