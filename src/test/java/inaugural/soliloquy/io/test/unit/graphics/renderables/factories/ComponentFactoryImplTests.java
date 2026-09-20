@@ -50,6 +50,7 @@ public class ComponentFactoryImplTests {
             MOCK_BICONSUMER_AND_LOOKUP.lookup;
 
     @Mock private ProviderAtTime<FloatBox> mockDimensions;
+    @Mock private ProviderAtTime<FloatBox> mockUnadjDimensions;
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundaries;
     @Mock private Consumer<Component> mockRegisterComponent;
     @Mock private Consumer<Component> mockDeregisterComponent;
@@ -58,6 +59,8 @@ public class ComponentFactoryImplTests {
     @Mock private Consumer<RenderableWithMouseEvents> mockAddToMouseCapturing;
     @Mock private Consumer<RenderableWithMouseEvents> mockRemoveFromMouseCapturing;
     @Mock private Component mockComponent;
+    @Mock private java.util.function.Consumer<java.util.function.Consumer<Long>>
+            mockRunFrameBlockingEvent;
 
     private ComponentFactory factory;
 
@@ -65,7 +68,7 @@ public class ComponentFactoryImplTests {
     public void setUp() {
         factory = new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                 mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER);
+                mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER, mockRunFrameBlockingEvent);
     }
 
     @Test
@@ -73,31 +76,40 @@ public class ComponentFactoryImplTests {
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(null, mockDeregisterComponent, mockAddToKeyCapturing,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER));
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER,
+                        mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, null, mockAddToKeyCapturing,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER));
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER,
+                        mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent, null,
                         mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER));
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER,
+                        mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, null, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER));
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER,
+                        mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, mockRemoveFromKeyCapturing, null,
-                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER));
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER,
+                        mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        null, MOCK_GET_BICONSUMER));
+                        null, MOCK_GET_BICONSUMER, mockRunFrameBlockingEvent));
         assertThrows(IllegalArgumentException.class,
                 () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
                         mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
-                        mockRemoveFromMouseCapturing, null));
+                        mockRemoveFromMouseCapturing, null, mockRunFrameBlockingEvent));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ComponentFactoryImpl(mockRegisterComponent, mockDeregisterComponent,
+                        mockAddToKeyCapturing, mockRemoveFromKeyCapturing, mockAddToMouseCapturing,
+                        mockRemoveFromMouseCapturing, MOCK_GET_BICONSUMER, null));
     }
 
     @Test
@@ -112,8 +124,8 @@ public class ComponentFactoryImplTests {
         var mockRenderableWithMouseEvents = mock(RenderableWithMouseEvents.class);
 
         var output = factory.make(uuid, z, bindings, overrides, keyEventPriority,
-                mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
-                mockComponent, DATA);
+                mockDimensions, mockUnadjDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID,
+                ADD_HOOK_ID, mockComponent, DATA);
         when(mockRenderableWithMouseEvents.getContainingComponent()).thenReturn(output);
         output.add(mockRenderableWithMouseEvents);
 
@@ -138,7 +150,8 @@ public class ComponentFactoryImplTests {
         assertEquals(z, output.getZ());
         assertEquals(tier + 1, output.tier());
         assertSame(mockComponent, output.getContainingComponent());
-        assertSame(mockDimensions, output.getDimensionsProvider());
+        assertSame(mockDimensions, output.dimensionsProvider());
+        assertSame(mockUnadjDimensions, output.unadjustedDimensionsProvider());
         assertSame(mockRenderingBoundaries, output.getRenderingBoundariesProvider());
         assertEquals(DATA, output.data());
         assertNotSame(DATA, output.data());
@@ -147,33 +160,33 @@ public class ComponentFactoryImplTests {
         verify(mockAddToKeyCapturing, once()).accept(output, keyEventPriority);
         verify(MOCK_GET_BICONSUMER, once()).apply(ADD_HOOK_ID);
         verify(MOCK_GET_BICONSUMER, once()).apply(PRERENDER_HOOK_ID);
-
-        output.delete();
-
-        verify(mockDeregisterComponent, once()).accept(output);
-        verify(mockRemoveFromKeyCapturing, once()).accept(output);
     }
 
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(null, randomInt(), setOf(), randomBoolean(), randomInt(),
-                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
-                        mockComponent, DATA));
+                        mockDimensions, mockUnadjDimensions, mockRenderingBoundaries,
+                        PRERENDER_HOOK_ID, ADD_HOOK_ID, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), null, randomBoolean(), randomInt(),
-                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
+                        mockDimensions, mockUnadjDimensions, mockRenderingBoundaries,
+                        PRERENDER_HOOK_ID, ADD_HOOK_ID, mockComponent, DATA));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
+                        mockDimensions, mockUnadjDimensions, null, PRERENDER_HOOK_ID, ADD_HOOK_ID,
                         mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
-                        mockDimensions, null, PRERENDER_HOOK_ID, ADD_HOOK_ID, mockComponent, DATA));
+                        null, mockUnadjDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID,
+                        ADD_HOOK_ID, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
-                        null, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
-                        mockComponent, DATA));
+                        mockDimensions, null, mockRenderingBoundaries, PRERENDER_HOOK_ID,
+                        ADD_HOOK_ID, mockComponent, DATA));
         assertThrows(IllegalArgumentException.class,
                 () -> factory.make(randomUUID(), randomInt(), setOf(), randomBoolean(), randomInt(),
-                        mockDimensions, mockRenderingBoundaries, PRERENDER_HOOK_ID, ADD_HOOK_ID,
-                        mockComponent, null));
+                        mockDimensions, mockUnadjDimensions, mockRenderingBoundaries,
+                        PRERENDER_HOOK_ID, ADD_HOOK_ID, mockComponent, null));
     }
 }

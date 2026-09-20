@@ -51,15 +51,15 @@ public class FrameExecutorImplTests {
     public void setUp() {
         EVENTS_FIRED.clear();
 
-        frameExecutor = new FrameExecutorImpl(mockComponentRenderer, 100, mockReportFrameCompletion);
+        frameExecutor = new FrameExecutorImpl(mockComponentRenderer, mockReportFrameCompletion);
     }
 
     @Test
     public void constructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(null, 1, mockReportFrameCompletion));
+                () -> new FrameExecutorImpl(null, mockReportFrameCompletion));
         assertThrows(IllegalArgumentException.class,
-                () -> new FrameExecutorImpl(mockComponentRenderer, 0, mockReportFrameCompletion));
+                () -> new FrameExecutorImpl(mockComponentRenderer, null));
     }
 
     @Test

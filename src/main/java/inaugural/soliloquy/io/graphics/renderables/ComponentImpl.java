@@ -10,6 +10,7 @@ import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 import soliloquy.specs.io.input.keyboard.KeyBinding;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,11 +24,14 @@ import static soliloquy.specs.io.graphics.renderables.Component.Addend.addend;
 public class ComponentImpl extends AbstractRenderable implements Component {
     private final Set<KeyBinding> BINDINGS;
     private final boolean BLOCKS_LOWER_BINDINGS;
+    private final ProviderAtTime<FloatBox> DIMENSIONS_PROVIDER;
+    private final ProviderAtTime<FloatBox> UNADJ_DIMENSIONS_PROVIDER;
     private final Set<Renderable> RENDERABLES;
     private final Map<String, Object> DATA;
     private final BiConsumer<Component, Long> PRERENDER;
     private final soliloquy.specs.common.entities.BiConsumer<Component, Addend>
             ADD_HOOK;
+    private final Consumer<Consumer<Long>> RUN_FRAME_BLOCKING_EVENT;
 
     private final Consumer<Component> DEREGISTER_COMPONENT;
     private final Consumer<Component> REMOVE_FROM_KEY_CAPTURING;
@@ -35,7 +39,6 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
 
     private int tier;
-    private ProviderAtTime<FloatBox> dimensionsProvider;
     private ProviderAtTime<FloatBox> renderingBoundariesProvider;
 
     public final static java.util.function.BiConsumer<Component, Long> COMPONENT_PRERENDER_HOOK =
@@ -48,6 +51,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
                          boolean blocksLowerKeyBindings,
                          Component containingComponent,
                          ProviderAtTime<FloatBox> dimensionsProvider,
+                         ProviderAtTime<FloatBox> unadjDimensionsProvider,
                          ProviderAtTime<FloatBox> renderingBoundariesProvider,
                          Map<String, Object> data,
                          Consumer<Component> registerComponent,
@@ -56,11 +60,14 @@ public class ComponentImpl extends AbstractRenderable implements Component {
                          Consumer<RenderableWithMouseEvents> addToMouseCapturing,
                          Consumer<RenderableWithMouseEvents> removeFromMouseCapturing,
                          BiConsumer<Component, Long> prerender,
-                         soliloquy.specs.common.entities.BiConsumer<Component, Addend> addHook) {
+                         soliloquy.specs.common.entities.BiConsumer<Component, Addend> addHook,
+                         Consumer<Consumer<Long>> runFrameBlockingEvent) {
         super(z, uuid);
         BINDINGS = Check.ifNull(keyBindings, "keyBindings");
         BLOCKS_LOWER_BINDINGS = blocksLowerKeyBindings;
-        this.dimensionsProvider = Check.ifNull(dimensionsProvider, "dimensionsProvider");
+        DIMENSIONS_PROVIDER = Check.ifNull(dimensionsProvider, "dimensionsProvider");
+        UNADJ_DIMENSIONS_PROVIDER =
+                Check.ifNull(unadjDimensionsProvider, "unadjDimensionsProvider");
         this.containingComponent = containingComponent;
         if (containingComponent != null) {
             this.tier = containingComponent.tier() + 1;
@@ -70,6 +77,7 @@ public class ComponentImpl extends AbstractRenderable implements Component {
         RENDERABLES = setOf();
         PRERENDER = prerender;
         ADD_HOOK = addHook;
+        RUN_FRAME_BLOCKING_EVENT = Check.ifNull(runFrameBlockingEvent, "runFrameBlockingEvent");
         DATA = mapOf(Check.ifNull(data, "data"));
         DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
         REMOVE_FROM_KEY_CAPTURING = Check.ifNull(removeFromKeyCapturing, "removeFromKeyCapturing");
@@ -147,14 +155,13 @@ public class ComponentImpl extends AbstractRenderable implements Component {
     }
 
     @Override
-    public ProviderAtTime<FloatBox> getDimensionsProvider() {
-        return dimensionsProvider;
+    public ProviderAtTime<FloatBox> dimensionsProvider() {
+        return DIMENSIONS_PROVIDER;
     }
 
     @Override
-    public void setDimensionsProvider(ProviderAtTime<FloatBox> dimensionsProvider)
-            throws IllegalArgumentException {
-        this.dimensionsProvider = Check.ifNull(dimensionsProvider, "dimensionsProvider");
+    public ProviderAtTime<FloatBox> unadjustedDimensionsProvider() {
+        return UNADJ_DIMENSIONS_PROVIDER;
     }
 
     @Override
@@ -221,10 +228,17 @@ public class ComponentImpl extends AbstractRenderable implements Component {
 
     @Override
     public void delete() {
-        RENDERABLES.forEach(Renderable::delete);
-        DEREGISTER_COMPONENT.accept(this);
-        REMOVE_FROM_KEY_CAPTURING.accept(this);
-        super.delete();
+        RUN_FRAME_BLOCKING_EVENT.accept(_ -> {
+            for (Iterator<Renderable> iterator = RENDERABLES.iterator();
+                 iterator.hasNext(); ) {
+                var content = iterator.next();
+                iterator.remove();
+                content.delete();
+            }
+            DEREGISTER_COMPONENT.accept(this);
+            REMOVE_FROM_KEY_CAPTURING.accept(this);
+            super.delete();
+        });
     }
 
     @Override

@@ -51,6 +51,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         var dto = JSON.fromJson(writtenVal, Dto.class);
 
         var dimens = PROVIDER_HANDLER.read(dto.dimens);
+        var unadjDimens = PROVIDER_HANDLER.read(dto.unadjDimens);
         var renderingBoundaries = PROVIDER_HANDLER.read(dto.boundaries);
         var data = DATA_HANDLER.read(dto.data);
 
@@ -68,6 +69,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
                 dto.overrides,
                 dto.priority,
                 dimens,
+                unadjDimens,
                 renderingBoundaries,
                 dto.prerenderHook,
                 dto.addHook,
@@ -106,7 +108,8 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
             return bindingDto;
         }).toArray(Dto.BindingDto[]::new);
 
-        dto.dimens = PROVIDER_HANDLER.write(component.getDimensionsProvider());
+        dto.dimens = PROVIDER_HANDLER.write(component.dimensionsProvider());
+        dto.unadjDimens = PROVIDER_HANDLER.write(component.unadjustedDimensionsProvider());
         dto.boundaries = PROVIDER_HANDLER.write(component.getRenderingBoundariesProvider());
 
         dto.content = component.contentsRepresentation().stream().map(c -> {
@@ -131,6 +134,7 @@ public class ComponentHandler extends AbstractTypeHandler<Component> {
         boolean overrides;
         int priority;
         String dimens;
+        String unadjDimens;
         String boundaries;
         ContentDto[] content;
         String prerenderHook;

@@ -6,26 +6,22 @@ import soliloquy.specs.io.graphics.rendering.FrameExecutor;
 import soliloquy.specs.io.graphics.rendering.renderers.ComponentRenderer;
 
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 import static inaugural.soliloquy.tools.collections.Collections.listOf;
+import static inaugural.soliloquy.tools.concurrency.Concurrency.waitUntilTasksCompleted;
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 public class FrameExecutorImpl implements FrameExecutor {
     private final ComponentRenderer COMPONENT_RENDERER;
-    private final Semaphore SEMAPHORE;
     private final List<Consumer<Long>> FRAME_BLOCKING_EVENTS;
     private final Runnable REPORT_FRAME_COMPLETION;
 
     private Component topLevelComponent;
 
     public FrameExecutorImpl(ComponentRenderer componentRenderer,
-                             int semaphorePermissions, Runnable reportFrameCompletion) {
+                             Runnable reportFrameCompletion) {
         COMPONENT_RENDERER = Check.ifNull(componentRenderer, "componentRenderer");
-        SEMAPHORE = new Semaphore(
-                Check.throwOnLteZero(semaphorePermissions, "semaphorePermissions"),
-                true
-        );
         FRAME_BLOCKING_EVENTS = listOf();
         REPORT_FRAME_COMPLETION = Check.ifNull(reportFrameCompletion, "reportFrameCompletion");
     }
@@ -49,20 +45,14 @@ public class FrameExecutorImpl implements FrameExecutor {
         if (topLevelComponent == null) {
             throw new IllegalStateException("FrameExecutorImpl.execute: no top-level component");
         }
-        for (Consumer<Long> frameBlockingEvent : FRAME_BLOCKING_EVENTS) {
-            try {
-                SEMAPHORE.acquire();
-                new Thread(() -> {
-                    frameBlockingEvent.accept(timestamp);
-                    SEMAPHORE.release();
-                }).start();
-            }
-            catch (InterruptedException e) {
-                //noinspection CallToPrintStackTrace
-                e.printStackTrace();
-            }
+        // A while loop is used here instead of an if statement, since frame blocking events may
+        // emerge within other frame-blocking events, and those should block the same frame
+        while (!FRAME_BLOCKING_EVENTS.isEmpty()) {
+            var frameBlockingTasks = FRAME_BLOCKING_EVENTS.stream()
+                    .map(event -> runAsync(() -> event.accept(timestamp))).toList();
+            FRAME_BLOCKING_EVENTS.clear();
+            waitUntilTasksCompleted(frameBlockingTasks, () -> false);
         }
-        FRAME_BLOCKING_EVENTS.clear();
 
         COMPONENT_RENDERER.render(topLevelComponent, timestamp);
 

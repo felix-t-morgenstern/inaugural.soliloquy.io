@@ -55,6 +55,7 @@ public class KeyEventDisplayTest extends DisplayTest {
                 0,
                 staticProvider(floatBoxOf(0f,0f)),
                 staticProvider(WHOLE_SCREEN),
+                staticProvider(WHOLE_SCREEN),
                 null,
                 null,
                 topLevelComponent,

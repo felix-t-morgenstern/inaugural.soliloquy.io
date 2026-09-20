@@ -215,9 +215,11 @@ public class CoreLoopImpl implements CoreLoop {
 
         refreshSounds(frameTimestamp);
 
-        KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
-        readMouseButtonStates();
+        FRAME_EXECUTOR.execute(frameTimestamp);
 
+        KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
+
+        readMouseButtonStates();
         UPDATE_MOST_RECENT_MOUSE_LOC.accept(screenMouseLocation);
         if (screenMouseLocation != null) {
             DETERMINE_MOUSE_EVENTS_AND_ACT.accept(
@@ -226,8 +228,6 @@ public class CoreLoopImpl implements CoreLoop {
                     frameTimestamp
             );
         }
-
-        FRAME_EXECUTOR.execute(frameTimestamp);
 
         glfwSwapBuffers(window);
     }

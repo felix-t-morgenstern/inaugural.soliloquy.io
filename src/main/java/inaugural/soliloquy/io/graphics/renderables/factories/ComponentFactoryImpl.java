@@ -25,6 +25,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
     private final Consumer<RenderableWithMouseEvents> REMOVE_FROM_MOUSE_CAPTURING;
     @SuppressWarnings("rawtypes")
     private final Function<String, soliloquy.specs.common.entities.BiConsumer> GET_BICONSUMER;
+    private final Consumer<Consumer<Long>> RUN_FRAME_BLOCKING_EVENT;
 
     public ComponentFactoryImpl(Consumer<Component> registerComponent,
                                 Consumer<Component> deregisterComponent,
@@ -33,7 +34,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
                                 Consumer<RenderableWithMouseEvents> addToCapturing,
                                 Consumer<RenderableWithMouseEvents> removeFromCapturing,
                                 @SuppressWarnings("rawtypes")
-                                Function<String, soliloquy.specs.common.entities.BiConsumer> getBiConsumer) {
+                                Function<String, soliloquy.specs.common.entities.BiConsumer> getBiConsumer,
+                                Consumer<Consumer<Long>> runFrameBlockingEvent) {
         REGISTER_COMPONENT = Check.ifNull(registerComponent, "registerComponent");
         DEREGISTER_COMPONENT = Check.ifNull(deregisterComponent, "deregisterComponent");
         ADD_TO_KEY_CAPTURING = Check.ifNull(addToKeyCapturing, "addToKeyCapturing");
@@ -41,6 +43,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
         ADD_TO_MOUSE_CAPTURING = Check.ifNull(addToCapturing, "addToCapturing");
         REMOVE_FROM_MOUSE_CAPTURING = Check.ifNull(removeFromCapturing, "removeFromCapturing");
         GET_BICONSUMER = Check.ifNull(getBiConsumer, "getBiConsumer");
+        RUN_FRAME_BLOCKING_EVENT = Check.ifNull(runFrameBlockingEvent, "runFrameBlockingEvent");
     }
 
     @Override
@@ -51,6 +54,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
             boolean blocksLowerKeyBindings,
             int keyBindingPriority,
             ProviderAtTime<FloatBox> dimensionsProvider,
+            ProviderAtTime<FloatBox> unadjDimensionsProvider,
             ProviderAtTime<FloatBox> renderingBoundariesProvider,
             String prerenderHookId,
             String addActionHookId,
@@ -68,6 +72,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 blocksLowerKeyBindings,
                 containingComponent,
                 dimensionsProvider,
+                unadjDimensionsProvider,
                 renderingBoundariesProvider,
                 data,
                 REGISTER_COMPONENT,
@@ -76,7 +81,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
                 ADD_TO_MOUSE_CAPTURING,
                 REMOVE_FROM_MOUSE_CAPTURING,
                 prerenderHook,
-                addHook
+                addHook,
+                RUN_FRAME_BLOCKING_EVENT
         );
         ADD_TO_KEY_CAPTURING.accept(component, keyBindingPriority);
         return component;

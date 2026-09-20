@@ -216,7 +216,8 @@ public class DisplayTest {
 
     protected static IOModule ioModule;
     private static GlobalClock Clock;
-    @SuppressWarnings("rawtypes") private static java.util.function.BiFunction<UUID, Object, ProviderAtTime>
+    @SuppressWarnings("rawtypes")
+    private static java.util.function.BiFunction<UUID, Object, ProviderAtTime>
             StaticProviderFactory;
 
     public Component topLevelComponent;
@@ -263,8 +264,6 @@ public class DisplayTest {
                 generateMockSetting(1),
                 FRAME_TIMER_POLLING_INTERVAL_ID,
                 generateMockSetting(-1),
-                FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID,
-                generateMockSetting(3),
                 SHADER_FILENAME_PREFIX_ID,
                 generateMockSetting(SHADER_FILENAME_PREFIX),
                 MESH_VERTICES_ID,
@@ -344,7 +343,8 @@ public class DisplayTest {
         StaticProviderFactory = ioModule.provide(STATIC_PROVIDER_FACTORY);
         var wholeScreenProvider = staticProvider(WHOLE_SCREEN);
         topLevelComponent = componentFactory.make(randomUUID(), 0, setOf(), false, 0,
-                staticProvider(floatBoxOf(0f, 0f)), wholeScreenProvider, null, null, null, mapOf());
+                staticProvider(floatBoxOf(0f, 0f)), wholeScreenProvider, wholeScreenProvider, null,
+                null, null, mapOf());
         frameExecutor.setTopLevelComponent(topLevelComponent);
 
         coreLoop.startup(() -> {

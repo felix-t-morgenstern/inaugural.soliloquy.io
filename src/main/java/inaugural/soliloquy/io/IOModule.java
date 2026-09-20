@@ -149,11 +149,8 @@ public class IOModule extends AbstractModule {
         var frameTimer = andRegister(new FrameTimerImpl(globalClock, frameRateReporter));
         var frameTimerPollingInterval =
                 (int) getSetting.apply(FRAME_TIMER_POLLING_INTERVAL_ID).getValue();
-        var semaphorePermissions =
-                (int) getSetting.apply(FRAME_EXECUTOR_SEMAPHORE_PERMISSIONS_ID).getValue();
         var frameExecutor = andRegister(
-                new FrameExecutorImpl(componentRenderer, semaphorePermissions,
-                        frameTimer::registerFrameExecution));
+                new FrameExecutorImpl(componentRenderer, frameTimer::registerFrameExecution));
 
         var shaderFactory = new ShaderFactoryImpl();
         var shaderFilenamePrefix = (String) getSetting.apply(SHADER_FILENAME_PREFIX_ID).getValue();
@@ -363,7 +360,8 @@ public class IOModule extends AbstractModule {
                 keyEventHandler::removeComponent,
                 mouseCapturing::putRenderable,
                 mouseCapturing::removeRenderable,
-                methods.BICONSUMERS::get
+                methods.BICONSUMERS::get,
+                r -> frameExecutor.registerFrameBlockingEvent(r)
         ));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));

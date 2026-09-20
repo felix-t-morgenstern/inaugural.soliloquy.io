@@ -59,11 +59,13 @@ public class ComponentHandlerTests {
     private final Function<String, Consumer> MOCK_GET_CONSUMER = MOCK_CONSUMERS_AND_LOOKUP.lookup;
 
     private final String DIMENS_WRITTEN = randomString();
+    private final String UNADJ_DIMENS_WRITTEN = randomString();
     private final String BOUNDARIES_WRITTEN = randomString();
     private final String DATA_WRITTEN = randomString();
     private final String CONTENT_WRITTEN = randomString();
 
     @Mock private ProviderAtTime<FloatBox> mockDimensProvider;
+    @Mock private ProviderAtTime<FloatBox> mockUnadjDimensProvider;
     @Mock private ProviderAtTime<FloatBox> mockRenderingBoundariesProvider;
     @SuppressWarnings("rawtypes") @Mock private TypeHandler<ProviderAtTime> mockProviderHandler;
     @Mock private Renderable mockContent;
@@ -84,6 +86,7 @@ public class ComponentHandlerTests {
         hydrateMockHandler(
                 mockProviderHandler,
                 pairOf(mockDimensProvider, DIMENS_WRITTEN),
+                pairOf(mockUnadjDimensProvider, UNADJ_DIMENS_WRITTEN),
                 pairOf(mockRenderingBoundariesProvider, BOUNDARIES_WRITTEN)
         );
         hydrateMockHandler(
@@ -99,13 +102,9 @@ public class ComponentHandlerTests {
                 .thenReturn((TypeHandler) mockContentHandler);
 
         writtenValue = String.format(
-                "{\"uuid\":\"%s\",\"bindings\":[{\"keys\":[%s],\"onPress\":\"%s\"," +
-                        "\"onRelease\":\"%s\"}],\"overrides\":%s,\"priority\":%d," +
-                        "\"dimens\":\"%s\",\"boundaries\":\"%s\",\"content\":[{\"type\":\"%s\"," +
-                        "\"content\":\"%s\"}],\"prerenderHook\":\"%s\",\"addHook\":\"%s\"," +
-                        "\"data\":\"%s\",\"z\":%d}",
+                "{\"uuid\":\"%s\",\"bindings\":[{\"keys\":[%s],\"onPress\":\"%s\",\"onRelease\":\"%s\"}],\"overrides\":%s,\"priority\":%d,\"dimens\":\"%s\",\"unadjDimens\":\"%s\",\"boundaries\":\"%s\",\"content\":[{\"type\":\"%s\",\"content\":\"%s\"}],\"prerenderHook\":\"%s\",\"addHook\":\"%s\",\"data\":\"%s\",\"z\":%d}",
                 UUID, KEY, ON_KEY_PRESS_ID, ON_KEY_RELEASE_ID, OVERRIDES, KEY_PRIORITY,
-                DIMENS_WRITTEN, BOUNDARIES_WRITTEN, mockContent.getClass().getCanonicalName(),
+                DIMENS_WRITTEN, UNADJ_DIMENS_WRITTEN, BOUNDARIES_WRITTEN, mockContent.getClass().getCanonicalName(),
                 CONTENT_WRITTEN, PRERENDER_HOOK_ID, ADD_HOOK_ID, DATA_WRITTEN, Z
         );
 
@@ -145,7 +144,8 @@ public class ComponentHandlerTests {
         when(mockComponent.blocksLowerKeyBindings()).thenReturn(OVERRIDES);
         when(mockComponent.getRenderingBoundariesProvider()).thenReturn(
                 mockRenderingBoundariesProvider);
-        when(mockComponent.getDimensionsProvider()).thenReturn(mockDimensProvider);
+        when(mockComponent.dimensionsProvider()).thenReturn(mockDimensProvider);
+        when(mockComponent.unadjustedDimensionsProvider()).thenReturn(mockUnadjDimensProvider);
         when(mockComponent.prerenderHookId()).thenReturn(PRERENDER_HOOK_ID);
         when(mockComponent.addHookId()).thenReturn(ADD_HOOK_ID);
         when(mockComponent.data()).thenReturn(mockData);
@@ -162,7 +162,8 @@ public class ComponentHandlerTests {
         verify(mockPersistenceHandler, once()).getTypeHandler(
                 mockContent.getClass().getCanonicalName());
         verify(mockContentHandler, once()).write(mockContent);
-        verify(mockComponent, once()).getDimensionsProvider();
+        verify(mockComponent, once()).dimensionsProvider();
+        verify(mockComponent, once()).unadjustedDimensionsProvider();
         verify(mockComponent, once()).getRenderingBoundariesProvider();
         verify(mockProviderHandler, once()).write(mockDimensProvider);
         verify(mockComponent, once()).addHookId();
@@ -179,7 +180,7 @@ public class ComponentHandlerTests {
 
     @Test
     public void testRead() {
-        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), anyInt(), any(), any(),
+        when(mockFactory.make(any(), anyInt(), any(), anyBoolean(), anyInt(), any(), any(), any(),
                 any(), any(), any(), any())).thenReturn(mockComponent);
 
         var output = handler.read(writtenValue);
@@ -195,6 +196,7 @@ public class ComponentHandlerTests {
                 eq(OVERRIDES),
                 eq(KEY_PRIORITY),
                 same(mockDimensProvider),
+                same(mockUnadjDimensProvider),
                 same(mockRenderingBoundariesProvider),
                 eq(PRERENDER_HOOK_ID),
                 eq(ADD_HOOK_ID),
@@ -202,6 +204,7 @@ public class ComponentHandlerTests {
                 same(mockData)
         );
         verify(mockProviderHandler, once()).read(DIMENS_WRITTEN);
+        verify(mockProviderHandler, once()).read(UNADJ_DIMENS_WRITTEN);
         verify(mockPersistenceHandler, once()).getTypeHandler(
                 mockContent.getClass().getCanonicalName());
         verify(mockContentHandler, once()).read(CONTENT_WRITTEN);
