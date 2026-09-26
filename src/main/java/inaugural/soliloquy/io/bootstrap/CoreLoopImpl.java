@@ -189,6 +189,8 @@ public class CoreLoopImpl implements CoreLoop {
         glDepthMask(false);
         glEnable(GL_TEXTURE_2D);
 
+        glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
+
         glOrtho(0d, 1d, 1d, 0d, 0d, 1d);
     }
 
