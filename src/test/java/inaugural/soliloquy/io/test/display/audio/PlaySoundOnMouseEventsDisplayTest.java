@@ -8,6 +8,8 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFactory;
 
 import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
+import static inaugural.soliloquy.io.test.display.DisplayTestMethods.DisplayTestMethods_playMousePressSound;
+import static inaugural.soliloquy.io.test.display.DisplayTestMethods.DisplayTestMethods_playMouseReleaseSound;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomColor;
 import static inaugural.soliloquy.tools.random.Random.randomInt;
@@ -56,8 +58,8 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                         pairOf(
                                 LEFT_MOUSE_BUTTON,
                                 consumer(
-                                        "playMousePressSound",
-                                        DisplayTestMethods::playMousePressSound
+                                        DisplayTestMethods_playMousePressSound,
+                                        DisplayTestMethods::DisplayTestMethods_playMousePressSound
                                 )
                         )
                 ),
@@ -65,11 +67,12 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                         pairOf(
                                 LEFT_MOUSE_BUTTON,
                                 consumer(
-                                        "playMouseReleaseSound",
-                                        DisplayTestMethods::playMouseReleaseSound
+                                        DisplayTestMethods_playMouseReleaseSound,
+                                        DisplayTestMethods::DisplayTestMethods_playMouseReleaseSound
                                 )
                         )
                 ),
+                null,
                 null,
                 null,
                 rectDimensProvider,
@@ -77,7 +80,7 @@ public class PlaySoundOnMouseEventsDisplayTest extends DisplayTest {
                 randomUUID(),
                 topLevelComponent
         );
-        rectRenderable.setCapturesMouseEvents(true);
+        rectRenderable.setCapturesMouseButtonEvents(true);
         topLevelComponent.add(rectRenderable);
     }
 }

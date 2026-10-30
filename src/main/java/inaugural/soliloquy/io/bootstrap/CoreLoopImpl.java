@@ -60,10 +60,10 @@ public class CoreLoopImpl implements CoreLoop {
     private final KeyEventListener KEY_EVENT_LISTENER;
     private final Consumer<Long> UPDATE_MOUSE_CURSOR;
     private final Consumer<Vertex> UPDATE_MOST_RECENT_MOUSE_LOC;
-    private final TriConsumer<Vertex, Map<Integer, Boolean>, Long>
-            DETERMINE_MOUSE_EVENTS_AND_ACT;
+    private final Consumer<FrameMouseState> DETERMINE_MOUSE_EVENTS_AND_ACT;
 
     private final Map<Integer, Boolean> MOUSE_BUTTON_STATES;
+    private float mouseWheelOffset;
 
     private long window = Long.MIN_VALUE;
     private String titlebar;
@@ -94,7 +94,7 @@ public class CoreLoopImpl implements CoreLoop {
             KeyEventListener keyEventListener,
             Consumer<Long> updateMouseCursor,
             Consumer<Vertex> updateMostRecentMouseLoc,
-            TriConsumer<Vertex, Map<Integer, Boolean>, Long> determineMouseEventsAndAct) {
+            Consumer<FrameMouseState> determineMouseEventsAndAct) {
         this.titlebar = Check.ifNullOrEmpty(titlebar, "titlebar");
         FRAME_TIMER = Check.ifNull(frameTimer, "frameTimer");
         FRAME_TIMER_POLLING_INTERVAL =
@@ -189,8 +189,6 @@ public class CoreLoopImpl implements CoreLoop {
         glDepthMask(false);
         glEnable(GL_TEXTURE_2D);
 
-        glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
-
         glOrtho(0d, 1d, 1d, 0d, 0d, 1d);
     }
 
@@ -222,14 +220,19 @@ public class CoreLoopImpl implements CoreLoop {
         KEY_EVENT_LISTENER.reportKeyEvents(frameTimestamp);
 
         readMouseButtonStates();
+
         UPDATE_MOST_RECENT_MOUSE_LOC.accept(screenMouseLocation);
         if (screenMouseLocation != null) {
-            DETERMINE_MOUSE_EVENTS_AND_ACT.accept(
+            DETERMINE_MOUSE_EVENTS_AND_ACT.accept(new FrameMouseState(
                     screenMouseLocation,
                     MOUSE_BUTTON_STATES,
+                    mouseWheelOffset,
                     frameTimestamp
-            );
+            ));
         }
+
+        // Reset the wheel movement for the next frame
+        mouseWheelOffset = 0f;
 
         glfwSwapBuffers(window);
     }
@@ -271,6 +274,13 @@ public class CoreLoopImpl implements CoreLoop {
 
             screenMouseLocation = vertexOf(x, y);
         });
+
+        glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
+        glfwSetScrollCallback(window, this::mouseWheelCallback);
+    }
+
+    private void mouseWheelCallback(long window, double xOffset, double yOffset) {
+        mouseWheelOffset = (float) yOffset;
     }
 
     private void readMouseButtonStates() {
@@ -312,5 +322,24 @@ public class CoreLoopImpl implements CoreLoop {
         FRAME_TIMER.stop();
 
         glfwTerminate();
+    }
+
+    public static class FrameMouseState {
+        public Vertex loc;
+        public Map<Integer, Boolean> buttonPressStates;
+        public float wheelOffset;
+        public long timestamp;
+
+        public FrameMouseState(
+                Vertex loc,
+                Map<Integer, Boolean> buttonPressStates,
+                float wheelOffset,
+                long timestamp
+        ) {
+            this.loc = loc;
+            this.buttonPressStates = buttonPressStates;
+            this.wheelOffset = wheelOffset;
+            this.timestamp = timestamp;
+        }
     }
 }

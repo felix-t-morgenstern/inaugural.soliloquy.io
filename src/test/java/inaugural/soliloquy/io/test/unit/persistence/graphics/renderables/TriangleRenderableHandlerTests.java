@@ -67,14 +67,16 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
                         "\"texId\":\"%s\",\"texWidth\":\"%s\",\"texXOffset\":\"%s\"," +
                         "\"texHeight\":\"%s\",\"texYOffset\":\"%s\",\"onPress\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
-                        "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
+                        "\"actionId\":\"%s\"}],\"onScroll\":\"%s\",\"mouseOver\":\"%s\"," +
+                        "\"mouseLeave\":\"%s\",\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"," +
+                        "\"capturesButton\":%s,\"capturesWheel\":%s}",
                 VERTEX_1_WRITTEN, VERTEX_1_COLOR_WRITTEN, VERTEX_2_WRITTEN, VERTEX_2_COLOR_WRITTEN,
                 VERTEX_3_WRITTEN, VERTEX_3_COLOR_WRITTEN, TEXTURE_ID_WRITTEN,
                 TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_X_OFFSET_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN,
                 TEXTURE_Y_OFFSET_WRITTEN, ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON,
-                ON_RELEASE_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z,
-                UUID, mockRenderable.getClass().getCanonicalName()
+                ON_RELEASE_CONSUMER_ID, ON_WHEEL_SCROLL_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID,
+                ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID, mockRenderable.getClass().getCanonicalName(),
+                CAPTURES_MOUSE_BUTTON_EVENTS, CAPTURES_MOUSE_WHEEL_EVENTS
         );
 
         handler =
@@ -145,6 +147,7 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
                 any(),
                 any(),
                 any(),
+                any(),
                 anyInt(),
                 any(),
                 any()
@@ -153,7 +156,7 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyRead();
+        verifyRead(mockRenderable);
         verify(mockProviderHandler, once()).read(VERTEX_1_WRITTEN);
         verify(mockProviderHandler, once()).read(VERTEX_1_COLOR_WRITTEN);
         verify(mockProviderHandler, once()).read(VERTEX_2_WRITTEN);
@@ -174,6 +177,7 @@ public class TriangleRenderableHandlerTests extends AbstractPolygonRenderableHan
                 same(mockTextureYOffsetProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
+                same(MOCK_ON_WHEEL_SCROLL_CONSUMER),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),
                 same(MOCK_ON_MOUSE_LEAVE_CONSUMER),
                 eq(Z),

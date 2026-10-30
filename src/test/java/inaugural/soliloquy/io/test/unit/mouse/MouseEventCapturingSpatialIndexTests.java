@@ -11,6 +11,7 @@ import soliloquy.specs.io.graphics.renderables.Component;
 import soliloquy.specs.io.graphics.renderables.ImageAssetRenderable;
 import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
+import static inaugural.soliloquy.tools.collections.Collections.listOf;
 import static inaugural.soliloquy.tools.random.Random.*;
 import static inaugural.soliloquy.tools.testing.Assertions.once;
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,10 +76,10 @@ public class MouseEventCapturingSpatialIndexTests {
         lenient().when(mockRenderable2.getZ()).thenReturn(Z_LOWER);
         lenient().when(mockRenderable3.getZ()).thenReturn(Z_HIGHER);
         lenient().when(mockRenderable4.getZ()).thenReturn(Z_LOWER);
-        lenient().when(mockRenderable1.getCapturesMouseEvents()).thenReturn(true);
-        lenient().when(mockRenderable2.getCapturesMouseEvents()).thenReturn(true);
-        lenient().when(mockRenderable3.getCapturesMouseEvents()).thenReturn(true);
-        lenient().when(mockRenderable4.getCapturesMouseEvents()).thenReturn(true);
+        lenient().when(mockRenderable1.getCapturesMouseButtonEvents()).thenReturn(true);
+        lenient().when(mockRenderable2.getCapturesMouseButtonEvents()).thenReturn(true);
+        lenient().when(mockRenderable3.getCapturesMouseButtonEvents()).thenReturn(true);
+        lenient().when(mockRenderable4.getCapturesMouseButtonEvents()).thenReturn(true);
         lenient().when(mockRenderable1.capturesMouseEventAtPoint(any(), anyLong()))
                 .thenReturn(true);
         lenient().when(mockRenderable2.capturesMouseEventAtPoint(any(), anyLong()))
@@ -97,18 +98,16 @@ public class MouseEventCapturingSpatialIndexTests {
 
     @Test
     public void testPutRenderableAndGetCapturingRenderable() {
-        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
+        assertEquals(listOf(), capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.putRenderable(mockRenderable1);
 
-        assertSame(mockRenderable1,
+        assertEquals(listOf(mockRenderable1),
                 capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
-        assertNull(capturing
-                .getCapturingRenderable(vertexOf(0.09999f, 0.09999f), 0L));
-        assertSame(mockRenderable1,
+        assertEquals(listOf(), capturing.getCapturingRenderable(vertexOf(0.09999f, 0.09999f), 0L));
+        assertEquals(listOf(mockRenderable1),
                 capturing.getCapturingRenderable(vertexOf(.5f, .5f), 0L));
-        assertNull(capturing
-                .getCapturingRenderable(vertexOf(0.50001f, 0.50001f), 0L));
+        assertEquals(listOf(), capturing.getCapturingRenderable(vertexOf(0.50001f, 0.50001f), 0L));
     }
 
     @Test
@@ -129,26 +128,26 @@ public class MouseEventCapturingSpatialIndexTests {
 
     @Test
     public void testRemoveRenderable() {
-        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
+        assertEquals(listOf(), capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.putRenderable(mockRenderable1);
 
-        assertSame(mockRenderable1,
+        assertEquals(listOf(mockRenderable1),
                 capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
 
         capturing.removeRenderable(mockRenderable1);
 
-        assertNull(capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
+        assertEquals(listOf(), capturing.getCapturingRenderable(vertexOf(.1f, .1f), 0L));
     }
 
     @Test
-    public void testGetCapturingRenderableWithHighestZIndex() {
+    public void testGetCapturingRenderableInZIndexOrder() {
         capturing.putRenderable(mockRenderable1);
         capturing.putRenderable(mockRenderable2);
         capturing.putRenderable(mockRenderable3);
         capturing.putRenderable(mockRenderable4);
 
-        assertSame(mockRenderable1,
+        assertEquals(listOf(mockRenderable1, mockRenderable2, mockRenderable3, mockRenderable4),
                 capturing.getCapturingRenderable(vertexOf(.45f, .45f), 0L));
     }
 
@@ -162,8 +161,10 @@ public class MouseEventCapturingSpatialIndexTests {
         capturing.putRenderable(mockRenderable3);
         capturing.putRenderable(mockRenderable4);
 
-        assertSame(mockRenderable3, capturing
-                .getCapturingRenderable(vertexOf(.454f, .456f), 789L));
+        assertEquals(
+                listOf(mockRenderable3, mockRenderable4),
+                capturing.getCapturingRenderable(vertexOf(.454f, .456f), 789L)
+        );
         verify(mockRenderable1, once()).capturesMouseEventAtPoint(any(), anyLong());
         verify(mockRenderable1, once()).capturesMouseEventAtPoint(
                 eq(vertexOf(0.454f, 0.456f)), eq(789L));

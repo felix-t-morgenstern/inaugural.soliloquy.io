@@ -42,6 +42,7 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
 
     @Mock private ProviderAtTime<Float> mockBorderThicknessProvider;
     @Mock private ProviderAtTime<Color> mockBorderColorProvider;
+    @Mock private Consumer<EventInputs> mockOnWheelScroll;
     @Mock private Consumer<EventInputs> mockOnMouseOver;
     @Mock private Consumer<EventInputs> mockOnMouseLeave;
     @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
@@ -53,15 +54,18 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
 
     @BeforeEach
     public void setUp() {
-        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries, mockTimestampValidator);
+        factory = new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries,
+                mockTimestampValidator);
     }
 
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null, mockTimestampValidator));
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(null,
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
-                () -> new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries, null));
+                () -> new GlobalLoopingAnimationRenderableFactoryImpl(mockRenderingBoundaries,
+                        null));
     }
 
     @Test
@@ -69,10 +73,9 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
         var globalLoopingAnimationRenderableSupportingMouseEvents =
                 factory.make(
                         GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS,
-                        mockBorderThicknessProvider,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
-                        mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
-                        mockContainingComponent
+                        mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
+                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent
                 );
 
         var globalLoopingAnimationRenderableNotSupportingMouseEvents =
@@ -93,37 +96,40 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class, () -> factory
-                .make(null, mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
-                        mockRenderingAreaProvider,
-                        Z, UUID, mockContainingComponent));
+                .make(null, mockBorderThicknessProvider, mockBorderColorProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, null,
-                        mockBorderColorProvider,
-                        ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent));
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                        null, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                        null, ON_PRESS_CONSUMERS, null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
-                        mockRenderingAreaProvider, Z, UUID, mockContainingComponent));
-        assertThrows(IllegalArgumentException.class, () -> factory
-                .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
-                        mockOnMouseLeave, null, mockRenderingAreaProvider, Z, UUID,
+                        null, ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
-                        mockOnMouseLeave, COLOR_SHIFTS, null, Z, UUID, mockContainingComponent));
+                        null, ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
+                        mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOver,
-                        mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider, Z, null,
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, null, mockRenderingAreaProvider, Z, UUID,
                         mockContainingComponent));
+        assertThrows(IllegalArgumentException.class, () -> factory
+                .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, null, Z, UUID,
+                        mockContainingComponent));
+        assertThrows(IllegalArgumentException.class, () -> factory
+                .make(GLOBAL_LOOPING_ANIMATION_SUPPORTING_MOUSE_EVENTS, mockBorderThicknessProvider,
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z, null, mockContainingComponent));
 
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(null, mockBorderThicknessProvider, mockBorderColorProvider, COLOR_SHIFTS,
@@ -134,11 +140,13 @@ public class GlobalLoopingAnimationRenderableFactoryImplTests {
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        mockBorderThicknessProvider, null, COLOR_SHIFTS, mockRenderingAreaProvider, Z,
+                        mockBorderThicknessProvider, null, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z,
                         UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,
-                        mockBorderThicknessProvider, null, COLOR_SHIFTS, mockRenderingAreaProvider, Z,
+                        mockBorderThicknessProvider, null, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z,
                         UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class, () -> factory
                 .make(GLOBAL_LOOPING_ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS,

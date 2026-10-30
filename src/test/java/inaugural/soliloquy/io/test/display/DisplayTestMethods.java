@@ -10,12 +10,22 @@ import static inaugural.soliloquy.io.test.display.DisplayTest.*;
 public class DisplayTestMethods {
     static BiConsumer<String, ProviderAtTime<Float>> PlaySound;
 
-    public static void playMousePressSound(@SuppressWarnings("unused") EventInputs e) {
+    public final static String DisplayTestMethods_playMousePressSound = "DisplayTestMethods_playMousePressSound";
+
+    public static void DisplayTestMethods_playMousePressSound(@SuppressWarnings("unused") EventInputs e) {
         PlaySound.accept(PRESS_SOUND_ID, staticProvider(1f));
     }
 
-    public static void playMouseReleaseSound(@SuppressWarnings("unused") EventInputs e) {
+    public final static String DisplayTestMethods_playMouseReleaseSound = "DisplayTestMethods_playMouseReleaseSound";
+
+    public static void DisplayTestMethods_playMouseReleaseSound(@SuppressWarnings("unused") EventInputs e) {
         PlaySound.accept(RELEASE_SOUND_ID, staticProvider(1f));
+    }
+
+    public final static String DisplayTestMethods_printWheelOffset = "DisplayTestMethods_printWheelOffset";
+
+    public static void printWheelOffset(EventInputs e) {
+        System.out.println("Scroll wheel offset = " + e.scrollWheelOffset);
     }
 
     public static void printKeyPressed(EventInputs e) {

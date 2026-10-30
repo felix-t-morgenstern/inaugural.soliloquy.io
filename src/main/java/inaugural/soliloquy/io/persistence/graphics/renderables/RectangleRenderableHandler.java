@@ -9,7 +9,8 @@ import soliloquy.specs.io.graphics.renderables.factories.RectangleRenderableFact
 import java.util.UUID;
 import java.util.function.Function;
 
-public class RectangleRenderableHandler extends AbstractPolygonRenderableHandler<RectangleRenderable> {
+public class RectangleRenderableHandler
+        extends AbstractPolygonRenderableHandler<RectangleRenderable> {
     private final RectangleRenderableFactory FACTORY;
 
     public RectangleRenderableHandler(
@@ -36,7 +37,7 @@ public class RectangleRenderableHandler extends AbstractPolygonRenderableHandler
 
         var area = PROVIDER_HANDLER.read(dto.area);
 
-        return FACTORY.make(
+        var renderable = FACTORY.make(
                 topLeftColor,
                 topRightColor,
                 bottomLeftColor,
@@ -48,6 +49,7 @@ public class RectangleRenderableHandler extends AbstractPolygonRenderableHandler
                 readProps.texYOffset,
                 readProps.onPress,
                 readProps.onRelease,
+                readProps.onScroll,
                 readProps.onMouseOver,
                 readProps.onMouseLeave,
                 area,
@@ -55,6 +57,10 @@ public class RectangleRenderableHandler extends AbstractPolygonRenderableHandler
                 UUID.fromString(dto.uuid),
                 null
         );
+
+        setCapturing(renderable, readProps);
+
+        return renderable;
     }
 
     @Override

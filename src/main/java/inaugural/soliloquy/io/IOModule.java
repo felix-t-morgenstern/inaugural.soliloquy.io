@@ -361,7 +361,7 @@ public class IOModule extends AbstractModule {
                 mouseCapturing::putRenderable,
                 mouseCapturing::removeRenderable,
                 methods.BICONSUMERS::get,
-                r -> frameExecutor.registerFrameBlockingEvent(r)
+                frameExecutor::registerFrameBlockingEvent
         ));
         var finiteAnimationRenderableFactory = andRegister(
                 new FiniteAnimationRenderableFactoryImpl(renderingBoundaries, timestampValidator));

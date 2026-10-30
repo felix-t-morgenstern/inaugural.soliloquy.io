@@ -70,8 +70,8 @@ public abstract class AbstractPolygonRenderableHandlerTests
         verify(mockProviderHandler, once()).write(mockTextureYOffsetProvider);
     }
 
-    protected void verifyRead() {
-        super.verifyRead();
+    protected void verifyRead(PolygonRenderable mockRenderable) {
+        super.verifyRead(mockRenderable);
 
         verify(mockProviderHandler, once()).read(TEXTURE_ID_WRITTEN);
         verify(mockProviderHandler, once()).read(TEXTURE_TILE_WIDTH_WRITTEN);

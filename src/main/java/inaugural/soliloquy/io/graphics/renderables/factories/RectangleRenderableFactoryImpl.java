@@ -38,6 +38,7 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
                                     ProviderAtTime<Float> textureYOffsetProvider,
                                     Map<Integer, Consumer<EventInputs>> onPress,
                                     Map<Integer, Consumer<EventInputs>> onRelease,
+                                    Consumer<EventInputs> onWheelScroll,
                                     Consumer<EventInputs> onMouseOver,
                                     Consumer<EventInputs> onMouseLeave,
                                     ProviderAtTime<FloatBox> renderingAreaProvider,
@@ -48,8 +49,8 @@ public class RectangleRenderableFactoryImpl implements RectangleRenderableFactor
         return new RectangleRenderableImpl(topLeftColorProvider, topRightColorProvider,
                 bottomRightColorProvider, bottomLeftColorProvider, textureIdProvider,
                 textureTilesPerWidthProvider, textureXOffsetProvider, textureTilesPerHeightProvider,
-                textureYOffsetProvider, onPress, onRelease, onMouseOver, onMouseLeave,
-                renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES,
+                textureYOffsetProvider, onPress, onRelease, onWheelScroll, onMouseOver,
+                onMouseLeave, renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES,
                 TIMESTAMP_VALIDATOR);
     }
 }

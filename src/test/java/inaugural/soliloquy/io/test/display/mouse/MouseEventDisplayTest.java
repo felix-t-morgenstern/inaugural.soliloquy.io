@@ -27,19 +27,22 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
-    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
-    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
     private static final String ON_MOUSE_PRESS_CONSUMER_ID = "onMousePress";
     private static final String ON_MOUSE_RELEASE_CONSUMER_ID = "onMouseRelease";
+    private static final String ON_WHEEL_SCROLL_CONSUMER_ID = "onWheelScroll";
+    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
+    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
 
-    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
-            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
-    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
-            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
     private final static Consumer<EventInputs> ON_MOUSE_PRESS_CONSUMER =
             consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS"));
     private final static Consumer<EventInputs> ON_MOUSE_RELEASE_CONSUMER =
             consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"));
+    private final static Consumer<EventInputs> ON_WHEEL_SCROLL_CONSUMER =
+            consumer(ON_WHEEL_SCROLL_CONSUMER_ID, e -> System.out.println("WHEEL SCROLL OFFSET = " + e.scrollWheelOffset));
+    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
+            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
+    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
+            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
 
     public static void main(String[] args) {
         var displayTest = new DisplayTest(
@@ -95,12 +98,13 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 rectDimensProvider,
                 0,
                 randomUUID(),
                 topLevelComponent
         );
-        rectRenderer.setCapturesMouseEvents(true);
+        rectRenderer.setCapturesMouseButtonEvents(true);
         topLevelComponent.add(rectRenderer);
 
         @SuppressWarnings("rawtypes") BiFunction<UUID, Object, ProviderAtTime>
@@ -123,6 +127,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                         LEFT_MOUSE_BUTTON,
                         ON_MOUSE_RELEASE_CONSUMER
                 ),
+                ON_WHEEL_SCROLL_CONSUMER,
                 ON_MOUSE_OVER_CONSUMER,
                 ON_MOUSE_LEAVE_CONSUMER,
                 listOf(),
@@ -131,7 +136,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                 randomUUID(),
                 topLevelComponent
         );
-        spriteRenderable.setCapturesMouseEvents(true);
+        spriteRenderable.setCapturesMouseButtonEvents(true);
 
         topLevelComponent.add(spriteRenderable);
         var vector1 = staticProvider(vertexOf(0.05f, 0.05f));
@@ -158,6 +163,7 @@ public class MouseEventDisplayTest extends SpriteSimpleDisplayTest {
                         LEFT_MOUSE_BUTTON,
                         ON_MOUSE_RELEASE_CONSUMER
                 ),
+                ON_WHEEL_SCROLL_CONSUMER,
                 ON_MOUSE_OVER_CONSUMER,
                 ON_MOUSE_LEAVE_CONSUMER,
                 randomInt(),

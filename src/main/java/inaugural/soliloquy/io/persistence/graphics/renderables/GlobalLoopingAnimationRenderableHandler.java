@@ -37,12 +37,13 @@ public class GlobalLoopingAnimationRenderableHandler extends
         var readProps = new ReadProps<GlobalLoopingAnimation>();
         hydrateReadProps(readProps, dto);
 
-        return FACTORY.make(
+        var renderable = FACTORY.make(
                 readProps.asset,
                 readProps.borderThickness,
                 readProps.borderColor,
                 readProps.onPress,
                 readProps.onRelease,
+                readProps.onScroll,
                 readProps.onMouseOver,
                 readProps.onMouseLeave,
                 readProps.shifts,
@@ -51,6 +52,10 @@ public class GlobalLoopingAnimationRenderableHandler extends
                 UUID.fromString(dto.uuid),
                 null
         );
+
+        setCapturing(renderable, readProps);
+
+        return renderable;
     }
 
     @Override

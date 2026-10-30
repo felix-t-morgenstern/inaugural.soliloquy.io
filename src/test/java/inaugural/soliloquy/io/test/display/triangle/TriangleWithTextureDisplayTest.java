@@ -61,6 +61,7 @@ public class TriangleWithTextureDisplayTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 randomInt(),
                 randomUUID(),
                 topLevelComponent

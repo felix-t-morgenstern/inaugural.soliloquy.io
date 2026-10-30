@@ -51,6 +51,7 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           ProviderAtTime<Color> borderColorProvider,
                                           Map<Integer, Consumer<EventInputs>> onPress,
                                           Map<Integer, Consumer<EventInputs>> onRelease,
+                                          Consumer<EventInputs> onWheelScroll,
                                           Consumer<EventInputs> onMouseOver,
                                           Consumer<EventInputs> onMouseLeave,
                                           List<ColorShift> colorShifts,
@@ -61,8 +62,8 @@ public class FiniteAnimationRenderableFactoryImpl implements FiniteAnimationRend
                                           Long pausedTimestamp)
             throws IllegalArgumentException {
         return new FiniteAnimationRenderableImpl(animation, borderThicknessProvider,
-                borderColorProvider, onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
-                renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES, startTimestamp,
-                pausedTimestamp, TIMESTAMP_VALIDATOR);
+                borderColorProvider, onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave,
+                colorShifts, renderingAreaProvider, z, uuid, component, RENDERING_BOUNDARIES,
+                startTimestamp, pausedTimestamp, TIMESTAMP_VALIDATOR);
     }
 }

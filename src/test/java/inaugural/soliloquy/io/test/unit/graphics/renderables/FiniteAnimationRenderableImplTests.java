@@ -58,6 +58,7 @@ public class FiniteAnimationRenderableImplTests {
     private final Long MOST_RECENT_TIMESTAMP = -123L;
 
     private final Vertex MOUSE_LOC = randomVertex();
+    private final float WHEEL_OFFSET = randomFloat();
     private final long TIMESTAMP = randomLongWithInclusiveFloor(MOST_RECENT_TIMESTAMP);
 
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -69,9 +70,10 @@ public class FiniteAnimationRenderableImplTests {
     @Mock private ProviderAtTime<FloatBox> mockRenderingAreaProvider;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private Consumer<EventInputs> mockOnPressAction;
-    @Mock private Consumer<EventInputs> mockOnMouseOverAction;
-    @Mock private Consumer<EventInputs> mockOnMouseLeaveAction;
+    @Mock private Consumer<EventInputs> mockOnPress;
+    @Mock private Consumer<EventInputs> mockOnWheelScroll;
+    @Mock private Consumer<EventInputs> mockOnMouseOver;
+    @Mock private Consumer<EventInputs> mockOnMouseLeave;
 
     private FiniteAnimationRenderable renderable;
 
@@ -81,10 +83,10 @@ public class FiniteAnimationRenderableImplTests {
 
         renderable = new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                 mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS, null,
-                mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                 mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
                 mockRenderingBoundaries, START_TIMESTAMP, null, mockTimestampValidator);
-        renderable.setCapturesMouseEvents(true);
+        renderable.setCapturesMouseButtonEvents(true);
     }
 
     @Test
@@ -132,61 +134,55 @@ public class FiniteAnimationRenderableImplTests {
 
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(null, mockBorderThicknessProvider,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries,
-                        START_TIMESTAMP, PAUSED_TIMESTAMP_1, mockTimestampValidator));
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingComponent, mockRenderingBoundaries, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP_1, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_NOT_SUPPORTING_MOUSE_EVENTS, null,
-                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, COLOR_SHIFTS, mockRenderingAreaProvider, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries,
-                        START_TIMESTAMP, PAUSED_TIMESTAMP_1, mockTimestampValidator));
+                        mockBorderColorProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS, mockRenderingAreaProvider,
+                        Z, UUID, mockContainingComponent, mockRenderingBoundaries, START_TIMESTAMP,
+                        PAUSED_TIMESTAMP_1, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, null, ON_PRESS_CONSUMERS, null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                        mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
-                        mockRenderingBoundaries, START_TIMESTAMP,
-                        PAUSED_TIMESTAMP_1, mockTimestampValidator));
+                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, null,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, null,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
-                        mockRenderingBoundaries, START_TIMESTAMP,
-                        PAUSED_TIMESTAMP_1, mockTimestampValidator));
+                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS, null, Z, UUID,
-                        mockContainingComponent, mockRenderingBoundaries,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
+                        null, Z, UUID, mockContainingComponent, mockRenderingBoundaries,
                         START_TIMESTAMP, PAUSED_TIMESTAMP_1, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, null, mockContainingComponent,
-                        mockRenderingBoundaries, START_TIMESTAMP,
-                        PAUSED_TIMESTAMP_1, mockTimestampValidator));
+                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1,
+                        mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent, null,
                         START_TIMESTAMP, PAUSED_TIMESTAMP_1, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new FiniteAnimationRenderableImpl(ANIMATION_SUPPORTING_MOUSE_EVENTS,
                         mockBorderThicknessProvider, mockBorderColorProvider, ON_PRESS_CONSUMERS,
-                        null,
-                        mockOnMouseOverAction, mockOnMouseLeaveAction, COLOR_SHIFTS,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                         mockRenderingAreaProvider, Z, UUID, mockContainingComponent,
-                        mockRenderingBoundaries, START_TIMESTAMP,
-                        PAUSED_TIMESTAMP_1, null));
+                        mockRenderingBoundaries, START_TIMESTAMP, PAUSED_TIMESTAMP_1, null));
     }
 
     @Test
@@ -276,19 +272,19 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testGetAndSetCapturesMouseEvents() {
-        assertTrue(renderable.getCapturesMouseEvents());
+        assertTrue(renderable.getCapturesMouseButtonEvents());
 
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
-        assertFalse(renderable.getCapturesMouseEvents());
+        assertFalse(renderable.getCapturesMouseButtonEvents());
     }
 
     @Test
     public void testPressAndSetOnPress() {
-        renderable.setOnPress(2, mockOnPressAction);
+        renderable.setOnPress(2, mockOnPress);
 
         renderable.press(2, MOUSE_LOC, TIMESTAMP);
-        verify(mockOnPressAction, once()).accept(
+        verify(mockOnPress, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent))
         );
@@ -311,7 +307,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testPressAndSetOnPressWhenNotCapturingMouseEvents() {
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
         assertThrows(UnsupportedOperationException.class, () -> renderable.press(2, MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class,
@@ -360,7 +356,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testReleaseAndSetOnReleaseWhenNotCapturingMouseEvents() {
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.release(2, MOUSE_LOC, 0L));
@@ -386,6 +382,26 @@ public class FiniteAnimationRenderableImplTests {
         assertEquals(2, releaseConsumerIds.size());
         assertEquals(id1, releaseConsumerIds.get(0));
         assertEquals(id3, releaseConsumerIds.get(7));
+    }
+
+    @Test
+    public void testWheelScrollAndSetWheelScroll() {
+        renderable.wheelScroll(WHEEL_OFFSET, MOUSE_LOC, TIMESTAMP);
+
+        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
+        verify(mockOnWheelScroll, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseScrollWheelEvent(MOUSE_LOC, WHEEL_OFFSET,
+                        renderable, mockContainingComponent)));
+
+        @SuppressWarnings("unchecked")
+        Consumer<EventInputs> newOnWheelScroll = mock(Consumer.class);
+        renderable.setOnWheelScroll(newOnWheelScroll);
+
+        renderable.wheelScroll(WHEEL_OFFSET, MOUSE_LOC, TIMESTAMP + 1);
+
+        verify(newOnWheelScroll, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseScrollWheelEvent(MOUSE_LOC, WHEEL_OFFSET,
+                        renderable, mockContainingComponent)));
     }
 
     @Test
@@ -415,7 +431,7 @@ public class FiniteAnimationRenderableImplTests {
     public void testMouseOverAndSetOnMouseOver() {
         renderable.mouseOver(MOUSE_LOC, TIMESTAMP);
 
-        verify(mockOnMouseOverAction, once()).accept(
+        verify(mockOnMouseOver, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC, renderable,
                         mockContainingComponent))
         );
@@ -433,7 +449,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testMouseOverAndSetOnMouseOverWhenNotCapturingMouseEvents() {
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.mouseOver(MOUSE_LOC, 0L));
@@ -459,7 +475,7 @@ public class FiniteAnimationRenderableImplTests {
     public void testMouseLeaveAndSetOnMouseLeave() {
         renderable.mouseLeave(MOUSE_LOC, TIMESTAMP);
 
-        verify(mockOnMouseLeaveAction, once()).accept(
+        verify(mockOnMouseLeave, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC, renderable,
                         mockContainingComponent))
         );
@@ -477,7 +493,7 @@ public class FiniteAnimationRenderableImplTests {
 
     @Test
     public void testMouseLeaveAndSetOnMouseLeaveWhenNotCapturingMouseEvents() {
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> renderable.mouseLeave(MOUSE_LOC, 0L));

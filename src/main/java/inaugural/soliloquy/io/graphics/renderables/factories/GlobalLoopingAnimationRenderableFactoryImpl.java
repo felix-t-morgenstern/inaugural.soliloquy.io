@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopingAnimationRenderableFactory {
+public class GlobalLoopingAnimationRenderableFactoryImpl
+        implements GlobalLoopingAnimationRenderableFactory {
     private final RenderingBoundaries RENDERING_BOUNDARIES;
     private final TimestampValidator TIMESTAMP_VALIDATOR;
 
@@ -50,6 +51,7 @@ public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopin
                                                  ProviderAtTime<Color> borderColorProvider,
                                                  Map<Integer, Consumer<EventInputs>> onPress,
                                                  Map<Integer, Consumer<EventInputs>> onRelease,
+                                                 Consumer<EventInputs> onWheelScroll,
                                                  Consumer<EventInputs> onMouseOver,
                                                  Consumer<EventInputs> onMouseLeave,
                                                  List<ColorShift> colorShifts,
@@ -58,8 +60,8 @@ public class GlobalLoopingAnimationRenderableFactoryImpl implements GlobalLoopin
                                                  Component component)
             throws IllegalArgumentException {
         return new GlobalLoopingAnimationRenderableImpl(globalLoopingAnimation,
-                borderThicknessProvider, borderColorProvider, onPress, onRelease, onMouseOver,
-                onMouseLeave, colorShifts, renderingAreaProvider, z, uuid,
-                component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
+                borderThicknessProvider, borderColorProvider, onPress, onRelease, onWheelScroll,
+                onMouseOver, onMouseLeave, colorShifts, renderingAreaProvider, z, uuid, component,
+                RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

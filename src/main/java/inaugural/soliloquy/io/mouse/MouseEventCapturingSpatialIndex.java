@@ -7,6 +7,7 @@ import soliloquy.specs.io.graphics.renderables.Renderable;
 import soliloquy.specs.io.graphics.renderables.RenderableWithMouseEvents;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class MouseEventCapturingSpatialIndex {
     private final RTreeFacade R_TREE;
@@ -16,7 +17,7 @@ public class MouseEventCapturingSpatialIndex {
     }
 
     // TODO: Verify and use timestamp
-    public RenderableWithMouseEvents getCapturingRenderable(Vertex point, long timestamp)
+    public List<RenderableWithMouseEvents> getCapturingRenderable(Vertex point, long timestamp)
             throws IllegalArgumentException {
         var roughResults = R_TREE.search(point.X, point.Y, timestamp);
         var capturingResults = roughResults.stream()
@@ -32,7 +33,7 @@ public class MouseEventCapturingSpatialIndex {
                 capturingResults.sorted(Comparator.comparingInt(Renderable::getZ).reversed());
         var sortedByTierAndZ = sortedByZ.sorted(Comparator.comparingInt(r -> r.getContainingComponent().tier()));
 
-        return sortedByTierAndZ.findFirst().orElse(null);
+        return sortedByTierAndZ.toList();
     }
 
     public void putRenderable(RenderableWithMouseEvents renderable)

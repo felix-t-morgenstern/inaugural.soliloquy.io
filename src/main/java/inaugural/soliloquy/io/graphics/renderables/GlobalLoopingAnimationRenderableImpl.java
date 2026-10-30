@@ -42,6 +42,7 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 ProviderAtTime<Color> borderColorProvider,
                                                 Map<Integer, Consumer<EventInputs>> onPress,
                                                 Map<Integer, Consumer<EventInputs>> onRelease,
+                                                Consumer<EventInputs> onWheelScroll,
                                                 Consumer<EventInputs> onMouseOver,
                                                 Consumer<EventInputs> onMouseLeave,
                                                 List<ColorShift> colorShifts,
@@ -50,9 +51,9 @@ public class GlobalLoopingAnimationRenderableImpl
                                                 Component component,
                                                 RenderingBoundaries renderingBoundaries,
                                                 TimestampValidator timestampValidator) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component,
-                renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
+                component, renderingBoundaries, timestampValidator);
         setGlobalLoopingAnimation(globalLoopingAnimation);
     }
 
@@ -75,12 +76,13 @@ public class GlobalLoopingAnimationRenderableImpl
     public void setGlobalLoopingAnimation(GlobalLoopingAnimation globalLoopingAnimation)
             throws IllegalArgumentException {
         Check.ifNull(globalLoopingAnimation, "globalLoopingAnimation");
-        if (capturesMouseEvents && !globalLoopingAnimation.supportsMouseEvents()) {
+        if ((capturesMouseButtonEvents || capturesMouseWheelEvents) &&
+                !globalLoopingAnimation.supportsMouseEvents()) {
             throw new IllegalArgumentException(
                     "GlobalLoopingAnimationRenderableImpl.setGlobalLoopingAnimation: cannot " +
-                            "assign GlobalLoopingAnimation which does not support mouse events " +
-                            "to a setGlobalLoopingAnimationRenderable which does support mouse " +
-                            "events");
+                            "assign GlobalLoopingAnimation which does not support mouse button " +
+                            "events to a setGlobalLoopingAnimationRenderable which does support " +
+                            "mouse events");
         }
         this.globalLoopingAnimation = globalLoopingAnimation;
     }

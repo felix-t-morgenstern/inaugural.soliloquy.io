@@ -56,6 +56,7 @@ public class TriangleSimpleDisplayTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 randomInt(),
                 randomUUID(),
                 topLevelComponent

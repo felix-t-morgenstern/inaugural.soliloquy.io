@@ -28,6 +28,7 @@ public abstract class AbstractPolygonRenderable
             ProviderAtTime<Float> textureYOffsetProvider,
             Map<Integer, Consumer<EventInputs>> onPress,
             Map<Integer, Consumer<EventInputs>> onRelease,
+            Consumer<EventInputs> onWheelScroll,
             Consumer<EventInputs> onMouseOver,
             Consumer<EventInputs> onMouseLeave,
             int z,
@@ -36,8 +37,8 @@ public abstract class AbstractPolygonRenderable
             RenderingBoundaries renderingBoundaries,
             TimestampValidator timestampValidator
     ) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
-                renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, z, uuid,
+                containingComponent, renderingBoundaries, timestampValidator);
         setTextureIdProvider(textureIdProvider);
         setTextureTilesPerWidthProvider(textureTilesPerWidthProvider);
         setTextureXOffsetProvider(textureXOffsetProvider);

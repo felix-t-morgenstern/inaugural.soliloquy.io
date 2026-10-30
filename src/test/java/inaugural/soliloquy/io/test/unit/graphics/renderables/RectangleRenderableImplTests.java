@@ -40,6 +40,7 @@ public class RectangleRenderableImplTests {
             generateMockStaticProvider(null);
     private final int Z = randomInt();
     private final Vertex MOUSE_LOC = randomVertex();
+    private final float WHEEL_OFFSET = randomFloat();
     private final long TIMESTAMP = randomLong();
 
     private final UUID UUID = java.util.UUID.randomUUID();
@@ -56,9 +57,10 @@ public class RectangleRenderableImplTests {
     @Mock private Component mockContainingComponent;
     @Mock private RenderingBoundaries mockRenderingBoundaries;
     @Mock private TimestampValidator mockTimestampValidator;
-    @Mock private Consumer<EventInputs> mockOnPressAction;
-    @Mock private Consumer<EventInputs> mockOnMouseOverAction;
-    @Mock private Consumer<EventInputs> mockOnMouseLeaveAction;
+    @Mock private Consumer<EventInputs> mockOnPress;
+    @Mock private Consumer<EventInputs> mockOnWheelScroll;
+    @Mock private Consumer<EventInputs> mockOnMouseOver;
+    @Mock private Consumer<EventInputs> mockOnMouseLeave;
 
     @Mock private ProviderAtTime<Color> newColorProvider;
 
@@ -74,20 +76,20 @@ public class RectangleRenderableImplTests {
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator);
-        renderable.setCapturesMouseEvents(true);
+        renderable.setCapturesMouseButtonEvents(true);
 
         renderableNotSupportingMouseEvents =
                 new RectangleRenderableImpl(mockTopLeftColorProvider, mockTopRightColorProvider,
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator);
-        renderableNotSupportingMouseEvents.setCapturesMouseEvents(false);
+        renderableNotSupportingMouseEvents.setCapturesMouseButtonEvents(false);
     }
 
     @Test
@@ -97,40 +99,40 @@ public class RectangleRenderableImplTests {
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider, null,
                         mockBottomRightColorProvider, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
                         mockTopRightColorProvider, null, mockBottomLeftColorProvider,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
                         mockTopRightColorProvider, mockBottomRightColorProvider, null,
                         mockBackgroundTextureIdProvider, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
                         mockTopRightColorProvider, mockBottomRightColorProvider,
                         mockBottomLeftColorProvider, null, mockTextureTilesPerWidthProvider,
                         mockTextureXOffsetProvider, mockTextureTilesPerHeightProvider,
-                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnMouseOverAction,
-                        mockOnMouseLeaveAction, RENDERING_AREA_PROVIDER, Z, UUID,
+                        mockTextureYOffsetProvider, ON_PRESS_CONSUMERS, null, mockOnWheelScroll,
+                        mockOnMouseOver, mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID,
                         mockContainingComponent, mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
@@ -138,17 +140,8 @@ public class RectangleRenderableImplTests {
                         mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
                         mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
                         mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
-                        ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        null, Z, UUID, mockContainingComponent, mockRenderingBoundaries,
-                        mockTimestampValidator));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
-                        mockTopRightColorProvider, mockBottomRightColorProvider,
-                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
-                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
-                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
-                        ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
+                        ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, null, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
@@ -156,17 +149,26 @@ public class RectangleRenderableImplTests {
                         mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
                         mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
                         mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
-                        ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent, null,
-                        mockTimestampValidator));
+                        ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, null, mockContainingComponent,
+                        mockRenderingBoundaries, mockTimestampValidator));
         assertThrows(IllegalArgumentException.class,
                 () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
                         mockTopRightColorProvider, mockBottomRightColorProvider,
                         mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
                         mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
                         mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
-                        ON_PRESS_CONSUMERS, null, mockOnMouseOverAction, mockOnMouseLeaveAction,
-                        RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
+                        null, mockTimestampValidator));
+        assertThrows(IllegalArgumentException.class,
+                () -> new RectangleRenderableImpl(mockTopLeftColorProvider,
+                        mockTopRightColorProvider, mockBottomRightColorProvider,
+                        mockBottomLeftColorProvider, mockBackgroundTextureIdProvider,
+                        mockTextureTilesPerWidthProvider, mockTextureXOffsetProvider,
+                        mockTextureTilesPerHeightProvider, mockTextureYOffsetProvider,
+                        ON_PRESS_CONSUMERS, null, mockOnWheelScroll, mockOnMouseOver,
+                        mockOnMouseLeave, RENDERING_AREA_PROVIDER, Z, UUID, mockContainingComponent,
                         mockRenderingBoundaries, null));
     }
 
@@ -266,11 +268,11 @@ public class RectangleRenderableImplTests {
 
     @Test
     public void testGetAndSetCapturesMouseEvents() {
-        assertTrue(renderable.getCapturesMouseEvents());
+        assertTrue(renderable.getCapturesMouseButtonEvents());
 
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
-        assertFalse(renderable.getCapturesMouseEvents());
+        assertFalse(renderable.getCapturesMouseButtonEvents());
     }
 
     @Test
@@ -281,12 +283,12 @@ public class RectangleRenderableImplTests {
                 renderableNotSupportingMouseEvents.setOnPress(2,
                         consumer(randomString(), _ -> {})));
 
-        renderable.setOnPress(2, mockOnPressAction);
+        renderable.setOnPress(2, mockOnPress);
 
         renderable.press(2, MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnPressAction, once()).accept(
+        verify(mockOnPress, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(2, PRESS, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
@@ -388,16 +390,40 @@ public class RectangleRenderableImplTests {
     }
 
     @Test
+    public void testWheelScrollAndSetWheelScroll() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> renderableNotSupportingMouseEvents.wheelScroll(WHEEL_OFFSET, MOUSE_LOC,
+                        TIMESTAMP));
+
+        renderable.wheelScroll(WHEEL_OFFSET, MOUSE_LOC, TIMESTAMP);
+
+        verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
+        verify(mockOnWheelScroll, once()).accept(
+                eq(eventInputs(TIMESTAMP).withMouseScrollWheelEvent(MOUSE_LOC, WHEEL_OFFSET,
+                        renderable, mockContainingComponent)));
+
+        @SuppressWarnings("unchecked")
+        Consumer<EventInputs> newOnWheelScroll = mock(Consumer.class);
+        renderable.setOnWheelScroll(newOnWheelScroll);
+
+        renderable.wheelScroll(WHEEL_OFFSET, MOUSE_LOC, TIMESTAMP + 1);
+
+        verify(newOnWheelScroll, once()).accept(
+                eq(eventInputs(TIMESTAMP + 1).withMouseScrollWheelEvent(MOUSE_LOC, WHEEL_OFFSET,
+                        renderable, mockContainingComponent)));
+    }
+
+    @Test
     public void testMouseOverAndSetOnMouseOver() {
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.mouseOver(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
-                renderableNotSupportingMouseEvents.setOnMouseOver(mockOnMouseOverAction));
+                renderableNotSupportingMouseEvents.setOnMouseOver(mockOnMouseOver));
 
         renderable.mouseOver(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseOverAction, once()).accept(
+        verify(mockOnMouseOver, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_OVER, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
@@ -434,12 +460,12 @@ public class RectangleRenderableImplTests {
                 renderableNotSupportingMouseEvents.mouseLeave(MOUSE_LOC, 0L));
         assertThrows(UnsupportedOperationException.class, () ->
                 renderableNotSupportingMouseEvents.setOnMouseLeave(
-                        mockOnMouseLeaveAction));
+                        mockOnMouseLeave));
 
         renderable.mouseLeave(MOUSE_LOC, TIMESTAMP);
 
         verify(mockTimestampValidator, atLeastOnce()).validateTimestamp(TIMESTAMP);
-        verify(mockOnMouseLeaveAction, once()).accept(
+        verify(mockOnMouseLeave, once()).accept(
                 eq(eventInputs(TIMESTAMP).withMouseEvent(null, MOUSE_LEAVE, MOUSE_LOC, renderable,
                         mockContainingComponent)));
 
@@ -505,7 +531,7 @@ public class RectangleRenderableImplTests {
         assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.249f, 0.5f), TIMESTAMP));
 
-        renderable.setCapturesMouseEvents(false);
+        renderable.setCapturesMouseButtonEvents(false);
 
         assertFalse(renderable
                 .capturesMouseEventAtPoint(vertexOf(0.251f, 0.5f), TIMESTAMP));

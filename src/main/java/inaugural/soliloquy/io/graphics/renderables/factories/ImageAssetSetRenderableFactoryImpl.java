@@ -52,6 +52,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         ProviderAtTime<Color> borderColorProvider,
                                         Map<Integer, Consumer<EventInputs>> onPress,
                                         Map<Integer, Consumer<EventInputs>> onRelease,
+                                        Consumer<EventInputs> onWheelScroll,
                                         Consumer<EventInputs> onMouseOver,
                                         Consumer<EventInputs> onMouseLeave,
                                         List<ColorShift> colorShifts,
@@ -61,7 +62,7 @@ public class ImageAssetSetRenderableFactoryImpl implements ImageAssetSetRenderab
                                         Component component)
             throws IllegalArgumentException {
         return new ImageAssetSetRenderableImpl(imageAssetSet, displayParams, onPress, onRelease,
-                onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
+                onWheelScroll, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
                 borderColorProvider, renderingAreaProvider, z, uuid, component,
                 RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }

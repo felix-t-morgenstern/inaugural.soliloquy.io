@@ -47,6 +47,7 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  ProviderAtTime<Color> borderColorProvider,
                                  Map<Integer, Consumer<EventInputs>> onPress,
                                  Map<Integer, Consumer<EventInputs>> onRelease,
+                                 Consumer<EventInputs> onWheelScroll,
                                  Consumer<EventInputs> onMouseOver,
                                  Consumer<EventInputs> onMouseLeave,
                                  List<ColorShift> colorShifts,
@@ -55,7 +56,7 @@ public class SpriteRenderableFactoryImpl implements SpriteRenderableFactory {
                                  Component component)
             throws IllegalArgumentException {
         return new SpriteRenderableImpl(sprite, borderThicknessProvider, borderColorProvider,
-                onPress, onRelease, onMouseOver, onMouseLeave, colorShifts,
+                onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, colorShifts,
                 renderingDimensionsProvider, z, uuid, component, RENDERING_BOUNDARIES,
                 TIMESTAMP_VALIDATOR);
     }

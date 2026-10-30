@@ -13,8 +13,6 @@ import soliloquy.specs.ui.EventInputs;
 import java.util.Map;
 import java.util.UUID;
 
-import static inaugural.soliloquy.io.api.Constants.LEFT_MOUSE_BUTTON;
-import static inaugural.soliloquy.io.api.Constants.RIGHT_MOUSE_BUTTON;
 import static inaugural.soliloquy.tools.Tools.defaultIfNull;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.io.input.mouse.Mouse.EventType.*;
@@ -29,13 +27,16 @@ public abstract class AbstractRenderableWithMouseEvents
     private final Map<Integer, Consumer<EventInputs>> ON_PRESS;
     private final Map<Integer, Consumer<EventInputs>> ON_RELEASE;
 
-    protected boolean capturesMouseEvents;
+    protected boolean capturesMouseButtonEvents;
+    protected boolean capturesMouseWheelEvents;
 
+    private Consumer<EventInputs> onWheelScroll;
     private Consumer<EventInputs> onMouseOver;
     private Consumer<EventInputs> onMouseLeave;
 
     protected AbstractRenderableWithMouseEvents(Map<Integer, Consumer<EventInputs>> onPress,
                                                 Map<Integer, Consumer<EventInputs>> onRelease,
+                                                Consumer<EventInputs> onWheelScroll,
                                                 Consumer<EventInputs> onMouseOver,
                                                 Consumer<EventInputs> onMouseLeave,
                                                 int z,
@@ -46,6 +47,7 @@ public abstract class AbstractRenderableWithMouseEvents
         super(z, uuid, containingComponent);
         ON_PRESS = defaultIfNull(onPress, mapOf());
         ON_RELEASE = defaultIfNull(onRelease, mapOf());
+        this.onWheelScroll = onWheelScroll;
         this.onMouseOver = onMouseOver;
         this.onMouseLeave = onMouseLeave;
         TIMESTAMP_VALIDATOR = Check.ifNull(timestampValidator, "timestampValidator");
@@ -53,25 +55,43 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public boolean getCapturesMouseEvents() {
-        return capturesMouseEvents;
+    public boolean getCapturesMouseButtonEvents() {
+        return capturesMouseButtonEvents;
     }
 
     @Override
-    public void setCapturesMouseEvents(boolean capturesMouseEvents) {
+    public void setCapturesMouseButtonEvents(boolean capturesMouseButtonEvents) {
         if (!underlyingAssetSupportsMouseEvents()) {
-            throw new UnsupportedOperationException(className() + ".setCapturesMouseEvents: " +
-                    "underlying asset does not support mouse event capturing");
+            throw new UnsupportedOperationException(className() +
+                    ".setCapturesMouseButtonEvents: underlying asset does not support mouse event" +
+                    " capturing");
         }
 
-        this.capturesMouseEvents = capturesMouseEvents;
+        this.capturesMouseButtonEvents = capturesMouseButtonEvents;
+    }
+
+    @Override
+    public boolean getCapturesMouseWheelEvents() {
+        return capturesMouseWheelEvents;
+    }
+
+    @Override
+    public void setCapturesMouseWheelEvents(boolean capturesMouseWheelEvents) {
+        if (!underlyingAssetSupportsMouseEvents()) {
+            throw new UnsupportedOperationException(className() +
+                    ".setCapturesMouseWheelEvents: underlying asset does not support mouse event " +
+                    "capturing");
+        }
+
+        this.capturesMouseWheelEvents = capturesMouseWheelEvents;
     }
 
     /** @noinspection BooleanMethodIsAlwaysInverted */
     protected abstract boolean underlyingAssetSupportsMouseEvents();
 
     @Override
-    public void press(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
+    public void press(int mouseButton, Vertex mouseLoc, long timestamp)
+            throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "press");
         callConsumer(
                 mouseButton,
@@ -101,7 +121,8 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     @Override
-    public void release(int mouseButton, Vertex mouseLoc, long timestamp) throws UnsupportedOperationException {
+    public void release(int mouseButton, Vertex mouseLoc, long timestamp)
+            throws UnsupportedOperationException {
         throwOnInvalidButton(mouseButton, "release");
         callConsumer(
                 mouseButton,
@@ -143,6 +164,34 @@ public abstract class AbstractRenderableWithMouseEvents
         Map<Integer, String> actionIds = mapOf();
         actions.forEach((button, action) -> actionIds.put(button, action.id()));
         return actionIds;
+    }
+
+    @Override
+    public void wheelScroll(float offset, Vertex mouseLoc, long timestamp) {
+        throwIfNotSupportingMouseEvents("wheelScroll");
+        TIMESTAMP_VALIDATOR.validateTimestamp(timestamp);
+        if (onWheelScroll != null) {
+            onWheelScroll.accept(
+                    eventInputs(timestamp)
+                            .withMouseScrollWheelEvent(
+                                    mouseLoc,
+                                    offset,
+                                    this,
+                                    this.containingComponent
+                            )
+            );
+        }
+    }
+
+    @Override
+    public void setOnWheelScroll(Consumer<EventInputs> onWheelScroll) {
+        throwIfNotSupportingMouseEvents("setOnWheelScroll");
+        this.onWheelScroll = onWheelScroll;
+    }
+
+    @Override
+    public String wheelScrollConsumerId() {
+        return actionId(onWheelScroll, "wheelScrollConsumerId");
     }
 
     @Override
@@ -225,7 +274,7 @@ public abstract class AbstractRenderableWithMouseEvents
     }
 
     protected void throwIfNotSupportingMouseEvents(String methodName) {
-        if (!capturesMouseEvents) {
+        if (!capturesMouseButtonEvents && !capturesMouseWheelEvents) {
             throw new UnsupportedOperationException(className() + "." + methodName +
                     ": mouse events not supported");
         }

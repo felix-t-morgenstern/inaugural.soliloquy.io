@@ -37,6 +37,7 @@ public class SpriteRenderableFactoryImplTests {
 
     @Mock private ProviderAtTime<Float> BORDER_THICKNESS_PROVIDER;
     @Mock private ProviderAtTime<Color> BORDER_COLOR_PROVIDER;
+    @Mock private Consumer<EventInputs> mockOnWheelScroll;
     @Mock private Consumer<EventInputs> mockOnMouseOver;
     @Mock private Consumer<EventInputs> mockOnMouseLeave;
     @Mock private ProviderAtTime<FloatBox> RENDERING_DIMENSIONS_PROVIDER;
@@ -63,7 +64,7 @@ public class SpriteRenderableFactoryImplTests {
     public void testMake() {
         var spriteRenderableWithMouseEvents = factory.make(
                 SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER,
-                null, null, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
+                null, null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
                 RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingComponent);
 
         assertNotNull(spriteRenderableWithMouseEvents);
@@ -75,48 +76,41 @@ public class SpriteRenderableFactoryImplTests {
 
         assertNotNull(spriteRenderableWithoutMouseEvents);
         assertInstanceOf(SpriteRenderableImpl.class, spriteRenderableWithoutMouseEvents);
-        assertFalse(spriteRenderableWithoutMouseEvents.getCapturesMouseEvents());
+        assertFalse(spriteRenderableWithoutMouseEvents.getCapturesMouseButtonEvents());
     }
 
     @Test
     public void testMakeWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(null, BORDER_THICKNESS_PROVIDER,
-                        BORDER_COLOR_PROVIDER, null, null, mockOnMouseOver, mockOnMouseLeave,
+                () -> factory.make(null, BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
+                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, null, BORDER_COLOR_PROVIDER, null,
+                        null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave, COLOR_SHIFTS,
+                        RENDERING_DIMENSIONS_PROVIDER, Z, UUID, mockContainingComponent));
+        assertThrows(IllegalArgumentException.class,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
+                        null, null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave,
                         COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, null,
-                        BORDER_COLOR_PROVIDER, null, null, mockOnMouseOver, mockOnMouseLeave,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER, null,
+                        null, null, mockOnWheelScroll, mockOnMouseOver, mockOnMouseLeave,
                         COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, null, null, mockOnMouseOver,
-                        mockOnMouseLeave,
-                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
-                        mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, null, null, null, mockOnMouseOver,
-                        mockOnMouseLeave,
-                        COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
-                        mockContainingComponent));
-        assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null,
-                        mockOnMouseOver,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, null, null, mockOnWheelScroll, mockOnMouseOver,
                         mockOnMouseLeave, null, RENDERING_DIMENSIONS_PROVIDER, Z, UUID,
                         mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null,
-                        mockOnMouseOver,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, null, null, mockOnWheelScroll, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, null, Z, UUID, mockContainingComponent));
         assertThrows(IllegalArgumentException.class,
-                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS,
-                        BORDER_THICKNESS_PROVIDER, BORDER_COLOR_PROVIDER, null, null,
-                        mockOnMouseOver,
+                () -> factory.make(SPRITE_SUPPORTS_MOUSE_EVENTS, BORDER_THICKNESS_PROVIDER,
+                        BORDER_COLOR_PROVIDER, null, null, mockOnWheelScroll, mockOnMouseOver,
                         mockOnMouseLeave, COLOR_SHIFTS, RENDERING_DIMENSIONS_PROVIDER, Z, null,
                         mockContainingComponent));
 

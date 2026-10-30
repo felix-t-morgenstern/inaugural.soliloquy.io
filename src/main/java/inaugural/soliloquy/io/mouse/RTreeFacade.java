@@ -28,7 +28,7 @@ public class RTreeFacade {
     public List<RenderableWithMouseEvents> search(float x, float y, long timestamp) {
         var rTree = new RTree<>(new RTreeFacadeRectBuilder(), 2, 8, RTree.Split.AXIAL);
         ITEMS.stream()
-                .filter(RenderableWithMouseEvents::getCapturesMouseEvents)
+                .filter(r -> r.getCapturesMouseButtonEvents() || r.getCapturesMouseWheelEvents())
                 .forEach(item -> rTree.add(pairOf(item, timestamp)));
         var results = Collections.<RenderableWithMouseEvents>listOf();
         var searchRect = new Rect2d(x - TOLERANCE, y - TOLERANCE, x + TOLERANCE, y + TOLERANCE);

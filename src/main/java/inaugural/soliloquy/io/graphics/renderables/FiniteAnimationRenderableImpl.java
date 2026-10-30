@@ -51,6 +51,7 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          ProviderAtTime<Color> borderColorProvider,
                                          Map<Integer, Consumer<EventInputs>> onPress,
                                          Map<Integer, Consumer<EventInputs>> onRelease,
+                                         Consumer<EventInputs> onWheelScroll,
                                          Consumer<EventInputs> onMouseOver,
                                          Consumer<EventInputs> onMouseLeave,
                                          List<ColorShift> colorShifts,
@@ -60,9 +61,9 @@ public class FiniteAnimationRenderableImpl extends AbstractImageAssetRenderable
                                          RenderingBoundaries renderingBoundaries,
                                          long startTimestamp, Long pausedTimestamp,
                                          TimestampValidator timestampValidator) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingAreaProvider, z, uuid, component, renderingBoundaries,
-                timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingAreaProvider, z, uuid,
+                component, renderingBoundaries, timestampValidator);
         ANIMATION = Check.ifNull(animation, "animation");
         this.startTimestamp = startTimestamp;
         this.pausedTimestamp = pausedTimestamp;

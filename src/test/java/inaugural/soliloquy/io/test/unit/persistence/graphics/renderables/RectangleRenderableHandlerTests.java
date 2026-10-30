@@ -62,15 +62,18 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                         "\"actionId\":\"%s\"}]," +
                         "\"onRelease\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}]," +
+                        "\"onScroll\":\"%s\"," +
                         "\"mouseOver\":\"%s\"," +
                         "\"mouseLeave\":\"%s\",\"z\":%d," +
-                        "\"uuid\":\"%s\",\"type\":\"%s\"}",
+                        "\"uuid\":\"%s\",\"type\":\"%s\"," +
+                        "\"capturesButton\":%s,\"capturesWheel\":%s}",
                 TOP_LEFT_COLOR_WRITTEN, TOP_RIGHT_COLOR_WRITTEN, BOTTOM_LEFT_COLOR_WRITTEN,
                 BOTTOM_RIGHT_COLOR_WRITTEN, DIMENSIONS_WRITTEN, TEXTURE_ID_WRITTEN,
                 TEXTURE_TILE_WIDTH_WRITTEN, TEXTURE_X_OFFSET_WRITTEN, TEXTURE_TILE_HEIGHT_WRITTEN,
                 TEXTURE_Y_OFFSET_WRITTEN, ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON,
-                ON_RELEASE_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z,
-                UUID, mockRenderable.getClass().getCanonicalName()
+                ON_RELEASE_CONSUMER_ID, ON_WHEEL_SCROLL_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID,
+                ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID, mockRenderable.getClass().getCanonicalName(),
+                CAPTURES_MOUSE_BUTTON_EVENTS, CAPTURES_MOUSE_WHEEL_EVENTS
         );
 
         handler =
@@ -155,6 +158,7 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 any(),
                 any(),
                 any(),
+                any(),
                 anyInt(),
                 any(),
                 any()
@@ -163,7 +167,7 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyRead();
+        verifyRead(mockRenderable);
         verify(mockProviderHandler, once()).read(TOP_LEFT_COLOR_WRITTEN);
         verify(mockProviderHandler, once()).read(TOP_RIGHT_COLOR_WRITTEN);
         verify(mockProviderHandler, once()).read(BOTTOM_LEFT_COLOR_WRITTEN);
@@ -181,6 +185,7 @@ public class RectangleRenderableHandlerTests extends AbstractPolygonRenderableHa
                 same(mockTextureYOffsetProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
+                same(MOCK_ON_WHEEL_SCROLL_CONSUMER),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),
                 same(MOCK_ON_MOUSE_LEAVE_CONSUMER),
                 same(mockDimensionsProvider),

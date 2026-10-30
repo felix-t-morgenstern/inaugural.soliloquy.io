@@ -73,6 +73,7 @@ public class GlobalLoopingAnimationRendererSimpleDisplayTest extends DisplayTest
                 mapOf(),
                 null,
                 null,
+                null,
                 listOf(),
                 dimens,
                 0,

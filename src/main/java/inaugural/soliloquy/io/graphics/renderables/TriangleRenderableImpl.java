@@ -42,6 +42,7 @@ public class TriangleRenderableImpl
                                   ProviderAtTime<Float> textureYOffsetProvider,
                                   Map<Integer, Consumer<EventInputs>> onPress,
                                   Map<Integer, Consumer<EventInputs>> onRelease,
+                                  Consumer<EventInputs> onWheelScroll,
                                   Consumer<EventInputs> onMouseOver,
                                   Consumer<EventInputs> onMouseLeave,
                                   int z,
@@ -51,7 +52,7 @@ public class TriangleRenderableImpl
                                   TimestampValidator timestampValidator) {
         super(textureIdProvider, textureTilesPerWidthProvider, textureXOffsetProvider,
                 textureTilesPerHeightProvider, textureYOffsetProvider, onPress, onRelease,
-                onMouseOver, onMouseLeave, z, uuid, component, renderingBoundaries,
+                onWheelScroll, onMouseOver, onMouseLeave, z, uuid, component, renderingBoundaries,
                 timestampValidator);
         setVertex1Provider(vertex1Provider);
         setVertex1ColorProvider(vertex1ColorProvider);

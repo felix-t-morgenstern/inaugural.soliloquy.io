@@ -58,6 +58,7 @@ public class RectangleTextureDisplayTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 dimensProvider,
                 randomInt(),
                 randomUUID(),

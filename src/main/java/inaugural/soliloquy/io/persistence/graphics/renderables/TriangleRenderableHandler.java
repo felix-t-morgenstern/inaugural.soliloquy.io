@@ -9,7 +9,8 @@ import soliloquy.specs.io.graphics.renderables.factories.TriangleRenderableFacto
 import java.util.UUID;
 import java.util.function.Function;
 
-public class TriangleRenderableHandler extends AbstractPolygonRenderableHandler<TriangleRenderable> {
+public class TriangleRenderableHandler
+        extends AbstractPolygonRenderableHandler<TriangleRenderable> {
     private final TriangleRenderableFactory FACTORY;
 
     public TriangleRenderableHandler(
@@ -36,7 +37,7 @@ public class TriangleRenderableHandler extends AbstractPolygonRenderableHandler<
         var vertex3 = PROVIDER_HANDLER.read(dto.vertex3);
         var vertex3Color = PROVIDER_HANDLER.read(dto.vertex3Color);
 
-        return FACTORY.make(
+        var renderable = FACTORY.make(
                 vertex1,
                 vertex1Color,
                 vertex2,
@@ -50,12 +51,17 @@ public class TriangleRenderableHandler extends AbstractPolygonRenderableHandler<
                 readProps.texYOffset,
                 readProps.onPress,
                 readProps.onRelease,
+                readProps.onScroll,
                 readProps.onMouseOver,
                 readProps.onMouseLeave,
                 dto.z,
                 UUID.fromString(dto.uuid),
                 null
         );
+
+        setCapturing(renderable, readProps);
+
+        return renderable;
     }
 
     @Override

@@ -8,7 +8,8 @@ import soliloquy.specs.io.graphics.renderables.providers.ProviderAtTime;
 
 import java.util.function.Function;
 
-abstract class AbstractPolygonRenderableHandler<TRenderable extends PolygonRenderable> extends AbstractMouseEventsRenderableHandler<TRenderable> {
+abstract class AbstractPolygonRenderableHandler<TRenderable extends PolygonRenderable> extends
+        AbstractRenderableWithMouseEventsHandler<TRenderable> {
     protected final ProviderHandler PROVIDER_HANDLER;
 
     protected AbstractPolygonRenderableHandler(
@@ -38,7 +39,7 @@ abstract class AbstractPolygonRenderableHandler<TRenderable extends PolygonRende
         readProps.texYOffset = PROVIDER_HANDLER.read(dto.texYOffset);
     }
 
-    protected static class Dto extends AbstractMouseEventsRenderableHandler.Dto {
+    protected static class Dto extends AbstractRenderableWithMouseEventsHandler.Dto {
         String texId;
         String texWidth;
         String texXOffset;
@@ -46,7 +47,7 @@ abstract class AbstractPolygonRenderableHandler<TRenderable extends PolygonRende
         String texYOffset;
     }
 
-    protected static class ReadProps extends AbstractMouseEventsRenderableHandler.ReadProps {
+    protected static class ReadProps extends AbstractRenderableWithMouseEventsHandler.ReadProps {
         ProviderAtTime<Integer> texId;
         ProviderAtTime<Float> texWidth;
         ProviderAtTime<Float> texXOffset;

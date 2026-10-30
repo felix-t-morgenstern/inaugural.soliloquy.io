@@ -51,6 +51,7 @@ public class ImageAssetSetRenderableHandler
                 readProps.borderColor,
                 readProps.onPress,
                 readProps.onRelease,
+                readProps.onScroll,
                 readProps.onMouseOver,
                 readProps.onMouseLeave,
                 readProps.shifts,
@@ -60,6 +61,7 @@ public class ImageAssetSetRenderableHandler
                 null
         );
         renderable.setAnimationStart(dto.animationStart);
+        setCapturing(renderable, readProps);
         return renderable;
     }
 

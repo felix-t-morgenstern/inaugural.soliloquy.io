@@ -39,6 +39,7 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 ProviderAtTime<Color> borderColorProvider,
                                 Map<Integer, Consumer<EventInputs>> onPress,
                                 Map<Integer, Consumer<EventInputs>> onRelease,
+                                Consumer<EventInputs> onWheelScroll,
                                 Consumer<EventInputs> onMouseOver,
                                 Consumer<EventInputs> onMouseLeave,
                                 List<ColorShift> colorShifts,
@@ -47,9 +48,9 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
                                 Component containingComponent,
                                 RenderingBoundaries renderingBoundaries,
                                 TimestampValidator timestampValidator) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, containingComponent,
-                renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
+                containingComponent, renderingBoundaries, timestampValidator);
         setSprite(sprite);
     }
 
@@ -61,7 +62,8 @@ public class SpriteRenderableImpl extends AbstractImageAssetRenderable implement
     @Override
     public void setSprite(Sprite sprite) throws IllegalArgumentException {
         Check.ifNull(sprite, "sprite");
-        if (capturesMouseEvents && !sprite.image().supportsMouseEventCapturing()) {
+        if ((capturesMouseButtonEvents || capturesMouseWheelEvents) &&
+                !sprite.image().supportsMouseEventCapturing()) {
             throw new IllegalArgumentException("SpriteRenderableImpl.setSprite: cannot assign " +
                     "Sprite whose Image does not support mouse events to a SpriteRenderable " +
                     "which does support mouse events");

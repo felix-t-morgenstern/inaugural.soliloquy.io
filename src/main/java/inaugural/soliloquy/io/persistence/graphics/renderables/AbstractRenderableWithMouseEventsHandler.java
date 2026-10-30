@@ -13,11 +13,11 @@ import java.util.function.Function;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static soliloquy.specs.common.valueobjects.Pair.pairOf;
 
-abstract class AbstractMouseEventsRenderableHandler<TRenderable extends RenderableWithMouseEvents>
+abstract class AbstractRenderableWithMouseEventsHandler<TRenderable extends RenderableWithMouseEvents>
         extends AbstractTypeHandler<TRenderable> {
     @SuppressWarnings("rawtypes") protected final Function<String, Consumer> GET_CONSUMER;
 
-    protected AbstractMouseEventsRenderableHandler(
+    protected AbstractRenderableWithMouseEventsHandler(
             @SuppressWarnings("rawtypes") Function<String, Consumer> getConsumer) {
         GET_CONSUMER = Check.ifNull(getConsumer, "getConsumer");
     }
@@ -49,9 +49,14 @@ abstract class AbstractMouseEventsRenderableHandler<TRenderable extends Renderab
         }
         dto.onRelease = onRelease;
 
+        dto.onScroll = renderable.wheelScrollConsumerId();
+
         dto.mouseOver = renderable.mouseOverConsumerId();
 
         dto.mouseLeave = renderable.mouseLeaveConsumerId();
+
+        dto.capturesButton = renderable.getCapturesMouseButtonEvents();
+        dto.capturesWheel = renderable.getCapturesMouseWheelEvents();
 
         dto.z = renderable.getZ();
         dto.uuid = renderable.uuid().toString();
@@ -66,26 +71,46 @@ abstract class AbstractMouseEventsRenderableHandler<TRenderable extends Renderab
         readProps.onRelease = mapOf(Arrays.stream(dto.onRelease)
                 .map(p -> pairOf(p.button, (Consumer<EventInputs>) GET_CONSUMER.apply(p.actionId))));
         //noinspection unchecked
+        readProps.onScroll = GET_CONSUMER.apply(dto.onScroll);
+        //noinspection unchecked
         readProps.onMouseOver = GET_CONSUMER.apply(dto.mouseOver);
         //noinspection unchecked
         readProps.onMouseLeave = GET_CONSUMER.apply(dto.mouseLeave);
+
+        readProps.capturesButton = dto.capturesButton;
+        readProps.capturesWheel = dto.capturesWheel;
+    }
+
+    protected void setCapturing(RenderableWithMouseEvents renderable, ReadProps readProps) {
+        if (readProps.capturesButton) {
+            renderable.setCapturesMouseButtonEvents(true);
+        }
+        if (readProps.capturesWheel) {
+            renderable.setCapturesMouseWheelEvents(true);
+        }
     }
 
     protected static class ReadProps {
         Map<Integer, Consumer<EventInputs>> onPress;
         Map<Integer, Consumer<EventInputs>> onRelease;
+        Consumer<EventInputs> onScroll;
         Consumer<EventInputs> onMouseOver;
         Consumer<EventInputs> onMouseLeave;
+        public boolean capturesButton;
+        public boolean capturesWheel;
     }
 
     protected static class Dto {
         public ButtonEvent[] onPress;
         public ButtonEvent[] onRelease;
+        public String onScroll;
         public String mouseOver;
         public String mouseLeave;
         public int z;
         public String uuid;
         public String type;
+        public boolean capturesButton;
+        public boolean capturesWheel;
 
         protected static class ButtonEvent {
             public int button;

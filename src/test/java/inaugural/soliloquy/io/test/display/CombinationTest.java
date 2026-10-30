@@ -25,19 +25,22 @@ import static soliloquy.specs.common.valueobjects.FloatBox.floatBoxOf;
 import static soliloquy.specs.common.valueobjects.Vertex.vertexOf;
 
 public class CombinationTest extends DisplayTest {
-    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
-    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
     private static final String ON_MOUSE_PRESS_CONSUMER_ID = "onMousePress";
     private static final String ON_MOUSE_RELEASE_CONSUMER_ID = "onMouseRelease";
+    private static final String ON_WHEEL_SCROLL_CONSUMER_ID = "onWheelScroll";
+    private static final String ON_MOUSE_OVER_CONSUMER_ID = "onMouseOver";
+    private static final String ON_MOUSE_LEAVE_CONSUMER_ID = "onMouseLeave";
 
-    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
-            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
-    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
-            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
     private final static Consumer<EventInputs> ON_MOUSE_PRESS_CONSUMER =
             consumer(ON_MOUSE_PRESS_CONSUMER_ID, _ -> System.out.println("MOUSE PRESS"));
     private final static Consumer<EventInputs> ON_MOUSE_RELEASE_CONSUMER =
             consumer(ON_MOUSE_RELEASE_CONSUMER_ID, _ -> System.out.println("MOUSE RELEASE"));
+    private final static Consumer<EventInputs> ON_WHEEL_SCROLL_CONSUMER =
+            consumer(ON_WHEEL_SCROLL_CONSUMER_ID, _ -> System.out.println("WHEEL SCROLL"));
+    private final static Consumer<EventInputs> ON_MOUSE_OVER_CONSUMER =
+            consumer(ON_MOUSE_OVER_CONSUMER_ID, _ -> System.out.println("MOUSE OVER"));
+    private final static Consumer<EventInputs> ON_MOUSE_LEAVE_CONSUMER =
+            consumer(ON_MOUSE_LEAVE_CONSUMER_ID, _ -> System.out.println("MOUSE LEAVE"));
 
     public static void main(String[] args) {
         var displayTest = new DisplayTest(
@@ -123,6 +126,7 @@ public class CombinationTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 rectDimensProvider,
                 0,
                 randomUUID(),
@@ -143,12 +147,13 @@ public class CombinationTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 rectDimensProvider,
                 0,
                 randomUUID(),
                 topLevelComponent
         );
-        rectRendererWithTex.setCapturesMouseEvents(true);
+        rectRendererWithTex.setCapturesMouseButtonEvents(true);
         topLevelComponent.add(rectRendererWithTex);
 
         var triangleRenderableFactory = ioModule.provide(TriangleRenderableFactory.class);
@@ -166,6 +171,7 @@ public class CombinationTest extends DisplayTest {
                 nullProvider(),
                 mapOf(),
                 mapOf(),
+                null,
                 null,
                 null,
                 0,
@@ -193,6 +199,7 @@ public class CombinationTest extends DisplayTest {
                         GLFW_MOUSE_BUTTON_LEFT,
                         ON_MOUSE_RELEASE_CONSUMER
                 ),
+                ON_WHEEL_SCROLL_CONSUMER,
                 ON_MOUSE_OVER_CONSUMER,
                 ON_MOUSE_LEAVE_CONSUMER,
                 listOf(),

@@ -40,13 +40,14 @@ public class FiniteAnimationRenderableHandlerTests
                 "{\"start\":%d,\"pause\":%d,\"assetId\":\"%s\",\"borderThickness\":\"%s\"," +
                         "\"borderColor\":\"%s\",\"colorShifts\":[\"%s\"],\"area\":\"%s\"," +
                         "\"onPress\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
-                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}]," +
+                        "\"onRelease\":[{\"button\":%d,\"actionId\":\"%s\"}],\"onScroll\":\"%s\"," +
                         "\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\",\"z\":%d,\"uuid\":\"%s\"," +
-                        "\"type\":\"%s\"}",
+                        "\"type\":\"%s\",\"capturesButton\":%s,\"capturesWheel\":%s}",
                 START, PAUSE, ASSET_ID, BORDER_THICKNESS, BORDER_COLOR, COLOR_SHIFT, AREA,
                 ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID, ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID,
-                ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID,
-                mockRenderable.getClass().getCanonicalName());
+                ON_WHEEL_SCROLL_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID,
+                Z, UUID, mockRenderable.getClass().getCanonicalName(), CAPTURES_MOUSE_BUTTON_EVENTS,
+                CAPTURES_MOUSE_WHEEL_EVENTS);
 
         handler = new FiniteAnimationRenderableHandler(mockGetAsset, MOCK_GET_CONSUMER,
                 mockProviderHandler, mockShiftHandler, mockFactory);
@@ -105,6 +106,7 @@ public class FiniteAnimationRenderableHandlerTests
                 any(),
                 any(),
                 any(),
+                any(),
                 anyInt(),
                 any(),
                 any(),
@@ -115,13 +117,14 @@ public class FiniteAnimationRenderableHandlerTests
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyRead();
+        verifyRead(mockRenderable);
         verify(mockFactory, once()).make(
                 same(mockAsset),
                 same(mockBorderThicknessProvider),
                 same(mockBorderColorProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
+                same(MOCK_ON_WHEEL_SCROLL_CONSUMER),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),
                 same(MOCK_ON_MOUSE_LEAVE_CONSUMER),
                 eq(listOf(mockShift)),

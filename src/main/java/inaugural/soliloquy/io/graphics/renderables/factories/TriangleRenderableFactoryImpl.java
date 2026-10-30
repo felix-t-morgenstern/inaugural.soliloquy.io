@@ -40,6 +40,7 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
                                    ProviderAtTime<Float> textureYOffsetProvider,
                                    Map<Integer, Consumer<EventInputs>> onPress,
                                    Map<Integer, Consumer<EventInputs>> onRelease,
+                                   Consumer<EventInputs> onWheelScroll,
                                    Consumer<EventInputs> onMouseOver,
                                    Consumer<EventInputs> onMouseLeave,
                                    int z,
@@ -49,7 +50,7 @@ public class TriangleRenderableFactoryImpl implements TriangleRenderableFactory 
         return new TriangleRenderableImpl(vertex1Provider, vertex1ColorProvider, vertex2Provider,
                 vertex2ColorProvider, vertex3Provider, vertex3ColorProvider, textureIdProvider,
                 textureTilesPerWidthProvider, textureXOffsetProvider, textureTilesPerHeightProvider,
-                textureYOffsetProvider, onPress, onRelease, onMouseOver, onMouseLeave, z, uuid,
-                component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
+                textureYOffsetProvider, onPress, onRelease, onWheelScroll, onMouseOver,
+                onMouseLeave, z, uuid, component, RENDERING_BOUNDARIES, TIMESTAMP_VALIDATOR);
     }
 }

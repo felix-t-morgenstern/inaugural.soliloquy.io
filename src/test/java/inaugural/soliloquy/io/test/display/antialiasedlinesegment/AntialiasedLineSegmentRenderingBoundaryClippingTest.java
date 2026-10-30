@@ -15,7 +15,6 @@ import soliloquy.specs.io.graphics.rendering.timing.GlobalClock;
 import java.awt.*;
 
 import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN;
-import static inaugural.soliloquy.io.api.Constants.WHOLE_SCREEN_PROVIDER;
 import static inaugural.soliloquy.tools.collections.Collections.*;
 import static inaugural.soliloquy.tools.collections.Collections.mapOf;
 import static inaugural.soliloquy.tools.random.Random.randomHighSaturationColor;
@@ -85,6 +84,7 @@ public class AntialiasedLineSegmentRenderingBoundaryClippingTest extends Display
                 nullProvider(),
                 mapOf(),
                 mapOf(),
+                null,
                 null,
                 null,
                 staticProvider(WHOLE_SCREEN),

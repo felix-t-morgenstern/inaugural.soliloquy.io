@@ -4,7 +4,6 @@ import inaugural.soliloquy.io.bootstrap.CoreLoopImpl;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeFrameTimer;
 import inaugural.soliloquy.io.test.testdoubles.fakes.FakeGraphicsPreloader;
 import inaugural.soliloquy.tools.exception.CheckedExceptionWrapper;
-import org.apache.commons.lang3.function.TriConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -88,8 +87,7 @@ public class CoreLoopImplTests {
     @Mock private KeyEventListener mockKeyEventListener;
     @Mock private Consumer<Long> mockUpdateMouseCursor;
     @Mock private Consumer<Vertex> mockUpdateMostRecentMouseLoc;
-    @Mock private TriConsumer<Vertex, Map<Integer, Boolean>, Long>
-            mockRegisterMousePositionAndButtonStates;
+    @Mock private Consumer<CoreLoopImpl.FrameMouseState> mockRegisterMousePositionAndButtonStates;
 
     private Long windowId;
 
@@ -985,7 +983,7 @@ public class CoreLoopImplTests {
         assertTrue(GRAPHICS_PRELOADER.LoadCalled);
         verify(mockUpdateMouseCursor, atLeastOnce()).accept(anyLong());
         verify(mockUpdateMostRecentMouseLoc, atLeastOnce()).accept(any());
-        verify(mockRegisterMousePositionAndButtonStates, atLeastOnce()).accept(any(), anyMap(), any());
+        verify(mockRegisterMousePositionAndButtonStates, atLeastOnce()).accept(any());
     }
 
     // NB: It is impossible to directly test the calls to MouseListener, since even

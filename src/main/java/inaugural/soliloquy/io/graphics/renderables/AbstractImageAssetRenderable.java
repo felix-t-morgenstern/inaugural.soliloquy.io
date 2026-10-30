@@ -37,14 +37,15 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
                                            Component containingComponent,
                                            RenderingBoundaries renderingBoundaries,
                                            TimestampValidator timestampValidator) {
-        this(null, null, null, null, colorShifts, borderThicknessProvider, borderColorProvider,
-                renderingAreaProvider, z, uuid, containingComponent, renderingBoundaries,
-                timestampValidator);
+        this(null, null, null, null, null, colorShifts, borderThicknessProvider,
+                borderColorProvider, renderingAreaProvider, z, uuid, containingComponent,
+                renderingBoundaries, timestampValidator);
     }
 
     protected AbstractImageAssetRenderable(
             Map<Integer, Consumer<EventInputs>> onPress,
             Map<Integer, Consumer<EventInputs>> onRelease,
+            Consumer<EventInputs> onWheelScroll,
             Consumer<EventInputs> onMouseOver,
             Consumer<EventInputs> onMouseLeave,
             List<ColorShift> colorShifts,
@@ -56,8 +57,8 @@ abstract class AbstractImageAssetRenderable extends AbstractRenderableWithMouseE
             Component containingComponent,
             RenderingBoundaries renderingBoundaries,
             TimestampValidator timestampValidator) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, z, uuid, containingComponent,
-                renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, z, uuid,
+                containingComponent, renderingBoundaries, timestampValidator);
         COLOR_SHIFTS = Check.ifNull(colorShifts, "colorShifts");
         setRenderingDimensionsProvider(renderingDimensionsProvider);
         setBorderColorProvider(borderColorProvider);

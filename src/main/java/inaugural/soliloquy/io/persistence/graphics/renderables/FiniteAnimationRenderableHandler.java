@@ -36,12 +36,13 @@ public class FiniteAnimationRenderableHandler
         var readProps = new ReadProps<Animation>();
         hydrateReadProps(readProps, dto);
 
-        return FACTORY.make(
+        var renderable = FACTORY.make(
                 readProps.asset,
                 readProps.borderThickness,
                 readProps.borderColor,
                 readProps.onPress,
                 readProps.onRelease,
+                readProps.onScroll,
                 readProps.onMouseOver,
                 readProps.onMouseLeave,
                 readProps.shifts,
@@ -52,6 +53,10 @@ public class FiniteAnimationRenderableHandler
                 dto.start,
                 dto.pause
         );
+
+        setCapturing(renderable, readProps);
+
+        return renderable;
     }
 
     @Override

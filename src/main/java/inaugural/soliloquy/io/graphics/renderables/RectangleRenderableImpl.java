@@ -35,6 +35,7 @@ public class RectangleRenderableImpl
                                    ProviderAtTime<Float> textureYOffsetProvider,
                                    Map<Integer, Consumer<EventInputs>> onPress,
                                    Map<Integer, Consumer<EventInputs>> onRelease,
+                                   Consumer<EventInputs> onWheelScroll,
                                    Consumer<EventInputs> onMouseOver,
                                    Consumer<EventInputs> onMouseLeave,
                                    ProviderAtTime<FloatBox> renderingDimensionsProvider,
@@ -45,8 +46,8 @@ public class RectangleRenderableImpl
                                    TimestampValidator timestampValidator) {
         super(backgroundTextureIdProvider, textureTilesPerWidthProvider, textureXOffsetProvider,
                 textureTilesPerHeightProvider, textureYOffsetProvider, onPress, onRelease,
-                onMouseOver, onMouseLeave, z, uuid, containingComponent, renderingBoundaries,
-                timestampValidator);
+                onWheelScroll, onMouseOver, onMouseLeave, z, uuid, containingComponent,
+                renderingBoundaries, timestampValidator);
         setTopLeftColorProvider(topLeftColorProvider);
         setTopRightColorProvider(topRightColorProvider);
         setBottomRightColorProvider(bottomRightColorProvider);
@@ -122,7 +123,7 @@ public class RectangleRenderableImpl
                             point.X + "," + point.Y + ")");
         }
 
-        if (!capturesMouseEvents) {
+        if (!capturesMouseButtonEvents && !capturesMouseWheelEvents) {
             return false;
         }
 

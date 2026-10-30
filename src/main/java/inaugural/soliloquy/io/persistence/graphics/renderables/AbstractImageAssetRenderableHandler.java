@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 abstract class AbstractImageAssetRenderableHandler<TAsset extends Asset,
         TRenderable extends ImageAssetRenderable>
-        extends AbstractMouseEventsRenderableHandler<TRenderable> {
+        extends AbstractRenderableWithMouseEventsHandler<TRenderable> {
     protected final Function<String, TAsset> GET_ASSET;
     @SuppressWarnings("rawtypes") protected final TypeHandler<ProviderAtTime> PROVIDER_HANDLER;
     protected final TypeHandler<ColorShift> SHIFT_HANDLER;
@@ -68,7 +68,7 @@ abstract class AbstractImageAssetRenderableHandler<TAsset extends Asset,
         readProps.area = PROVIDER_HANDLER.read(dto.area);
     }
 
-    static class ReadProps<TAsset> extends AbstractMouseEventsRenderableHandler.ReadProps {
+    static class ReadProps<TAsset> extends AbstractRenderableWithMouseEventsHandler.ReadProps {
         TAsset asset;
         ProviderAtTime<Float> borderThickness;
         ProviderAtTime<Color> borderColor;
@@ -76,7 +76,7 @@ abstract class AbstractImageAssetRenderableHandler<TAsset extends Asset,
         ProviderAtTime<FloatBox> area;
     }
 
-    static class Dto extends AbstractMouseEventsRenderableHandler.Dto {
+    static class Dto extends AbstractRenderableWithMouseEventsHandler.Dto {
         public String assetId;
         public String borderThickness;
         public String borderColor;

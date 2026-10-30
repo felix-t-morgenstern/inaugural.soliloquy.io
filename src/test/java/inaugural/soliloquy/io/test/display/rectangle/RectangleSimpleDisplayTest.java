@@ -53,6 +53,7 @@ public class RectangleSimpleDisplayTest extends DisplayTest {
                 mapOf(),
                 null,
                 null,
+                null,
                 rectDimensProvider,
                 randomInt(),
                 randomUUID(),

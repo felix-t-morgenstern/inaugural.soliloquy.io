@@ -79,8 +79,8 @@ public class AbstractImageAssetRenderableHandlerTests<TAsset extends HasId>
         verify(mockProviderHandler, once()).write(mockAreaProvider);
     }
 
-    protected void verifyRead() {
-        super.verifyRead();
+    protected void verifyRead(ImageAssetRenderable mockRenderable) {
+        super.verifyRead(mockRenderable);
 
         verify(mockGetAsset, once()).apply(ASSET_ID);
         verify(mockProviderHandler, once()).read(BORDER_THICKNESS);

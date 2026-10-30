@@ -50,6 +50,7 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        Map<String, String> displayParams,
                                        Map<Integer, Consumer<EventInputs>> onPress,
                                        Map<Integer, Consumer<EventInputs>> onRelease,
+                                       Consumer<EventInputs> onWheelScroll,
                                        Consumer<EventInputs> onMouseOver,
                                        Consumer<EventInputs> onMouseLeave,
                                        List<ColorShift> colorShifts,
@@ -61,9 +62,9 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
                                        Component component,
                                        RenderingBoundaries renderingBoundaries,
                                        TimestampValidator timestampValidator) {
-        super(onPress, onRelease, onMouseOver, onMouseLeave, colorShifts, borderThicknessProvider,
-                borderColorProvider, renderingDimensionsProvider, z, uuid, component,
-                renderingBoundaries, timestampValidator);
+        super(onPress, onRelease, onWheelScroll, onMouseOver, onMouseLeave, colorShifts,
+                borderThicknessProvider, borderColorProvider, renderingDimensionsProvider, z, uuid,
+                component, renderingBoundaries, timestampValidator);
         setImageAssetSet(imageAssetSet);
         DISPLAY_PARAMS = displayParams;
     }
@@ -76,7 +77,8 @@ public class ImageAssetSetRenderableImpl extends AbstractImageAssetRenderable
     @Override
     public void setImageAssetSet(ImageAssetSet imageAssetSet) throws IllegalArgumentException {
         Check.ifNull(imageAssetSet, "imageAssetSet");
-        if (capturesMouseEvents && !imageAssetSet.supportsMouseEventCapturing()) {
+        if ((capturesMouseButtonEvents || capturesMouseWheelEvents) &&
+                !imageAssetSet.supportsMouseEventCapturing()) {
             throw new IllegalArgumentException("ImageAssetSetRenderableImpl.setImageAssetSet: " +
                     "cannot assign ImageAssetSet which does not support mouse events to an " +
                     "ImageAssetSetRenderable which does support mouse events");

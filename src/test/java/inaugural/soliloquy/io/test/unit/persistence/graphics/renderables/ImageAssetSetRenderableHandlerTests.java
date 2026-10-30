@@ -46,12 +46,15 @@ public class ImageAssetSetRenderableHandlerTests
                         "\"assetId\":\"%s\",\"borderThickness\":\"%s\",\"borderColor\":\"%s\"," +
                         "\"colorShifts\":[\"%s\"],\"area\":\"%s\",\"onPress\":[{\"button\":%d," +
                         "\"actionId\":\"%s\"}],\"onRelease\":[{\"button\":%d," +
-                        "\"actionId\":\"%s\"}],\"mouseOver\":\"%s\",\"mouseLeave\":\"%s\"," +
-                        "\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"}",
+                        "\"actionId\":\"%s\"}],\"onScroll\":\"%s\",\"mouseOver\":\"%s\"," +
+                        "\"mouseLeave\":\"%s\",\"z\":%d,\"uuid\":\"%s\",\"type\":\"%s\"," +
+                        "\"capturesButton\":%s,\"capturesWheel\":%s}",
                 DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL, ANIMATION_START, ASSET_ID, BORDER_THICKNESS,
                 BORDER_COLOR, COLOR_SHIFT, AREA, ON_PRESS_BUTTON, ON_PRESS_CONSUMER_ID,
-                ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID, ON_MOUSE_OVER_CONSUMER_ID,
-                ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID, mockRenderable.getClass().getCanonicalName());
+                ON_RELEASE_BUTTON, ON_RELEASE_CONSUMER_ID, ON_WHEEL_SCROLL_CONSUMER_ID,
+                ON_MOUSE_OVER_CONSUMER_ID, ON_MOUSE_LEAVE_CONSUMER_ID, Z, UUID,
+                mockRenderable.getClass().getCanonicalName(), CAPTURES_MOUSE_BUTTON_EVENTS,
+                CAPTURES_MOUSE_WHEEL_EVENTS);
 
         handler = new ImageAssetSetRenderableHandler(mockGetAsset, MOCK_GET_CONSUMER,
                 mockProviderHandler, mockShiftHandler, mockFactory);
@@ -60,7 +63,8 @@ public class ImageAssetSetRenderableHandlerTests
     @Test
     public void testConstructorWithInvalidArgs() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ImageAssetSetRenderableHandler(null, MOCK_GET_CONSUMER, mockProviderHandler,
+                () -> new ImageAssetSetRenderableHandler(null, MOCK_GET_CONSUMER,
+                        mockProviderHandler,
                         mockShiftHandler, mockFactory));
         assertThrows(IllegalArgumentException.class,
                 () -> new ImageAssetSetRenderableHandler(mockGetAsset, null, mockProviderHandler,
@@ -111,6 +115,7 @@ public class ImageAssetSetRenderableHandlerTests
                 any(),
                 any(),
                 any(),
+                any(),
                 anyInt(),
                 any(),
                 any()
@@ -119,7 +124,7 @@ public class ImageAssetSetRenderableHandlerTests
         var output = handler.read(writtenValue);
 
         assertSame(mockRenderable, output);
-        verifyRead();
+        verifyRead(mockRenderable);
         verify(mockFactory, once()).make(
                 same(mockAsset),
                 eq(mapOf(pairOf(DISPLAY_PARAM_KEY, DISPLAY_PARAM_VAL))),
@@ -127,6 +132,7 @@ public class ImageAssetSetRenderableHandlerTests
                 same(mockBorderColorProvider),
                 eq(mapOf(pairOf(ON_PRESS_BUTTON, MOCK_ON_PRESS_CONSUMER))),
                 eq(mapOf(pairOf(ON_RELEASE_BUTTON, MOCK_ON_RELEASE_CONSUMER))),
+                same(MOCK_ON_WHEEL_SCROLL_CONSUMER),
                 same(MOCK_ON_MOUSE_OVER_CONSUMER),
                 same(MOCK_ON_MOUSE_LEAVE_CONSUMER),
                 eq(listOf(mockShift)),
